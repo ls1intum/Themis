@@ -44,6 +44,7 @@
 		83396D4429155936003EF727 /* feedback2goUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = feedback2goUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D4829155936003EF727 /* feedback2goUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedback2goUITests.swift; sourceTree = "<group>"; };
 		83396D4A29155936003EF727 /* feedback2goUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedback2goUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +95,7 @@
 		83396D2C29155935003EF727 /* feedback2go */ = {
 			isa = PBXGroup;
 			children = (
+				83E729E52915751600DB7B36 /* Supporting */,
 				83396D2D29155935003EF727 /* feedback2goApp.swift */,
 				83396D2F29155935003EF727 /* ContentView.swift */,
 				83396D3129155935003EF727 /* Assets.xcassets */,
@@ -125,6 +127,14 @@
 				83396D4A29155936003EF727 /* feedback2goUITestsLaunchTests.swift */,
 			);
 			path = feedback2goUITests;
+			sourceTree = "<group>";
+		};
+		83E729E52915751600DB7B36 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				83E729E82915786600DB7B36 /* Info.plist */,
+			);
+			path = Supporting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,7 +429,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"feedback2go/Preview Content\"";
 				DEVELOPMENT_TEAM = 7PLLZ436SG;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = feedback2go/Supporting/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -449,7 +460,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"feedback2go/Preview Content\"";
 				DEVELOPMENT_TEAM = 7PLLZ436SG;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = feedback2go/Supporting/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

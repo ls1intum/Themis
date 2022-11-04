@@ -1,0 +1,137 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "[CI] Run Unit and UI Tests"
+  lane :test do
+    # Run Unit Tests
+    scan(
+      clean: true,
+      scheme: "feedback2go"
+    )
+  end
+
+  desc "[CI] Default build configuration"
+  lane :build do
+    ##########################################
+    # Environment Setup
+    ##########################################   
+
+    # Unlock the keychain
+    unlock_keychain(
+    	path: ENV['bamboo_KeyChain'],
+      password: ENV['bamboo_KeyChainPassword'],
+    )
+
+    xcode_select "/Applications/Xcode.app"
+
+    # If the build number was specified by the CI environment,
+    # use it to specify the build number for this build
+    if ENV["bamboo_buildNumber"]
+      increment_build_number(
+        build_number: ENV["bamboo_buildNumber"]
+      )
+    end
+
+    info_plist_path = "feedback2go/Supporting/Info.plist"
+
+    set_info_plist_value(
+      path: info_plist_path,
+      key: "ITSAppUsesNonExemptEncryption",
+      value: "NO"
+    )
+
+    ##########################################
+    # Provisioning Profile
+    ##########################################
+
+    # Download the latest provisioning profile
+    # from the apple developer portal
+    get_provisioning_profile(
+      api_key: api_key,
+      adhoc: true,
+      force: true
+    )
+
+    ##########################################
+    # Project Setup
+    ##########################################
+
+    # Update AppID for publishing
+    update_app_identifier(
+      plist_path: info_plist_path
+    )
+
+    # Update Xcode Project to use maunual code signing
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      code_sign_identity: "iPhone Distribution",
+      profile_uuid: lane_context[SharedValues::SIGH_UUID],
+      profile_name: lane_context[SharedValues::SIGH_NAME]
+    )
+
+    # Define correct Provisioning Profile in Xcode Project
+    update_project_provisioning(
+      build_configuration: "Release"
+    )
+
+    ##########################################
+    # Code sign and Build
+    ##########################################
+
+    # Build the app
+    build_ios_app(
+      clean: true, # Do a clean build each time
+      output_name: "App.ipa", # The name of the output artifact
+      export_method: "ad-hoc", # Export for ad-hoc signing
+      configuration: "Release", # Build with release configuration
+      cloned_source_packages_path: ".SwiftPackages", # Custom path for cloning source packages to
+      derived_data_path: ".DerivedData", # Custom derived data path
+      output_directory: "./build", # Directory where the output artifacts are generated
+      scheme: "feedback2go" # We want to build the "HallOfFame" scheme
+    )
+  end
+
+  desc "[CI] Upload a previous build app to TestFlight"
+  lane :release do
+    # Support for older fastlane environments
+    # ENV["SPACESHIP_CONNECT_API_IN_HOUSE"] = "true"
+
+    xcode_select "/Applications/Xcode.app"
+
+    upload_to_testflight(
+      ipa: "#{Dir.pwd}/../build/App.ipa",
+      demo_account_required: true,
+      api_key: api_key,
+      # submit_beta_review: false,
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc "[CI] Generate a fresh token to authenticate on the app store connect api"
+  lane :api_key do
+    app_store_connect_api_key(
+      duration: 300, # This Token is valid for 300s
+      key_id: ENV["bamboo_APP_STORE_CONNECT_API_KEY_KEY_ID"],
+      issuer_id: ENV["bamboo_APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_content: ENV["bamboo_APP_STORE_CONNECT_API_KEY_PASSWORD"],
+      is_key_content_base64: true
+    )
+  end
+
+end
