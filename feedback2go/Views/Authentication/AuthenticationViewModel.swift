@@ -9,6 +9,8 @@ import Foundation
 import Combine
 
 class AuthenticationViewModel: ObservableObject {
+    /// This Variable is for the serverURL TextField
+    /// Updating it will update the RESTController base URL and will save it in the User Defaults
     @Published var serverURL: String = "" {
         didSet {
             guard let serverURL = URL(string: serverURL) else { return }
@@ -23,12 +25,15 @@ class AuthenticationViewModel: ObservableObject {
     }
     @Published var username: String = ""
     @Published var password: String = ""
+    /// If this variable is true the User is authenticated
     @Published var authenticated: Bool = false
+    /// If an 401 Error was catched, this alert will inform the User
     @Published var invalidCredentialsAlert: Bool = false
+    /// While Authenticating this variable will be true for the ProgressView
     @Published var authenticationInProgress: Bool = false
     
-    private var restControllerInitialized = false
     
+    private var restControllerInitialized = false
     private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -38,6 +43,11 @@ class AuthenticationViewModel: ObservableObject {
             restControllerInitialized = true
         }
         Authentication.shared = Authentication()
+        observeAuthenticationToken()
+    }
+    
+    ///Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value
+    private func observeAuthenticationToken() {
         Authentication.shared.publisher(for: \.token, options: [.new])
             .receive(on: RunLoop.main)
             .sink { token in
@@ -64,10 +74,11 @@ class AuthenticationViewModel: ObservableObject {
         }
         
     }
+    /// Searches for the Bearer token in the Keychain
     func searchForToken () {
         Authentication.shared.getTokenFromKeychain ()
     }
-    
+    /// Logs the User out by deleting the Token which will triger the observation of the Authentication.shared.token Property
     func logout() {
         Authentication.shared.deleteToken()
     }
