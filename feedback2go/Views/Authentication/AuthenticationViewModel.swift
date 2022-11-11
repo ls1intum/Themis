@@ -13,12 +13,13 @@ class AuthenticationViewModel: ObservableObject {
     /// Updating it will update the RESTController base URL and will save it in the User Defaults
     @Published var serverURL: String = "" {
         didSet {
-            guard let serverURL = URL(string: serverURL) else { return }
+            guard let url = URL(string: serverURL) else { return }
+            print("setting server url")
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
             if restControllerInitialized {
-                RESTController.shared.baseURL = serverURL
+                RESTController.shared.baseURL = url
             } else {
-                RESTController.shared = RESTController(baseURL: serverURL)
+                RESTController.shared = RESTController(baseURL: url)
                 restControllerInitialized = true
             }
         }
@@ -37,7 +38,7 @@ class AuthenticationViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     
     init() {
-        self.serverURL = UserDefaults.standard.string(forKey: serverURL) ?? "https://artemis.in.tum.de"
+        self.serverURL = UserDefaults.standard.string(forKey: "serverURL") ?? "https://artemis.in.tum.de"
         if let serverURL = URL(string: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true

@@ -12,7 +12,7 @@ struct AuthenticationView: View {
     var body: some View {
         TextField("Artemis-Server", text: $authenticationVM.serverURL)
         TextField("username", text: $authenticationVM.username)
-        TextField("password", text: $authenticationVM.password)
+        SecureField("password", text: $authenticationVM.password)
         if authenticationVM.authenticationInProgress {
             ProgressView()
         }
