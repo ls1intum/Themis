@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+class Authentication {
+    static var token: String?
+    
+    init() {
+        
+    }
+}

@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+enum RESTError: String, Error {
+    //TODO:add desc
+    case unauthorized = "d"
+    case badRequest = "a"
+    case methodNotAllowed = "g"
+    case forbidden = "h"
+    case notFound = "j"
+    case server = "k"
+    case different = "r"
+}
