@@ -14,6 +14,7 @@
 		83396D3F29155936003EF727 /* feedback2goTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D3E29155936003EF727 /* feedback2goTests.swift */; };
 		83396D4929155936003EF727 /* feedback2goUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D4829155936003EF727 /* feedback2goUITests.swift */; };
 		83396D4B29155936003EF727 /* feedback2goUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D4A29155936003EF727 /* feedback2goUITestsLaunchTests.swift */; };
+		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
 		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
 		E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED4291E57640092CE58 /* HTTPMethod.swift */; };
 		E2192ED7291E57810092CE58 /* RESTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED6291E57810092CE58 /* RESTError.swift */; };
@@ -54,6 +55,7 @@
 		83396D4829155936003EF727 /* feedback2goUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedback2goUITests.swift; sourceTree = "<group>"; };
 		83396D4A29155936003EF727 /* feedback2goUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedback2goUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
 		E2192ED4291E57640092CE58 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		E2192ED6291E57810092CE58 /* RESTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 			children = (
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
 				E2192EDD291E687C0092CE58 /* Authentication.swift */,
+				E1BF8881291EEF2900B8FA06 /* Course.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */,
 				E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,

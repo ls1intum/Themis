@@ -16,8 +16,6 @@ class ArtemisAPI {
         }
         request.setBeaererToken(token: token)
         
-        print(token)
-        
         return try await RESTController.shared.sendRequest(request)
     }
     
