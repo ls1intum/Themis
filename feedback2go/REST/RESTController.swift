@@ -10,7 +10,7 @@ import Foundation
 class RESTController {
     static var shared: RESTController!
     
-    private var baseURL: URL
+    var baseURL: URL
     
     private var jsonEncoder = JSONEncoder()
     private var jsonDecoder = JSONDecoder()

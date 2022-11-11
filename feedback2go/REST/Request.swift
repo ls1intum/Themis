@@ -27,4 +27,11 @@ struct Request {
         return dict
     }
     
+    mutating public func addHeaderField(field: String, value: String) {
+        self.headers[field] = value
+    }
+    
+    mutating public func setBeaererToken(token: String) {
+        addHeaderField(field: "Authorization", value: "Bearer \(token)")
+    }
 }
