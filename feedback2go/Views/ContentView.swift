@@ -25,9 +25,6 @@ struct ContentView: View {
         .onAppear {
             authenticationVM.searchForToken()
         }
-        .alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert, actions: {
-            Button("Ok"){}
-        })
         .padding()
     }
 }

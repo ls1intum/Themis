@@ -10,19 +10,24 @@ import SwiftUI
 struct AuthenticationView: View {
     @ObservedObject var authenticationVM: AuthenticationViewModel
     var body: some View {
-        TextField("Artemis-Server", text: $authenticationVM.serverURL)
-        TextField("username", text: $authenticationVM.username)
-        SecureField("password", text: $authenticationVM.password)
-        if authenticationVM.authenticationInProgress {
-            ProgressView()
-        }
-        Button {
-            Task {
-                await authenticationVM.authenticate()
+        VStack {
+            TextField("Artemis-Server", text: $authenticationVM.serverURL)
+            TextField("username", text: $authenticationVM.username)
+            SecureField("password", text: $authenticationVM.password)
+            if authenticationVM.authenticationInProgress {
+                ProgressView()
             }
-        } label: {
-            Text("Log-In")
-        }
+            Button {
+                Task {
+                    await authenticationVM.authenticate()
+                }
+            } label: {
+                Text("Log-In")
+            }
+        }.alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert, actions: {
+            Button("Ok"){}
+        })
+        
     }
 }
 
