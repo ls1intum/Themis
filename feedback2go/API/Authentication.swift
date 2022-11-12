@@ -8,6 +8,20 @@
 import Foundation
 import KeychainAccess
 
+///This Struct allows to send a authenticate request.
+///If the rememberMe flag is set the token will be valid for 30 Days (if not 30 minutes)
+///For consistency we use this struct even though we can't use the ArtemisAPI because it requires a bearer token
+struct AuthenticationRequest: APIRequest, Encodable {
+    let username  : String
+    let password  : String
+    let rememberMe: Bool
+    
+    var request: Request {
+        Request(method: .post, path: "/api/authenticate", body: self)
+    }
+}
+
+
 class Authentication: NSObject {
     
     static var shared: Authentication!
@@ -57,13 +71,9 @@ class Authentication: NSObject {
     }
     
     ///This Method allows the user to Authenticate. If it doesnt throw an Error the Bearer token will be set
-    func authenticate(username: String, password: String) async throws {
-        let body = [
-                    "username": username,
-                    "password": password
-                   ]
-        let request = Request(method: .post, path: "/api/authenticate", body: body)
-        self.token = try await RESTController.shared.sendRequest(request) { try parseAuth(data: $0) }
+    func authenticate(username: String, password: String, rememeberMe: Bool) async throws {
+        let request = AuthenticationRequest(username: username, password: password, rememberMe: rememeberMe)
+        self.token = try await RESTController.shared.sendRequest(request.request) { try parseAuth(data: $0) }
     }
     
     private func parseAuth(data: Data) throws -> String {
@@ -75,3 +85,4 @@ class Authentication: NSObject {
         return token
     }
 }
+

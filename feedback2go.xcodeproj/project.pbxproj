@@ -24,6 +24,10 @@
 		E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2192EE0291E6F780092CE58 /* KeychainAccess */; };
 		E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */; };
 		E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */; };
+		E2E67483292032870081238B /* CourseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67482292032870081238B /* CourseListViewModel.swift */; };
+		E2E67485292033EE0081238B /* CourseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67484292033EE0081238B /* CourseListView.swift */; };
+		E2E6748829203E350081238B /* ExercisesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExercisesListView.swift */; };
+		E2E6748B2920419B0081238B /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748A2920419B0081238B /* Exercise.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +68,10 @@
 		E2192EDD291E687C0092CE58 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListViewModel.swift; sourceTree = "<group>"; };
+		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListView.swift; sourceTree = "<group>"; };
+		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesListView.swift; sourceTree = "<group>"; };
+		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +184,7 @@
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
 				E2192EDD291E687C0092CE58 /* Authentication.swift */,
 				E1BF8881291EEF2900B8FA06 /* Course.swift */,
+				E2E6748A2920419B0081238B /* Exercise.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -183,6 +192,8 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E2E6748629203E280081238B /* Exercises */,
+				E2E674812920326F0081238B /* Courses */,
 				E2192EE7291EC3100092CE58 /* Authentication */,
 				83396D2F29155935003EF727 /* ContentView.swift */,
 			);
@@ -196,6 +207,23 @@
 				E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		E2E674812920326F0081238B /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				E2E67482292032870081238B /* CourseListViewModel.swift */,
+				E2E67484292033EE0081238B /* CourseListView.swift */,
+			);
+			path = Courses;
+			sourceTree = "<group>";
+		};
+		E2E6748629203E280081238B /* Exercises */ = {
+			isa = PBXGroup;
+			children = (
+				E2E6748729203E350081238B /* ExercisesListView.swift */,
+			);
+			path = Exercises;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,8 +384,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				E2E67483292032870081238B /* CourseListViewModel.swift in Sources */,
+				E2E6748829203E350081238B /* ExercisesListView.swift in Sources */,
 				E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */,
 				E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */,
+				E2E6748B2920419B0081238B /* Exercise.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
@@ -365,6 +396,7 @@
 				E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */,
 				E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */,
 				83396D2E29155935003EF727 /* feedback2goApp.swift in Sources */,
+				E2E67485292033EE0081238B /* CourseListView.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

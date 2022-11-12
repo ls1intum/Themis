@@ -14,6 +14,10 @@ struct AuthenticationView: View {
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
             TextField("username", text: $authenticationVM.username)
             SecureField("password", text: $authenticationVM.password)
+            HStack {
+                Text("Remember Session for 30 Days?")
+                rememberMe
+            }
             if authenticationVM.authenticationInProgress {
                 ProgressView()
             }
@@ -28,6 +32,14 @@ struct AuthenticationView: View {
             Button("Ok"){}
         })
         
+    }
+    
+    var rememberMe: some View {
+        Image(systemName: authenticationVM.rememberMe ? "checkmark.square.fill" : "square")
+            .foregroundColor(authenticationVM.rememberMe ? Color(UIColor.systemBlue) : Color.secondary)
+            .onTapGesture {
+                self.authenticationVM.rememberMe.toggle()
+            }
     }
 }
 
