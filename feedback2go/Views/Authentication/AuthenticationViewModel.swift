@@ -28,6 +28,7 @@ class AuthenticationViewModel: ObservableObject {
     }
     @Published var username: String = ""
     @Published var password: String = ""
+    @Published var rememberMe: Bool = true
     /// If this variable is true the User is authenticated
     @Published var authenticated: Bool = false
     /// If an 401 Error was catched, this alert will inform the User
@@ -67,7 +68,7 @@ class AuthenticationViewModel: ObservableObject {
             self.authenticationInProgress = false
         }
         do {
-            try await Authentication.shared.authenticate(username: username, password: password)
+            try await Authentication.shared.authenticate(username: username, password: password, rememeberMe: rememberMe)
             if let token = Authentication.shared.token {
                 Authentication.shared.storeTokenInKeychain(token: token)
             }

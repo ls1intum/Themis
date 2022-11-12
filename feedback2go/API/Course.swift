@@ -17,3 +17,17 @@ struct GetCourseTitle: APIRequest {
         Request(method: .get, path: "/api/courses/\(courseID)")
     }
 }
+
+struct Course: Codable {
+    let id: Int
+    let title: String?
+    let description: String?
+    let shortName: String?
+    let exercises: [Exercise]?
+}
+
+struct GetCourses: APIRequest {
+    var request: Request {
+        Request(method: .get, path: "/api/courses/for-dashboard")
+    }
+}
