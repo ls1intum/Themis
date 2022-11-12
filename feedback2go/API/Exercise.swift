@@ -16,3 +16,35 @@ struct Exercise: Codable {
     let problemStatement: String?
     let gradingInstructions: String?
 }
+
+struct DueDateStat: Codable {
+    let inTime: Int
+    let late: Int
+}
+
+struct ExerciseForAssessment: Codable {
+    let numberOfStudent: Int?
+    let numberOfSumissions: DueDateStat?
+    let totalNumberOfAssessments: DueDateStat?
+    let totalNumberOfAssessmentLocks: DueDateStat?
+    let complaintsEnabled: Bool?
+    let feedbackRequestEnabled: Bool?
+    //let numberOfAssessmentsOfCorrectionRounds: DueDateStat? - this is an Array?!?! see ExerciseResource.java
+    //let numberOfLockedAssessmentByOtherTutorsOfCorrectionRound: DueDateStat?
+    let numberOfAutomaticAssistedAssessments: DueDateStat?
+    
+}
+
+struct GetExercise: APIRequest {
+    let exerciseID: Int
+    var request: Request {
+        Request(method: .get, path: "/api/exercises/\(exerciseID)/for-assessment-dashboard")
+    }
+}
+
+struct GetExerciseStats: APIRequest {
+    let exerciseID: Int
+    var request: Request {
+        Request(method: .get, path: "/api/exercises/\(exerciseID)/stats-for-assessment-dashboard")
+    }
+}
