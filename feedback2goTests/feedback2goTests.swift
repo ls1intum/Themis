@@ -8,7 +8,7 @@
 import XCTest
 @testable import feedback2go
 
-final class feedback2goTests: XCTestCase {
+final class Feedback2goTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
