@@ -6,19 +6,22 @@
 //
 
 import Foundation
+import SwiftUI
 
-struct GetPNGfromPlantUML {
+/// gets the plantuml as a png
+struct GetPNGfromPlantUML: APIRequest {
+    @Environment(\.colorScheme) var colorScheme
     let plantuml: String
-    let darkMode: Bool
     var request: Request {
-        Request(method: .get, path: "/api/plantuml/png?plantuml=\(plantuml)&useDarkTheme=\(darkMode)")
+        Request(method: .get, path: "/api/plantuml/png?plantuml=\(plantuml)&useDarkTheme=\(colorScheme == .dark)")
     }
 }
 
-struct GetSVGfromPlantUML {
+/// get the plantuml as a svg
+struct GetSVGfromPlantUML: APIRequest {
+    @Environment(\.colorScheme) var colorScheme
     let plantuml: String
-    let darkMode: Bool
     var request: Request {
-        Request(method: .get, path: "/api/plantuml/svg?plantuml=\(plantuml)&useDarkTheme=\(darkMode)")
+        Request(method: .get, path: "/api/plantuml/svg?plantuml=\(plantuml)&useDarkTheme=\(colorScheme == .dark)")
     }
 }
