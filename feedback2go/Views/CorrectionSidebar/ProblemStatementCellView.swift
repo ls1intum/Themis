@@ -11,9 +11,10 @@ import Foundation
 struct ProblemStatementCellView: View {
     var body: some View {
         VStack {
-            ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
+            /*ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
                 Text(line)
-            }
+            }*/
+            Text(ProblemStatementCellViewModel.convertString(ProblemStatementCellViewModel.mockData))
         }
     }
 }
