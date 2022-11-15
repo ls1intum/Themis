@@ -14,14 +14,14 @@ struct Exercise: Codable {
     let maxPoints: Double?
     let assessmentType: String?
     let problemStatement: String?
-    let gradingInstructions: String?
+    let gradingInstructions: String? //For Programming Assesments this is nil
 }
 
 struct DueDateStat: Codable {
     let inTime: Int
     let late: Int
 }
-
+///This Struct represents the Statstics for a an Exercise
 struct ExerciseForAssessment: Codable {
     let numberOfStudent: Int?
     let numberOfSumissions: DueDateStat?
