@@ -47,7 +47,7 @@ struct GetFileOfRepository: APIRequest {
     let participationId: Int
     let filePath: String
     var request: Request {
-        Request(method: .get, path: "/api/repository/\(participationId)/file?file=\(filePath)")
+        Request(method: .get, path: "/api/repository/\(participationId)/file", params: [URLQueryItem(name: "file", value: filePath)])
     }
 }
 
