@@ -13,7 +13,7 @@ struct GetPNGfromPlantUML: APIRequest {
     @Environment(\.colorScheme) var colorScheme
     let plantuml: String
     var request: Request {
-        Request(method: .get, path: "/api/plantuml/png?plantuml=\(plantuml)&useDarkTheme=\(colorScheme == .dark)")
+        Request(method: .get, path: "/api/plantuml/png", params: [URLQueryItem(name: "plantuml", value: plantuml), URLQueryItem(name: "useDarkTheme", value: "\(colorScheme == .dark)")])
     }
 }
 
@@ -22,6 +22,6 @@ struct GetSVGfromPlantUML: APIRequest {
     @Environment(\.colorScheme) var colorScheme
     let plantuml: String
     var request: Request {
-        Request(method: .get, path: "/api/plantuml/svg?plantuml=\(plantuml)&useDarkTheme=\(colorScheme == .dark)")
+        Request(method: .get, path: "/api/plantuml/svg", params: [URLQueryItem(name: "plantuml", value: plantuml), URLQueryItem(name: "useDarkTheme", value: "\(colorScheme == .dark)")])
     }
 }

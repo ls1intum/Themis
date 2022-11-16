@@ -51,7 +51,7 @@ struct GetSubmissions: APIRequest {
 struct GetRandomSubmission: APIRequest {
     let exerciseId: Int
     var request: Request {
-        Request(method: .get, path: "/api/exercises/\(exerciseId)/programming-submission-without-assessment?lock=true")
+        Request(method: .get, path: "/api/exercises/5284/programming-submission-without-assessment", params: [URLQueryItem(name: "lock", value: "true")])
     }
 }
 
