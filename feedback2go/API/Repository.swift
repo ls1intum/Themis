@@ -7,8 +7,6 @@
 
 import Foundation
 
-//TODO: Check how to convert to zip / to directory
-
 private struct ExportOptions: Encodable {
     let anonymizeStudentCommits: Bool = true
     let hideStudentNameInZippedFolder: Bool = true
@@ -30,3 +28,21 @@ struct GetSolutionRepository: APIRequest {
         Request(method: .get, path: "/api/programming-exercises/\(exerciseId)/export-solution-repository")
     }
 }
+
+/// Gets all file names from repository of submission with participationId. Response type: [String]
+struct GetFileNamesFromRepository {
+    let participationId: Int
+    var request: Request {
+        Request(method: .get, path: "/api/repository/\(participationId)/file-names")
+    }
+}
+
+/// Gets file of filePath from repository of submission with participationId. Response type: String
+struct GetFileOfRepository: APIRequest {
+    let participationId: Int
+    let filePath: String
+    var request: Request {
+        Request(method: .get, path: "/api/repository/\(participationId)/file?file=\(filePath)")
+    }
+}
+

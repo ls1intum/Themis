@@ -39,7 +39,7 @@ struct SubmissionForAssessment: Codable {
     let exercise: Exercise //TODO: Ask Tom for additional attributes in Exercise struct
 }
 
-/// Gets all submissions of that exercise.
+/// Gets all submissions of that exercise. Response type: [Submission]
 struct GetSubmissions: APIRequest {
     let exerciseId: Int
     var request: Request {
@@ -47,7 +47,7 @@ struct GetSubmissions: APIRequest {
     }
 }
 
-/// Gets a random submission and locks it. This should be used to assess a random submission.
+/// Gets a random submission and locks it. This should be used to assess a random submission. Response type: SubmissionForAssessment
 struct GetRandomSubmission: APIRequest {
     let exerciseId: Int
     var request: Request {
@@ -55,7 +55,7 @@ struct GetRandomSubmission: APIRequest {
     }
 }
 
-/// Gets a submission associated with submissionId and locks it, so no one else can assess it. This should be used to assess a specific Submission.
+/// Gets a submission associated with submissionId and locks it, so no one else can assess it. This should be used to assess a specific Submission. Response: SubmissionForAssessment
 struct GetSubmission: APIRequest {
     let submissionId: Int
     var request: Request {
