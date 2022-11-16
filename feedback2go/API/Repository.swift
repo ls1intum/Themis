@@ -46,3 +46,10 @@ struct GetFileOfRepository: APIRequest {
     }
 }
 
+struct GetAllFilesOfRepository: APIRequest {
+    let participationId: Int
+    var request: Request {
+        Request(method: .get, path: "/api/repository/\(participationId)/files")
+    }
+}
+
