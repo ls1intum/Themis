@@ -29,11 +29,16 @@ struct GetSolutionRepository: APIRequest {
     }
 }
 
-/// Gets all file names from repository of submission with participationId. Response type: [String]
-struct GetFileNamesFromRepository {
+enum FileType: String, Codable {
+    case folder = "FOLDER"
+    case file = "FILE"
+}
+
+/// Gets all file names from repository of submission with participationId. Response type: [String: FileType]
+struct GetFileNamesOfRepository: APIRequest {
     let participationId: Int
     var request: Request {
-        Request(method: .get, path: "/api/repository/\(participationId)/file-names")
+        Request(method: .get, path: "/api/repository/\(participationId)/files")
     }
 }
 
@@ -46,10 +51,11 @@ struct GetFileOfRepository: APIRequest {
     }
 }
 
+/// Gets alls files with content from repository of submission with participationId. Response type: [String: String]
 struct GetAllFilesOfRepository: APIRequest {
     let participationId: Int
     var request: Request {
-        Request(method: .get, path: "/api/repository/\(participationId)/files")
+        Request(method: .get, path: "/api/repository/\(participationId)/files-content")
     }
 }
 
