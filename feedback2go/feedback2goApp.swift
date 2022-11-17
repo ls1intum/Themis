@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct feedback2goApp: App {
+struct Feedback2goApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

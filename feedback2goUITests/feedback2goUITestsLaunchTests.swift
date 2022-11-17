@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class feedback2goUITestsLaunchTests: XCTestCase {
+final class Feedback2goUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
