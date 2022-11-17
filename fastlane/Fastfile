@@ -77,7 +77,7 @@ platform :ios do
       plist_path: info_plist_path
     )
 
-    # Update Xcode Project to use maunual code signing
+    # Update Xcode Project to use manual code signing
     update_code_signing_settings(
       use_automatic_signing: false,
       code_sign_identity: "iPhone Distribution",
@@ -131,6 +131,22 @@ platform :ios do
       issuer_id: ENV["bamboo_APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
       key_content: ENV["bamboo_APP_STORE_CONNECT_API_KEY_PASSWORD"],
       is_key_content_base64: true
+    )
+  end
+
+  desc "[CI] Notify slack channel about new release"
+  lane :slack_notification do
+    slack(
+      message: "App successfully released!",
+      slack_url: ENV["bamboo_SLACK_WEBHOOK"]
+    )
+  end
+
+  desc "[CI] Notify slack channel about unsuccessful release"
+  error do |lane, exception|
+    slack(
+      message: "Something went wrong with the app release.",
+      slack_url: ENV["bamboo_SLACK_WEBHOOK"]
     )
   end
 
