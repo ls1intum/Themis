@@ -40,7 +40,7 @@ class AuthenticationViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
 
     init() {
-        self.serverURL = UserDefaults.standard.string(forKey: "serverURL") ?? "https://artemis.in.tum.de"
+        self.serverURL = "https://artemis-staging.ase.in.tum.de"
         if let serverURL = URL(string: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
@@ -68,7 +68,7 @@ class AuthenticationViewModel: ObservableObject {
             self.authenticationInProgress = false
         }
         do {
-            try await Authentication.shared.authenticate(username: username, password: password, rememeberMe: rememberMe)
+            try await Authentication.shared.auth(username: username, password: password, rememberMe: rememberMe)
             if let token = Authentication.shared.token {
                 Authentication.shared.storeTokenInKeychain(token: token)
             }
@@ -77,6 +77,7 @@ class AuthenticationViewModel: ObservableObject {
         } catch let error {
             print(error.localizedDescription)
         }
+
     }
 
     /// Searches for the Bearer token in the Keychain
