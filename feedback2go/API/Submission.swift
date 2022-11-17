@@ -36,7 +36,7 @@ struct SubmissionForAssessment: Codable {
     let submitted: Bool
     let participation: SubmissionParticipation
     let results: SubmissionResult
-    let exercise: Exercise //TODO: Ask Tom for additional attributes in Exercise struct
+    let exercise: Exercise // TODO: Ask Tom for additional attributes in Exercise struct
 }
 
 extension ArtemisAPI {
@@ -45,13 +45,13 @@ extension ArtemisAPI {
         let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/programming-submissions")
         return try await sendRequest([Submission].self, request: request)
     }
-    
+
     /// Gets a random submission and locks it. This should be used to assess a random submission.
     static func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> SubmissionForAssessment {
         let request = Request(method: .get, path: "/api/exercises/5284/programming-submission-without-assessment", params: [URLQueryItem(name: "lock", value: "true")])
         return try await sendRequest(SubmissionForAssessment.self, request: request)
     }
-    
+
     /// Gets a submission associated with submissionId and locks it, so no one else can assess it. This should be used to assess a specific Submission.
     static func getSubmissionForAssessment(submissionId: Int) async throws -> SubmissionForAssessment {
         let request = Request(method: .get, path: "/api/programming-submissions/\(submissionId)/lock")
