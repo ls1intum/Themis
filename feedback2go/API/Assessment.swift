@@ -8,29 +8,17 @@
 import Foundation
 
 
-/// delete all saved feedback and release the lock of the submission
-struct CancelAssessment: APIRequest {
-    let submissionId: Int
-    var request: Request {
-        Request(method: .put, path: "/api/programming-submissions/\(submissionId)/cancel-assessment")
+extension ArtemisAPI {
+    
+    /// delete all saved feedback and release the lock of the submission
+    static func cancelAssessment(submissionId: Int) async throws {
+        let request = Request(method: .put, path: "/api/programming-submissions/\(submissionId)/cancel-assessment")
+        try await sendRequest(String.self, request: request)
     }
-}
-
-/// save feedback to the submission
-struct SaveAssessment: APIRequest {
-    let participationId: Int
-    let newAssessment: String //TODO: find what body has to be pushed
-    var request: Request {
-        Request(method: .post, path: "/participations/\(participationId)/manual-results", body: newAssessment)
-    }
-}
-
-/// delete all feedback of submission
-struct DeleteAssessment: APIRequest {
-    let participationId: Int
-    let submissionId: Int
-    let resultId: Int
-    var request: Request {
-        Request(method: .delete, path: "/api/participations/\(participationId)/programming-submissions/\(submissionId)/results/\(resultId)")
+    
+    /// save feedback to the submission
+    static func saveAssessment(participationId: Int, newAssessment: String) async throws {
+        let request = Request(method: .post, path: "/participations/\(participationId)/manual-results", body: newAssessment)
+        try await sendRequest(String.self, request: request)
     }
 }
