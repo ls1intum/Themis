@@ -32,7 +32,7 @@ struct CourseListView: View {
             await courseListVM.fetchAllCourses()
         }
     }
-    
+
     var logoutButton: some View {
         Button {
             authenticationVM.logout()
@@ -41,5 +41,3 @@ struct CourseListView: View {
         }
     }
 }
-
-

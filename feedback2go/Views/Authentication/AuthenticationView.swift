@@ -29,11 +29,11 @@ struct AuthenticationView: View {
                 Text("Log-In")
             }
         }.alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert, actions: {
-            Button("Ok"){}
+            Button("Ok") {}
         })
-        
+
     }
-    
+
     var rememberMe: some View {
         Image(systemName: authenticationVM.rememberMe ? "checkmark.square.fill" : "square")
             .foregroundColor(authenticationVM.rememberMe ? Color(UIColor.systemBlue) : Color.secondary)
@@ -42,4 +42,3 @@ struct AuthenticationView: View {
             }
     }
 }
-
