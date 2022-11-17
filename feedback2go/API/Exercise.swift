@@ -14,14 +14,14 @@ struct Exercise: Codable {
     let maxPoints: Double?
     let assessmentType: String?
     let problemStatement: String?
-    let gradingInstructions: String? //For Programming Assesments this is nil
+    let gradingInstructions: String? // For Programming Assesments this is nil
 }
 
 struct DueDateStat: Codable {
     let inTime: Int
     let late: Int
 }
-///This Struct represents the Statstics for a an Exercise
+/// This Struct represents the Statstics for a an Exercise
 struct ExerciseForAssessment: Codable {
     let numberOfStudent: Int?
     let numberOfSumissions: DueDateStat?
@@ -29,10 +29,10 @@ struct ExerciseForAssessment: Codable {
     let totalNumberOfAssessmentLocks: DueDateStat?
     let complaintsEnabled: Bool?
     let feedbackRequestEnabled: Bool?
-    //let numberOfAssessmentsOfCorrectionRounds: DueDateStat? - this is an Array?!?! see ExerciseResource.java
-    //let numberOfLockedAssessmentByOtherTutorsOfCorrectionRound: DueDateStat?
+    // let numberOfAssessmentsOfCorrectionRounds: DueDateStat? - this is an Array?!?! see ExerciseResource.java
+    // let numberOfLockedAssessmentByOtherTutorsOfCorrectionRound: DueDateStat?
     let numberOfAutomaticAssistedAssessments: DueDateStat?
-    
+
 }
 
 extension ArtemisAPI {
@@ -40,7 +40,7 @@ extension ArtemisAPI {
         let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/for-assessment-dashboard")
         return try await sendRequest(Exercise.self, request: request)
     }
-    
+
     static func getExerciseStats(exerciseId: Int) async throws -> ExerciseForAssessment {
         let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/stats-for-assessment-dashboard")
         return try await sendRequest(ExerciseForAssessment.self, request: request)

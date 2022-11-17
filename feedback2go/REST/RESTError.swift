@@ -16,4 +16,3 @@ enum RESTError: String, Error {
     case server = "The Server experienced an error, therefore not being able to respond."
     case different = "Some error occured while making a request."
 }
-

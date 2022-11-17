@@ -13,8 +13,8 @@ struct Request {
     var params: [URLQueryItem]
     var headers: [String: String] = [:]
     var body: Encodable?
-    
-    init(method: HTTPMethod, path: String = "/", params: [URLQueryItem] = [], headers: [String : String]? = nil, body: Encodable? = nil) {
+
+    init(method: HTTPMethod, path: String = "/", params: [URLQueryItem] = [], headers: [String: String]? = nil, body: Encodable? = nil) {
         self.method = method
         self.path = path
         self.params = params

@@ -67,7 +67,7 @@ class RESTController {
         }
         return urlRequest
     }
-    
+
     private func makeURL(with path: String, params: [URLQueryItem]) -> URL {
         var newURL = baseURL
         newURL.append(path: path)
