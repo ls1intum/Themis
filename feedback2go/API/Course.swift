@@ -7,17 +7,6 @@
 
 import Foundation
 
-struct CourseTitle: Codable {
-    var title: String
-}
-
-struct GetCourseTitle: APIRequest {
-    let courseID: String
-    var request: Request {
-        Request(method: .get, path: "/api/courses/\(courseID)")
-    }
-}
-
 struct Course: Codable {
     let id: Int
     let title: String?
@@ -26,8 +15,9 @@ struct Course: Codable {
     let exercises: [Exercise]?
 }
 
-struct GetCourses: APIRequest {
-    var request: Request {
-        Request(method: .get, path: "/api/courses/for-dashboard")
+extension ArtemisAPI {
+    static func getAllCourses() async throws -> [Course] {
+        let request = Request(method: .get, path: "/api/courses/for-dashboard")
+        return try await sendRequest([Course].self, request: request)
     }
 }

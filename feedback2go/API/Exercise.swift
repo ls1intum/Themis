@@ -35,16 +35,14 @@ struct ExerciseForAssessment: Codable {
     
 }
 
-struct GetExercise: APIRequest {
-    let exerciseID: Int
-    var request: Request {
-        Request(method: .get, path: "/api/exercises/\(exerciseID)/for-assessment-dashboard")
+extension ArtemisAPI {
+    static func getExercise(exerciseId: Int) async throws -> Exercise {
+        let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/for-assessment-dashboard")
+        return try await sendRequest(Exercise.self, request: request)
     }
-}
-
-struct GetExerciseStats: APIRequest {
-    let exerciseID: Int
-    var request: Request {
-        Request(method: .get, path: "/api/exercises/\(exerciseID)/stats-for-assessment-dashboard")
+    
+    static func getExerciseStats(exerciseId: Int) async throws -> ExerciseForAssessment {
+        let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/stats-for-assessment-dashboard")
+        return try await sendRequest(ExerciseForAssessment.self, request: request)
     }
 }

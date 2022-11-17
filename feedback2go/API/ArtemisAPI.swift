@@ -8,8 +8,8 @@
 import Foundation
 
 class ArtemisAPI {
-    static func sendRequest<T: Decodable, R: APIRequest>(_ type: T.Type, request: R) async throws -> T {
-        var request = request.request
+    static func sendRequest<T: Decodable>(_ type: T.Type, request: Request) async throws -> T {
+        var request = request
         
         guard let token = Authentication.shared.token else {
             throw Authentication.AuthenticationError.tokenNotFound
@@ -19,8 +19,8 @@ class ArtemisAPI {
         return try await RESTController.shared.sendRequest(request)
     }
     
-    static func sendRequest<T, R: APIRequest>(_ type: T.Type, request: R, decode: (Data) throws -> T) async throws -> T {
-        var request = request.request
+    static func sendRequest<T>(_ type: T.Type, request: Request, decode: (Data) throws -> T) async throws -> T {
+        var request = request
         
         guard let token = Authentication.shared.token else {
             throw Authentication.AuthenticationError.tokenNotFound
@@ -29,8 +29,4 @@ class ArtemisAPI {
         
         return try await RESTController.shared.sendRequest(request, decode: decode)
     }
-}
-
-protocol APIRequest {
-    var request: Request { get }
 }
