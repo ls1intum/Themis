@@ -32,11 +32,10 @@ class AuthenticationViewModel: ObservableObject {
     @Published var invalidCredentialsAlert: Bool = false
     /// While Authenticating this variable will be true for the ProgressView
     @Published var authenticationInProgress: Bool = false
-    
-    
+
     private var restControllerInitialized = false
     private var cancellable = Set<AnyCancellable>()
-    
+
     init() {
         self.serverURL = UserDefaults.standard.string(forKey: "serverURL") ?? "https://artemis.in.tum.de"
         if let serverURL = URL(string: serverURL) {
@@ -46,8 +45,8 @@ class AuthenticationViewModel: ObservableObject {
         Authentication.shared = Authentication()
         observeAuthenticationToken()
     }
-    
-    ///Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value
+
+    /// Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value
     private func observeAuthenticationToken() {
         Authentication.shared.publisher(for: \.token, options: [.new])
             .receive(on: RunLoop.main)
@@ -55,7 +54,7 @@ class AuthenticationViewModel: ObservableObject {
                 self.authenticated = token != nil
             }.store(in: &cancellable)
     }
-    
+
     @MainActor
     func authenticate() async {
         guard restControllerInitialized else { return }
@@ -68,16 +67,16 @@ class AuthenticationViewModel: ObservableObject {
             if let token = Authentication.shared.token {
                 Authentication.shared.storeTokenInKeychain(token: token)
             }
-        } catch (RESTError.unauthorized) {
+        } catch RESTError.unauthorized {
             self.invalidCredentialsAlert.toggle()
-        } catch (let error) {
+        } catch let error {
             print(error.localizedDescription)
         }
-        
+
     }
     /// Searches for the Bearer token in the Keychain
     func searchForToken () {
-        Authentication.shared.getTokenFromKeychain ()
+        Authentication.shared.getTokenFromKeychain()
     }
     /// Logs the User out by deleting the Token which will triger the observation of the Authentication.shared.token Property
     func logout() {

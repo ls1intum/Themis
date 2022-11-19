@@ -8,7 +8,7 @@
 import Foundation
 
 enum RESTError: String, Error {
-    //TODO:add desc
+    // TODO:add desc
     case unauthorized = "d"
     case badRequest = "a"
     case methodNotAllowed = "g"

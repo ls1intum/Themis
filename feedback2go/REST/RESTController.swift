@@ -9,29 +9,29 @@ import Foundation
 
 class RESTController {
     static var shared: RESTController!
-    
+
     var baseURL: URL
-    
+
     private var jsonEncoder = JSONEncoder()
     private var jsonDecoder = JSONDecoder()
-    
+
     init(baseURL: URL) {
         self.baseURL = baseURL
     }
-    
+
     func sendRequest<T: Decodable>(_ request: Request) async throws -> T {
         return try await sendRequest(request, decode: { data in
             return try jsonDecoder.decode(T.self, from: data)
         })
     }
-    
+
     func sendRequest<T>(_ request: Request, decode: (Data) throws -> T) async throws -> T {
         let request = try makeURLRequest(request)
         let (data, response) = try await URLSession.shared.data(for: request)
         try validate(response: response)
         return try decode(data)
     }
-    
+
     private func validate(response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse else { return }
         switch httpResponse.statusCode {
@@ -51,10 +51,9 @@ class RESTController {
             throw RESTError.server
         default:
             throw RESTError.different
-            
         }
     }
-    
+
     private func makeURLRequest(_ request: Request) throws -> URLRequest {
         let url = makeURL(with: request.path)
         var urlRequest = URLRequest(url: url)
@@ -66,7 +65,7 @@ class RESTController {
         }
         return urlRequest
     }
-    
+
     private func makeURL(with path: String) -> URL {
         var newURL = baseURL
         newURL.append(path: path)
@@ -74,4 +73,3 @@ class RESTController {
     }
 
 }
-
