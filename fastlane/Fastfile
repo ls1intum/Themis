@@ -134,6 +134,15 @@ platform :ios do
     )
   end
 
+  desc "[CI] Check static code quality"
+  lane :swift_lint do
+    swiftlint(
+      config_file: "swiftlint.yml",
+      strict: false,
+      raise_if_swiftlint_error: true
+    )
+  end
+
   desc "[CI] Notify slack channel about new release"
   lane :slack_notification do
     slack(
