@@ -27,6 +27,5 @@ struct AuthenticationView: View {
         }.alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert, actions: {
             Button("Ok") {}
         })
-
     }
 }

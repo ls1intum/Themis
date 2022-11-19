@@ -13,7 +13,9 @@ class AuthenticationViewModel: ObservableObject {
     /// Updating it will update the RESTController base URL and will save it in the User Defaults
     @Published var serverURL: String = "" {
         didSet {
-            guard let url = URL(string: serverURL) else { return }
+            guard let url = URL(string: serverURL) else {
+                return
+            }
             print("setting server url")
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
             if restControllerInitialized {
@@ -57,7 +59,9 @@ class AuthenticationViewModel: ObservableObject {
 
     @MainActor
     func authenticate() async {
-        guard restControllerInitialized else { return }
+        guard restControllerInitialized else {
+            return
+        }
         self.authenticationInProgress = true
         defer {
             self.authenticationInProgress = false
@@ -72,12 +76,13 @@ class AuthenticationViewModel: ObservableObject {
         } catch let error {
             print(error.localizedDescription)
         }
-
     }
+
     /// Searches for the Bearer token in the Keychain
     func searchForToken () {
         Authentication.shared.getTokenFromKeychain()
     }
+
     /// Logs the User out by deleting the Token which will triger the observation of the Authentication.shared.token Property
     func logout() {
         Authentication.shared.deleteToken()

@@ -33,7 +33,9 @@ class RESTController {
     }
 
     private func validate(response: URLResponse) throws {
-        guard let httpResponse = response as? HTTPURLResponse else { return }
+        guard let httpResponse = response as? HTTPURLResponse else {
+            return
+        }
         switch httpResponse.statusCode {
         case 200..<300:
             return
@@ -71,5 +73,4 @@ class RESTController {
         newURL.append(path: path)
         return newURL
     }
-
 }

@@ -59,9 +59,9 @@ class Authentication: NSObject {
     /// This Method allows the user to Authenticate. If it doesnt throw an Error the Bearer token will be set
     func authenticate(username: String, password: String) async throws {
         let body = [
-                    "username": username,
-                    "password": password
-                   ]
+            "username": username,
+            "password": password
+        ]
         let request = Request(method: .post, path: "/api/authenticate", body: body)
         self.token = try await RESTController.shared.sendRequest(request) { try parseAuth(data: $0) }
     }
