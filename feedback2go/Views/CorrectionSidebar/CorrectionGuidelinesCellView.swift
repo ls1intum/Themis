@@ -9,12 +9,24 @@ import SwiftUI
 
 struct CorrectionGuidelinesCellView: View {
     var body: some View {
-        Text("Correction Guidelines").font(.headline)
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Correction Guidelines")
+                    .font(.largeTitle)
+
+                Text("Test")
+
+                Spacer()
+            }
+
+            Spacer()
+        }.padding()
     }
 }
 
 struct CorrectionGuidelinesCellView_Previews: PreviewProvider {
     static var previews: some View {
         CorrectionGuidelinesCellView()
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
