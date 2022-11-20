@@ -13,6 +13,7 @@ enum CorrectionSidebarElements {
 
 struct CorrectionSidebarView: View {
     @StateObject var feedbackModel = FeedbackViewModel.mock
+    @StateObject var correctionGuidelines = CorrectionGuidelines.mock
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
 
     var body: some View {
@@ -33,7 +34,7 @@ struct CorrectionSidebarView: View {
                 case .problemStatement:
                     ProblemStatementCellView()
                 case .correctionGuidelines:
-                    CorrectionGuidelinesCellView()
+                    CorrectionGuidelinesCellView(correctionGuidelinesModel: correctionGuidelines)
                 case .generalFeedback:
                     GeneralFeedbackCellView(feedbackModel: feedbackModel)
                 }

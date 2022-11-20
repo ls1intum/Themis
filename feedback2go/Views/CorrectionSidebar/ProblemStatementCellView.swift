@@ -11,7 +11,7 @@ import Foundation
 struct ProblemStatementCellView: View {
     var body: some View {
         HStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 40) {
                 /*ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
                     Text(line)
                 }*/
