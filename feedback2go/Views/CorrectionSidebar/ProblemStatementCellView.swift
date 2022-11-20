@@ -10,17 +10,24 @@ import Foundation
 
 struct ProblemStatementCellView: View {
     var body: some View {
-        VStack {
-            /*ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
-                Text(line)
-            }*/
-            Text(ProblemStatementCellViewModel.convertString(ProblemStatementCellViewModel.mockData))
-        }
+        HStack {
+            VStack(alignment: .leading) {
+                /*ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
+                    Text(line)
+                }*/
+                Text("Problem Statement")
+                    .font(.largeTitle)
+                Spacer()
+                Text(ProblemStatementCellViewModel.convertString(ProblemStatementCellViewModel.mockData))
+            }
+            Spacer()
+        }.padding()
     }
 }
 
 struct ProblemStatementCellView_Previews: PreviewProvider {
     static var previews: some View {
         ProblemStatementCellView()
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

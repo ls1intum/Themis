@@ -27,6 +27,7 @@ struct GeneralFeedbackCellView: View {
             ForEach(feedbackModel.feedbacks) { feedback in
                 FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
             }
+
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(feedbackModel: feedbackModel, showAddFeedback: $showAddFeedback)
