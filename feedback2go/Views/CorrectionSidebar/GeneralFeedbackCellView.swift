@@ -23,7 +23,8 @@ struct GeneralFeedbackCellView: View {
                     Image(systemName: "plus")
                 }.font(.largeTitle)
             }.padding()
-            List(feedbackModel.feedbacks) { feedback in
+
+            ForEach(feedbackModel.feedbacks) { feedback in
                 FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
             }
             Spacer()

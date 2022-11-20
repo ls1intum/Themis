@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 public class FeedbackViewModel: ObservableObject {
     @Published var feedbacks: [Feedback] = []
@@ -37,9 +36,11 @@ public class FeedbackViewModel: ObservableObject {
         }
         return feedback.score
     }
+
     public static var mock: FeedbackViewModel {
         let mockModel = FeedbackViewModel()
         mockModel.addFeedback(feedbackText: "This is your feedback", score: -7.5)
+        mockModel.addFeedback(feedbackText: "Second Feedback", score: -1.5)
         return mockModel
     }
 }
