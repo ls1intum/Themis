@@ -10,12 +10,8 @@ import SwiftUI
 
 struct FeedbackCellView: View {
     @ObservedObject var feedbackModel: FeedbackViewModel
-    @State var score = 0.0
     var feedbackID: Feedback.ID
-    let maxScore = Double(10)
-    var pickerRange: [Double] {
-        Array(stride(from: -1 * maxScore, to: maxScore +  0.5, by: 0.5))
-    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -42,7 +38,9 @@ struct FeedbackCellView: View {
 
 struct FeedbackCell_Previews: PreviewProvider {
     private static let mock: FeedbackViewModel = FeedbackViewModel.mock
+
     static var previews: some View {
-        FeedbackCellView(feedbackModel: mock, feedbackID: mock.feedbacks[0].id).previewInterfaceOrientation(.landscapeLeft)
+        FeedbackCellView(feedbackModel: mock, feedbackID: mock.feedbacks[0].id)
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

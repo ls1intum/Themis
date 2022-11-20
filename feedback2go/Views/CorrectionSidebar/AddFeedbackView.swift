@@ -55,6 +55,7 @@ struct AddFeedbackView: View {
 
 struct AddFeedbackView_Previews: PreviewProvider {
     @State static var showAddFeedback = true
+
     static var previews: some View {
         AddFeedbackView(feedbackModel: FeedbackViewModel.mock, showAddFeedback: $showAddFeedback)
             .previewInterfaceOrientation(.landscapeLeft)

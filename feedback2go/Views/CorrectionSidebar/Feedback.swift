@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 public class Feedback: Identifiable {
     public var id: UUID

@@ -28,6 +28,8 @@ struct CorrectionSidebarView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
+            Text(feedbackModel.getFeedbackText(id: feedbackModel.feedbacks[0].id))
+
             ScrollView {
                 switch correctionSidebarStatus {
                 case .problemStatement:
@@ -45,7 +47,6 @@ struct CorrectionSidebarView: View {
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static var previews: some View {
         CorrectionSidebarView()
-            .environmentObject(FeedbackViewModel.mock)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
