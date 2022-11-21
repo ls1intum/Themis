@@ -30,6 +30,7 @@ struct AddFeedbackView: View {
                 } label: {
                     Text("Save")
                 }.font(.title)
+                 .disabled(feedbackText.isEmpty)
             }
             HStack {
                 TextField("Enter your feedback here", text: $feedbackText, axis: .vertical)
