@@ -114,7 +114,7 @@ extension ArtemisAPI {
             }
             .filter { $0.0 != [""] }
             .map { (path: Stack(storage: $0.0.reversed()), type: $0.1) }
-    
+
         let root = Node(type: .folder, name: "")
         let start = DispatchTime.now()
         parseFileTree(node: root, paths: convertedStructure)

@@ -48,7 +48,11 @@ extension ArtemisAPI {
 
     /// Gets a random submission and locks it. This should be used to assess a random submission.
     static func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> SubmissionForAssessment {
-        let request = Request(method: .get, path: "/api/exercises/5284/programming-submission-without-assessment", params: [URLQueryItem(name: "lock", value: "true")])
+        let request = Request(
+            method: .get,
+            path: "/api/exercises/5284/programming-submission-without-assessment",
+            params: [URLQueryItem(name: "lock", value: "true")]
+        )
         return try await sendRequest(SubmissionForAssessment.self, request: request)
     }
 

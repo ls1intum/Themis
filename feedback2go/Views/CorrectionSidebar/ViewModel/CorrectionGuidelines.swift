@@ -37,8 +37,17 @@ public class CorrectionGuidelines: ObservableObject {
     }
 
     public static var mock: CorrectionGuidelines {
-        let gradingCriteria = GradingCriteria(credits: 2.0, gradingScale: "Perfect", instructionDescription: "Test", feedback: "very good", usageCount: 0)
-        let correctionGuidelines = CorrectionGuidelines(gradingCriteria: [gradingCriteria], gradingInstructions: "Add Assessment Instruction text here")
+        let gradingCriteria = GradingCriteria(
+            credits: 2.0,
+            gradingScale: "Perfect",
+            instructionDescription: "Test",
+            feedback: "very good",
+            usageCount: 0
+        )
+        let correctionGuidelines = CorrectionGuidelines(
+            gradingCriteria: [gradingCriteria],
+            gradingInstructions: "Add Assessment Instruction text here"
+        )
         return correctionGuidelines
     }
 }
