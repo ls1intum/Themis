@@ -20,7 +20,7 @@ extension Stackable {
 }
 
 class Stack<Element>: ExpressibleByArrayLiteral, Stackable where Element: Equatable {
-    private var storage = [Element]()
+    private(set) var storage = [Element]()
     func peek() -> Element? { storage.last }
     func push(_ element: Element) { storage.append(element)  }
     func pop() -> Element? { storage.popLast() }

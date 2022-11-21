@@ -107,16 +107,17 @@ extension ArtemisAPI {
 
     static func initFileTreeStructure(files: [String: FileType]) -> Node {
 
-        let convertedDict = Dictionary(uniqueKeysWithValues: files.map { key, value in
-            guard let path = URL(string: key) else { return ([""], value)}
-            return (path.pathComponents, value)
-        })
-        .filter { $0.key != [""] }
-        .map { (path: Stack(storage: $0.key.reversed()), type: $0.value) }
-
+        let convertedStructure = files.sorted { $0.key < $1.key }
+            .map {
+                guard let path = URL(string: $0.key) else { return ([""], $0.value)}
+                return (path.pathComponents, $0.value)
+            }
+            .filter { $0.0 != [""] }
+            .map { (path: Stack(storage: $0.0.reversed()), type: $0.1) }
+    
         let root = Node(type: .folder, name: "")
         let start = DispatchTime.now()
-        parseFileTree(node: root, paths: convertedDict)
+        parseFileTree(node: root, paths: convertedStructure)
         let end = DispatchTime.now()
 
         let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
