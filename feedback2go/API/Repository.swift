@@ -13,24 +13,24 @@ enum FileType: String, Codable {
 }
 
 class Node: Hashable {
-    
+
     var parent: Node?
     var name: String
-    
+
     let type: FileType
     var children: [Node]?
     var code: String?
-    
+
     init(type: FileType, name: String) {
         self.name = name
         self.type = type
     }
-    
+
     convenience init(type: FileType, name: String, parent: Node) {
         self.init(type: type, name: name)
         self.parent = parent
     }
-    
+
     var description: String {
         var desc = "\(name)"
         if let children {
@@ -40,17 +40,17 @@ class Node: Hashable {
         }
         return desc.trimmingCharacters(in: .newlines)
     }
-    
+
     var path: String {
         calculatePath().joined(separator: "/")
     }
-    
+
     private func calculatePath() -> [String] {
         var parentPath = parent?.calculatePath() ?? []
         parentPath.append(name)
         return parentPath
     }
-    
+
     private func prettyPrint(spaces: String) -> String {
         var desc = ""
         let newSpaces = spaces + "  "
@@ -61,11 +61,10 @@ class Node: Hashable {
         }
         return desc
     }
-    
+
     public func fetchCode() {
-        if code != nil { return }
-        else {
-            ///MOCK STUFF
+        if code != nil { return } else {
+            /// MOCK STUFF
             switch name {
             case "Baum.java": self.code = "class Baum {\n\tString type = \"Eiche\";\n}"
             case "Wald.java": self.code = "class Wald {\n}"
@@ -74,11 +73,11 @@ class Node: Hashable {
             }
         }
     }
-    
+
     static func == (lhs: Node, rhs: Node) -> Bool {
         lhs.path == rhs.path
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(path)
     }
@@ -105,17 +104,16 @@ extension ArtemisAPI {
         let request = Request(method: .get, path: "/api/repository/\(participationId)/files-content")
         return try await sendRequest([String: String].self, request: request)
     }
-    
-    static func initFileTreeStructure(files: [String:FileType]) -> Node {
-        
+
+    static func initFileTreeStructure(files: [String: FileType]) -> Node {
+
         let convertedDict = Dictionary(uniqueKeysWithValues: files.map { key, value in
             guard let path = URL(string: key) else { return ([""], value)}
             return (path.pathComponents, value)
         })
         .filter { $0.key != [""] }
         .map { (path: Stack(storage: $0.key.reversed()), type: $0.value) }
-        
-        
+
         let root = Node(type: .folder, name: "")
         let start = DispatchTime.now()
         parseFileTree(node: root, paths: convertedDict)
@@ -125,11 +123,11 @@ extension ArtemisAPI {
         let timeInterval = Double(nanoTime) / 1_000_000_000
 
         print("Time to evaluate Parse: \(timeInterval) seconds")
-        
+
         return root
     }
-    
-    static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)])  {
+
+    static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)]) {
         let root = paths.filter { $0.path.size() == 1 }.map { (name: $0.path.pop()!, type: $0.type) }
         var notRoot = paths.filter { $0.path.size() > 0 }
         for elem in root {
@@ -140,16 +138,15 @@ extension ArtemisAPI {
                 let newFolder = Node(type: .folder, name: elem.name, parent: node)
                 let children = notRoot.filter { $0.path.peek() == elem.name }
                 children.forEach { c in
-                    let _ = c.path.pop()
+                    _ = c.path.pop()
                     notRoot.removeAll { p in p.path === c.path }
                 }
-                //notRoot.removeAll { p in children.contains { $0.path === p.path } }
+                // notRoot.removeAll { p in children.contains { $0.path === p.path } }
                 parseFileTree(node: newFolder, paths: children)
                 if node.children == nil { node.children = [] }
                 node.children?.append(newFolder)
             }
         }
     }
-   
-}
 
+}

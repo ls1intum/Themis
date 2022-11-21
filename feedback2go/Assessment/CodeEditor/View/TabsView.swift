@@ -16,11 +16,11 @@ struct TabsView: View {
                             Button(action: {
                                 model.closeFile(file: file)
                             }, label: {
-                                //if file.id == model.selectedFile?.id {
+                                // if file.id == model.selectedFile?.id {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.gray)
                                         .buttonStyle(.borderless)
-                                //}
+                                // }
                             })
                         }
                         .frame(width: 100, height: 20)

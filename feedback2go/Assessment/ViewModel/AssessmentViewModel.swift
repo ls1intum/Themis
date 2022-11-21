@@ -44,8 +44,8 @@ class AssessmentViewModel: ObservableObject {
                  title: "Fluss.java",
                  code: "class Fluss {\n}")
     ]
-    
-    static let newMockData: [String:FileType] = [
+
+    static let newMockData: [String: FileType] = [
         "": .folder,
         "gradlew": .file,
         "settings.gradle": .file,

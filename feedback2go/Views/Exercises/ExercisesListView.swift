@@ -10,7 +10,7 @@ import SwiftUI
 struct ExercisesListView: View {
     @ObservedObject var courseListVM: CourseListViewModel
     var courseID: Int
-    
+
     var body: some View {
         courseListVM.courseForID(id: courseID).exercises.flatMap { exerciseList in
             List {
@@ -23,4 +23,3 @@ struct ExercisesListView: View {
         }
     }
 }
-

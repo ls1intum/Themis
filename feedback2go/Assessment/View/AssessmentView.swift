@@ -217,7 +217,7 @@ struct AssessmentView: View {
         )
     }
     var correction: some View {
-        Text("CorrectionSidebar")
+        CorrectionSidebarView()
     }
 }
 
