@@ -164,6 +164,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		83342600292BEA40007B86FA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
+				8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */,
+				8384C43C292A8634008CCB4D /* Feedback.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +237,7 @@
 		8384C4292920F7D7008CCB4D /* CorrectionSidebar */ = {
 			isa = PBXGroup;
 			children = (
+				83342600292BEA40007B86FA /* ViewModel */,
 				8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */,
 				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
 				8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */,
@@ -234,9 +245,6 @@
 				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
 				8384C436292A84C7008CCB4D /* AddFeedbackView.swift */,
 				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
-				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
-				8384C43C292A8634008CCB4D /* Feedback.swift */,
-				8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */,
 				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
 			);
 			path = CorrectionSidebar;

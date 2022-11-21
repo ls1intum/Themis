@@ -19,11 +19,11 @@ struct CorrectionSidebarView: View {
     var body: some View {
         VStack {
             Picker(selection: $correctionSidebarStatus, label: Text("")) {
-                Text("Problem Statement")
+                Text("Problem")
                     .tag(CorrectionSidebarElements.problemStatement)
-                Text("Correction Guidelines")
+                Text("Guidelines")
                     .tag(CorrectionSidebarElements.correctionGuidelines)
-                Text("General Feedback")
+                Text("Feedback")
                     .tag(CorrectionSidebarElements.generalFeedback)
             }
             .pickerStyle(SegmentedPickerStyle())
