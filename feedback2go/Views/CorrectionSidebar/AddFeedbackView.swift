@@ -5,6 +5,8 @@
 //  Created by Katjana Kosic on 18.11.22.
 //
 
+// swiftlint:disable closure_body_length
+
 import Foundation
 import SwiftUI
 
