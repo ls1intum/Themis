@@ -20,4 +20,9 @@ extension ArtemisAPI {
         let request = Request(method: .get, path: "/api/courses/for-dashboard")
         return try await sendRequest([Course].self, request: request)
     }
+    
+    static func getAllProgrammingExercises(courseId: Int) async throws -> [Exercise] {
+        let request = Request(method: .get, path: "api/courses/\(courseId)/programming-exercises")
+        return try await sendRequest([Exercise].self, request: request)
+    }
 }
