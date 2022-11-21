@@ -12,14 +12,14 @@ enum FileType: String, Codable {
     case file = "FILE"
 }
 
-class Node {
+class Node: Hashable {
     
     var parent: Node?
     var name: String
     
     let type: FileType
     var children: [Node]?
-    var file: String?
+    var code: String?
     
     init(type: FileType, name: String) {
         self.name = name
@@ -60,6 +60,27 @@ class Node {
             desc += child.prettyPrint(spaces: newSpaces)  + "\n"
         }
         return desc
+    }
+    
+    public func fetchCode() {
+        if code != nil { return }
+        else {
+            ///MOCK STUFF
+            switch name {
+            case "Baum.java": self.code = "class Baum {\n\tString type = \"Eiche\";\n}"
+            case "Wald.java": self.code = "class Wald {\n}"
+            case "Fluss.java": self.code = "class Fluss {\n}"
+            default: self.code = "class DEFAULT {\n}"
+            }
+        }
+    }
+    
+    static func == (lhs: Node, rhs: Node) -> Bool {
+        lhs.path == rhs.path
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(path)
     }
 }
 
