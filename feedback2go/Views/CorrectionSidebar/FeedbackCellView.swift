@@ -26,10 +26,10 @@ struct FeedbackCellView: View {
             }
             HStack {
                 Text(feedbackModel.getFeedbackText(id: feedbackID))
-                    .frame(width: 1000, alignment: .leading)
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
                         .stroke(.blue, lineWidth: 2))
+                Spacer()
                 Text("Score: " + String(feedbackModel.getFeedbackScore(id: feedbackID)))
             }
         }.padding()
