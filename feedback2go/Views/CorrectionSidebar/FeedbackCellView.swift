@@ -16,7 +16,7 @@ struct FeedbackCellView: View {
         VStack(alignment: .leading) {
             HStack {
                 Text("Feedback")
-                    .font(.largeTitle)
+                    .font(.title2)
                 Spacer()
                 Button {
                     feedbackModel.deleteFeedback(id: feedbackID)
