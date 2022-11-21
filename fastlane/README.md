@@ -47,6 +47,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 [CI] Generate a fresh token to authenticate on the app store connect api
 
+### ios swift_lint
+
+```sh
+[bundle exec] fastlane ios swift_lint
+```
+
+[CI] Check static code quality
+
+### ios slack_notification
+
+```sh
+[bundle exec] fastlane ios slack_notification
+```
+
+[CI] Notify slack channel about new release
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
