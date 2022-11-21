@@ -23,7 +23,7 @@ struct TabsView: View {
                                 }
                             })
                         }
-                        .frame(width: 100, height: 20)
+                        .frame(height: 20)
                         .id(file)
                         .onTapGesture {
                             withAnimation {
