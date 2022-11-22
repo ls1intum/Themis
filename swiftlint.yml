@@ -292,7 +292,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
 
 closure_body_length: # Closure bodies should not span too many lines.
   - 25 # warning - default: 20
-  - 25 # error - default: 100
+  - 100 # error - default: 100 - default by iPraktikum: 25
 
 file_length: # Files should not span too many lines.
   - 500 # warning - default: 400
@@ -307,6 +307,7 @@ function_parameter_count: # Number of function parameters should be low.
   - 5 # error - default: 8
 
 identifier_name:
+  allowed_symbols: "_"
   excluded: # excluded names
     - id
     - ok
