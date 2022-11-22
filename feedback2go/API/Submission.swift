@@ -7,6 +7,14 @@
 
 import Foundation
 
+struct Student: Codable {
+    let id: Int
+    let login: String
+    let firstName: String
+    let lastName: String
+    let email: String
+}
+
 struct SubmissionResult: Codable {
     let id: Int
     let score: Double
@@ -18,25 +26,22 @@ struct SubmissionResult: Codable {
 }
 
 struct SubmissionParticipation: Codable {
+    let id: Int
     let repositoryUrl: String
     let userIndependentRepositoryUrl: String
+    let student: Student
 }
 
 struct Submission: Codable {
-    let type: String
     let id: Int
-    let submitted: Bool
     let participation: SubmissionParticipation
     let results: SubmissionResult
 }
 
 struct SubmissionForAssessment: Codable {
-    let type: String
     let id: Int
-    let submitted: Bool
     let participation: SubmissionParticipation
     let results: SubmissionResult
-    let exercise: Exercise // TODO: Ask Tom for additional attributes in Exercise struct
 }
 
 extension ArtemisAPI {
@@ -50,7 +55,7 @@ extension ArtemisAPI {
     static func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> SubmissionForAssessment {
         let request = Request(
             method: .get,
-            path: "/api/exercises/5284/programming-submission-without-assessment",
+            path: "/api/exercises/\(exerciseId)/programming-submission-without-assessment",
             params: [URLQueryItem(name: "lock", value: "true")]
         )
         return try await sendRequest(SubmissionForAssessment.self, request: request)
