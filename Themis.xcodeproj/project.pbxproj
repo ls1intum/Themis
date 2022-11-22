@@ -1,0 +1,1017 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
+		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
+		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
+		83396D3529155935003EF727 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3429155935003EF727 /* Preview Assets.xcassets */; };
+		83396D3F29155936003EF727 /* ThemisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D3E29155936003EF727 /* ThemisTests.swift */; };
+		83396D4929155936003EF727 /* feedback2goUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D4829155936003EF727 /* feedback2goUITests.swift */; };
+		83396D4B29155936003EF727 /* ThemisUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D4A29155936003EF727 /* ThemisUITestsLaunchTests.swift */; };
+		8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */; };
+		8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */; };
+		8384C43129210474008CCB4D /* GeneralFeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */; };
+		8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43229210488008CCB4D /* ProblemStatementCellView.swift */; };
+		8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */; };
+		8384C437292A84C7008CCB4D /* AddFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C436292A84C7008CCB4D /* AddFeedbackView.swift */; };
+		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
+		8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */; };
+		8384C43D292A8634008CCB4D /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43C292A8634008CCB4D /* Feedback.swift */; };
+		8384C43F292A9D24008CCB4D /* CorrectionGuidelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */; };
+		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
+		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
+		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
+		E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */; };
+		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
+		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
+		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
+		E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED4291E57640092CE58 /* HTTPMethod.swift */; };
+		E2192ED7291E57810092CE58 /* RESTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED6291E57810092CE58 /* RESTError.swift */; };
+		E2192ED9291E57A40092CE58 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED8291E57A40092CE58 /* Request.swift */; };
+		E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */; };
+		E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EDD291E687C0092CE58 /* Authentication.swift */; };
+		E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2192EE0291E6F780092CE58 /* KeychainAccess */; };
+		E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */; };
+		E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */; };
+		E21AF018292B9B370096ACFC /* Runestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF017292B9B370096ACFC /* Runestone */; };
+		E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF034292B9D0A0096ACFC /* TreeSitterJava */; };
+		E21AF037292B9D0A0096ACFC /* TreeSitterJavaQueries in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */; };
+		E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */; };
+		E21AF03B292B9D0A0096ACFC /* TreeSitterLanguagesCommon in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */; };
+		E21AF03D292B9D0A0096ACFC /* TreeSitterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */; };
+		E21AF03F292B9D0A0096ACFC /* TreeSitterSwiftQueries in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */; };
+		E21AF041292B9D0A0096ACFC /* TreeSitterSwiftRunestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */; };
+		E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */; };
+		E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF047292B9D4C0096ACFC /* CodeView.swift */; };
+		E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF048292B9D4C0096ACFC /* TabsView.swift */; };
+		E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */; };
+		E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */; };
+		E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04E292B9D4C0096ACFC /* HighlightName.swift */; };
+		E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */; };
+		E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF052292B9D4C0096ACFC /* AssessmentView.swift */; };
+		E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E460DC29292ECF00ECC0A5 /* Stack.swift */; };
+		E2E67483292032870081238B /* CourseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67482292032870081238B /* CourseListViewModel.swift */; };
+		E2E67485292033EE0081238B /* CourseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67484292033EE0081238B /* CourseListView.swift */; };
+		E2E6748829203E350081238B /* ExercisesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExercisesListView.swift */; };
+		E2E6748B2920419B0081238B /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748A2920419B0081238B /* Exercise.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		83396D3B29155936003EF727 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83396D2229155934003EF727 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83396D2929155934003EF727;
+			remoteInfo = feedback2go;
+		};
+		83396D4529155936003EF727 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83396D2229155934003EF727 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83396D2929155934003EF727;
+			remoteInfo = feedback2go;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
+		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		83396D3129155935003EF727 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		83396D3429155935003EF727 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		83396D3A29155936003EF727 /* ThemisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThemisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		83396D3E29155936003EF727 /* ThemisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisTests.swift; sourceTree = "<group>"; };
+		83396D4429155936003EF727 /* ThemisUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThemisUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		83396D4829155936003EF727 /* feedback2goUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedback2goUITests.swift; sourceTree = "<group>"; };
+		83396D4A29155936003EF727 /* ThemisUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionSidebarView.swift; sourceTree = "<group>"; };
+		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionGuidelinesCellView.swift; sourceTree = "<group>"; };
+		8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralFeedbackCellView.swift; sourceTree = "<group>"; };
+		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemStatementCellView.swift; sourceTree = "<group>"; };
+		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemStatementCellViewModel.swift; sourceTree = "<group>"; };
+		8384C436292A84C7008CCB4D /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFeedbackView.swift; sourceTree = "<group>"; };
+		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCellView.swift; sourceTree = "<group>"; };
+		8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewModel.swift; sourceTree = "<group>"; };
+		8384C43C292A8634008CCB4D /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
+		8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionGuidelines.swift; sourceTree = "<group>"; };
+		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingCriteriaCellView.swift; sourceTree = "<group>"; };
+		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Submission.swift; sourceTree = "<group>"; };
+		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assessment.swift; sourceTree = "<group>"; };
+		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantUMLConverter.swift; sourceTree = "<group>"; };
+		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
+		E2192ED4291E57640092CE58 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		E2192ED6291E57810092CE58 /* RESTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
+		E2192ED8291E57A40092CE58 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisAPI.swift; sourceTree = "<group>"; };
+		E2192EDD291E687C0092CE58 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentViewModel.swift; sourceTree = "<group>"; };
+		E21AF047292B9D4C0096ACFC /* CodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
+		E21AF048292B9D4C0096ACFC /* TabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
+		E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeSettings.swift; sourceTree = "<group>"; };
+		E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorFontSizeStepper.swift; sourceTree = "<group>"; };
+		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightName.swift; sourceTree = "<group>"; };
+		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		E21AF052292B9D4C0096ACFC /* AssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentView.swift; sourceTree = "<group>"; };
+		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListViewModel.swift; sourceTree = "<group>"; };
+		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListView.swift; sourceTree = "<group>"; };
+		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesListView.swift; sourceTree = "<group>"; };
+		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		83396D2729155934003EF727 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E21AF03B292B9D0A0096ACFC /* TreeSitterLanguagesCommon in Frameworks */,
+				E21AF037292B9D0A0096ACFC /* TreeSitterJavaQueries in Frameworks */,
+				E21AF03D292B9D0A0096ACFC /* TreeSitterSwift in Frameworks */,
+				E21AF018292B9B370096ACFC /* Runestone in Frameworks */,
+				E21AF03F292B9D0A0096ACFC /* TreeSitterSwiftQueries in Frameworks */,
+				E21AF041292B9D0A0096ACFC /* TreeSitterSwiftRunestone in Frameworks */,
+				E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */,
+				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
+				E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83396D3729155936003EF727 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83396D4129155936003EF727 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		83342600292BEA40007B86FA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
+				8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */,
+				8384C43C292A8634008CCB4D /* Feedback.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		83396D2129155934003EF727 = {
+			isa = PBXGroup;
+			children = (
+				83396D2C29155935003EF727 /* Themis */,
+				83396D3D29155936003EF727 /* ThemisTests */,
+				83396D4729155936003EF727 /* ThemisUITests */,
+				83396D2B29155935003EF727 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		83396D2B29155935003EF727 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				83396D2A29155935003EF727 /* Themis.app */,
+				83396D3A29155936003EF727 /* ThemisTests.xctest */,
+				83396D4429155936003EF727 /* ThemisUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		83396D2C29155935003EF727 /* Themis */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF042292B9D4C0096ACFC /* Assessment */,
+				E2192EDA291E59B50092CE58 /* API */,
+				E2192ED1291E47670092CE58 /* REST */,
+				83E729E52915751600DB7B36 /* Supporting */,
+				E2192EE6291EC2F90092CE58 /* Views */,
+				83396D2D29155935003EF727 /* ThemisApp.swift */,
+				83396D3129155935003EF727 /* Assets.xcassets */,
+				83396D3329155935003EF727 /* Preview Content */,
+			);
+			path = Themis;
+			sourceTree = "<group>";
+		};
+		83396D3329155935003EF727 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				83396D3429155935003EF727 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		83396D3D29155936003EF727 /* ThemisTests */ = {
+			isa = PBXGroup;
+			children = (
+				83396D3E29155936003EF727 /* ThemisTests.swift */,
+			);
+			path = ThemisTests;
+			sourceTree = "<group>";
+		};
+		83396D4729155936003EF727 /* ThemisUITests */ = {
+			isa = PBXGroup;
+			children = (
+				83396D4829155936003EF727 /* feedback2goUITests.swift */,
+				83396D4A29155936003EF727 /* ThemisUITestsLaunchTests.swift */,
+			);
+			path = ThemisUITests;
+			sourceTree = "<group>";
+		};
+		8384C4292920F7D7008CCB4D /* CorrectionSidebar */ = {
+			isa = PBXGroup;
+			children = (
+				83342600292BEA40007B86FA /* ViewModel */,
+				8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */,
+				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
+				8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */,
+				8384C43229210488008CCB4D /* ProblemStatementCellView.swift */,
+				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
+				8384C436292A84C7008CCB4D /* AddFeedbackView.swift */,
+				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
+				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
+			);
+			path = CorrectionSidebar;
+			sourceTree = "<group>";
+		};
+		83E729E52915751600DB7B36 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				83E729E82915786600DB7B36 /* Info.plist */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
+		E2192ED1291E47670092CE58 /* REST */ = {
+			isa = PBXGroup;
+			children = (
+				E2192ED2291E47820092CE58 /* RESTController.swift */,
+				E2192ED4291E57640092CE58 /* HTTPMethod.swift */,
+				E2192ED6291E57810092CE58 /* RESTError.swift */,
+				E2192ED8291E57A40092CE58 /* Request.swift */,
+			);
+			path = REST;
+			sourceTree = "<group>";
+		};
+		E2192EDA291E59B50092CE58 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
+				E2192EDD291E687C0092CE58 /* Authentication.swift */,
+				E1BF8881291EEF2900B8FA06 /* Course.swift */,
+				E2E6748A2920419B0081238B /* Exercise.swift */,
+				E119ED982922D89900626DEA /* Submission.swift */,
+				E119ED9A2922DE4700626DEA /* Assessment.swift */,
+				E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */,
+				E119ED9E2922F48A00626DEA /* Repository.swift */,
+				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		E2192EE6291EC2F90092CE58 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
+				E2E6748629203E280081238B /* Exercises */,
+				E2E674812920326F0081238B /* Courses */,
+				E2192EE7291EC3100092CE58 /* Authentication */,
+				83396D2F29155935003EF727 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E2192EE7291EC3100092CE58 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */,
+				E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		E21AF042292B9D4C0096ACFC /* Assessment */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF043292B9D4C0096ACFC /* ViewModel */,
+				E21AF045292B9D4C0096ACFC /* CodeEditor */,
+				E21AF049292B9D4C0096ACFC /* AppearanceSettings */,
+				E21AF051292B9D4C0096ACFC /* View */,
+			);
+			path = Assessment;
+			sourceTree = "<group>";
+		};
+		E21AF043292B9D4C0096ACFC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E21AF045292B9D4C0096ACFC /* CodeEditor */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF046292B9D4C0096ACFC /* View */,
+			);
+			path = CodeEditor;
+			sourceTree = "<group>";
+		};
+		E21AF046292B9D4C0096ACFC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF047292B9D4C0096ACFC /* CodeView.swift */,
+				E21AF048292B9D4C0096ACFC /* TabsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E21AF049292B9D4C0096ACFC /* AppearanceSettings */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
+				E21AF04B292B9D4C0096ACFC /* FontSize */,
+				E21AF04E292B9D4C0096ACFC /* HighlightName.swift */,
+				E21AF04F292B9D4C0096ACFC /* View */,
+			);
+			path = AppearanceSettings;
+			sourceTree = "<group>";
+		};
+		E21AF04B292B9D4C0096ACFC /* FontSize */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF04C292B9D4C0096ACFC /* View */,
+			);
+			path = FontSize;
+			sourceTree = "<group>";
+		};
+		E21AF04C292B9D4C0096ACFC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E21AF04F292B9D4C0096ACFC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E21AF051292B9D4C0096ACFC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF052292B9D4C0096ACFC /* AssessmentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E2E674812920326F0081238B /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				E2E67482292032870081238B /* CourseListViewModel.swift */,
+				E2E67484292033EE0081238B /* CourseListView.swift */,
+			);
+			path = Courses;
+			sourceTree = "<group>";
+		};
+		E2E6748629203E280081238B /* Exercises */ = {
+			isa = PBXGroup;
+			children = (
+				E2E6748729203E350081238B /* ExercisesListView.swift */,
+			);
+			path = Exercises;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		83396D2929155934003EF727 /* Themis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83396D4E29155936003EF727 /* Build configuration list for PBXNativeTarget "Themis" */;
+			buildPhases = (
+				83396D2629155934003EF727 /* Sources */,
+				83396D2729155934003EF727 /* Frameworks */,
+				83396D2829155934003EF727 /* Resources */,
+				83D0D3E4291EA84300AE690D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Themis;
+			packageProductDependencies = (
+				E2192EE0291E6F780092CE58 /* KeychainAccess */,
+				E21AF017292B9B370096ACFC /* Runestone */,
+				E21AF034292B9D0A0096ACFC /* TreeSitterJava */,
+				E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */,
+				E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */,
+				E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */,
+				E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */,
+				E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */,
+				E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */,
+			);
+			productName = feedback2go;
+			productReference = 83396D2A29155935003EF727 /* Themis.app */;
+			productType = "com.apple.product-type.application";
+		};
+		83396D3929155936003EF727 /* ThemisTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83396D5129155936003EF727 /* Build configuration list for PBXNativeTarget "ThemisTests" */;
+			buildPhases = (
+				83396D3629155936003EF727 /* Sources */,
+				83396D3729155936003EF727 /* Frameworks */,
+				83396D3829155936003EF727 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83396D3C29155936003EF727 /* PBXTargetDependency */,
+			);
+			name = ThemisTests;
+			productName = feedback2goTests;
+			productReference = 83396D3A29155936003EF727 /* ThemisTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		83396D4329155936003EF727 /* ThemisUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83396D5429155936003EF727 /* Build configuration list for PBXNativeTarget "ThemisUITests" */;
+			buildPhases = (
+				83396D4029155936003EF727 /* Sources */,
+				83396D4129155936003EF727 /* Frameworks */,
+				83396D4229155936003EF727 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83396D4629155936003EF727 /* PBXTargetDependency */,
+			);
+			name = ThemisUITests;
+			productName = feedback2goUITests;
+			productReference = 83396D4429155936003EF727 /* ThemisUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83396D2229155934003EF727 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					83396D2929155934003EF727 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					83396D3929155936003EF727 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 83396D2929155934003EF727;
+					};
+					83396D4329155936003EF727 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 83396D2929155934003EF727;
+					};
+				};
+			};
+			buildConfigurationList = 83396D2529155934003EF727 /* Build configuration list for PBXProject "Themis" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83396D2129155934003EF727;
+			packageReferences = (
+				E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */,
+				E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */,
+			);
+			productRefGroup = 83396D2B29155935003EF727 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				83396D2929155934003EF727 /* Themis */,
+				83396D3929155936003EF727 /* ThemisTests */,
+				83396D4329155936003EF727 /* ThemisUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		83396D2829155934003EF727 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83396D3529155935003EF727 /* Preview Assets.xcassets in Resources */,
+				83396D3229155935003EF727 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83396D3829155936003EF727 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83396D4229155936003EF727 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		83D0D3E4291EA84300AE690D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n  export PATH=\"$PATH:/opt/homebrew/bin\"\n  if which swiftlint > /dev/null; then\n    swiftlint --fix\n  else\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n  fi\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		83396D2629155934003EF727 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
+				E2E67483292032870081238B /* CourseListViewModel.swift in Sources */,
+				E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */,
+				E2E6748829203E350081238B /* ExercisesListView.swift in Sources */,
+				E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */,
+				8384C43D292A8634008CCB4D /* Feedback.swift in Sources */,
+				E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */,
+				E2E6748B2920419B0081238B /* Exercise.swift in Sources */,
+				E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */,
+				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
+				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
+				E119ED992922D89900626DEA /* Submission.swift in Sources */,
+				E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */,
+				8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */,
+				83396D3029155935003EF727 /* ContentView.swift in Sources */,
+				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
+				8384C43129210474008CCB4D /* GeneralFeedbackCellView.swift in Sources */,
+				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
+				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
+				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
+				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
+				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
+				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
+				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
+				8384C43F292A9D24008CCB4D /* CorrectionGuidelines.swift in Sources */,
+				E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */,
+				8384C437292A84C7008CCB4D /* AddFeedbackView.swift in Sources */,
+				E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */,
+				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
+				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
+				E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */,
+				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
+				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
+				E2E67485292033EE0081238B /* CourseListView.swift in Sources */,
+				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
+				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
+				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
+				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83396D3629155936003EF727 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83396D3F29155936003EF727 /* ThemisTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83396D4029155936003EF727 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83396D4B29155936003EF727 /* ThemisUITestsLaunchTests.swift in Sources */,
+				83396D4929155936003EF727 /* feedback2goUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		83396D3C29155936003EF727 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83396D2929155934003EF727 /* Themis */;
+			targetProxy = 83396D3B29155936003EF727 /* PBXContainerItemProxy */;
+		};
+		83396D4629155936003EF727 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83396D2929155934003EF727 /* Themis */;
+			targetProxy = 83396D4529155936003EF727 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		83396D4C29155936003EF727 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		83396D4D29155936003EF727 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		83396D4F29155936003EF727 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "Themis/Preview\\ Content";
+				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Themis/Supporting/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.university.ios2223.cit.Themis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		83396D5029155936003EF727 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "Themis/Preview\\ Content";
+				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Themis/Supporting/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.university.ios2223.cit.Themis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		83396D5229155936003EF727 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.university.ios2223.cit.ThemisTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Themis.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Themis";
+			};
+			name = Debug;
+		};
+		83396D5329155936003EF727 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.university.ios2223.cit.ThemisTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Themis.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Themis";
+			};
+			name = Release;
+		};
+		83396D5529155936003EF727 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.university.ios2223.cit.ThemisUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Themis;
+			};
+			name = Debug;
+		};
+		83396D5629155936003EF727 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.university.ios2223.cit.ThemisUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Themis;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		83396D2529155934003EF727 /* Build configuration list for PBXProject "Themis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83396D4C29155936003EF727 /* Debug */,
+				83396D4D29155936003EF727 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83396D4E29155936003EF727 /* Build configuration list for PBXNativeTarget "Themis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83396D4F29155936003EF727 /* Debug */,
+				83396D5029155936003EF727 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83396D5129155936003EF727 /* Build configuration list for PBXNativeTarget "ThemisTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83396D5229155936003EF727 /* Debug */,
+				83396D5329155936003EF727 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83396D5429155936003EF727 /* Build configuration list for PBXNativeTarget "ThemisUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83396D5529155936003EF727 /* Debug */,
+				83396D5629155936003EF727 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simonbs/Runestone.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.9;
+			};
+		};
+		E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simonbs/TreeSitterLanguages.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E2192EE0291E6F780092CE58 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+		E21AF017292B9B370096ACFC /* Runestone */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */;
+			productName = Runestone;
+		};
+		E21AF034292B9D0A0096ACFC /* TreeSitterJava */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterJava;
+		};
+		E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterJavaQueries;
+		};
+		E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterJavaRunestone;
+		};
+		E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterLanguagesCommon;
+		};
+		E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterSwift;
+		};
+		E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterSwiftQueries;
+		};
+		E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
+			productName = TreeSitterSwiftRunestone;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 83396D2229155934003EF727 /* Project object */;
+}

@@ -22,7 +22,7 @@ platform :ios do
     # Run Unit Tests
     scan(
       clean: true,
-      scheme: "feedback2go"
+      scheme: "Themis"
     )
   end
 
@@ -48,7 +48,7 @@ platform :ios do
       )
     end
 
-    info_plist_path = "feedback2go/Supporting/Info.plist"
+    info_plist_path = "Themis/Supporting/Info.plist"
 
     set_info_plist_value(
       path: info_plist_path,
@@ -103,7 +103,7 @@ platform :ios do
       cloned_source_packages_path: ".SwiftPackages", # Custom path for cloning source packages to
       derived_data_path: ".DerivedData", # Custom derived data path
       output_directory: "./build", # Directory where the output artifacts are generated
-      scheme: "feedback2go" # We want to build the "HallOfFame" scheme
+      scheme: "Themis" # We want to build the "HallOfFame" scheme
     )
   end
 
