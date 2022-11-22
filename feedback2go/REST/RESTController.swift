@@ -20,8 +20,8 @@ class RESTController {
     }
 
     func sendRequest<T: Decodable>(_ request: Request) async throws -> T {
-        return try await sendRequest(request, decode: { data in
-            return try jsonDecoder.decode(T.self, from: data)
+        try await sendRequest(request, decode: { data in
+            try jsonDecoder.decode(T.self, from: data)
         })
     }
 

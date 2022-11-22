@@ -22,11 +22,10 @@ struct AssessmentFeedback: Codable {
     var visibility: FeedbackVisibility = .AFTER_DUE_DATE
 }
 
-
 enum FeedbackVisibility: String, Codable {
-    case ALWAYS = "ALWAYS"
-    case AFTER_DUE_DATE = "AFTER_DUE_DATE"
-    case NEVER = "NEVER"
+    case ALWAYS
+    case AFTER_DUE_DATE
+    case NEVER
 }
 
 extension ArtemisAPI {
