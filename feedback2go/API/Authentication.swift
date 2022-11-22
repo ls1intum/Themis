@@ -8,6 +8,12 @@
 import Foundation
 import KeychainAccess
 
+private struct AuthBody: Encodable {
+    let username: String
+    let password: String
+    let rememberMe: Bool
+}
+
 class Authentication: NSObject {
 
     static var shared: Authentication!
@@ -57,11 +63,9 @@ class Authentication: NSObject {
     }
 
     /// This Method allows the user to Authenticate. If it doesnt throw an Error the Bearer token will be set
-    func authenticate(username: String, password: String) async throws {
-        let body = [
-            "username": username,
-            "password": password
-        ]
+    /// If the rememberMe flag is set the token will be valid for 30 Days (if not 30 minutes)
+    func auth(username: String, password: String, rememberMe: Bool = false) async throws {
+        let body = AuthBody(username: username, password: password, rememberMe: rememberMe)
         let request = Request(method: .post, path: "/api/authenticate", body: body)
         self.token = try await RESTController.shared.sendRequest(request) { try parseAuth(data: $0) }
     }

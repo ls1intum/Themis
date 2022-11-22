@@ -8,12 +8,11 @@
 import Foundation
 
 enum RESTError: String, Error {
-    // TODO:add desc
-    case unauthorized = "d"
-    case badRequest = "a"
-    case methodNotAllowed = "g"
-    case forbidden = "h"
-    case notFound = "j"
-    case server = "k"
-    case different = "r"
+    case unauthorized = "Request failed due to missing authentication."
+    case badRequest = "Server didn't process request due to client error (e.g. wrong syntax)."
+    case methodNotAllowed = "The HTTP Method is not allowed in this context."
+    case forbidden = "Request failed due to insufficient permissions."
+    case notFound = "The requested ressource could not be found."
+    case server = "The Server experienced an error, therefore not being able to respond."
+    case different = "Some error occured while making a request."
 }

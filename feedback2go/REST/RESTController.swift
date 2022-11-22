@@ -20,8 +20,8 @@ class RESTController {
     }
 
     func sendRequest<T: Decodable>(_ request: Request) async throws -> T {
-        return try await sendRequest(request, decode: { data in
-            return try jsonDecoder.decode(T.self, from: data)
+        try await sendRequest(request, decode: { data in
+            try jsonDecoder.decode(T.self, from: data)
         })
     }
 
@@ -57,7 +57,7 @@ class RESTController {
     }
 
     private func makeURLRequest(_ request: Request) throws -> URLRequest {
-        let url = makeURL(with: request.path)
+        let url = makeURL(with: request.path, params: request.params)
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = request.method.rawValue
         urlRequest.allHTTPHeaderFields = request.headers
@@ -68,9 +68,10 @@ class RESTController {
         return urlRequest
     }
 
-    private func makeURL(with path: String) -> URL {
+    private func makeURL(with path: String, params: [URLQueryItem]) -> URL {
         var newURL = baseURL
         newURL.append(path: path)
+        newURL.append(queryItems: params)
         return newURL
     }
 }

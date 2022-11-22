@@ -10,14 +10,10 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var authenticationVM = AuthenticationViewModel()
     var body: some View {
-        VStack {
+        AssessmentView()
+        /*VStack {
             if authenticationVM.authenticated {
-                Text("Sie sind eingeloggt")
-                Button {
-                    authenticationVM.logout()
-                } label: {
-                    Text("Delete Token")
-                }
+                CourseListView(authenticationVM: authenticationVM)
             } else {
                 AuthenticationView(authenticationVM: authenticationVM)
             }
@@ -25,7 +21,7 @@ struct ContentView: View {
         .onAppear {
             authenticationVM.searchForToken()
         }
-        .padding()
+        .padding()*/
     }
 }
 
