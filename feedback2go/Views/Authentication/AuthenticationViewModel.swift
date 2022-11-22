@@ -77,7 +77,6 @@ class AuthenticationViewModel: ObservableObject {
         } catch let error {
             print(error.localizedDescription)
         }
-
     }
 
     /// Searches for the Bearer token in the Keychain

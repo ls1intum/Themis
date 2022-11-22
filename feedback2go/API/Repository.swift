@@ -138,9 +138,9 @@ extension ArtemisAPI {
             } else {
                 let newFolder = Node(type: .folder, name: elem.name, parent: node)
                 let children = notRoot.filter { $0.path.peek() == elem.name }
-                children.forEach { c in
-                    _ = c.path.pop()
-                    notRoot.removeAll { p in p.path === c.path }
+                children.forEach { child in
+                    _ = child.path.pop()
+                    notRoot.removeAll { parent in parent.path === child.path }
                 }
                 // notRoot.removeAll { p in children.contains { $0.path === p.path } }
                 parseFileTree(node: newFolder, paths: children)
