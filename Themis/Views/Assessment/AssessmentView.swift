@@ -6,6 +6,7 @@ struct AssessmentView: View {
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
+    @State private var correctionAsPlaceholder: Bool = true
 
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
@@ -24,8 +25,7 @@ struct AssessmentView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     rightGrip
                         .edgesIgnoringSafeArea(.bottom)
-                    CorrectionSidebarView()
-                        .frame(width: dragWidthRight)
+                    correctionWithPlaceholder
                 }
                 .animation(.default, value: showFileTree)
                 Button {
@@ -139,6 +139,7 @@ struct AssessmentView: View {
                     if dragWidthRight <= 0 {
                         withAnimation {
                             dragWidthRight = UIScreen.main.bounds.size.width * 0.2
+                            correctionAsPlaceholder = false
                         }
                     }
                 }
@@ -154,6 +155,8 @@ struct AssessmentView: View {
                             } else if dragWidthRight < minWidth {
                                 dragWidthRight = minWidth
                             }
+
+                            correctionAsPlaceholder = dragWidthRight < UIScreen.main.bounds.size.width * 0.1 ? true : false
                         }
                         .onEnded {_ in
                             if dragWidthRight < UIScreen.main.bounds.size.width * 0.1 {
@@ -176,6 +179,18 @@ struct AssessmentView: View {
             }
         }
         .frame(width: 7)
+    }
+    var correctionWithPlaceholder: some View {
+        VStack {
+            if correctionAsPlaceholder {
+                CorrectionSidebarView()
+                    .frame(width: dragWidthRight)
+                    .redacted(reason: .placeholder)
+            } else {
+                CorrectionSidebarView()
+                    .frame(width: dragWidthRight)
+            }
+        }
     }
 }
 
