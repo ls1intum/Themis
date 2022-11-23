@@ -23,6 +23,7 @@ struct TabsView: View {
                                 }
                             })
                         }
+                        .frame(maxWidth: .infinity)
                         .frame(height: 20)
                         .id(file)
                         .onTapGesture {

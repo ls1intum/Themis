@@ -1,16 +1,5 @@
 import SwiftUI
 
-struct FileCellView: View {
-    var file: CodeFile
-
-    var body: some View {
-        HStack {
-            Image(systemName: "insert_drive_file")
-            Text(file.title)
-        }
-    }
-}
-
 struct AssessmentView: View {
     @StateObject var model = AssessmentViewModel.mock
     @State var showSettings: Bool = false
@@ -25,17 +14,17 @@ struct AssessmentView: View {
             ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
                 HStack(spacing: 0) {
                     if showFileTree {
-                        sidebar
+                        FiletreeSidebarView(model: model)
                             .padding(.top, 50)
                             .frame(width: dragWidthLeft)
                         leftGrip
                             .edgesIgnoringSafeArea(.bottom)
                     }
-                    code
+                    CodeEditorView(model: model, showFileTree: $showFileTree)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     rightGrip
                         .edgesIgnoringSafeArea(.bottom)
-                    correction
+                    CorrectionSidebarView()
                         .frame(width: dragWidthRight)
                 }
                 .animation(.default, value: showFileTree)
@@ -93,29 +82,6 @@ struct AssessmentView: View {
             }
         }
     }
-    var sidebar: some View {
-        VStack(alignment: .leading) {
-            Text("Filetree")
-                .font(.title)
-                .bold()
-                .padding(.leading, 18)
-            if let fileTree = model.fileTree {
-                List {
-                    OutlineGroup(fileTree, id: \.path, children: \.children) { tree in
-                        Text(tree.name)
-                            .tag(tree)
-                            .onTapGesture {
-                                if tree.type == .file {
-                                    withAnimation {
-                                        model.openFile(file: tree)
-                                    }
-                                }
-                            }
-                    }.listRowSeparator(.hidden)
-                }.listStyle(.inset)
-            }
-        }
-    }
     var leftGrip: some View {
         ZStack {
             artemisColor
@@ -141,23 +107,6 @@ struct AssessmentView: View {
                 )
         }
         .frame(width: 7)
-    }
-    var code: some View {
-        VStack {
-            if model.selectedFile != nil {
-                VStack {
-                    HStack {
-                        Spacer()
-                            .frame(width: showFileTree ? 0 : 40)
-                        TabsView(model: model)
-                    }
-                    CodeView(model: model)
-                }
-            } else {
-                Text("Select a file")
-            }
-        }
-        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
     }
     var rightLabel: some View {
         ZStack {
@@ -215,9 +164,6 @@ struct AssessmentView: View {
                     }
                 }
         )
-    }
-    var correction: some View {
-        CorrectionSidebarView()
     }
 }
 
