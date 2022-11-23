@@ -82,7 +82,7 @@
 /* Begin PBXFileReference section */
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
-		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		83396D3129155935003EF727 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83396D3429155935003EF727 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		83396D3A29155936003EF727 /* ThemisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThemisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,44 +90,44 @@
 		83396D4429155936003EF727 /* ThemisUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThemisUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D4829155936003EF727 /* feedback2goUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedback2goUITests.swift; sourceTree = "<group>"; };
 		83396D4A29155936003EF727 /* ThemisUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionSidebarView.swift; sourceTree = "<group>"; };
-		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionGuidelinesCellView.swift; sourceTree = "<group>"; };
-		8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralFeedbackCellView.swift; sourceTree = "<group>"; };
-		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemStatementCellView.swift; sourceTree = "<group>"; };
-		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemStatementCellViewModel.swift; sourceTree = "<group>"; };
-		8384C436292A84C7008CCB4D /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFeedbackView.swift; sourceTree = "<group>"; };
-		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCellView.swift; sourceTree = "<group>"; };
-		8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewModel.swift; sourceTree = "<group>"; };
-		8384C43C292A8634008CCB4D /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
-		8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionGuidelines.swift; sourceTree = "<group>"; };
-		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingCriteriaCellView.swift; sourceTree = "<group>"; };
+		8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionSidebarView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionSidebarView.swift; sourceTree = SOURCE_ROOT; };
+		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelinesCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionGuidelinesCellView.swift; sourceTree = SOURCE_ROOT; };
+		8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GeneralFeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GeneralFeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
+		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellView.swift; sourceTree = SOURCE_ROOT; };
+		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
+		8384C436292A84C7008CCB4D /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddFeedbackView.swift; path = Themis/Views/Assessment/CorrectionSidebar/AddFeedbackView.swift; sourceTree = SOURCE_ROOT; };
+		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
+		8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/FeedbackViewModel.swift; sourceTree = SOURCE_ROOT; };
+		8384C43C292A8634008CCB4D /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Feedback.swift; path = Themis/Models/Feedback.swift; sourceTree = SOURCE_ROOT; };
+		8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelines.swift; path = Themis/ViewModels/CorrectionSidebar/CorrectionGuidelines.swift; sourceTree = SOURCE_ROOT; };
+		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Submission.swift; sourceTree = "<group>"; };
-		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assessment.swift; sourceTree = "<group>"; };
-		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantUMLConverter.swift; sourceTree = "<group>"; };
-		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
-		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
+		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
+		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlantUMLConverter.swift; path = Themis/API/PlantUMLConverter.swift; sourceTree = SOURCE_ROOT; };
+		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
+		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
 		E2192ED4291E57640092CE58 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		E2192ED6291E57810092CE58 /* RESTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
 		E2192ED8291E57A40092CE58 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
-		E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisAPI.swift; sourceTree = "<group>"; };
-		E2192EDD291E687C0092CE58 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
-		E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
-		E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
-		E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentViewModel.swift; sourceTree = "<group>"; };
-		E21AF047292B9D4C0096ACFC /* CodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
-		E21AF048292B9D4C0096ACFC /* TabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
-		E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeSettings.swift; sourceTree = "<group>"; };
-		E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorFontSizeStepper.swift; sourceTree = "<group>"; };
-		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightName.swift; sourceTree = "<group>"; };
-		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
-		E21AF052292B9D4C0096ACFC /* AssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentView.swift; sourceTree = "<group>"; };
-		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
-		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListViewModel.swift; sourceTree = "<group>"; };
-		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListView.swift; sourceTree = "<group>"; };
-		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesListView.swift; sourceTree = "<group>"; };
-		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ArtemisAPI.swift; path = Themis/API/ArtemisAPI.swift; sourceTree = SOURCE_ROOT; };
+		E2192EDD291E687C0092CE58 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Authentication.swift; path = Themis/Models/Authentication.swift; sourceTree = SOURCE_ROOT; };
+		E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthenticationViewModel.swift; path = Themis/ViewModels/Authentication/AuthenticationViewModel.swift; sourceTree = SOURCE_ROOT; };
+		E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthenticationView.swift; path = Themis/Views/Authentication/AuthenticationView.swift; sourceTree = SOURCE_ROOT; };
+		E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentViewModel.swift; path = Themis/ViewModels/Assessment/AssessmentViewModel.swift; sourceTree = SOURCE_ROOT; };
+		E21AF047292B9D4C0096ACFC /* CodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CodeView.swift; path = Themis/Views/Assessment/CodeEditor/CodeView.swift; sourceTree = SOURCE_ROOT; };
+		E21AF048292B9D4C0096ACFC /* TabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsView.swift; path = Themis/Views/Assessment/CodeEditor/TabsView.swift; sourceTree = SOURCE_ROOT; };
+		E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThemeSettings.swift; path = Themis/Models/Appearance/ThemeSettings.swift; sourceTree = SOURCE_ROOT; };
+		E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditorFontSizeStepper.swift; path = Themis/Views/AppearanceSettings/EditorFontSizeStepper.swift; sourceTree = SOURCE_ROOT; };
+		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighlightName.swift; path = Themis/Models/Appearance/HighlightName.swift; sourceTree = SOURCE_ROOT; };
+		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppearanceSettingsView.swift; path = Themis/Views/AppearanceSettings/AppearanceSettingsView.swift; sourceTree = SOURCE_ROOT; };
+		E21AF052292B9D4C0096ACFC /* AssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentView.swift; path = Themis/Views/Assessment/AssessmentView.swift; sourceTree = SOURCE_ROOT; };
+		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
+		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListViewModel.swift; path = Themis/ViewModels/CourseList/CourseListViewModel.swift; sourceTree = SOURCE_ROOT; };
+		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListView.swift; path = Themis/Views/Courses/CourseListView.swift; sourceTree = SOURCE_ROOT; };
+		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExercisesListView.swift; path = Themis/Views/Exercises/ExercisesListView.swift; sourceTree = SOURCE_ROOT; };
+		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,15 +164,90 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		83342600292BEA40007B86FA /* ViewModel */ = {
+		4065F854292E8729005DAEE8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4065F857292E8A08005DAEE8 /* Appearance */,
+				E2192EDD291E687C0092CE58 /* Authentication.swift */,
+				E1BF8881291EEF2900B8FA06 /* Course.swift */,
+				E119ED982922D89900626DEA /* Submission.swift */,
+				E2E6748A2920419B0081238B /* Exercise.swift */,
+				E119ED9A2922DE4700626DEA /* Assessment.swift */,
+				E119ED9E2922F48A00626DEA /* Repository.swift */,
+				8384C43C292A8634008CCB4D /* Feedback.swift */,
+			);
+			name = Models;
+			path = Themis/Models;
+			sourceTree = SOURCE_ROOT;
+		};
+		4065F855292E873A005DAEE8 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				4065F85A292E8AB1005DAEE8 /* CourseList */,
+				4065F859292E8A90005DAEE8 /* Assessment */,
+				4065F858292E8A7F005DAEE8 /* Authentication */,
+				83342600292BEA40007B86FA /* CorrectionSidebar */,
+			);
+			name = ViewModels;
+			path = Themis/ViewModels;
+			sourceTree = SOURCE_ROOT;
+		};
+		4065F856292E87AB005DAEE8 /* AppearanceSettings */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */,
+				E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */,
+			);
+			name = AppearanceSettings;
+			path = Themis/Views/AppearanceSettings;
+			sourceTree = SOURCE_ROOT;
+		};
+		4065F857292E8A08005DAEE8 /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
+				E21AF04E292B9D4C0096ACFC /* HighlightName.swift */,
+			);
+			name = Appearance;
+			path = Themis/Models/Appearance;
+			sourceTree = SOURCE_ROOT;
+		};
+		4065F858292E8A7F005DAEE8 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */,
+			);
+			name = Authentication;
+			path = Themis/ViewModels/Authentication;
+			sourceTree = SOURCE_ROOT;
+		};
+		4065F859292E8A90005DAEE8 /* Assessment */ = {
+			isa = PBXGroup;
+			children = (
+				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
+			);
+			name = Assessment;
+			path = Themis/ViewModels/Assessment;
+			sourceTree = SOURCE_ROOT;
+		};
+		4065F85A292E8AB1005DAEE8 /* CourseList */ = {
+			isa = PBXGroup;
+			children = (
+				E2E67482292032870081238B /* CourseListViewModel.swift */,
+			);
+			name = CourseList;
+			path = Themis/ViewModels/CourseList;
+			sourceTree = SOURCE_ROOT;
+		};
+		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
 			isa = PBXGroup;
 			children = (
 				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
 				8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */,
-				8384C43C292A8634008CCB4D /* Feedback.swift */,
 			);
-			path = ViewModel;
-			sourceTree = "<group>";
+			name = CorrectionSidebar;
+			path = Themis/ViewModels/CorrectionSidebar;
+			sourceTree = SOURCE_ROOT;
 		};
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
@@ -197,17 +272,18 @@
 		83396D2C29155935003EF727 /* Themis */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF042292B9D4C0096ACFC /* Assessment */,
+				4065F854292E8729005DAEE8 /* Models */,
+				E2192EE6291EC2F90092CE58 /* Views */,
+				4065F855292E873A005DAEE8 /* ViewModels */,
 				E2192EDA291E59B50092CE58 /* API */,
 				E2192ED1291E47670092CE58 /* REST */,
 				83E729E52915751600DB7B36 /* Supporting */,
-				E2192EE6291EC2F90092CE58 /* Views */,
 				83396D2D29155935003EF727 /* ThemisApp.swift */,
 				83396D3129155935003EF727 /* Assets.xcassets */,
 				83396D3329155935003EF727 /* Preview Content */,
 			);
 			path = Themis;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		83396D3329155935003EF727 /* Preview Content */ = {
 			isa = PBXGroup;
@@ -237,7 +313,6 @@
 		8384C4292920F7D7008CCB4D /* CorrectionSidebar */ = {
 			isa = PBXGroup;
 			children = (
-				83342600292BEA40007B86FA /* ViewModel */,
 				8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */,
 				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
 				8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */,
@@ -247,8 +322,9 @@
 				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
 				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
 			);
-			path = CorrectionSidebar;
-			sourceTree = "<group>";
+			name = CorrectionSidebar;
+			path = Themis/Views/Assessment/CorrectionSidebar;
+			sourceTree = SOURCE_ROOT;
 		};
 		83E729E52915751600DB7B36 /* Supporting */ = {
 			isa = PBXGroup;
@@ -273,134 +349,74 @@
 			isa = PBXGroup;
 			children = (
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
-				E2192EDD291E687C0092CE58 /* Authentication.swift */,
-				E1BF8881291EEF2900B8FA06 /* Course.swift */,
-				E2E6748A2920419B0081238B /* Exercise.swift */,
-				E119ED982922D89900626DEA /* Submission.swift */,
-				E119ED9A2922DE4700626DEA /* Assessment.swift */,
 				E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */,
-				E119ED9E2922F48A00626DEA /* Repository.swift */,
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
 			);
-			path = API;
-			sourceTree = "<group>";
+			name = API;
+			path = Themis/API;
+			sourceTree = SOURCE_ROOT;
 		};
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
+				E21AF042292B9D4C0096ACFC /* Assessment */,
+				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
 				E2E6748629203E280081238B /* Exercises */,
 				E2E674812920326F0081238B /* Courses */,
 				E2192EE7291EC3100092CE58 /* Authentication */,
 				83396D2F29155935003EF727 /* ContentView.swift */,
 			);
-			path = Views;
-			sourceTree = "<group>";
+			name = Views;
+			path = Themis/Views;
+			sourceTree = SOURCE_ROOT;
 		};
 		E2192EE7291EC3100092CE58 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */,
 				E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */,
 			);
-			path = Authentication;
-			sourceTree = "<group>";
+			name = Authentication;
+			path = Themis/Views/Authentication;
+			sourceTree = SOURCE_ROOT;
 		};
 		E21AF042292B9D4C0096ACFC /* Assessment */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF043292B9D4C0096ACFC /* ViewModel */,
+				E21AF052292B9D4C0096ACFC /* AssessmentView.swift */,
+				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
 				E21AF045292B9D4C0096ACFC /* CodeEditor */,
-				E21AF049292B9D4C0096ACFC /* AppearanceSettings */,
-				E21AF051292B9D4C0096ACFC /* View */,
 			);
-			path = Assessment;
-			sourceTree = "<group>";
-		};
-		E21AF043292B9D4C0096ACFC /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
+			name = Assessment;
+			path = Themis/Views/Assessment;
+			sourceTree = SOURCE_ROOT;
 		};
 		E21AF045292B9D4C0096ACFC /* CodeEditor */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF046292B9D4C0096ACFC /* View */,
-			);
-			path = CodeEditor;
-			sourceTree = "<group>";
-		};
-		E21AF046292B9D4C0096ACFC /* View */ = {
 			isa = PBXGroup;
 			children = (
 				E21AF047292B9D4C0096ACFC /* CodeView.swift */,
 				E21AF048292B9D4C0096ACFC /* TabsView.swift */,
 			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		E21AF049292B9D4C0096ACFC /* AppearanceSettings */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
-				E21AF04B292B9D4C0096ACFC /* FontSize */,
-				E21AF04E292B9D4C0096ACFC /* HighlightName.swift */,
-				E21AF04F292B9D4C0096ACFC /* View */,
-			);
-			path = AppearanceSettings;
-			sourceTree = "<group>";
-		};
-		E21AF04B292B9D4C0096ACFC /* FontSize */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF04C292B9D4C0096ACFC /* View */,
-			);
-			path = FontSize;
-			sourceTree = "<group>";
-		};
-		E21AF04C292B9D4C0096ACFC /* View */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		E21AF04F292B9D4C0096ACFC /* View */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		E21AF051292B9D4C0096ACFC /* View */ = {
-			isa = PBXGroup;
-			children = (
-				E21AF052292B9D4C0096ACFC /* AssessmentView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
+			name = CodeEditor;
+			path = Themis/Views/Assessment/CodeEditor;
+			sourceTree = SOURCE_ROOT;
 		};
 		E2E674812920326F0081238B /* Courses */ = {
 			isa = PBXGroup;
 			children = (
-				E2E67482292032870081238B /* CourseListViewModel.swift */,
 				E2E67484292033EE0081238B /* CourseListView.swift */,
 			);
-			path = Courses;
-			sourceTree = "<group>";
+			name = Courses;
+			path = Themis/Views/Courses;
+			sourceTree = SOURCE_ROOT;
 		};
 		E2E6748629203E280081238B /* Exercises */ = {
 			isa = PBXGroup;
 			children = (
 				E2E6748729203E350081238B /* ExercisesListView.swift */,
 			);
-			path = Exercises;
-			sourceTree = "<group>";
+			name = Exercises;
+			path = Themis/Views/Exercises;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 

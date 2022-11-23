@@ -5,6 +5,8 @@
 //  Created by Katjana Kosic on 19.11.22.
 //
 
+// Will be deleted in the future, as struct already exists in Assessment.swift
+
 import Foundation
 
 public class Feedback: Identifiable {
