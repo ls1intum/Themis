@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */; };
+		0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -80,6 +82,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiletreeSidebarView.swift; sourceTree = "<group>"; };
+		0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -164,6 +168,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0BEC4C33292EA18000F9F802 /* FiletreeSidebar */ = {
+			isa = PBXGroup;
+			children = (
+				0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */,
+			);
+			path = FiletreeSidebar;
+			sourceTree = "<group>";
+		};
 		4065F854292E8729005DAEE8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -383,8 +395,9 @@
 			isa = PBXGroup;
 			children = (
 				E21AF052292B9D4C0096ACFC /* AssessmentView.swift */,
-				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
+				0BEC4C33292EA18000F9F802 /* FiletreeSidebar */,
 				E21AF045292B9D4C0096ACFC /* CodeEditor */,
+				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
 			);
 			name = Assessment;
 			path = Themis/Views/Assessment;
@@ -395,6 +408,7 @@
 			children = (
 				E21AF047292B9D4C0096ACFC /* CodeView.swift */,
 				E21AF048292B9D4C0096ACFC /* TabsView.swift */,
+				0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */,
 			);
 			name = CodeEditor;
 			path = Themis/Views/Assessment/CodeEditor;
@@ -602,6 +616,7 @@
 				E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */,
 				8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
+				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* GeneralFeedbackCellView.swift in Sources */,
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
@@ -625,6 +640,7 @@
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
 				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
+				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

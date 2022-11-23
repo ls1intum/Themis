@@ -1,22 +1,12 @@
 import SwiftUI
 
-struct FileCellView: View {
-    var file: CodeFile
-
-    var body: some View {
-        HStack {
-            Image(systemName: "insert_drive_file")
-            Text(file.title)
-        }
-    }
-}
-
 struct AssessmentView: View {
     @StateObject var model = AssessmentViewModel.mock
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
+    @State private var correctionAsPlaceholder: Bool = true
 
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
@@ -25,18 +15,17 @@ struct AssessmentView: View {
             ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
                 HStack(spacing: 0) {
                     if showFileTree {
-                        sidebar
+                        FiletreeSidebarView(model: model)
                             .padding(.top, 50)
                             .frame(width: dragWidthLeft)
                         leftGrip
                             .edgesIgnoringSafeArea(.bottom)
                     }
-                    code
+                    CodeEditorView(model: model, showFileTree: $showFileTree)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     rightGrip
                         .edgesIgnoringSafeArea(.bottom)
-                    correction
-                        .frame(width: dragWidthRight)
+                    correctionWithPlaceholder
                 }
                 .animation(.default, value: showFileTree)
                 Button {
@@ -64,7 +53,7 @@ struct AssessmentView: View {
                                 .font(.title)
                                 .bold()
                             Text("Correction")
-                                .font(.caption2)
+                                .font(.caption)
                                 .bold()
                         }
                         .foregroundColor(.white)
@@ -93,38 +82,15 @@ struct AssessmentView: View {
             }
         }
     }
-    var sidebar: some View {
-        VStack(alignment: .leading) {
-            Text("Filetree")
-                .font(.title)
-                .bold()
-                .padding(.leading, 18)
-            if let fileTree = model.fileTree {
-                List {
-                    OutlineGroup(fileTree, id: \.path, children: \.children) { tree in
-                        Text(tree.name)
-                            .tag(tree)
-                            .onTapGesture {
-                                if tree.type == .file {
-                                    withAnimation {
-                                        model.openFile(file: tree)
-                                    }
-                                }
-                            }
-                    }.listRowSeparator(.hidden)
-                }.listStyle(.inset)
-            }
-        }
-    }
     var leftGrip: some View {
         ZStack {
             artemisColor
                 .frame(maxWidth: 7, maxHeight: .infinity)
-            Image(systemName: "minus")
-                .resizable()
-                .frame(width: 50, height: 3)
-                .foregroundColor(.gray)
-                .rotationEffect(.degrees(90))
+
+            Rectangle()
+                .opacity(0)
+                .frame(width: 20, height: 50)
+                .contentShape(Rectangle())
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
@@ -139,31 +105,19 @@ struct AssessmentView: View {
                             }
                         }
                 )
+            Image(systemName: "minus")
+                .resizable()
+                .frame(width: 50, height: 3)
+                .foregroundColor(.gray)
+                .rotationEffect(.degrees(90))
         }
         .frame(width: 7)
-    }
-    var code: some View {
-        VStack {
-            if model.selectedFile != nil {
-                VStack {
-                    HStack {
-                        Spacer()
-                            .frame(width: showFileTree ? 0 : 40)
-                        TabsView(model: model)
-                    }
-                    CodeView(model: model)
-                }
-            } else {
-                Text("Select a file")
-            }
-        }
-        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
     }
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .foregroundColor(artemisColor)
-                .frame(width: 120, height: 70)
+                .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
                 Text("Correction")
@@ -172,17 +126,46 @@ struct AssessmentView: View {
             .foregroundColor(.white)
             .frame(width: 120, height: 70)
             .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
-            .onTapGesture {
-                withAnimation {
-                    dragWidthRight = UIScreen.main.bounds.size.width * 0.2
-                }
-            }
+            .rotationEffect(.degrees(270))
         }
-        .frame(width: 0, height: 120)
-        .rotationEffect(.degrees(270))
     }
     var rightGrip: some View {
         ZStack {
+            Rectangle()
+                .opacity(0)
+                .frame(width: dragWidthRight > 0 ? 20 : 70, height: dragWidthRight > 0 ? 50 : 120)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    if dragWidthRight <= 0 {
+                        withAnimation {
+                            dragWidthRight = UIScreen.main.bounds.size.width * 0.2
+                            correctionAsPlaceholder = false
+                        }
+                    }
+                }
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            let minWidth: CGFloat = 0
+                            let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 0.3
+                            let delta = gesture.translation.width
+                            dragWidthRight -= delta
+                            if dragWidthRight > maxWidth {
+                                dragWidthRight = maxWidth
+                            } else if dragWidthRight < minWidth {
+                                dragWidthRight = minWidth
+                            }
+
+                            correctionAsPlaceholder = dragWidthRight < UIScreen.main.bounds.size.width * 0.1 ? true : false
+                        }
+                        .onEnded {_ in
+                            if dragWidthRight < UIScreen.main.bounds.size.width * 0.1 {
+                                dragWidthRight = 0
+                            }
+                        }
+                )
+                .zIndex(1)
+
             if dragWidthRight > 0 {
                 artemisColor
                     .frame(maxWidth: 7, maxHeight: .infinity)
@@ -196,28 +179,18 @@ struct AssessmentView: View {
             }
         }
         .frame(width: 7)
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    let minWidth: CGFloat = 0
-                    let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 0.3
-                    let delta = gesture.translation.width
-                    dragWidthRight -= delta
-                    if dragWidthRight > maxWidth {
-                        dragWidthRight = maxWidth
-                    } else if dragWidthRight < minWidth {
-                        dragWidthRight = minWidth
-                    }
-                }
-                .onEnded {_ in
-                    if dragWidthRight < UIScreen.main.bounds.size.width * 0.1 {
-                        dragWidthRight = 0
-                    }
-                }
-        )
     }
-    var correction: some View {
-        CorrectionSidebarView()
+    var correctionWithPlaceholder: some View {
+        VStack {
+            if correctionAsPlaceholder {
+                CorrectionSidebarView()
+                    .frame(width: dragWidthRight)
+                    .redacted(reason: .placeholder)
+            } else {
+                CorrectionSidebarView()
+                    .frame(width: dragWidthRight)
+            }
+        }
     }
 }
 
