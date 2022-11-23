@@ -53,7 +53,7 @@ struct AssessmentView: View {
                                 .font(.title)
                                 .bold()
                             Text("Correction")
-                                .font(.caption2)
+                                .font(.caption)
                                 .bold()
                         }
                         .foregroundColor(.white)
@@ -86,11 +86,11 @@ struct AssessmentView: View {
         ZStack {
             artemisColor
                 .frame(maxWidth: 7, maxHeight: .infinity)
-            Image(systemName: "minus")
-                .resizable()
-                .frame(width: 50, height: 3)
-                .foregroundColor(.gray)
-                .rotationEffect(.degrees(90))
+
+            Rectangle()
+                .opacity(0)
+                .frame(width: 20, height: 50)
+                .contentShape(Rectangle())
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
@@ -105,6 +105,11 @@ struct AssessmentView: View {
                             }
                         }
                 )
+            Image(systemName: "minus")
+                .resizable()
+                .frame(width: 50, height: 3)
+                .foregroundColor(.gray)
+                .rotationEffect(.degrees(90))
         }
         .frame(width: 7)
     }
@@ -112,7 +117,7 @@ struct AssessmentView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .foregroundColor(artemisColor)
-                .frame(width: 120, height: 70)
+                .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
                 Text("Correction")
@@ -121,17 +126,43 @@ struct AssessmentView: View {
             .foregroundColor(.white)
             .frame(width: 120, height: 70)
             .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
-            .onTapGesture {
-                withAnimation {
-                    dragWidthRight = UIScreen.main.bounds.size.width * 0.2
-                }
-            }
+            .rotationEffect(.degrees(270))
         }
-        .frame(width: 0, height: 120)
-        .rotationEffect(.degrees(270))
     }
     var rightGrip: some View {
         ZStack {
+            Rectangle()
+                .opacity(0)
+                .frame(width: dragWidthRight > 0 ? 20 : 70, height: dragWidthRight > 0 ? 50 : 120)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    if dragWidthRight <= 0 {
+                        withAnimation {
+                            dragWidthRight = UIScreen.main.bounds.size.width * 0.2
+                        }
+                    }
+                }
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            let minWidth: CGFloat = 0
+                            let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 0.3
+                            let delta = gesture.translation.width
+                            dragWidthRight -= delta
+                            if dragWidthRight > maxWidth {
+                                dragWidthRight = maxWidth
+                            } else if dragWidthRight < minWidth {
+                                dragWidthRight = minWidth
+                            }
+                        }
+                        .onEnded {_ in
+                            if dragWidthRight < UIScreen.main.bounds.size.width * 0.1 {
+                                dragWidthRight = 0
+                            }
+                        }
+                )
+                .zIndex(1)
+
             if dragWidthRight > 0 {
                 artemisColor
                     .frame(maxWidth: 7, maxHeight: .infinity)
@@ -145,25 +176,6 @@ struct AssessmentView: View {
             }
         }
         .frame(width: 7)
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    let minWidth: CGFloat = 0
-                    let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 0.3
-                    let delta = gesture.translation.width
-                    dragWidthRight -= delta
-                    if dragWidthRight > maxWidth {
-                        dragWidthRight = maxWidth
-                    } else if dragWidthRight < minWidth {
-                        dragWidthRight = minWidth
-                    }
-                }
-                .onEnded {_ in
-                    if dragWidthRight < UIScreen.main.bounds.size.width * 0.1 {
-                        dragWidthRight = 0
-                    }
-                }
-        )
     }
 }
 

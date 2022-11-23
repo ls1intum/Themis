@@ -17,6 +17,7 @@ struct CodeEditorView: View {
                 }
             } else {
                 Text("Select a file")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
