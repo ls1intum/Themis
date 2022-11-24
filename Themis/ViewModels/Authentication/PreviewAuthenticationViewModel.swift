@@ -12,7 +12,8 @@
 /// - ARTEMIS_STAGING_SERVER
 /// - ARTEMIS_STAGING_USER
 /// - ARTEMIS_STAGING_PASSWORD
-/// Consult https://m25lazi.medium.com/environment-variables-in-xcode-a78e07d223ed for an explanation on how to configure them.
+/// Consult https://confluence.ase.in.tum.de/display/IOS2223CIT/Authentication+Preview+Setup for an explanation on how to configure them.
+/// (alternative for people without access: https://m25lazi.medium.com/environment-variables-in-xcode-a78e07d223ed)
 
 import Foundation
 
