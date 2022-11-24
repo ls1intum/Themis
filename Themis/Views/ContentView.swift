@@ -14,6 +14,7 @@ struct ContentView: View {
         /*VStack {
             if authenticationVM.authenticated {
                 CourseListView(authenticationVM: authenticationVM)
+                // SubmissionListView(exerciseId: 5284)
             } else {
                 AuthenticationView(authenticationVM: authenticationVM)
             }
@@ -21,12 +22,14 @@ struct ContentView: View {
         .onAppear {
             authenticationVM.searchForToken()
         }
-        .padding()*/
+        .padding()
+         */
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(authenticationVM: PreviewAuthenticationViewModel())
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

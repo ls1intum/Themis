@@ -39,14 +39,18 @@ class AuthenticationViewModel: ObservableObject {
     private var restControllerInitialized = false
     private var cancellable = Set<AnyCancellable>()
 
-    init() {
-        self.serverURL = "https://artemis-staging.ase.in.tum.de"
+    init(serverURL: String) {
+        self.serverURL = serverURL
         if let serverURL = URL(string: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
         }
         Authentication.shared = Authentication()
         observeAuthenticationToken()
+    }
+
+    convenience init() {
+        self.init(serverURL: "https://artemis-staging.ase.in.tum.de")
     }
 
     /// Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value

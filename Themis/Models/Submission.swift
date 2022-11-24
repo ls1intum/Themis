@@ -10,8 +10,7 @@ import Foundation
 struct Student: Codable {
     let id: Int
     let login: String
-    let firstName: String
-    let lastName: String
+    let name: String
     let email: String
 }
 
@@ -35,7 +34,7 @@ struct SubmissionParticipation: Codable {
 struct Submission: Codable {
     let id: Int
     let participation: SubmissionParticipation
-    let results: SubmissionResult
+    let results: [SubmissionResult]
 }
 
 struct SubmissionForAssessment: Codable {
@@ -45,9 +44,13 @@ struct SubmissionForAssessment: Codable {
 }
 
 extension ArtemisAPI {
-    /// Gets all submissions of that exercise.
-    static func getAllSubmissions(exerciseId: Int) async throws -> [Submission] {
-        let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/programming-submissions")
+    /// Gets all submissions of that exercise assessed by the tutor = by the user.
+    static func getTutorSubmissions(exerciseId: Int) async throws -> [Submission] {
+        let request = Request(
+            method: .get,
+            path: "/api/exercises/\(exerciseId)/programming-submissions",
+            params: [URLQueryItem(name: "assessedByTutor", value: "true")]
+        )
         return try await sendRequest([Submission].self, request: request)
     }
 
