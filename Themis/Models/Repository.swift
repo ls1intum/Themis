@@ -44,6 +44,21 @@ class Node: Hashable {
     var path: String {
         calculatePath().joined(separator: "/")
     }
+    
+    ///This Method will flatMap children that have only one folder
+    func flatMap() {
+        guard let children, type == .folder else { return }
+        if let childFolder = children.first, childFolder.type == .folder, children.count == 1 {
+            self.name = self.name + "/" + childFolder.name
+            self.children?.removeFirst()
+            self.children = childFolder.children
+            self.flatMap()
+        } else {
+            for child in children {
+                child.flatMap()
+            }
+        }
+    }
 
     private func calculatePath() -> [String] {
         var parentPath = parent?.calculatePath() ?? []
@@ -124,7 +139,7 @@ extension ArtemisAPI {
         let timeInterval = Double(nanoTime) / 1_000_000_000
 
         print("Time to evaluate Parse: \(timeInterval) seconds")
-
+        root.flatMap()
         return root
     }
 
