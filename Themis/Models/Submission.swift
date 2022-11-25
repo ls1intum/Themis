@@ -44,6 +44,12 @@ struct SubmissionForAssessment: Codable {
 }
 
 extension ArtemisAPI {
+    /// Gets all submissions of that exercise.
+    static func getAllSubmissions(exerciseId: Int) async throws -> [Submission] {
+        let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/programming-submissions")
+        return try await sendRequest([Submission].self, request: request)
+    }
+    
     /// Gets all submissions of that exercise assessed by the tutor = by the user.
     static func getTutorSubmissions(exerciseId: Int) async throws -> [Submission] {
         let request = Request(
