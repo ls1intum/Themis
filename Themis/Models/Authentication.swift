@@ -44,10 +44,10 @@ class Authentication: NSObject {
 
     func checkAuth() {
         let cookie = HTTPCookieStorage.shared.cookies(for: url)?.first { cookie in
-            guard let url = url.host(), let date = cookie.expiresDate else {
+            guard let exp = cookie.expiresDate else {
                 return false
             }
-            return cookie.name == "jwt" && cookie.domain == url && Date() < date
+            return cookie.name == "jwt" && Date() < exp
         }
         self.authenticated = cookie != nil
     }
