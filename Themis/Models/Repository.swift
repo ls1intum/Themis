@@ -49,7 +49,7 @@ class Node: Hashable {
     func flatMap() {
         guard let children, type == .folder else { return }
         if let childFolder = children.first, childFolder.type == .folder, children.count == 1 {
-            self.name = self.name + "/" + childFolder.name
+            self.name += "/" + childFolder.name // WTF Swiftlint enforece to use += lol
             self.children?.removeFirst()
             self.children = childFolder.children
             self.flatMap()
