@@ -10,18 +10,15 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var authenticationVM = AuthenticationViewModel()
     var body: some View {
-        AssessmentView()
-        /*VStack {
+        VStack {
             if authenticationVM.authenticated {
+                // AssessmentView()
                 CourseListView(authenticationVM: authenticationVM)
             } else {
                 AuthenticationView(authenticationVM: authenticationVM)
             }
         }
-        .onAppear {
-            authenticationVM.searchForToken()
-        }
-        .padding()*/
+        .padding()
     }
 }
 

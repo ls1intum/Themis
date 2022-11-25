@@ -35,7 +35,9 @@ struct CourseListView: View {
 
     var logoutButton: some View {
         Button {
-            authenticationVM.logout()
+            Task {
+                await authenticationVM.logout()
+            }
         } label: {
             Text("Logout")
         }

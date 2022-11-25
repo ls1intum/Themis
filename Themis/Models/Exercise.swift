@@ -22,8 +22,8 @@ struct Exercise: Codable {
     let assessmentType: String?
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this is nil
-    let templateParticipation: Participation
-    let solutionParticipation: Participation
+    // let templateParticipation: Participation check again
+    // let solutionParticipation: Participation check again
 }
 
 struct DueDateStat: Codable {
