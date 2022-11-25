@@ -44,8 +44,8 @@ class Node: Hashable {
     var path: String {
         calculatePath().joined(separator: "/")
     }
-    
-    ///This Method will flatMap children that have only one folder
+
+    /// This Method will flatMap children that have only one folder
     func flatMap() {
         guard let children, type == .folder else { return }
         if let childFolder = children.first, childFolder.type == .folder, children.count == 1 {
