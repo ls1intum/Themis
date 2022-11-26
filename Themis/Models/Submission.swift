@@ -28,7 +28,7 @@ struct SubmissionResult: Codable {
     let id: Int
     let score: Double
     let rated: Bool
-    let hasFeedback: Bool
+    let hasFeedback: Bool?
     let testCaseCount: Int
     let passedTestCaseCount: Int
     let codeIssueCount: Int
