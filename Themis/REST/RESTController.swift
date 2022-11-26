@@ -42,6 +42,7 @@ class RESTController {
         case 400:
             throw RESTError.badRequest
         case 401:
+            Authentication.shared.authenticated = false
             throw RESTError.unauthorized
         case 403:
             throw RESTError.forbidden
