@@ -16,7 +16,6 @@ class AuthenticationViewModel: ObservableObject {
             guard let url = URL(string: serverURL) else {
                 return
             }
-            print("setting server url")
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
             if restControllerInitialized {
                 RESTController.shared.baseURL = url
@@ -44,9 +43,10 @@ class AuthenticationViewModel: ObservableObject {
         if let serverURL = URL(string: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
+            Authentication.shared = Authentication(for: serverURL)
         }
-        Authentication.shared = Authentication()
-        observeAuthenticationToken()
+        observeAuthenticationStatus()
+        Authentication.shared.checkAuth()
     }
 
     convenience init() {
@@ -54,12 +54,13 @@ class AuthenticationViewModel: ObservableObject {
     }
 
     /// Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value
-    private func observeAuthenticationToken() {
-        Authentication.shared.publisher(for: \.token, options: [.new])
+    private func observeAuthenticationStatus() {
+        Authentication.shared.publisher(for: \.authenticated, options: [.new])
             .receive(on: RunLoop.main)
-            .sink { token in
-                self.authenticated = token != nil
-            }.store(in: &cancellable)
+            .sink { authenticated in
+                self.authenticated = authenticated
+            }
+            .store(in: &cancellable)
     }
 
     @MainActor
@@ -73,9 +74,6 @@ class AuthenticationViewModel: ObservableObject {
         }
         do {
             try await Authentication.shared.auth(username: username, password: password, rememberMe: rememberMe)
-            if let token = Authentication.shared.token {
-                Authentication.shared.storeTokenInKeychain(token: token)
-            }
         } catch RESTError.unauthorized {
             self.invalidCredentialsAlert.toggle()
         } catch let error {
@@ -85,13 +83,12 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Searches for the Bearer token in the Keychain
-    func searchForToken () {
-        Authentication.shared.getTokenFromKeychain()
-    }
-
-    /// Logs the User out by deleting the Token which will triger the observation of the Authentication.shared.token Property
-    func logout() {
-        Authentication.shared.deleteToken()
+    /// Logs the User out by deleting the cookie
+    func logout() async {
+        do {
+            try await Authentication.shared.logOut()
+        } catch let error {
+            print(error)
+        }
     }
 }
