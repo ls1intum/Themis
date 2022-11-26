@@ -27,6 +27,10 @@
 		8384C43D292A8634008CCB4D /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43C292A8634008CCB4D /* Feedback.swift */; };
 		8384C43F292A9D24008CCB4D /* CorrectionGuidelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
+		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
+		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
+		DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */; };
+		DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */; };
@@ -106,6 +110,10 @@
 		8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelines.swift; path = Themis/ViewModels/CorrectionSidebar/CorrectionGuidelines.swift; sourceTree = SOURCE_ROOT; };
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
+		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
+		DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAuthenticationViewModel.swift; sourceTree = "<group>"; };
+		DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPreview.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlantUMLConverter.swift; path = Themis/API/PlantUMLConverter.swift; sourceTree = SOURCE_ROOT; };
@@ -195,6 +203,7 @@
 		4065F855292E873A005DAEE8 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				DA249E9429301E1B008DE1D5 /* SubmissionList */,
 				4065F85A292E8AB1005DAEE8 /* CourseList */,
 				4065F859292E8A90005DAEE8 /* Assessment */,
 				4065F858292E8A7F005DAEE8 /* Authentication */,
@@ -228,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */,
+				DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */,
 			);
 			name = Authentication;
 			path = Themis/ViewModels/Authentication;
@@ -346,6 +356,22 @@
 			path = Supporting;
 			sourceTree = "<group>";
 		};
+		DA0687C0292FB4610091B88A /* Submissions */ = {
+			isa = PBXGroup;
+			children = (
+				DA0687C1292FB4870091B88A /* SubmissionListView.swift */,
+			);
+			path = Submissions;
+			sourceTree = "<group>";
+		};
+		DA249E9429301E1B008DE1D5 /* SubmissionList */ = {
+			isa = PBXGroup;
+			children = (
+				DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */,
+			);
+			path = SubmissionList;
+			sourceTree = "<group>";
+		};
 		E2192ED1291E47670092CE58 /* REST */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,8 +399,9 @@
 			children = (
 				E21AF042292B9D4C0096ACFC /* Assessment */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
-				E2E6748629203E280081238B /* Exercises */,
 				E2E674812920326F0081238B /* Courses */,
+				E2E6748629203E280081238B /* Exercises */,
+				DA0687C0292FB4610091B88A /* Submissions */,
 				E2192EE7291EC3100092CE58 /* Authentication */,
 				83396D2F29155935003EF727 /* ContentView.swift */,
 			);
@@ -386,6 +413,7 @@
 			isa = PBXGroup;
 			children = (
 				E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */,
+				DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */,
 			);
 			name = Authentication;
 			path = Themis/Views/Authentication;
@@ -622,7 +650,9 @@
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
 				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
+				DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
+				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
 				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
@@ -632,6 +662,7 @@
 				E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */,
 				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
 				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
+				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
 				E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
@@ -640,6 +671,7 @@
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
 				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
+				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -785,6 +817,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;

@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var authenticationVM = AuthenticationViewModel()
     var body: some View {
+        // SubmissionListView(exerciseId: 5284)
         VStack {
             if authenticationVM.authenticated {
                 // AssessmentView()
@@ -24,6 +25,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(authenticationVM: PreviewAuthenticationViewModel())
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

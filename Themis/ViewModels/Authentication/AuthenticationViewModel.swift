@@ -38,8 +38,8 @@ class AuthenticationViewModel: ObservableObject {
     private var restControllerInitialized = false
     private var cancellable = Set<AnyCancellable>()
 
-    init() {
-        self.serverURL = "https://artemis-staging.ase.in.tum.de"
+    init(serverURL: String) {
+        self.serverURL = serverURL
         if let serverURL = URL(string: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
@@ -49,6 +49,11 @@ class AuthenticationViewModel: ObservableObject {
         Authentication.shared.checkAuth()
     }
 
+    convenience init() {
+        self.init(serverURL: "https://artemis-staging.ase.in.tum.de")
+    }
+
+    /// Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value
     private func observeAuthenticationStatus() {
         Authentication.shared.publisher(for: \.authenticated, options: [.new])
             .receive(on: RunLoop.main)
@@ -72,7 +77,9 @@ class AuthenticationViewModel: ObservableObject {
         } catch RESTError.unauthorized {
             self.invalidCredentialsAlert.toggle()
         } catch let error {
-            print(error.localizedDescription)
+            // converting to string gives nicer errors,
+            // see https://stackoverflow.com/a/68044439/4306257
+            print(String(describing: error))
         }
     }
 
