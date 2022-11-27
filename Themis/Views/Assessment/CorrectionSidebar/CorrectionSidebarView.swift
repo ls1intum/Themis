@@ -32,7 +32,7 @@ struct CorrectionSidebarView: View {
             ScrollView {
                 switch correctionSidebarStatus {
                 case .problemStatement:
-                    ProblemStatementCellView()
+                    ProblemStatementCellView(model: ProblemStatementCellViewModel.mock)
                 case .correctionGuidelines:
                     CorrectionGuidelinesCellView()
                 case .generalFeedback:

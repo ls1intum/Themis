@@ -7,27 +7,32 @@
 
 import SwiftUI
 import Foundation
+import MarkdownUI
 
 struct ProblemStatementCellView: View {
+    @ObservedObject var model: ProblemStatementCellViewModel
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 40) {
-                /*ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
-                    Text(line)
-                }*/
                 Text("Problem Statement")
                     .font(.largeTitle)
-                Spacer()
-                Text(ProblemStatementCellViewModel.convertString(ProblemStatementCellViewModel.mockData))
+
+                ForEach(model.problemStatementParts) { problemStatementPart in
+                    if let problemStatementPart = problemStatementPart.part as? String {
+                        Markdown(problemStatementPart)
+                    } else if let imageData = problemStatementPart.part as? Data {
+                        Image(uiImage: UIImage(data: imageData)!)
+                    }
+                }
             }
-            Spacer()
         }.padding()
     }
 }
 
 struct ProblemStatementCellView_Previews: PreviewProvider {
     static var previews: some View {
-        ProblemStatementCellView()
+        ProblemStatementCellView(model: ProblemStatementCellViewModel.mock)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
