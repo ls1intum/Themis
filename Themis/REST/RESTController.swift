@@ -29,6 +29,12 @@ class RESTController {
         let request = try makeURLRequest(request)
         let (data, response) = try await URLSession.shared.data(for: request)
         try validate(response: response)
+
+        // check for empty response
+        guard !data.isEmpty else {
+            throw RESTError.empty
+        }
+
         return try decode(data)
     }
 

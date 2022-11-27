@@ -14,5 +14,6 @@ enum RESTError: String, Error {
     case forbidden = "Request failed due to insufficient permissions."
     case notFound = "The requested ressource could not be found."
     case server = "The Server experienced an error, therefore not being able to respond."
+    case empty = "The response was empty."
     case different = "Some error occured while making a request."
 }
