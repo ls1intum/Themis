@@ -38,7 +38,7 @@ struct SubmissionParticipation: Codable {
     let id: Int
     let repositoryUrl: String
     let userIndependentRepositoryUrl: String
-    let student: Student
+    // let student: Student
 }
 
 struct Submission: Codable {
@@ -50,7 +50,7 @@ struct Submission: Codable {
 struct SubmissionForAssessment: Codable {
     let id: Int
     let participation: SubmissionParticipation
-    let results: SubmissionResult
+    // let results: [SubmissionResult]
 }
 
 extension ArtemisAPI {
