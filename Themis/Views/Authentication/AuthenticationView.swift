@@ -11,6 +11,9 @@ struct AuthenticationView: View {
     @ObservedObject var authenticationVM: AuthenticationViewModel
     var body: some View {
         VStack {
+            Image("AppIconVectorTransparent")
+                .resizable()
+                .frame(width: 300, height: 300)
             Text("Please sign in with your Artemis Account")
                 .font(.title)
                 .bold()
