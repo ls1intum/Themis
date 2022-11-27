@@ -25,7 +25,6 @@
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
 		8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */; };
 		8384C43D292A8634008CCB4D /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43C292A8634008CCB4D /* Feedback.swift */; };
-		8384C43F292A9D24008CCB4D /* CorrectionGuidelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
@@ -35,6 +34,7 @@
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
+		E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */; };
 		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
 		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
 		E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED4291E57640092CE58 /* HTTPMethod.swift */; };
@@ -107,7 +107,6 @@
 		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/FeedbackViewModel.swift; sourceTree = SOURCE_ROOT; };
 		8384C43C292A8634008CCB4D /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Feedback.swift; path = Themis/Models/Feedback.swift; sourceTree = SOURCE_ROOT; };
-		8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelines.swift; path = Themis/ViewModels/CorrectionSidebar/CorrectionGuidelines.swift; sourceTree = SOURCE_ROOT; };
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
@@ -118,6 +117,7 @@
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlantUMLConverter.swift; path = Themis/API/PlantUMLConverter.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
+		E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorViewModel.swift; sourceTree = "<group>"; };
 		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
 		E2192ED4291E57640092CE58 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
@@ -247,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
+				E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */,
 			);
 			name = Assessment;
 			path = Themis/ViewModels/Assessment;
@@ -265,7 +266,6 @@
 			isa = PBXGroup;
 			children = (
 				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
-				8384C43E292A9D24008CCB4D /* CorrectionGuidelines.swift */,
 			);
 			name = CorrectionSidebar;
 			path = Themis/ViewModels/CorrectionSidebar;
@@ -652,11 +652,11 @@
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
 				DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
+				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
 				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
 				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
-				8384C43F292A9D24008CCB4D /* CorrectionGuidelines.swift in Sources */,
 				E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */,
 				8384C437292A84C7008CCB4D /* AddFeedbackView.swift in Sources */,
 				E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */,

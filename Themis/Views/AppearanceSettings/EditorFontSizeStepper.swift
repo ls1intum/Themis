@@ -4,7 +4,8 @@ import UIKit
 
 // Custom stepper to adjust font size with input field
 struct EditorFontSizeStepperView: View {
-    @ObservedObject var vm: AssessmentViewModel
+
+    @ObservedObject var vm: CodeEditorViewModel
 
     var body: some View {
         HStack {

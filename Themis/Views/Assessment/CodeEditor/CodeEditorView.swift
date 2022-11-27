@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct CodeEditorView: View {
-    @ObservedObject var vm: AssessmentViewModel
+    @EnvironmentObject var assessmentViewModel: AssessmentViewModel
+
+    @ObservedObject var vm: CodeEditorViewModel
     @Binding var showFileTree: Bool
 
     var body: some View {
@@ -13,7 +15,7 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView(vm: vm)
                     }
-                    CodeView(vm: vm)
+                    CodeView(vm: vm, selectedFile: vm.selectedFile!)
                 }
             } else {
                 Text("Select a file")
@@ -21,5 +23,9 @@ struct CodeEditorView: View {
             }
         }
         .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+        .task {
+            guard let submission = assessmentViewModel.submission else { return }
+            await vm.initFileTree(participationId: submission.id)
+        }
     }
 }

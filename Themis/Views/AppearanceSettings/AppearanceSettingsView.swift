@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AppearanceSettingsView: View {
-    @ObservedObject var vm: AssessmentViewModel
+    @ObservedObject var vm: CodeEditorViewModel
     @Binding var showSettings: Bool
 
     var body: some View {

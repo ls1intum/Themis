@@ -2,8 +2,9 @@ import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
+    @EnvironmentObject var vm: AssessmentViewModel
 
-    @StateObject var vm = AssessmentViewModel()
+    @StateObject var codeEditorViewModel = CodeEditorViewModel()
 
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
@@ -24,13 +25,13 @@ struct AssessmentView: View {
             ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
                 HStack(spacing: 0) {
                     if showFileTree {
-                        FiletreeSidebarView(vm: vm)
+                        FiletreeSidebarView(vm: codeEditorViewModel)
                             .padding(.top, 50)
                             .frame(width: dragWidthLeft)
                         leftGrip
                             .edgesIgnoringSafeArea(.bottom)
                     }
-                    CodeEditorView(vm: vm, showFileTree: $showFileTree)
+                    CodeEditorView(vm: codeEditorViewModel, showFileTree: $showFileTree)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     rightGrip
                         .edgesIgnoringSafeArea(.bottom)
@@ -86,7 +87,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
-                AppearanceSettingsView(vm: vm, showSettings: $showSettings)
+                AppearanceSettingsView(vm: codeEditorViewModel, showSettings: $showSettings)
                     .navigationTitle("Appearance settings")
             }
         }
@@ -97,6 +98,9 @@ struct AssessmentView: View {
         }
         .task(priority: .high) {
             await vm.initRandomSubmission(exerciseId: exerciseId)
+            if let pId = vm.submission?.participation.id {
+                await codeEditorViewModel.initFileTree(participationId: pId)
+            }
         }
     }
     var leftGrip: some View {

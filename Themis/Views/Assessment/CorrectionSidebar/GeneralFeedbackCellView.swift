@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GeneralFeedbackCellView: View {
-    @ObservedObject var feedbackModel: FeedbackViewModel
+    @StateObject var feedbackModel = FeedbackViewModel()
     @State var showAddFeedback = false
 
     var body: some View {

@@ -15,7 +15,10 @@ struct SubmissionListView: View {
 
     var body: some View {
         NavigationStack {
-            NavigationLink(destination: AssessmentView(exerciseId: 5284)) {
+            NavigationLink(destination: {
+                AssessmentView(exerciseId: 5284)
+                    .environmentObject(AssessmentViewModel())
+            }) {
                 Text("Assess random submission")
             }
             List {

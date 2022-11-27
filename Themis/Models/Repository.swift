@@ -12,14 +12,14 @@ enum FileType: String, Codable {
     case file = "FILE"
 }
 
-class Node: Hashable {
+class Node: Hashable, ObservableObject {
 
     var parent: Node?
     var name: String
 
     let type: FileType
     var children: [Node]?
-    var code: String?
+    @Published var code: String?
 
     init(type: FileType, name: String) {
         self.name = name
@@ -80,6 +80,7 @@ class Node: Hashable {
         return desc
     }
 
+    @MainActor
     public func fetchCode(participationId: Int) async throws {
         if code != nil { return } else {
             do {

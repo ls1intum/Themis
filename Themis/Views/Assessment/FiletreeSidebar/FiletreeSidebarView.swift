@@ -12,7 +12,9 @@ struct FileCellView: View {
 }
 
 struct FiletreeSidebarView: View {
-    @ObservedObject var vm: AssessmentViewModel
+    @EnvironmentObject var assessmentViewModel: AssessmentViewModel
+
+    @ObservedObject var vm: CodeEditorViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -28,7 +30,8 @@ struct FiletreeSidebarView: View {
                             .onTapGesture {
                                 if tree.type == .file {
                                     withAnimation {
-                                        vm.openFile(file: tree)
+                                        guard let pId = assessmentViewModel.submission?.participation.id else { return }
+                                        vm.openFile(file: tree, participationId: pId)
                                     }
                                 }
                             }
