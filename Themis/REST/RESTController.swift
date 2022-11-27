@@ -19,6 +19,12 @@ class RESTController {
         self.baseURL = baseURL
     }
 
+    func sendRequest(_ request: Request) async throws {
+        let request = try makeURLRequest(request)
+        let (_, response) = try await URLSession.shared.data(for: request)
+        try validate(response: response)
+    }
+
     func sendRequest<T: Decodable>(_ request: Request) async throws -> T {
         try await sendRequest(request, decode: { data in
             try jsonDecoder.decode(T.self, from: data)

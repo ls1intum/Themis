@@ -11,11 +11,3 @@ struct AppearanceSettingsView: View {
         }
     }
 }
-
-/*struct AppearanceSettingsView_Previews: PreviewProvider {
-    @State static var showSettings: Bool = true
-    static var previews: some View {
-        AppearanceSettingsView(showSettings: $showSettings)
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}*/

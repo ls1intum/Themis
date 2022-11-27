@@ -23,7 +23,7 @@ struct SubmissionListView: View {
             } label: {
                 Text("Assess random submission")
             }
-            .navigationDestination(isPresented: $vm.foundSubmission) {
+            .navigationDestination(isPresented: $vm.showSubmission) {
                 AssessmentView(exerciseId: 5284)
                            .environmentObject(vm)
             }

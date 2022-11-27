@@ -11,10 +11,10 @@ struct CorrectionGuidelinesCellView: View {
     @EnvironmentObject var assessment: AssessmentViewModel
 
     var gradingCriteria: [GradingCriteria] {
-        if let criteria = assessment.submission?.participation.exercise.gradingCriteria {
-            return criteria
+        guard let criteria = assessment.submission?.participation.exercise.gradingCriteria else {
+            return []
         }
-        return []
+        return criteria
     }
 
     var body: some View {
@@ -38,8 +38,6 @@ struct CorrectionGuidelinesCellView: View {
 
                 Spacer()
             }
-
-            // Spacer()
         }.padding()
     }
 }

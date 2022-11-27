@@ -32,21 +32,13 @@ class Authentication: NSObject {
     func auth(username: String, password: String, rememberMe: Bool = false) async throws {
         let body = AuthBody(username: username, password: password, rememberMe: rememberMe)
         let request = Request(method: .post, path: "/api/authenticate", body: body)
-        do {
-            _ = try await RESTController.shared.sendRequest(request) { _ in true }
-        } catch RESTError.empty {
-            // do nothing because empty response is intended
-        }
+        try await RESTController.shared.sendRequest(request)
         checkAuth()
     }
 
     func logOut() async throws {
         let request = Request(method: .post, path: "/api/logout")
-        do {
-            _ = try await RESTController.shared.sendRequest(request) { _ in true }
-        } catch RESTError.empty {
-            // do nothing because empty response is intended
-        }
+        try await RESTController.shared.sendRequest(request)
         checkAuth()
     }
 
