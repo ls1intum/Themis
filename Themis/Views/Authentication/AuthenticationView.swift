@@ -11,34 +11,54 @@ struct AuthenticationView: View {
     @ObservedObject var authenticationVM: AuthenticationViewModel
     var body: some View {
         VStack {
+            Text("Please sign in with your Artemis Account")
+                .font(.title)
+                .bold()
+                .padding()
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
+                .textFieldStyle(LoginTextFieldStyle())
             TextField("username", text: $authenticationVM.username)
+                .textFieldStyle(LoginTextFieldStyle())
             SecureField("password", text: $authenticationVM.password)
-            HStack {
-                Text("Remember Session for 30 Days?")
-                rememberMe
-            }
-            if authenticationVM.authenticationInProgress {
-                ProgressView()
-            }
-            Button {
-                Task {
-                    await authenticationVM.authenticate()
-                }
-            } label: {
-                Text("Log-In")
-            }
-        }.alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert, actions: {
-            Button("Ok") {}
-        })
+                .textFieldStyle(LoginTextFieldStyle())
 
+            Toggle("Remember Session for 30 Days?", isOn: $authenticationVM.rememberMe)
+                .frame(width: 500)
+                .padding()
+            authenticateButton
+        }.alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert) {
+            Button("Ok") {}
+        }
     }
 
-    var rememberMe: some View {
-        Image(systemName: authenticationVM.rememberMe ? "checkmark.square.fill" : "square")
-            .foregroundColor(authenticationVM.rememberMe ? Color(UIColor.systemBlue) : Color.secondary)
-            .onTapGesture {
-                self.authenticationVM.rememberMe.toggle()
+    var authenticateButton: some View {
+        Button {
+            Task {
+                await authenticationVM.authenticate()
             }
+        } label: {
+            if authenticationVM.authenticationInProgress {
+                ProgressView()
+            } else {
+                Text("Login")
+            }
+        }
+        .foregroundColor(.white)
+        .frame(width: 500, height: 50)
+        .background(Color.blue)
+        .cornerRadius(10)
+    }
+
+}
+
+struct LoginTextFieldStyle: TextFieldStyle {
+    @Environment(\.colorScheme) var colorScheme
+
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .padding()
+            .frame(width: 500, height: 50)
+            .background(colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6))
+            .cornerRadius(10)
     }
 }
