@@ -31,7 +31,7 @@ class RESTController {
         try validate(response: response)
 
         // check for empty response
-        guard !data.isEmpty else {
+        if data.isEmpty {
             throw RESTError.empty
         }
 
