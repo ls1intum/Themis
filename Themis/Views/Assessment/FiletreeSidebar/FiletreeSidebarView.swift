@@ -12,7 +12,7 @@ struct FileCellView: View {
 }
 
 struct FiletreeSidebarView: View {
-    @ObservedObject var model: AssessmentViewModel
+    @ObservedObject var vm: AssessmentViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,7 +20,7 @@ struct FiletreeSidebarView: View {
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
-            if let fileTree = model.fileTree {
+            if let fileTree = vm.fileTree {
                 List {
                     OutlineGroup(fileTree, id: \.path, children: \.children) { tree in
                         Text(tree.name)
@@ -28,7 +28,7 @@ struct FiletreeSidebarView: View {
                             .onTapGesture {
                                 if tree.type == .file {
                                     withAnimation {
-                                        model.openFile(file: tree)
+                                        vm.openFile(file: tree)
                                     }
                                 }
                             }

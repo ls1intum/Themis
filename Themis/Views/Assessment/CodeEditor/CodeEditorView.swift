@@ -1,19 +1,19 @@
 import SwiftUI
 
 struct CodeEditorView: View {
-    @ObservedObject var model: AssessmentViewModel
+    @ObservedObject var vm: AssessmentViewModel
     @Binding var showFileTree: Bool
 
     var body: some View {
         VStack {
-            if model.selectedFile != nil {
+            if vm.selectedFile != nil {
                 VStack {
                     HStack {
                         Spacer()
                             .frame(width: showFileTree ? 0 : 40)
-                        TabsView(model: model)
+                        TabsView(vm: vm)
                     }
-                    CodeView(model: model)
+                    CodeView(vm: vm)
                 }
             } else {
                 Text("Select a file")

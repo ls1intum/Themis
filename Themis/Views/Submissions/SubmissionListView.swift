@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct SubmissionListView: View {
-    var exerciseId: Int
+
     @StateObject var submissionListVM = SubmissionListViewModel()
+
+    var exerciseId: Int
 
     var body: some View {
         NavigationStack {
+            NavigationLink(destination: AssessmentView(exerciseId: 5284)) {
+                Text("Assess random submission")
+            }
             List {
                 ForEach(submissionListVM.submissions, id: \.id) { submission in
                     NavigationLink {
                     } label: {
-                        Text("Submission \(submission.id) by \(submission.participation.student.name)")
+                        Text("Submission \(submission.id)")
+                        // Text("Submission \(submission.id) by \(submission.participation.student.name)")
                     }
                 }
             }

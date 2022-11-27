@@ -12,17 +12,17 @@ struct CodeFile: Identifiable, Hashable {
 
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
-    @ObservedObject var model: AssessmentViewModel
+    @ObservedObject var vm: AssessmentViewModel
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
-        viewController.sourceCode = model.selectedFile?.code ?? ""
+        viewController.sourceCode = vm.selectedFile?.code ?? ""
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
-        uiViewController.sourceCode = model.selectedFile?.code ?? ""
-        uiViewController.editorFontSize = model.editorFontSize
+        uiViewController.sourceCode = vm.selectedFile?.code ?? ""
+        uiViewController.editorFontSize = vm.editorFontSize
     }
 }
 
@@ -78,7 +78,7 @@ struct CodeView_Previews: PreviewProvider {
                                title: "Baum.java",
                                code: "class Baum {\n\tString type = \"Eiche\";\n}")
     static var previews: some View {
-        CodeView(model: AssessmentViewModel.mock)
+        CodeView(vm: AssessmentViewModel())
             .padding()
             .previewInterfaceOrientation(.landscapeLeft)
     }

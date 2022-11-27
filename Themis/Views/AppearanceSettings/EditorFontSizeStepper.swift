@@ -4,25 +4,25 @@ import UIKit
 
 // Custom stepper to adjust font size with input field
 struct EditorFontSizeStepperView: View {
-    @ObservedObject var model = AssessmentViewModel.mock
+    @ObservedObject var vm: AssessmentViewModel
 
     var body: some View {
         HStack {
             Text("Font size").bold()
             Spacer()
-            Button(action: model.decrementFontSize) {
+            Button(action: vm.decrementFontSize) {
                 Label("", systemImage: "minus")
             }.backgroundStyle(Color.gray)
-            TextField("", value: $model.editorFontSize, formatter: NumberFormatter())
+            TextField("", value: $vm.editorFontSize, formatter: NumberFormatter())
                 .onSubmit {
-                    if model.editorFontSize < 8 {
-                        model.editorFontSize = 8
+                    if vm.editorFontSize < 8 {
+                        vm.editorFontSize = 8
                     }
                 }
                 .keyboardType(.numberPad)
                 .fixedSize()
                 .padding(5)
-            Button(action: model.incrementFontSize) {
+            Button(action: vm.incrementFontSize) {
                 Label("", systemImage: "plus")
             }.backgroundStyle(Color.gray)
         }.padding(15)

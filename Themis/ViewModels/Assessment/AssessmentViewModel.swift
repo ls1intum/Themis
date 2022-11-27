@@ -1,21 +1,31 @@
 import Foundation
 import SwiftUI
+import Combine
 
 class AssessmentViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
+    var submission: SubmissionForAssessment? // SubmissionForAssessment(id: 0, participation: SubmissionParticipation(id: 0, repositoryUrl: "", userIndependentRepositoryUrl: ""))
 
-    init(files: [String: FileType]) {
-        let node = ArtemisAPI.initFileTreeStructure(files: files)
-        self.fileTree = node.children ?? []
+    var dismissPublisher = PassthroughSubject<Bool, Never>()
+    private var dismissView = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.dismissPublisher.send(self.dismissView)
+            }
+        }
     }
 
     func openFile(file: Node) {
         if !openFiles.contains(where: { $0.path == file.path }) {
             openFiles.append(file)
-            file.fetchCode()
+            if let pId = submission?.participation.id {
+                Task {
+                    try await file.fetchCode(participationId: pId)
+                }
+            }
         }
         selectedFile = file
     }
@@ -33,40 +43,23 @@ class AssessmentViewModel: ObservableObject {
         if editorFontSize > 8 { editorFontSize -= 1 }
     }
 
-    static let mockData = [
-        CodeFile(id: UUID(),
-                 title: "Baum.java",
-                 code: "class Baum {\n\tString type = \"Eiche\";\n}"),
-        CodeFile(id: UUID(),
-                 title: "Wald.java",
-                 code: "class Wald {\n}"),
-        CodeFile(id: UUID(),
-                 title: "Fluss.java",
-                 code: "class Fluss {\n}")
-    ]
-
-    static let newMockData: [String: FileType] = [
-        "": .folder,
-        "gradlew": .file,
-        "settings.gradle": .file,
-        "src/de/tum/themis/MergeSort.java": .file,
-        "src": .folder,
-        "gradle/wrapper/gradle-wrapper.jar": .file,
-        "src/de/tum/themis": .folder,
-        "gradle/wrapper/gradle-wrapper.properties": .file,
-        "gradle/wrapper": .folder,
-        "gradlew.bat": .file,
-        "gradle": .folder,
-        "src/de/tum": .folder,
-        "build.gradle": .file,
-        "src/de/tum/themis/Wald.java": .file,
-        "src/de/tum/themis/Baum.java": .file,
-        "src/de/tum/themis/Fluss.java": .file,
-        "src/de": .folder
-    ]
-
-    public static var mock: AssessmentViewModel {
-        let mock = AssessmentViewModel(files: newMockData)
-        return mock
+    func initRandomSubmission(exerciseId: Int) async {
+        do {
+            self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: 5284)
+            guard let submission = submission else {
+                self.dismissView = true
+                return
+            }
+            let files = try await ArtemisAPI.getFileNamesOfRepository(participationId: submission.participation.id)
+            let node = ArtemisAPI.initFileTreeStructure(files: files)
+            DispatchQueue.main.async {
+                self.fileTree = node.children ?? []
+            }
+        } catch {
+            print(error)
+            self.dismissView = true
+            return
+        }
     }
+
 }
