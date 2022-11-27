@@ -86,7 +86,6 @@ class Node: Hashable, ObservableObject {
             do {
                 var relativePath = path
                 relativePath.remove(at: relativePath.startIndex)
-                // Does not update view yet, as Tom needs to update the node class to a struct to make it properly observable
                 self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
             } catch {
                 print(error)

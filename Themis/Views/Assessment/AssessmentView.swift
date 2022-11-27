@@ -91,11 +91,6 @@ struct AssessmentView: View {
                     .navigationTitle("Appearance settings")
             }
         }
-        .onReceive(vm.dismissPublisher) { shouldDismiss in
-                    if shouldDismiss {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-        }
         .task(priority: .high) {
             await vm.initRandomSubmission(exerciseId: exerciseId)
             if let pId = vm.submission?.participation.id {
