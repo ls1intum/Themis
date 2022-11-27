@@ -28,10 +28,3 @@ struct GradingCriteriaCellView: View {
         }.padding()
     }
 }
-
-struct GradingCriteria_Previews: PreviewProvider {
-    static var previews: some View {
-        GradingCriteriaCellView(gradingCriterium: GradingCriteria(id: 1, structuredGradingInstructions: [GradingInstruction(id: 1, credits: 22, gradingScale: "asasd", instructionDescription: "asSAdasd", feedback: "asdasdasd", usageCount: 2)]))
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
