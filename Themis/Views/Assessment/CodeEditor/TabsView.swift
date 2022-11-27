@@ -2,21 +2,21 @@ import SwiftUI
 
 // used to show opened tabs on top of CodeView
 struct TabsView: View {
-    @ObservedObject var model: AssessmentViewModel
+    @ObservedObject var vm: CodeEditorViewModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollReader in
                 HStack {
                     Divider()
-                    ForEach(model.openFiles, id: \.path) { file in
+                    ForEach(vm.openFiles, id: \.path) { file in
                         HStack {
                             Text(file.name)
-                                .bold(model.selectedFile?.path == file.path)
+                                .bold(vm.selectedFile?.path == file.path)
                             Button(action: {
-                                model.closeFile(file: file)
+                                vm.closeFile(file: file)
                             }, label: {
-                                if file.path == model.selectedFile?.path {
+                                if file.path == vm.selectedFile?.path {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.gray)
                                         .buttonStyle(.borderless)
@@ -28,14 +28,14 @@ struct TabsView: View {
                         .id(file)
                         .onTapGesture {
                             withAnimation {
-                                model.selectedFile = file
+                                vm.selectedFile = file
                             }
                         }
                         Divider()
                     }
                 }
                 .frame(height: 20)
-                .onChange(of: model.selectedFile, perform: { file in
+                .onChange(of: vm.selectedFile, perform: { file in
                     scrollReader.scrollTo(file, anchor: nil)
                 })
                 .padding()
@@ -46,6 +46,6 @@ struct TabsView: View {
 
 struct TabsView_Previews: PreviewProvider {
     static var previews: some View {
-        TabsView(model: AssessmentViewModel.mock)
+        TabsView(vm: CodeEditorViewModel())
     }
 }

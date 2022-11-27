@@ -1,12 +1,22 @@
 import SwiftUI
 
 struct AssessmentView: View {
-    @StateObject var model = AssessmentViewModel.mock
+    @Environment(\.presentationMode) private var presentationMode
+    @EnvironmentObject var vm: AssessmentViewModel
+
+    @StateObject var codeEditorViewModel = CodeEditorViewModel()
+
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder: Bool = true
+
+    private let exerciseId: Int
+
+    init(exerciseId: Int) {
+        self.exerciseId = exerciseId
+    }
 
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
@@ -15,13 +25,13 @@ struct AssessmentView: View {
             ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
                 HStack(spacing: 0) {
                     if showFileTree {
-                        FiletreeSidebarView(model: model)
+                        FiletreeSidebarView(vm: codeEditorViewModel)
                             .padding(.top, 50)
                             .frame(width: dragWidthLeft)
                         leftGrip
                             .edgesIgnoringSafeArea(.bottom)
                     }
-                    CodeEditorView(model: model, showFileTree: $showFileTree)
+                    CodeEditorView(vm: codeEditorViewModel, showFileTree: $showFileTree)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     rightGrip
                         .edgesIgnoringSafeArea(.bottom)
@@ -77,8 +87,14 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
-                AppearanceSettingsView(model: model, showSettings: $showSettings)
+                AppearanceSettingsView(vm: codeEditorViewModel, showSettings: $showSettings)
                     .navigationTitle("Appearance settings")
+            }
+        }
+        .task(priority: .high) {
+            await vm.initRandomSubmission(exerciseId: exerciseId)
+            if let pId = vm.submission?.participation.id {
+                await codeEditorViewModel.initFileTree(participationId: pId)
             }
         }
     }
@@ -181,6 +197,7 @@ struct AssessmentView: View {
         .frame(width: 7)
     }
     var correctionWithPlaceholder: some View {
+        // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
                 CorrectionSidebarView()
@@ -196,7 +213,7 @@ struct AssessmentView: View {
 
 struct AssessmentView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentView()
+        AssessmentView(exerciseId: 5284)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

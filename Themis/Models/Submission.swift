@@ -38,7 +38,8 @@ struct SubmissionParticipation: Codable {
     let id: Int
     let repositoryUrl: String
     let userIndependentRepositoryUrl: String
-    let student: Student
+    let exercise: ExerciseOfSubmission
+    // let student: Student
 }
 
 struct Submission: Codable {
@@ -47,10 +48,30 @@ struct Submission: Codable {
     let results: [SubmissionResult]
 }
 
+struct ExerciseOfSubmission: Codable {
+    let problemStatement: String
+    let gradingInstructions: String
+    let gradingCriteria: [GradingCriteria]
+}
+
 struct SubmissionForAssessment: Codable {
     let id: Int
     let participation: SubmissionParticipation
-    let results: SubmissionResult
+    // let results: [SubmissionResult]
+}
+
+struct GradingCriteria: Codable, Identifiable {
+    var id: Int
+    var structuredGradingInstructions: [GradingInstruction]
+}
+
+struct GradingInstruction: Codable, Identifiable {
+    var id: Int
+    var credits: Double
+    var gradingScale: String
+    var instructionDescription: String
+    var feedback: String
+    var usageCount: Int
 }
 
 extension ArtemisAPI {

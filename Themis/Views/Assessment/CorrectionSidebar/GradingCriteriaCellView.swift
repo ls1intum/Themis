@@ -9,30 +9,22 @@ import Foundation
 import SwiftUI
 
 struct GradingCriteriaCellView: View {
-    @ObservedObject var gradingCriteriaModel: GradingCriteria
-    var gradingCriteriaID: GradingCriteria.ID
+    let gradingCriterium: GradingCriteria
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text(String(gradingCriteriaModel.credits))
-                    .font(.title3)
-                Spacer()
-                Text(gradingCriteriaModel.gradingScale)
-                    .font(.title3)
-                Spacer()
-                Text(gradingCriteriaModel.instructionDescription)
-                    .font(.title3)
+            ForEach(gradingCriterium.structuredGradingInstructions) { instruction in
+                HStack {
+                    Text("\(instruction.credits)")
+                        .font(.title3)
+                    Spacer()
+                    Text(instruction.gradingScale)
+                        .font(.title3)
+                    Spacer()
+                    Text(instruction.instructionDescription)
+                        .font(.title3)
+                }
             }
         }.padding()
-    }
-}
-
-struct GradingCriteria_Previews: PreviewProvider {
-    private static let mock: CorrectionGuidelines = CorrectionGuidelines.mock
-
-    static var previews: some View {
-        GradingCriteriaCellView(gradingCriteriaModel: mock.gradingCriteria[0], gradingCriteriaID: mock.gradingCriteria[0].id)
-            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

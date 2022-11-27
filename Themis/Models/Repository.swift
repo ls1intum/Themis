@@ -1,5 +1,5 @@
 //
-//  ExportRepository.swift
+//  Repository.swift
 //  Themis
 //
 //  Created by Andreas Cselovszky on 14.11.22.
@@ -12,14 +12,14 @@ enum FileType: String, Codable {
     case file = "FILE"
 }
 
-class Node: Hashable {
+class Node: Hashable, ObservableObject {
 
     var parent: Node?
     var name: String
 
     let type: FileType
     var children: [Node]?
-    var code: String?
+    @Published var code: String?
 
     init(type: FileType, name: String) {
         self.name = name
@@ -52,6 +52,9 @@ class Node: Hashable {
             self.name += "/" + childFolder.name // WTF Swiftlint enforece to use += lol
             self.children?.removeFirst()
             self.children = childFolder.children
+            self.children?.forEach { child in
+                child.parent = self
+            }
             self.flatMap()
         } else {
             for child in children {
@@ -77,14 +80,15 @@ class Node: Hashable {
         return desc
     }
 
-    public func fetchCode() {
+    @MainActor
+    public func fetchCode(participationId: Int) async throws {
         if code != nil { return } else {
-            /// MOCK STUFF
-            switch name {
-            case "Baum.java": self.code = "class Baum {\n\tString type = \"Eiche\";\n}"
-            case "Wald.java": self.code = "class Wald {\n}"
-            case "Fluss.java": self.code = "class Fluss {\n}"
-            default: self.code = "class DEFAULT {\n}"
+            do {
+                var relativePath = path
+                relativePath.remove(at: relativePath.startIndex)
+                self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
+            } catch {
+                print(error)
             }
         }
     }
