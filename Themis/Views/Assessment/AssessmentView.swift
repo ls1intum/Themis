@@ -92,7 +92,6 @@ struct AssessmentView: View {
             }
         }
         .task(priority: .high) {
-            await vm.initRandomSubmission(exerciseId: exerciseId)
             if let pId = vm.submission?.participation.id {
                 await codeEditorViewModel.initFileTree(participationId: pId)
             }
