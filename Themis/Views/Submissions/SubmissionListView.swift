@@ -25,8 +25,21 @@ struct SubmissionListView: View {
             }
             .navigationDestination(isPresented: $vm.showSubmission) {
                 AssessmentView(exerciseId: 5284)
-                           .environmentObject(vm)
+                    .environmentObject(vm)
             }
+            List {
+                ForEach(submissionListVM.submissions, id: \.id) { submission in
+                    NavigationLink {
+                    } label: {
+                        Text("Submission \(submission.id) by \(submission.participation.student.name)")
+                    }
+                }
+            }
+            .overlay(Group {
+                if submissionListVM.submissions.isEmpty {
+                    Text("No submissions")
+                }
+            })
         }
         .navigationTitle("Your Submissions")
         .task {

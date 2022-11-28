@@ -13,21 +13,13 @@ struct Student: Codable {
     let firstName: String
     let lastName: String?
     let email: String
-
-    var name: String {
-        get {
-            guard let lastName = lastName else {
-                return firstName
-            }
-            return "\(firstName) \(lastName)"
-        }
-    }
+    let name: String
 }
 
 struct SubmissionResult: Codable {
     let id: Int
-    let score: Double
-    let rated: Bool
+    // let score: Double
+    // let rated: Bool
     let hasFeedback: Bool?
     let testCaseCount: Int
     let passedTestCaseCount: Int
@@ -38,8 +30,14 @@ struct SubmissionParticipation: Codable {
     let id: Int
     let repositoryUrl: String
     let userIndependentRepositoryUrl: String
+    let student: Student
+}
+
+struct ParticipationForAssessment: Codable {
+    let id: Int
+    let repositoryUrl: String
+    let userIndependentRepositoryUrl: String
     let exercise: ExerciseOfSubmission
-    // let student: Student
 }
 
 struct Submission: Codable {
@@ -56,7 +54,7 @@ struct ExerciseOfSubmission: Codable {
 
 struct SubmissionForAssessment: Codable {
     let id: Int
-    let participation: SubmissionParticipation
+    let participation: ParticipationForAssessment
     // let results: [SubmissionResult]
 }
 
