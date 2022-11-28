@@ -20,8 +20,8 @@ struct Exercise: Codable {
     let shortName: String?
     let maxPoints: Double?
     let assessmentType: String?
-    let problemStatement: String? // important!!!
-    let gradingInstructions: String? // For Programming Assesments this is nil, not always -> important!!!
+    let problemStatement: String?
+    let gradingInstructions: String?
     // let templateParticipation: Participation check again
     // let solutionParticipation: Participation check again
 }
