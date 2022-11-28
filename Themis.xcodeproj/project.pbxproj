@@ -33,7 +33,6 @@
 		DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
-		E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
 		E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */; };
 		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
@@ -103,7 +102,7 @@
 		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelinesCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionGuidelinesCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GeneralFeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GeneralFeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellView.swift; sourceTree = SOURCE_ROOT; };
-		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
+		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
 		8384C436292A84C7008CCB4D /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddFeedbackView.swift; path = Themis/Views/Assessment/CorrectionSidebar/AddFeedbackView.swift; sourceTree = SOURCE_ROOT; };
 		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/FeedbackViewModel.swift; sourceTree = SOURCE_ROOT; };
@@ -116,7 +115,6 @@
 		DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPreview.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
-		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlantUMLConverter.swift; path = Themis/API/PlantUMLConverter.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
 		E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorViewModel.swift; sourceTree = "<group>"; };
 		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
@@ -267,6 +265,7 @@
 		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
 			isa = PBXGroup;
 			children = (
+				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
 				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
 			);
 			name = CorrectionSidebar;
@@ -341,7 +340,6 @@
 				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
 				8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */,
 				8384C43229210488008CCB4D /* ProblemStatementCellView.swift */,
-				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
 				8384C436292A84C7008CCB4D /* AddFeedbackView.swift */,
 				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
 				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
@@ -389,7 +387,6 @@
 			isa = PBXGroup;
 			children = (
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
-				E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */,
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
 			);
 			name = API;
@@ -645,7 +642,6 @@
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
-				E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */,
 				8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,

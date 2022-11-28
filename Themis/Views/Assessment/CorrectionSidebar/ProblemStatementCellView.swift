@@ -21,19 +21,23 @@ struct ProblemStatementCellView: View {
                 Text("Problem Statement")
                     .font(.largeTitle)
 
-                ForEach(vm.problemStatementParts) { problemStatementPart in
-                    if let problemStatementPart = problemStatementPart.part as? String {
-                        Markdown(problemStatementPart)
-                    } else if let imageData = problemStatementPart.part as? Data {
-                        Image(uiImage: UIImage(data: imageData)!)
+                ForEach(vm.problemStatementParts, id: \.text) { part in
+                    if let puml = part as? ProblemStatementPlantUML {
+                        AsyncImage(url: puml.url) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    } else {
+                        Markdown(part.text)
                     }
                 }
 
             }
         }
         .padding()
-        .task {
-            await vm.convertProblemStatement(assessment.submission?.participation.exercise.problemStatement ?? "")
+        .onAppear {
+            vm.convertProblemStatement(problemStatement: assessment.submission?.participation.exercise.problemStatement ?? "")
         }
     }
 }
