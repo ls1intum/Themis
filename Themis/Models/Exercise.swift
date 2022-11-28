@@ -21,7 +21,7 @@ struct Exercise: Codable {
     let maxPoints: Double?
     let assessmentType: String?
     let problemStatement: String?
-    let gradingInstructions: String?
+    let gradingInstructions: String? // For Programming Assesments this might be nil
     // let templateParticipation: Participation check again
     // let solutionParticipation: Participation check again
 }
