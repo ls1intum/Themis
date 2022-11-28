@@ -31,9 +31,13 @@ struct CorrectionGuidelinesCellView: View {
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Structured Assessment Criteria").font(.title2)
+
                     ForEach(gradingCriteria) { gradingCriterium in
                         GradingCriteriaCellView(gradingCriterium: gradingCriterium)
-                    }.padding()
+                    }
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 20)
+                        .stroke(.blue, lineWidth: 2))
                 }.padding()
 
                 Spacer()
@@ -44,7 +48,7 @@ struct CorrectionGuidelinesCellView: View {
 
 struct CorrectionGuidelinesCellView_Previews: PreviewProvider {
     static var previews: some View {
-        CorrectionGuidelinesCellView()
+        CorrectionGuidelinesCellView(correctionGuidelinesModel: CorrectionGuidelines.mock)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
