@@ -51,8 +51,12 @@ class ProblemStatementCellViewModel: ObservableObject {
                 // definitely umlcurrently == true!
                 // get Image from Rest!
                 // problemStatementParts.append(umlImage)
-                let umlDiagram = try! await ArtemisAPI.getPNGFromPlantUML(plantuml: currentPart)
-                problemStatementParts.append(AnyType(part: umlDiagram))
+                do {
+                    let umlDiagram = try await ArtemisAPI.getPNGFromPlantUML(plantuml: currentPart)
+                    problemStatementParts.append(AnyType(part: umlDiagram))
+                } catch let error {
+                    print(error.localizedDescription)
+                }
 
                 currentPart = ""
                 currentlyUmlPart = false
@@ -71,8 +75,12 @@ class ProblemStatementCellViewModel: ObservableObject {
                     if currentlyUmlPart {
                         // get Image from Rest!
                         // problemStatementParts.append(umlImage)
-                        let umlDiagram = try! await ArtemisAPI.getPNGFromPlantUML(plantuml: currentPart)
-                        problemStatementParts.append(AnyType(part: umlDiagram))
+                        do {
+                            let umlDiagram = try await ArtemisAPI.getPNGFromPlantUML(plantuml: currentPart)
+                            problemStatementParts.append(AnyType(part: umlDiagram))
+                        } catch let error {
+                            print(error.localizedDescription)
+                        }
                     } else {
                         problemStatementParts.append(AnyType(part: currentPart))
                     }
@@ -96,8 +104,12 @@ class ProblemStatementCellViewModel: ObservableObject {
         if currentlyUmlPart {
             // get Image from Rest!
             // problemStatementParts.append(umlImage)
-            let umlDiagram = try! await ArtemisAPI.getPNGFromPlantUML(plantuml: currentPart)
-            problemStatementParts.append(AnyType(part: umlDiagram))
+            do {
+                let umlDiagram = try await ArtemisAPI.getPNGFromPlantUML(plantuml: currentPart)
+                problemStatementParts.append(AnyType(part: umlDiagram))
+            } catch let error {
+                print(error.localizedDescription)
+            }
         } else {
             problemStatementParts.append(AnyType(part: currentPart))
         }

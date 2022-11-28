@@ -17,6 +17,8 @@ struct CorrectionGuidelinesCellView: View {
         return criteria
     }
 
+    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 40) {
@@ -37,7 +39,7 @@ struct CorrectionGuidelinesCellView: View {
                     }
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
-                        .stroke(.blue, lineWidth: 2))
+                        .stroke(artemisColor, lineWidth: 2))
                 }.padding()
 
                 Spacer()
