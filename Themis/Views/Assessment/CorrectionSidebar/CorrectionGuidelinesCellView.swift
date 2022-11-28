@@ -50,7 +50,7 @@ struct CorrectionGuidelinesCellView: View {
 
 struct CorrectionGuidelinesCellView_Previews: PreviewProvider {
     static var previews: some View {
-        CorrectionGuidelinesCellView(correctionGuidelinesModel: CorrectionGuidelines.mock)
+        CorrectionGuidelinesCellView()
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
