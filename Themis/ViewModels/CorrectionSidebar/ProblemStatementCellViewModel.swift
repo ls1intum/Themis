@@ -32,18 +32,21 @@ class ProblemStatementCellViewModel: ObservableObject {
     @Published var problemStatementParts: [any ProblemStatementPart] = []
 
     func convertProblemStatement(problemStatement: String) {
-        let problemStatement = deleteTestCases(problemStatement)
         var index = problemStatement.startIndex
         // as long as problemstatemnt is not done
         while index < problemStatement.endIndex {
+            var substring: String
+
             guard let rangeStart = problemStatement.range(of: "@startuml", range: index..<problemStatement.endIndex), let rangeEnd = problemStatement.range(of: "@enduml", range: index..<problemStatement.endIndex) else {
-                problemStatementParts.append(ProblemStatementMD(text: String(problemStatement[index...])))
+                substring = String(problemStatement[index...])
+                substring = deleteTestCases(substring)
+                problemStatementParts.append(ProblemStatementMD(text: substring))
                 return
             }
 
-            var substring: String
             // Append markdown
             substring = String(problemStatement[index..<rangeStart.lowerBound])
+            substring = deleteTestCases(substring)
             problemStatementParts.append(ProblemStatementMD(text: substring))
 
             // Append plantuml
