@@ -10,7 +10,10 @@ import Foundation
 import MarkdownUI
 
 struct ProblemStatementCellView: View {
-    @ObservedObject var model: ProblemStatementCellViewModel
+
+    @EnvironmentObject var assessment: AssessmentViewModel
+
+    @StateObject var vm = ProblemStatementCellViewModel()
 
     var body: some View {
         HStack {
@@ -18,21 +21,26 @@ struct ProblemStatementCellView: View {
                 Text("Problem Statement")
                     .font(.largeTitle)
 
-                ForEach(model.problemStatementParts) { problemStatementPart in
+                ForEach(vm.problemStatementParts) { problemStatementPart in
                     if let problemStatementPart = problemStatementPart.part as? String {
                         Markdown(problemStatementPart)
                     } else if let imageData = problemStatementPart.part as? Data {
                         Image(uiImage: UIImage(data: imageData)!)
                     }
                 }
+
             }
-        }.padding()
+        }
+        .padding()
+        .task {
+            await vm.convertProblemStatement(assessment.submission?.participation.exercise.problemStatement ?? "")
+        }
     }
 }
 
 struct ProblemStatementCellView_Previews: PreviewProvider {
     static var previews: some View {
-        ProblemStatementCellView(model: ProblemStatementCellViewModel.mock)
+        ProblemStatementCellView()
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

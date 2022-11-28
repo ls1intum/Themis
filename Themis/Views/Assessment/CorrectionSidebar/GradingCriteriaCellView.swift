@@ -15,7 +15,7 @@ struct GradingCriteriaCellView: View {
         VStack(alignment: .leading) {
             ForEach(gradingCriterium.structuredGradingInstructions) { instruction in
                 HStack {
-                    Text("\(instruction.credits)")
+                    Text(String(format: "%.1f", instruction.credits))
                         .font(.title3)
                     Spacer()
                     Text(instruction.gradingScale)
