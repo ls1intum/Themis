@@ -10,17 +10,16 @@ import Foundation
 public class FeedbackViewModel: ObservableObject {
     @Published var feedbacks: [Feedback] = []
 
-    public func addFeedback(feedbackText: String, score: Double) {
-        let newFeedback = Feedback(feedbackText: feedbackText, score: score)
-        feedbacks.append(newFeedback)
-    }
-
     public func deleteFeedback(id: Feedback.ID) {
         feedbacks.removeAll(where: { $0.id == id })
     }
 
-    public func getFeedback(id: Feedback.ID) -> Feedback? {
-        feedbacks.first(where: { $0.id == id })
+    public func getFeedback(id: Feedback.ID?) -> Feedback? {
+        if let id {
+            return feedbacks.first(where: { $0.id == id })
+        } else {
+            return nil
+        }
     }
 
     public func getFeedbackText(id: Feedback.ID) -> String {
@@ -37,10 +36,16 @@ public class FeedbackViewModel: ObservableObject {
         return feedback.score
     }
 
+    public func saveFeedback(feedback: Feedback) {
+        self.feedbacks.removeAll(where: { $0.id == feedback.id })
+        feedbacks.append(feedback)
+    }
+
     public static var mock: FeedbackViewModel {
         let mockModel = FeedbackViewModel()
-        mockModel.addFeedback(feedbackText: "This is your feedback", score: -7.5)
-        mockModel.addFeedback(feedbackText: "Second Feedback", score: -1.5)
+        mockModel.saveFeedback(feedback: Feedback(feedbackText: "This is your feedback", score: -7.5))
+        mockModel.saveFeedback(feedback: Feedback(feedbackText: "Second Feedback", score: 3))
+
         return mockModel
     }
 }

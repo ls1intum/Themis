@@ -23,14 +23,12 @@ struct GeneralFeedbackCellView: View {
                     Image(systemName: "plus")
                 }.font(.largeTitle)
             }.padding()
-
             ForEach(feedbackModel.feedbacks) { feedback in
                 FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
             }
-
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
-            AddFeedbackView(feedbackModel: feedbackModel, showAddFeedback: $showAddFeedback)
+            EditFeedbackView(feedbackModel: feedbackModel, showEditFeedback: $showAddFeedback, feedbackID: nil)
         }
     }
 }
