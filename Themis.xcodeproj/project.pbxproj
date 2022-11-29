@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */; };
 		0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */; };
+		833160BA2932D79700571211 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 833160B92932D79700571211 /* MarkdownUI */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -33,7 +34,6 @@
 		DA6E32932936156E001D599F /* BearerTokenAuthToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
-		E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
 		E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */; };
 		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
@@ -106,7 +106,7 @@
 		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelinesCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionGuidelinesCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GeneralFeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GeneralFeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellView.swift; sourceTree = SOURCE_ROOT; };
-		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
+		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
 		8384C436292A84C7008CCB4D /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddFeedbackView.swift; path = Themis/Views/Assessment/CorrectionSidebar/AddFeedbackView.swift; sourceTree = SOURCE_ROOT; };
 		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/FeedbackViewModel.swift; sourceTree = SOURCE_ROOT; };
@@ -120,7 +120,6 @@
 		DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearerTokenAuthToggle.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
-		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlantUMLConverter.swift; path = Themis/API/PlantUMLConverter.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
 		E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorViewModel.swift; sourceTree = "<group>"; };
 		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
@@ -164,6 +163,7 @@
 				E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
 				E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */,
+				833160BA2932D79700571211 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +274,7 @@
 		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
 			isa = PBXGroup;
 			children = (
+				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
 				8384C43A292A85E0008CCB4D /* FeedbackViewModel.swift */,
 			);
 			name = CorrectionSidebar;
@@ -348,7 +349,6 @@
 				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
 				8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */,
 				8384C43229210488008CCB4D /* ProblemStatementCellView.swift */,
-				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
 				8384C436292A84C7008CCB4D /* AddFeedbackView.swift */,
 				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
 				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
@@ -396,7 +396,6 @@
 			isa = PBXGroup;
 			children = (
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
-				E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */,
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
 				DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */,
 			);
@@ -507,6 +506,7 @@
 				E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */,
 				E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */,
 				E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */,
+				833160B92932D79700571211 /* MarkdownUI */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -584,6 +584,7 @@
 				E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */,
 				E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */,
+				833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -664,7 +665,6 @@
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
-				E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */,
 				8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */,
 				DA6E32932936156E001D599F /* BearerTokenAuthToggle.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
@@ -1028,6 +1028,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1055,6 +1063,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		833160B92932D79700571211 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
+		};
 		E2192EE0291E6F780092CE58 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
