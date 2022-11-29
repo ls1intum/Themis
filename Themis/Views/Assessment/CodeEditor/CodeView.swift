@@ -13,36 +13,14 @@ struct CodeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
         viewController.textView.editorDelegate = context.coordinator
-        if let selectedFile = vm.selectedFile, let code = selectedFile.code {
-            switch selectedFile.fileExtension {
-            case .swift:
-                viewController.textView.setLanguageMode(TreeSitterLanguageMode(language: .swift), completion: { _ in
-                    viewController.textView.text = code })
-            case .java:
-                viewController.textView.setLanguageMode(TreeSitterLanguageMode(language: .java), completion: { _ in
-                    viewController.textView.text = code })
-            case .other:
-                viewController.textView.setLanguageMode(PlainTextLanguageMode(), completion: { _ in
-                    viewController.textView.text = code })
-            }
-        }
+        vm.applySyntaxHighlighting(on: viewController.textView)
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         uiViewController.fontSize = vm.editorFontSize
-        if let selectedFile = vm.selectedFile, let code = selectedFile.code {
-            switch selectedFile.fileExtension {
-            case .swift:
-                uiViewController.textView.setLanguageMode(TreeSitterLanguageMode(language: .swift), completion: { _ in
-                    uiViewController.textView.text = code })
-            case .java:
-                uiViewController.textView.setLanguageMode(TreeSitterLanguageMode(language: .java), completion: { _ in
-                    uiViewController.textView.text = code })
-            case .other:
-                uiViewController.textView.setLanguageMode(PlainTextLanguageMode(), completion: { _ in
-                    uiViewController.textView.text = code })
-            }
+        vm.applySyntaxHighlighting(on: uiViewController.textView)
+        if let selectedFile = vm.selectedFile {
             uiViewController.textView.highlightedRanges = fvm.inlineHighlights[selectedFile.path] ?? []
         }
     }
