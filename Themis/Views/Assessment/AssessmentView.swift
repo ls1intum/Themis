@@ -21,67 +21,65 @@ struct AssessmentView: View {
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-                HStack(spacing: 0) {
-                    if showFileTree {
-                        FiletreeSidebarView(vm: codeEditorViewModel)
-                            .padding(.top, 50)
-                            .frame(width: dragWidthLeft)
-                        leftGrip
-                            .edgesIgnoringSafeArea(.bottom)
-                    }
-                    CodeEditorView(vm: codeEditorViewModel, showFileTree: $showFileTree)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    rightGrip
+        ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
+            HStack(spacing: 0) {
+                if showFileTree {
+                    FiletreeSidebarView(vm: codeEditorViewModel)
+                        .padding(.top, 50)
+                        .frame(width: dragWidthLeft)
+                    leftGrip
                         .edgesIgnoringSafeArea(.bottom)
-                    correctionWithPlaceholder
                 }
-                .animation(.default, value: showFileTree)
-                Button {
-                    showFileTree.toggle()
-                } label: {
-                    Image(systemName: "sidebar.left")
-                        .font(.system(size: 23))
-                }
-                .padding(.top)
-                .padding(.leading, 18)
+                CodeEditorView(vm: codeEditorViewModel, showFileTree: $showFileTree)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                rightGrip
+                    .edgesIgnoringSafeArea(.bottom)
+                correctionWithPlaceholder
             }
-            .toolbarBackground(artemisColor, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                    } label: {
-                        Text("Back")
-                    }
+            .animation(.default, value: showFileTree)
+            Button {
+                showFileTree.toggle()
+            } label: {
+                Image(systemName: "sidebar.left")
+                    .font(.system(size: 23))
+            }
+            .padding(.top)
+            .padding(.leading, 18)
+        }
+        .toolbarBackground(artemisColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                } label: {
+                    Text("Back")
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    VStack(alignment: .leading) {
-                        Group {
-                            Text("Exercise 1")
-                                .font(.title)
-                                .bold()
-                            Text("Correction")
-                                .font(.caption)
-                                .bold()
-                        }
-                        .foregroundColor(.white)
-                        Spacer(minLength: 20)
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                VStack(alignment: .leading) {
+                    Group {
+                        Text("Exercise 1")
+                            .font(.title)
+                            .bold()
+                        Text("Correction")
+                            .font(.caption)
+                            .bold()
                     }
+                    .foregroundColor(.white)
+                    Spacer(minLength: 20)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showSettings.toggle()
-                    } label: {
-                        Image(systemName: "gearshape")
-                    }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showSettings.toggle()
+                } label: {
+                    Image(systemName: "gearshape")
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                    } label: {
-                        Text("Submit")
-                    }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                } label: {
+                    Text("Submit")
                 }
             }
         }

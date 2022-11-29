@@ -61,6 +61,8 @@
 		E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04E292B9D4C0096ACFC /* HighlightName.swift */; };
 		E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */; };
 		E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF052292B9D4C0096ACFC /* AssessmentView.swift */; };
+		E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE6382935214E00FAD327 /* ExerciseView.swift */; };
+		E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */; };
 		E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E460DC29292ECF00ECC0A5 /* Stack.swift */; };
 		E2E67483292032870081238B /* CourseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67482292032870081238B /* CourseListViewModel.swift */; };
 		E2E67485292033EE0081238B /* CourseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67484292033EE0081238B /* CourseListView.swift */; };
@@ -135,6 +137,8 @@
 		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighlightName.swift; path = Themis/Models/Appearance/HighlightName.swift; sourceTree = SOURCE_ROOT; };
 		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppearanceSettingsView.swift; path = Themis/Views/AppearanceSettings/AppearanceSettingsView.swift; sourceTree = SOURCE_ROOT; };
 		E21AF052292B9D4C0096ACFC /* AssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentView.swift; path = Themis/Views/Assessment/AssessmentView.swift; sourceTree = SOURCE_ROOT; };
+		E2CAE6382935214E00FAD327 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
+		E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
 		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListViewModel.swift; path = Themis/ViewModels/CourseList/CourseListViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListView.swift; path = Themis/Views/Courses/CourseListView.swift; sourceTree = SOURCE_ROOT; };
@@ -203,6 +207,7 @@
 		4065F855292E873A005DAEE8 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				E2CAE63C293521A100FAD327 /* ExerciseViewModel */,
 				DA249E9429301E1B008DE1D5 /* SubmissionList */,
 				4065F85A292E8AB1005DAEE8 /* CourseList */,
 				4065F859292E8A90005DAEE8 /* Assessment */,
@@ -442,6 +447,14 @@
 			path = Themis/Views/Assessment/CodeEditor;
 			sourceTree = SOURCE_ROOT;
 		};
+		E2CAE63C293521A100FAD327 /* ExerciseViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */,
+			);
+			path = ExerciseViewModel;
+			sourceTree = "<group>";
+		};
 		E2E674812920326F0081238B /* Courses */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,6 +468,7 @@
 			isa = PBXGroup;
 			children = (
 				E2E6748729203E350081238B /* ExercisesListView.swift */,
+				E2CAE6382935214E00FAD327 /* ExerciseView.swift */,
 			);
 			name = Exercises;
 			path = Themis/Views/Exercises;
@@ -630,8 +644,10 @@
 			files = (
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
+				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				E2E67483292032870081238B /* CourseListViewModel.swift in Sources */,
 				E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */,
+				E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */,
 				E2E6748829203E350081238B /* ExercisesListView.swift in Sources */,
 				E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */,
 				8384C43D292A8634008CCB4D /* Feedback.swift in Sources */,
@@ -832,7 +848,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Themis/Preview\\ Content";
-				DEVELOPMENT_TEAM = 7PLLZ436SG;
+				DEVELOPMENT_TEAM = 6U2TY3RPNB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Themis/Supporting/Info.plist;
