@@ -22,8 +22,34 @@ struct Exercise: Codable {
     let assessmentType: String?
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this might be nil
+    let dueDate: String?
     // let templateParticipation: Participation check again
     // let solutionParticipation: Participation check again
+
+    init() {
+        self.id = -1
+        self.title = nil
+        self.shortName = nil
+        self.maxPoints = nil
+        self.assessmentType = nil
+        self.problemStatement = nil
+        self.gradingInstructions = nil
+        self.dueDate = nil
+    }
+
+    func parseDate(_ dateString: String?) -> Date? {
+        guard let dateString else { return nil }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        return dateFormatter.date(from: dateString)
+    }
+
+    func getReadableDateString(_ dateString: String?) -> String {
+        guard let date = parseDate(dateString) else { return "" }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
+        return dateFormatter.string(from: date)
+    }
 }
 
 struct DueDateStat: Codable {
@@ -34,14 +60,15 @@ struct DueDateStat: Codable {
 /// This Struct represents the Statstics for a an Exercise
 struct ExerciseForAssessment: Codable {
     let numberOfStudent: Int?
-    let numberOfSumissions: DueDateStat?
+    let numberOfSubmissions: DueDateStat?
     let totalNumberOfAssessments: DueDateStat?
-    let totalNumberOfAssessmentLocks: DueDateStat?
+    // let totalNumberOfAssessments: DueDateStat?
+    // let totalNumberOfAssessmentLocks: DueDateStat?
     let complaintsEnabled: Bool?
     let feedbackRequestEnabled: Bool?
     // let numberOfAssessmentsOfCorrectionRounds: DueDateStat? - this is an Array?!?! see ExerciseResource.java
     // let numberOfLockedAssessmentByOtherTutorsOfCorrectionRound: DueDateStat?
-    let numberOfAutomaticAssistedAssessments: DueDateStat?
+    // let numberOfAutomaticAssistedAssessments: DueDateStat?
 
 }
 

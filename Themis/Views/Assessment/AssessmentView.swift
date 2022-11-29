@@ -5,7 +5,9 @@ struct AssessmentView: View {
     @EnvironmentObject var vm: AssessmentViewModel
 
     @StateObject var codeEditorViewModel = CodeEditorViewModel()
+    @StateObject var feedbackViewModel = FeedbackViewModel()
 
+    @State var showAddFeedback: Bool = false
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
@@ -21,67 +23,66 @@ struct AssessmentView: View {
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-                HStack(spacing: 0) {
-                    if showFileTree {
-                        FiletreeSidebarView(vm: codeEditorViewModel)
-                            .padding(.top, 50)
-                            .frame(width: dragWidthLeft)
-                        leftGrip
-                            .edgesIgnoringSafeArea(.bottom)
-                    }
-                    CodeEditorView(vm: codeEditorViewModel, showFileTree: $showFileTree)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    rightGrip
+        ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
+            HStack(spacing: 0) {
+                if showFileTree {
+                    FiletreeSidebarView(vm: codeEditorViewModel)
+                        .padding(.top, 50)
+                        .frame(width: dragWidthLeft)
+                    leftGrip
                         .edgesIgnoringSafeArea(.bottom)
-                    correctionWithPlaceholder
                 }
-                .animation(.default, value: showFileTree)
+                CodeEditorView(vm: codeEditorViewModel, fvm: feedbackViewModel, showFileTree: $showFileTree)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                rightGrip
+                    .edgesIgnoringSafeArea(.bottom)
+                correctionWithPlaceholder
+            }
+            .animation(.default, value: showFileTree)
+            Button {
+                showFileTree.toggle()
+            } label: {
+                Image(systemName: "sidebar.left")
+                    .font(.system(size: 23))
+            }
+            .padding(.top)
+            .padding(.leading, 18)
+        }
+        .toolbarBackground(artemisColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                } label: {
+                    Text("Back")
+                }
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                VStack(alignment: .leading) {
+                    Group {
+                        Text("Exercise 1")
+                            .font(.title)
+                            .bold()
+                        Text("Correction")
+                            .font(.caption)
+                            .bold()
+                    }
+                    .foregroundColor(.white)
+                    Spacer(minLength: 20)
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showSettings.toggle()
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showFileTree.toggle()
                 } label: {
-                    Image(systemName: "sidebar.left")
-                        .font(.system(size: 23))
-                }
-                .padding(.top)
-                .padding(.leading, 18)
-            }
-            .toolbarBackground(artemisColor, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                    } label: {
-                        Text("Back")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    VStack(alignment: .leading) {
-                        Group {
-                            Text("Exercise 1")
-                                .font(.title)
-                                .bold()
-                            Text("Correction")
-                                .font(.caption)
-                                .bold()
-                        }
-                        .foregroundColor(.white)
-                        Spacer(minLength: 20)
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showSettings.toggle()
-                    } label: {
-                        Image(systemName: "gearshape")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                    } label: {
-                        Text("Submit")
-                    }
+                    Text("Submit")
                 }
             }
         }
@@ -90,6 +91,13 @@ struct AssessmentView: View {
                 AppearanceSettingsView(vm: codeEditorViewModel, showSettings: $showSettings)
                     .navigationTitle("Appearance settings")
             }
+        }
+        .sheet(isPresented: $showAddFeedback) {
+            AddFeedbackView(feedbackModel: feedbackViewModel,
+                            showAddFeedback: $showAddFeedback,
+                            type: .inline,
+                            lineReference: codeEditorViewModel.selectedLineNumber,
+                            file: codeEditorViewModel.selectedFile)
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
@@ -199,11 +207,11 @@ struct AssessmentView: View {
         // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
-                CorrectionSidebarView()
+                CorrectionSidebarView(feedbackViewModel: feedbackViewModel)
                     .frame(width: dragWidthRight)
                     .redacted(reason: .placeholder)
             } else {
-                CorrectionSidebarView()
+                CorrectionSidebarView(feedbackViewModel: feedbackViewModel)
                     .frame(width: dragWidthRight)
             }
         }
@@ -212,7 +220,10 @@ struct AssessmentView: View {
 
 struct AssessmentView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentView(exerciseId: 5284)
-            .previewInterfaceOrientation(.landscapeLeft)
+        AuthenticatedPreview {
+            AssessmentView(exerciseId: 5284)
+                .environmentObject(AssessmentViewModel())
+        }
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

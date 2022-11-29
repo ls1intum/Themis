@@ -20,6 +20,22 @@ class Node: Hashable, ObservableObject {
     let type: FileType
     var children: [Node]?
     @Published var code: String?
+    /// property that calculates a lines character range to get line number of selectedTextRange
+    var lines: [NSRange]? {
+        if let code = code {
+            var startIndex = 0
+            var lines: [NSRange] = []
+            let entries = code.components(separatedBy: .newlines)
+            entries.forEach { line in
+                // the string.components function removes the newline characters so we need to add 1 to get the coorect LineRanges
+                lines.append(NSRange(location: startIndex, length: line.count + 1))
+                startIndex += line.count + 1
+            }
+            return lines
+        } else {
+            return nil
+        }
+    }
 
     init(type: FileType, name: String) {
         self.name = name

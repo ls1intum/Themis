@@ -8,29 +8,39 @@
 import SwiftUI
 
 struct GeneralFeedbackCellView: View {
-    @StateObject var feedbackModel = FeedbackViewModel()
+    @ObservedObject var feedbackModel: FeedbackViewModel
     @State var showAddFeedback = false
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("General Feedback")
-                    .font(.largeTitle)
+                Text("Add General Feedback")
+                    .font(.title3)
                 Spacer()
                 Button {
                     showAddFeedback = true
                 } label: {
                     Image(systemName: "plus")
-                }.font(.largeTitle)
+                }.font(.title3)
             }.padding()
 
-            ForEach(feedbackModel.feedbacks) { feedback in
-                FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+            List {
+                Section(header: Text("General")) {
+                    ForEach(feedbackModel.generalFeedbacks) { feedback in
+                        FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+                    }
+                }
+                Section(header: Text("Inline")) {
+                    ForEach(feedbackModel.inlineFeedbacks) { feedback in
+                        FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+                    }
+                }
             }
+            .listStyle(.plain)
 
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
-            AddFeedbackView(feedbackModel: feedbackModel, showAddFeedback: $showAddFeedback)
+            AddFeedbackView(feedbackModel: feedbackModel, showAddFeedback: $showAddFeedback, type: .general)
         }
     }
 }

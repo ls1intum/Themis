@@ -1,16 +1,5 @@
 import SwiftUI
 
-struct FileCellView: View {
-    var file: CodeFile
-
-    var body: some View {
-        HStack {
-            Image(systemName: "insert_drive_file")
-            Text(file.title)
-        }
-    }
-}
-
 struct FiletreeSidebarView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
 
