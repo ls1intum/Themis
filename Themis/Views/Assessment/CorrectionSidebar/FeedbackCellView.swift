@@ -23,6 +23,7 @@ struct FeedbackCellView: View {
                 } label: {
                     Image(systemName: "trash").foregroundColor(.blue)
                 }.font(.title)
+                    .buttonStyle(.borderless)
             }
             HStack {
                 Text(feedbackModel.getFeedbackText(id: feedbackID))
@@ -30,7 +31,12 @@ struct FeedbackCellView: View {
                     .overlay(RoundedRectangle(cornerRadius: 20)
                         .stroke(.blue, lineWidth: 2))
                 Spacer()
-                Text("Score: " + String(feedbackModel.getFeedbackScore(id: feedbackID)))
+                HStack {
+                    Text("Score: " + String(feedbackModel.getFeedbackScore(id: feedbackID)))
+                    if let lineRef = feedbackModel.getFeedbackRef(id: feedbackID) {
+                        Text("Line: " + String(lineRef))
+                         }
+                }
             }
         }.padding()
     }

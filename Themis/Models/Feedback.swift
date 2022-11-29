@@ -9,14 +9,25 @@
 
 import Foundation
 
+public enum FeedbackType: String, Codable {
+    case general = "GENERAL"
+    case inline = "INLINE"
+}
+
 public class Feedback: Identifiable {
     public var id: UUID
+    public var filePath: String?
+    public var type: FeedbackType
     public var feedbackText: String
     public var score: Double
+    public var lineReference: Int?
 
-    init(id: UUID? = nil, feedbackText: String, score: Double) {
+    init(id: UUID? = nil, filePath: String? = nil, type: FeedbackType, feedbackText: String, score: Double, lineReference: Int? = nil) {
         self.id = id ?? UUID()
+        self.filePath = filePath
+        self.type = type
         self.feedbackText = feedbackText
         self.score = score
+        self.lineReference = lineReference
     }
 }

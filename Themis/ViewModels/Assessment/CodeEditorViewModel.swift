@@ -12,6 +12,8 @@ class CodeEditorViewModel: ObservableObject {
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
+    @Published var currentlySelecting: Bool = false
+    @Published var selectedLineNumber: Int?
 
     func incrementFontSize() {
         editorFontSize += 1

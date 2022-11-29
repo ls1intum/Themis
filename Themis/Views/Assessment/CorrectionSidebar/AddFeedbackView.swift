@@ -17,6 +17,9 @@ struct AddFeedbackView: View {
     var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore +  0.5, by: 0.5))
     }
+    var type: FeedbackType
+    var lineReference: Int?
+    var file: Node?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -25,7 +28,7 @@ struct AddFeedbackView: View {
                     .font(.largeTitle)
                 Spacer()
                 Button {
-                    feedbackModel.addFeedback(feedbackText: feedbackText, score: score)
+                    feedbackModel.addFeedback(feedbackText: feedbackText, score: score, type: type, lineReference: lineReference, file: file)
                     showAddFeedback = false
                 } label: {
                     Text("Save")
@@ -58,7 +61,7 @@ struct AddFeedbackView_Previews: PreviewProvider {
     @State static var showAddFeedback = true
 
     static var previews: some View {
-        AddFeedbackView(feedbackModel: FeedbackViewModel.mock, showAddFeedback: $showAddFeedback)
+        AddFeedbackView(feedbackModel: FeedbackViewModel.mock, showAddFeedback: $showAddFeedback, type: .general)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

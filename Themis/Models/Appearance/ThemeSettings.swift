@@ -73,7 +73,7 @@ extension UIColor {
     // define custom themes here
     struct DefaultTheme {
         var background: UIColor {
-            .white
+            .systemBackground
         }
         var selection: UIColor {
             UIColor(red: 222 / 255, green: 222 / 255, blue: 222 / 255, alpha: 1)
