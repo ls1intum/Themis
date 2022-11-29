@@ -17,4 +17,13 @@ class AssessmentViewModel: ObservableObject {
         }
     }
 
+    @MainActor
+    func getSubmission(id: Int) async {
+        do {
+            self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
+            self.showSubmission = true
+        } catch {
+            print(error)
+        }
+    }
 }

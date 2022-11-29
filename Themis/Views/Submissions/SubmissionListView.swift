@@ -10,38 +10,23 @@ import SwiftUI
 struct SubmissionListView: View {
 
     @StateObject var submissionListVM = SubmissionListViewModel()
-    @StateObject var vm = AssessmentViewModel()
 
     var exerciseId: Int
 
     var body: some View {
-        NavigationStack {
-            Button {
-                Task {
-                    await vm.initRandomSubmission(exerciseId: 5284)
-                }
-            } label: {
-                Text("Assess random submission")
-            }
-            .navigationDestination(isPresented: $vm.showSubmission) {
-                AssessmentView(exerciseId: 5284)
-                    .environmentObject(vm)
-            }
-            List {
+        List {
+            if submissionListVM.submissions.isEmpty {
+                Text("No submissions")
+            } else {
                 ForEach(submissionListVM.submissions, id: \.id) { submission in
                     NavigationLink {
+                        AssessmentSubmissionLoaderView(exerciseID: exerciseId, submissionID: submission.id)
                     } label: {
                         Text("Submission \(submission.id) by \(submission.participation.student.name)")
                     }
                 }
             }
-            .overlay(Group {
-                if submissionListVM.submissions.isEmpty {
-                    Text("No submissions")
-                }
-            })
         }
-        .navigationTitle("Your Submissions")
         .task {
             await submissionListVM.fetchTutorSubmissions(exerciseId: exerciseId)
         }
