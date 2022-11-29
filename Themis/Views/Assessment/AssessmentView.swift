@@ -71,6 +71,15 @@ struct AssessmentView: View {
                     Spacer(minLength: 20)
                 }
             }
+            if codeEditorViewModel.currentlySelecting {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showAddFeedback.toggle()
+                    } label: {
+                        Text("Feedback")
+                    }
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showSettings.toggle()
