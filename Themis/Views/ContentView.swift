@@ -20,6 +20,11 @@ struct ContentView: View {
                 AuthenticationView(authenticationVM: authenticationVM)
             }
         }
+        .onAppear {
+            if bearerTokenAuth {
+                authenticationVM.searchForToken()
+            }
+        }
         .padding()
     }
 }

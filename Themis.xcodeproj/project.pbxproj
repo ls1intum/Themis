@@ -30,6 +30,7 @@
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
 		DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */; };
 		DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */; };
+		DA6E32932936156E001D599F /* BearerTokenAuthToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */; };
@@ -113,6 +114,7 @@
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
 		DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAuthenticationViewModel.swift; sourceTree = "<group>"; };
 		DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPreview.swift; sourceTree = "<group>"; };
+		DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearerTokenAuthToggle.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlantUMLConverter.swift; path = Themis/API/PlantUMLConverter.swift; sourceTree = SOURCE_ROOT; };
@@ -389,6 +391,7 @@
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
 				E119ED9C2922EE2300626DEA /* PlantUMLConverter.swift */,
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
+				DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */,
 			);
 			name = API;
 			path = Themis/API;
@@ -643,6 +646,7 @@
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
 				E119ED9D2922EE2300626DEA /* PlantUMLConverter.swift in Sources */,
 				8384C43B292A85E0008CCB4D /* FeedbackViewModel.swift in Sources */,
+				DA6E32932936156E001D599F /* BearerTokenAuthToggle.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
