@@ -29,6 +29,9 @@ struct ExerciseView: View {
                         Text("Start new Assessment")
                             .foregroundColor(.green)
                     }
+                    Section("Submission") {
+                        SubmissionListView(exerciseId: exercise.id)
+                    }
                 }
             } else {
                 ProgressView()
@@ -36,7 +39,7 @@ struct ExerciseView: View {
 
         }
         .navigationDestination(isPresented: $vm.showSubmission) {
-            AssessmentView(exerciseId: 5284)
+            AssessmentView(exerciseId: exercise.id)
                 .environmentObject(vm)
         }
         .navigationTitle(exercise.title ?? "")
