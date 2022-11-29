@@ -7,21 +7,38 @@
 
 import SwiftUI
 import Foundation
+import MarkdownUI
 
 struct ProblemStatementCellView: View {
+
+    @EnvironmentObject var assessment: AssessmentViewModel
+
+    @StateObject var vm = ProblemStatementCellViewModel()
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 40) {
-                /*ForEach(ProblemStatementCellViewModel.splitString(ProblemStatementCellViewModel.mockData), id: \.self) { line in
-                    Text(line)
-                }*/
                 Text("Problem Statement")
                     .font(.largeTitle)
-                Spacer()
-                Text(ProblemStatementCellViewModel.convertString(ProblemStatementCellViewModel.mockData))
+
+                ForEach(vm.problemStatementParts, id: \.text) { part in
+                    if let puml = part as? ProblemStatementPlantUML {
+                        AsyncImage(url: puml.url) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    } else {
+                        Markdown(part.text)
+                    }
+                }
+
             }
-            Spacer()
-        }.padding()
+        }
+        .padding()
+        .onAppear {
+            vm.convertProblemStatement(problemStatement: assessment.submission?.participation.exercise.problemStatement ?? "")
+        }
     }
 }
 
