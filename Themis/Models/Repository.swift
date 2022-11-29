@@ -12,6 +12,13 @@ enum FileType: String, Codable {
     case file = "FILE"
 }
 
+// support for additional languages can be added in the future
+enum FileExtension: String, Codable {
+    case java = "JAVA"
+    case swift = "SWIFT"
+    case other = "OTHER"
+}
+
 class Node: Hashable, ObservableObject {
 
     var parent: Node?
@@ -34,6 +41,18 @@ class Node: Hashable, ObservableObject {
             return lines
         } else {
             return nil
+        }
+    }
+    var fileExtension: FileExtension {
+        let components = name.components(separatedBy: ".")
+        if components.count <= 1 {
+            return .other
+        } else if components[1] == "java" {
+            return .java
+        } else if components[1] == "swift" {
+            return.swift
+        } else {
+            return .other
         }
     }
 
