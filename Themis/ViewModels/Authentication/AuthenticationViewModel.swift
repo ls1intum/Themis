@@ -45,8 +45,12 @@ class AuthenticationViewModel: ObservableObject {
             restControllerInitialized = true
             Authentication.shared = Authentication(for: serverURL)
         }
-        observeAuthenticationStatus()
-        Authentication.shared.checkAuth()
+        if bearerTokenAuth {
+            observeAuthenticationToken()
+        } else {
+            observeAuthenticationStatus()
+            Authentication.shared.checkAuth()
+        }
     }
 
     convenience init() {
@@ -63,6 +67,16 @@ class AuthenticationViewModel: ObservableObject {
             .store(in: &cancellable)
     }
 
+    // TODO: remove after bearer token is gone
+    private func observeAuthenticationToken() {
+        Authentication.shared.publisher(for: \.token, options: [.new])
+            .receive(on: RunLoop.main)
+            .sink { token in
+                self.authenticated = token != nil
+            }.store(in: &cancellable)
+    }
+    // end TODO
+
     @MainActor
     func authenticate() async {
         guard restControllerInitialized else {
@@ -74,6 +88,11 @@ class AuthenticationViewModel: ObservableObject {
         }
         do {
             try await Authentication.shared.auth(username: username, password: password, rememberMe: rememberMe)
+            if bearerTokenAuth {
+                if let token = Authentication.shared.token {
+                    Authentication.shared.storeTokenInKeychain(token: token)
+                }
+            }
         } catch RESTError.unauthorized {
             self.invalidCredentialsAlert.toggle()
         } catch let error {
@@ -83,12 +102,22 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    // TODO: remove after bearer token is gone
+    func searchForToken() {
+        Authentication.shared.getTokenFromKeychain()
+    }
+    // end TODO
+
     /// Logs the User out by deleting the cookie
     func logout() async {
-        do {
-            try await Authentication.shared.logOut()
-        } catch let error {
-            print(error)
+        if bearerTokenAuth {
+            Authentication.shared.deleteToken()
+        } else {
+            do {
+                try await Authentication.shared.logOut()
+            } catch let error {
+                print(error)
+            }
         }
     }
 }
