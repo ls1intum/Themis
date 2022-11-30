@@ -10,7 +10,7 @@ import SwiftUI
 struct CorrectionGuidelinesCellView: View {
     @EnvironmentObject var assessment: AssessmentViewModel
 
-    var gradingCriteria: [GradingCriteria] {
+    var gradingCriteria: [GradingCriterion] {
         guard let criteria = assessment.submission?.participation.exercise.gradingCriteria else {
             return []
         }
@@ -32,14 +32,11 @@ struct CorrectionGuidelinesCellView: View {
                 }.padding()
 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Structured Assessment Criteria").font(.title2)
+                    Text("Assessment Criteria").font(.title2)
 
-                    ForEach(gradingCriteria) { gradingCriterium in
-                        GradingCriteriaCellView(gradingCriterium: gradingCriterium)
+                    ForEach(gradingCriteria) { gradingCriterion in
+                        GradingCriteriaCellView(gradingCriterion: gradingCriterion)
                     }
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 20)
-                        .stroke(artemisColor, lineWidth: 2))
                 }.padding()
 
                 Spacer()
@@ -49,8 +46,11 @@ struct CorrectionGuidelinesCellView: View {
 }
 
 struct CorrectionGuidelinesCellView_Previews: PreviewProvider {
+    static var assessment = AssessmentViewModel()
+
     static var previews: some View {
         CorrectionGuidelinesCellView()
+            .environmentObject(assessment)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

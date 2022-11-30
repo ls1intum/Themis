@@ -10,7 +10,6 @@ import Foundation
 import MarkdownUI
 
 struct ProblemStatementCellView: View {
-
     @EnvironmentObject var assessment: AssessmentViewModel
 
     @StateObject var vm = ProblemStatementCellViewModel()
@@ -43,8 +42,11 @@ struct ProblemStatementCellView: View {
 }
 
 struct ProblemStatementCellView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel()
+
     static var previews: some View {
         ProblemStatementCellView()
+            .environmentObject(assessment)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
