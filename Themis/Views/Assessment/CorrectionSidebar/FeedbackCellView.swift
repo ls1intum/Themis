@@ -24,12 +24,16 @@ struct FeedbackCellView: View {
                     showEditFeedback = true
                 } label: {
                     Image(systemName: "pencil").foregroundColor(.blue)
-                }.font(.title3).padding()
+                }
+                .buttonStyle(.borderless)
+                .font(.title3).padding()
                 Button {
                     feedbackModel.deleteFeedback(id: feedbackID)
                 } label: {
                     Image(systemName: "trash").foregroundColor(.blue)
-                }.font(.title3).padding()
+                }
+                .buttonStyle(.borderless)
+                .font(.title3).padding()
             }
             HStack {
                 Text(feedbackModel.getFeedbackText(id: feedbackID))

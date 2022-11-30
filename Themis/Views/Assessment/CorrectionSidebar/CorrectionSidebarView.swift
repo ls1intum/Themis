@@ -29,15 +29,18 @@ struct CorrectionSidebarView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
-            ScrollView {
-                switch correctionSidebarStatus {
-                case .problemStatement:
+            switch correctionSidebarStatus {
+            case .problemStatement:
+                ScrollView {
                     ProblemStatementCellView()
-                case .correctionGuidelines:
-                    CorrectionGuidelinesCellView(correctionGuidelinesModel: correctionGuidelines)
-                case .generalFeedback:
-                    GeneralFeedbackCellView(feedbackModel: feedbackModel)
                 }
+            case .correctionGuidelines:
+                ScrollView {
+                    CorrectionGuidelinesCellView(correctionGuidelinesModel: correctionGuidelines)
+                }
+            case .generalFeedback:
+                GeneralFeedbackCellView(feedbackModel: feedbackModel)
+
             }
         }
     }

@@ -23,13 +23,25 @@ struct GeneralFeedbackCellView: View {
                     Image(systemName: "plus")
                 }.font(.largeTitle)
             }.padding()
-            ForEach(feedbackModel.feedbacks) { feedback in
-                FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+            List {
+                ForEach(feedbackModel.feedbacks) { feedback in
+                    FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+                }
+                .onDelete(perform: delete(at:))
             }
+            .listStyle(.sidebar)
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             EditFeedbackView(feedbackModel: feedbackModel, showEditFeedback: $showAddFeedback, feedbackID: nil)
         }
+    }
+
+    private func delete(at indexSet: IndexSet) {
+        indexSet
+            .map { feedbackModel.feedbacks[$0].id }
+            .forEach {
+                feedbackModel.deleteFeedback(id: $0)
+            }
     }
 }
 

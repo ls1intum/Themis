@@ -37,8 +37,11 @@ public class FeedbackViewModel: ObservableObject {
     }
 
     public func saveFeedback(feedback: Feedback) {
-        self.feedbacks.removeAll(where: { $0.id == feedback.id })
-        feedbacks.append(feedback)
+        if let index = feedbacks.firstIndex(where: { $0.id == feedback.id }) {
+            feedbacks[index] = feedback
+        } else {
+            feedbacks.append(feedback)
+        }
     }
 
     public static var mock: FeedbackViewModel {
