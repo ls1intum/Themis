@@ -5,7 +5,9 @@ struct AssessmentView: View {
     @EnvironmentObject var vm: AssessmentViewModel
 
     @StateObject var codeEditorViewModel = CodeEditorViewModel()
+    @StateObject var feedbackViewModel = FeedbackViewModel()
 
+    @State var showAddFeedback: Bool = false
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
@@ -30,7 +32,7 @@ struct AssessmentView: View {
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
-                CodeEditorView(vm: codeEditorViewModel, showFileTree: $showFileTree)
+                CodeEditorView(vm: codeEditorViewModel, fvm: feedbackViewModel, showFileTree: $showFileTree)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
@@ -78,6 +80,7 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+                    showFileTree.toggle()
                 } label: {
                     Text("Submit")
                 }
@@ -88,6 +91,13 @@ struct AssessmentView: View {
                 AppearanceSettingsView(vm: codeEditorViewModel, showSettings: $showSettings)
                     .navigationTitle("Appearance settings")
             }
+        }
+        .sheet(isPresented: $showAddFeedback) {
+            AddFeedbackView(feedbackModel: feedbackViewModel,
+                            showAddFeedback: $showAddFeedback,
+                            type: .inline,
+                            lineReference: codeEditorViewModel.selectedLineNumber,
+                            file: codeEditorViewModel.selectedFile)
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
@@ -197,11 +207,11 @@ struct AssessmentView: View {
         // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
-                CorrectionSidebarView()
+                CorrectionSidebarView(feedbackViewModel: feedbackViewModel)
                     .frame(width: dragWidthRight)
                     .redacted(reason: .placeholder)
             } else {
-                CorrectionSidebarView()
+                CorrectionSidebarView(feedbackViewModel: feedbackViewModel)
                     .frame(width: dragWidthRight)
             }
         }
@@ -210,7 +220,10 @@ struct AssessmentView: View {
 
 struct AssessmentView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentView(exerciseId: 5284)
-            .previewInterfaceOrientation(.landscapeLeft)
+        AuthenticatedPreview {
+            AssessmentView(exerciseId: 5284)
+                .environmentObject(AssessmentViewModel())
+        }
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

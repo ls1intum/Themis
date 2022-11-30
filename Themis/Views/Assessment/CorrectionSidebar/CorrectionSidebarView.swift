@@ -12,7 +12,7 @@ enum CorrectionSidebarElements {
 }
 
 struct CorrectionSidebarView: View {
-    @StateObject var feedBackViewModel = FeedbackViewModel()
+    @ObservedObject var feedbackViewModel: FeedbackViewModel
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
 
@@ -29,23 +29,25 @@ struct CorrectionSidebarView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
-            ScrollView {
                 switch correctionSidebarStatus {
                 case .problemStatement:
-                    ProblemStatementCellView()
+                    ScrollView {
+                        ProblemStatementCellView()
+                    }
                 case .correctionGuidelines:
-                    CorrectionGuidelinesCellView()
+                    ScrollView {
+                        CorrectionGuidelinesCellView()
+                    }
                 case .generalFeedback:
-                    GeneralFeedbackCellView()
+                    GeneralFeedbackCellView(feedbackModel: feedbackViewModel)
                 }
-            }
         }
     }
 }
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        CorrectionSidebarView()
+        CorrectionSidebarView(feedbackViewModel: FeedbackViewModel())
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

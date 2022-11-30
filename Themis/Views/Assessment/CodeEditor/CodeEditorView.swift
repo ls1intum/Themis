@@ -4,6 +4,7 @@ struct CodeEditorView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
 
     @ObservedObject var vm: CodeEditorViewModel
+    @ObservedObject var fvm: FeedbackViewModel
     @Binding var showFileTree: Bool
 
     var body: some View {
@@ -15,7 +16,7 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView(vm: vm)
                     }
-                    CodeView(vm: vm)
+                    CodeView(vm: vm, fvm: fvm)
                 }
             } else {
                 Text("Select a file")
