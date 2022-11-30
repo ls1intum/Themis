@@ -40,16 +40,19 @@ struct AuthenticationView: View {
                 await authenticationVM.authenticate()
             }
         } label: {
-            if authenticationVM.authenticationInProgress {
-                ProgressView()
-            } else {
-                Text("Login")
+            Group {
+                if authenticationVM.authenticationInProgress {
+                    ProgressView()
+                } else {
+                    Text("Login")
+                }
             }
+            .foregroundColor(.white)
+            .frame(width: 500, height: 50)
+            .background(Color.blue)
+            .cornerRadius(10)
         }
-        .foregroundColor(.white)
-        .frame(width: 500, height: 50)
-        .background(Color.blue)
-        .cornerRadius(10)
+
     }
 
 }
