@@ -13,21 +13,22 @@ struct GeneralFeedbackCellView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text("General Feedback")
-                    .font(.largeTitle)
-                Spacer()
-                Button {
-                    showAddFeedback = true
-                } label: {
-                    Image(systemName: "plus")
-                }.font(.largeTitle)
-            }.padding()
             List {
-                ForEach(feedbackModel.feedbacks) { feedback in
-                    FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
-                }
-                .onDelete(perform: delete(at:))
+                Section(header: HStack {
+                    Text("General Feedback")
+                        .font(.title3)
+                    Spacer()
+                    Button {
+                        showAddFeedback = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }.padding()) {
+                    ForEach(feedbackModel.feedbacks) { feedback in
+                        FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+                    }
+                    .onDelete(perform: delete(at:))
+                }.headerProminence(.increased)
             }
             .listStyle(.sidebar)
             Spacer()

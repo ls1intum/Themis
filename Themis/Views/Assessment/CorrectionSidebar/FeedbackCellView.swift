@@ -18,7 +18,7 @@ struct FeedbackCellView: View {
         VStack(alignment: .leading) {
             HStack {
                 Text("Feedback")
-                    .font(.title2)
+                    .font(.body)
                 Spacer()
                 Button {
                     showEditFeedback = true
@@ -26,19 +26,20 @@ struct FeedbackCellView: View {
                     Image(systemName: "pencil").foregroundColor(.blue)
                 }
                 .buttonStyle(.borderless)
-                .font(.title3).padding()
-                Button {
+                .font(.caption)
+                Button(role: .destructive) {
                     feedbackModel.deleteFeedback(id: feedbackID)
                 } label: {
-                    Image(systemName: "trash").foregroundColor(.blue)
+                    Image(systemName: "trash")
+                        .foregroundColor(.blue)
                 }
                 .buttonStyle(.borderless)
-                .font(.title3).padding()
+                .font(.caption)
             }
             HStack {
                 Text(feedbackModel.getFeedbackText(id: feedbackID))
+                    .font(.caption)
                 Spacer()
-                Text("Score: " )
                 if feedbackModel.getFeedbackScore(id: feedbackID) < 0.0 {
                     Text(String(feedbackModel.getFeedbackScore(id: feedbackID))).foregroundColor(.red)
                 } else if feedbackModel.getFeedbackScore(id: feedbackID) > 0.0 {
@@ -46,8 +47,8 @@ struct FeedbackCellView: View {
                 } else {
                     Text(String(feedbackModel.getFeedbackScore(id: feedbackID)))
                 }
-            }.padding()
-            .overlay(RoundedRectangle(cornerRadius: 20)
+            }.padding(10)
+            .overlay(RoundedRectangle(cornerRadius: 10)
                 .stroke(artemisColor, lineWidth: 2).opacity(0.3))
         }
         .sheet(isPresented: $showEditFeedback) {
@@ -55,7 +56,6 @@ struct FeedbackCellView: View {
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 20).stroke(artemisColor, lineWidth: 2))
-        .padding()
     }
 }
 
