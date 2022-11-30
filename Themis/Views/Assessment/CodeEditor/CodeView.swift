@@ -1,5 +1,6 @@
 import SwiftUI
 import TreeSitterJavaRunestone
+import TreeSitterSwiftRunestone
 import Runestone
 import UIKit
 
@@ -12,13 +13,13 @@ struct CodeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
         viewController.textView.editorDelegate = context.coordinator
-        viewController.sourceCode = vm.selectedFile?.code ?? ""
+        vm.applySyntaxHighlighting(on: viewController.textView)
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
-        uiViewController.sourceCode = vm.selectedFile?.code ?? ""
-        uiViewController.editorFontSize = vm.editorFontSize
+        uiViewController.fontSize = vm.editorFontSize
+        vm.applySyntaxHighlighting(on: uiViewController.textView)
         if let selectedFile = vm.selectedFile {
             uiViewController.textView.highlightedRanges = fvm.inlineHighlights[selectedFile.path] ?? []
         }
@@ -51,30 +52,17 @@ struct CodeView: UIViewControllerRepresentable {
 // view controller that manages runestone UITextView
 class ViewController: UIViewController {
     let textView = TextView()
-    // in a future version the language mode will dynamically adapt to the programming language of the exercise
-    let languageMode = TreeSitterLanguageMode(language: .java)
-    var sourceCode = "" {
+    var fontSize = 14.0 {
         didSet {
-            textView.text = sourceCode
+            textView.setState(TextViewState(text: textView.text,
+                                            theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
         }
     }
-    var editorFontSize = 14.0 {
-        didSet {
-            let state = TextViewState(text: sourceCode,
-                                      theme: ThemeSettings(font: .systemFont(ofSize: editorFontSize)),
-                                      language: .java)
-            textView.setState(state)
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
-        textView.text = sourceCode
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = .systemBackground
         setCustomization(on: textView)
-        textView.setLanguageMode(languageMode)
         view.addSubview(textView)
         NSLayoutConstraint.activate([
             textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
