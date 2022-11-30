@@ -11,6 +11,7 @@ struct ExerciseView: View {
     var exercise: Exercise
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var vm = AssessmentViewModel()
+    @StateObject var searchFilter = SubmissionSearchFilter()
 
     var body: some View {
         VStack {
@@ -30,7 +31,7 @@ struct ExerciseView: View {
                             .foregroundColor(.green)
                     }
                     Section("Submission") {
-                        SubmissionListView(exerciseId: exercise.id)
+                        SubmissionListView(exerciseId: exercise.id, searchFilter: searchFilter)
                     }
                 }
             } else {
@@ -49,6 +50,10 @@ struct ExerciseView: View {
                 await exerciseVM.fetchExerciseStats()
             }
         }
+        .searchable(
+            text: $searchFilter.searchTerm,
+            prompt: Text("Submissions")
+        )
     }
 
 }

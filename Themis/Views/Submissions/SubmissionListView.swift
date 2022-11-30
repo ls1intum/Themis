@@ -8,17 +8,21 @@
 import SwiftUI
 
 struct SubmissionListView: View {
+    var exerciseId: Int
 
     @StateObject var submissionListVM = SubmissionListViewModel()
+    @ObservedObject var searchFilter = SubmissionSearchFilter()
 
-    var exerciseId: Int
+    private func getSubmissions() -> [Submission] {
+        searchFilter.determineResultsInOrder(submissions: submissionListVM.submissions)
+    }
 
     var body: some View {
         List {
-            if submissionListVM.submissions.isEmpty {
-                Text("No submissions")
+            if getSubmissions().isEmpty {
+                Text("No submissions found")
             } else {
-                ForEach(submissionListVM.submissions, id: \.id) { submission in
+                ForEach(getSubmissions(), id: \.id) { submission in
                     NavigationLink {
                         AssessmentSubmissionLoaderView(exerciseID: exerciseId, submissionID: submission.id)
                     } label: {
