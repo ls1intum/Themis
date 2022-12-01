@@ -60,7 +60,7 @@ struct SubmissionForAssessment: Codable {
 
 struct GradingCriterion: Codable, Identifiable {
     var id: Int
-    var title: String
+    var title: String?
     var structuredGradingInstructions: [GradingInstruction]
 }
 

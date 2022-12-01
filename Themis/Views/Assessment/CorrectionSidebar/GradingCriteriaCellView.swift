@@ -16,7 +16,9 @@ struct GradingCriteriaCellView: View {
     var body: some View {
 
         VStack(alignment: .leading) {
-            Text(gradingCriterion.title).font(.title3)
+            if let gradingCriterionTitle = gradingCriterion.title {
+                Text(gradingCriterionTitle).font(.title3)
+            }
 
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
                 VStack {
