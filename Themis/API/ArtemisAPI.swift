@@ -31,4 +31,16 @@ class ArtemisAPI {
         }
         return try await RESTController.shared.sendRequest(request, decode: decode)
     }
+
+    static func sendRequest(request: Request) async throws {
+        if bearerTokenAuth {
+            var request = request
+            guard let token = Authentication.shared.token else {
+                throw Authentication.AuthenticationError.tokenNotFound
+            }
+            request.setBeaererToken(token: token)
+            try await RESTController.shared.sendRequest(request)
+        }
+        try await RESTController.shared.sendRequest(request)
+    }
 }

@@ -2,8 +2,7 @@ import SwiftUI
 
 struct FiletreeSidebarView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
-
-    @ObservedObject var vm: CodeEditorViewModel
+    @EnvironmentObject var cvm: CodeEditorViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -11,7 +10,7 @@ struct FiletreeSidebarView: View {
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
-            if let fileTree = vm.fileTree {
+            if let fileTree = cvm.fileTree {
                 List {
                     OutlineGroup(fileTree, id: \.path, children: \.children) { tree in
                         Text(tree.name)
@@ -20,7 +19,7 @@ struct FiletreeSidebarView: View {
                                 if tree.type == .file {
                                     withAnimation {
                                         guard let pId = assessmentViewModel.submission?.participation.id else { return }
-                                        vm.openFile(file: tree, participationId: pId)
+                                        cvm.openFile(file: tree, participationId: pId)
                                     }
                                 }
                             }

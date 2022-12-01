@@ -3,9 +3,7 @@ import SwiftUI
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vm: AssessmentViewModel
-
-    @StateObject var codeEditorViewModel = CodeEditorViewModel()
-    @StateObject var feedbackViewModel = FeedbackViewModel()
+    @EnvironmentObject var cvm: CodeEditorViewModel
 
     @State var showAddFeedback: Bool = false
     @State var showSettings: Bool = false
@@ -26,13 +24,13 @@ struct AssessmentView: View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView(vm: codeEditorViewModel)
+                    FiletreeSidebarView()
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
-                CodeEditorView(vm: codeEditorViewModel, fvm: feedbackViewModel, showFileTree: $showFileTree)
+                CodeEditorView(showFileTree: $showFileTree)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
@@ -48,13 +46,23 @@ struct AssessmentView: View {
             .padding(.top)
             .padding(.leading, 18)
         }
+        .navigationBarBackButtonHidden(true)
         .toolbarBackground(artemisColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
+                    Task {
+                        if let id = vm.submission?.id {
+                            await vm.cancelAssessment(submissionId: id)
+                        }
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 } label: {
-                    Text("Back")
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("Cancel")
+                    }
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {
@@ -71,7 +79,7 @@ struct AssessmentView: View {
                     Spacer(minLength: 20)
                 }
             }
-            if codeEditorViewModel.currentlySelecting {
+            if cvm.currentlySelecting {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showAddFeedback.toggle()
@@ -89,7 +97,22 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    showFileTree.toggle()
+                    Task {
+                        if let pId = vm.submission?.participation.id {
+                            await vm.sendAssessment(participationId: pId, submit: false)
+                        }
+                    }
+                } label: {
+                    Text("Save")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    Task {
+                        if let pId = vm.submission?.participation.id {
+                            await vm.sendAssessment(participationId: pId, submit: true)
+                        }
+                    }
                 } label: {
                     Text("Submit")
                 }
@@ -97,20 +120,16 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
-                AppearanceSettingsView(vm: codeEditorViewModel, showSettings: $showSettings)
+                AppearanceSettingsView(showSettings: $showSettings)
                     .navigationTitle("Appearance settings")
             }
         }
         .sheet(isPresented: $showAddFeedback) {
-            AddFeedbackView(feedbackModel: feedbackViewModel,
-                            showAddFeedback: $showAddFeedback,
-                            type: .inline,
-                            lineReference: codeEditorViewModel.selectedLineNumber,
-                            file: codeEditorViewModel.selectedFile)
+            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .inline)
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
-                await codeEditorViewModel.initFileTree(participationId: pId)
+                await cvm.initFileTree(participationId: pId)
             }
         }
     }

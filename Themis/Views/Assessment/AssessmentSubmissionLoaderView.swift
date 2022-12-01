@@ -9,12 +9,16 @@ import SwiftUI
 
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var vm = AssessmentViewModel()
+    @StateObject var cvm = CodeEditorViewModel()
+
     var exerciseID: Int
     var submissionID: Int
     var body: some View {
         Group {
             if vm.showSubmission {
-                AssessmentView(exerciseId: exerciseID).environmentObject(vm)
+                AssessmentView(exerciseId: exerciseID)
+                    .environmentObject(vm)
+                    .environmentObject(cvm)
             } else {
                 ProgressView()
             }

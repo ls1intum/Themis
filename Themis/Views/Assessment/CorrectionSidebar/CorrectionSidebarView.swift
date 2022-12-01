@@ -8,11 +8,10 @@
 import SwiftUI
 
 enum CorrectionSidebarElements {
-  case problemStatement, correctionGuidelines, generalFeedback
+    case problemStatement, correctionGuidelines, generalFeedback
 }
 
 struct CorrectionSidebarView: View {
-    @ObservedObject var feedbackViewModel: FeedbackViewModel
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
 
@@ -29,18 +28,18 @@ struct CorrectionSidebarView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
-                switch correctionSidebarStatus {
-                case .problemStatement:
-                    ScrollView {
-                        ProblemStatementCellView()
-                    }
-                case .correctionGuidelines:
-                    ScrollView {
-                        CorrectionGuidelinesCellView()
-                    }
-                case .generalFeedback:
-                    GeneralFeedbackCellView(feedbackModel: feedbackViewModel)
+            switch correctionSidebarStatus {
+            case .problemStatement:
+                ScrollView {
+                    ProblemStatementCellView()
                 }
+            case .correctionGuidelines:
+                ScrollView {
+                    CorrectionGuidelinesCellView()
+                }
+            case .generalFeedback:
+                GeneralFeedbackCellView()
+            }
         }
     }
 }
