@@ -14,6 +14,9 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
+# added deviating from template
+*.xcscheme
+
 # Other
 *.pbxuser
 !default.pbxuser
