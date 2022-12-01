@@ -235,11 +235,11 @@ struct AssessmentView: View {
         // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
-                CorrectionSidebarView(feedbackViewModel: feedbackViewModel)
+                CorrectionSidebarView()
                     .frame(width: dragWidthRight)
                     .redacted(reason: .placeholder)
             } else {
-                CorrectionSidebarView(feedbackViewModel: feedbackViewModel)
+                CorrectionSidebarView()
                     .frame(width: dragWidthRight)
             }
         }

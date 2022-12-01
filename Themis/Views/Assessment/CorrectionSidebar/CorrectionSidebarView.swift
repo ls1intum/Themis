@@ -43,10 +43,3 @@ struct CorrectionSidebarView: View {
         }
     }
 }
-
-struct CorrectionSidebarView_Previews: PreviewProvider {
-    static var previews: some View {
-        CorrectionSidebarView(feedbackViewModel: FeedbackViewModel())
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}

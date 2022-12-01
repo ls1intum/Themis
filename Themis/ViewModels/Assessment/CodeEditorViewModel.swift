@@ -16,6 +16,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var editorFontSize = CGFloat(14) // Default font size
     @Published var currentlySelecting: Bool = false
     @Published var selectedLineNumber: Int?
+    @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
 
     func incrementFontSize() {
         editorFontSize += 1
