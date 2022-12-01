@@ -9,44 +9,62 @@ import Foundation
 import SwiftUI
 
 struct FeedbackCellView: View {
-    @ObservedObject var feedbackModel: FeedbackViewModel
-    var feedbackID: Feedback.ID
+
+    @EnvironmentObject var assessment: AssessmentViewModel
+    @EnvironmentObject var cvm: CodeEditorViewModel
+
+    let feedback: AssessmentFeedback
+
+    @State var showEditFeedback = false
+    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Text("Feedback")
-                    .font(.title2)
+                    .font(.body)
                 Spacer()
                 Button {
-                    feedbackModel.deleteFeedback(id: feedbackID)
+                    showEditFeedback = true
                 } label: {
-                    Image(systemName: "trash").foregroundColor(.blue)
-                }.font(.title)
-                    .buttonStyle(.borderless)
-            }
-            HStack {
-                Text(feedbackModel.getFeedbackText(id: feedbackID))
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 20)
-                        .stroke(.blue, lineWidth: 2))
-                Spacer()
-                HStack {
-                    Text("Score: " + String(feedbackModel.getFeedbackScore(id: feedbackID)))
-                    if let lineRef = feedbackModel.getFeedbackRef(id: feedbackID) {
-                        Text("Line: " + String(lineRef))
-                         }
+                    Image(systemName: "pencil").foregroundColor(.blue)
                 }
+                .buttonStyle(.borderless)
+                .font(.caption)
+                Button(role: .destructive) {
+                    assessment.feedback.deleteFeedback(id: feedback.id)
+                    cvm.deleteInlineHighlight(feedback: feedback)
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundColor(.blue)
+                }
+                .buttonStyle(.borderless)
+                .font(.caption)
             }
-        }.padding()
-    }
-}
-
-struct FeedbackCell_Previews: PreviewProvider {
-    private static let mock: FeedbackViewModel = FeedbackViewModel.mock
-
-    static var previews: some View {
-        FeedbackCellView(feedbackModel: mock, feedbackID: mock.feedbacks[0].id)
-            .previewInterfaceOrientation(.landscapeLeft)
+            VStack {
+                HStack {
+                    Text(feedback.text)
+                        .foregroundColor(Color(.systemGray))
+                    Spacer()
+                    if feedback.credits < 0.0 {
+                        Text(String(format: "%.1f", feedback.credits)).foregroundColor(.red)
+                    } else if feedback.credits > 0.0 {
+                        Text(String(format: "%.1f", feedback.credits)).foregroundColor(.green)
+                    } else {
+                        Text(String(format: "%.1f", feedback.credits))
+                    }
+                }
+                Text(feedback.detailText)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(10)
+            .overlay(RoundedRectangle(cornerRadius: 10)
+                .stroke(artemisColor, lineWidth: 2).opacity(0.3))
+        }
+        .sheet(isPresented: $showEditFeedback) {
+            EditFeedbackView(showEditFeedback: $showEditFeedback, feedback: feedback, edit: true, type: feedback.type)
+        }
+        .padding()
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(artemisColor, lineWidth: 2))
     }
 }

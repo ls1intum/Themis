@@ -2,21 +2,20 @@ import SwiftUI
 
 struct CodeEditorView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
+    @EnvironmentObject var cvm: CodeEditorViewModel
 
-    @ObservedObject var vm: CodeEditorViewModel
-    @ObservedObject var fvm: FeedbackViewModel
     @Binding var showFileTree: Bool
 
     var body: some View {
         VStack {
-            if vm.selectedFile != nil {
+            if cvm.selectedFile != nil {
                 VStack {
                     HStack {
                         Spacer()
                             .frame(width: showFileTree ? 0 : 40)
-                        TabsView(vm: vm)
+                        TabsView()
                     }
-                    CodeView(vm: vm, fvm: fvm)
+                    CodeView()
                 }
             } else {
                 Text("Select a file")

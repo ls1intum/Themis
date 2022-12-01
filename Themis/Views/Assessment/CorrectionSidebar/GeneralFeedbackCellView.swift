@@ -8,46 +8,51 @@
 import SwiftUI
 
 struct GeneralFeedbackCellView: View {
-    @ObservedObject var feedbackModel: FeedbackViewModel
+    @EnvironmentObject var assessment: AssessmentViewModel
+    @EnvironmentObject var cvm: CodeEditorViewModel
+
     @State var showAddFeedback = false
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text("Add General Feedback")
-                    .font(.title3)
-                Spacer()
-                Button {
-                    showAddFeedback = true
-                } label: {
-                    Image(systemName: "plus")
-                }.font(.title3)
-            }.padding()
-
             List {
-                Section(header: Text("General")) {
-                    ForEach(feedbackModel.generalFeedbacks) { feedback in
-                        FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+                Section(header: HStack {
+                    Text("General Feedback")
+                        .font(.title3)
+                    Spacer()
+                    Button {
+                        showAddFeedback = true
+                    } label: {
+                        Image(systemName: "plus")
                     }
-                }
-                Section(header: Text("Inline")) {
-                    ForEach(feedbackModel.inlineFeedbacks) { feedback in
-                        FeedbackCellView(feedbackModel: feedbackModel, feedbackID: feedback.id)
+                }.padding()) {
+                    ForEach(assessment.feedback.feedbacks) { feedback in
+                        FeedbackCellView(feedback: feedback)
                     }
-                }
+                    .onDelete(perform: delete(at:))
+                }.headerProminence(.increased)
             }
-            .listStyle(.plain)
-
+            .listStyle(.sidebar)
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
-            AddFeedbackView(feedbackModel: feedbackModel, showAddFeedback: $showAddFeedback, type: .general)
+            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .general)
+                .environmentObject(assessment)
+                .environmentObject(cvm)
         }
+    }
+    private func delete(at indexSet: IndexSet) {
+        indexSet
+            .map { assessment.feedback.feedbacks[$0] }
+            .forEach {
+                assessment.feedback.deleteFeedback(id: $0.id)
+                cvm.deleteInlineHighlight(feedback: $0)
+            }
     }
 }
 
 struct GeneralFeedbackCellView_Previews: PreviewProvider {
     static var previews: some View {
-        GeneralFeedbackCellView(feedbackModel: FeedbackViewModel.mock)
+        GeneralFeedbackCellView()
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
