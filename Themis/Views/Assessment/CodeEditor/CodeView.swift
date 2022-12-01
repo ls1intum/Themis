@@ -6,22 +6,21 @@ import UIKit
 
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
-    @ObservedObject var vm: CodeEditorViewModel
-    @ObservedObject var fvm: FeedbackViewModel
+    @EnvironmentObject var cvm: CodeEditorViewModel
 
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
         viewController.textView.editorDelegate = context.coordinator
-        vm.applySyntaxHighlighting(on: viewController.textView)
+        cvm.applySyntaxHighlighting(on: viewController.textView)
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
-        uiViewController.fontSize = vm.editorFontSize
-        vm.applySyntaxHighlighting(on: uiViewController.textView)
-        if let selectedFile = vm.selectedFile {
-            uiViewController.textView.highlightedRanges = fvm.inlineHighlights[selectedFile.path] ?? []
+        uiViewController.fontSize = cvm.editorFontSize
+        cvm.applySyntaxHighlighting(on: uiViewController.textView)
+        if let selectedFile = cvm.selectedFile {
+            uiViewController.textView.highlightedRanges = cvm.inlineHighlights[selectedFile.path] ?? []
         }
     }
 
@@ -38,12 +37,12 @@ struct CodeView: UIViewControllerRepresentable {
 
         func textViewDidChangeSelection(_ textView: TextView) {
             if textView.selectedRange.length > 0 {
-                parent.vm.currentlySelecting = true
-                parent.vm.selectedLineNumber = (parent.vm.selectedFile?.lines?.firstIndex {
+                parent.cvm.currentlySelecting = true
+                parent.cvm.selectedLineNumber = (parent.cvm.selectedFile?.lines?.firstIndex {
                     $0.contains(textView.selectedRange.location)
                 } ?? 0) + 1
             } else {
-                parent.vm.currentlySelecting = false
+                parent.cvm.currentlySelecting = false
             }
         }
     }

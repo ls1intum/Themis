@@ -7,19 +7,83 @@
 
 import Foundation
 
-struct AssessmentResult: Codable {
-    let score: Double /// total score
-    let feedbacks: [AssessmentFeedback]
+enum FeedbackType {
+    case inline
+    case general
 }
 
-struct AssessmentFeedback: Codable {
-    let text: String /// max length = 500
-    let detailText: String /// max length = 5000
-    let reference: String /// max length = 2000
-    let credits: Double /// score of element
-    let positive: Bool /// sign of score
-    var type: String = "MANUAL"
-    var visibility: FeedbackVisibility = .AFTER_DUE_DATE
+struct AssessmentResult: Encodable {
+    var score: Double {
+        feedbacks.reduce(0) { $0 + $1.credits}
+    }
+    var feedbacks: [AssessmentFeedback]
+
+    enum CodingKeys: CodingKey {
+        case score
+        case feedbacks
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(score, forKey: .score)
+        try container.encode(feedbacks, forKey: .feedbacks)
+    }
+
+    var generalFeedback: [AssessmentFeedback] {
+        feedbacks.filter { $0.type == .general }
+    }
+    var inlineFeedback: [AssessmentFeedback] {
+        feedbacks.filter { $0.type == .inline }
+    }
+
+    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, line: Int? = nil) {
+        feedbacks.append(AssessmentFeedback(id: id, detailText: detailText, credits: credits, type: type, file: file, line: line))
+    }
+
+    mutating func deleteFeedback(id: UUID) {
+        feedbacks.removeAll { $0.id == id }
+    }
+
+    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
+        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+            return
+        }
+        feedbacks[index].updateFeedback(detailText: detailText, credits: credits)
+    }
+}
+
+struct AssessmentFeedback: Encodable, Identifiable {
+    let id: UUID
+    var text: String {
+        guard let file = file, let line = line else {
+            return ""
+        }
+        return file.name + " at line \(line)"
+    } /// max length = 500
+    var detailText: String /// max length = 5000
+    var credits: Double /// score of element
+    let type: FeedbackType
+
+    var file: Node?
+    var line: Int?
+
+    enum CodingKeys: CodingKey {
+        case text
+        case detailText
+        case credits
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(text, forKey: .text)
+        try container.encode(detailText, forKey: .detailText)
+        try container.encode(credits, forKey: .credits)
+    }
+
+    mutating func updateFeedback(detailText: String, credits: Double) {
+        self.detailText = detailText
+        self.credits = credits
+    }
 }
 
 enum FeedbackVisibility: String, Codable {
@@ -38,10 +102,10 @@ extension ArtemisAPI {
 
     /// save feedback to the submission
     static func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
-        let request = Request(method: .post,
-                              path: "/participations/\(participationId)/manual-results",
+        let request = Request(method: .put,
+                              path: "/api/participations/\(participationId)/manual-results",
                               params: [URLQueryItem(name: "submit", value: String(submit))],
                               body: newAssessment)
-        _ = try await sendRequest(String.self, request: request)
+        try await sendRequest(request: request)
     }
 }

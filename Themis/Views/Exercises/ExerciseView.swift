@@ -11,6 +11,7 @@ struct ExerciseView: View {
     var exercise: Exercise
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var vm = AssessmentViewModel()
+    @StateObject var cvm = CodeEditorViewModel()
 
     var body: some View {
         VStack {
@@ -41,6 +42,7 @@ struct ExerciseView: View {
         .navigationDestination(isPresented: $vm.showSubmission) {
             AssessmentView(exerciseId: exercise.id)
                 .environmentObject(vm)
+                .environmentObject(cvm)
         }
         .navigationTitle(exercise.title ?? "")
         .onAppear {

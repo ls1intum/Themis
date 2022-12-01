@@ -7,6 +7,7 @@
 
 import Foundation
 import Runestone
+import UIKit
 
 class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
@@ -15,6 +16,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var editorFontSize = CGFloat(14) // Default font size
     @Published var currentlySelecting: Bool = false
     @Published var selectedLineNumber: Int?
+    @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
 
     func incrementFontSize() {
         editorFontSize += 1
@@ -67,4 +69,25 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
 
+    func addInlineHighlight(feedbackId: UUID) {
+        if let file = selectedFile, let lineReference = selectedLineNumber, let lines = file.lines {
+            if (inlineHighlights.contains { $0.key == file.path }) {
+                inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackId.uuidString,
+                                                                     range: lines[lineReference - 1],
+                                                                     color: UIColor.systemYellow,
+                                                                     cornerRadius: 10))
+            } else {
+                inlineHighlights[file.path] = [HighlightedRange(id: feedbackId.uuidString,
+                                                                range: lines[lineReference - 1],
+                                                                color: UIColor.systemYellow,
+                                                                cornerRadius: 10)]
+            }
+        }
+    }
+
+    func deleteInlineHighlight(feedback: AssessmentFeedback) {
+        if let filePath = feedback.file?.path {
+            inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
+        }
+    }
 }
