@@ -54,9 +54,3 @@ struct ExerciseView: View {
     }
 
 }
-
-/*struct ExerciseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExerciseView()
-    }
-}*/

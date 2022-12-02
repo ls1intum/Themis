@@ -16,7 +16,10 @@ struct CourseListView: View {
             List {
                 ForEach(courseListVM.courses, id: \.id) { course in
                     NavigationLink {
-                        ExercisesListView(courseListVM: courseListVM, courseID: course.id)
+                        ExercisesListView(
+                            title: course.title,
+                            exercises: course.exercises
+                        )
                     } label: {
                         HStack {
                             Text(course.title ?? "")
