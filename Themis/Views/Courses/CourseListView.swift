@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct CourseListView: View {
-    @ObservedObject var authenticationVM: AuthenticationViewModel
+    var authenticationVM: AuthenticationViewModel
     @StateObject var courseListVM = CourseListViewModel()
+
     var body: some View {
         NavigationStack {
             List {
