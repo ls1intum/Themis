@@ -56,17 +56,18 @@ class ViewController: UIViewController {
             if textView.theme.font.pointSize != fontSize {
                 textView.setState(TextViewState(text: textView.text,
                                                 theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
-                applySyntaxHighlighting(on: textView, file: file)
+                applySyntaxHighlighting(on: textView)
             }
         }
     }
     var file: Node? {
         didSet {
             if textView.text != file?.code {
-                applySyntaxHighlighting(on: textView, file: file)
+                applySyntaxHighlighting(on: textView)
             }
         }
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
@@ -92,18 +93,15 @@ class ViewController: UIViewController {
         textView.lineBreakMode = .byWordWrapping
     }
 
-    private func applySyntaxHighlighting(on textView: TextView, file: Node?) {
+    private func applySyntaxHighlighting(on textView: TextView) {
         if let file = file, let code = file.code {
             switch file.fileExtension {
             case .swift:
-                textView.setLanguageMode(TreeSitterLanguageMode(language: .swift), completion: { _ in
-                    textView.text = code })
+                textView.setState(TextViewState(text: code, language: .swift))
             case .java:
-                textView.setLanguageMode(TreeSitterLanguageMode(language: .java), completion: { _ in
-                    textView.text = code })
+                textView.setState(TextViewState(text: code, language: .java))
             case .other:
-                textView.setLanguageMode(PlainTextLanguageMode(), completion: { _ in
-                    textView.text = code })
+                textView.setState(TextViewState(text: code))
             }
         }
     }
