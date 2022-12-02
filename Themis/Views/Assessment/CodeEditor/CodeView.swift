@@ -7,21 +7,20 @@ import UIKit
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
     @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var file: Node
 
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
         viewController.textView.editorDelegate = context.coordinator
-        viewController.file = cvm.selectedFile
+        viewController.file = file
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         uiViewController.fontSize = cvm.editorFontSize
-        uiViewController.file = cvm.selectedFile
-        if let selectedFile = cvm.selectedFile {
-            uiViewController.textView.highlightedRanges = cvm.inlineHighlights[selectedFile.path] ?? []
-        }
+        uiViewController.file = file
+        uiViewController.textView.highlightedRanges = cvm.inlineHighlights[file.path] ?? []
     }
 
     func makeCoordinator() -> Coordinator {
