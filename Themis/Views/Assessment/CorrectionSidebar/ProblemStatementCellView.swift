@@ -16,7 +16,7 @@ struct ProblemStatementCellView: View {
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 40) {
+            LazyVStack(alignment: .leading, spacing: 40) {
                 Text("Problem Statement")
                     .font(.largeTitle)
 

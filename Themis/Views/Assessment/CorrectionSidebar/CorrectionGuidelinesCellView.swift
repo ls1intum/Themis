@@ -31,7 +31,7 @@ struct CorrectionGuidelinesCellView: View {
                     Text(assessment.submission?.participation.exercise.gradingInstructions ?? "").padding()
                 }.padding()
 
-                VStack(alignment: .leading, spacing: 10) {
+                LazyVStack(alignment: .leading, spacing: 10) {
                     Text("Assessment Criteria").font(.title2)
 
                     ForEach(gradingCriteria) { gradingCriterion in

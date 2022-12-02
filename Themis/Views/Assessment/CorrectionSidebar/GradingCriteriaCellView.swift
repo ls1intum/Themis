@@ -21,7 +21,7 @@ struct GradingCriteriaCellView: View {
             }
 
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
-                VStack {
+                VStack(alignment: .leading) {
                     HStack {
                         Text(instruction.gradingScale)
                             .font(.title3)
@@ -30,12 +30,8 @@ struct GradingCriteriaCellView: View {
                             .font(.title3)
                     }
 
-                    HStack {
-                        Text(instruction.instructionDescription)
+                    Text(instruction.instructionDescription)
                             .font(.title3)
-
-                        Spacer()
-                    }
                 }
                 .padding()
                 .overlay(RoundedRectangle(cornerRadius: 20)
@@ -44,7 +40,7 @@ struct GradingCriteriaCellView: View {
         }.padding()
     }
 
-    func colorize(credits: Double) -> Color {
+    private func colorize(credits: Double) -> Color {
         if credits > 0 {
             return .green
         } else if credits == 0.0 {
