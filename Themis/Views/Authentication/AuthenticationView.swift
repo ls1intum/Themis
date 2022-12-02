@@ -45,7 +45,7 @@ struct AuthenticationView: View {
                 if authenticationVM.authenticationInProgress {
                     ProgressView()
                 } else {
-                    Text("Login")
+                    Text("Sign in")
                 }
             }
             .foregroundColor(.white)
