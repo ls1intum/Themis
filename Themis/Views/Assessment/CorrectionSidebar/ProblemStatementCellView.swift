@@ -10,14 +10,13 @@ import Foundation
 import MarkdownUI
 
 struct ProblemStatementCellView: View {
-
     @EnvironmentObject var assessment: AssessmentViewModel
 
     @StateObject var vm = ProblemStatementCellViewModel()
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 40) {
+            LazyVStack(alignment: .leading, spacing: 40) {
                 Text("Problem Statement")
                     .font(.largeTitle)
 
@@ -43,8 +42,11 @@ struct ProblemStatementCellView: View {
 }
 
 struct ProblemStatementCellView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel()
+
     static var previews: some View {
         ProblemStatementCellView()
+            .environmentObject(assessment)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
