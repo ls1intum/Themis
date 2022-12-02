@@ -49,7 +49,7 @@ struct CodeView: UIViewControllerRepresentable {
 }
 
 // view controller that manages runestone UITextView
-class ViewController: UIViewController, UIEditMenuInteractionDelegate {
+class ViewController: UIViewController {
     let cvm: CodeEditorViewModel
     let textView = TextView()
     let generator = UIImpactFeedbackGenerator(style: .light)
