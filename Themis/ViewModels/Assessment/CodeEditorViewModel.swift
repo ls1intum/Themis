@@ -36,22 +36,6 @@ class CodeEditorViewModel: ObservableObject {
         selectedFile = file
     }
 
-    func applySyntaxHighlighting(on textView: TextView) {
-        if let selectedFile = selectedFile, let code = selectedFile.code {
-            switch selectedFile.fileExtension {
-            case .swift:
-                textView.setLanguageMode(TreeSitterLanguageMode(language: .swift), completion: { _ in
-                    textView.text = code })
-            case .java:
-                textView.setLanguageMode(TreeSitterLanguageMode(language: .java), completion: { _ in
-                    textView.text = code })
-            case .other:
-                textView.setLanguageMode(PlainTextLanguageMode(), completion: { _ in
-                    textView.text = code })
-            }
-        }
-    }
-
     func closeFile(file: Node) {
         openFiles = openFiles.filter({ $0.path != file.path })
         selectedFile = openFiles.first

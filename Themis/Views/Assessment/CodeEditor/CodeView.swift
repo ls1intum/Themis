@@ -7,34 +7,34 @@ import UIKit
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
     @EnvironmentObject var cvm: CodeEditorViewModel
-
+    
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
         viewController.textView.editorDelegate = context.coordinator
-        cvm.applySyntaxHighlighting(on: viewController.textView)
+        viewController.file = cvm.selectedFile
         return viewController
     }
-
+    
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         uiViewController.fontSize = cvm.editorFontSize
-        cvm.applySyntaxHighlighting(on: uiViewController.textView)
+        uiViewController.file = cvm.selectedFile
         if let selectedFile = cvm.selectedFile {
             uiViewController.textView.highlightedRanges = cvm.inlineHighlights[selectedFile.path] ?? []
         }
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-
+    
     class Coordinator: NSObject, TextViewDelegate {
         var parent: CodeView
-
+        
         init(_ parent: CodeView) {
             self.parent = parent
         }
-
+        
         func textViewDidChangeSelection(_ textView: TextView) {
             if textView.selectedRange.length > 0 {
                 parent.cvm.currentlySelecting = true
@@ -53,8 +53,17 @@ class ViewController: UIViewController {
     let textView = TextView()
     var fontSize = 14.0 {
         didSet {
-            textView.setState(TextViewState(text: textView.text,
-                                            theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
+            if textView.theme.font.pointSize != fontSize {
+                textView.setState(TextViewState(text: textView.text,
+                                                theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
+            }
+        }
+    }
+    var file: Node? {
+        didSet {
+            if textView.text != file?.code {
+                applySyntaxHighlighting(on: textView, file: file)
+            }
         }
     }
     override func viewDidLoad() {
@@ -70,7 +79,7 @@ class ViewController: UIViewController {
             textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-
+    
     private func setCustomization(on textView: TextView) {
         textView.backgroundColor = .systemBackground
         textView.lineHeightMultiplier = 1.3
@@ -80,5 +89,21 @@ class ViewController: UIViewController {
         textView.isLineWrappingEnabled = true
         textView.isEditable = false
         textView.lineBreakMode = .byWordWrapping
+    }
+    
+    private func applySyntaxHighlighting(on textView: TextView, file: Node?) {
+        if let file = file, let code = file.code {
+            switch file.fileExtension {
+            case .swift:
+                textView.setLanguageMode(TreeSitterLanguageMode(language: .swift), completion: { _ in
+                    textView.text = code })
+            case .java:
+                textView.setLanguageMode(TreeSitterLanguageMode(language: .java), completion: { _ in
+                    textView.text = code })
+            case .other:
+                textView.setLanguageMode(PlainTextLanguageMode(), completion: { _ in
+                    textView.text = code })
+            }
+        }
     }
 }
