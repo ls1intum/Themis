@@ -11,7 +11,7 @@ import Combine
 class AuthenticationViewModel: ObservableObject {
     /// This Variable is for the serverURL TextField
     /// Updating it will update the RESTController base URL and will save it in the User Defaults
-    @Published var serverURL: String = "" {
+    @Published var serverURL: String {
         didSet {
             guard let url = URL(string: serverURL) else {
                 return
@@ -25,8 +25,8 @@ class AuthenticationViewModel: ObservableObject {
             }
         }
     }
-    @Published var username: String = ""
-    @Published var password: String = ""
+    @Published var username: String = stagingUser ?? ""
+    @Published var password: String = stagingPassword ?? ""
     @Published var rememberMe: Bool = true
     /// If this variable is true the User is authenticated
     @Published var authenticated: Bool = false
@@ -54,7 +54,7 @@ class AuthenticationViewModel: ObservableObject {
     }
 
     convenience init() {
-        self.init(serverURL: "https://artemis-staging.ase.in.tum.de")
+        self.init(serverURL: stagingServer ?? "https://artemis-staging.ase.in.tum.de")
     }
 
     /// Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value

@@ -20,12 +20,13 @@ struct AuthenticationView: View {
                 .padding()
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
                 .textFieldStyle(LoginTextFieldStyle())
-            TextField("username", text: $authenticationVM.username)
+            TextField("Username", text: $authenticationVM.username)
                 .textFieldStyle(LoginTextFieldStyle())
-            SecureField("password", text: $authenticationVM.password)
+                .textInputAutocapitalization(.never)
+            SecureField("Password", text: $authenticationVM.password)
                 .textFieldStyle(LoginTextFieldStyle())
 
-            Toggle("Remember Session for 30 Days?", isOn: $authenticationVM.rememberMe)
+            Toggle("Remember me", isOn: $authenticationVM.rememberMe)
                 .frame(width: 500)
                 .padding()
             authenticateButton
@@ -44,7 +45,7 @@ struct AuthenticationView: View {
                 if authenticationVM.authenticationInProgress {
                     ProgressView()
                 } else {
-                    Text("Login")
+                    Text("Sign in")
                 }
             }
             .foregroundColor(.white)
