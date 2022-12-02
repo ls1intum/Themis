@@ -7,7 +7,7 @@ import UIKit
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
     @EnvironmentObject var cvm: CodeEditorViewModel
-    
+
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController()
@@ -15,7 +15,7 @@ struct CodeView: UIViewControllerRepresentable {
         viewController.file = cvm.selectedFile
         return viewController
     }
-    
+
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         uiViewController.fontSize = cvm.editorFontSize
         uiViewController.file = cvm.selectedFile
@@ -23,18 +23,18 @@ struct CodeView: UIViewControllerRepresentable {
             uiViewController.textView.highlightedRanges = cvm.inlineHighlights[selectedFile.path] ?? []
         }
     }
-    
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    
+
     class Coordinator: NSObject, TextViewDelegate {
         var parent: CodeView
-        
+
         init(_ parent: CodeView) {
             self.parent = parent
         }
-        
+
         func textViewDidChangeSelection(_ textView: TextView) {
             if textView.selectedRange.length > 0 {
                 parent.cvm.currentlySelecting = true
@@ -56,6 +56,7 @@ class ViewController: UIViewController {
             if textView.theme.font.pointSize != fontSize {
                 textView.setState(TextViewState(text: textView.text,
                                                 theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
+                applySyntaxHighlighting(on: textView, file: file)
             }
         }
     }
@@ -79,7 +80,7 @@ class ViewController: UIViewController {
             textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
     private func setCustomization(on textView: TextView) {
         textView.backgroundColor = .systemBackground
         textView.lineHeightMultiplier = 1.3
@@ -90,7 +91,7 @@ class ViewController: UIViewController {
         textView.isEditable = false
         textView.lineBreakMode = .byWordWrapping
     }
-    
+
     private func applySyntaxHighlighting(on textView: TextView, file: Node?) {
         if let file = file, let code = file.code {
             switch file.fileExtension {
