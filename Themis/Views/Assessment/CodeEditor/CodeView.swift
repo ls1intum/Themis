@@ -72,6 +72,7 @@ class ViewController: UIViewController {
     }
 
     private func setCustomization(on textView: TextView) {
+        textView.backgroundColor = .systemBackground
         textView.lineHeightMultiplier = 1.3
         textView.showLineNumbers = true
         textView.showSpaces = true
