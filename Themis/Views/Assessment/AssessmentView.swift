@@ -120,7 +120,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
-                AppearanceSettingsView(showSettings: $showSettings)
+                AppearanceSettingsView()
                     .navigationTitle("Appearance settings")
             }
         }
