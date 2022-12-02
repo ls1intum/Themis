@@ -192,12 +192,12 @@
 			isa = PBXGroup;
 			children = (
 				4065F857292E8A08005DAEE8 /* Appearance */,
+				E119ED9A2922DE4700626DEA /* Assessment.swift */,
 				E2192EDD291E687C0092CE58 /* Authentication.swift */,
 				E1BF8881291EEF2900B8FA06 /* Course.swift */,
-				E119ED982922D89900626DEA /* Submission.swift */,
 				E2E6748A2920419B0081238B /* Exercise.swift */,
-				E119ED9A2922DE4700626DEA /* Assessment.swift */,
 				E119ED9E2922F48A00626DEA /* Repository.swift */,
+				E119ED982922D89900626DEA /* Submission.swift */,
 			);
 			name = Models;
 			path = Themis/Models;
@@ -220,8 +220,8 @@
 		4065F856292E87AB005DAEE8 /* AppearanceSettings */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */,
 				E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */,
+				E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */,
 			);
 			name = AppearanceSettings;
 			path = Themis/Views/AppearanceSettings;
@@ -230,8 +230,8 @@
 		4065F857292E8A08005DAEE8 /* Appearance */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
 				E21AF04E292B9D4C0096ACFC /* HighlightName.swift */,
+				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
 			);
 			name = Appearance;
 			path = Themis/Models/Appearance;
@@ -298,15 +298,15 @@
 		83396D2C29155935003EF727 /* Themis */ = {
 			isa = PBXGroup;
 			children = (
-				4065F854292E8729005DAEE8 /* Models */,
-				E2192EE6291EC2F90092CE58 /* Views */,
-				4065F855292E873A005DAEE8 /* ViewModels */,
 				E2192EDA291E59B50092CE58 /* API */,
+				83396D3129155935003EF727 /* Assets.xcassets */,
+				4065F854292E8729005DAEE8 /* Models */,
+				83396D3329155935003EF727 /* Preview Content */,
 				E2192ED1291E47670092CE58 /* REST */,
 				83E729E52915751600DB7B36 /* Supporting */,
 				83396D2D29155935003EF727 /* ThemisApp.swift */,
-				83396D3129155935003EF727 /* Assets.xcassets */,
-				83396D3329155935003EF727 /* Preview Content */,
+				4065F855292E873A005DAEE8 /* ViewModels */,
+				E2192EE6291EC2F90092CE58 /* Views */,
 			);
 			path = Themis;
 			sourceTree = SOURCE_ROOT;
@@ -400,13 +400,13 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF042292B9D4C0096ACFC /* Assessment */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
+				E21AF042292B9D4C0096ACFC /* Assessment */,
+				E2192EE7291EC3100092CE58 /* Authentication */,
+				83396D2F29155935003EF727 /* ContentView.swift */,
 				E2E674812920326F0081238B /* Courses */,
 				E2E6748629203E280081238B /* Exercises */,
 				DA0687C0292FB4610091B88A /* Submissions */,
-				E2192EE7291EC3100092CE58 /* Authentication */,
-				83396D2F29155935003EF727 /* ContentView.swift */,
 			);
 			name = Views;
 			path = Themis/Views;
