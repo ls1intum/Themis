@@ -5,7 +5,6 @@ struct AssessmentView: View {
     @EnvironmentObject var vm: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
 
-    @State var showAddFeedback: Bool = false
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
@@ -82,7 +81,7 @@ struct AssessmentView: View {
             if cvm.currentlySelecting {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        showAddFeedback.toggle()
+                        cvm.showAddFeedback.toggle()
                     } label: {
                         Text("Feedback")
                     }
@@ -124,8 +123,8 @@ struct AssessmentView: View {
                     .navigationTitle("Appearance settings")
             }
         }
-        .sheet(isPresented: $showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .inline)
+        .sheet(isPresented: $cvm.showAddFeedback) {
+            EditFeedbackView(showEditFeedback: $cvm.showAddFeedback, feedback: nil, edit: false, type: .inline)
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {

@@ -17,6 +17,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var currentlySelecting: Bool = false
     @Published var selectedLineNumber: Int?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
+    @Published var showAddFeedback: Bool = false
 
     func incrementFontSize() {
         editorFontSize += 1
