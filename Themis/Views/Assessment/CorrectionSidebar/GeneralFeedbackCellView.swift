@@ -51,8 +51,13 @@ struct GeneralFeedbackCellView: View {
 }
 
 struct GeneralFeedbackCellView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel()
+    static let codeEditor = CodeEditorViewModel()
+
     static var previews: some View {
         GeneralFeedbackCellView()
+            .environmentObject(assessment)
+            .environmentObject(codeEditor)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

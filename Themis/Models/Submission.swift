@@ -49,7 +49,7 @@ struct Submission: Codable {
 struct ExerciseOfSubmission: Codable {
     let problemStatement: String
     let gradingInstructions: String
-    let gradingCriteria: [GradingCriteria]
+    let gradingCriteria: [GradingCriterion]
 }
 
 struct SubmissionForAssessment: Codable {
@@ -58,8 +58,9 @@ struct SubmissionForAssessment: Codable {
     // let results: [SubmissionResult]
 }
 
-struct GradingCriteria: Codable, Identifiable {
+struct GradingCriterion: Codable, Identifiable {
     var id: Int
+    var title: String?
     var structuredGradingInstructions: [GradingInstruction]
 }
 

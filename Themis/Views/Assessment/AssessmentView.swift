@@ -246,11 +246,13 @@ struct AssessmentView: View {
 }
 
 struct AssessmentView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel()
+    static let codeEditor = CodeEditorViewModel()
+
     static var previews: some View {
-        AuthenticatedPreview {
-            AssessmentView(exerciseId: 5284)
-                .environmentObject(AssessmentViewModel())
-        }
-        .previewInterfaceOrientation(.landscapeLeft)
+        AssessmentView(exerciseId: 5284)
+            .environmentObject(assessment)
+            .environmentObject(codeEditor)
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
