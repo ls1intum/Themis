@@ -28,7 +28,7 @@ struct GeneralFeedbackCellView: View {
                         Image(systemName: "plus")
                     }
                 }.padding()) {
-                    ForEach(assessment.feedback.feedbacks.filter { $0.type == .general }) { feedback in
+                    ForEach(assessment.feedback.generalFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
                     }
                     .onDelete(perform: delete(at:))
@@ -45,7 +45,7 @@ struct GeneralFeedbackCellView: View {
                         Image(systemName: "plus")
                     }
                 }.padding()) {
-                    ForEach(assessment.feedback.feedbacks.filter { $0.type == .inline }) { feedback in
+                    ForEach(assessment.feedback.inlineFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
                     }
                     .onDelete(perform: delete(at:))
