@@ -14,11 +14,7 @@ struct AssessmentView: View {
     @State private var correctionAsPlaceholder: Bool = true
     @State private var showCancelDialog = false
 
-    private let exerciseId: Int
-
-    init(exerciseId: Int) {
-        self.exerciseId = exerciseId
-    }
+    let exerciseId: Int
 
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
@@ -69,17 +65,17 @@ struct AssessmentView: View {
                         Task {
                             if let id = vm.submission?.id {
                                 await vm.sendAssessment(participationId: id, submit: false)
+                                presentationMode.wrappedValue.dismiss()
                             }
                         }
-                        presentationMode.wrappedValue.dismiss()
                     }
                     Button("Discard", role: .destructive) {
                         Task {
                             if let id = vm.submission?.id {
                                 await vm.cancelAssessment(submissionId: id)
+                                presentationMode.wrappedValue.dismiss()
                             }
                         }
-                        presentationMode.wrappedValue.dismiss()
                     }
                 } message: {
                     Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
