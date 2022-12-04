@@ -25,7 +25,6 @@ struct ContentView: View {
                 authenticationVM.searchForToken()
             }
         }
-        .padding()
     }
 }
 
