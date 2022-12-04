@@ -48,35 +48,48 @@ struct AssessmentView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    Task {
-                        showCancelDialog.toggle()
-                    }
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("Cancel")
-                    }
-                }
-                .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
-                    Button("Save") {
+                if vm.readOnly {
+                    Button {
                         Task {
-                            if let id = vm.submission?.id {
-                                await vm.sendAssessment(participationId: id, submit: false)
-                                presentationMode.wrappedValue.dismiss()
-                            }
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("Cancel")
                         }
                     }
-                    Button("Discard", role: .destructive) {
+                } else {
+                    Button {
                         Task {
-                            if let id = vm.submission?.id {
-                                await vm.cancelAssessment(submissionId: id)
-                                presentationMode.wrappedValue.dismiss()
-                            }
+                            showCancelDialog.toggle()
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("Cancel")
                         }
                     }
-                } message: {
-                    Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
+                    .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
+                        Button("Save") {
+                            Task {
+                                if let id = vm.submission?.id {
+                                    await vm.sendAssessment(participationId: id, submit: false)
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+                        }
+                        Button("Discard", role: .destructive) {
+                            Task {
+                                if let id = vm.submission?.id {
+                                    await vm.cancelAssessment(submissionId: id)
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+                        }
+                    } message: {
+                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
+                    }
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {
@@ -100,6 +113,7 @@ struct AssessmentView: View {
                     } label: {
                         Text("Feedback")
                     }
+                    .disabled(vm.readOnly)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -119,6 +133,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Save")
                 }
+                .disabled(vm.readOnly)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -130,6 +145,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Submit")
                 }
+                .disabled(vm.readOnly)
             }
         }
         .sheet(isPresented: $showSettings) {
@@ -264,7 +280,7 @@ extension Color {
 }
 
 struct AssessmentView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel()
+    static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
 
     static var previews: some View {

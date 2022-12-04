@@ -40,7 +40,7 @@ struct ParticipationForAssessment: Codable {
     let exercise: ExerciseOfSubmission
 }
 
-struct Submission: Codable {
+struct Submission: Codable, Identifiable {
     let id: Int
     let participation: SubmissionParticipation
     let results: [SubmissionResult]
@@ -49,7 +49,7 @@ struct Submission: Codable {
 struct ExerciseOfSubmission: Codable {
     let problemStatement: String
     let gradingInstructions: String
-    let gradingCriteria: [GradingCriterion]
+    let gradingCriteria: [GradingCriterion]?
 }
 
 struct SubmissionForAssessment: Codable {
@@ -102,6 +102,12 @@ extension ArtemisAPI {
 
     /// Gets a submission associated with submissionId and locks it, so no one else can assess it. This should be used to assess a specific Submission.
     static func getSubmissionForAssessment(submissionId: Int) async throws -> SubmissionForAssessment {
+        let request = Request(method: .get, path: "/api/programming-submissions/\(submissionId)/lock")
+        return try await sendRequest(SubmissionForAssessment.self, request: request)
+    }
+
+    /// Gets a submission associated with submissionId without locking it.
+    static func getSubmissionForReadOnly(submissionId: Int) async throws -> SubmissionForAssessment {
         let request = Request(method: .get, path: "/api/programming-submissions/\(submissionId)/lock")
         return try await sendRequest(SubmissionForAssessment.self, request: request)
     }

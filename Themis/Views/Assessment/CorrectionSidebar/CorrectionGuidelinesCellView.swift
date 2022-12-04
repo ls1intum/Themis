@@ -44,7 +44,7 @@ struct CorrectionGuidelinesCellView: View {
 }
 
 struct CorrectionGuidelinesCellView_Previews: PreviewProvider {
-    static var assessment = AssessmentViewModel()
+    static var assessment = AssessmentViewModel(readOnly: false)
 
     static var previews: some View {
         CorrectionGuidelinesCellView()

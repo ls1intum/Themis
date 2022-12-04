@@ -24,6 +24,7 @@ struct GeneralFeedbackCellView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .disabled(assessment.readOnly)
                 }.padding()) {
                     ForEach(assessment.feedback.generalFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
@@ -54,6 +55,7 @@ struct GeneralFeedbackCellView: View {
                 .environmentObject(cvm)
         }
     }
+
     private func delete(at indexSet: IndexSet) {
         indexSet
             .map { assessment.feedback.feedbacks[$0] }
@@ -65,7 +67,7 @@ struct GeneralFeedbackCellView: View {
 }
 
 struct GeneralFeedbackCellView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel()
+    static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
 
     static var previews: some View {
