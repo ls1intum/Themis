@@ -14,7 +14,7 @@ enum FeedbackType {
 
 struct AssessmentResult: Encodable {
     var score: Double {
-        feedbacks.reduce(0) { $0 + $1.credits}
+        feedbacks.reduce(0) { $0 + $1.credits }
     }
     var feedbacks: [AssessmentFeedback]
 
@@ -36,7 +36,8 @@ struct AssessmentResult: Encodable {
         feedbacks.filter { $0.type == .inline }
     }
 
-    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) {
+    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType,
+                              file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) {
         feedbacks.append(AssessmentFeedback(id: id, detailText: detailText, credits: credits, type: type, file: file, lines: lines, columns: columns))
     }
 
