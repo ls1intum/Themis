@@ -17,8 +17,6 @@ struct AssessmentView: View {
         self.exerciseId = exerciseId
     }
 
-    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
-
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
@@ -47,7 +45,7 @@ struct AssessmentView: View {
             .padding(.leading, 18)
         }
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(artemisColor, for: .navigationBar)
+        .toolbarBackground(Color.artemisColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -135,7 +133,7 @@ struct AssessmentView: View {
     }
     var leftGrip: some View {
         ZStack {
-            artemisColor
+            Color.artemisColor
                 .frame(maxWidth: 7, maxHeight: .infinity)
 
             Rectangle()
@@ -167,7 +165,7 @@ struct AssessmentView: View {
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(artemisColor)
+                .foregroundColor(.artemisColor)
                 .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
@@ -218,7 +216,7 @@ struct AssessmentView: View {
                 .zIndex(1)
 
             if dragWidthRight > 0 {
-                artemisColor
+                Color.artemisColor
                     .frame(maxWidth: 7, maxHeight: .infinity)
                 Image(systemName: "minus")
                     .resizable()
@@ -240,6 +238,12 @@ struct AssessmentView: View {
                 CorrectionSidebarView()
             }
         }
+    }
+}
+
+extension Color {
+    public static var artemisColor: Color {
+        return Color("artemisColor")
     }
 }
 

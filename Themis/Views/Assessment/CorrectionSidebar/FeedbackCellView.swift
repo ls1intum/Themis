@@ -16,7 +16,6 @@ struct FeedbackCellView: View {
     let feedback: AssessmentFeedback
 
     @State var showEditFeedback = false
-    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -59,12 +58,12 @@ struct FeedbackCellView: View {
             }
             .padding(10)
             .overlay(RoundedRectangle(cornerRadius: 10)
-                .stroke(artemisColor, lineWidth: 2).opacity(0.3))
+                .stroke(lineWidth: 2).opacity(0.3))
         }
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(showEditFeedback: $showEditFeedback, feedback: feedback, edit: true, type: feedback.type)
         }
         .padding()
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(artemisColor, lineWidth: 2))
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(lineWidth: 2))
     }
 }
