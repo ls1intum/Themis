@@ -116,11 +116,11 @@ class ViewController: UIViewController {
         if let file = file, let code = file.code {
             switch file.fileExtension {
             case .swift:
-                textView.setState(TextViewState(text: code, language: .swift))
+                textView.setState(TextViewState(text: code, theme: ThemeSettings(font: .systemFont(ofSize: fontSize)), language: .swift))
             case .java:
-                textView.setState(TextViewState(text: code, language: .java))
+                textView.setState(TextViewState(text: code, theme: ThemeSettings(font: .systemFont(ofSize: fontSize)), language: .java))
             case .other:
-                textView.setState(TextViewState(text: code))
+                textView.setState(TextViewState(text: code, theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
             }
         }
     }
