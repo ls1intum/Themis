@@ -18,27 +18,26 @@ struct CorrectionGuidelinesCellView: View {
     }
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 40) {
-                Text("Correction Guidelines")
-                    .font(.largeTitle)
 
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Assessment Instructions").font(.title2)
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Correction Guidelines")
+                .font(.largeTitle)
 
-                    Text(assessment.submission?.participation.exercise.gradingInstructions ?? "").padding()
-                }.padding()
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Assessment Instructions").font(.title2)
 
-                LazyVStack(alignment: .leading, spacing: 10) {
-                    Text("Assessment Criteria").font(.title2)
-
-                    ForEach(gradingCriteria) { gradingCriterion in
-                        GradingCriteriaCellView(gradingCriterion: gradingCriterion)
-                    }
-                }.padding()
-
-                Spacer()
+                Text(assessment.submission?.participation.exercise.gradingInstructions ?? "").padding()
             }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Assessment Criteria").font(.title2)
+
+                ForEach(gradingCriteria) { gradingCriterion in
+                    GradingCriteriaCellView(gradingCriterion: gradingCriterion)
+                }
+            }
+
+            Spacer()
         }.padding()
     }
 }

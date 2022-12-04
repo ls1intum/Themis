@@ -15,25 +15,23 @@ struct ProblemStatementCellView: View {
     @StateObject var vm = ProblemStatementCellViewModel()
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 40) {
-                Text("Problem Statement")
-                    .font(.largeTitle)
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Problem Statement")
+                .font(.largeTitle)
 
-                ForEach(vm.problemStatementParts, id: \.text) { part in
-                    if let puml = part as? ProblemStatementPlantUML {
-                        AsyncImage(url: puml.url) { image in
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                        } placeholder: {
-                            ProgressView()
-                        }
-                    } else {
-                        Markdown(part.text)
+            ForEach(vm.problemStatementParts, id: \.text) { part in
+                if let puml = part as? ProblemStatementPlantUML {
+                    AsyncImage(url: puml.url) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        ProgressView()
                     }
+                } else {
+                    Markdown(part.text)
                 }
-
             }
+
         }
         .padding()
         .onAppear {
