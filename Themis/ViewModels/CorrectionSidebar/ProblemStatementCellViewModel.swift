@@ -66,7 +66,7 @@ class ProblemStatementCellViewModel: ObservableObject {
 
     func replaceTestsColor(_ problemStatement: String) -> String {
         return problemStatement
-            .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: "red", options: .regularExpression) // replace test color by red (or green)
+            .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: "black", options: .regularExpression) // replace test color by red (or green)
             // .replacingOccurrences(of: "testsColor(testAttributes[.*])", with: "", options: .regularExpression)
             // .replacingOccurrences(of: "testsColor(testMethods[.*])", with: "", options: .regularExpression)
             // .replacingOccurrences(of: "testsColor(testClass[.*])", with: "", options: .regularExpression)
