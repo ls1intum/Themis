@@ -17,7 +17,6 @@ struct EditFeedbackView: View {
     @Binding var showEditFeedback: Bool
 
     let maxScore = Double(10)
-    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
 
     let feedback: AssessmentFeedback?
     let edit: Bool
@@ -50,7 +49,7 @@ struct EditFeedbackView: View {
                     .lineLimit(10...40)
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
-                        .stroke(artemisColor, lineWidth: 2))
+                        .stroke(lineWidth: 2))
                 Text("Score:")
                     .font(.title)
                     .padding(.leading)

@@ -1,3 +1,5 @@
+// swiftlint:disable line_length
+
 import SwiftUI
 
 struct AssessmentView: View {
@@ -10,14 +12,9 @@ struct AssessmentView: View {
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder: Bool = true
+    @State private var showCancelDialog = false
 
-    private let exerciseId: Int
-
-    init(exerciseId: Int) {
-        self.exerciseId = exerciseId
-    }
-
-    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
+    let exerciseId: Int
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -47,22 +44,39 @@ struct AssessmentView: View {
             .padding(.leading, 18)
         }
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(artemisColor, for: .navigationBar)
+        .toolbarBackground(Color.primary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     Task {
-                        if let id = vm.submission?.id {
-                            await vm.cancelAssessment(submissionId: id)
-                        }
-                        presentationMode.wrappedValue.dismiss()
+                        showCancelDialog.toggle()
                     }
                 } label: {
                     HStack {
                         Image(systemName: "chevron.left")
                         Text("Cancel")
                     }
+                }
+                .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
+                    Button("Save") {
+                        Task {
+                            if let id = vm.submission?.id {
+                                await vm.sendAssessment(participationId: id, submit: false)
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
+                    Button("Discard", role: .destructive) {
+                        Task {
+                            if let id = vm.submission?.id {
+                                await vm.cancelAssessment(submissionId: id)
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
+                } message: {
+                    Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {
@@ -135,7 +149,7 @@ struct AssessmentView: View {
     }
     var leftGrip: some View {
         ZStack {
-            artemisColor
+            Color.primary
                 .frame(maxWidth: 7, maxHeight: .infinity)
 
             Rectangle()
@@ -167,7 +181,7 @@ struct AssessmentView: View {
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(artemisColor)
+                .foregroundColor(.primary)
                 .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
@@ -218,7 +232,7 @@ struct AssessmentView: View {
                 .zIndex(1)
 
             if dragWidthRight > 0 {
-                artemisColor
+                Color.primary
                     .frame(maxWidth: 7, maxHeight: .infinity)
                 Image(systemName: "minus")
                     .resizable()
@@ -240,6 +254,12 @@ struct AssessmentView: View {
                 CorrectionSidebarView()
             }
         }
+    }
+}
+
+extension Color {
+    public static var primary: Color {
+        Color("primary")
     }
 }
 

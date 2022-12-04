@@ -16,14 +16,13 @@ struct FeedbackCellView: View {
     let feedback: AssessmentFeedback
 
     @State var showEditFeedback = false
-    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
     var feedbackColor: Color {
         if feedback.credits < 0.0 {
             return Color(.systemRed)
         } else if feedback.credits > 0.0 {
             return Color(.systemGreen)
         } else {
-            return Color(.systemBackground)
+            return Color(.label)
         }
     }
 

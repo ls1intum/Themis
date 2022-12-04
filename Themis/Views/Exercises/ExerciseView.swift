@@ -15,7 +15,7 @@ struct ExerciseView: View {
 
     var body: some View {
         VStack {
-            if let exerciseStats = exerciseVM.exerciseStats {
+            if exerciseVM.exerciseStats != nil {
                 Form {
                     HStack {
                         Text("Assessed:")
@@ -37,7 +37,6 @@ struct ExerciseView: View {
             } else {
                 ProgressView()
             }
-
         }
         .navigationDestination(isPresented: $vm.showSubmission) {
             AssessmentView(exerciseId: exercise.id)
@@ -52,11 +51,4 @@ struct ExerciseView: View {
             }
         }
     }
-
 }
-
-/*struct ExerciseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExerciseView()
-    }
-}*/
