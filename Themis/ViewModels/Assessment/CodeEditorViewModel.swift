@@ -77,12 +77,12 @@ class CodeEditorViewModel: ObservableObject {
                 inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackId.uuidString,
                                                                      range: selectedSection,
                                                                      color: UIColor.systemYellow,
-                                                                     cornerRadius: 10))
+                                                                     cornerRadius: 8))
             } else {
                 inlineHighlights[file.path] = [HighlightedRange(id: feedbackId.uuidString,
                                                                 range: selectedSection,
                                                                 color: UIColor.systemYellow,
-                                                                cornerRadius: 10)]
+                                                                cornerRadius: 8)]
             }
         }
     }
