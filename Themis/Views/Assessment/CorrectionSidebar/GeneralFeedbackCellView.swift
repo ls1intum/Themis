@@ -12,17 +12,14 @@ struct GeneralFeedbackCellView: View {
     @EnvironmentObject var cvm: CodeEditorViewModel
 
     @State var showAddFeedback = false
-    @State var feedbackType: FeedbackType = .general
 
     var body: some View {
         VStack(alignment: .leading) {
             List {
                 Section(header: HStack {
                     Text("General Feedback")
-                        .font(.title3)
                     Spacer()
                     Button {
-                        feedbackType = .general
                         showAddFeedback.toggle()
                     } label: {
                         Image(systemName: "plus")
@@ -34,28 +31,23 @@ struct GeneralFeedbackCellView: View {
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
 
-                Section(header: HStack {
-                    Text("Inline Feedback")
-                        .font(.title3)
-                    Spacer()
-                    Button {
-                        feedbackType = .inline
-                        showAddFeedback.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }.padding()) {
+                Section {
                     ForEach(assessment.feedback.inlineFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
                     }
                     .onDelete(perform: delete(at:))
+                } header: {
+                    HStack {
+                        Text("Inline Feedback")
+                        Spacer()
+                    }.padding()
                 }.headerProminence(.increased)
             }
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: feedbackType)
+            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .general)
                 .environmentObject(assessment)
                 .environmentObject(cvm)
         }
