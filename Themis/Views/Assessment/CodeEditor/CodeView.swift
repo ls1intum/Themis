@@ -34,6 +34,7 @@ struct CodeView: UIViewControllerRepresentable {
             self.parent = parent
         }
 
+        @MainActor
         func textViewDidChangeSelection(_ textView: TextView) {
             if textView.selectedRange.length > 0 {
                 parent.cvm.currentlySelecting = true

@@ -21,11 +21,11 @@ class CodeEditorViewModel: ObservableObject {
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {
-            let fromLine = (lines.firstIndex(where: { $0.contains(selectedSection.location) }) ?? -1) + 1
-            let toLine = (lines.firstIndex(where: { $0.contains(selectedSection.location + selectedSection.length) }) ?? -1) + 1
+            let fromLine = (lines.firstIndex { $0.contains(selectedSection.location) } ?? -1) + 1
+            let toLine = (lines.firstIndex { $0.contains(selectedSection.location + selectedSection.length) } ?? -1) + 1
             let lineRange = NSRange(location: fromLine, length: toLine - fromLine)
 
-            if fromLine == toLine {
+            if (fromLine == toLine) && (fromLine != 0) {
                 let fromColumn = selectedSection.location - lines[fromLine - 1].location
                 let toColumn = (selectedSection.location + selectedSection.length) - lines[toLine - 1].location
                 let columnRange = NSRange(location: fromColumn, length: toColumn - fromColumn)

@@ -56,13 +56,16 @@ struct AssessmentResult: Encodable {
 struct AssessmentFeedback: Encodable, Identifiable {
     let id: UUID
     var text: String {
-        if let file = file, let lines = lines {
-            if let columns = columns {
-                return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
-            }
+        guard let file = file, let lines = lines else {
+            return ""
+        }
+        if lines.location == 0 {
+            return ""
+        }
+        guard let columns = columns else {
             return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
         }
-        return ""
+        return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
     } /// max length = 500
     var detailText: String /// max length = 5000
     var credits: Double /// score of element
