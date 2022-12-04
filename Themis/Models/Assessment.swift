@@ -65,6 +65,9 @@ struct AssessmentFeedback: Encodable, Identifiable {
         guard let columns = columns else {
             return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
         }
+        if columns.length == 0 {
+            return file.name + " at Line: \(lines.location) Col: \(columns.location)"
+        }
         return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
     } /// max length = 500
     var detailText: String /// max length = 5000

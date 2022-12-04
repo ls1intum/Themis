@@ -15,7 +15,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
     @Published var currentlySelecting: Bool = false
-    @Published var selectedSection: NSRange? // First Range = selected Lines, Second Range = columns iff single line
+    @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
     @Published var showAddFeedback: Bool = false
 
@@ -26,7 +26,7 @@ class CodeEditorViewModel: ObservableObject {
             let lineRange = NSRange(location: fromLine, length: toLine - fromLine)
 
             if (fromLine == toLine) && (fromLine != 0) {
-                let fromColumn = selectedSection.location - lines[fromLine - 1].location
+                let fromColumn = (selectedSection.location - lines[fromLine - 1].location) + 1
                 let toColumn = (selectedSection.location + selectedSection.length) - lines[toLine - 1].location
                 let columnRange = NSRange(location: fromColumn, length: toColumn - fromColumn)
                 return (lineRange, columnRange)
