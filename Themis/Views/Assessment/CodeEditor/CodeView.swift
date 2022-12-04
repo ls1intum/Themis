@@ -11,7 +11,7 @@ struct CodeView: UIViewControllerRepresentable {
 
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
-        let viewController = ViewController()
+        let viewController = ViewController(cvm: cvm)
         viewController.textView.editorDelegate = context.coordinator
         viewController.file = file
         return viewController
@@ -49,7 +49,10 @@ struct CodeView: UIViewControllerRepresentable {
 
 // view controller that manages runestone UITextView
 class ViewController: UIViewController {
+    let cvm: CodeEditorViewModel
     let textView = TextView()
+    let generator = UIImpactFeedbackGenerator(style: .light)
+
     var fontSize = 14.0 {
         didSet {
             if textView.theme.font.pointSize != fontSize {
@@ -64,7 +67,14 @@ class ViewController: UIViewController {
             if textView.text != file?.code {
                 applySyntaxHighlighting(on: textView)
             }
+
+    init(cvm: CodeEditorViewModel) {
+            self.cvm = cvm
+            super.init(nibName: nil, bundle: nil)
         }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -79,6 +89,14 @@ class ViewController: UIViewController {
             textView.topAnchor.constraint(equalTo: view.topAnchor),
             textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        setupLongPressInteraction()
+    }
+
+    @objc
+    func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        guard gestureRecognizer.state == .began else { return }
+        self.cvm.showAddFeedback.toggle()
+        generator.impactOccurred() // haptic feedback
     }
 
     private func setCustomization(on textView: TextView) {
@@ -103,5 +121,8 @@ class ViewController: UIViewController {
                 textView.setState(TextViewState(text: code))
             }
         }
+    private func setupLongPressInteraction() {
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        textView.addGestureRecognizer(longPressGestureRecognizer)
     }
 }
