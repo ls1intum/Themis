@@ -51,6 +51,7 @@ class ProblemStatementCellViewModel: ObservableObject {
 
             // Append plantuml
             substring = String(problemStatement[rangeStart.lowerBound...rangeEnd.upperBound])
+            substring = replaceTestsColor(substring)
             problemStatementParts.append(ProblemStatementPlantUML(text: substring))
 
             index = problemStatement.index(rangeEnd.upperBound, offsetBy: 1)
@@ -61,5 +62,13 @@ class ProblemStatementCellViewModel: ObservableObject {
         return problemStatement
             .replacingOccurrences(of: "[task][", with: "") // to remove symbol
             .replacingOccurrences(of: "](.*())", with: "", options: .regularExpression) // to remove tests
+    }
+
+    func replaceTestsColor(_ problemStatement: String) -> String {
+        return problemStatement
+            .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: "black", options: .regularExpression) // replace test color by red (or green)
+            // .replacingOccurrences(of: "testsColor(testAttributes[.*])", with: "", options: .regularExpression)
+            // .replacingOccurrences(of: "testsColor(testMethods[.*])", with: "", options: .regularExpression)
+            // .replacingOccurrences(of: "testsColor(testClass[.*])", with: "", options: .regularExpression)
     }
 }

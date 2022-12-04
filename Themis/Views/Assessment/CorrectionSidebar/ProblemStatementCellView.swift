@@ -16,7 +16,7 @@ struct ProblemStatementCellView: View {
 
     var body: some View {
         HStack {
-            LazyVStack(alignment: .leading, spacing: 40) {
+            VStack(alignment: .leading, spacing: 40) {
                 Text("Problem Statement")
                     .font(.largeTitle)
 
@@ -24,6 +24,7 @@ struct ProblemStatementCellView: View {
                     if let puml = part as? ProblemStatementPlantUML {
                         AsyncImage(url: puml.url) { image in
                             image.resizable()
+                                .aspectRatio(contentMode: .fit)
                         } placeholder: {
                             ProgressView()
                         }
