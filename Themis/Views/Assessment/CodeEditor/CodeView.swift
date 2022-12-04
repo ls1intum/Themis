@@ -37,9 +37,7 @@ struct CodeView: UIViewControllerRepresentable {
         func textViewDidChangeSelection(_ textView: TextView) {
             if textView.selectedRange.length > 0 {
                 parent.cvm.currentlySelecting = true
-                parent.cvm.selectedLineNumber = (parent.cvm.selectedFile?.lines?.firstIndex {
-                    $0.contains(textView.selectedRange.location)
-                } ?? 0) + 1
+                parent.cvm.selectedSection = textView.selectedRange
             } else {
                 parent.cvm.currentlySelecting = false
             }

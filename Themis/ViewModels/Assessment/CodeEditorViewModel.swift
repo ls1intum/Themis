@@ -15,9 +15,26 @@ class CodeEditorViewModel: ObservableObject {
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
     @Published var currentlySelecting: Bool = false
-    @Published var selectedLineNumber: Int?
+    @Published var selectedSection: NSRange? // First Range = selected Lines, Second Range = columns iff single line
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
     @Published var showAddFeedback: Bool = false
+
+    var selectedSectionParsed: (NSRange, NSRange?)? {
+        if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {
+            let fromLine = (lines.firstIndex(where: { $0.contains(selectedSection.location) }) ?? -1) + 1
+            let toLine = (lines.firstIndex(where: { $0.contains(selectedSection.location + selectedSection.length) }) ?? -1) + 1
+            let lineRange = NSRange(location: fromLine, length: toLine - fromLine)
+
+            if fromLine == toLine {
+                let fromColumn = selectedSection.location - lines[fromLine - 1].location
+                let toColumn = (selectedSection.location + selectedSection.length) - lines[toLine - 1].location
+                let columnRange = NSRange(location: fromColumn, length: toColumn - fromColumn)
+                return (lineRange, columnRange)
+            }
+            return (lineRange, nil)
+        }
+        return nil
+    }
 
     func incrementFontSize() {
         editorFontSize += 1
@@ -55,15 +72,15 @@ class CodeEditorViewModel: ObservableObject {
     }
 
     func addInlineHighlight(feedbackId: UUID) {
-        if let file = selectedFile, let lineReference = selectedLineNumber, let lines = file.lines {
+        if let file = selectedFile, let selectedSection = selectedSection {
             if (inlineHighlights.contains { $0.key == file.path }) {
                 inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackId.uuidString,
-                                                                     range: lines[lineReference - 1],
+                                                                     range: selectedSection,
                                                                      color: UIColor.systemYellow,
                                                                      cornerRadius: 10))
             } else {
                 inlineHighlights[file.path] = [HighlightedRange(id: feedbackId.uuidString,
-                                                                range: lines[lineReference - 1],
+                                                                range: selectedSection,
                                                                 color: UIColor.systemYellow,
                                                                 cornerRadius: 10)]
             }

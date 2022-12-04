@@ -88,7 +88,8 @@ struct EditFeedbackView: View {
                                          credits: score,
                                          type: type,
                                          file: cvm.selectedFile,
-                                         line: cvm.selectedLineNumber)
+                                         lines: cvm.selectedSectionParsed?.0,
+                                         columns: cvm.selectedSectionParsed?.1)
                 cvm.addInlineHighlight(feedbackId: id)
             } else {
                 avm.feedback.addFeedback(detailText: feedbackText, credits: score, type: type)
