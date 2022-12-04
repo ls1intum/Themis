@@ -1,3 +1,5 @@
+// swiftlint:disable line_length
+
 import SwiftUI
 
 struct AssessmentView: View {
@@ -10,12 +12,9 @@ struct AssessmentView: View {
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder: Bool = true
+    @State private var showCancelDialog = false
 
-    private let exerciseId: Int
-
-    init(exerciseId: Int) {
-        self.exerciseId = exerciseId
-    }
+    let exerciseId: Int
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -51,16 +50,33 @@ struct AssessmentView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     Task {
-                        if let id = vm.submission?.id {
-                            await vm.cancelAssessment(submissionId: id)
-                        }
-                        presentationMode.wrappedValue.dismiss()
+                        showCancelDialog.toggle()
                     }
                 } label: {
                     HStack {
                         Image(systemName: "chevron.left")
                         Text("Cancel")
                     }
+                }
+                .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
+                    Button("Save") {
+                        Task {
+                            if let id = vm.submission?.id {
+                                await vm.sendAssessment(participationId: id, submit: false)
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
+                    Button("Discard", role: .destructive) {
+                        Task {
+                            if let id = vm.submission?.id {
+                                await vm.cancelAssessment(submissionId: id)
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
+                } message: {
+                    Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {

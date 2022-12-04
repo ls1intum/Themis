@@ -13,6 +13,7 @@ struct AssessmentSubmissionLoaderView: View {
 
     var exerciseID: Int
     var submissionID: Int
+
     var body: some View {
         Group {
             if vm.showSubmission {
