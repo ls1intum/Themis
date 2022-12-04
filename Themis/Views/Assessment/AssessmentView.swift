@@ -34,6 +34,7 @@ struct AssessmentView: View {
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
                 correctionWithPlaceholder
+                    .frame(width: dragWidthRight)
             }
             .animation(.default, value: showFileTree)
             Button {
@@ -234,12 +235,9 @@ struct AssessmentView: View {
         // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
-                CorrectionSidebarView()
-                    .frame(width: dragWidthRight)
-                    .redacted(reason: .placeholder)
+                EmptyView()
             } else {
                 CorrectionSidebarView()
-                    .frame(width: dragWidthRight)
             }
         }
     }

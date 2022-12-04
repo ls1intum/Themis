@@ -12,7 +12,8 @@ enum FileType: String, Codable {
     case file = "FILE"
 }
 
-// support for additional languages can be added in the future
+/// support for additional languages can be added in the future
+/// just by adding them here
 enum FileExtension: String, Codable {
     case java = "JAVA"
     case swift = "SWIFT"
@@ -45,15 +46,11 @@ class Node: Hashable, ObservableObject {
     }
     var fileExtension: FileExtension {
         let components = name.components(separatedBy: ".")
-        if components.count <= 1 {
-            return .other
-        } else if components[1] == "java" {
-            return .java
-        } else if components[1] == "swift" {
-            return.swift
-        } else {
-            return .other
+        let extensionString = components.last ?? ""
+        if let ext = FileExtension(rawValue: extensionString.uppercased()) {
+            return ext
         }
+        return .other
     }
 
     init(type: FileType, name: String) {
