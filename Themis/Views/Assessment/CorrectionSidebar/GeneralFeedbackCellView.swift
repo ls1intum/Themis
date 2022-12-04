@@ -27,6 +27,7 @@ struct GeneralFeedbackCellView: View {
                 }.padding()) {
                     ForEach(assessment.feedback.generalFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
+                            .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
@@ -34,6 +35,7 @@ struct GeneralFeedbackCellView: View {
                 Section {
                     ForEach(assessment.feedback.inlineFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
+                            .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
