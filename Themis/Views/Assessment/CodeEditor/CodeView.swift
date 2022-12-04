@@ -67,11 +67,13 @@ class ViewController: UIViewController {
             if textView.text != file?.code {
                 applySyntaxHighlighting(on: textView)
             }
+        }
+    }
 
     init(cvm: CodeEditorViewModel) {
-            self.cvm = cvm
-            super.init(nibName: nil, bundle: nil)
-        }
+        self.cvm = cvm
+        super.init(nibName: nil, bundle: nil)
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -121,6 +123,7 @@ class ViewController: UIViewController {
                 textView.setState(TextViewState(text: code))
             }
         }
+    }
     private func setupLongPressInteraction() {
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         textView.addGestureRecognizer(longPressGestureRecognizer)
