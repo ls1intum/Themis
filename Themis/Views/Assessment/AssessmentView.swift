@@ -45,7 +45,7 @@ struct AssessmentView: View {
             .padding(.leading, 18)
         }
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(Color.artemisColor, for: .navigationBar)
+        .toolbarBackground(Color.primary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -133,7 +133,7 @@ struct AssessmentView: View {
     }
     var leftGrip: some View {
         ZStack {
-            Color.artemisColor
+            Color.primary
                 .frame(maxWidth: 7, maxHeight: .infinity)
 
             Rectangle()
@@ -165,7 +165,7 @@ struct AssessmentView: View {
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(.artemisColor)
+                .foregroundColor(.primary)
                 .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
@@ -216,7 +216,7 @@ struct AssessmentView: View {
                 .zIndex(1)
 
             if dragWidthRight > 0 {
-                Color.artemisColor
+                Color.primary
                     .frame(maxWidth: 7, maxHeight: .infinity)
                 Image(systemName: "minus")
                     .resizable()
@@ -242,8 +242,8 @@ struct AssessmentView: View {
 }
 
 extension Color {
-    public static var artemisColor: Color {
-        return Color("artemisColor")
+    public static var primary: Color {
+        Color("primary")
     }
 }
 
