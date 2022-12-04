@@ -17,18 +17,28 @@ struct FeedbackCellView: View {
 
     @State var showEditFeedback = false
     let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
+    var feedbackColor: Color {
+        if feedback.credits < 0.0 {
+            return Color(.systemRed)
+        } else if feedback.credits > 0.0 {
+            return Color(.systemGreen)
+        } else {
+            return Color(.systemBackground)
+        }
+    }
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text("Feedback")
-                    .font(.body)
+                Text(feedback.text.isEmpty ? "Feedback" : feedback.text)
                 Spacer()
                 Button {
                     showEditFeedback = true
                 } label: {
-                    Image(systemName: "pencil").foregroundColor(.blue)
-                }
+                    Image(systemName: "pencil")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                    }
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Button(role: .destructive) {
@@ -36,35 +46,26 @@ struct FeedbackCellView: View {
                     cvm.deleteInlineHighlight(feedback: feedback)
                 } label: {
                     Image(systemName: "trash")
-                        .foregroundColor(.blue)
+                        .resizable()
+                        .frame(width: 15, height: 15)
                 }
                 .buttonStyle(.borderless)
                 .font(.caption)
             }
-            VStack {
-                HStack {
-                    Text(feedback.text)
-                        .foregroundColor(Color(.systemGray))
-                    Spacer()
-                    if feedback.credits < 0.0 {
-                        Text(String(format: "%.1f", feedback.credits)).foregroundColor(.red)
-                    } else if feedback.credits > 0.0 {
-                        Text(String(format: "%.1f", feedback.credits)).foregroundColor(.green)
-                    } else {
-                        Text(String(format: "%.1f", feedback.credits))
-                    }
-                }
+            Divider()
+                .frame(maxWidth: .infinity)
+            HStack {
                 Text(feedback.detailText)
-                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(String(format: "%.1f", feedback.credits))
+                    .foregroundColor(feedbackColor)
             }
-            .padding(10)
-            .overlay(RoundedRectangle(cornerRadius: 10)
-                .stroke(artemisColor, lineWidth: 2).opacity(0.3))
         }
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(showEditFeedback: $showEditFeedback, feedback: feedback, edit: true, type: feedback.type)
         }
         .padding()
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(artemisColor, lineWidth: 2))
+        .overlay(RoundedRectangle(cornerRadius: 25)
+            .stroke(lineWidth: 2))
     }
 }
