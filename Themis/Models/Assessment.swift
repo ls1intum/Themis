@@ -14,7 +14,7 @@ enum FeedbackType {
 
 struct AssessmentResult: Encodable {
     var score: Double {
-        feedbacks.reduce(0) { $0 + $1.credits}
+        feedbacks.reduce(0) { $0 + $1.credits }
     }
     var feedbacks: [AssessmentFeedback]
 
@@ -36,8 +36,9 @@ struct AssessmentResult: Encodable {
         feedbacks.filter { $0.type == .inline }
     }
 
-    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, line: Int? = nil) {
-        feedbacks.append(AssessmentFeedback(id: id, detailText: detailText, credits: credits, type: type, file: file, line: line))
+    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType,
+                              file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) {
+        feedbacks.append(AssessmentFeedback(id: id, detailText: detailText, credits: credits, type: type, file: file, lines: lines, columns: columns))
     }
 
     mutating func deleteFeedback(id: UUID) {
@@ -55,17 +56,27 @@ struct AssessmentResult: Encodable {
 struct AssessmentFeedback: Encodable, Identifiable {
     let id: UUID
     var text: String {
-        guard let file = file, let line = line else {
+        guard let file = file, let lines = lines else {
             return ""
         }
-        return file.name + " at line \(line)"
+        if lines.location == 0 {
+            return ""
+        }
+        guard let columns = columns else {
+            return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
+        }
+        if columns.length == 0 {
+            return file.name + " at Line: \(lines.location) Col: \(columns.location)"
+        }
+        return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
     } /// max length = 500
     var detailText: String /// max length = 5000
     var credits: Double /// score of element
     let type: FeedbackType
 
     var file: Node?
-    var line: Int?
+    var lines: NSRange?
+    var columns: NSRange?
 
     enum CodingKeys: CodingKey {
         case text
