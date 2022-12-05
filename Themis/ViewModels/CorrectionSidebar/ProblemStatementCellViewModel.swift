@@ -19,13 +19,7 @@ struct ProblemStatementPlantUML: ProblemStatementPart {
     let text: String
     var url: URL? {
         var url = URL(string: "https://artemis-staging.ase.in.tum.de/api/plantuml/png")
-
-        if colorScheme == .light {
-            url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text), URLQueryItem(name: "useDarkTheme", value: "false")])
-        } else {
-            url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text), URLQueryItem(name: "useDarkTheme", value: "true")])
-        }
-
+        url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text), URLQueryItem(name: "useDarkTheme", value: String(colorScheme != .light))])
         return url
     }
 }
