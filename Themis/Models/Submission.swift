@@ -55,7 +55,7 @@ struct ExerciseOfSubmission: Codable {
 struct SubmissionForAssessment: Codable {
     let id: Int
     let participation: ParticipationForAssessment
-    // let results: [SubmissionResult]
+    let feedbacks: [ArtemisFeedback]?
 }
 
 struct GradingCriterion: Codable, Identifiable {
@@ -71,6 +71,30 @@ struct GradingInstruction: Codable, Identifiable {
     var instructionDescription: String
     var feedback: String
     var usageCount: Int
+}
+
+enum AssessmentType: String, Codable {
+    case automatic = "AUTOMATIC"
+    case semi_automatic = "SEMI_AUTOMATIC"
+    case manual = "MANUAL"
+}
+
+struct ParticipationResult: Codable {
+    let submission: SubmissionFromResult
+    let feedbacks: [ArtemisFeedback]
+    let participation: ParticipationForAssessment
+}
+
+struct SubmissionFromResult: Codable {
+    let id: Int
+}
+
+struct ArtemisFeedback: Codable {
+    let text: String
+    let detailText: String?
+    let credits: Double
+    let positive: Bool
+    let type: AssessmentType
 }
 
 extension ArtemisAPI {
@@ -107,8 +131,16 @@ extension ArtemisAPI {
     }
 
     /// Gets a submission associated with submissionId without locking it.
-    static func getSubmissionForReadOnly(submissionId: Int) async throws -> SubmissionForAssessment {
-        let request = Request(method: .get, path: "/api/programming-submissions/\(submissionId)/lock")
-        return try await sendRequest(SubmissionForAssessment.self, request: request)
+    static func getSubmissionForReadOnly(participationId: Int) async throws -> SubmissionForAssessment {
+        let request = Request(
+            method: .get,
+            path: "/api/programming-exercise-participations/\(participationId)/latest-result-with-feedbacks",
+            params: [URLQueryItem(name: "withSubmission", value: "true")])
+        let pr = try await sendRequest(ParticipationResult.self, request: request)
+        return SubmissionForAssessment(
+            id: pr.submission.id,
+            participation: pr.participation,
+            feedbacks: pr.feedbacks
+        )
     }
 }

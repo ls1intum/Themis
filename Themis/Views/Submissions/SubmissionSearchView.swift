@@ -19,7 +19,7 @@ struct SubmissionSearchView: View {
         ScrollView {
             LazyVStack {
                 ForEach(vm.filterSubmissions(search: search)) { submission in
-                    SingleSubmissionCell(avm: avm, submission: submission)
+                    SingleSubmissionCellView(avm: avm, submission: submission)
                 }
             }
         }
@@ -54,7 +54,7 @@ extension SubmissionSearchView {
     }
 }
 
-private struct SingleSubmissionCell: View {
+private struct SingleSubmissionCellView: View {
     @ObservedObject var avm: AssessmentViewModel
 
     let submission: Submission
@@ -70,7 +70,7 @@ private struct SingleSubmissionCell: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             Button {
                 Task {
-                    await avm.getSubmission(id: submission.id)
+                    await avm.getSubmission(id: submission.participation.id)
                 }
             } label: {
                 HStack {

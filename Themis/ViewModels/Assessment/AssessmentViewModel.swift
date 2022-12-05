@@ -27,7 +27,7 @@ class AssessmentViewModel: ObservableObject {
     func getSubmission(id: Int) async {
         do {
             if readOnly {
-                self.submission = try await ArtemisAPI.getSubmissionForReadOnly(submissionId: id)
+                self.submission = try await ArtemisAPI.getSubmissionForReadOnly(participationId: id)
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
             }
