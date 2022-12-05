@@ -72,8 +72,8 @@ struct AssessmentFeedback: Encodable, Identifiable {
     } /// max length = 500
     var detailText: String /// max length = 5000
     var credits: Double /// score of element
-    let type: FeedbackType
 
+    let type: FeedbackType
     var file: Node?
     var lines: NSRange?
     var columns: NSRange?

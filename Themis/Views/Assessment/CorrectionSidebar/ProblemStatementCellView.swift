@@ -41,7 +41,7 @@ struct ProblemStatementCellView: View {
 }
 
 struct ProblemStatementCellView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel()
+    static let assessment = AssessmentViewModel(readOnly: false)
 
     static var previews: some View {
         ProblemStatementCellView()

@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ExerciseView: View {
-    var exercise: Exercise
     @StateObject var exerciseVM = ExerciseViewModel()
-    @StateObject var vm = AssessmentViewModel()
+    @StateObject var vm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
+
+    let exercise: Exercise
 
     var body: some View {
         VStack {
@@ -50,5 +51,26 @@ struct ExerciseView: View {
                 await exerciseVM.fetchExerciseStats()
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: SubmissionSearchView(exercise: exercise)) {
+                    searchButton
+                }
+            }
+        }
+    }
+
+    private var searchButton: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .resizable()
+                .foregroundColor(Color(.label))
+                .frame(width: 20, height: 20)
+            Text("Search for submission")
+                .foregroundColor(Color(.systemGray))
+        }
+        .padding()
+        .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+
     }
 }
