@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct AssessmentSubmissionLoaderView: View {
-    @StateObject var vm = AssessmentViewModel()
+    @StateObject var vm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
 
     var exerciseID: Int
     var submissionID: Int
+
     var body: some View {
         Group {
             if vm.showSubmission {

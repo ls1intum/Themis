@@ -18,21 +18,36 @@ struct GeneralFeedbackCellView: View {
             List {
                 Section(header: HStack {
                     Text("General Feedback")
-                        .font(.title3)
                     Spacer()
                     Button {
-                        showAddFeedback = true
+                        showAddFeedback.toggle()
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .disabled(assessment.readOnly)
                 }.padding()) {
-                    ForEach(assessment.feedback.feedbacks) { feedback in
+                    ForEach(assessment.feedback.generalFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
+                            .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
+
+                Section {
+                    ForEach(assessment.feedback.inlineFeedback) { feedback in
+                        FeedbackCellView(feedback: feedback)
+                            .listRowSeparator(.hidden)
+                    }
+                    .onDelete(perform: delete(at:))
+                } header: {
+                    HStack {
+                        Text("Inline Feedback")
+                        Spacer()
+                    }.padding()
+                }.headerProminence(.increased)
             }
             .listStyle(.sidebar)
+            .scrollContentBackground(.hidden)
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .general)
@@ -40,6 +55,7 @@ struct GeneralFeedbackCellView: View {
                 .environmentObject(cvm)
         }
     }
+
     private func delete(at indexSet: IndexSet) {
         indexSet
             .map { assessment.feedback.feedbacks[$0] }
@@ -51,8 +67,13 @@ struct GeneralFeedbackCellView: View {
 }
 
 struct GeneralFeedbackCellView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel(readOnly: false)
+    static let codeEditor = CodeEditorViewModel()
+
     static var previews: some View {
         GeneralFeedbackCellView()
+            .environmentObject(assessment)
+            .environmentObject(codeEditor)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

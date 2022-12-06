@@ -1,3 +1,5 @@
+// swiftlint:disable line_length
+
 import SwiftUI
 
 struct AssessmentView: View {
@@ -5,20 +7,14 @@ struct AssessmentView: View {
     @EnvironmentObject var vm: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
 
-    @State var showAddFeedback: Bool = false
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder: Bool = true
+    @State private var showCancelDialog = false
 
-    private let exerciseId: Int
-
-    init(exerciseId: Int) {
-        self.exerciseId = exerciseId
-    }
-
-    let artemisColor = Color(#colorLiteral(red: 0.20944947, green: 0.2372354269, blue: 0.2806544006, alpha: 1))
+    let exerciseId: Int
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -35,6 +31,7 @@ struct AssessmentView: View {
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
                 correctionWithPlaceholder
+                    .frame(width: dragWidthRight)
             }
             .animation(.default, value: showFileTree)
             Button {
@@ -47,21 +44,51 @@ struct AssessmentView: View {
             .padding(.leading, 18)
         }
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(artemisColor, for: .navigationBar)
+        .toolbarBackground(Color.primary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    Task {
-                        if let id = vm.submission?.id {
-                            await vm.cancelAssessment(submissionId: id)
+                if vm.readOnly {
+                    Button {
+                        Task {
+                            presentationMode.wrappedValue.dismiss()
                         }
-                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("Cancel")
+                        }
                     }
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("Cancel")
+                } else {
+                    Button {
+                        Task {
+                            showCancelDialog.toggle()
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("Cancel")
+                        }
+                    }
+                    .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
+                        Button("Save") {
+                            Task {
+                                if let id = vm.submission?.id {
+                                    await vm.sendAssessment(participationId: id, submit: false)
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+                        }
+                        Button("Discard", role: .destructive) {
+                            Task {
+                                if let id = vm.submission?.id {
+                                    await vm.cancelAssessment(submissionId: id)
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+                        }
+                    } message: {
+                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
                     }
                 }
             }
@@ -82,10 +109,11 @@ struct AssessmentView: View {
             if cvm.currentlySelecting {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        showAddFeedback.toggle()
+                        cvm.showAddFeedback.toggle()
                     } label: {
                         Text("Feedback")
                     }
+                    .disabled(vm.readOnly)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -105,6 +133,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Save")
                 }
+                .disabled(vm.readOnly)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -116,6 +145,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Submit")
                 }
+                .disabled(vm.readOnly)
             }
         }
         .sheet(isPresented: $showSettings) {
@@ -124,8 +154,8 @@ struct AssessmentView: View {
                     .navigationTitle("Appearance settings")
             }
         }
-        .sheet(isPresented: $showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .inline)
+        .sheet(isPresented: $cvm.showAddFeedback) {
+            EditFeedbackView(showEditFeedback: $cvm.showAddFeedback, feedback: nil, edit: false, type: .inline)
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
@@ -135,7 +165,7 @@ struct AssessmentView: View {
     }
     var leftGrip: some View {
         ZStack {
-            artemisColor
+            Color.primary
                 .frame(maxWidth: 7, maxHeight: .infinity)
 
             Rectangle()
@@ -167,7 +197,7 @@ struct AssessmentView: View {
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(artemisColor)
+                .foregroundColor(.primary)
                 .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
@@ -218,7 +248,7 @@ struct AssessmentView: View {
                 .zIndex(1)
 
             if dragWidthRight > 0 {
-                artemisColor
+                Color.primary
                     .frame(maxWidth: 7, maxHeight: .infinity)
                 Image(systemName: "minus")
                     .resizable()
@@ -235,23 +265,28 @@ struct AssessmentView: View {
         // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
-                CorrectionSidebarView()
-                    .frame(width: dragWidthRight)
-                    .redacted(reason: .placeholder)
+                EmptyView()
             } else {
                 CorrectionSidebarView()
-                    .frame(width: dragWidthRight)
             }
         }
     }
 }
 
+extension Color {
+    public static var primary: Color {
+        Color("primary")
+    }
+}
+
 struct AssessmentView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel(readOnly: false)
+    static let codeEditor = CodeEditorViewModel()
+
     static var previews: some View {
-        AuthenticatedPreview {
-            AssessmentView(exerciseId: 5284)
-                .environmentObject(AssessmentViewModel())
-        }
-        .previewInterfaceOrientation(.landscapeLeft)
+        AssessmentView(exerciseId: 5284)
+            .environmentObject(assessment)
+            .environmentObject(codeEditor)
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
