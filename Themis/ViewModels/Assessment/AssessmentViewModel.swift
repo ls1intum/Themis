@@ -17,6 +17,7 @@ class AssessmentViewModel: ObservableObject {
     func initRandomSubmission(exerciseId: Int) async {
         do {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
+            feedback.feedbacks = submission?.results?.last?.feedbacks ?? []
             self.showSubmission = true
         } catch {
             print(error)
@@ -28,8 +29,10 @@ class AssessmentViewModel: ObservableObject {
         do {
             if readOnly {
                 self.submission = try await ArtemisAPI.getSubmissionForReadOnly(participationId: id)
+                feedback.feedbacks = submission?.feedbacks ?? []
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
+                feedback.feedbacks = submission?.results?.last?.feedbacks ?? []
             }
             self.showSubmission = true
         } catch {

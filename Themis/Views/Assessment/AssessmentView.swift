@@ -73,8 +73,8 @@ struct AssessmentView: View {
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
                             Task {
-                                if let id = vm.submission?.id {
-                                    await vm.sendAssessment(participationId: id, submit: false)
+                                if let pId = vm.submission?.participation.id {
+                                    await vm.sendAssessment(participationId: pId, submit: false)
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
