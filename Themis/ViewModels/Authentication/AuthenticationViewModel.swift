@@ -27,7 +27,7 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     var validURL: Bool {
-        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return false }
         if let match = detector.firstMatch(in: serverURL, options: [], range: NSRange(location: 0, length: serverURL.utf16.count)) {
             return match.range.length == serverURL.utf16.count
         } else {
