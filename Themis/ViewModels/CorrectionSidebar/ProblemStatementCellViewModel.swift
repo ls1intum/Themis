@@ -15,10 +15,11 @@ protocol ProblemStatementPart {
 }
 
 struct ProblemStatementPlantUML: ProblemStatementPart {
+    let colorScheme: ColorScheme
     let text: String
     var url: URL? {
         var url = URL(string: "https://artemis-staging.ase.in.tum.de/api/plantuml/png")
-        url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text)])
+        url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text), URLQueryItem(name: "useDarkTheme", value: String(colorScheme != .light))])
         return url
     }
 }
@@ -31,7 +32,7 @@ class ProblemStatementCellViewModel: ObservableObject {
 
     @Published var problemStatementParts: [any ProblemStatementPart] = []
 
-    func convertProblemStatement(problemStatement: String) {
+    func convertProblemStatement(problemStatement: String, colorScheme: ColorScheme) {
         var index = problemStatement.startIndex
         // as long as problemstatemnt is not done
         while index < problemStatement.endIndex {
@@ -51,8 +52,8 @@ class ProblemStatementCellViewModel: ObservableObject {
 
             // Append plantuml
             substring = String(problemStatement[rangeStart.lowerBound...rangeEnd.upperBound])
-            substring = replaceTestsColor(substring)
-            problemStatementParts.append(ProblemStatementPlantUML(text: substring))
+            substring = replaceTestsColor(substring, colorScheme)
+            problemStatementParts.append(ProblemStatementPlantUML(colorScheme: colorScheme, text: substring))
 
             index = problemStatement.index(rangeEnd.upperBound, offsetBy: 1)
         }
@@ -64,9 +65,12 @@ class ProblemStatementCellViewModel: ObservableObject {
             .replacingOccurrences(of: "](.*())", with: "", options: .regularExpression) // to remove tests
     }
 
-    func replaceTestsColor(_ problemStatement: String) -> String {
+    func replaceTestsColor(_ problemStatement: String, _ colorSchemeVariable: ColorScheme) -> String {
         return problemStatement
-            .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: "black", options: .regularExpression) // replace test color by red (or green)
+                .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: colorSchemeVariable == .light ? "black" : "white", options: .regularExpression)
+
+        // return problemStatement
+            // .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: "black", options: .regularExpression) // replace test color by red (or green)
             // .replacingOccurrences(of: "testsColor(testAttributes[.*])", with: "", options: .regularExpression)
             // .replacingOccurrences(of: "testsColor(testMethods[.*])", with: "", options: .regularExpression)
             // .replacingOccurrences(of: "testsColor(testClass[.*])", with: "", options: .regularExpression)
