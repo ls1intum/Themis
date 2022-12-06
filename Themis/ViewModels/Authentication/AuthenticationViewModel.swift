@@ -13,7 +13,7 @@ class AuthenticationViewModel: ObservableObject {
     /// Updating it will update the RESTController base URL and will save it in the User Defaults
     @Published var serverURL: String {
         didSet {
-            guard let url = URL(string: serverURL) else {
+            guard let url = generateURL(serverURL: serverURL) else {
                 return
             }
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
@@ -25,6 +25,20 @@ class AuthenticationViewModel: ObservableObject {
             }
         }
     }
+    
+    var validURL: Bool {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return false }
+        if let match = detector.firstMatch(in: serverURL, options: [], range: NSRange(location: 0, length: serverURL.utf16.count)) {
+            return match.range.length == serverURL.utf16.count
+        } else {
+            return false
+        }
+    }
+    
+    var loginDisabled: Bool {
+        !validURL || username.count < 1 || password.count < 1
+    }
+    
     @Published var username: String = stagingUser ?? ""
     @Published var password: String = stagingPassword ?? ""
     @Published var rememberMe: Bool = true
@@ -40,7 +54,7 @@ class AuthenticationViewModel: ObservableObject {
 
     init(serverURL: String) {
         self.serverURL = serverURL
-        if let serverURL = URL(string: serverURL) {
+        if let serverURL = generateURL(serverURL: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
             Authentication.shared = Authentication(for: serverURL)
@@ -51,6 +65,20 @@ class AuthenticationViewModel: ObservableObject {
             observeAuthenticationStatus()
             Authentication.shared.checkAuth()
         }
+    }
+    
+    private func generateURL(serverURL: String) -> URL? {
+        guard let url = URL(string: serverURL) else { return nil }
+        return cleanURL(url: url)
+    }
+    
+    private func cleanURL(url: URL) -> URL? {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        guard let components else { return nil }
+        var newComponents = URLComponents()
+        newComponents.scheme = components.scheme
+        newComponents.host = components.host
+        return newComponents.url
     }
 
     convenience init() {
