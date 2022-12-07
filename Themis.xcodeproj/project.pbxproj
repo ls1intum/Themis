@@ -28,12 +28,14 @@
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
 		DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */; };
 		DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */; };
-		DA6E32932936156E001D599F /* BearerTokenAuthToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */; };
+		DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
 		E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */; };
 		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
+		E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */; };
+		E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */; };
 		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
 		E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED4291E57640092CE58 /* HTTPMethod.swift */; };
 		E2192ED7291E57810092CE58 /* RESTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED6291E57810092CE58 /* RESTError.swift */; };
@@ -113,12 +115,14 @@
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
 		DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAuthenticationViewModel.swift; sourceTree = "<group>"; };
 		DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPreview.swift; sourceTree = "<group>"; };
-		DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearerTokenAuthToggle.swift; sourceTree = "<group>"; };
+		DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationEnvironmentVariables.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
 		E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorViewModel.swift; sourceTree = "<group>"; };
 		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
+		E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchView.swift; sourceTree = "<group>"; };
+		E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchViewModel.swift; sourceTree = "<group>"; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
 		E2192ED4291E57640092CE58 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		E2192ED6291E57810092CE58 /* RESTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
@@ -365,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				DA0687C1292FB4870091B88A /* SubmissionListView.swift */,
+				E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */,
 			);
 			path = Submissions;
 			sourceTree = "<group>";
@@ -373,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */,
+				E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */,
 			);
 			path = SubmissionList;
 			sourceTree = "<group>";
@@ -393,7 +399,6 @@
 			children = (
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
-				DA6E32922936156E001D599F /* BearerTokenAuthToggle.swift */,
 			);
 			name = API;
 			path = Themis/API;
@@ -419,6 +424,7 @@
 			children = (
 				E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */,
 				DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */,
+				DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */,
 			);
 			name = Authentication;
 			path = Themis/Views/Authentication;
@@ -662,7 +668,6 @@
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
-				DA6E32932936156E001D599F /* BearerTokenAuthToggle.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
@@ -672,6 +677,7 @@
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
 				DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
+				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
 				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
@@ -689,7 +695,9 @@
 				E2E67485292033EE0081238B /* CourseListView.swift in Sources */,
 				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
+				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
 				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
+				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,

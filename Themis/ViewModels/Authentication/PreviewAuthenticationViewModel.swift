@@ -18,21 +18,17 @@
 import Foundation
 
 class PreviewAuthenticationViewModel: AuthenticationViewModel {
-    static let SERVER_ENV_VAR = "ARTEMIS_STAGING_SERVER"
-    static let USER_ENV_VAR = "ARTEMIS_STAGING_USER"
-    static let PASSWORD_ENV_VAR = "ARTEMIS_STAGING_PASSWORD"
-
     init() {
-        guard let serverURL = ProcessInfo.processInfo.environment[Self.SERVER_ENV_VAR] else {
-            fatalError("Set \(Self.SERVER_ENV_VAR) in the environment to use PreviewAuthenticationViewModel.")
+        guard let serverURL = stagingServer else {
+            fatalError("Set the staging server in the environment to use PreviewAuthenticationViewModel.")
         }
         super.init(serverURL: serverURL)
-        guard let username = ProcessInfo.processInfo.environment[Self.USER_ENV_VAR] else {
-            fatalError("Set \(Self.USER_ENV_VAR) in the environment to use PreviewAuthenticationViewModel.")
+        guard let username = stagingUser else {
+            fatalError("Set the staging user in the environment to use PreviewAuthenticationViewModel.")
         }
         self.username = username
-        guard let password = ProcessInfo.processInfo.environment[Self.PASSWORD_ENV_VAR] else {
-            fatalError("Set \(Self.PASSWORD_ENV_VAR) in the environment to use PreviewAuthenticationViewModel.")
+        guard let password = stagingPassword else {
+            fatalError("Set the staging password in the environment to use PreviewAuthenticationViewModel.")
         }
         self.password = password
         Task {

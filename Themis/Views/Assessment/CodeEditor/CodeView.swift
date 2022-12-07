@@ -7,21 +7,20 @@ import UIKit
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
     @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var file: Node
 
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
-        let viewController = ViewController()
+        let viewController = ViewController(cvm: cvm)
         viewController.textView.editorDelegate = context.coordinator
-        cvm.applySyntaxHighlighting(on: viewController.textView)
+        viewController.file = file
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         uiViewController.fontSize = cvm.editorFontSize
-        cvm.applySyntaxHighlighting(on: uiViewController.textView)
-        if let selectedFile = cvm.selectedFile {
-            uiViewController.textView.highlightedRanges = cvm.inlineHighlights[selectedFile.path] ?? []
-        }
+        uiViewController.file = file
+        uiViewController.textView.highlightedRanges = cvm.inlineHighlights[file.path] ?? []
     }
 
     func makeCoordinator() -> Coordinator {
@@ -35,12 +34,11 @@ struct CodeView: UIViewControllerRepresentable {
             self.parent = parent
         }
 
+        @MainActor
         func textViewDidChangeSelection(_ textView: TextView) {
             if textView.selectedRange.length > 0 {
                 parent.cvm.currentlySelecting = true
-                parent.cvm.selectedLineNumber = (parent.cvm.selectedFile?.lines?.firstIndex {
-                    $0.contains(textView.selectedRange.location)
-                } ?? 0) + 1
+                parent.cvm.selectedSection = textView.selectedRange
             } else {
                 parent.cvm.currentlySelecting = false
             }
@@ -50,13 +48,36 @@ struct CodeView: UIViewControllerRepresentable {
 
 // view controller that manages runestone UITextView
 class ViewController: UIViewController {
+    let cvm: CodeEditorViewModel
     let textView = TextView()
+    let generator = UIImpactFeedbackGenerator(style: .light)
+
     var fontSize = 14.0 {
         didSet {
-            textView.setState(TextViewState(text: textView.text,
-                                            theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
+            if textView.theme.font.pointSize != fontSize {
+                textView.setState(TextViewState(text: textView.text,
+                                                theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
+                applySyntaxHighlighting(on: textView)
+            }
         }
     }
+    var file: Node? {
+        didSet {
+            if textView.text != file?.code {
+                applySyntaxHighlighting(on: textView)
+            }
+        }
+    }
+
+    init(cvm: CodeEditorViewModel) {
+        self.cvm = cvm
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
@@ -69,9 +90,18 @@ class ViewController: UIViewController {
             textView.topAnchor.constraint(equalTo: view.topAnchor),
             textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        setupLongPressInteraction()
+    }
+
+    @objc
+    func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        guard gestureRecognizer.state == .began else { return }
+        self.cvm.showAddFeedback.toggle()
+        generator.impactOccurred() // haptic feedback
     }
 
     private func setCustomization(on textView: TextView) {
+        textView.backgroundColor = .systemBackground
         textView.lineHeightMultiplier = 1.3
         textView.showLineNumbers = true
         textView.showSpaces = true
@@ -79,5 +109,22 @@ class ViewController: UIViewController {
         textView.isLineWrappingEnabled = true
         textView.isEditable = false
         textView.lineBreakMode = .byWordWrapping
+    }
+
+    private func applySyntaxHighlighting(on textView: TextView) {
+        if let file = file, let code = file.code {
+            switch file.fileExtension {
+            case .swift:
+                textView.setState(TextViewState(text: code, theme: ThemeSettings(font: .systemFont(ofSize: fontSize)), language: .swift))
+            case .java:
+                textView.setState(TextViewState(text: code, theme: ThemeSettings(font: .systemFont(ofSize: fontSize)), language: .java))
+            case .other:
+                textView.setState(TextViewState(text: code, theme: ThemeSettings(font: .systemFont(ofSize: fontSize))))
+            }
+        }
+    }
+    private func setupLongPressInteraction() {
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        textView.addGestureRecognizer(longPressGestureRecognizer)
     }
 }

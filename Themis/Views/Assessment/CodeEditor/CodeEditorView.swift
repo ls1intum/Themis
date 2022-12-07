@@ -8,14 +8,14 @@ struct CodeEditorView: View {
 
     var body: some View {
         VStack {
-            if cvm.selectedFile != nil {
+            if let file = cvm.selectedFile {
                 VStack {
                     HStack {
                         Spacer()
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView()
                     }
-                    CodeView()
+                    CodeView(file: file)
                 }
             } else {
                 Text("Select a file")

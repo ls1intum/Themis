@@ -43,3 +43,15 @@ struct CorrectionSidebarView: View {
         }
     }
 }
+
+struct CorrectionSidebarView_Previews: PreviewProvider {
+    static let assessment = AssessmentViewModel(readOnly: false)
+    static let codeEditor = CodeEditorViewModel()
+
+    static var previews: some View {
+        CorrectionSidebarView()
+            .environmentObject(assessment)
+            .environmentObject(codeEditor)
+            .previewInterfaceOrientation(.landscapeLeft)
+    }
+}

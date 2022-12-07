@@ -11,9 +11,9 @@ import Combine
 class AuthenticationViewModel: ObservableObject {
     /// This Variable is for the serverURL TextField
     /// Updating it will update the RESTController base URL and will save it in the User Defaults
-    @Published var serverURL: String = "" {
+    @Published var serverURL: String {
         didSet {
-            guard let url = URL(string: serverURL) else {
+            guard let url = generateURL(serverURL: serverURL) else {
                 return
             }
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
@@ -25,8 +25,22 @@ class AuthenticationViewModel: ObservableObject {
             }
         }
     }
-    @Published var username: String = ""
-    @Published var password: String = ""
+    
+    var validURL: Bool {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return false }
+        if let match = detector.firstMatch(in: serverURL, options: [], range: NSRange(location: 0, length: serverURL.utf16.count)) {
+            return match.range.length == serverURL.utf16.count
+        } else {
+            return false
+        }
+    }
+    
+    var loginDisabled: Bool {
+        !validURL || username.count < 1 || password.count < 1
+    }
+    
+    @Published var username: String = stagingUser ?? ""
+    @Published var password: String = stagingPassword ?? ""
     @Published var rememberMe: Bool = true
     /// If this variable is true the User is authenticated
     @Published var authenticated: Bool = false
@@ -40,7 +54,7 @@ class AuthenticationViewModel: ObservableObject {
 
     init(serverURL: String) {
         self.serverURL = serverURL
-        if let serverURL = URL(string: serverURL) {
+        if let serverURL = generateURL(serverURL: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
             Authentication.shared = Authentication(for: serverURL)
@@ -52,9 +66,23 @@ class AuthenticationViewModel: ObservableObject {
             Authentication.shared.checkAuth()
         }
     }
+    
+    private func generateURL(serverURL: String) -> URL? {
+        guard let url = URL(string: serverURL) else { return nil }
+        return cleanURL(url: url)
+    }
+    
+    private func cleanURL(url: URL) -> URL? {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        guard let components else { return nil }
+        var newComponents = URLComponents()
+        newComponents.scheme = components.scheme
+        newComponents.host = components.host
+        return newComponents.url
+    }
 
     convenience init() {
-        self.init(serverURL: "https://artemis-staging.ase.in.tum.de")
+        self.init(serverURL: stagingServer ?? "https://artemis-staging.ase.in.tum.de")
     }
 
     /// Observing the Authentication Token will always change the @Published authenticated Bool  to the correct Value
