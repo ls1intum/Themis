@@ -59,6 +59,7 @@ struct AssessmentView: View {
                             Text("Cancel")
                         }
                     }
+                    .foregroundColor(.white)
                 } else {
                     Button {
                         Task {
@@ -69,6 +70,7 @@ struct AssessmentView: View {
                             Image(systemName: "chevron.left")
                             Text("Cancel")
                         }
+                        .foregroundColor(.white)
                     }
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
@@ -122,6 +124,7 @@ struct AssessmentView: View {
                 } label: {
                     Image(systemName: "gearshape")
                 }
+                .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -133,6 +136,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Save")
                 }
+                .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -145,6 +149,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Submit")
                 }
+                .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly)
             }
         }
@@ -288,5 +293,15 @@ struct AssessmentView_Previews: PreviewProvider {
             .environmentObject(assessment)
             .environmentObject(codeEditor)
             .previewInterfaceOrientation(.landscapeLeft)
+    }
+}
+
+struct NavigationBarButton: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.white)
+            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
+            .background(.cyan)
+            .cornerRadius(12)
     }
 }
