@@ -14,6 +14,10 @@ struct FiletreeSidebarView: View {
                 List {
                     OutlineGroup(fileTree, id: \.path, children: \.children) { tree in
                         Text(tree.name)
+                            .padding(.horizontal)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            .background(tree == cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.white))
+                            .cornerRadius(10)
                             .tag(tree)
                             .onTapGesture {
                                 if tree.type == .file {
@@ -23,8 +27,10 @@ struct FiletreeSidebarView: View {
                                     }
                                 }
                             }
-                    }.listRowSeparator(.hidden)
-                }.listStyle(.inset)
+                    }
+                    .listRowSeparator(.hidden)
+                }
+                .listStyle(.inset)
             }
         }
     }
