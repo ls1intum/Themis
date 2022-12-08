@@ -9,12 +9,12 @@ import SwiftUI
 
 struct AuthenticationView: View {
     enum SecureFieldFocus { case plain, secure }
-    
+
     @ObservedObject var authenticationVM: AuthenticationViewModel
     @State private var isSecured: Bool = true
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var passwordFocus: SecureFieldFocus?
-    
+
     var body: some View {
         VStack {
             Image("AppIconVectorTransparent")
@@ -26,7 +26,7 @@ struct AuthenticationView: View {
                 .padding()
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
                 .textFieldStyle(LoginTextFieldStyle(validInput: authenticationVM.validURL))
-                
+
             TextField("Username", text: $authenticationVM.username)
                 .textFieldStyle(LoginTextFieldStyle())
                 .textInputAutocapitalization(.never)
@@ -60,7 +60,7 @@ struct AuthenticationView: View {
         }.disabled(authenticationVM.loginDisabled)
 
     }
-    
+
     var passwordField: some View {
         ZStack(alignment: .trailing) {
             Group {
