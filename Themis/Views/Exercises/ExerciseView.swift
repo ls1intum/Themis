@@ -32,7 +32,7 @@ struct ExerciseView: View {
                             .foregroundColor(.green)
                     }
                     Section("Submission") {
-                        SubmissionListView(exerciseId: exercise.id)
+                        SubmissionListView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
                     }
                 }
             } else {
@@ -40,7 +40,7 @@ struct ExerciseView: View {
             }
         }
         .navigationDestination(isPresented: $vm.showSubmission) {
-            AssessmentView(exerciseId: exercise.id)
+            AssessmentView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
                 .environmentObject(vm)
                 .environmentObject(cvm)
         }
