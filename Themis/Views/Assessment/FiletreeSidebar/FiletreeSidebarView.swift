@@ -17,7 +17,7 @@ struct FiletreeSidebarView: View {
                             .bold(tree == cvm.selectedFile)
                             .padding(.horizontal)
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                            .background(tree == cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+                            .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
                             .cornerRadius(10)
                             .tag(tree)
                             .onTapGesture {
