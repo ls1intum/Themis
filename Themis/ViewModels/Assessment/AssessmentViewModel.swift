@@ -4,7 +4,7 @@ import Combine
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: SubmissionForAssessment?
-    @Published var feedback: AssessmentResult = AssessmentResult(feedbacks: [])
+    @Published var feedback: AssessmentResult = AssessmentResult()
     @Published var showSubmission: Bool = false
 
     let readOnly: Bool
@@ -48,7 +48,7 @@ class AssessmentViewModel: ObservableObject {
             print(error)
         }
         self.submission = nil
-        self.feedback = AssessmentResult(feedbacks: [])
+        self.feedback = AssessmentResult()
     }
 
     @MainActor

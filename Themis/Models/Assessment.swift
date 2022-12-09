@@ -18,7 +18,17 @@ struct AssessmentResult: Encodable {
     var score: Double {
         feedbacks.reduce(0) { $0 + $1.credits }
     }
-    var feedbacks: [AssessmentFeedback]
+
+    private var _feedbacks: [AssessmentFeedback] = []
+
+    var feedbacks: [AssessmentFeedback] {
+        get {
+            _feedbacks
+        }
+        set(new) {
+            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+        }
+    }
 
     enum CodingKeys: CodingKey {
         case score
@@ -34,14 +44,11 @@ struct AssessmentResult: Encodable {
     var generalFeedback: [AssessmentFeedback] {
         return feedbacks
             .filter { $0.type == .general }
-            .sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
-            .sorted(by: >)
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
             .filter { $0.type == .inline }
-            .sorted(by: >)
     }
 
     mutating func addFeedback(detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) -> AssessmentFeedback {
