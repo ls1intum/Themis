@@ -28,10 +28,27 @@ struct CodeEditorView: View {
 }
 
 struct CodeViewNew: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var file: Node
     @Binding var fontSize: CGFloat
     
     var body: some View {
-        CodeEditor(source: file.code ?? "", language: .swift, fontSize: $fontSize)
+        CodeEditor(source: file.code ?? "loading...", language: .swift, theme: theme, fontSize: $fontSize, flags: editorFlags)
+    }
+    
+    var editorFlags: CodeEditor.Flags {
+        if colorScheme == .dark {
+            return .blackBackground
+        } else {
+            return CodeEditor.Flags()
+        }
+    }
+    
+    var theme: CodeEditor.ThemeName {
+        if colorScheme == .dark {
+            return .ocean
+        } else {
+            return .xcode
+        }
     }
 }

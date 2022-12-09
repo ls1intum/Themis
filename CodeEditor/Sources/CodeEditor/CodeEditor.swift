@@ -159,6 +159,7 @@ public struct CodeEditor: View {
    * Flags available for `CodeEditor`, currently just:
    * - `.editable`
    * - `.selectable`
+   * - `.blackBackground`
    */
   @frozen public struct Flags: OptionSet {
     public let rawValue : UInt8
@@ -174,10 +175,12 @@ public struct CodeEditor: View {
     /// If the user starts a newline, the editor automagically adds the same
     /// whitespace as on the previous line.
     public static let smartIndent = Flags(rawValue: 1 << 2)
+    public static let blackBackground = Flags(rawValue: 1 << 3)
     
     public static let defaultViewerFlags : Flags = [ .selectable ]
     public static let defaultEditorFlags : Flags =
                         [ .selectable, .editable, .smartIndent ]
+    
   }
   
   @frozen public enum IndentStyle: Equatable {

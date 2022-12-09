@@ -228,6 +228,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
     
     textView.isEditable   = flags.contains(.editable)
     textView.isSelectable = flags.contains(.selectable)
+    textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
   }
 
   #if os(macOS)

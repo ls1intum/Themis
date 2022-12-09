@@ -153,10 +153,9 @@ struct AssessmentView: View {
             }
         }
         .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                AppearanceSettingsView(showSettings: $showSettings)
-                    .navigationTitle("Appearance settings")
-            }
+            AppearanceSettingsView(showSettings: $showSettings)
+                .environmentObject(cvm)
+                .navigationTitle("Appearance settings")
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             EditFeedbackView(showEditFeedback: $cvm.showAddFeedback, feedback: nil, edit: false, type: .inline)

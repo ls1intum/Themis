@@ -25,6 +25,7 @@ public extension CodeEditor.ThemeName {
   static var pojoaque  = CodeEditor.ThemeName(rawValue: "pojoaque")
   static var agate     = CodeEditor.ThemeName(rawValue: "agate")
   static var ocean     = CodeEditor.ThemeName(rawValue: "ocean")
+  static var xcode     = CodeEditor.ThemeName(rawValue: "xcode")
   
   static var atelierSavannaLight =
                CodeEditor.ThemeName(rawValue: "atelier-savanna-light")
