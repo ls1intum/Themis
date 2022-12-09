@@ -104,8 +104,8 @@ class ViewController: UIViewController {
         textView.backgroundColor = .systemBackground
         textView.lineHeightMultiplier = 1.3
         textView.showLineNumbers = true
-        textView.showSpaces = true
-        textView.showLineBreaks = true
+        textView.showSpaces = false
+        textView.showLineBreaks = false
         textView.isLineWrappingEnabled = true
         textView.isEditable = false
         textView.lineBreakMode = .byWordWrapping

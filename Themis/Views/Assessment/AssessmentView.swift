@@ -14,7 +14,10 @@ struct AssessmentView: View {
     @State private var correctionAsPlaceholder: Bool = true
     @State private var showCancelDialog = false
 
+    private let minRightSnapWidth: CGFloat = 185
+
     let exerciseId: Int
+    let exerciseTitle: String
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -59,6 +62,7 @@ struct AssessmentView: View {
                             Text("Cancel")
                         }
                     }
+                    .foregroundColor(.white)
                 } else {
                     Button {
                         Task {
@@ -69,6 +73,7 @@ struct AssessmentView: View {
                             Image(systemName: "chevron.left")
                             Text("Cancel")
                         }
+                        .foregroundColor(.white)
                     }
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
@@ -93,18 +98,14 @@ struct AssessmentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {
-                VStack(alignment: .leading) {
-                    Group {
-                        Text("Exercise 1")
-                            .font(.title)
-                            .bold()
-                        Text("Correction")
-                            .font(.caption)
-                            .bold()
-                    }
-                    .foregroundColor(.white)
-                    Spacer(minLength: 20)
+                HStack(alignment: .center) {
+                    Text(exerciseTitle)
+                        .bold()
+                        .font(.title)
+                    Image(systemName: vm.readOnly ? "eyeglasses" : "pencil.and.outline")
+                        .font(.title3)
                 }
+                .foregroundColor(.white)
             }
             if cvm.currentlySelecting {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -122,6 +123,7 @@ struct AssessmentView: View {
                 } label: {
                     Image(systemName: "gearshape")
                 }
+                .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -133,6 +135,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Save")
                 }
+                .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -145,6 +148,7 @@ struct AssessmentView: View {
                 } label: {
                     Text("Submit")
                 }
+                .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly)
             }
         }
@@ -175,8 +179,9 @@ struct AssessmentView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            let minWidth: CGFloat = UIScreen.main.bounds.size.width * 0.1
-                            let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 0.3
+                            let screenWidth: CGFloat = UIScreen.main.bounds.size.width
+                            let minWidth: CGFloat = screenWidth < 130 ? screenWidth : 130
+                            let maxWidth: CGFloat = screenWidth * 0.3 > minWidth ? screenWidth * 0.3 : 1.5 * minWidth
                             let delta = gesture.translation.width
                             dragWidthLeft += delta
                             if dragWidthLeft > maxWidth {
@@ -184,6 +189,8 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
+
+                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -219,7 +226,7 @@ struct AssessmentView: View {
                 .onTapGesture {
                     if dragWidthRight <= 0 {
                         withAnimation {
-                            dragWidthRight = UIScreen.main.bounds.size.width * 0.2
+                            dragWidthRight = minRightSnapWidth
                             correctionAsPlaceholder = false
                         }
                     }
@@ -228,7 +235,9 @@ struct AssessmentView: View {
                     DragGesture()
                         .onChanged { gesture in
                             let minWidth: CGFloat = 0
-                            let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 0.3
+                            let screenWidth: CGFloat = UIScreen.main.bounds.size.width
+                            let maxWidth: CGFloat = screenWidth * 0.3 > minRightSnapWidth ? screenWidth * 0.3 : 1.5 * minRightSnapWidth
+
                             let delta = gesture.translation.width
                             dragWidthRight -= delta
                             if dragWidthRight > maxWidth {
@@ -237,10 +246,11 @@ struct AssessmentView: View {
                                 dragWidthRight = minWidth
                             }
 
-                            correctionAsPlaceholder = dragWidthRight < UIScreen.main.bounds.size.width * 0.1 ? true : false
+                            correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
-                            if dragWidthRight < UIScreen.main.bounds.size.width * 0.1 {
+                            print(dragWidthRight)
+                            if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
                         }
@@ -277,6 +287,10 @@ extension Color {
     public static var primary: Color {
         Color("primary")
     }
+
+    public static var secondary: Color {
+        Color("secondary")
+    }
 }
 
 struct AssessmentView_Previews: PreviewProvider {
@@ -284,9 +298,19 @@ struct AssessmentView_Previews: PreviewProvider {
     static let codeEditor = CodeEditorViewModel()
 
     static var previews: some View {
-        AssessmentView(exerciseId: 5284)
+        AssessmentView(exerciseId: 5284, exerciseTitle: "Example Exercise")
             .environmentObject(assessment)
             .environmentObject(codeEditor)
             .previewInterfaceOrientation(.landscapeLeft)
+    }
+}
+
+struct NavigationBarButton: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.white)
+            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
+            .background(Color.secondary)
+            .cornerRadius(12)
     }
 }
