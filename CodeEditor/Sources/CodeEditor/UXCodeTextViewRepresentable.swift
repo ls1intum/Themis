@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 #if os(macOS)
 typealias UXViewRepresentable = NSViewRepresentable
@@ -53,7 +54,8 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
                 indentStyle : CodeEditor.IndentStyle,
                 autoPairs   : [ String : String ],
                 inset       : CGSize,
-                autoscroll  : Bool)
+                autoscroll  : Bool,
+                highlightedRanges: [HighlightedRange])
     {
         self.source      = source
         self.selection = selection
@@ -65,6 +67,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
         self.autoPairs   = autoPairs
         self.inset       = inset
         self.autoscroll = autoscroll
+        self.highlightedRanges = highlightedRanges
     }
     
     private var source      : Binding<String>
@@ -77,6 +80,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
     private let inset       : CGSize
     private let autoPairs   : [ String : String ]
     private let autoscroll  : Bool
+    private let highlightedRanges : [HighlightedRange]
     
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -226,7 +230,6 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
             }
         }
         
-        
         textView.isEditable   = flags.contains(.editable)
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
@@ -271,6 +274,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.textContainerInset = edgeInsets
+        textView.highlightedRanges = highlightedRanges
 #if os(iOS)
         textView.autocapitalizationType = .none
         textView.smartDashesType = .no
@@ -321,7 +325,8 @@ struct UXCodeTextViewRepresentable_Previews: PreviewProvider {
                                     indentStyle : .system,
                                     autoPairs   : [:],
                                     inset       : .init(width: 8, height: 8),
-                                    autoscroll  : false)
+                                    autoscroll  : false,
+                                    highlightedRanges: [])
         .frame(width: 200, height: 100)
         
         UXCodeTextViewRepresentable(source: .constant("let a = 5"),
@@ -333,7 +338,8 @@ struct UXCodeTextViewRepresentable_Previews: PreviewProvider {
                                     indentStyle : .system,
                                     autoPairs   : [:],
                                     inset       : .init(width: 8, height: 8),
-                                    autoscroll  : false)
+                                    autoscroll  : false,
+                                    highlightedRanges: [])
         .frame(width: 200, height: 100)
         
         UXCodeTextViewRepresentable(
@@ -351,7 +357,8 @@ struct UXCodeTextViewRepresentable_Previews: PreviewProvider {
             indentStyle : .system,
             autoPairs   : [:],
             inset       : .init(width: 8, height: 8),
-            autoscroll  : false
+            autoscroll  : false,
+            highlightedRanges: []
         )
         .frame(width: 540, height: 200)
     }

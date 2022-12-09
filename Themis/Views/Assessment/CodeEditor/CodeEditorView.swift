@@ -33,7 +33,12 @@ struct CodeViewNew: View {
     @Binding var fontSize: CGFloat
     
     var body: some View {
-        CodeEditor(source: file.code ?? "loading...", language: .swift, theme: theme, fontSize: $fontSize, flags: editorFlags)
+        CodeEditor(source: file.code ?? "loading...", language: .swift, theme: theme, fontSize: $fontSize, flags: editorFlags, highlightedRanges: mockHighlights)
+    }
+    
+    var mockHighlights: [HighlightedRange] {
+        return [HighlightedRange(range: NSMakeRange(10, 10), color: UIColor.yellow),
+                HighlightedRange(range: NSMakeRange(30, 10), color: UIColor.red)]
     }
     
     var editorFlags: CodeEditor.Flags {
