@@ -82,6 +82,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             hlTextStorage.highlightDelegate = self
         }
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        self.addGestureRecognizer(tap)
+        
 #if os(macOS)
         isVerticallyResizable = true
         maxSize               = .init(width: 0, height: 1_000_000)
@@ -101,6 +104,12 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        let touchPoint = sender?.location(in: self.textInputView)
+        guard let touchPoint else { return }
+        let glyphIndex = self.layoutManager.glyphIndex(for: touchPoint, in: self.textContainer)
+        print("Glyph Index: \(glyphIndex) TouchPoint: \(touchPoint)")
+    }
     
     // MARK: - Actions
     
