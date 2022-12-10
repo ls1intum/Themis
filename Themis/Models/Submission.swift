@@ -55,7 +55,13 @@ struct ExerciseOfSubmission: Codable {
 struct SubmissionForAssessment: Codable {
     let id: Int
     let participation: ParticipationForAssessment
-    let feedbacks: [ArtemisFeedback]?
+    let feedbacks: [AssessmentFeedback]?
+    let results: [SavedAssessmentResults]?
+}
+
+struct SavedAssessmentResults: Codable {
+    let score: Double?
+    let feedbacks: [AssessmentFeedback]
 }
 
 struct GradingCriterion: Codable, Identifiable {
@@ -73,28 +79,14 @@ struct GradingInstruction: Codable, Identifiable {
     var usageCount: Int
 }
 
-enum AssessmentType: String, Codable {
-    case automatic = "AUTOMATIC"
-    case semi_automatic = "SEMI_AUTOMATIC"
-    case manual = "MANUAL"
-}
-
 struct ParticipationResult: Codable {
     let submission: SubmissionFromResult
-    let feedbacks: [ArtemisFeedback]
+    let feedbacks: [AssessmentFeedback]
     let participation: ParticipationForAssessment
 }
 
 struct SubmissionFromResult: Codable {
     let id: Int
-}
-
-struct ArtemisFeedback: Codable {
-    let text: String
-    let detailText: String?
-    let credits: Double
-    let positive: Bool
-    let type: AssessmentType
 }
 
 extension ArtemisAPI {
@@ -140,7 +132,8 @@ extension ArtemisAPI {
         return SubmissionForAssessment(
             id: pr.submission.id,
             participation: pr.participation,
-            feedbacks: pr.feedbacks
+            feedbacks: pr.feedbacks,
+            results: nil
         )
     }
 }

@@ -1,5 +1,3 @@
-// swiftlint:disable line_length
-
 import SwiftUI
 
 struct AssessmentView: View {
@@ -78,8 +76,8 @@ struct AssessmentView: View {
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
                             Task {
-                                if let id = vm.submission?.id {
-                                    await vm.sendAssessment(participationId: id, submit: false)
+                                if let pId = vm.submission?.participation.id {
+                                    await vm.sendAssessment(participationId: pId, submit: false)
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
@@ -93,7 +91,11 @@ struct AssessmentView: View {
                             }
                         }
                     } message: {
-                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
+                        Text("""
+                             Either discard the assessment \
+                             and release the lock (recommended) \
+                             or keep the lock and save the assessment without submitting it.
+                             """)
                     }
                 }
             }

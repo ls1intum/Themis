@@ -5,6 +5,8 @@
 //  Created by Andreas Cselovszky on 14.11.22.
 //
 
+// swiftlint:disable line_length
+
 import Foundation
 
 enum FeedbackType {
@@ -16,7 +18,17 @@ struct AssessmentResult: Encodable {
     var score: Double {
         feedbacks.reduce(0) { $0 + $1.credits }
     }
-    var feedbacks: [AssessmentFeedback]
+
+    private var _feedbacks: [AssessmentFeedback] = []
+
+    var feedbacks: [AssessmentFeedback] {
+        get {
+            _feedbacks
+        }
+        set(new) {
+            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+        }
+    }
 
     enum CodingKeys: CodingKey {
         case score
@@ -30,15 +42,20 @@ struct AssessmentResult: Encodable {
     }
 
     var generalFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.type == .general }
-    }
-    var inlineFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.type == .inline }
+        return feedbacks
+            .filter { $0.type == .general }
     }
 
-    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType,
-                              file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) {
-        feedbacks.append(AssessmentFeedback(id: id, detailText: detailText, credits: credits, type: type, file: file, lines: lines, columns: columns))
+    var inlineFeedback: [AssessmentFeedback] {
+        feedbacks
+            .filter { $0.type == .inline }
+    }
+
+    mutating func addFeedback(detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) -> AssessmentFeedback {
+        let text = makeText(file: file, lines: lines, columns: columns)
+        let feedback = AssessmentFeedback(text: text, detailText: detailText, credits: credits, type: type, file: file)
+        feedbacks.append(feedback)
+        return feedback
     }
 
     mutating func deleteFeedback(id: UUID) {
@@ -51,16 +68,13 @@ struct AssessmentResult: Encodable {
         }
         feedbacks[index].updateFeedback(detailText: detailText, credits: credits)
     }
-}
 
-struct AssessmentFeedback: Encodable, Identifiable {
-    let id: UUID
-    var text: String {
+    func makeText(file: Node?, lines: NSRange?, columns: NSRange?) -> String? {
         guard let file = file, let lines = lines else {
-            return ""
+            return nil
         }
         if lines.location == 0 {
-            return ""
+            return nil
         }
         guard let columns = columns else {
             return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
@@ -69,32 +83,74 @@ struct AssessmentFeedback: Encodable, Identifiable {
             return file.name + " at Line: \(lines.location) Col: \(columns.location)"
         }
         return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
-    } /// max length = 500
-    var detailText: String /// max length = 5000
+    }
+}
+
+struct AssessmentFeedback: Identifiable {
+    // attributes from artemis
+    let id: UUID = UUID()
+    let created: Date = Date()
+    var text: String? /// max length = 500
+    var detailText: String? /// max length = 5000
     var credits: Double /// score of element
+    var assessmentType: AssessmentType?
 
-    let type: FeedbackType
+    // custom utility attributes
+    var type: FeedbackType
     var file: Node?
-    var lines: NSRange?
-    var columns: NSRange?
 
-    enum CodingKeys: CodingKey {
+    mutating func updateFeedback(detailText: String, credits: Double) {
+        self.detailText = detailText
+        self.credits = credits
+    }
+}
+
+// send to artemis
+extension AssessmentFeedback: Encodable {
+    enum EncodingKeys: CodingKey {
         case text
         case detailText
         case credits
     }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: EncodingKeys.self)
         try container.encode(text, forKey: .text)
         try container.encode(detailText, forKey: .detailText)
         try container.encode(credits, forKey: .credits)
     }
+}
 
-    mutating func updateFeedback(detailText: String, credits: Double) {
-        self.detailText = detailText
-        self.credits = credits
+// receive feedbacks from artemis
+extension AssessmentFeedback: Decodable {
+    enum DecodingKeys: String, CodingKey {
+        case text
+        case detailText
+        case credits
+        case assessmentType = "type"
     }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: DecodingKeys.self)
+        text = try? values.decode(String?.self, forKey: .text)
+        detailText = try? values.decode(String?.self, forKey: .detailText)
+        credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
+        type = text?.contains("at Line:") ?? false ? .inline : .general
+        // TODO: find a way to distinguish between automatic and manual feedback when fetching feedback for a specific submission
+        assessmentType = try? values.decode(AssessmentType?.self, forKey: .assessmentType) ?? .MANUAL
+    }
+}
+
+extension AssessmentFeedback: Comparable {
+    static func < (lhs: AssessmentFeedback, rhs: AssessmentFeedback) -> Bool {
+        lhs.created < rhs.created
+    }
+}
+
+enum AssessmentType: String, Codable {
+    case AUTOMATIC
+    case SEMI_AUTOMATIC
+    case MANUAL
 }
 
 enum FeedbackVisibility: String, Codable {
