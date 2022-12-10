@@ -1,5 +1,3 @@
-// swiftlint:disable line_length
-
 import SwiftUI
 
 struct AssessmentView: View {
@@ -93,7 +91,11 @@ struct AssessmentView: View {
                             }
                         }
                     } message: {
-                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
+                        Text("""
+                             Either discard the assessment \
+                             and release the lock (recommended) \
+                             or keep the lock and save the assessment without submitting it.
+                             """)
                     }
                 }
             }

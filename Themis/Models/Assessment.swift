@@ -105,7 +105,7 @@ struct AssessmentFeedback: Identifiable {
     }
 }
 
-// make feedback encodable to send to artemis
+// send to artemis
 extension AssessmentFeedback: Encodable {
     enum EncodingKeys: CodingKey {
         case text
@@ -121,7 +121,7 @@ extension AssessmentFeedback: Encodable {
     }
 }
 
-// make feedback decodable to receive feedbacks from artemis
+// receive feedbacks from artemis
 extension AssessmentFeedback: Decodable {
     enum DecodingKeys: String, CodingKey {
         case text
