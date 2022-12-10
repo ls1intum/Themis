@@ -10,6 +10,7 @@ import Foundation
 import MarkdownUI
 
 struct ProblemStatementCellView: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var assessment: AssessmentViewModel
 
     @StateObject var vm = ProblemStatementCellViewModel()
@@ -35,7 +36,9 @@ struct ProblemStatementCellView: View {
         }
         .padding()
         .onAppear {
-            vm.convertProblemStatement(problemStatement: assessment.submission?.participation.exercise.problemStatement ?? "")
+            vm.convertProblemStatement(
+                problemStatement: assessment.submission?.participation.exercise.problemStatement ?? "",
+                colorScheme: colorScheme)
         }
     }
 }

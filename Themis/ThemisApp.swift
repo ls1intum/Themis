@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import TouchVisualizer
 
 @main
 struct ThemisApp: App {
+
+    init() {
+        Visualizer.start()
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()
