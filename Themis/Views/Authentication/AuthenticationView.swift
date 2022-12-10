@@ -9,11 +9,13 @@ import SwiftUI
 
 struct AuthenticationView: View {
     enum SecureFieldFocus { case plain, secure }
+    enum FocusedField { case serverurl, username, password }
 
     @ObservedObject var authenticationVM: AuthenticationViewModel
     @State private var isSecured: Bool = true
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var passwordFocus: SecureFieldFocus?
+    @FocusState private var focusedField: FocusedField?
 
     var body: some View {
         VStack {
@@ -26,16 +28,36 @@ struct AuthenticationView: View {
                 .padding()
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
                 .textFieldStyle(LoginTextFieldStyle(validInput: authenticationVM.validURL))
+                .focused($focusedField, equals: .serverurl)
+                .submitLabel(.next)
 
             TextField("Username", text: $authenticationVM.username)
                 .textFieldStyle(LoginTextFieldStyle())
                 .textInputAutocapitalization(.never)
+                .focused($focusedField, equals: .username)
+                .submitLabel(.next)
             passwordField
             Toggle("Remember me", isOn: $authenticationVM.rememberMe)
                 .frame(width: 500)
                 .padding()
             authenticateButton
-        }.alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert) {
+        }
+        .onSubmit {
+            switch focusedField {
+            case .serverurl:
+                focusedField = .username
+            case .username:
+                focusedField = .password
+            case .password:
+                Task {
+                    await authenticationVM.authenticate()
+                }
+                focusedField = nil
+            case .none:
+                focusedField = nil
+            }
+        }
+        .alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert) {
             Button("Ok") {}
         }
     }
@@ -72,7 +94,10 @@ struct AuthenticationView: View {
                     .autocapitalization(.none)
                     .focused($passwordFocus, equals: .plain)
                     .opacity(!isSecured ? 1.0 : 0.0)
-            }.padding(.trailing, 32)
+            }
+            .focused($focusedField, equals: .password)
+            .submitLabel(.join)
+            .padding(.trailing, 32)
             Button(action: {
                 isSecured.toggle()
                 passwordFocus = isSecured ? .secure : .plain
