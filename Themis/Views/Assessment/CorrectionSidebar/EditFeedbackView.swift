@@ -46,6 +46,7 @@ struct EditFeedbackView: View {
             }
             HStack {
                 TextField("Enter your feedback here", text: $feedbackText, axis: .vertical)
+                    .submitLabel(.return)
                     .lineLimit(10...40)
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
