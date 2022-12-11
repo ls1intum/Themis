@@ -241,6 +241,7 @@ public struct CodeEditor: View {
                 inset: CGSize?              = nil,
                 autoscroll: Bool                 = true,
                 highlightedRanges: [HighlightedRange] = [],
+                dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>?       = nil) {
         self.source      = source
         self.selection   = selection
@@ -255,6 +256,7 @@ public struct CodeEditor: View {
         ?? [:]
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
+        self.dragSelection = dragSelection
         self.line = line
     }
 
@@ -293,6 +295,7 @@ public struct CodeEditor: View {
                 autoPairs: [ String: String ]? = nil,
                 inset: CGSize?              = nil,
                 highlightedRanges: [HighlightedRange] = [],
+                dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>?       = nil) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
@@ -305,6 +308,7 @@ public struct CodeEditor: View {
                   autoPairs: autoPairs,
                   inset: inset,
                   highlightedRanges: highlightedRanges,
+                  dragSelection: dragSelection,
                   line: line)
     }
 
@@ -319,6 +323,7 @@ public struct CodeEditor: View {
     private let inset: CGSize
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
+    private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
 
     public var body: some View {
@@ -333,27 +338,7 @@ public struct CodeEditor: View {
                                     inset: inset,
                                     autoscroll: autoscroll,
                                     highlightedRanges: highlightedRanges,
+                                    dragSelection: dragSelection,
                                     line: line)
     }
 }
-
-/*struct CodeEditor_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        
-        CodeEditor(source: "let a = 5")
-            .frame(width: 200, height: 100)
-        
-        CodeEditor(source: "let a = 5", language: .swift, theme: .pojoaque)
-            .frame(width: 200, height: 100)
-        
-        CodeEditor(source:
-      #"""
-      The quadratic formula is $-b \pm \sqrt{b^2 - 4ac} \over 2a$
-      \bye
-      """#, language: .tex
-        )
-        .frame(width: 540, height: 200)
-    }
-}
-*/

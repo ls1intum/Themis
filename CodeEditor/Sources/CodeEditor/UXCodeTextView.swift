@@ -279,14 +279,17 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
                 let upper = min(dragSelection.upperBound, text.count)
                 self.textStorage.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.cyan, range: NSRange(location: dragSelection.lowerBound, length: upper - dragSelection.lowerBound))
             }
+            let coordinator = self.delegate as? UXCodeTextViewDelegate
+            coordinator?.setDragSelection(self.dragSelection)
         }
     }
 }
 
 protocol UXCodeTextViewDelegate: UXTextViewDelegate {
-
     var allowCopy: Bool { get }
     var fontSize: CGFloat? { get set }
+
+    func setDragSelection(_: Range<Int>?)
 }
 
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView

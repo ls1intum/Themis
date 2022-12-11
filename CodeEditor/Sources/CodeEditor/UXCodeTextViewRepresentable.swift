@@ -56,6 +56,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 inset: CGSize,
                 autoscroll: Bool,
                 highlightedRanges: [HighlightedRange],
+                dragSelection: Binding<Range<Int>?>?,
                 line: Binding<Line?>?) {
         self.source      = source
         self.selection = selection
@@ -68,6 +69,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.inset       = inset
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
+        self.dragSelection = dragSelection
         self.line = line
     }
 
@@ -82,6 +84,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private let autoPairs: [ String: String ]
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
+    private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
 
     // The inner `value` is true, exactly when execution is inside
@@ -105,6 +108,10 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
         init(_ parent: UXCodeTextViewRepresentable) {
             self.parent = parent
+        }
+
+        func setDragSelection(_ dragSelection: Range<Int>?) {
+            parent.dragSelection?.wrappedValue = dragSelection
         }
 
 #if os(macOS)
@@ -188,7 +195,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         return textView.layoutManager.glyphIndex(for: point, in: textView.textContainer)
     }
 
-    public func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
+    private func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
         var selectionRange: Range<Int>?
         for point in line?.wrappedValue?.points ?? [] {
             let glyphIndex = getGlyphIndex(textView: textView, point: point)
@@ -232,7 +239,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 textView.string = source.wrappedValue
             }
         }
-        textView.dragSelection = getSelectionFromLine(textView: textView)
+
+        let dragSelection = getSelectionFromLine(textView: textView)
+        textView.dragSelection = dragSelection
 
         if let selection = selection {
             let range = selection.wrappedValue

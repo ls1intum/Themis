@@ -5,6 +5,7 @@ struct CodeViewNew: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var file: Node
     @Binding var fontSize: CGFloat
+    @State var dragSelection: Range<Int>?
     @State var line: Line?
 
     var body: some View {
@@ -15,6 +16,7 @@ struct CodeViewNew: View {
                        fontSize: $fontSize,
                        flags: editorFlags,
                        highlightedRanges: mockHighlights,
+                       dragSelection: $dragSelection,
                        line: $line)
             if let line {
                 DrawingShape(points: line.points)
@@ -27,7 +29,12 @@ struct CodeViewNew: View {
             } else {
                 self.line?.points.append(newPoint)
             }
-        }))
+        }).onEnded { _ in
+            print("Feedback hinzugefuegt! \(dragSelection)")
+            dragSelection = nil
+        }).onChange(of: dragSelection) { value in
+            print("dragSelection changed to \(value)")
+        }
     }
 
     var mockHighlights: [HighlightedRange] {
