@@ -7,6 +7,11 @@ struct CodeEditorView: View {
 
     @Binding var showFileTree: Bool
 
+    private func openFeedbackSheet(forRange dragRange: Range<Int>) {
+        cvm.selectedSection = dragRange.toNSRange()
+        cvm.showAddFeedback = true
+    }
+
     var body: some View {
         VStack {
             if let file = cvm.selectedFile {
@@ -16,7 +21,11 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView()
                     }
-                    CodeViewNewTest(file: file, fontSize: $cvm.editorFontSize)
+                    CodeView(
+                        file: file,
+                        fontSize: $cvm.editorFontSize,
+                        onOpenFeedback: openFeedbackSheet
+                    )
                 }
             } else {
                 Text("Select a file")
@@ -93,27 +102,7 @@ struct CodeViewNew: View {
             } else {
                 self.line?.points.append(newPoint)
             }
-        }))
-    }
-
-    var mockHighlights: [HighlightedRange] {
-        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
-                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
-    }
-
-    var editorFlags: CodeEditor.Flags {
-        if colorScheme == .dark {
-            return .blackBackground
-        } else {
-            return .selectable
         }
-    }
-
-    var theme: CodeEditor.ThemeName {
-        if colorScheme == .dark {
-            return .ocean
-        } else {
-            return .xcode
-        }
+        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
     }
 }

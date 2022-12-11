@@ -111,6 +111,10 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             self.parent = parent
         }
 
+        func setDragSelection(_ dragSelection: Range<Int>?) {
+            parent.dragSelection?.wrappedValue = dragSelection
+        }
+
 #if os(macOS)
         public func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? UXTextView else {
@@ -245,9 +249,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 textView.string = source.wrappedValue
             }
         }
-        let newDragSelection = getSelectionFromLine(textView: textView)
-        self.dragSelection?.wrappedValue = newDragSelection
-        textView.dragSelection = newDragSelection
+
+        let dragSelection = getSelectionFromLine(textView: textView)
+        textView.dragSelection = dragSelection
 
         if let selection = selection {
             let range = selection.wrappedValue

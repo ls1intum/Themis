@@ -270,23 +270,32 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {
-        if self.text.count > 40 { // TODO
+        if !text.isEmpty {
             for hRange in highlightedRanges {
-                self.textStorage.addAttribute(NSAttributedString.Key.backgroundColor, value: hRange.color, range: hRange.range)
+                self.textStorage.addAttribute(
+                    NSAttributedString.Key.backgroundColor,
+                    value: hRange.color,
+                    range: hRange.range.makeSafeFor(text)
+                )
             }
             if let dragSelection {
-                // apparently, the drag selection upper bound sometimes it too high - prevent that
-                var upper = min(dragSelection.upperBound, text.count)
-                self.textStorage.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.cyan, range: NSRange(location: dragSelection.lowerBound, length: upper - dragSelection.lowerBound))
+                self.textStorage.addAttribute(
+                    NSAttributedString.Key.backgroundColor,
+                    value: UIColor.yellow.withAlphaComponent(0.5),
+                    range: dragSelection.toNSRange().makeSafeFor(text)
+                )
             }
+            let coordinator = self.delegate as? UXCodeTextViewDelegate
+            coordinator?.setDragSelection(self.dragSelection)
         }
     }
 }
 
 protocol UXCodeTextViewDelegate: UXTextViewDelegate {
-
     var allowCopy: Bool { get }
     var fontSize: CGFloat? { get set }
+
+    func setDragSelection(_: Range<Int>?)
 }
 
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView

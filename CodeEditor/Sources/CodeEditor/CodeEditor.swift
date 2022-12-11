@@ -342,24 +342,3 @@ public struct CodeEditor: View {
                                     line: line)
     }
 }
-
-/*struct CodeEditor_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        
-        CodeEditor(source: "let a = 5")
-            .frame(width: 200, height: 100)
-        
-        CodeEditor(source: "let a = 5", language: .swift, theme: .pojoaque)
-            .frame(width: 200, height: 100)
-        
-        CodeEditor(source:
-      #"""
-      The quadratic formula is $-b \pm \sqrt{b^2 - 4ac} \over 2a$
-      \bye
-      """#, language: .tex
-        )
-        .frame(width: 540, height: 200)
-    }
-}
-*/

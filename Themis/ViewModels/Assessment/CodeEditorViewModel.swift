@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Runestone
 import UIKit
+import CodeEditor
 
 class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []

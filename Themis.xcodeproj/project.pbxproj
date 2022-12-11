@@ -45,18 +45,9 @@
 		E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2192EE0291E6F780092CE58 /* KeychainAccess */; };
 		E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */; };
 		E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */; };
-		E21AF018292B9B370096ACFC /* Runestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF017292B9B370096ACFC /* Runestone */; };
-		E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF034292B9D0A0096ACFC /* TreeSitterJava */; };
-		E21AF037292B9D0A0096ACFC /* TreeSitterJavaQueries in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */; };
-		E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */; };
-		E21AF03B292B9D0A0096ACFC /* TreeSitterLanguagesCommon in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */; };
-		E21AF03D292B9D0A0096ACFC /* TreeSitterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */; };
-		E21AF03F292B9D0A0096ACFC /* TreeSitterSwiftQueries in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */; };
-		E21AF041292B9D0A0096ACFC /* TreeSitterSwiftRunestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */; };
 		E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */; };
 		E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF047292B9D4C0096ACFC /* CodeView.swift */; };
 		E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF048292B9D4C0096ACFC /* TabsView.swift */; };
-		E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */; };
 		E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */; };
 		E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04E292B9D4C0096ACFC /* HighlightName.swift */; };
 		E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */; };
@@ -137,7 +128,6 @@
 		E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentViewModel.swift; path = Themis/ViewModels/Assessment/AssessmentViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E21AF047292B9D4C0096ACFC /* CodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CodeView.swift; path = Themis/Views/Assessment/CodeEditor/CodeView.swift; sourceTree = SOURCE_ROOT; };
 		E21AF048292B9D4C0096ACFC /* TabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsView.swift; path = Themis/Views/Assessment/CodeEditor/TabsView.swift; sourceTree = SOURCE_ROOT; };
-		E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThemeSettings.swift; path = Themis/Models/Appearance/ThemeSettings.swift; sourceTree = SOURCE_ROOT; };
 		E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditorFontSizeStepper.swift; path = Themis/Views/AppearanceSettings/EditorFontSizeStepper.swift; sourceTree = SOURCE_ROOT; };
 		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighlightName.swift; path = Themis/Models/Appearance/HighlightName.swift; sourceTree = SOURCE_ROOT; };
 		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppearanceSettingsView.swift; path = Themis/Views/AppearanceSettings/AppearanceSettingsView.swift; sourceTree = SOURCE_ROOT; };
@@ -161,17 +151,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E21AF03B292B9D0A0096ACFC /* TreeSitterLanguagesCommon in Frameworks */,
-				E21AF037292B9D0A0096ACFC /* TreeSitterJavaQueries in Frameworks */,
-				E21AF03D292B9D0A0096ACFC /* TreeSitterSwift in Frameworks */,
-				E21AF018292B9B370096ACFC /* Runestone in Frameworks */,
 				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
-				E21AF03F292B9D0A0096ACFC /* TreeSitterSwiftQueries in Frameworks */,
-				E21AF041292B9D0A0096ACFC /* TreeSitterSwiftRunestone in Frameworks */,
-				E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
 				F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */,
-				E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */,
 				833160BA2932D79700571211 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,7 +225,6 @@
 		4065F857292E8A08005DAEE8 /* Appearance */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
 				E21AF04E292B9D4C0096ACFC /* HighlightName.swift */,
 			);
 			name = Appearance;
@@ -312,15 +293,16 @@
 		83396D2C29155935003EF727 /* Themis */ = {
 			isa = PBXGroup;
 			children = (
-				4065F854292E8729005DAEE8 /* Models */,
-				E2192EE6291EC2F90092CE58 /* Views */,
-				4065F855292E873A005DAEE8 /* ViewModels */,
 				E2192EDA291E59B50092CE58 /* API */,
+				83396D3129155935003EF727 /* Assets.xcassets */,
+				4065F854292E8729005DAEE8 /* Models */,
+				83396D3329155935003EF727 /* Preview Content */,
 				E2192ED1291E47670092CE58 /* REST */,
 				83E729E52915751600DB7B36 /* Supporting */,
 				83396D2D29155935003EF727 /* ThemisApp.swift */,
-				83396D3129155935003EF727 /* Assets.xcassets */,
-				83396D3329155935003EF727 /* Preview Content */,
+				DA8D6771294653BA00599110 /* Utils */,
+				4065F855292E873A005DAEE8 /* ViewModels */,
+				E2192EE6291EC2F90092CE58 /* Views */,
 			);
 			path = Themis;
 			sourceTree = SOURCE_ROOT;
@@ -389,6 +371,13 @@
 				E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */,
 			);
 			path = SubmissionList;
+			sourceTree = "<group>";
+		};
+		DA8D6771294653BA00599110 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		E2192ED1291E47670092CE58 /* REST */ = {
@@ -518,14 +507,6 @@
 			name = Themis;
 			packageProductDependencies = (
 				E2192EE0291E6F780092CE58 /* KeychainAccess */,
-				E21AF017292B9B370096ACFC /* Runestone */,
-				E21AF034292B9D0A0096ACFC /* TreeSitterJava */,
-				E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */,
-				E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */,
-				E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */,
-				E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */,
-				E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */,
-				E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */,
 				833160B92932D79700571211 /* MarkdownUI */,
 				F911B9BF29392668003CF4C8 /* TouchVisualizer */,
 				E2E3852929437F9100F5854D /* CodeEditor */,
@@ -604,8 +585,6 @@
 			mainGroup = 83396D2129155934003EF727;
 			packageReferences = (
 				E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */,
-				E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */,
 				833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				F911B9BE29392668003CF4C8 /* XCRemoteSwiftPackageReference "TouchVisualizer" */,
 				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
@@ -710,7 +689,6 @@
 				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
 				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
-				E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
 				E2E67485292033EE0081238B /* CourseListView.swift in Sources */,
@@ -1070,22 +1048,6 @@
 				kind = branch;
 			};
 		};
-		E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/simonbs/Runestone.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.9;
-			};
-		};
-		E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/simonbs/TreeSitterLanguages.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.3;
-			};
-		};
 		E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZeeZide/CodeEditor.git";
@@ -1114,46 +1076,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
-		};
-		E21AF017292B9B370096ACFC /* Runestone */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */;
-			productName = Runestone;
-		};
-		E21AF034292B9D0A0096ACFC /* TreeSitterJava */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterJava;
-		};
-		E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterJavaQueries;
-		};
-		E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterJavaRunestone;
-		};
-		E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterLanguagesCommon;
-		};
-		E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterSwift;
-		};
-		E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterSwiftQueries;
-		};
-		E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterSwiftRunestone;
 		};
 		E2E3852929437F9100F5854D /* CodeEditor */ = {
 			isa = XCSwiftPackageProductDependency;
