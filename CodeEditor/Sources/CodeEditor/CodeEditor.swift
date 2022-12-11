@@ -242,7 +242,8 @@ public struct CodeEditor: View {
                 autoscroll: Bool                 = true,
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
-                line: Binding<Line?>?       = nil) {
+                line: Binding<Line?>?       = nil,
+                showAddFeedback: Binding<Bool>) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -258,6 +259,7 @@ public struct CodeEditor: View {
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
         self.line = line
+        self.showAddFeedback = showAddFeedback
     }
 
     /**
@@ -296,7 +298,8 @@ public struct CodeEditor: View {
                 inset: CGSize?              = nil,
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
-                line: Binding<Line?>?       = nil) {
+                line: Binding<Line?>?       = nil,
+                showAddFeedback: Binding<Bool>) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -309,7 +312,8 @@ public struct CodeEditor: View {
                   inset: inset,
                   highlightedRanges: highlightedRanges,
                   dragSelection: dragSelection,
-                  line: line)
+                  line: line,
+                  showAddFeedback: showAddFeedback)
     }
 
     private var source: Binding<String>
@@ -325,6 +329,7 @@ public struct CodeEditor: View {
     private var highlightedRanges: [HighlightedRange]
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
+    private var showAddFeedback: Binding<Bool>
 
     public var body: some View {
         UXCodeTextViewRepresentable(source: source,
@@ -339,6 +344,7 @@ public struct CodeEditor: View {
                                     autoscroll: autoscroll,
                                     highlightedRanges: highlightedRanges,
                                     dragSelection: dragSelection,
-                                    line: line)
+                                    line: line,
+                                    showAddFeedback: showAddFeedback)
     }
 }

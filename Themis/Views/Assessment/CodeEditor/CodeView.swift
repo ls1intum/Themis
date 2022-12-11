@@ -3,6 +3,7 @@ import CodeEditor
 
 struct CodeView: View {
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var file: Node
     @Binding var fontSize: CGFloat
     @State var dragSelection: Range<Int>?
@@ -18,7 +19,8 @@ struct CodeView: View {
                        flags: editorFlags,
                        highlightedRanges: mockHighlights,
                        dragSelection: $dragSelection,
-                       line: $line)
+                       line: $line,
+                       showAddFeedback: $cvm.showAddFeedback)
             if let line {
                 DrawingShape(points: line.points)
                     .stroke(line.color, style: StrokeStyle(lineWidth: line.lineWidth, lineCap: .round, lineJoin: .round))
@@ -40,6 +42,51 @@ struct CodeView: View {
             }
             dragSelection = nil
         })
+    }
+
+    var mockHighlights: [HighlightedRange] {
+        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
+                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
+    }
+
+    var editorFlags: CodeEditor.Flags {
+        if colorScheme == .dark {
+            return .blackBackground
+        } else {
+            return .selectable
+        }
+    }
+
+    var theme: CodeEditor.ThemeName {
+        if colorScheme == .dark {
+            return .ocean
+        } else {
+            return .xcode
+        }
+    }
+}
+
+struct CodeViewSelect: View {
+    @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var file: Node
+    @Binding var fontSize: CGFloat
+    @State var dragSelection: Range<Int>?
+    @State var line: Line?
+    var onOpenFeedback: (Range<Int>) -> Void
+
+    var body: some View {
+        ZStack {
+            CodeEditor(source: file.code ?? "loading...",
+                       language: .swift,
+                       theme: theme,
+                       fontSize: $fontSize,
+                       flags: editorFlags,
+                       highlightedRanges: mockHighlights,
+                       dragSelection: $dragSelection,
+                       line: $line,
+                       showAddFeedback: $cvm.showAddFeedback)
+        }
     }
 
     var mockHighlights: [HighlightedRange] {
