@@ -203,7 +203,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 selectionRange = glyphIndex..<glyphIndex + 1
             } else {
                 if glyphIndex < selectionRange!.lowerBound {
-                    selectionRange = glyphIndex..<selectionRange!.upperBound + 1
+                    selectionRange = glyphIndex..<selectionRange!.upperBound
                 }
                 if glyphIndex > selectionRange!.upperBound {
                     selectionRange = selectionRange!.lowerBound..<glyphIndex + 1
