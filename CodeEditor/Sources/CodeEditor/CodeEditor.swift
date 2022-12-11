@@ -242,7 +242,8 @@ public struct CodeEditor: View {
                 autoPairs   : [ String : String ]? = nil,
                 inset       : CGSize?              = nil,
                 autoscroll  : Bool                 = true,
-                highlightedRanges : [HighlightedRange] = [])
+                highlightedRanges : [HighlightedRange] = [],
+                line        : Binding<Line?>?       = nil)
     {
         self.source      = source
         self.selection   = selection
@@ -257,6 +258,7 @@ public struct CodeEditor: View {
         ?? [:]
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
+        self.line = line
     }
     
     /**
@@ -285,6 +287,7 @@ public struct CodeEditor: View {
      */
     @inlinable
     public init(source      : String,
+                selection   : Binding<Range<String.Index>>? = nil,
                 language    : Language?            = nil,
                 theme       : ThemeName            = .default,
                 fontSize    : Binding<CGFloat>?    = nil,
@@ -292,10 +295,12 @@ public struct CodeEditor: View {
                 indentStyle : IndentStyle          = .system,
                 autoPairs   : [ String : String ]? = nil,
                 inset       : CGSize?              = nil,
-                highlightedRanges: [HighlightedRange] = [])
+                highlightedRanges: [HighlightedRange] = [],
+                line        : Binding<Line?>?       = nil)
     {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source      : .constant(source),
+                  selection   : selection,
                   language    : language,
                   theme       : theme,
                   fontSize    : fontSize,
@@ -303,7 +308,8 @@ public struct CodeEditor: View {
                   indentStyle : indentStyle,
                   autoPairs   : autoPairs,
                   inset       : inset,
-                  highlightedRanges: highlightedRanges)
+                  highlightedRanges: highlightedRanges,
+                  line        : line)
     }
     
     private var source      : Binding<String>
@@ -317,6 +323,7 @@ public struct CodeEditor: View {
     private let inset       : CGSize
     private let autoscroll  : Bool
     private var highlightedRanges: [HighlightedRange]
+    private var line        : Binding<Line?>?
     
     public var body: some View {
         UXCodeTextViewRepresentable(source      : source,
@@ -329,11 +336,12 @@ public struct CodeEditor: View {
                                     autoPairs   : autoPairs,
                                     inset       : inset,
                                     autoscroll  : autoscroll,
-                                    highlightedRanges: highlightedRanges)
+                                    highlightedRanges: highlightedRanges,
+                                    line        : line)
     }
 }
 
-struct CodeEditor_Previews: PreviewProvider {
+/*struct CodeEditor_Previews: PreviewProvider {
     
     static var previews: some View {
         
@@ -352,3 +360,4 @@ struct CodeEditor_Previews: PreviewProvider {
         .frame(width: 540, height: 200)
     }
 }
+*/

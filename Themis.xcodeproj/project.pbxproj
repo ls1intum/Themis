@@ -64,6 +64,8 @@
 		E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE6382935214E00FAD327 /* ExerciseView.swift */; };
 		E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */; };
 		E2CAE63E29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */; };
+		E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481C294626AD00DAF0CC /* DrawingShape.swift */; };
+		E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */; };
 		E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3852929437F9100F5854D /* CodeEditor */; };
 		E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E460DC29292ECF00ECC0A5 /* Stack.swift */; };
 		E2E67483292032870081238B /* CourseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67482292032870081238B /* CourseListViewModel.swift */; };
@@ -143,6 +145,8 @@
 		E2CAE6382935214E00FAD327 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentSubmissionLoaderView.swift; sourceTree = "<group>"; };
+		E2DC481C294626AD00DAF0CC /* DrawingShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingShape.swift; sourceTree = "<group>"; };
+		E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingEngine.swift; sourceTree = "<group>"; };
 		E2E3852B2943800100F5854D /* CodeEditor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodeEditor; sourceTree = "<group>"; };
 		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
 		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListViewModel.swift; path = Themis/ViewModels/CourseList/CourseListViewModel.swift; sourceTree = SOURCE_ROOT; };
@@ -450,6 +454,7 @@
 		E21AF045292B9D4C0096ACFC /* CodeEditor */ = {
 			isa = PBXGroup;
 			children = (
+				E2DC481B294626A200DAF0CC /* Drawing */,
 				E21AF047292B9D4C0096ACFC /* CodeView.swift */,
 				E21AF048292B9D4C0096ACFC /* TabsView.swift */,
 				0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */,
@@ -464,6 +469,15 @@
 				E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */,
 			);
 			path = ExerciseViewModel;
+			sourceTree = "<group>";
+		};
+		E2DC481B294626A200DAF0CC /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */,
+				E2DC481C294626AD00DAF0CC /* DrawingShape.swift */,
+			);
+			path = Drawing;
 			sourceTree = "<group>";
 		};
 		E2E674812920326F0081238B /* Courses */ = {
@@ -659,6 +673,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */,
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
@@ -707,6 +722,7 @@
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
+				E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

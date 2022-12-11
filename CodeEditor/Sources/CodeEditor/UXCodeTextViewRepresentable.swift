@@ -55,7 +55,8 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
                 autoPairs   : [ String : String ],
                 inset       : CGSize,
                 autoscroll  : Bool,
-                highlightedRanges: [HighlightedRange])
+                highlightedRanges: [HighlightedRange],
+                line        : Binding<Line?>?)
     {
         self.source      = source
         self.selection = selection
@@ -68,6 +69,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
         self.inset       = inset
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
+        self.line = line
     }
     
     private var source      : Binding<String>
@@ -80,7 +82,8 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
     private let inset       : CGSize
     private let autoPairs   : [ String : String ]
     private let autoscroll  : Bool
-    private let highlightedRanges : [HighlightedRange]
+    private var highlightedRanges : [HighlightedRange]
+    private var line        : Binding<Line?>?
     
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -181,6 +184,39 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
     public func makeCoordinator() -> Coordinator {
         return Coordinator(self)
     }
+    //Source: https://stackoverflow.com/questions/27156916/convert-rangeint-to-rangestring-index/29948549#29948549
+    private func convertRange(range: Range<Int>, string: String) -> Range<String.Index>
+    {
+        let lower = string.index(string.startIndex, offsetBy: range.lowerBound)
+        let upper = string.index(string.startIndex, offsetBy: range.upperBound)
+        return lower..<upper
+    }
+    
+    private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
+        return textView.layoutManager.glyphIndex(for: point, in: textView.textContainer)
+    }
+    
+    private func getSelectionFromLine(textView: UXCodeTextView) -> Range<String.Index>? {
+        var selectionRange: ClosedRange<Int>? = nil
+        for point in line?.wrappedValue?.points ?? [] {
+            let glyphIndex = getGlyphIndex(textView: textView, point: point)
+            if selectionRange == nil {
+                selectionRange = glyphIndex...glyphIndex
+            } else {
+                if glyphIndex < selectionRange!.lowerBound {
+                    selectionRange = glyphIndex...selectionRange!.upperBound
+                }
+                if glyphIndex > selectionRange!.upperBound {
+                    selectionRange = selectionRange!.lowerBound...glyphIndex
+                }
+            }
+        }
+        guard let selectionRange else { return nil }
+        print("Selection: \(selectionRange.lowerBound)...\(selectionRange.upperBound)")
+        self.highlightedRanges[self.highlightedRanges.count - 1] = HighlightedRange(range: NSMakeRange(selectionRange.lowerBound, selectionRange.count), color: .cyan)
+        return convertRange(range: selectionRange.lowerBound..<(selectionRange.upperBound + 1), string: textView.text)
+    }
+    
     
     private func updateTextView(_ textView: UXCodeTextView) {
         isCurrentlyUpdatingView.value = true
@@ -210,7 +246,8 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
                 textView.string = source.wrappedValue
             }
         }
-        
+        if let newSelection = getSelectionFromLine(textView: textView)
+
         if let selection = selection {
             let range = selection.wrappedValue
             
@@ -309,57 +346,5 @@ extension UXCodeTextViewRepresentable {
         init(value: Bool) {
             self.value = value
         }
-    }
-}
-
-struct UXCodeTextViewRepresentable_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        
-        UXCodeTextViewRepresentable(source      : .constant("let a = 5"),
-                                    selection   : nil,
-                                    language    : nil,
-                                    theme       : .pojoaque,
-                                    fontSize    : nil,
-                                    flags       : [ .selectable ],
-                                    indentStyle : .system,
-                                    autoPairs   : [:],
-                                    inset       : .init(width: 8, height: 8),
-                                    autoscroll  : false,
-                                    highlightedRanges: [])
-        .frame(width: 200, height: 100)
-        
-        UXCodeTextViewRepresentable(source: .constant("let a = 5"),
-                                    selection   : nil,
-                                    language    : .swift,
-                                    theme       : .pojoaque,
-                                    fontSize    : nil,
-                                    flags       : [ .selectable ],
-                                    indentStyle : .system,
-                                    autoPairs   : [:],
-                                    inset       : .init(width: 8, height: 8),
-                                    autoscroll  : false,
-                                    highlightedRanges: [])
-        .frame(width: 200, height: 100)
-        
-        UXCodeTextViewRepresentable(
-            source: .constant(
-        #"""
-        The quadratic formula is $-b \pm \sqrt{b^2 - 4ac} \over 2a$
-        \bye
-        """#
-            ),
-            selection   : nil,
-            language    : .tex,
-            theme       : .pojoaque,
-            fontSize    : nil,
-            flags       : [ .selectable ],
-            indentStyle : .system,
-            autoPairs   : [:],
-            inset       : .init(width: 8, height: 8),
-            autoscroll  : false,
-            highlightedRanges: []
-        )
-        .frame(width: 540, height: 200)
     }
 }

@@ -287,6 +287,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             for hRange in highlightedRanges {
                 self.textStorage.addAttribute(NSAttributedString.Key.backgroundColor, value: hRange.color, range: hRange.range)
             }
+            
         }
     }
 }
