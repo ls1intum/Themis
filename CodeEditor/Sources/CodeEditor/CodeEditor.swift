@@ -241,7 +241,6 @@ public struct CodeEditor: View {
                 inset: CGSize?              = nil,
                 autoscroll: Bool                 = true,
                 highlightedRanges: [HighlightedRange] = [],
-                dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>?       = nil) {
         self.source      = source
         self.selection   = selection
@@ -256,7 +255,6 @@ public struct CodeEditor: View {
         ?? [:]
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
-        self.dragSelection = dragSelection
         self.line = line
     }
 
@@ -295,7 +293,6 @@ public struct CodeEditor: View {
                 autoPairs: [ String: String ]? = nil,
                 inset: CGSize?              = nil,
                 highlightedRanges: [HighlightedRange] = [],
-                dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>?       = nil) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
@@ -308,7 +305,6 @@ public struct CodeEditor: View {
                   autoPairs: autoPairs,
                   inset: inset,
                   highlightedRanges: highlightedRanges,
-                  dragSelection: dragSelection,
                   line: line)
     }
 
@@ -323,7 +319,6 @@ public struct CodeEditor: View {
     private let inset: CGSize
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
-    private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
 
     public var body: some View {
@@ -338,7 +333,6 @@ public struct CodeEditor: View {
                                     inset: inset,
                                     autoscroll: autoscroll,
                                     highlightedRanges: highlightedRanges,
-                                    dragSelection: dragSelection,
                                     line: line)
     }
 }

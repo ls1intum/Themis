@@ -32,7 +32,6 @@ struct CodeViewNew: View {
     @ObservedObject var file: Node
     @Binding var fontSize: CGFloat
     @State var line: Line?
-    @State var dragSelection: Range<Int>?
 
     var body: some View {
         ZStack {
@@ -42,7 +41,6 @@ struct CodeViewNew: View {
                        fontSize: $fontSize,
                        flags: editorFlags,
                        highlightedRanges: mockHighlights,
-                       dragSelection: $dragSelection,
                        line: $line)
             if let line {
                 DrawingShape(points: line.points)
