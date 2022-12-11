@@ -25,7 +25,7 @@ class AuthenticationViewModel: ObservableObject {
             }
         }
     }
-    
+
     var validURL: Bool {
         guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return false }
         if let match = detector.firstMatch(in: serverURL, options: [], range: NSRange(location: 0, length: serverURL.utf16.count)) {
@@ -34,11 +34,11 @@ class AuthenticationViewModel: ObservableObject {
             return false
         }
     }
-    
+
     var loginDisabled: Bool {
         !validURL || username.count < 1 || password.count < 1
     }
-    
+
     @Published var username: String = stagingUser ?? ""
     @Published var password: String = stagingPassword ?? ""
     @Published var rememberMe: Bool = true
@@ -66,12 +66,12 @@ class AuthenticationViewModel: ObservableObject {
             Authentication.shared.checkAuth()
         }
     }
-    
+
     private func generateURL(serverURL: String) -> URL? {
         guard let url = URL(string: serverURL) else { return nil }
         return cleanURL(url: url)
     }
-    
+
     private func cleanURL(url: URL) -> URL? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         guard let components else { return nil }

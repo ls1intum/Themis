@@ -32,47 +32,91 @@ class ProblemStatementCellViewModel: ObservableObject {
 
     @Published var problemStatementParts: [any ProblemStatementPart] = []
 
-    func convertProblemStatement(problemStatement: String, colorScheme: ColorScheme) {
+    func convertProblemStatement(problemStatement: String, feedbacks: [AssessmentFeedback], colorScheme: ColorScheme) {
         var index = problemStatement.startIndex
-        // as long as problemstatemnt is not done
+
         while index < problemStatement.endIndex {
             var substring: String
 
             guard let rangeStart = problemStatement.range(of: "@startuml", range: index..<problemStatement.endIndex), let rangeEnd = problemStatement.range(of: "@enduml", range: index..<problemStatement.endIndex) else {
                 substring = String(problemStatement[index...])
-                substring = deleteTestCases(substring)
+                substring = replaceProblemStatementTestCases(substring, feedbacks)
                 problemStatementParts.append(ProblemStatementMD(text: substring))
                 return
             }
 
             // Append markdown
             substring = String(problemStatement[index..<rangeStart.lowerBound])
-            substring = deleteTestCases(substring)
+            substring = replaceProblemStatementTestCases(substring, feedbacks)
             problemStatementParts.append(ProblemStatementMD(text: substring))
 
             // Append plantuml
             substring = String(problemStatement[rangeStart.lowerBound...rangeEnd.upperBound])
-            substring = replaceTestsColor(substring, colorScheme)
+            substring = replaceUMLTestsColor(substring, feedbacks, colorScheme)
             problemStatementParts.append(ProblemStatementPlantUML(colorScheme: colorScheme, text: substring))
 
             index = problemStatement.index(rangeEnd.upperBound, offsetBy: 1)
         }
     }
 
-    func deleteTestCases(_ problemStatement: String) -> String {
-        return problemStatement
-            .replacingOccurrences(of: "[task][", with: "") // to remove symbol
-            .replacingOccurrences(of: "](.*())", with: "", options: .regularExpression) // to remove tests
+    private func replaceProblemStatementTestCases(_ problemStatement: String, _ feedbacks: [AssessmentFeedback]) -> String {
+        var problemStatementText = problemStatement
+
+        for feedback in feedbacks {
+            if let feedbackText = feedback.text {
+                problemStatementText = problemStatementText
+                    .replacingOccurrences(of: "\(feedbackText)", with: feedback.credits == 0.0 ? "0" : "1")
+            }
+        }
+
+        let lines = problemStatementText.components(separatedBy: "\n")
+        problemStatementText = ""
+
+        for var line in lines {
+            if line.contains("[task][") && line.contains("0") {
+                line = calculateScoreOfPassingTests(line)
+                line = line.replacingOccurrences(of: "[task][", with: " ![Test failed](asset:///multiply.circle.fill) **")
+            } else if line.contains("[task][") && line.contains("1") {
+                line = calculateScoreOfPassingTests(line)
+                line = line.replacingOccurrences(of: "[task][", with: " ![Test passed](asset:///checkmark.circle.fill) **")
+            }
+
+            problemStatementText.append(line + "\n")
+        }
+
+        return problemStatementText
     }
 
-    func replaceTestsColor(_ problemStatement: String, _ colorSchemeVariable: ColorScheme) -> String {
-        return problemStatement
-                .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: colorSchemeVariable == .light ? "black" : "white", options: .regularExpression)
+    private func calculateScoreOfPassingTests(_ line: String) -> String {
+        if let rangeStart = line.range(of: "](", range: line.startIndex..<line.endIndex) {
+            let lineBeforeScore = String(line[...rangeStart.lowerBound].dropLast())
 
-        // return problemStatement
-            // .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: "black", options: .regularExpression) // replace test color by red (or green)
-            // .replacingOccurrences(of: "testsColor(testAttributes[.*])", with: "", options: .regularExpression)
-            // .replacingOccurrences(of: "testsColor(testMethods[.*])", with: "", options: .regularExpression)
-            // .replacingOccurrences(of: "testsColor(testClass[.*])", with: "", options: .regularExpression)
+            let scoreSubstring = String(line[rangeStart.lowerBound...].dropFirst().dropFirst().dropLast())
+
+            let scoreSubstringArray = scoreSubstring.components(separatedBy: ",").map { Int($0)! }
+
+            let lineScore = " (\(scoreSubstringArray.reduce(0, +)) of \(scoreSubstringArray.count) tests passing)** "
+
+            return lineBeforeScore + lineScore
+        }
+
+        return line
+    }
+
+    private func replaceUMLTestsColor(_ problemStatement: String, _ feedbacks: [AssessmentFeedback], _ colorSchemeVariable: ColorScheme) -> String {
+        var plantUML = problemStatement
+
+        for feedback in feedbacks {
+            if let feedbackText = feedback.text {
+                plantUML = plantUML.replacingOccurrences(
+                    of: "testsColor(\(feedbackText))",
+                    with: feedback.credits == 0.0 ? "red" : "green")
+            }
+        }
+
+        return plantUML.replacingOccurrences(
+                    of: "testsColor\\([A-z]+\\)",
+                    with: colorSchemeVariable == .light ? "black" : "white",
+                    options: .regularExpression)
     }
 }
