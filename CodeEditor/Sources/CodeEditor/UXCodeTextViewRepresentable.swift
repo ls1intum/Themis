@@ -18,8 +18,8 @@ typealias UXViewRepresentable = UIViewRepresentable
 /**
  * Move the gritty details out of the main representable.
  */
-struct UXCodeTextViewRepresentable : UXViewRepresentable {
-    
+struct UXCodeTextViewRepresentable: UXViewRepresentable {
+
     /**
      * Configures a CodeEditor View with the given parameters.
      *
@@ -45,19 +45,19 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
      *   - autoscroll:  If enabled, the editor automatically scrolls to the respective
      *                  region when the `selection` is changed programatically.
      */
-    public init(source      : Binding<String>,
-                selection   : Binding<Range<String.Index>>?,
-                language    : CodeEditor.Language?,
-                theme       : CodeEditor.ThemeName,
-                fontSize    : Binding<CGFloat>?,
-                flags       : CodeEditor.Flags,
-                indentStyle : CodeEditor.IndentStyle,
-                autoPairs   : [ String : String ],
-                inset       : CGSize,
-                autoscroll  : Bool,
+    public init(source: Binding<String>,
+                selection: Binding<Range<String.Index>>?,
+                language: CodeEditor.Language?,
+                theme: CodeEditor.ThemeName,
+                fontSize: Binding<CGFloat>?,
+                flags: CodeEditor.Flags,
+                indentStyle: CodeEditor.IndentStyle,
+                autoPairs: [ String: String ],
+                inset: CGSize,
+                autoscroll: Bool,
                 highlightedRanges: [HighlightedRange],
-                line        : Binding<Line?>?)
-    {
+                dragSelection: Binding<Range<Int>?>?,
+                line: Binding<Line?>?) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -69,22 +69,24 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
         self.inset       = inset
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
+        self.dragSelection = dragSelection
         self.line = line
     }
-    
-    private var source      : Binding<String>
-    private var selection   : Binding<Range<String.Index>>?
-    private var fontSize    : Binding<CGFloat>?
-    private let language    : CodeEditor.Language?
-    private let themeName   : CodeEditor.ThemeName
-    private let flags       : CodeEditor.Flags
-    private let indentStyle : CodeEditor.IndentStyle
-    private let inset       : CGSize
-    private let autoPairs   : [ String : String ]
-    private let autoscroll  : Bool
-    private var highlightedRanges : [HighlightedRange]
-    private var line        : Binding<Line?>?
-    
+
+    private var source: Binding<String>
+    private var selection: Binding<Range<String.Index>>?
+    private var fontSize: Binding<CGFloat>?
+    private let language: CodeEditor.Language?
+    private let themeName: CodeEditor.ThemeName
+    private let flags: CodeEditor.Flags
+    private let indentStyle: CodeEditor.IndentStyle
+    private let inset: CGSize
+    private let autoPairs: [ String: String ]
+    private let autoscroll: Bool
+    private var highlightedRanges: [HighlightedRange]
+    private var dragSelection: Binding<Range<Int>?>?
+    private var line: Binding<Line?>?
+
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
     // value to guard against update cycles.
@@ -92,22 +94,22 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
     // might be destructed and recreated in between calls to `makeCoordinator()`
     // and `updateTextView(_:)`.
     @State private var isCurrentlyUpdatingView = ReferenceTypeBool(value: false)
-    
+
     // MARK: - TextView Delegate  Coordinator
-    
+
     public final class Coordinator: NSObject, UXCodeTextViewDelegate {
-        
-        var parent : UXCodeTextViewRepresentable
-        
-        var fontSize : CGFloat? {
+
+        var parent: UXCodeTextViewRepresentable
+
+        var fontSize: CGFloat? {
             set { if let value = newValue { parent.fontSize?.wrappedValue = value } }
             get { parent.fontSize?.wrappedValue }
         }
-        
+
         init(_ parent: UXCodeTextViewRepresentable) {
             self.parent = parent
         }
-        
+
 #if os(macOS)
         public func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? UXTextView else {
@@ -123,7 +125,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
-        
+
         private func textViewDidChange(textView: UXTextView) {
             // This function may be called as a consequence of updating the text string
             //  in UXCodeTextViewRepresentable/updateTextView(_:)`.
@@ -133,17 +135,17 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
             guard !parent.isCurrentlyUpdatingView.value else {
                 return
             }
-            
+
             parent.source.wrappedValue = textView.string
         }
-        
+
 #if os(macOS)
         public func textViewDidChangeSelection(_ notification: Notification) {
             guard let textView = notification.object as? UXTextView else {
                 assertionFailure("unexpected notification object")
                 return
             }
-            
+
             textViewDidChangeSelection(textView: textView as! UXCodeTextView)
         }
 #elseif os(iOS)
@@ -153,7 +155,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
-        
+
         private func textViewDidChangeSelection(textView: UXCodeTextView) {
             // This function may be called as a consequence of updating the selected
             // range in UXCodeTextViewRepresentable/updateTextView(_:)`.
@@ -163,94 +165,83 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
             guard !parent.isCurrentlyUpdatingView.value else {
                 return
             }
-            
+
             guard let selection = parent.selection else {
                 return
             }
-            
+
             let range = textView.swiftSelectedRange
-            
+
             if selection.wrappedValue != range {
                 selection.wrappedValue = range
             }
         }
-        
+
         var allowCopy: Bool {
             return parent.flags.contains(.selectable)
             || parent.flags.contains(.editable)
         }
     }
-    
+
     public func makeCoordinator() -> Coordinator {
         return Coordinator(self)
     }
-    //Source: https://stackoverflow.com/questions/27156916/convert-rangeint-to-rangestring-index/29948549#29948549
-    private func convertRange(range: Range<Int>, string: String) -> Range<String.Index>
-    {
-        let lower = string.index(string.startIndex, offsetBy: range.lowerBound)
-        let upper = string.index(string.startIndex, offsetBy: range.upperBound)
-        return lower..<upper
-    }
-    
+
     private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
         return textView.layoutManager.glyphIndex(for: point, in: textView.textContainer)
     }
-    
-    private func getSelectionFromLine(textView: UXCodeTextView) -> Range<String.Index>? {
-        var selectionRange: ClosedRange<Int>? = nil
+
+    private func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
+        var selectionRange: Range<Int>?
         for point in line?.wrappedValue?.points ?? [] {
             let glyphIndex = getGlyphIndex(textView: textView, point: point)
             if selectionRange == nil {
-                selectionRange = glyphIndex...glyphIndex
+                selectionRange = glyphIndex..<glyphIndex + 1
             } else {
                 if glyphIndex < selectionRange!.lowerBound {
-                    selectionRange = glyphIndex...selectionRange!.upperBound
+                    selectionRange = glyphIndex..<selectionRange!.upperBound + 1
                 }
                 if glyphIndex > selectionRange!.upperBound {
-                    selectionRange = selectionRange!.lowerBound...glyphIndex
+                    selectionRange = selectionRange!.lowerBound..<glyphIndex + 1
                 }
             }
         }
-        guard let selectionRange else { return nil }
-        print("Selection: \(selectionRange.lowerBound)...\(selectionRange.upperBound)")
-        self.highlightedRanges[self.highlightedRanges.count - 1] = HighlightedRange(range: NSMakeRange(selectionRange.lowerBound, selectionRange.count), color: .cyan)
-        return convertRange(range: selectionRange.lowerBound..<(selectionRange.upperBound + 1), string: textView.text)
+        return selectionRange
     }
-    
-    
+
     private func updateTextView(_ textView: UXCodeTextView) {
         isCurrentlyUpdatingView.value = true
         defer {
             isCurrentlyUpdatingView.value = false
         }
-        
+
         if let binding = fontSize {
             textView.applyNewTheme(themeName, andFontSize: binding.wrappedValue)
-        }
-        else {
+        } else {
             textView.applyNewTheme(themeName)
         }
         textView.language = language
-        
+
         textView.indentStyle          = indentStyle
         textView.isSmartIndentEnabled = flags.contains(.smartIndent)
         textView.autoPairCompletion   = autoPairs
-        
+
         if source.wrappedValue != textView.string {
             if let textStorage = textView.codeTextStorage {
-                textStorage.replaceCharacters(in   : NSMakeRange(0, textStorage.length),
-                                              with : source.wrappedValue)
-            }
-            else {
+                textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length),
+                                              with: source.wrappedValue)
+            } else {
                 assertionFailure("no text storage?")
                 textView.string = source.wrappedValue
             }
         }
-        if let newSelection = getSelectionFromLine(textView: textView)
+        let newDragSelection = getSelectionFromLine(textView: textView)
+        self.dragSelection?.wrappedValue = newDragSelection
+        textView.dragSelection = newDragSelection
 
         if let selection = selection {
             let range = selection.wrappedValue
-            
+
             if range != textView.swiftSelectedRange {
                 let nsrange = NSRange(range, in: textView.string)
 #if os(macOS)
@@ -260,18 +251,18 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
-                
+
                 if autoscroll {
                     textView.scrollRangeToVisible(nsrange)
                 }
             }
         }
-        
+
         textView.isEditable   = flags.contains(.editable)
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
     }
-    
+
 #if os(macOS)
     public func makeNSView(context: Context) -> NSScrollView {
         let textView = UXCodeTextView()
@@ -279,15 +270,15 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
         textView.delegate           = context.coordinator
         textView.allowsUndo         = true
         textView.textContainerInset = inset
-        
+
         let scrollView = NSScrollView()
         scrollView.hasVerticalScroller = true
         scrollView.documentView = textView
-        
+
         updateTextView(textView)
         return scrollView
     }
-    
+
     public func updateNSView(_ scrollView: NSScrollView, context: Context) {
         guard let textView = scrollView.documentView as? UXCodeTextView else {
             assertionFailure("unexpected text view")
@@ -302,8 +293,8 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
 #else // iOS etc
     private var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(
-            top    : inset.height, left  : inset.width,
-            bottom : inset.height, right : inset.width
+            top: inset.height, left: inset.width,
+            bottom: inset.height, right: inset.width
         )
     }
     public func makeUIView(context: Context) -> UITextView {
@@ -322,7 +313,7 @@ struct UXCodeTextViewRepresentable : UXViewRepresentable {
         updateTextView(textView)
         return textView
     }
-    
+
     public func updateUIView(_ textView: UITextView, context: Context) {
         guard let textView = textView as? UXCodeTextView else {
             assertionFailure("unexpected text view")
@@ -342,7 +333,7 @@ extension UXCodeTextViewRepresentable {
     // the wrapped value during `View` renders.
     private class ReferenceTypeBool {
         var value: Bool
-        
+
         init(value: Bool) {
             self.value = value
         }

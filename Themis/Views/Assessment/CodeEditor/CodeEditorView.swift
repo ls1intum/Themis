@@ -32,17 +32,17 @@ struct CodeViewNew: View {
     @ObservedObject var file: Node
     @Binding var fontSize: CGFloat
     @State var line: Line?
-    @State var dragSelection: Range<String.Index> = ("_").lineRange(for: "".startIndex..."".endIndex)
-    
+    @State var dragSelection: Range<Int>?
+
     var body: some View {
         ZStack {
             CodeEditor(source: file.code ?? "loading...",
-                       selection: $dragSelection,
                        language: .swift,
                        theme: theme,
                        fontSize: $fontSize,
                        flags: editorFlags,
                        highlightedRanges: mockHighlights,
+                       dragSelection: $dragSelection,
                        line: $line)
             if let line {
                 DrawingShape(points: line.points)
@@ -57,12 +57,12 @@ struct CodeViewNew: View {
             }
         }))
     }
-    
+
     var mockHighlights: [HighlightedRange] {
-        return [HighlightedRange(range: NSMakeRange(10, 10), color: UIColor.yellow),
-                HighlightedRange(range: NSMakeRange(30, 10), color: UIColor.red)]
+        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
+                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
     }
-    
+
     var editorFlags: CodeEditor.Flags {
         if colorScheme == .dark {
             return .blackBackground
@@ -70,7 +70,7 @@ struct CodeViewNew: View {
             return .selectable
         }
     }
-    
+
     var theme: CodeEditor.ThemeName {
         if colorScheme == .dark {
             return .ocean

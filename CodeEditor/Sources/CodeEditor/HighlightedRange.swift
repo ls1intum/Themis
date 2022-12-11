@@ -5,7 +5,6 @@
 //  Created by Tom Rudnick on 09.12.22.
 //
 
-
 import UIKit
 
 /// Range of text to highlight.

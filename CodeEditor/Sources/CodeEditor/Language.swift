@@ -7,12 +7,12 @@
 //
 
 public extension CodeEditor {
-  
+
   @frozen
   struct Language: TypedString {
-    
-    public let rawValue : String
-    
+
+    public let rawValue: String
+
     @inlinable
     public init(rawValue: String) { self.rawValue = rawValue }
   }

@@ -15,8 +15,8 @@ struct DrawingShape: Shape {
     }
 }
 
-//struct DrawingShape_Previews: PreviewProvider {
+// struct DrawingShape_Previews: PreviewProvider {
 //    static var previews: some View {
 //        DrawingShape()
 //    }
-//}
+// }

@@ -145,16 +145,15 @@ import Highlightr
  * for its SVG and Swift editor parts.
  */
 public struct CodeEditor: View {
-    
+
     /// Returns the available themes in the associated Highlightr package.
     public static var availableThemes =
     Highlightr()?.availableThemes().map(ThemeName.init).sorted() ?? []
-    
+
     /// Returns the available languages in the associated Highlightr package.
     public static var availableLanguages =
     Highlightr()?.supportedLanguages().map(Language.init).sorted() ?? []
-    
-    
+
     /**
      * Flags available for `CodeEditor`, currently just:
      * - `.editable`
@@ -162,48 +161,47 @@ public struct CodeEditor: View {
      * - `.blackBackground`
      */
     @frozen public struct Flags: OptionSet {
-        public let rawValue : UInt8
+        public let rawValue: UInt8
         @inlinable public init(rawValue: UInt8) { self.rawValue = rawValue }
-        
+
         /// `.editable` requires that the `source` of the `CodeEditor` is a
         /// `Binding`.
         public static let editable   = Flags(rawValue: 1 << 0)
-        
+
         /// Whether the displayed content should be selectable by the user.
         public static let selectable = Flags(rawValue: 1 << 1)
-        
+
         /// If the user starts a newline, the editor automagically adds the same
         /// whitespace as on the previous line.
         public static let smartIndent = Flags(rawValue: 1 << 2)
         public static let blackBackground = Flags(rawValue: 1 << 3)
-        
-        public static let defaultViewerFlags : Flags = [ .selectable ]
-        public static let defaultEditorFlags : Flags =
+
+        public static let defaultViewerFlags: Flags = [ .selectable ]
+        public static let defaultEditorFlags: Flags =
         [ .selectable, .editable, .smartIndent ]
-        
+
     }
-    
+
     @frozen public enum IndentStyle: Equatable {
         case system
         case softTab(width: Int)
     }
-    
+
     /**
      * Default auto pairing mappings for languages.
      */
-    public static var defaultAutoPairs : [ Language : [ String : String ] ] = [
+    public static var defaultAutoPairs: [ Language: [ String: String ] ] = [
         .c: cStyleAutoPairs, .cpp: cStyleAutoPairs, .objectivec: cStyleAutoPairs,
         .swift: cStyleAutoPairs,
         .java: cStyleAutoPairs, .javascript: cStyleAutoPairs,
         .xml: xmlStyleAutoPairs,
-        .python: [ "(": ")", "[": "]",  "\"": "\"",  "'": "'", "`": "`" ]
+        .python: [ "(": ")", "[": "]", "\"": "\"", "'": "'", "`": "`" ]
     ]
     public static var cStyleAutoPairs = [
-        "(": ")", "[": "]", "{": "}", "\"": "\"",  "'": "'", "`": "`"
+        "(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'", "`": "`"
     ]
     public static var xmlStyleAutoPairs = [ "<": ">", "\"": "\"", "'": "'" ]
-    
-    
+
     /**
      * Configures a CodeEditor View with the given parameters.
      *
@@ -232,19 +230,19 @@ public struct CodeEditor: View {
      *   - autoscroll:  If enabled, the editor automatically scrolls to the respective
      *                  region when the `selection` is changed programatically.
      */
-    public init(source      : Binding<String>,
-                selection   : Binding<Range<String.Index>>? = nil,
-                language    : Language?            = nil,
-                theme       : ThemeName            = .default,
-                fontSize    : Binding<CGFloat>?    = nil,
-                flags       : Flags                = .defaultEditorFlags,
-                indentStyle : IndentStyle          = .system,
-                autoPairs   : [ String : String ]? = nil,
-                inset       : CGSize?              = nil,
-                autoscroll  : Bool                 = true,
-                highlightedRanges : [HighlightedRange] = [],
-                line        : Binding<Line?>?       = nil)
-    {
+    public init(source: Binding<String>,
+                selection: Binding<Range<String.Index>>? = nil,
+                language: Language?            = nil,
+                theme: ThemeName            = .default,
+                fontSize: Binding<CGFloat>?    = nil,
+                flags: Flags                = .defaultEditorFlags,
+                indentStyle: IndentStyle          = .system,
+                autoPairs: [ String: String ]? = nil,
+                inset: CGSize?              = nil,
+                autoscroll: Bool                 = true,
+                highlightedRanges: [HighlightedRange] = [],
+                dragSelection: Binding<Range<Int>?>? = nil,
+                line: Binding<Line?>?       = nil) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -258,9 +256,10 @@ public struct CodeEditor: View {
         ?? [:]
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
+        self.dragSelection = dragSelection
         self.line = line
     }
-    
+
     /**
      * Configures a read-only CodeEditor View with the given parameters.
      *
@@ -286,58 +285,61 @@ public struct CodeEditor: View {
      *                  8/8.
      */
     @inlinable
-    public init(source      : String,
-                selection   : Binding<Range<String.Index>>? = nil,
-                language    : Language?            = nil,
-                theme       : ThemeName            = .default,
-                fontSize    : Binding<CGFloat>?    = nil,
-                flags       : Flags                = .defaultViewerFlags,
-                indentStyle : IndentStyle          = .system,
-                autoPairs   : [ String : String ]? = nil,
-                inset       : CGSize?              = nil,
+    public init(source: String,
+                selection: Binding<Range<String.Index>>? = nil,
+                language: Language?            = nil,
+                theme: ThemeName            = .default,
+                fontSize: Binding<CGFloat>?    = nil,
+                flags: Flags                = .defaultViewerFlags,
+                indentStyle: IndentStyle          = .system,
+                autoPairs: [ String: String ]? = nil,
+                inset: CGSize?              = nil,
                 highlightedRanges: [HighlightedRange] = [],
-                line        : Binding<Line?>?       = nil)
-    {
+                dragSelection: Binding<Range<Int>?>? = nil,
+                line: Binding<Line?>?       = nil) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
-        self.init(source      : .constant(source),
-                  selection   : selection,
-                  language    : language,
-                  theme       : theme,
-                  fontSize    : fontSize,
-                  flags       : flags.subtracting(.editable),
-                  indentStyle : indentStyle,
-                  autoPairs   : autoPairs,
-                  inset       : inset,
+        self.init(source: .constant(source),
+                  selection: selection,
+                  language: language,
+                  theme: theme,
+                  fontSize: fontSize,
+                  flags: flags.subtracting(.editable),
+                  indentStyle: indentStyle,
+                  autoPairs: autoPairs,
+                  inset: inset,
                   highlightedRanges: highlightedRanges,
-                  line        : line)
+                  dragSelection: dragSelection,
+                  line: line)
     }
-    
-    private var source      : Binding<String>
-    private var selection   : Binding<Range<String.Index>>?
-    private var fontSize    : Binding<CGFloat>?
-    private let language    : Language?
-    private let themeName   : ThemeName
-    private let flags       : Flags
-    private let indentStyle : IndentStyle
-    private let autoPairs   : [ String : String ]
-    private let inset       : CGSize
-    private let autoscroll  : Bool
+
+    private var source: Binding<String>
+    private var selection: Binding<Range<String.Index>>?
+    private var fontSize: Binding<CGFloat>?
+    private let language: Language?
+    private let themeName: ThemeName
+    private let flags: Flags
+    private let indentStyle: IndentStyle
+    private let autoPairs: [ String: String ]
+    private let inset: CGSize
+    private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
-    private var line        : Binding<Line?>?
-    
+    private var dragSelection: Binding<Range<Int>?>?
+    private var line: Binding<Line?>?
+
     public var body: some View {
-        UXCodeTextViewRepresentable(source      : source,
-                                    selection   : selection,
-                                    language    : language,
-                                    theme       : themeName,
-                                    fontSize    : fontSize,
-                                    flags       : flags,
-                                    indentStyle : indentStyle,
-                                    autoPairs   : autoPairs,
-                                    inset       : inset,
-                                    autoscroll  : autoscroll,
+        UXCodeTextViewRepresentable(source: source,
+                                    selection: selection,
+                                    language: language,
+                                    theme: themeName,
+                                    fontSize: fontSize,
+                                    flags: flags,
+                                    indentStyle: indentStyle,
+                                    autoPairs: autoPairs,
+                                    inset: inset,
+                                    autoscroll: autoscroll,
                                     highlightedRanges: highlightedRanges,
-                                    line        : line)
+                                    dragSelection: dragSelection,
+                                    line: line)
     }
 }
 

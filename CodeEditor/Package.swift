@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-  
+
   name: "CodeEditor",
 
   platforms: [
@@ -13,11 +13,11 @@ let package = Package(
   products: [
     .library(name: "CodeEditor", targets: [ "CodeEditor" ])
   ],
-  
+
   dependencies: [
     .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2")
   ],
-           
+
   targets: [
     .target(name: "CodeEditor", dependencies: [ "Highlightr" ])
   ]
