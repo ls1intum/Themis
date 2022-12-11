@@ -7,6 +7,7 @@ struct CodeView: View {
     @Binding var fontSize: CGFloat
     @State var dragSelection: Range<Int>?
     @State var line: Line?
+    var onOpenFeedback: (Range<Int>) -> Void
 
     var body: some View {
         ZStack {
@@ -30,11 +31,11 @@ struct CodeView: View {
                 self.line?.points.append(newPoint)
             }
         }).onEnded { _ in
-            print("Feedback hinzugefuegt! \(dragSelection)")
+            if let dragSelection {
+                onOpenFeedback(dragSelection)
+            }
             dragSelection = nil
-        }).onChange(of: dragSelection) { value in
-            print("dragSelection changed to \(value)")
-        }
+        })
     }
 
     var mockHighlights: [HighlightedRange] {

@@ -6,6 +6,11 @@ struct CodeEditorView: View {
     @EnvironmentObject var cvm: CodeEditorViewModel
 
     @Binding var showFileTree: Bool
+    
+    private func openFeedbackSheet(forRange dragRange: Range<Int>) {
+        cvm.selectedSection = dragRange.toNSRange()
+        cvm.showAddFeedback = true
+    }
 
     var body: some View {
         VStack {
@@ -16,7 +21,11 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView()
                     }
-                    CodeView(file: file, fontSize: $cvm.editorFontSize)
+                    CodeView(
+                        file: file,
+                        fontSize: $cvm.editorFontSize,
+                        onOpenFeedback: openFeedbackSheet
+                    )
                 }
             } else {
                 Text("Select a file")
