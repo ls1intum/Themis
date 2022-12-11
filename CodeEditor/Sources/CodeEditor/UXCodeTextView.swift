@@ -270,17 +270,19 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {
-        if self.text.count > 40 { // TODO
+        if !text.isEmpty {
             for hRange in highlightedRanges {
-                self.textStorage.addAttribute(NSAttributedString.Key.backgroundColor, value: hRange.color, range: hRange.range)
+                self.textStorage.addAttribute(
+                    NSAttributedString.Key.backgroundColor,
+                    value: hRange.color,
+                    range: hRange.range.makeSafeFor(text)
+                )
             }
             if let dragSelection {
-                // apparently, the drag selection upper bound sometimes it too high - prevent that
-                let upper = min(dragSelection.upperBound, text.count)
                 self.textStorage.addAttribute(
                     NSAttributedString.Key.backgroundColor,
                     value: UIColor.yellow.withAlphaComponent(0.5),
-                    range: NSRange(location: dragSelection.lowerBound, length: upper - dragSelection.lowerBound)
+                    range: dragSelection.toNSRange().makeSafeFor(text)
                 )
             }
             let coordinator = self.delegate as? UXCodeTextViewDelegate

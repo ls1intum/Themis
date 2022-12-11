@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Range<Int> {
+public extension Range<Int> {
     func toNSRange() -> NSRange {
         return NSRange(location: lowerBound, length: count)
     }
