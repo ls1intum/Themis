@@ -75,10 +75,10 @@ class ProblemStatementCellViewModel: ObservableObject {
         for var line in lines {
             if line.contains("[task][") && line.contains("0") {
                 line = calculateScoreOfPassingTests(line)
-                line = line.replacingOccurrences(of: "[task][", with: " ![Test failed](asset:///multiply.circle.fill) **")
+                line = line.replacingOccurrences(of: "[task][", with: " ![Test failed](asset:///TestFailedSymbol) **")
             } else if line.contains("[task][") && line.contains("1") {
                 line = calculateScoreOfPassingTests(line)
-                line = line.replacingOccurrences(of: "[task][", with: " ![Test passed](asset:///checkmark.circle.fill) **")
+                line = line.replacingOccurrences(of: "[task][", with: " ![Test passed](asset:///TestPassedSymbol) **")
             }
 
             problemStatementText.append(line + "\n")
