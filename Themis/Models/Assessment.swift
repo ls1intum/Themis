@@ -16,7 +16,8 @@ enum FeedbackType {
 
 struct AssessmentResult: Encodable {
     var score: Double {
-        feedbacks.reduce(0) { $0 + $1.credits }
+        let score = feedbacks.reduce(0) { $0 + $1.credits }
+        return score < 0 ? 0 : score
     }
 
     private var _feedbacks: [AssessmentFeedback] = []
@@ -93,7 +94,7 @@ struct AssessmentFeedback: Identifiable {
     var text: String? /// max length = 500
     var detailText: String? /// max length = 5000
     var credits: Double /// score of element
-    var assessmentType: AssessmentType?
+    var assessmentType: AssessmentType = .MANUAL
 
     // custom utility attributes
     var type: FeedbackType
@@ -107,10 +108,11 @@ struct AssessmentFeedback: Identifiable {
 
 // send to artemis
 extension AssessmentFeedback: Encodable {
-    enum EncodingKeys: CodingKey {
+    enum EncodingKeys: String, CodingKey {
         case text
         case detailText
         case credits
+        case assessmentType = "type"
     }
 
     func encode(to encoder: Encoder) throws {
@@ -118,6 +120,7 @@ extension AssessmentFeedback: Encodable {
         try container.encode(text, forKey: .text)
         try container.encode(detailText, forKey: .detailText)
         try container.encode(credits, forKey: .credits)
+        try container.encode(assessmentType, forKey: .assessmentType)
     }
 }
 
@@ -135,9 +138,8 @@ extension AssessmentFeedback: Decodable {
         text = try? values.decode(String?.self, forKey: .text)
         detailText = try? values.decode(String?.self, forKey: .detailText)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
+        assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
         type = text?.contains("at Line:") ?? false ? .inline : .general
-        // TODO: find a way to distinguish between automatic and manual feedback when fetching feedback for a specific submission
-        assessmentType = try? values.decode(AssessmentType?.self, forKey: .assessmentType) ?? .MANUAL
     }
 }
 

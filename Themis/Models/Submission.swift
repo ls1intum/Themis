@@ -47,6 +47,7 @@ struct Submission: Codable, Identifiable {
 }
 
 struct ExerciseOfSubmission: Codable {
+    let maxPoints: Double
     let problemStatement: String
     let gradingInstructions: String
     let gradingCriteria: [GradingCriterion]?
@@ -57,6 +58,7 @@ struct SubmissionForAssessment: Codable {
     let participation: ParticipationForAssessment
     let feedbacks: [AssessmentFeedback]?
     let results: [SavedAssessmentResults]?
+    let buildFailed: Bool
 }
 
 struct SavedAssessmentResults: Codable {
@@ -87,6 +89,7 @@ struct ParticipationResult: Codable {
 
 struct SubmissionFromResult: Codable {
     let id: Int
+    let buildFailed: Bool
 }
 
 extension ArtemisAPI {
@@ -133,7 +136,8 @@ extension ArtemisAPI {
             id: pr.submission.id,
             participation: pr.participation,
             feedbacks: pr.feedbacks,
-            results: nil
+            results: nil,
+            buildFailed: pr.submission.buildFailed
         )
     }
 }

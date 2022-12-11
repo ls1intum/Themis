@@ -128,6 +128,12 @@ struct AssessmentView: View {
                 .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
+                progressView
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                scoreDisplay
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
                         if let pId = vm.submission?.participation.id {
@@ -283,6 +289,61 @@ struct AssessmentView: View {
             }
         }
     }
+
+    var scoreColor: Color {
+        guard let max = vm.submission?.participation.exercise.maxPoints else {
+            return Color(.systemRed)
+        }
+        let score = vm.feedback.score
+        if score < max / 3 {
+            return Color(.systemRed)
+        } else if score < max / 3 * 2 {
+            return Color(.systemYellow)
+        } else {
+            return Color(.systemGreen)
+        }
+    }
+
+    var scoreDisplay: some View {
+        Group {
+            if let submission = vm.submission {
+                if submission.buildFailed {
+                    Text("Build failed")
+                        .foregroundColor(.red)
+                } else {
+                    Text(String(format: "%.1f/%.1f", vm.feedback.score, submission.participation.exercise.maxPoints))
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .fontWeight(.semibold)
+    }
+
+    var progressView: some View {
+        Group {
+            if let submission = vm.submission {
+                ZStack {
+                    Circle()
+                        .stroke(
+                            Color.secondary.opacity(0.5),
+                            lineWidth: 5
+                        )
+                    Circle()
+                        .trim(from: 0, to: vm.feedback.score / submission.participation.exercise.maxPoints)
+                        .stroke(
+                            Color.secondary,
+                            style: StrokeStyle(
+                                lineWidth: 5,
+                                lineCap: .round
+                            )
+                        )
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear, value: vm.feedback.score)
+                }
+                .frame(width: 20)
+            }
+        }
+    }
 }
 
 extension Color {
@@ -311,8 +372,10 @@ struct NavigationBarButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
             .background(Color.secondary)
-            .cornerRadius(12)
+            .cornerRadius(20)
+            .fontWeight(.semibold)
     }
 }
