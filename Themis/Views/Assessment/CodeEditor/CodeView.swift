@@ -1,7 +1,7 @@
 import SwiftUI
 import CodeEditor
 
-struct CodeViewNew: View {
+struct CodeView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var file: Node
     @Binding var fontSize: CGFloat
