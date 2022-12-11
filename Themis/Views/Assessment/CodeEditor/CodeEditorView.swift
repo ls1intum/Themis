@@ -16,7 +16,7 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView()
                     }
-                    CodeViewNew(file: file, fontSize: $cvm.editorFontSize)
+                    CodeViewNewTest(file: file, fontSize: $cvm.editorFontSize)
                 }
             } else {
                 Text("Select a file")
@@ -24,6 +24,44 @@ struct CodeEditorView: View {
             }
         }
         .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+    }
+}
+
+struct CodeViewNewTest: View {
+    @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var file: Node
+    @Binding var fontSize: CGFloat
+
+    var body: some View {
+        ZStack {
+            CodeEditor(source: file.code ?? "loading...",
+                       language: .swift,
+                       theme: theme,
+                       fontSize: $fontSize,
+                       flags: editorFlags,
+                       highlightedRanges: mockHighlights)
+        }
+    }
+
+    var mockHighlights: [HighlightedRange] {
+        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
+                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
+    }
+
+    var editorFlags: CodeEditor.Flags {
+        if colorScheme == .dark {
+            return .blackBackground
+        } else {
+            return .selectable
+        }
+    }
+
+    var theme: CodeEditor.ThemeName {
+        if colorScheme == .dark {
+            return .ocean
+        } else {
+            return .xcode
+        }
     }
 }
 

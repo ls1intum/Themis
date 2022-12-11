@@ -45,6 +45,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
      *   - autoscroll:  If enabled, the editor automatically scrolls to the respective
      *                  region when the `selection` is changed programatically.
      */
+    
     public init(source: Binding<String>,
                 selection: Binding<Range<String.Index>>?,
                 language: CodeEditor.Language?,
@@ -155,6 +156,15 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
+
+        public func textView(_ textView: UITextView, editMenuForTextIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
+            var additionalActions: [UIMenuElement] = []
+            let feedbackAction = UIAction(title: "Feedback") { _ in
+
+            }
+            additionalActions.append(feedbackAction)
+            return UIMenu(children: additionalActions + suggestedActions)
+        }
 
         private func textViewDidChangeSelection(textView: UXCodeTextView) {
             // This function may be called as a consequence of updating the selected
