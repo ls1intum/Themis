@@ -39,6 +39,7 @@ struct CodeView: View {
                 onOpenFeedback(dragSelection)
             }
             dragSelection = nil
+            line = nil
         })
     }
 
