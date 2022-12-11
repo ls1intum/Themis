@@ -6,7 +6,7 @@ struct CodeEditorView: View {
     @EnvironmentObject var cvm: CodeEditorViewModel
 
     @Binding var showFileTree: Bool
-    
+
     private func openFeedbackSheet(forRange dragRange: Range<Int>) {
         cvm.selectedSection = dragRange.toNSRange()
         cvm.showAddFeedback = true

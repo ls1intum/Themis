@@ -277,7 +277,11 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             if let dragSelection {
                 // apparently, the drag selection upper bound sometimes it too high - prevent that
                 let upper = min(dragSelection.upperBound, text.count)
-                self.textStorage.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.cyan, range: NSRange(location: dragSelection.lowerBound, length: upper - dragSelection.lowerBound))
+                self.textStorage.addAttribute(
+                    NSAttributedString.Key.backgroundColor,
+                    value: UIColor.yellow.withAlphaComponent(0.5),
+                    range: NSRange(location: dragSelection.lowerBound, length: upper - dragSelection.lowerBound)
+                )
             }
             let coordinator = self.delegate as? UXCodeTextViewDelegate
             coordinator?.setDragSelection(self.dragSelection)

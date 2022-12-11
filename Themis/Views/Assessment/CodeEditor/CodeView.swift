@@ -26,7 +26,11 @@ struct CodeView: View {
         }.gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local).onChanged({ value in
             let newPoint = value.location
             if value.translation.width + value.translation.height == 0 {
-                self.line = Line(points: [newPoint], color: .blue, lineWidth: 10.0)
+                self.line = Line(
+                    points: [newPoint],
+                    color: .orange.opacity(0.5),
+                    lineWidth: 10.0
+                )
             } else {
                 self.line?.points.append(newPoint)
             }
