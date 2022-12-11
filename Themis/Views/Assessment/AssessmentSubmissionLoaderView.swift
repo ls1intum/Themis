@@ -10,6 +10,7 @@ import SwiftUI
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var vm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
+    @StateObject var umlVM = UMLViewModel()
 
     var exerciseID: Int
     var submissionID: Int

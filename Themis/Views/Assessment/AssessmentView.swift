@@ -6,6 +6,7 @@ struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vm: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
+    @EnvironmentObject var umlVM: UMLViewModel
 
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
@@ -45,6 +46,13 @@ struct AssessmentView: View {
             }
             .padding(.top)
             .padding(.leading, 18)
+        }
+        .overlay {
+            ZStack {
+                if umlVM.showUMLFullScreen {
+                    UMLView()
+                }
+            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(Color.primary, for: .navigationBar)
