@@ -275,7 +275,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
                 self.textStorage.addAttribute(
                     NSAttributedString.Key.backgroundColor,
                     value: hRange.color,
-                    range: hRange.range.makeSafeFor(text)
+                    range: hRange.range
                 )
             }
             if let dragSelection {

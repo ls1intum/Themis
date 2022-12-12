@@ -17,7 +17,7 @@ struct CodeView: View {
                        theme: theme,
                        fontSize: $fontSize,
                        flags: editorFlags,
-                       highlightedRanges: mockHighlights,
+                       highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
                        dragSelection: $dragSelection,
                        line: $line,
                        showAddFeedback: $cvm.showAddFeedback,
@@ -44,11 +44,6 @@ struct CodeView: View {
             dragSelection = nil
             line = nil
         })
-    }
-
-    var mockHighlights: [HighlightedRange] {
-        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow, cornerRadius: 10),
-                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
     }
 
     var editorFlags: CodeEditor.Flags {
@@ -85,17 +80,12 @@ struct CodeView: View {
                        theme: theme,
                        fontSize: $fontSize,
                        flags: editorFlags,
-                       highlightedRanges: mockHighlights,
+                       highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
                        dragSelection: $dragSelection,
                        line: $line,
                        showAddFeedback: $cvm.showAddFeedback,
                        selectedSection: $cvm.selectedSection)
         }
-    }
-
-    var mockHighlights: [HighlightedRange] {
-        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
-                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
     }
 
     var editorFlags: CodeEditor.Flags {

@@ -169,10 +169,12 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
         public func textView(_ textView: UITextView, editMenuForTextIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
             var additionalActions: [UIMenuElement] = []
-            let feedbackAction = UIAction(title: "Feedback") { _ in
-                self.parent.showAddFeedback.wrappedValue.toggle()
+            if range.length > 0 {
+                let feedbackAction = UIAction(title: "Feedback") { _ in
+                    self.parent.showAddFeedback.wrappedValue.toggle()
+                }
+                additionalActions.append(feedbackAction)
             }
-            additionalActions.append(feedbackAction)
             return UIMenu(children: additionalActions + suggestedActions)
         }
 
@@ -285,6 +287,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isEditable   = flags.contains(.editable)
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
+        textView.highlightedRanges = highlightedRanges
     }
 
 #if os(macOS)
