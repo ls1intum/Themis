@@ -9,9 +9,6 @@ import Foundation
 
 struct Participation: Codable {
     let id: Int
-    let testRun: Bool
-    let repositoryUrl: String
-    let userIndependentRepositoryUrl: String
 }
 
 struct Exercise: Codable {
@@ -23,7 +20,7 @@ struct Exercise: Codable {
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this might be nil
     let dueDate: String?
-    // let templateParticipation: Participation check again
+    let templateParticipation: Participation?
     // let solutionParticipation: Participation check again
 
     init() {
@@ -35,6 +32,7 @@ struct Exercise: Codable {
         self.problemStatement = nil
         self.gradingInstructions = nil
         self.dueDate = nil
+        self.templateParticipation = Participation(id: -1)
     }
 
     func parseDate(_ dateString: String?) -> Date? {

@@ -14,9 +14,10 @@ struct AssessmentSubmissionLoaderView: View {
     var exerciseID: Int
     var submissionID: Int
     let exerciseTitle: String
+    let templateParticipationId: Int
 
     var body: some View {
-        AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle)
+        AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle, templateParticipationId: templateParticipationId)
             .environmentObject(vm)
             .environmentObject(cvm)
             .task {
@@ -30,6 +31,6 @@ struct AssessmentSubmissionLoaderView: View {
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
+        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise", templateParticipationId: 123123)
     }
 }

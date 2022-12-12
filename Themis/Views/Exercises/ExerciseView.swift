@@ -16,7 +16,7 @@ struct ExerciseView: View {
 
     var body: some View {
         VStack {
-            if exerciseVM.exerciseStats != nil {
+            if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil {
                 Form {
                     HStack {
                         Text("Assessed:")
@@ -32,7 +32,11 @@ struct ExerciseView: View {
                             .foregroundColor(.green)
                     }
                     Section("Submission") {
-                        SubmissionListView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
+                        SubmissionListView(
+                            exerciseId: exercise.id,
+                            exerciseTitle: exercise.title ?? "",
+                            templateParticipationId: exercise.templateParticipation?.id ?? -1
+                        )
                     }
                 }
             } else {
@@ -40,15 +44,20 @@ struct ExerciseView: View {
             }
         }
         .navigationDestination(isPresented: $vm.showSubmission) {
-            AssessmentView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
+            AssessmentView(
+                exerciseId: exercise.id,
+                exerciseTitle: exercise.title ?? "",
+                templateParticipationId: exercise.templateParticipation?.id ?? -1
+            )
                 .environmentObject(vm)
                 .environmentObject(cvm)
         }
         .navigationTitle(exercise.title ?? "")
         .onAppear {
-            self.exerciseVM.exercise = exercise
+            exerciseVM.exercise = exercise
             Task {
-                await exerciseVM.fetchExerciseStats()
+                await exerciseVM.fetchExercise(exerciseId: exercise.id)
+                await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
             }
         }
         .toolbar {

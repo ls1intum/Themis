@@ -15,7 +15,7 @@ class CourseListViewModel: ObservableObject {
         do {
             self.courses = try await ArtemisAPI.getAllCourses()
         } catch let error {
-            print(error.localizedDescription)
+            print(error)
         }
     }
 

@@ -28,6 +28,9 @@ class Node: Hashable, ObservableObject {
     let type: FileType
     var children: [Node]?
     @Published var code: String?
+    var templateCode: String?
+    @Published var diffAdded: [Int]? // line numbers of changed lines starting from 1
+    @Published var diffRemoved: [Int]?
     /// property that calculates a lines character range to get line number of selectedTextRange
     var lines: [NSRange]? {
         if let code = code {
@@ -113,7 +116,7 @@ class Node: Hashable, ObservableObject {
     }
 
     @MainActor
-    public func fetchCode(participationId: Int) async throws {
+    public func fetchCode(participationId: Int) async {
         if code != nil { return } else {
             do {
                 var relativePath = path
@@ -131,6 +134,53 @@ class Node: Hashable, ObservableObject {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(path)
+    }
+
+    @MainActor
+    public func calculateDiff(templateParticipationId: Int) async {
+        // only calculate once
+        if diffAdded != nil && diffRemoved != nil {
+            return
+        }
+        guard let code = self.code else {
+            return
+        }
+        if templateCode == nil {
+            await fetchTemplateCode(templateParticipationId: templateParticipationId)
+        }
+        guard let tcode = templateCode else {
+            return
+        }
+        let base = tcode.components(separatedBy: .newlines)
+        let new = code.components(separatedBy: .newlines)
+
+        let diff = new.difference(from: base)
+        var added = [Int]()
+        var removed = [Int]()
+        diff.forEach { change in
+            switch change {
+            case .insert(offset: let offset, element: _, associatedWith: _):
+                added.append(offset + 1) // +1 as lines starting from 1
+            case .remove(offset: let offset, element: _, associatedWith: _):
+                removed.append(offset + 1)
+            }
+        }
+        self.diffAdded = added
+        self.diffRemoved = removed
+        print("added: \(diffAdded ?? [])") // print as long as no highlighting exists
+        print("removed: \(diffRemoved ?? [])")
+    }
+
+    private func fetchTemplateCode(templateParticipationId: Int) async {
+        if templateCode != nil { return } else {
+            do {
+                var relativePath = path
+                relativePath.remove(at: relativePath.startIndex)
+                self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 

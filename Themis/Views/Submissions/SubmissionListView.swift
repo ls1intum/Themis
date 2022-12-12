@@ -13,6 +13,7 @@ struct SubmissionListView: View {
 
     var exerciseId: Int
     let exerciseTitle: String
+    let templateParticipationId: Int
 
     var body: some View {
         List {
@@ -21,7 +22,12 @@ struct SubmissionListView: View {
             } else {
                 ForEach(submissionListVM.submissions, id: \.id) { submission in
                     NavigationLink {
-                        AssessmentSubmissionLoaderView(exerciseID: exerciseId, submissionID: submission.id, exerciseTitle: exerciseTitle)
+                        AssessmentSubmissionLoaderView(
+                            exerciseID: exerciseId,
+                            submissionID: submission.id,
+                            exerciseTitle: exerciseTitle,
+                            templateParticipationId: templateParticipationId
+                        )
                     } label: {
                         Text("Submission \(submission.id) by \(submission.participation.student.name)")
                     }
@@ -37,7 +43,7 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise")
+            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise", templateParticipationId: 12)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

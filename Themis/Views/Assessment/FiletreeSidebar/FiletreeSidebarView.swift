@@ -4,6 +4,8 @@ struct FiletreeSidebarView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
 
+    let templateParticipationId: Int
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Filetree")
@@ -24,7 +26,7 @@ struct FiletreeSidebarView: View {
                                 if tree.type == .file {
                                     withAnimation {
                                         guard let pId = assessmentViewModel.submission?.participation.id else { return }
-                                        cvm.openFile(file: tree, participationId: pId)
+                                        cvm.openFile(file: tree, participationId: pId, templateParticipationId: templateParticipationId)
                                     }
                                 }
                             }

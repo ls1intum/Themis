@@ -33,7 +33,11 @@ struct SubmissionSearchView: View {
             await vm.fetchSubmissions(exerciseId: exercise.id)
         }
         .navigationDestination(isPresented: $avm.showSubmission) {
-            AssessmentView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
+            AssessmentView(
+                exerciseId: exercise.id,
+                exerciseTitle: exercise.title ?? "",
+                templateParticipationId: exercise.templateParticipation?.id ?? -1
+            )
                 .environmentObject(avm)
                 .environmentObject(cvm)
         }

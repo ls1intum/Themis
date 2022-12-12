@@ -18,12 +18,13 @@ struct AssessmentView: View {
 
     let exerciseId: Int
     let exerciseTitle: String
+    let templateParticipationId: Int
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView()
+                    FiletreeSidebarView(templateParticipationId: templateParticipationId)
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
                     leftGrip
@@ -341,7 +342,7 @@ struct AssessmentView_Previews: PreviewProvider {
     static let codeEditor = CodeEditorViewModel()
 
     static var previews: some View {
-        AssessmentView(exerciseId: 5284, exerciseTitle: "Example Exercise")
+        AssessmentView(exerciseId: 5284, exerciseTitle: "Example Exercise", templateParticipationId: 12)
             .environmentObject(assessment)
             .environmentObject(codeEditor)
             .previewInterfaceOrientation(.landscapeLeft)
