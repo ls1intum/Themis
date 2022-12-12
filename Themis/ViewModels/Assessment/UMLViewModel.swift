@@ -19,9 +19,9 @@ class UMLViewModel: ObservableObject {
         // update offset
         viewOffset = value
         // calculate backgroun opacity
-        let halgHeight = UIScreen.main.bounds.height / 2
+        let halfHeight = UIScreen.main.bounds.height / 2
 
-        let progress = viewOffset.height / halgHeight
+        let progress = viewOffset.height / halfHeight
 
         withAnimation(.default) {
             bgOpacity = Double(1 - (progress < 0 ? -progress : progress))
