@@ -59,7 +59,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 highlightedRanges: [HighlightedRange],
                 dragSelection: Binding<Range<Int>?>?,
                 line: Binding<Line?>?,
-                showAddFeedback: Binding<Bool>) {
+                showAddFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -74,6 +75,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.dragSelection = dragSelection
         self.line = line
         self.showAddFeedback = showAddFeedback
+        self.selectedSection = selectedSection
     }
 
     private var source: Binding<String>
@@ -90,6 +92,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
+    private var selectedSection: Binding<NSRange?>
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -181,6 +184,10 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             // (Changing a `State` during a `View` update is not permitted).
             guard !parent.isCurrentlyUpdatingView.value else {
                 return
+            }
+            // avoid empty references for inline highlights
+            if textView.selectedRange.length > 0 {
+                parent.selectedSection.wrappedValue = textView.selectedRange
             }
 
             guard let selection = parent.selection else {

@@ -21,7 +21,7 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView()
                     }
-                    CodeView(
+                    CodeViewSelect(
                         cvm: cvm, file: file,
                         fontSize: $cvm.editorFontSize,
                         onOpenFeedback: openFeedbackSheet
