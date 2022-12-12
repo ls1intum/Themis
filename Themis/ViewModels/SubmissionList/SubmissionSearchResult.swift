@@ -39,8 +39,8 @@ struct SubmissionSearchResult {
     let forText: String
     let submission: Submission
 
-    private func prepareStringCompare(_ s: String) -> String {
-        return s.lowercased().trimmingCharacters(in: .whitespaces)
+    private func prepareStringCompare(_ str: String) -> String {
+        return str.lowercased().trimmingCharacters(in: .whitespaces)
     }
 
     private var student: Student {
