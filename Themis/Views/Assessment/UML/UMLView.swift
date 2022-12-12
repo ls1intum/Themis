@@ -31,9 +31,10 @@ struct UMLView: View {
                         // zoom in or out
                         MagnificationGesture().onChanged({ (value)  in
                             umlVM.scale = value
-                        }).onEnded({ (_) in
+                        })
+                        .onEnded({ (value) in
                             withAnimation(.spring()) {
-                                umlVM.scale = 1
+                                umlVM.scale = value
                             }
                         })
                         .simultaneously(with: TapGesture(count: 2).onEnded({
@@ -57,14 +58,19 @@ struct UMLView: View {
                 Image(systemName: "xmark")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.white.opacity(0.3))
+                    .background(Color.gray.opacity(0.6))
                     .clipShape(Circle())
             }).padding(5),
             alignment: .topTrailing
         )
-        .gesture(DragGesture().updating($draggingOffset, body: { (value, outValue, _ ) in
-            outValue = value.translation
-            umlVM.onChange(value: draggingOffset)
-        }).onEnded(umlVM.onEnd(value:)))
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    umlVM.onChange(value: gesture.translation)
+                }
+                .onEnded { value in
+                    umlVM.onEnd(value: value)
+                }
+        )
     }
 }
