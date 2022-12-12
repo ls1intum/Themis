@@ -59,8 +59,8 @@ struct UMLView: View {
                     .padding()
                     .background(Color.white.opacity(0.3))
                     .clipShape(Circle())
-            }).padding(5)
-            , alignment: .topTrailing
+            }).padding(5),
+            alignment: .topTrailing
         )
         .gesture(DragGesture().updating($draggingOffset, body: { (value, outValue, _ ) in
             outValue = value.translation
