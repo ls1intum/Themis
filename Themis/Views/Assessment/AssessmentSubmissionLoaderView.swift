@@ -26,11 +26,12 @@ struct AssessmentSubmissionLoaderView: View {
                 if let pId = vm.submission?.participation.id {
                     await cvm.initFileTree(participationId: pId)
                 }
+            }
     }
-}
 
-struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
+    struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
+        static var previews: some View {
+            AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
+        }
     }
 }
