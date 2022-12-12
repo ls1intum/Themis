@@ -21,6 +21,10 @@ struct CodeView: UIViewControllerRepresentable {
         uiViewController.fontSize = cvm.editorFontSize
         uiViewController.file = file
         uiViewController.textView.highlightedRanges = cvm.inlineHighlights[file.path] ?? []
+        if let scrollToRange = cvm.scrollToRange {
+            uiViewController.textView.scrollRangeToVisible(scrollToRange)
+            cvm.scrollToRange = nil
+        }
     }
 
     func makeCoordinator() -> Coordinator {

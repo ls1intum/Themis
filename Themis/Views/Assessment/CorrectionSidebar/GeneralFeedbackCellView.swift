@@ -36,6 +36,14 @@ struct GeneralFeedbackCellView: View {
                 Section {
                     ForEach(assessment.feedback.inlineFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
+                            .onTapGesture {
+                                if let file = feedback.file, let pId = assessment.submission?.participation.id {
+                                    cvm.openFile(file: file, participationId: pId)
+                                    cvm.scrollToRange = cvm.inlineHighlights[file.path]?.first {
+                                        $0.id == feedback.id.uuidString
+                                    }?.range
+                                }
+                            }
                             .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: delete(at:))

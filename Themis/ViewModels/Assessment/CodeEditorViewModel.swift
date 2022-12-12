@@ -18,6 +18,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
     @Published var showAddFeedback: Bool = false
+    @Published var scrollToRange: NSRange?
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {
