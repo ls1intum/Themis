@@ -314,7 +314,10 @@ struct AssessmentView: View {
                     Text("Build failed")
                         .foregroundColor(.red)
                 } else {
-                    Text(String(format: "%.1f/%.1f", vm.feedback.score, submission.participation.exercise.maxPoints))
+                    Text("""
+                         \(vm.feedback.score.formatted(FloatingPointFormatStyle()))/\
+                         \(submission.participation.exercise.maxPoints.formatted(FloatingPointFormatStyle()))
+                         """)
                         .foregroundColor(.white)
                 }
             }
