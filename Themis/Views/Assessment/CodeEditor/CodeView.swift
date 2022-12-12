@@ -48,7 +48,7 @@ struct CodeView: View {
 
     var editorFlags: CodeEditor.Flags {
         if colorScheme == .dark {
-            return .blackBackground
+            return [.selectable, .blackBackground]
         } else {
             return .selectable
         }
@@ -90,7 +90,7 @@ struct CodeView: View {
 
     var editorFlags: CodeEditor.Flags {
         if colorScheme == .dark {
-            return .blackBackground
+            return [.selectable, .blackBackground]
         } else {
             return .selectable
         }
