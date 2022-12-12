@@ -38,6 +38,7 @@ struct ProblemStatementCellView: View {
                     })
                 } else {
                     Markdown(part.text)
+                        .setImageHandler(.assetImage(), forURLScheme: "asset")
                 }
             }
 
@@ -46,6 +47,7 @@ struct ProblemStatementCellView: View {
         .onAppear {
             vm.convertProblemStatement(
                 problemStatement: assessment.submission?.participation.exercise.problemStatement ?? "",
+                feedbacks: assessment.feedback.feedbacks,
                 colorScheme: colorScheme)
         }
     }

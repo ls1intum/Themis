@@ -34,6 +34,7 @@
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
 		E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */; };
 		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
+		E1C09D3F2946A50F00EC709B /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */; };
 		E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */; };
 		E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */; };
 		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
@@ -123,6 +124,7 @@
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
 		E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorViewModel.swift; sourceTree = "<group>"; };
 		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
+		E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchView.swift; sourceTree = "<group>"; };
 		E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchViewModel.swift; sourceTree = "<group>"; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
@@ -388,6 +390,14 @@
 			path = SubmissionList;
 			sourceTree = "<group>";
 		};
+		E1C09D3D2946A4ED00EC709B /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
 		E2192ED1291E47670092CE58 /* REST */ = {
 			isa = PBXGroup;
 			children = (
@@ -412,6 +422,7 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E1C09D3D2946A4ED00EC709B /* Custom */,
 				E21AF042292B9D4C0096ACFC /* Assessment */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
 				E2E674812920326F0081238B /* Courses */,
@@ -716,6 +727,7 @@
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
+				E1C09D3F2946A50F00EC709B /* CustomProgressView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
