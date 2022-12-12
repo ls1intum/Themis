@@ -10,11 +10,11 @@ import SwiftUI
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var vm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
-    
+
     var exerciseID: Int
     var submissionID: Int
     let exerciseTitle: String
-    
+
     var body: some View {
         AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle)
             .environmentObject(vm)

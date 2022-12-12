@@ -130,7 +130,8 @@ struct AssessmentView: View {
                 .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                progressView
+                CustomProgressView(progress: vm.feedback.score,
+                                   max: vm.submission?.participation.exercise.maxPoints ?? 0)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 scoreDisplay
@@ -319,32 +320,6 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
-    }
-
-    var progressView: some View {
-        Group {
-            if let submission = vm.submission {
-                ZStack {
-                    Circle()
-                        .stroke(
-                            Color.secondary.opacity(0.5),
-                            lineWidth: 5
-                        )
-                    Circle()
-                        .trim(from: 0, to: vm.feedback.score / submission.participation.exercise.maxPoints)
-                        .stroke(
-                            Color.secondary,
-                            style: StrokeStyle(
-                                lineWidth: 5,
-                                lineCap: .round
-                            )
-                        )
-                        .rotationEffect(.degrees(-90))
-                        .animation(.linear, value: vm.feedback.score)
-                }
-                .frame(width: 20)
-            }
-        }
     }
 }
 
