@@ -34,13 +34,13 @@ struct ProblemStatementCellView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: 30, maxHeight: 30)
-                                .background(colorScheme == .light ? .white : .black)
+                                .background(Color(.systemBackground))
                         } else {
                             Image("TestFailedSymbol")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: 30, maxHeight: 30)
-                                .background(colorScheme == .light ? .white : .black)
+                                .background(Color(.systemBackground))
                         }
                     }
                 }
