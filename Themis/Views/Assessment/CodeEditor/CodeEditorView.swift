@@ -22,7 +22,7 @@ struct CodeEditorView: View {
                         TabsView()
                     }
                     CodeView(
-                        file: file,
+                        cvm: cvm, file: file,
                         fontSize: $cvm.editorFontSize,
                         onOpenFeedback: openFeedbackSheet
                     )

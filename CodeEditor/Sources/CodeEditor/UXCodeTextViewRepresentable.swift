@@ -45,6 +45,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
      *   - autoscroll:  If enabled, the editor automatically scrolls to the respective
      *                  region when the `selection` is changed programatically.
      */
+
     public init(source: Binding<String>,
                 selection: Binding<Range<String.Index>>?,
                 language: CodeEditor.Language?,
@@ -57,7 +58,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 autoscroll: Bool,
                 highlightedRanges: [HighlightedRange],
                 dragSelection: Binding<Range<Int>?>?,
-                line: Binding<Line?>?) {
+                line: Binding<Line?>?,
+                showAddFeedback: Binding<Bool>) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -71,6 +73,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
         self.line = line
+        self.showAddFeedback = showAddFeedback
     }
 
     private var source: Binding<String>
@@ -86,6 +89,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var highlightedRanges: [HighlightedRange]
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
+    private var showAddFeedback: Binding<Bool>
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -159,6 +163,15 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
+
+        public func textView(_ textView: UITextView, editMenuForTextIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
+            var additionalActions: [UIMenuElement] = []
+            let feedbackAction = UIAction(title: "Feedback") { _ in
+                self.parent.showAddFeedback.wrappedValue.toggle()
+            }
+            additionalActions.append(feedbackAction)
+            return UIMenu(children: additionalActions + suggestedActions)
+        }
 
         private func textViewDidChangeSelection(textView: UXCodeTextView) {
             // This function may be called as a consequence of updating the selected
