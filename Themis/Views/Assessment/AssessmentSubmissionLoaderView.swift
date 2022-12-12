@@ -16,17 +16,15 @@ struct AssessmentSubmissionLoaderView: View {
     let exerciseTitle: String
 
     var body: some View {
-        Group {
-            if vm.showSubmission {
-                AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle)
-                    .environmentObject(vm)
-                    .environmentObject(cvm)
-            } else {
-                ProgressView()
+        AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle)
+            .environmentObject(vm)
+            .environmentObject(cvm)
+            .task {
+                await vm.getSubmission(id: submissionID)
+                if let pId = vm.submission?.participation.id {
+                    await cvm.initFileTree(participationId: pId)
+                }
             }
-        }.task {
-            await vm.getSubmission(id: submissionID)
-        }
     }
 }
 

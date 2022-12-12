@@ -1,5 +1,7 @@
 import SwiftUI
 
+// swiftlint:disable type_body_length
+
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vm: AssessmentViewModel
@@ -126,6 +128,13 @@ struct AssessmentView: View {
                     Image(systemName: "gearshape")
                 }
                 .foregroundColor(.white)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CustomProgressView(progress: vm.feedback.score,
+                                   max: vm.submission?.participation.exercise.maxPoints ?? 0)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                scoreDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -283,6 +292,38 @@ struct AssessmentView: View {
             }
         }
     }
+
+    var scoreColor: Color {
+        guard let max = vm.submission?.participation.exercise.maxPoints else {
+            return Color(.systemRed)
+        }
+        let score = vm.feedback.score
+        if score < max / 3 {
+            return Color(.systemRed)
+        } else if score < max / 3 * 2 {
+            return Color(.systemYellow)
+        } else {
+            return Color(.systemGreen)
+        }
+    }
+
+    var scoreDisplay: some View {
+        Group {
+            if let submission = vm.submission {
+                if submission.buildFailed {
+                    Text("Build failed")
+                        .foregroundColor(.red)
+                } else {
+                    Text("""
+                         \(vm.feedback.score.formatted(FloatingPointFormatStyle()))/\
+                         \(submission.participation.exercise.maxPoints.formatted(FloatingPointFormatStyle()))
+                         """)
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .fontWeight(.semibold)
+    }
 }
 
 extension Color {
@@ -311,8 +352,10 @@ struct NavigationBarButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
             .background(Color.secondary)
-            .cornerRadius(12)
+            .cornerRadius(20)
+            .fontWeight(.semibold)
     }
 }
