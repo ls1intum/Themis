@@ -59,7 +59,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 highlightedRanges: [HighlightedRange],
                 dragSelection: Binding<Range<Int>?>?,
                 line: Binding<Line?>?,
-                showAddFeedback: Binding<Bool>) {
+                showAddFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -74,6 +75,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.dragSelection = dragSelection
         self.line = line
         self.showAddFeedback = showAddFeedback
+        self.selectedSection = selectedSection
     }
 
     private var source: Binding<String>
@@ -90,6 +92,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
+    private var selectedSection: Binding<NSRange?>
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -166,10 +169,12 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
         public func textView(_ textView: UITextView, editMenuForTextIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
             var additionalActions: [UIMenuElement] = []
-            let feedbackAction = UIAction(title: "Feedback") { _ in
-                self.parent.showAddFeedback.wrappedValue.toggle()
+            if range.length > 0 {
+                let feedbackAction = UIAction(title: "Feedback") { _ in
+                    self.parent.showAddFeedback.wrappedValue.toggle()
+                }
+                additionalActions.append(feedbackAction)
             }
-            additionalActions.append(feedbackAction)
             return UIMenu(children: additionalActions + suggestedActions)
         }
 
@@ -181,6 +186,10 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             // (Changing a `State` during a `View` update is not permitted).
             guard !parent.isCurrentlyUpdatingView.value else {
                 return
+            }
+            // avoid empty references for inline highlights
+            if textView.selectedRange.length > 0 {
+                parent.selectedSection.wrappedValue = textView.selectedRange
             }
 
             guard let selection = parent.selection else {
@@ -278,6 +287,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isEditable   = flags.contains(.editable)
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
+        textView.highlightedRanges = highlightedRanges
     }
 
 #if os(macOS)

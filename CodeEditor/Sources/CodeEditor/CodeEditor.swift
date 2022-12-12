@@ -243,7 +243,8 @@ public struct CodeEditor: View {
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>?       = nil,
-                showAddFeedback: Binding<Bool>) {
+                showAddFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -260,6 +261,7 @@ public struct CodeEditor: View {
         self.dragSelection = dragSelection
         self.line = line
         self.showAddFeedback = showAddFeedback
+        self.selectedSection = selectedSection
     }
 
     /**
@@ -299,7 +301,8 @@ public struct CodeEditor: View {
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>?       = nil,
-                showAddFeedback: Binding<Bool>) {
+                showAddFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -313,7 +316,8 @@ public struct CodeEditor: View {
                   highlightedRanges: highlightedRanges,
                   dragSelection: dragSelection,
                   line: line,
-                  showAddFeedback: showAddFeedback)
+                  showAddFeedback: showAddFeedback,
+                  selectedSection: selectedSection)
     }
 
     private var source: Binding<String>
@@ -330,6 +334,7 @@ public struct CodeEditor: View {
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
+    private var selectedSection: Binding<NSRange?>
 
     public var body: some View {
         UXCodeTextViewRepresentable(source: source,
@@ -345,6 +350,7 @@ public struct CodeEditor: View {
                                     highlightedRanges: highlightedRanges,
                                     dragSelection: dragSelection,
                                     line: line,
-                                    showAddFeedback: showAddFeedback)
+                                    showAddFeedback: showAddFeedback,
+                                    selectedSection: selectedSection)
     }
 }

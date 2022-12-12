@@ -17,10 +17,11 @@ struct CodeView: View {
                        theme: theme,
                        fontSize: $fontSize,
                        flags: editorFlags,
-                       highlightedRanges: mockHighlights,
+                       highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
                        dragSelection: $dragSelection,
                        line: $line,
-                       showAddFeedback: $cvm.showAddFeedback)
+                       showAddFeedback: $cvm.showAddFeedback,
+                       selectedSection: $cvm.selectedSection)
             if let line {
                 DrawingShape(points: line.points)
                     .stroke(line.color, style: StrokeStyle(lineWidth: line.lineWidth, lineCap: .round, lineJoin: .round))
@@ -45,14 +46,9 @@ struct CodeView: View {
         })
     }
 
-    var mockHighlights: [HighlightedRange] {
-        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
-                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
-    }
-
     var editorFlags: CodeEditor.Flags {
         if colorScheme == .dark {
-            return .blackBackground
+            return [.selectable, .blackBackground]
         } else {
             return .selectable
         }
@@ -68,47 +64,43 @@ struct CodeView: View {
 }
 
 /// used for testing editmenu
-// struct CodeViewSelect: View {
-//    @Environment(\.colorScheme) var colorScheme
-//    @ObservedObject var cvm: CodeEditorViewModel
-//    @ObservedObject var file: Node
-//    @Binding var fontSize: CGFloat
-//    @State var dragSelection: Range<Int>?
-//    @State var line: Line?
-//    var onOpenFeedback: (Range<Int>) -> Void
-//
-//    var body: some View {
-//        ZStack {
-//            CodeEditor(source: file.code ?? "loading...",
-//                       language: .swift,
-//                       theme: theme,
-//                       fontSize: $fontSize,
-//                       flags: editorFlags,
-//                       highlightedRanges: mockHighlights,
-//                       dragSelection: $dragSelection,
-//                       line: $line,
-//                       showAddFeedback: $cvm.showAddFeedback)
-//        }
-//    }
-//
-//    var mockHighlights: [HighlightedRange] {
-//        return [HighlightedRange(range: NSRange(location: 10, length: 10), color: UIColor.yellow),
-//                HighlightedRange(range: NSRange(location: 30, length: 10), color: UIColor.red)]
-//    }
-//
-//    var editorFlags: CodeEditor.Flags {
-//        if colorScheme == .dark {
-//            return .blackBackground
-//        } else {
-//            return .selectable
-//        }
-//    }
-//
-//    var theme: CodeEditor.ThemeName {
-//        if colorScheme == .dark {
-//            return .ocean
-//        } else {
-//            return .xcode
-//        }
-//    }
-// }
+ struct CodeViewSelect: View {
+    @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var file: Node
+    @Binding var fontSize: CGFloat
+    @State var dragSelection: Range<Int>?
+    @State var line: Line?
+    var onOpenFeedback: (Range<Int>) -> Void
+
+    var body: some View {
+        ZStack {
+            CodeEditor(source: file.code ?? "loading...",
+                       language: .swift,
+                       theme: theme,
+                       fontSize: $fontSize,
+                       flags: editorFlags,
+                       highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
+                       dragSelection: $dragSelection,
+                       line: $line,
+                       showAddFeedback: $cvm.showAddFeedback,
+                       selectedSection: $cvm.selectedSection)
+        }
+    }
+
+    var editorFlags: CodeEditor.Flags {
+        if colorScheme == .dark {
+            return [.selectable, .blackBackground]
+        } else {
+            return .selectable
+        }
+    }
+
+    var theme: CodeEditor.ThemeName {
+        if colorScheme == .dark {
+            return .ocean
+        } else {
+            return .xcode
+        }
+    }
+ }
