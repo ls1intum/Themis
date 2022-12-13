@@ -12,25 +12,23 @@ struct FiletreeSidebarView: View {
                 .padding(.leading, 18)
             List {
                 OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
-                    Group {
-                        if tree.type == .folder {
-                            Text(tree.name)
-                        } else {
-                            Button {
-                                withAnimation {
-                                    guard let pId = assessmentViewModel.submission?.participation.id else { return }
-                                    cvm.openFile(file: tree, participationId: pId)
-                                }
-                            } label: {
-                                Text(tree.name)
+                    if tree.type == .folder {
+                        Text(tree.name)
+                    } else {
+                        Button {
+                            withAnimation {
+                                guard let pId = assessmentViewModel.submission?.participation.id else { return }
+                                cvm.openFile(file: tree, participationId: pId)
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                            .bold(tree === cvm.selectedFile)
-                            .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
-                            .cornerRadius(10)
+                        } label: {
+                            Text(tree.name)
                         }
+                        .buttonStyle(PlainButtonStyle())
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .bold(tree === cvm.selectedFile)
+                        .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+                        .cornerRadius(10)
                     }
                 }
                 .listRowSeparator(.hidden)
