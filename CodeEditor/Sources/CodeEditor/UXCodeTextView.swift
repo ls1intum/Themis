@@ -70,7 +70,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         }
         ?? NSTextStorage()
 
-        let layoutManager = NSLayoutManager()
+        let layoutManager = RoundedCornerLayoutManager()
         textStorage.addLayoutManager(layoutManager)
 
         let textContainer = NSTextContainer()
@@ -272,23 +272,29 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
             for hRange in highlightedRanges {
-                self.textStorage.addAttribute(
-                    NSAttributedString.Key.backgroundColor,
-                    value: hRange.color,
-                    range: hRange.range
-                )
+                self.textStorage.addAttributes(
+                    [
+                        .foregroundColor: UIColor.blue,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue,
+                        .underlineColor: hRange.color
+                    ]
+                    , range: hRange.range)
             }
             if let dragSelection {
-                self.textStorage.addAttribute(
-                    NSAttributedString.Key.backgroundColor,
-                    value: UIColor.yellow.withAlphaComponent(0.5),
-                    range: dragSelection.toNSRange().makeSafeFor(text)
-                )
+                self.textStorage.addAttributes(
+                    [
+                        .foregroundColor: UIColor.blue,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue,
+                        .underlineColor: UIColor.yellow.withAlphaComponent(0.5)
+                    ]
+                    , range: dragSelection.toNSRange().makeSafeFor(text))
             }
             let coordinator = self.delegate as? UXCodeTextViewDelegate
             coordinator?.setDragSelection(self.dragSelection)
         }
     }
+    
+
 }
 
 protocol UXCodeTextViewDelegate: UXTextViewDelegate {
