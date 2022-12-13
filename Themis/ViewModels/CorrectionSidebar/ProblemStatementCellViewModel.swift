@@ -28,9 +28,16 @@ struct ProblemStatementMD: ProblemStatementPart {
     let text: String
 }
 
+struct BundledTest: Equatable {
+    var testCase: String
+    var passed: Bool
+}
+
 class ProblemStatementCellViewModel: ObservableObject {
 
     @Published var problemStatementParts: [any ProblemStatementPart] = []
+
+    @Published var bundledTests: [BundledTest] = []
 
     func convertProblemStatement(problemStatement: String, feedbacks: [AssessmentFeedback], colorScheme: ColorScheme) {
         var index = problemStatement.startIndex
@@ -76,9 +83,11 @@ class ProblemStatementCellViewModel: ObservableObject {
             if line.contains("[task][") && line.contains("0") {
                 line = calculateScoreOfPassingTests(line)
                 line = line.replacingOccurrences(of: "[task][", with: " ![Test failed](asset:///TestFailedSymbol) **")
+                bundledTests.append(BundledTest(testCase: line, passed: false))
             } else if line.contains("[task][") && line.contains("1") {
                 line = calculateScoreOfPassingTests(line)
                 line = line.replacingOccurrences(of: "[task][", with: " ![Test passed](asset:///TestPassedSymbol) **")
+                bundledTests.append(BundledTest(testCase: line, passed: true))
             }
 
             problemStatementText.append(line + "\n")
