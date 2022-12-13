@@ -20,6 +20,7 @@ struct AssessmentSubmissionLoaderView: View {
         AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle)
             .environmentObject(vm)
             .environmentObject(cvm)
+            .environmentObject(umlVM)
             .task {
                 await vm.getSubmission(id: submissionID)
                 if let pId = vm.submission?.participation.id {
