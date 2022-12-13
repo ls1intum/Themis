@@ -18,7 +18,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
     @Published var showAddFeedback: Bool = false
-    @Published var scrollToRange: NSRange?
+    var scrollToRange = ReferenceTypeRange(value: nil)
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {
@@ -91,6 +91,16 @@ class CodeEditorViewModel: ObservableObject {
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
+        }
+    }
+}
+
+extension CodeEditorViewModel {
+    class ReferenceTypeRange {
+        var value: NSRange?
+
+        init(value: NSRange? = nil) {
+            self.value = value
         }
     }
 }

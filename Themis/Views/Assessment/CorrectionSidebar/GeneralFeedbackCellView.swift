@@ -39,7 +39,7 @@ struct GeneralFeedbackCellView: View {
                             .onTapGesture {
                                 if let file = feedback.file, let pId = assessment.submission?.participation.id {
                                     cvm.openFile(file: file, participationId: pId)
-                                    cvm.scrollToRange = cvm.inlineHighlights[file.path]?.first {
+                                    cvm.scrollToRange.value = cvm.inlineHighlights[file.path]?.first {
                                         $0.id == feedback.id.uuidString
                                     }?.range
                                 }

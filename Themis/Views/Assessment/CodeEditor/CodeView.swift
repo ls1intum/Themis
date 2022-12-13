@@ -9,6 +9,8 @@ struct CodeView: UIViewControllerRepresentable {
     @EnvironmentObject var cvm: CodeEditorViewModel
     @ObservedObject var file: Node
 
+    @State private var isCurrentlyUpdatingView = ReferenceTypeBool(value: false)
+
     typealias UIViewControllerType = ViewController
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController(cvm: cvm)
@@ -17,7 +19,12 @@ struct CodeView: UIViewControllerRepresentable {
         return viewController
     }
 
+    @MainActor
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+        isCurrentlyUpdatingView.value = true
+        defer {
+            isCurrentlyUpdatingView.value = false
+        }
         uiViewController.fontSize = cvm.editorFontSize
         // fixes content not being visisble if last files offset is higher than current content
         // (TODO: store content offsets of opened files e.g. in dictionary)
@@ -26,31 +33,41 @@ struct CodeView: UIViewControllerRepresentable {
         }
         uiViewController.file = file
         uiViewController.textView.highlightedRanges = cvm.inlineHighlights[file.path] ?? []
-        if let scrollToRange = cvm.scrollToRange {
-            let contentHeight = uiViewController.textView.contentSize.height
-            let containerHeight = uiViewController.textView.bounds.size.height
-                // hack to get UITextRange
-                uiViewController.textView.selectedRange = scrollToRange
-                let textRange = uiViewController.textView.selectedTextRange
-                uiViewController.textView.selectedRange = NSRange(location: 0, length: 0)
-
-                if let textRange = textRange {
-                    let rangeOffsetY = uiViewController.textView.firstRect(for: textRange).origin.y
-                    // handle cases where offsetting it to the center is not wanted
-                    // otherwise the scrollview would jump back on next interaction since min/max scroll range is exceeded
-                    if (contentHeight - rangeOffsetY) < (containerHeight / 2) {
-                        let bottomOffsetY = max(contentHeight - containerHeight, 0)
-                        uiViewController.textView.setContentOffset(CGPoint(x: 0, y: bottomOffsetY), animated: true)
-                    } else {
-                        uiViewController.textView.setContentOffset(CGPoint(x: 0, y: rangeOffsetY - (containerHeight / 2)), animated: true)
-                    }
-            }
-                cvm.scrollToRange = nil
+        if let range = cvm.scrollToRange.value {
+            scrollToRange(viewController: uiViewController, range: range)
+            cvm.scrollToRange.value = nil
         }
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
+    }
+
+    private func scrollToRange(viewController: ViewController, range: NSRange) {
+        // TODO: fix container height = 0 when first opened
+        // TODO: get actual content size (lazy scrollview results in dynamic content size)
+        let contentHeight = viewController.textView.contentSize.height
+        let containerHeight = viewController.textView.bounds.height
+        if contentHeight > containerHeight {
+            // hack to get UITextRange
+            viewController.textView.selectedRange = range
+            let textRange = viewController.textView.selectedTextRange
+            viewController.textView.selectedRange = NSRange(location: 0, length: 0)
+
+            if let textRange = textRange {
+                let rangeOffsetY = viewController.textView.firstRect(for: textRange).origin.y
+                // handle cases where offsetting it to the center is not wanted
+                // otherwise the scrollview would jump back on next interaction since min/max scroll range is exceeded
+                if rangeOffsetY < (containerHeight / 2) {
+                    viewController.textView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else if (contentHeight - rangeOffsetY) < (containerHeight / 2) {
+                    let bottomOffsetY = contentHeight - containerHeight
+                    viewController.textView.setContentOffset(CGPoint(x: 0, y: bottomOffsetY), animated: true)
+                } else {
+                    viewController.textView.setContentOffset(CGPoint(x: 0, y: rangeOffsetY - (containerHeight / 2)), animated: true)
+                }
+            }
+        }
     }
 
     class Coordinator: NSObject, TextViewDelegate {
@@ -62,6 +79,9 @@ struct CodeView: UIViewControllerRepresentable {
 
         @MainActor
         func textViewDidChangeSelection(_ textView: TextView) {
+            if parent.isCurrentlyUpdatingView.value {
+                return
+            }
             if textView.selectedRange.length > 0 {
                 parent.cvm.currentlySelecting = true
                 parent.cvm.selectedSection = textView.selectedRange
@@ -152,5 +172,15 @@ class ViewController: UIViewController {
     private func setupLongPressInteraction() {
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         textView.addGestureRecognizer(longPressGestureRecognizer)
+    }
+}
+
+extension CodeView {
+    private class ReferenceTypeBool {
+        var value: Bool
+
+        init(value: Bool) {
+            self.value = value
+        }
     }
 }
