@@ -48,14 +48,14 @@ struct ProblemStatementCellView: View {
             }
 
             ForEach(vm.problemStatementParts, id: \.text) { part in
-                if let puml = part as? ProblemStatementPlantUML {
+                if let uml = part as? ProblemStatementPlantUML {
                     Button(action: {
                         withAnimation(.easeInOut) {
-                            umlVM.imageURL = puml.url?.absoluteString
+                            umlVM.imageURL = uml.url?.absoluteString
                             umlVM.showUMLFullScreen.toggle()
                         }
                     }, label: {
-                        AsyncImage(url: puml.url) { image in
+                        AsyncImage(url: uml.url) { image in
                             image.resizable()
                                 .aspectRatio(contentMode: .fit)
                         } placeholder: {
