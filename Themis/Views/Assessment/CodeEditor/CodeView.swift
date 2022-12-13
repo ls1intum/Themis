@@ -19,11 +19,33 @@ struct CodeView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         uiViewController.fontSize = cvm.editorFontSize
+        // fixes content not being visisble if last files offset is higher than current content
+        // (TODO: store content offsets of opened files e.g. in dictionary)
+        if uiViewController.file != file {
+            uiViewController.textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        }
         uiViewController.file = file
         uiViewController.textView.highlightedRanges = cvm.inlineHighlights[file.path] ?? []
         if let scrollToRange = cvm.scrollToRange {
-            uiViewController.textView.scrollRangeToVisible(scrollToRange)
-            cvm.scrollToRange = nil
+            let contentHeight = uiViewController.textView.contentSize.height
+            let containerHeight = uiViewController.textView.bounds.size.height
+                // hack to get UITextRange
+                uiViewController.textView.selectedRange = scrollToRange
+                let textRange = uiViewController.textView.selectedTextRange
+                uiViewController.textView.selectedRange = NSRange(location: 0, length: 0)
+
+                if let textRange = textRange {
+                    let rangeOffsetY = uiViewController.textView.firstRect(for: textRange).origin.y
+                    // handle cases where offsetting it to the center is not wanted
+                    // otherwise the scrollview would jump back on next interaction since min/max scroll range is exceeded
+                    if (contentHeight - rangeOffsetY) < (containerHeight / 2) {
+                        let bottomOffsetY = max(contentHeight - containerHeight, 0)
+                        uiViewController.textView.setContentOffset(CGPoint(x: 0, y: bottomOffsetY), animated: true)
+                    } else {
+                        uiViewController.textView.setContentOffset(CGPoint(x: 0, y: rangeOffsetY - (containerHeight / 2)), animated: true)
+                    }
+            }
+                cvm.scrollToRange = nil
         }
     }
 
