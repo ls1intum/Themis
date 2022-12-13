@@ -10,6 +10,7 @@ import SwiftUI
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var vm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
+    @StateObject var umlVM = UMLViewModel()
 
     var exerciseID: Int
     var submissionID: Int
@@ -19,6 +20,7 @@ struct AssessmentSubmissionLoaderView: View {
         AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle)
             .environmentObject(vm)
             .environmentObject(cvm)
+            .environmentObject(umlVM)
             .task {
                 await vm.getSubmission(id: submissionID)
                 if let pId = vm.submission?.participation.id {
@@ -26,10 +28,10 @@ struct AssessmentSubmissionLoaderView: View {
                 }
             }
     }
-}
 
-struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
+    struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
+        static var previews: some View {
+            AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
+        }
     }
 }

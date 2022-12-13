@@ -12,6 +12,7 @@ import MarkdownUI
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var assessment: AssessmentViewModel
+    @EnvironmentObject var umlVM: UMLViewModel
 
     @StateObject var vm = ProblemStatementCellViewModel()
 
@@ -48,12 +49,19 @@ struct ProblemStatementCellView: View {
 
             ForEach(vm.problemStatementParts, id: \.text) { part in
                 if let uml = part as? ProblemStatementPlantUML {
-                    AsyncImage(url: uml.url) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        ProgressView()
-                    }
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            umlVM.imageURL = uml.url?.absoluteString
+                            umlVM.showUMLFullScreen.toggle()
+                        }
+                    }, label: {
+                        AsyncImage(url: uml.url) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fit)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    })
                 } else {
                     Markdown(part.text)
                         .setImageHandler(.assetImage(), forURLScheme: "asset")
