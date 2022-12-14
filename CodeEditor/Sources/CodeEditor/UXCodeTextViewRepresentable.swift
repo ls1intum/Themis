@@ -69,7 +69,6 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.flags       = flags
         self.indentStyle = indentStyle
         self.autoPairs   = autoPairs
-        self.inset       = inset
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
@@ -85,7 +84,6 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private let themeName: CodeEditor.ThemeName
     private let flags: CodeEditor.Flags
     private let indentStyle: CodeEditor.IndentStyle
-    private let inset: CGSize
     private let autoPairs: [ String: String ]
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
@@ -262,8 +260,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = source.wrappedValue
             }
+            
         }
-
+        textView.setNeedsDisplay()
         let dragSelection = getSelectionFromLine(textView: textView)
         textView.dragSelection = dragSelection
 
@@ -320,17 +319,11 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         updateTextView(textView)
     }
 #else // iOS etc
-    private var edgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(
-            top: inset.height, left: inset.width,
-            bottom: inset.height, right: inset.width
-        )
-    }
+
     public func makeUIView(context: Context) -> UITextView {
         let textView = UXCodeTextView()
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
-        textView.textContainerInset = edgeInsets
         textView.highlightedRanges = highlightedRanges
 #if os(iOS)
         textView.autocapitalizationType = .none
@@ -351,7 +344,6 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         if textView.delegate !== context.coordinator {
             textView.delegate = context.coordinator
         }
-        textView.textContainerInset = edgeInsets
         updateTextView(textView)
     }
 #endif // iOS
