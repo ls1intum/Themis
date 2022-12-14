@@ -279,7 +279,9 @@ struct AssessmentView: View {
             if correctionAsPlaceholder {
                 EmptyView()
             } else {
-                CorrectionSidebarView()
+                CorrectionSidebarView(
+                    problemStatement: vm.submission?.participation.exercise.problemStatement
+                )
             }
         }
     }

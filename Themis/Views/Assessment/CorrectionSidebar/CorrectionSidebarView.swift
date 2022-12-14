@@ -14,6 +14,7 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    @State var problemStatement: String?
 
     var body: some View {
         VStack {
@@ -31,7 +32,9 @@ struct CorrectionSidebarView: View {
             switch correctionSidebarStatus {
             case .problemStatement:
                 ScrollView {
-                    ProblemStatementCellView()
+                    ProblemStatementCellView(
+                        problemStatement: problemStatement
+                    )
                 }
             case .correctionGuidelines:
                 ScrollView {

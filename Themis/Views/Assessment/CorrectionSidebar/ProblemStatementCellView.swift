@@ -11,7 +11,7 @@ import MarkdownUI
 
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var assessment: AssessmentViewModel
+    @State var problemStatement: String?
 
     @StateObject var vm = ProblemStatementCellViewModel()
 
@@ -37,18 +37,15 @@ struct ProblemStatementCellView: View {
         .padding()
         .onAppear {
             vm.convertProblemStatement(
-                problemStatement: assessment.submission?.participation.exercise.problemStatement ?? "",
+                problemStatement: problemStatement ?? "",
                 colorScheme: colorScheme)
         }
     }
 }
 
-struct ProblemStatementCellView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
-
+struct ProblemStatementCellView_Previews {
     static var previews: some View {
-        ProblemStatementCellView()
-            .environmentObject(assessment)
+        ProblemStatementCellView(problemStatement: "Test")
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
