@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct EditFeedbackView: View {
-    @State var feedbackResult: AssessmentResult
+    @State var assessmentResult: AssessmentResult
     @State var cvm: CodeEditorViewModel
 
     @State var feedbackText = ""
@@ -34,7 +34,7 @@ struct EditFeedbackView: View {
         guard let feedback else {
             return
         }
-        feedbackResult.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
+        assessmentResult.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
     }
 
     private func setStates() {
@@ -55,7 +55,7 @@ struct EditFeedbackView: View {
                     if edit {
                         updateFeedback()
                     } else {
-                        cvm.createFeedback(assessmentResult: feedbackResult, detailText: feedbackText, feedbackScore: score, feedbackType: type)
+                        cvm.createFeedback(assessmentResult: assessmentResult, detailText: feedbackText, feedbackScore: score, feedbackType: type)
                     }
                     showEditFeedback = false
                 } label: {

@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct GeneralFeedbackCellView: View {
-    @EnvironmentObject var assessment: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @State var readOnly: Bool
+    @State var assessmentResult: AssessmentResult
+    @State var cvm: CodeEditorViewModel
 
     @State var showAddFeedback = false
 
@@ -24,9 +25,9 @@ struct GeneralFeedbackCellView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
-                    .disabled(assessment.readOnly)
+                    .disabled(readOnly)
                 }.padding()) {
-                    ForEach(assessment.feedback.generalFeedback) { feedback in
+                    ForEach(assessmentResult.generalFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
                             .listRowSeparator(.hidden)
                     }
@@ -34,7 +35,7 @@ struct GeneralFeedbackCellView: View {
                 }.headerProminence(.increased)
 
                 Section {
-                    ForEach(assessment.feedback.inlineFeedback) { feedback in
+                    ForEach(assessmentResult.inlineFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
                             .listRowSeparator(.hidden)
                     }
@@ -51,7 +52,7 @@ struct GeneralFeedbackCellView: View {
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             EditFeedbackView(
-                feedbackResult: assessment.feedback,
+                assessmentResult: assessmentResult,
                 cvm: cvm,
                 showEditFeedback: $showAddFeedback,
                 feedback: nil,
@@ -63,9 +64,9 @@ struct GeneralFeedbackCellView: View {
 
     private func delete(at indexSet: IndexSet) {
         indexSet
-            .map { assessment.feedback.feedbacks[$0] }
+            .map { assessmentResult.feedbacks[$0] }
             .forEach {
-                assessment.feedback.deleteFeedback(id: $0.id)
+                assessmentResult.deleteFeedback(id: $0.id)
                 cvm.deleteInlineHighlight(feedback: $0)
             }
     }
@@ -76,9 +77,11 @@ struct GeneralFeedbackCellView_Previews: PreviewProvider {
     static let codeEditor = CodeEditorViewModel()
 
     static var previews: some View {
-        GeneralFeedbackCellView()
-            .environmentObject(assessment)
-            .environmentObject(codeEditor)
-            .previewInterfaceOrientation(.landscapeLeft)
+        GeneralFeedbackCellView(
+            readOnly: false,
+            assessmentResult: AssessmentResult(),
+            cvm: codeEditor
+        )
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

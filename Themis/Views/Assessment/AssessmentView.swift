@@ -181,7 +181,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             EditFeedbackView(
-                feedbackResult: vm.feedback,
+                assessmentResult: vm.feedback,
                 cvm: cvm,
                 showEditFeedback: $cvm.showAddFeedback,
                 feedback: nil,
@@ -306,7 +306,8 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 CorrectionSidebarView(
-                    problemStatement: vm.submission?.participation.exercise.problemStatement
+                    problemStatement: vm.submission?.participation.exercise.problemStatement,
+                    cvm: cvm
                 )
             }
         }

@@ -15,6 +15,8 @@ struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
     @State var problemStatement: String?
+    @EnvironmentObject var avm: AssessmentViewModel
+    @State var cvm: CodeEditorViewModel
 
     var body: some View {
         VStack {
@@ -41,7 +43,11 @@ struct CorrectionSidebarView: View {
                     CorrectionGuidelinesCellView()
                 }
             case .generalFeedback:
-                GeneralFeedbackCellView()
+                GeneralFeedbackCellView(
+                    readOnly: avm.readOnly,
+                    assessmentResult: avm.feedback,
+                    cvm: cvm
+                )
             }
         }
     }
@@ -49,12 +55,13 @@ struct CorrectionSidebarView: View {
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static let assessment = AssessmentViewModel(readOnly: false)
-    static let codeEditor = CodeEditorViewModel()
+    static let cvm = CodeEditorViewModel()
 
     static var previews: some View {
-        CorrectionSidebarView()
+        CorrectionSidebarView(
+            cvm: cvm
+        )
             .environmentObject(assessment)
-            .environmentObject(codeEditor)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
