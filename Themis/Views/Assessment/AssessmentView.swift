@@ -154,7 +154,9 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
-                AppearanceSettingsView()
+                AppearanceSettingsView(
+                    fontSize: $cvm.editorFontSize
+                )
                     .navigationTitle("Appearance settings")
             }
         }
