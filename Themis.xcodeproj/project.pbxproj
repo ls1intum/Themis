@@ -19,7 +19,7 @@
 		83396D4B29155936003EF727 /* ThemisUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D4A29155936003EF727 /* ThemisUITestsLaunchTests.swift */; };
 		8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */; };
 		8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */; };
-		8384C43129210474008CCB4D /* GeneralFeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */; };
+		8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43029210474008CCB4D /* FeedbackListView.swift */; };
 		8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43229210488008CCB4D /* ProblemStatementCellView.swift */; };
 		8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */; };
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
@@ -111,7 +111,7 @@
 		83396D4A29155936003EF727 /* ThemisUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionSidebarView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionSidebarView.swift; sourceTree = SOURCE_ROOT; };
 		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelinesCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionGuidelinesCellView.swift; sourceTree = SOURCE_ROOT; };
-		8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GeneralFeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GeneralFeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
+		8384C43029210474008CCB4D /* FeedbackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackListView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackListView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
 		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
@@ -361,7 +361,7 @@
 				DA3F0F04294A30B800A7B807 /* EditFeedback */,
 				8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */,
 				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
-				8384C43029210474008CCB4D /* GeneralFeedbackCellView.swift */,
+				8384C43029210474008CCB4D /* FeedbackListView.swift */,
 				8384C43229210488008CCB4D /* ProblemStatementCellView.swift */,
 				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
 				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
@@ -714,7 +714,7 @@
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
-				8384C43129210474008CCB4D /* GeneralFeedbackCellView.swift in Sources */,
+				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
 				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GeneralFeedbackListView: View {
+struct FeedbackListView: View {
     var readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
@@ -80,13 +80,13 @@ struct GeneralFeedbackListView: View {
     }
 }
 
-struct GeneralFeedbackListView_Previews: PreviewProvider {
+struct FeedbackListView_Previews: PreviewProvider {
     static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
 
     static var previews: some View {
-        GeneralFeedbackListView(
+        FeedbackListView(
             readOnly: false,
             assessmentResult: $assessmentResult,
             cvm: codeEditor

@@ -312,7 +312,7 @@ struct AssessmentView: View {
                 CorrectionSidebarView(
                     exercise: vm.submission?.participation.exercise,
                     readOnly: vm.readOnly,
-                    assessmentResult: vm.assessmentResult,
+                    assessmentResult: $vm.assessmentResult,
                     cvm: cvm,
                     umlVM: umlVM
                 )
