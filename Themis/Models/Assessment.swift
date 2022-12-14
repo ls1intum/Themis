@@ -44,12 +44,16 @@ struct AssessmentResult: Encodable {
 
     var generalFeedback: [AssessmentFeedback] {
         return feedbacks
-            .filter { $0.type == .general }
+            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .inline }
+            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
+    }
+    
+    var automaticFeedback: [AssessmentFeedback] {
+        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
     }
 
     mutating func addFeedback(detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) -> AssessmentFeedback {
