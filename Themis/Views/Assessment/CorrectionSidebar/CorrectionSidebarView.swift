@@ -14,7 +14,7 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    var problemStatement: String?
+    var exercise: ExerciseOfSubmission?
     var readOnly: Bool
     @State var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
@@ -36,12 +36,15 @@ struct CorrectionSidebarView: View {
             case .problemStatement:
                 ScrollView {
                     ProblemStatementCellView(
-                        problemStatement: problemStatement
+                        problemStatement: exercise?.problemStatement
                     )
                 }
             case .correctionGuidelines:
                 ScrollView {
-                    CorrectionGuidelinesCellView()
+                    CorrectionGuidelinesCellView(
+                        gradingCriteria: exercise?.gradingCriteria ?? [],
+                        gradingInstructions: exercise?.gradingInstructions
+                    )
                 }
             case .generalFeedback:
                 GeneralFeedbackListView(
@@ -64,7 +67,6 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
             assessmentResult: AssessmentResult(),
             cvm: cvm
         )
-            .environmentObject(assessment)
-            .previewInterfaceOrientation(.landscapeLeft)
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

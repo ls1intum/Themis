@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct FiletreeSidebarView: View {
-    @EnvironmentObject var assessmentViewModel: AssessmentViewModel
     let participationID: Int?
     @ObservedObject var cvm: CodeEditorViewModel
 

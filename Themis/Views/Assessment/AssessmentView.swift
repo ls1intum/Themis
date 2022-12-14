@@ -310,7 +310,7 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 CorrectionSidebarView(
-                    problemStatement: vm.submission?.participation.exercise.problemStatement,
+                    exercise: vm.submission?.participation.exercise,
                     readOnly: vm.readOnly,
                     assessmentResult: vm.assessmentResult,
                     cvm: cvm
