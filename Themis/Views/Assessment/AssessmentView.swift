@@ -48,10 +48,8 @@ struct AssessmentView: View {
             .padding(.leading, 18)
         }
         .overlay {
-            ZStack {
-                if umlVM.showUMLFullScreen {
-                    UMLView()
-                }
+            if umlVM.showUMLFullScreen {
+                UMLView(umlVM: umlVM)
             }
         }
         .navigationBarBackButtonHidden(true)
