@@ -43,7 +43,7 @@ struct FeedbackCellView: View {
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Button(role: .destructive) {
-                    assessment.feedback.deleteFeedback(id: feedback.id)
+                    assessment.assessmentResult.deleteFeedback(id: feedback.id)
                     cvm.deleteInlineHighlight(feedback: feedback)
                 } label: {
                     Image(systemName: "trash")
@@ -65,7 +65,7 @@ struct FeedbackCellView: View {
         }
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
-                assessmentResult: assessment.feedback,
+                assessmentResult: assessment.assessmentResult,
                 cvm: cvm,
                 showEditFeedback: $showEditFeedback,
                 feedback: feedback,

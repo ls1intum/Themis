@@ -45,7 +45,7 @@ struct CorrectionSidebarView: View {
             case .generalFeedback:
                 GeneralFeedbackCellView(
                     readOnly: avm.readOnly,
-                    assessmentResult: avm.feedback,
+                    assessmentResult: avm.assessmentResult,
                     cvm: cvm
                 )
             }

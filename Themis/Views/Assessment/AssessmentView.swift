@@ -138,8 +138,10 @@ struct AssessmentView: View {
                 .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                CustomProgressView(progress: vm.feedback.score,
-                                   max: vm.submission?.participation.exercise.maxPoints ?? 0)
+                CustomProgressView(
+                    progress: vm.assessmentResult.score,
+                    max: vm.submission?.participation.exercise.maxPoints ?? 0
+                )
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 scoreDisplay
@@ -181,7 +183,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             EditFeedbackView(
-                assessmentResult: vm.feedback,
+                assessmentResult: vm.assessmentResult,
                 cvm: cvm,
                 showEditFeedback: $cvm.showAddFeedback,
                 feedback: nil,
@@ -317,7 +319,7 @@ struct AssessmentView: View {
         guard let max = vm.submission?.participation.exercise.maxPoints else {
             return Color(.systemRed)
         }
-        let score = vm.feedback.score
+        let score = vm.assessmentResult.score
         if score < max / 3 {
             return Color(.systemRed)
         } else if score < max / 3 * 2 {
@@ -335,7 +337,7 @@ struct AssessmentView: View {
                         .foregroundColor(.red)
                 } else {
                     Text("""
-                         \(vm.feedback.score.formatted(FloatingPointFormatStyle()))/\
+                         \(vm.assessmentResult.score.formatted(FloatingPointFormatStyle()))/\
                          \(submission.participation.exercise.maxPoints.formatted(FloatingPointFormatStyle()))
                          """)
                         .foregroundColor(.white)

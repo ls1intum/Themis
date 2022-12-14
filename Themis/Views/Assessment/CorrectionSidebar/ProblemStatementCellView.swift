@@ -74,7 +74,7 @@ struct ProblemStatementCellView: View {
         .onAppear {
             vm.convertProblemStatement(
                 problemStatement: problemStatement ?? "",
-                feedbacks: assessment.feedback.feedbacks,
+                feedbacks: assessment.assessmentResult.feedbacks,
                 colorScheme: colorScheme)
         }
     }
