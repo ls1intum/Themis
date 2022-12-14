@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 struct EditFeedbackView: View {
-    @EnvironmentObject var avm: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @State var feedbackResult: AssessmentResult
+    @State var cvm: CodeEditorViewModel
 
     @State var feedbackText = ""
     @State var score = 0.0
@@ -30,6 +30,21 @@ struct EditFeedbackView: View {
         edit ? "Edit Feedback" : "Add Feedback"
     }
 
+    func updateFeedback() {
+        guard let feedback else {
+            return
+        }
+        feedbackResult.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
+    }
+
+    private func setStates() {
+        guard let feedback else {
+            return
+        }
+        self.feedbackText = feedback.detailText ?? ""
+        self.score = feedback.credits
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -37,7 +52,11 @@ struct EditFeedbackView: View {
                     .font(.largeTitle)
                 Spacer()
                 Button {
-                    updateOrCreateFeedback()
+                    if edit {
+                        updateFeedback()
+                    } else {
+                        cvm.createFeedback(assessmentResult: feedbackResult, detailText: feedbackText, feedbackScore: score, feedbackType: type)
+                    }
                     showEditFeedback = false
                 } label: {
                     Text("Save")
@@ -74,33 +93,5 @@ struct EditFeedbackView: View {
         .onAppear {
             setStates()
         }
-    }
-
-    // will be put into viemodel when restructuring happens
-    private func updateOrCreateFeedback() {
-        if let feedback = feedback, edit {
-            avm.feedback.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
-        } else {
-            if type == .inline {
-                let feedback = avm.feedback.addFeedback(
-                    detailText: feedbackText,
-                    credits: score,
-                    type: type,
-                    file: cvm.selectedFile,
-                    lines: cvm.selectedSectionParsed?.0,
-                    columns: cvm.selectedSectionParsed?.1)
-                cvm.addInlineHighlight(feedbackId: feedback.id)
-            } else {
-                _ = avm.feedback.addFeedback(detailText: feedbackText, credits: score, type: type)
-            }
-        }
-    }
-
-    private func setStates() {
-        guard let feedback = feedback else {
-            return
-        }
-        self.feedbackText = feedback.detailText ?? ""
-        self.score = feedback.credits
     }
 }

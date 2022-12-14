@@ -180,7 +180,14 @@ struct AssessmentView: View {
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $cvm.showAddFeedback, feedback: nil, edit: false, type: .inline)
+            EditFeedbackView(
+                feedbackResult: vm.feedback,
+                cvm: cvm,
+                showEditFeedback: $cvm.showAddFeedback,
+                feedback: nil,
+                edit: false,
+                type: .inline
+            )
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {

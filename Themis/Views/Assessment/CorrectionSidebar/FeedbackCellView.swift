@@ -64,7 +64,14 @@ struct FeedbackCellView: View {
             }
         }
         .sheet(isPresented: $showEditFeedback) {
-            EditFeedbackView(showEditFeedback: $showEditFeedback, feedback: feedback, edit: true, type: feedback.type)
+            EditFeedbackView(
+                feedbackResult: assessment.feedback,
+                cvm: cvm,
+                showEditFeedback: $showEditFeedback,
+                feedback: feedback,
+                edit: true,
+                type: feedback.type
+            )
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 25)

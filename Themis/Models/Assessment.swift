@@ -14,7 +14,7 @@ enum FeedbackType {
     case general
 }
 
-struct AssessmentResult: Encodable {
+class AssessmentResult: Encodable {
     var score: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
@@ -52,18 +52,25 @@ struct AssessmentResult: Encodable {
             .filter { $0.type == .inline }
     }
 
-    mutating func addFeedback(detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) -> AssessmentFeedback {
+    func addFeedback(
+        detailText: String,
+        credits: Double,
+        type: FeedbackType,
+        file: Node? = nil,
+        lines: NSRange? = nil,
+        columns: NSRange? = nil
+    ) -> AssessmentFeedback {
         let text = makeText(file: file, lines: lines, columns: columns)
         let feedback = AssessmentFeedback(text: text, detailText: detailText, credits: credits, type: type, file: file)
         feedbacks.append(feedback)
         return feedback
     }
 
-    mutating func deleteFeedback(id: UUID) {
+    func deleteFeedback(id: UUID) {
         feedbacks.removeAll { $0.id == id }
     }
 
-    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    func updateFeedback(id: UUID, detailText: String, credits: Double) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }

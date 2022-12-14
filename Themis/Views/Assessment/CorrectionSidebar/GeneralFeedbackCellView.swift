@@ -50,9 +50,14 @@ struct GeneralFeedbackCellView: View {
             .scrollContentBackground(.hidden)
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $showAddFeedback, feedback: nil, edit: false, type: .general)
-                .environmentObject(assessment)
-                .environmentObject(cvm)
+            EditFeedbackView(
+                feedbackResult: assessment.feedback,
+                cvm: cvm,
+                showEditFeedback: $showAddFeedback,
+                feedback: nil,
+                edit: false,
+                type: .general
+            )
         }
     }
 
