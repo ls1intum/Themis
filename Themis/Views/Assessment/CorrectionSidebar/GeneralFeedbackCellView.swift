@@ -28,7 +28,12 @@ struct GeneralFeedbackListView: View {
                     .disabled(readOnly)
                 }.padding()) {
                     ForEach(assessmentResult.generalFeedback) { feedback in
-                        FeedbackCellView(feedback: feedback)
+                        FeedbackCellView(
+                            readOnly: readOnly,
+                            assessmentResult: $assessmentResult,
+                            cvm: cvm,
+                            feedback: feedback
+                        )
                             .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: delete(at:))
@@ -36,7 +41,12 @@ struct GeneralFeedbackListView: View {
 
                 Section {
                     ForEach(assessmentResult.inlineFeedback) { feedback in
-                        FeedbackCellView(feedback: feedback)
+                        FeedbackCellView(
+                            readOnly: readOnly,
+                            assessmentResult: $assessmentResult,
+                            cvm: cvm,
+                            feedback: feedback
+                        )
                             .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: delete(at:))

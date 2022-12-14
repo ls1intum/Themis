@@ -10,11 +10,12 @@ import SwiftUI
 
 struct FeedbackCellView: View {
 
-    @EnvironmentObject var assessment: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    var readOnly: Bool
+    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var cvm: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { assessment.readOnly || feedback.assessmentType == .AUTOMATIC }
+    var editingDisabled: Bool { readOnly || feedback.assessmentType == .AUTOMATIC }
 
     @State var showEditFeedback = false
     var feedbackColor: Color {
@@ -43,7 +44,7 @@ struct FeedbackCellView: View {
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Button(role: .destructive) {
-                    assessment.assessmentResult.deleteFeedback(id: feedback.id)
+                    assessmentResult.deleteFeedback(id: feedback.id)
                     cvm.deleteInlineHighlight(feedback: feedback)
                 } label: {
                     Image(systemName: "trash")
@@ -65,7 +66,7 @@ struct FeedbackCellView: View {
         }
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
-                assessmentResult: $assessment.assessmentResult,
+                assessmentResult: $assessmentResult,
                 cvm: cvm,
                 type: feedback.type,
                 showSheet: $showEditFeedback,

@@ -14,7 +14,7 @@ struct CodeEditorView: View {
                             .frame(width: showFileTree ? 0 : 40)
                         TabsView(cvm: cvm)
                     }
-                    CodeView(file: file)
+                    CodeView(cvm: cvm, file: file)
                 }
             } else {
                 Text("Select a file")

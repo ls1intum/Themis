@@ -18,6 +18,7 @@ struct CorrectionSidebarView: View {
     var readOnly: Bool
     @State var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var umlVM: UMLViewModel
 
     var body: some View {
         VStack {
@@ -36,7 +37,9 @@ struct CorrectionSidebarView: View {
             case .problemStatement:
                 ScrollView {
                     ProblemStatementCellView(
-                        problemStatement: exercise?.problemStatement
+                        problemStatement: exercise?.problemStatement,
+                        feedbacks: assessmentResult.feedbacks,
+                        umlVM: umlVM
                     )
                 }
             case .correctionGuidelines:
@@ -58,14 +61,15 @@ struct CorrectionSidebarView: View {
 }
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
     static let cvm = CodeEditorViewModel()
+    static let umlVM = UMLViewModel()
 
     static var previews: some View {
         CorrectionSidebarView(
             readOnly: false,
             assessmentResult: AssessmentResult(),
-            cvm: cvm
+            cvm: cvm,
+            umlVM: umlVM
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

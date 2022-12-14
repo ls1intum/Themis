@@ -4,9 +4,9 @@ import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @EnvironmentObject var vm: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
-    @EnvironmentObject var umlVM: UMLViewModel
+    @ObservedObject var vm: AssessmentViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
+    @State var umlVM = UMLViewModel()
 
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
@@ -313,7 +313,8 @@ struct AssessmentView: View {
                     exercise: vm.submission?.participation.exercise,
                     readOnly: vm.readOnly,
                     assessmentResult: vm.assessmentResult,
-                    cvm: cvm
+                    cvm: cvm,
+                    umlVM: umlVM
                 )
             }
         }
@@ -363,13 +364,16 @@ extension Color {
 }
 
 struct AssessmentView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
-    static let codeEditor = CodeEditorViewModel()
+    static let avm = AssessmentViewModel(readOnly: false)
+    static let cvm = CodeEditorViewModel()
 
     static var previews: some View {
-        AssessmentView(exerciseId: 5284, exerciseTitle: "Example Exercise")
-            .environmentObject(assessment)
-            .environmentObject(codeEditor)
+        AssessmentView(
+            vm: avm,
+            cvm: cvm,
+            exerciseId: 5284,
+            exerciseTitle: "Example Exercise"
+        )
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
