@@ -13,7 +13,7 @@ struct CodeEditorView: View {
                     HStack {
                         Spacer()
                             .frame(width: showFileTree ? 0 : 40)
-                        TabsView()
+                        TabsView(cvm: cvm)
                     }
                     CodeView(file: file)
                 }
