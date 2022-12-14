@@ -33,7 +33,10 @@ struct AssessmentView: View {
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
-                CodeEditorView(showFileTree: $showFileTree)
+                CodeEditorView(
+                    cvm: cvm,
+                    showFileTree: $showFileTree
+                )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)

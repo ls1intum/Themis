@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct CodeEditorView: View {
-    @EnvironmentObject var assessmentViewModel: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
 
     @Binding var showFileTree: Bool
 
