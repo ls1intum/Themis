@@ -15,6 +15,8 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func initRandomSubmission(exerciseId: Int) async {
+        submission = nil
+        feedback = AssessmentResult()
         do {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
             feedback.feedbacks = submission?.results?.last?.feedbacks ?? []

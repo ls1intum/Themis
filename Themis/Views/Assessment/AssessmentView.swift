@@ -14,6 +14,7 @@ struct AssessmentView: View {
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder: Bool = true
     @State private var showCancelDialog = false
+    @State var showNoSubmissionsAlert = false
 
     private let minRightSnapWidth: CGFloat = 185
 
@@ -169,6 +170,25 @@ struct AssessmentView: View {
                 }
                 .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    Task {
+                        await vm.initRandomSubmission(exerciseId: exerciseId)
+                        if vm.submission == nil {
+                            showNoSubmissionsAlert = true
+                        }
+                    }
+                } label: {
+                    Text("Next")
+                }
+                .buttonStyle(NavigationBarButton())
+                .disabled(vm.readOnly)
+            }
+        }
+        .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
+            Button("OK", role: .cancel) {
+                presentationMode.wrappedValue.dismiss()
             }
         }
         .sheet(isPresented: $showSettings) {
