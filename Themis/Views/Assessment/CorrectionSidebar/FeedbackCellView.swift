@@ -13,7 +13,7 @@ struct FeedbackCellView: View {
     @EnvironmentObject var assessment: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
 
-    let feedback: AssessmentFeedback
+    @State var feedback: AssessmentFeedback
     var editingDisabled: Bool { assessment.readOnly || feedback.assessmentType == .AUTOMATIC }
 
     @State var showEditFeedback = false
@@ -67,10 +67,9 @@ struct FeedbackCellView: View {
             EditFeedbackView(
                 assessmentResult: $assessment.assessmentResult,
                 cvm: cvm,
-                feedback: feedback,
-                showEditFeedback: $showEditFeedback,
-                edit: true,
-                type: feedback.type
+                type: feedback.type,
+                showSheet: $showEditFeedback,
+                feedback: $feedback
             )
         }
         .padding()

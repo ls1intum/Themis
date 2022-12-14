@@ -60,11 +60,11 @@ struct AssessmentResult: Encodable {
         feedbacks.removeAll { $0.id == id }
     }
 
-    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    mutating func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        feedbacks[index].updateFeedback(detailText: detailText, credits: credits)
+        feedbacks[index] = feedback
     }
 }
 

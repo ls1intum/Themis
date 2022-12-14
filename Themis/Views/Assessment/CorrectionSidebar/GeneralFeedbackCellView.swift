@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GeneralFeedbackListView: View {
     var readOnly: Bool
-    @State var assessmentResult: AssessmentResult
+    @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var showAddFeedback = false
@@ -51,13 +51,11 @@ struct GeneralFeedbackListView: View {
             .scrollContentBackground(.hidden)
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
-            EditFeedbackView(
+            AddFeedbackView(
                 assessmentResult: $assessmentResult,
                 cvm: cvm,
-                feedback: nil,
-                showEditFeedback: $showAddFeedback,
-                edit: false,
-                type: .general
+                type: .general,
+                showSheet: $showAddFeedback
             )
         }
     }
@@ -75,11 +73,12 @@ struct GeneralFeedbackListView: View {
 struct GeneralFeedbackListView_Previews: PreviewProvider {
     static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
+    @State static var assessmentResult = AssessmentResult()
 
     static var previews: some View {
         GeneralFeedbackListView(
             readOnly: false,
-            assessmentResult: AssessmentResult(),
+            assessmentResult: $assessmentResult,
             cvm: codeEditor
         )
         .previewInterfaceOrientation(.landscapeLeft)

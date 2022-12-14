@@ -8,17 +8,18 @@
 import Foundation
 import SwiftUI
 
-struct EditFeedbackView: View {
+struct EditFeedbackViewBase: View {
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
-    let feedback: AssessmentFeedback?
+    @Binding var feedback: AssessmentFeedback
     @State var detailText = ""
     @State var score = 0.0
-    @Binding var showEditFeedback: Bool
+    @Binding var showSheet: Bool
 
     let maxScore = Double(10)
 
+    let title: String?
     let edit: Bool
     let type: FeedbackType
 
@@ -26,18 +27,12 @@ struct EditFeedbackView: View {
         Array(stride(from: -1 * maxScore, to: maxScore +  0.5, by: 0.5))
             .sorted { $0 > $1 }
     }
-    var title: String {
-        edit ? "Edit Feedback" : "Add Feedback"
-    }
 
     func updateFeedback() {
-        guard let feedback else {
-            return
-        }
+        feedback.updateFeedback(detailText: detailText, credits: score)
         assessmentResult.updateFeedback(
             id: feedback.id,
-            detailText: detailText,
-            credits: score
+            feedback: feedback
         )
     }
 
@@ -56,9 +51,6 @@ struct EditFeedbackView: View {
     }
 
     private func setStates() {
-        guard let feedback else {
-            return
-        }
         self.detailText = feedback.detailText ?? ""
         self.score = feedback.credits
     }
@@ -66,7 +58,7 @@ struct EditFeedbackView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(title)
+                Text(title ?? "Edit feedback")
                     .font(.largeTitle)
                 Spacer()
                 Button {
@@ -75,7 +67,7 @@ struct EditFeedbackView: View {
                     } else {
                         createFeedback()
                     }
-                    showEditFeedback = false
+                    showSheet = false
                 } label: {
                     Text("Save")
                 }.font(.title)

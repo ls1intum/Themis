@@ -15,7 +15,8 @@ struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
     var problemStatement: String?
-    @EnvironmentObject var avm: AssessmentViewModel
+    var readOnly: Bool
+    @State var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
     var body: some View {
@@ -44,8 +45,8 @@ struct CorrectionSidebarView: View {
                 }
             case .generalFeedback:
                 GeneralFeedbackListView(
-                    readOnly: avm.readOnly,
-                    assessmentResult: avm.assessmentResult,
+                    readOnly: readOnly,
+                    assessmentResult: $assessmentResult,
                     cvm: cvm
                 )
             }
@@ -59,6 +60,8 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
 
     static var previews: some View {
         CorrectionSidebarView(
+            readOnly: false,
+            assessmentResult: AssessmentResult(),
             cvm: cvm
         )
             .environmentObject(assessment)

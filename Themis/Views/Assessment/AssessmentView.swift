@@ -186,13 +186,11 @@ struct AssessmentView: View {
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
-            EditFeedbackView(
+            AddFeedbackView(
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
-                feedback: nil,
-                showEditFeedback: $cvm.showAddFeedback,
-                edit: false,
-                type: .inline
+                type: .inline,
+                showSheet: $cvm.showAddFeedback
             )
         }
         .task(priority: .high) {
@@ -313,6 +311,8 @@ struct AssessmentView: View {
             } else {
                 CorrectionSidebarView(
                     problemStatement: vm.submission?.participation.exercise.problemStatement,
+                    readOnly: vm.readOnly,
+                    assessmentResult: vm.assessmentResult,
                     cvm: cvm
                 )
             }
