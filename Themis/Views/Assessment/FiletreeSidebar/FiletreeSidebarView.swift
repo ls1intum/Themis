@@ -3,7 +3,7 @@ import SwiftUI
 struct FiletreeSidebarView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Filetree")
@@ -36,6 +36,5 @@ struct FiletreeSidebarView: View {
             .listStyle(.inset)
         }
     }
-    
-    
+
 }
