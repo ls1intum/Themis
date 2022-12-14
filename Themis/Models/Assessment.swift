@@ -14,7 +14,7 @@ enum FeedbackType {
     case general
 }
 
-class AssessmentResult: Encodable {
+struct AssessmentResult: Encodable {
     var score: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
@@ -52,45 +52,19 @@ class AssessmentResult: Encodable {
             .filter { $0.type == .inline }
     }
 
-    func addFeedback(
-        detailText: String,
-        credits: Double,
-        type: FeedbackType,
-        file: Node? = nil,
-        lines: NSRange? = nil,
-        columns: NSRange? = nil
-    ) -> AssessmentFeedback {
-        let text = makeText(file: file, lines: lines, columns: columns)
-        let feedback = AssessmentFeedback(text: text, detailText: detailText, credits: credits, type: type, file: file)
+    mutating func addFeedback(feedback: AssessmentFeedback) {
         feedbacks.append(feedback)
-        return feedback
     }
 
-    func deleteFeedback(id: UUID) {
+    mutating func deleteFeedback(id: UUID) {
         feedbacks.removeAll { $0.id == id }
     }
 
-    func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
         feedbacks[index].updateFeedback(detailText: detailText, credits: credits)
-    }
-
-    func makeText(file: Node?, lines: NSRange?, columns: NSRange?) -> String? {
-        guard let file = file, let lines = lines else {
-            return nil
-        }
-        if lines.location == 0 {
-            return nil
-        }
-        guard let columns = columns else {
-            return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
-        }
-        if columns.length == 0 {
-            return file.name + " at Line: \(lines.location) Col: \(columns.location)"
-        }
-        return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
     }
 }
 
@@ -110,6 +84,24 @@ struct AssessmentFeedback: Identifiable {
     mutating func updateFeedback(detailText: String, credits: Double) {
         self.detailText = detailText
         self.credits = credits
+    }
+
+    mutating func buildLineDescription(lines: NSRange?, columns: NSRange?) {
+        guard let file = file, let lines = lines else {
+            return
+        }
+        if lines.location == 0 {
+            return
+        }
+        guard let columns else {
+            self.text = file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
+            return
+        }
+        if columns.length == 0 {
+            self.text =  file.name + " at Line: \(lines.location) Col: \(columns.location)"
+        } else {
+            self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
+        }
     }
 }
 

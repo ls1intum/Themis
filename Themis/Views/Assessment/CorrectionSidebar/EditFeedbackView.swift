@@ -9,16 +9,16 @@ import Foundation
 import SwiftUI
 
 struct EditFeedbackView: View {
-    @State var assessmentResult: AssessmentResult
-    @State var cvm: CodeEditorViewModel
+    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var cvm: CodeEditorViewModel
 
-    @State var feedbackText = ""
+    let feedback: AssessmentFeedback?
+    @State var detailText = ""
     @State var score = 0.0
     @Binding var showEditFeedback: Bool
 
     let maxScore = Double(10)
 
-    let feedback: AssessmentFeedback?
     let edit: Bool
     let type: FeedbackType
 
@@ -34,14 +34,32 @@ struct EditFeedbackView: View {
         guard let feedback else {
             return
         }
-        assessmentResult.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
+        assessmentResult.updateFeedback(
+            id: feedback.id,
+            detailText: detailText,
+            credits: score
+        )
+    }
+
+    func createFeedback() {
+        var feedback = AssessmentFeedback(
+            detailText: detailText,
+            credits: score,
+            type: type,
+            file: cvm.selectedFile
+        )
+        let lines: NSRange? = cvm.selectedSectionParsed?.0
+        let columns: NSRange? = cvm.selectedSectionParsed?.1
+        feedback.buildLineDescription(lines: lines, columns: columns)
+        cvm.addInlineHighlight(feedbackId: feedback.id)
+        assessmentResult.addFeedback(feedback: feedback)
     }
 
     private func setStates() {
         guard let feedback else {
             return
         }
-        self.feedbackText = feedback.detailText ?? ""
+        self.detailText = feedback.detailText ?? ""
         self.score = feedback.credits
     }
 
@@ -55,16 +73,16 @@ struct EditFeedbackView: View {
                     if edit {
                         updateFeedback()
                     } else {
-                        cvm.createFeedback(assessmentResult: assessmentResult, detailText: feedbackText, feedbackScore: score, feedbackType: type)
+                        createFeedback()
                     }
                     showEditFeedback = false
                 } label: {
                     Text("Save")
                 }.font(.title)
-                    .disabled(feedbackText.isEmpty)
+                    .disabled(detailText.isEmpty)
             }
             HStack {
-                TextField("Enter your feedback here", text: $feedbackText, axis: .vertical)
+                TextField("Enter your feedback here", text: $detailText, axis: .vertical)
                     .submitLabel(.return)
                     .lineLimit(10...40)
                     .padding()

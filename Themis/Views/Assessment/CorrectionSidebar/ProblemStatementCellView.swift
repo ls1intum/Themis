@@ -11,7 +11,7 @@ import MarkdownUI
 
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    @State var problemStatement: String?
+    var problemStatement: String?
     @EnvironmentObject var assessment: AssessmentViewModel
     @EnvironmentObject var umlVM: UMLViewModel
 

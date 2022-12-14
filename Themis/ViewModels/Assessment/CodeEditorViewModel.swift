@@ -84,28 +84,4 @@ class CodeEditorViewModel: ObservableObject {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
     }
-
-    func createFeedback(assessmentResult: AssessmentResult, detailText: String, feedbackScore: Double, feedbackType: FeedbackType) {
-        switch feedbackType {
-        case .inline:
-            let file: Node? = self.selectedFile
-            let lines: NSRange? = self.selectedSectionParsed?.0
-            let columns: NSRange? = self.selectedSectionParsed?.1
-            let feedback = assessmentResult.addFeedback(
-                detailText: detailText,
-                credits: feedbackScore,
-                type: feedbackType,
-                file: file,
-                lines: lines,
-                columns: columns
-            )
-            self.addInlineHighlight(feedbackId: feedback.id)
-        case .general:
-            _ = assessmentResult.addFeedback(
-                detailText: detailText,
-                credits: feedbackScore,
-                type: feedbackType
-            )
-        }
-    }
 }

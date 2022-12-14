@@ -184,10 +184,10 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             EditFeedbackView(
-                assessmentResult: vm.assessmentResult,
+                assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
-                showEditFeedback: $cvm.showAddFeedback,
                 feedback: nil,
+                showEditFeedback: $cvm.showAddFeedback,
                 edit: false,
                 type: .inline
             )

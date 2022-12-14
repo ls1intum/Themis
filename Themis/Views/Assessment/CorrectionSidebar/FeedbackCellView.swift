@@ -65,10 +65,10 @@ struct FeedbackCellView: View {
         }
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
-                assessmentResult: assessment.assessmentResult,
+                assessmentResult: $assessment.assessmentResult,
                 cvm: cvm,
-                showEditFeedback: $showEditFeedback,
                 feedback: feedback,
+                showEditFeedback: $showEditFeedback,
                 edit: true,
                 type: feedback.type
             )

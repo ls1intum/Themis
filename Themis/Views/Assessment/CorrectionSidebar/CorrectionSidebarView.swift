@@ -14,9 +14,9 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    @State var problemStatement: String?
+    var problemStatement: String?
     @EnvironmentObject var avm: AssessmentViewModel
-    @State var cvm: CodeEditorViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
 
     var body: some View {
         VStack {
@@ -43,7 +43,7 @@ struct CorrectionSidebarView: View {
                     CorrectionGuidelinesCellView()
                 }
             case .generalFeedback:
-                GeneralFeedbackCellView(
+                GeneralFeedbackListView(
                     readOnly: avm.readOnly,
                     assessmentResult: avm.assessmentResult,
                     cvm: cvm

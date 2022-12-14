@@ -10,7 +10,7 @@ import SwiftUI
 
 struct UMLView: View {
     @Environment(\.colorScheme) var colorScheme
-    @State var umlVM: UMLViewModel
+    var umlVM: UMLViewModel
     @GestureState var draggingOffset: CGSize = .zero
 
     var body: some View {

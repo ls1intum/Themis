@@ -3,7 +3,7 @@ import SwiftUI
 struct FiletreeSidebarView: View {
     @EnvironmentObject var assessmentViewModel: AssessmentViewModel
     let participationID: Int?
-    var cvm: CodeEditorViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
