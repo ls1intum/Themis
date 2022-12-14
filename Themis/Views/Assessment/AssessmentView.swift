@@ -24,7 +24,10 @@ struct AssessmentView: View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView()
+                    FiletreeSidebarView(
+                        participationID: vm.submission?.participation.id,
+                        cvm: cvm
+                    )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
                     leftGrip
