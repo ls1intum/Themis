@@ -323,8 +323,10 @@ struct AssessmentView: View {
                         .foregroundColor(.red)
                 } else {
                     Text("""
-                         \(vm.feedback.score.formatted(FloatingPointFormatStyle()))/\
-                         \(submission.participation.exercise.maxPoints.formatted(FloatingPointFormatStyle()))
+                         \(Double(round(10 * vm.feedback.score) / 10)
+                         .formatted(FloatingPointFormatStyle()))/\
+                         \(submission.participation.exercise.maxPoints
+                         .formatted(FloatingPointFormatStyle()))
                          """)
                         .foregroundColor(.white)
                 }
