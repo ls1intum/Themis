@@ -12,6 +12,8 @@ import MarkdownUI
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var problemStatement: String?
+    @EnvironmentObject var assessment: AssessmentViewModel
+    @EnvironmentObject var umlVM: UMLViewModel
 
     @StateObject var vm = ProblemStatementCellViewModel()
 
@@ -20,16 +22,50 @@ struct ProblemStatementCellView: View {
             Text("Problem Statement")
                 .font(.largeTitle)
 
-            ForEach(vm.problemStatementParts, id: \.text) { part in
-                if let puml = part as? ProblemStatementPlantUML {
-                    AsyncImage(url: puml.url) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        ProgressView()
+            ZStack {
+                Divider()
+                    .frame(height: 5)
+                    .overlay(.gray)
+                HStack {
+                    ForEach(vm.bundledTests, id: \.testCase) { bundledTest in
+                        if bundledTest != vm.bundledTests.first {
+                            Spacer()
+                        }
+                        if bundledTest.passed {
+                            Image("TestPassedSymbol")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 30, maxHeight: 30)
+                                .background(Color(.systemBackground))
+                        } else {
+                            Image("TestFailedSymbol")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 30, maxHeight: 30)
+                                .background(Color(.systemBackground))
+                        }
                     }
+                }
+            }
+
+            ForEach(vm.problemStatementParts, id: \.text) { part in
+                if let uml = part as? ProblemStatementPlantUML {
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            umlVM.imageURL = uml.url?.absoluteString
+                            umlVM.showUMLFullScreen.toggle()
+                        }
+                    }, label: {
+                        AsyncImage(url: uml.url) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fit)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    })
                 } else {
                     Markdown(part.text)
+                        .setImageHandler(.assetImage(), forURLScheme: "asset")
                 }
             }
 
@@ -38,6 +74,7 @@ struct ProblemStatementCellView: View {
         .onAppear {
             vm.convertProblemStatement(
                 problemStatement: problemStatement ?? "",
+                feedbacks: assessment.feedback.feedbacks,
                 colorScheme: colorScheme)
         }
     }

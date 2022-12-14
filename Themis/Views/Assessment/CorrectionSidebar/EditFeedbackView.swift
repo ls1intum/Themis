@@ -42,10 +42,11 @@ struct EditFeedbackView: View {
                 } label: {
                     Text("Save")
                 }.font(.title)
-                 .disabled(feedbackText.isEmpty)
+                    .disabled(feedbackText.isEmpty)
             }
             HStack {
                 TextField("Enter your feedback here", text: $feedbackText, axis: .vertical)
+                    .submitLabel(.return)
                     .lineLimit(10...40)
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
@@ -81,17 +82,16 @@ struct EditFeedbackView: View {
             avm.feedback.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
         } else {
             if type == .inline {
-                let id = UUID()
-                avm.feedback.addFeedback(id: id,
-                                         detailText: feedbackText,
-                                         credits: score,
-                                         type: type,
-                                         file: cvm.selectedFile,
-                                         lines: cvm.selectedSectionParsed?.0,
-                                         columns: cvm.selectedSectionParsed?.1)
-                cvm.addInlineHighlight(feedbackId: id)
+                let feedback = avm.feedback.addFeedback(
+                    detailText: feedbackText,
+                    credits: score,
+                    type: type,
+                    file: cvm.selectedFile,
+                    lines: cvm.selectedSectionParsed?.0,
+                    columns: cvm.selectedSectionParsed?.1)
+                cvm.addInlineHighlight(feedbackId: feedback.id)
             } else {
-                avm.feedback.addFeedback(detailText: feedbackText, credits: score, type: type)
+                _ = avm.feedback.addFeedback(detailText: feedbackText, credits: score, type: type)
             }
         }
     }
@@ -100,7 +100,7 @@ struct EditFeedbackView: View {
         guard let feedback = feedback else {
             return
         }
-        self.feedbackText = feedback.detailText
+        self.feedbackText = feedback.detailText ?? ""
         self.score = feedback.credits
     }
 }
