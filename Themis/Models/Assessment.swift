@@ -27,7 +27,7 @@ struct AssessmentResult: Encodable {
             _feedbacks
         }
         set(new) {
-            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .manual && $1.assessmentType == .automatic }
         }
     }
 
@@ -44,16 +44,16 @@ struct AssessmentResult: Encodable {
 
     var generalFeedback: [AssessmentFeedback] {
         return feedbacks
-            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
+            .filter { $0.type == .general && $0.assessmentType == .manual }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
+            .filter { $0.type == .inline && $0.assessmentType == .manual }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
+        feedbacks.filter { $0.assessmentType == .automatic }
     }
 
     mutating func addFeedback(feedback: AssessmentFeedback) {
@@ -79,7 +79,7 @@ struct AssessmentFeedback: Identifiable {
     var text: String? /// max length = 500
     var detailText: String? /// max length = 5000
     var credits: Double /// score of element
-    var assessmentType: AssessmentType = .MANUAL
+    var assessmentType: AssessmentType = .manual
 
     // custom utility attributes
     var type: FeedbackType
@@ -89,7 +89,7 @@ struct AssessmentFeedback: Identifiable {
         text: String? = nil,
         detailText: String? = nil,
         credits: Double,
-        assessmentType: AssessmentType = .MANUAL,
+        assessmentType: AssessmentType = .manual,
         type: FeedbackType,
         file: Node? = nil,
         lines: NSRange? = nil,
@@ -172,15 +172,9 @@ extension AssessmentFeedback: Comparable {
 }
 
 enum AssessmentType: String, Codable {
-    case AUTOMATIC
-    case SEMI_AUTOMATIC
-    case MANUAL
-}
-
-enum FeedbackVisibility: String, Codable {
-    case ALWAYS
-    case AFTER_DUE_DATE
-    case NEVER
+    case automatic
+    case semiAutomatic
+    case manual
 }
 
 extension ArtemisAPI {
