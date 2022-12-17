@@ -27,7 +27,7 @@ struct AssessmentResult: Encodable {
             _feedbacks
         }
         set(new) {
-            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .manual && $1.assessmentType == .automatic }
+            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
         }
     }
 
@@ -44,16 +44,16 @@ struct AssessmentResult: Encodable {
 
     var generalFeedback: [AssessmentFeedback] {
         return feedbacks
-            .filter { $0.type == .general && $0.assessmentType == .manual }
+            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .inline && $0.assessmentType == .manual }
+            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.assessmentType == .automatic }
+        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
     }
 
     mutating func addFeedback(feedback: AssessmentFeedback) {
@@ -79,7 +79,7 @@ struct AssessmentFeedback: Identifiable {
     var text: String? /// max length = 500
     var detailText: String? /// max length = 5000
     var credits: Double /// score of element
-    var assessmentType: AssessmentType = .manual
+    var assessmentType: AssessmentType = .MANUAL
 
     // custom utility attributes
     var type: FeedbackType
@@ -89,7 +89,7 @@ struct AssessmentFeedback: Identifiable {
         text: String? = nil,
         detailText: String? = nil,
         credits: Double,
-        assessmentType: AssessmentType = .manual,
+        assessmentType: AssessmentType = .MANUAL,
         type: FeedbackType,
         file: Node? = nil,
         lines: NSRange? = nil,
@@ -172,9 +172,9 @@ extension AssessmentFeedback: Comparable {
 }
 
 enum AssessmentType: String, Codable {
-    case automatic
-    case semiAutomatic
-    case manual
+    case AUTOMATIC
+    case SEMI_AUTOMATIC
+    case MANUAL
 }
 
 extension ArtemisAPI {

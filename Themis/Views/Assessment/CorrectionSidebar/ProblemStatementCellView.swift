@@ -80,7 +80,7 @@ struct ProblemStatementCellView: View {
     }
 }
 
-struct ProblemStatementCellView_Previews {
+struct ProblemStatementCellView_Previews: PreviewProvider {
     static var umlVM = UMLViewModel()
     static let feedbacks: [AssessmentFeedback] = []
 
