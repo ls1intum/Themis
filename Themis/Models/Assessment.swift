@@ -81,6 +81,25 @@ struct AssessmentFeedback: Identifiable {
     var type: FeedbackType
     var file: Node?
 
+    init(
+        text: String? = nil,
+        detailText: String? = nil,
+        credits: Double,
+        assessmentType: AssessmentType = .MANUAL,
+        type: FeedbackType,
+        file: Node? = nil,
+        lines: NSRange? = nil,
+        columns: NSRange? = nil
+    ) {
+        self.text = text
+        self.detailText = detailText
+        self.credits = credits
+        self.assessmentType = assessmentType
+        self.type = type
+        self.file = file
+        self.buildLineDescription(lines: lines, columns: columns)
+    }
+
     mutating func updateFeedback(detailText: String, credits: Double) {
         self.detailText = detailText
         self.credits = credits

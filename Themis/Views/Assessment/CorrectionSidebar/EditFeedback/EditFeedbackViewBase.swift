@@ -37,15 +37,8 @@ struct EditFeedbackViewBase: View {
     }
 
     func createFeedback() {
-        var feedback = AssessmentFeedback(
-            detailText: detailText,
-            credits: score,
-            type: type,
-            file: cvm.selectedFile
-        )
-        let lines: NSRange? = cvm.selectedSectionParsed?.0
-        let columns: NSRange? = cvm.selectedSectionParsed?.1
-        feedback.buildLineDescription(lines: lines, columns: columns)
+        feedback.detailText = detailText
+        feedback.credits = score
         cvm.addInlineHighlight(feedbackId: feedback.id)
         assessmentResult.addFeedback(feedback: feedback)
     }
