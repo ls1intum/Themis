@@ -6,7 +6,7 @@ struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var vm: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
-    @State var umlVM = UMLViewModel()
+    @StateObject var umlVM = UMLViewModel()
 
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
