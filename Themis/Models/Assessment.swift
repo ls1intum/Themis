@@ -51,7 +51,7 @@ struct AssessmentResult: Encodable {
         feedbacks
             .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
     }
-    
+
     var automaticFeedback: [AssessmentFeedback] {
         feedbacks.filter { $0.assessmentType == .AUTOMATIC }
     }

@@ -10,9 +10,9 @@ import SwiftUI
 struct GeneralFeedbackCellView: View {
     @EnvironmentObject var assessment: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
-    
+
     @State var showAddFeedback = false
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             List {
@@ -32,7 +32,7 @@ struct GeneralFeedbackCellView: View {
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
-                
+
                 Section {
                     ForEach(assessment.feedback.inlineFeedback) { feedback in
                         FeedbackCellView(feedback: feedback)
@@ -57,7 +57,7 @@ struct GeneralFeedbackCellView: View {
                     }.padding()
                 }.headerProminence(.increased)
             }
-            
+
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             Spacer()
@@ -67,7 +67,7 @@ struct GeneralFeedbackCellView: View {
                 .environmentObject(cvm)
         }
     }
-    
+
     private func delete(at indexSet: IndexSet) {
         indexSet
             .map { assessment.feedback.feedbacks[$0] }
@@ -81,7 +81,7 @@ struct GeneralFeedbackCellView: View {
 struct GeneralFeedbackCellView_Previews: PreviewProvider {
     static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
-    
+
     static var previews: some View {
         GeneralFeedbackCellView()
             .environmentObject(assessment)
