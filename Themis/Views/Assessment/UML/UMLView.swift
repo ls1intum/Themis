@@ -1,5 +1,5 @@
 //
-//  ImageView.swift
+//  UMLView.swift
 //  Themis
 //
 //  Created by Evan Christopher on 10.12.22.
@@ -11,39 +11,44 @@ import SwiftUI
 struct UMLView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var umlVM: UMLViewModel
-    @GestureState var draggingOffset: CGSize = .zero
+    @State var viewOffset: CGSize = .zero
 
     var body: some View {
         ZStack {
             if colorScheme == .light {
-                Color.white.ignoresSafeArea().opacity(umlVM.bgOpacity)
+                Color.gray.ignoresSafeArea().opacity(0.6)
             } else {
-                Color.black.ignoresSafeArea().opacity(umlVM.bgOpacity)
+                Color.black.ignoresSafeArea().opacity(0.9)
             }
 
             AsyncImage(url: URL(string: umlVM.imageURL ?? "")) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
-                    .offset(y: umlVM.viewOffset.height)
-                    .opacity(umlVM.bgOpacity)
+                    .offset(viewOffset)
                     .scaleEffect(umlVM.scale > 1 ? umlVM.scale : 1)
                     .gesture(
                         // zoom in or out
-                        MagnificationGesture().onChanged({ (value)  in
-                            umlVM.scale = value
-                        })
-                        .onEnded({ (value) in
-                            withAnimation(.spring()) {
+                        MagnificationGesture()
+                            .onChanged({ (value)  in
                                 umlVM.scale = value
-                            }
-                        })
-                        .simultaneously(with: TapGesture(count: 2).onEnded({
-                            withAnimation {
-                                // double tap to zoom in (2x scale)
-                                umlVM.scale = umlVM.scale > 1 ? 1 : 2
-                            }
-                        })
-                    )
+                            })
+                            .onEnded({ (value) in
+                                withAnimation(.easeInOut) {
+                                    umlVM.scale = value
+                                }
+                            })
+                            .simultaneously(with: TapGesture(count: 2)
+                                .onEnded({
+                                    withAnimation(.spring()) { umlVM.scale = umlVM.scale > 1 ? 1 : 2 } // double tap to zoom in (2x scale)
+                                })
+                            )
+                            .simultaneously(with: DragGesture()
+                                .onChanged({ (value) in
+                                    withAnimation(.easeInOut) {
+                                        viewOffset = value.translation
+                                    }
+                                })
+                            )
                     )
             } placeholder: {
                 ProgressView()
@@ -58,19 +63,10 @@ struct UMLView: View {
                 Image(systemName: "xmark")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.gray.opacity(0.6))
+                    .background(Color.gray.opacity(0.7))
                     .clipShape(Circle())
             }).padding(5),
             alignment: .topTrailing
-        )
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    umlVM.onChange(value: gesture.translation)
-                }
-                .onEnded { value in
-                    umlVM.onEnd(value: value)
-                }
         )
     }
 }
