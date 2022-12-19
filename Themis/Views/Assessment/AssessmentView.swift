@@ -1,6 +1,7 @@
 import SwiftUI
 
 // swiftlint:disable type_body_length
+// swiftlint:disable closure_body_length
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
