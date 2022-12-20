@@ -114,24 +114,16 @@ struct AssessmentView: View {
                     }
                 }
             }
-            ToolbarItem(placement: .navigationBarLeading) {
-                HStack(alignment: .center) {
-                    Text(exerciseTitle)
-                        .bold()
-                        .font(.title)
-                    Image(systemName: vm.readOnly ? "eyeglasses" : "pencil.and.outline")
-                        .font(.title3)
-                }
-                .foregroundColor(.white)
-            }
-            if cvm.currentlySelecting {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        cvm.showAddFeedback.toggle()
-                    } label: {
-                        Text("Feedback")
+            if !vm.readOnly {
+                if cvm.currentlySelecting {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            cvm.showAddFeedback.toggle()
+                        } label: {
+                            Text("Feedback")
+                        }
+                        .disabled(vm.readOnly)
                     }
-                    .disabled(vm.readOnly)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -142,31 +134,43 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: false)
-                        }
+            if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        cvm.lassoMode.toggle()
+                    } label: {
+                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
+                        Image(systemName: "pencil.and.outline")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, iconDrawingColor)
                     }
-                } label: {
-                    Text("Save")
                 }
-                .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: true)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        Task {
+                            if let pId = vm.submission?.participation.id {
+                                await vm.sendAssessment(participationId: pId, submit: false)
+                            }
                         }
+                    } label: {
+                        Text("Save")
                     }
-                } label: {
-                    Text("Submit")
+                    .buttonStyle(NavigationBarButton())
+                    .disabled(vm.readOnly)
                 }
-                .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        Task {
+                            if let pId = vm.submission?.participation.id {
+                                await vm.sendAssessment(participationId: pId, submit: true)
+                            }
+                        }
+                    } label: {
+                        Text("Submit")
+                    }
+                    .buttonStyle(NavigationBarButton())
+                    .disabled(vm.readOnly)
+                }
             }
         }
         .sheet(isPresented: $showSettings) {
