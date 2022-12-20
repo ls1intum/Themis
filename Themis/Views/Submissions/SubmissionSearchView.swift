@@ -11,6 +11,7 @@ struct SubmissionSearchView: View {
     @StateObject var vm = SubmissionSearchViewModel()
     @StateObject var avm = AssessmentViewModel(readOnly: true)
     @StateObject var cvm = CodeEditorViewModel()
+    @StateObject var umlVM = UMLViewModel()
     @State var search: String = ""
 
     let exercise: Exercise
@@ -40,6 +41,7 @@ struct SubmissionSearchView: View {
             )
                 .environmentObject(avm)
                 .environmentObject(cvm)
+                .environmentObject(umlVM)
         }
     }
 }

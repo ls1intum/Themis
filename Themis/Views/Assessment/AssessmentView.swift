@@ -1,11 +1,13 @@
 import SwiftUI
 
 // swiftlint:disable type_body_length
+// swiftlint:disable closure_body_length
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vm: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
+    @EnvironmentObject var umlVM: UMLViewModel
 
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
@@ -46,6 +48,13 @@ struct AssessmentView: View {
             }
             .padding(.top)
             .padding(.leading, 18)
+        }
+        .overlay {
+            ZStack {
+                if umlVM.showUMLFullScreen {
+                    UMLView()
+                }
+            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(Color.primary, for: .navigationBar)
@@ -316,8 +325,10 @@ struct AssessmentView: View {
                         .foregroundColor(.red)
                 } else {
                     Text("""
-                         \(vm.feedback.score.formatted(FloatingPointFormatStyle()))/\
-                         \(submission.participation.exercise.maxPoints.formatted(FloatingPointFormatStyle()))
+                         \(Double(round(10 * vm.feedback.score) / 10)
+                         .formatted(FloatingPointFormatStyle()))/\
+                         \(submission.participation.exercise.maxPoints
+                         .formatted(FloatingPointFormatStyle()))
                          """)
                         .foregroundColor(.white)
                 }
