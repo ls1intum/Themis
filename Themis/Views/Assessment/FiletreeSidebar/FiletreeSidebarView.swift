@@ -16,24 +16,17 @@ struct FiletreeSidebarView: View {
                 OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
                     if tree.type == .folder {
                         Text(tree.name)
-                            .bold(tree == cvm.selectedFile)
-                            .padding(.horizontal)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                            .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
-                            .cornerRadius(10)
-                            .tag(tree)
-                            .onTapGesture {
-                                if tree.type == .file {
-                                    withAnimation {
-                                        guard let pId = assessmentViewModel.submission?.participation.id else { return }
-                                        cvm.openFile(file: tree, participationId: pId, templateParticipationId: templateParticipationId)
-                                    }
-                                }
                     } else {
                         Button {
                             withAnimation {
-                                guard let pId = assessmentViewModel.submission?.participation.id else { return }
-                                cvm.openFile(file: tree, participationId: pId)
+                                guard let pId = assessmentViewModel.submission?.participation.id else {
+                                    return
+                                }
+                                cvm.openFile(
+                                    file: tree,
+                                    participationId: pId,
+                                    templateParticipationId: templateParticipationId
+                                )
                             }
                         } label: {
                             Text(tree.name)

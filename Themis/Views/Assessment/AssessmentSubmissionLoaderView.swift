@@ -29,6 +29,7 @@ struct AssessmentSubmissionLoaderView: View {
                 }
             }
     }
+}
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
