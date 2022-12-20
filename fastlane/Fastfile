@@ -147,7 +147,8 @@ platform :ios do
   lane :slack_notification do
     slack(
       message: "App successfully released!",
-      slack_url: ENV["bamboo_SLACK_WEBHOOK"]
+      slack_url: ENV["bamboo_SLACK_WEBHOOK"],
+      success: true
     )
   end
 
@@ -155,7 +156,8 @@ platform :ios do
   error do |lane, exception|
     slack(
       message: "Something went wrong with the app release.",
-      slack_url: ENV["bamboo_SLACK_WEBHOOK"]
+      slack_url: ENV["bamboo_SLACK_WEBHOOK"],
+      success: false
     )
   end
 

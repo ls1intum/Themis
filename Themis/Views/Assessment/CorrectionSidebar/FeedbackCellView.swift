@@ -14,6 +14,7 @@ struct FeedbackCellView: View {
     @EnvironmentObject var cvm: CodeEditorViewModel
 
     let feedback: AssessmentFeedback
+    var editingDisabled: Bool { assessment.readOnly || feedback.assessmentType == .AUTOMATIC }
 
     @State var showEditFeedback = false
     var feedbackColor: Color {
@@ -29,7 +30,7 @@ struct FeedbackCellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text(feedback.text.isEmpty ? "Feedback" : feedback.text)
+                Text(feedback.text ?? "Feedback")
                 Spacer()
                 Button {
                     showEditFeedback = true
@@ -38,7 +39,7 @@ struct FeedbackCellView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                 }
-                .disabled(assessment.readOnly)
+                .disabled(editingDisabled)
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Button(role: .destructive) {
@@ -49,14 +50,14 @@ struct FeedbackCellView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                 }
-                .disabled(assessment.readOnly)
+                .disabled(editingDisabled)
                 .buttonStyle(.borderless)
                 .font(.caption)
             }
             Divider()
                 .frame(maxWidth: .infinity)
             HStack {
-                Text(feedback.detailText)
+                Text(feedback.detailText ?? "")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(String(format: "%.1f", feedback.credits))
                     .foregroundColor(feedbackColor)

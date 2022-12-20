@@ -307,6 +307,9 @@ function_parameter_count: # Number of function parameters should be low.
   - 5 # error - default: 8
 
 identifier_name:
+  min_length:
+    warning: 3
+    error: 0
   allowed_symbols: "_"
   excluded: # excluded names
     - id

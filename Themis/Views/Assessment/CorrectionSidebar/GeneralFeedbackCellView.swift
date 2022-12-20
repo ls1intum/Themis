@@ -45,7 +45,19 @@ struct GeneralFeedbackCellView: View {
                         Spacer()
                     }.padding()
                 }.headerProminence(.increased)
+                Section {
+                    ForEach(assessment.feedback.automaticFeedback) { feedback in
+                        FeedbackCellView(feedback: feedback)
+                            .listRowSeparator(.hidden)
+                    }
+                } header: {
+                    HStack {
+                        Text("Automatic Feedback")
+                        Spacer()
+                    }.padding()
+                }.headerProminence(.increased)
             }
+
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             Spacer()
