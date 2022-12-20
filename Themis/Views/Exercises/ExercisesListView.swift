@@ -31,7 +31,6 @@ struct ExercisesListView: View {
     }
 
     var title: String {
-        return "\(courseListVM.courseForID(id: courseID).title ?? "") Exercises"
+        "\(courseListVM.courseForID(id: courseID).title ?? "") Exercises"
     }
-
 }

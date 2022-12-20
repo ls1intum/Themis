@@ -1,4 +1,6 @@
 // swiftlint:disable line_length
+// swiftlint:disable type_body_length
+// swiftlint:disable closure_body_length
 
 import SwiftUI
 
@@ -7,11 +9,11 @@ struct AssessmentView: View {
     @EnvironmentObject var vm: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
 
-    @State var showSettings: Bool = false
-    @State var showFileTree: Bool = true
+    @State var showSettings = false
+    @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
-    @State private var correctionAsPlaceholder: Bool = true
+    @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
 
     private let minRightSnapWidth: CGFloat = 185
@@ -75,7 +77,10 @@ struct AssessmentView: View {
                         }
                         .foregroundColor(.white)
                     }
-                    .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
+                    .confirmationDialog(
+                        "Cancel Assessment",
+                        isPresented: $showCancelDialog
+                    ) {
                         Button("Save") {
                             Task {
                                 if let id = vm.submission?.id {

@@ -166,7 +166,7 @@ public struct CodeEditor: View {
 
         /// `.editable` requires that the `source` of the `CodeEditor` is a
         /// `Binding`.
-        public static let editable   = Flags(rawValue: 1 << 0)
+        public static let editable = Flags(rawValue: 1 << 0)
 
         /// Whether the displayed content should be selectable by the user.
         public static let selectable = Flags(rawValue: 1 << 1)
@@ -179,7 +179,6 @@ public struct CodeEditor: View {
         public static let defaultViewerFlags: Flags = [ .selectable ]
         public static let defaultEditorFlags: Flags =
         [ .selectable, .editable, .smartIndent ]
-
     }
 
     @frozen public enum IndentStyle: Equatable {
@@ -191,7 +190,7 @@ public struct CodeEditor: View {
      * Default auto pairing mappings for languages.
      */
     public static var defaultAutoPairs: [ Language: [ String: String ] ] = [
-        .c: cStyleAutoPairs, .cpp: cStyleAutoPairs, .objectivec: cStyleAutoPairs,
+        .cLang: cStyleAutoPairs, .cpp: cStyleAutoPairs, .objectivec: cStyleAutoPairs,
         .swift: cStyleAutoPairs,
         .java: cStyleAutoPairs, .javascript: cStyleAutoPairs,
         .xml: xmlStyleAutoPairs,
@@ -236,13 +235,13 @@ public struct CodeEditor: View {
                 theme: ThemeName            = .default,
                 fontSize: Binding<CGFloat>?    = nil,
                 flags: Flags                = .defaultEditorFlags,
-                indentStyle: IndentStyle          = .system,
+                indentStyle: IndentStyle = .system,
                 autoPairs: [ String: String ]? = nil,
-                inset: CGSize?              = nil,
-                autoscroll: Bool                 = true,
+                inset: CGSize? = nil,
+                autoscroll: Bool = true,
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
-                line: Binding<Line?>?       = nil,
+                line: Binding<Line?>? = nil,
                 showAddFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>) {
         self.source      = source
@@ -295,12 +294,12 @@ public struct CodeEditor: View {
                 theme: ThemeName            = .default,
                 fontSize: Binding<CGFloat>?    = nil,
                 flags: Flags                = .defaultViewerFlags,
-                indentStyle: IndentStyle          = .system,
+                indentStyle: IndentStyle = .system,
                 autoPairs: [ String: String ]? = nil,
-                inset: CGSize?              = nil,
+                inset: CGSize? = nil,
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
-                line: Binding<Line?>?       = nil,
+                line: Binding<Line?>? = nil,
                 showAddFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>) {
         assert(!flags.contains(.editable), "Editing requires a Binding")

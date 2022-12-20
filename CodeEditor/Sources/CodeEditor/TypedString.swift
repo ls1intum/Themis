@@ -20,12 +20,12 @@ public protocol TypedString: RawRepresentable, Hashable, Comparable, Codable,
 public extension TypedString where RawValue == String {
 
   @inlinable
-  var description: String { return self.rawValue }
+  var description: String { self.rawValue }
   @inlinable
-  var id: String { return self.rawValue }
+  var id: String { self.rawValue }
 
   @inlinable
   static func < (lhs: Self, rhs: Self) -> Bool {
-    return lhs.rawValue < rhs.rawValue
+    lhs.rawValue < rhs.rawValue
   }
 }

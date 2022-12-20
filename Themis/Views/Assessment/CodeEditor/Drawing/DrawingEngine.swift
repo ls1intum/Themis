@@ -30,7 +30,7 @@ class DrawingEngine {
     }
 
     func calculateMidPoint(_ point1: CGPoint, _ point2: CGPoint) -> CGPoint {
-        let newMidPoint = CGPoint(x: (point1.x + point2.x)/2, y: (point1.y + point2.y)/2)
+        let newMidPoint = CGPoint(x: (point1.x + point2.x) / 2, y: (point1.y + point2.y) / 2)
         return newMidPoint
     }
 }

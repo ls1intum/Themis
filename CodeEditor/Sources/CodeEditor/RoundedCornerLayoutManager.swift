@@ -15,7 +15,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         lineFragmentGlyphRange lineGlyphRange: NSRange,
         containerOrigin: CGPoint
     ) {
-        let firstPosition  = location(forGlyphAt: glyphRange.location).x
+        let firstPosition = location(forGlyphAt: glyphRange.location).x
 
         let lastPosition: CGFloat
 

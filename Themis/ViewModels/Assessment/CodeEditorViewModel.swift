@@ -14,10 +14,10 @@ class CodeEditorViewModel: ObservableObject {
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
-    @Published var currentlySelecting: Bool = false
+    @Published var currentlySelecting = false
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
-    @Published var showAddFeedback: Bool = false
+    @Published var showAddFeedback = false
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {

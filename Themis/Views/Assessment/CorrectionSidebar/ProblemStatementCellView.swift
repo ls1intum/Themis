@@ -32,7 +32,6 @@ struct ProblemStatementCellView: View {
                     Markdown(part.text)
                 }
             }
-
         }
         .padding()
         .onAppear {

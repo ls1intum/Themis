@@ -107,7 +107,7 @@ class Node: Hashable, ObservableObject {
         print("\(spaces)\(name) - \(type.rawValue) - \(self.path)")
         guard let children else { return desc }
         for child in children {
-            desc += child.prettyPrint(spaces: newSpaces)  + "\n"
+            desc += child.prettyPrint(spaces: newSpaces) + "\n"
         }
         return desc
     }
@@ -200,5 +200,4 @@ extension ArtemisAPI {
             }
         }
     }
-
 }

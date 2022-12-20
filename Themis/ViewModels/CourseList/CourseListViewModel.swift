@@ -25,5 +25,4 @@ class CourseListViewModel: ObservableObject {
         }
         return course
     }
-
 }

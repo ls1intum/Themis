@@ -11,7 +11,7 @@ struct AuthenticationView: View {
     enum SecureFieldFocus { case plain, secure }
 
     @ObservedObject var authenticationVM: AuthenticationViewModel
-    @State private var isSecured: Bool = true
+    @State private var isSecured = true
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var passwordFocus: SecureFieldFocus?
 
@@ -58,7 +58,6 @@ struct AuthenticationView: View {
             .background(authenticationVM.loginDisabled ? Color.gray : Color.blue)
             .cornerRadius(10)
         }.disabled(authenticationVM.loginDisabled)
-
     }
 
     var passwordField: some View {
@@ -84,9 +83,7 @@ struct AuthenticationView: View {
         .frame(width: 500, height: 50)
         .background(colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6))
         .cornerRadius(10)
-
     }
-
 }
 
 struct LoginTextFieldStyle: TextFieldStyle {

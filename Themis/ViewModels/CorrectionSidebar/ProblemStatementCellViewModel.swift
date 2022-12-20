@@ -60,13 +60,13 @@ class ProblemStatementCellViewModel: ObservableObject {
     }
 
     func deleteTestCases(_ problemStatement: String) -> String {
-        return problemStatement
+        problemStatement
             .replacingOccurrences(of: "[task][", with: "") // to remove symbol
             .replacingOccurrences(of: "](.*())", with: "", options: .regularExpression) // to remove tests
     }
 
     func replaceTestsColor(_ problemStatement: String, _ colorSchemeVariable: ColorScheme) -> String {
-        return problemStatement
+        problemStatement
                 .replacingOccurrences(of: "testsColor\\([A-z]+\\)", with: colorSchemeVariable == .light ? "black" : "white", options: .regularExpression)
 
         // return problemStatement

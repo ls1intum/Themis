@@ -20,6 +20,7 @@ typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
 #endif
 
+// swiftlint:disable type_body_length
 /**
  * Subclass of NSTextView/UITextView which adds some code editing features to
  * the respective Cocoa views.
@@ -31,7 +32,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     fileprivate let highlightr = Highlightr()
 
     private var hlTextStorage: CodeAttributedString? {
-        return textStorage as? CodeAttributedString
+        textStorage as? CodeAttributedString
     }
 
     /// If the user starts a newline, the editor automagically adds the same
@@ -52,7 +53,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             guard hlTextStorage?.language != newValue?.rawValue else { return }
             hlTextStorage?.language = newValue?.rawValue
         }
-        get { return hlTextStorage?.language.flatMap(CodeEditor.Language.init) }
+        get { hlTextStorage?.language.flatMap(CodeEditor.Language.init) }
     }
     private(set) var themeName = CodeEditor.ThemeName.default {
         didSet {
@@ -74,7 +75,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         textStorage.addLayoutManager(layoutManager)
 
         let textContainer = NSTextContainer()
-        textContainer.widthTracksTextView  = true // those are key!
+        textContainer.widthTracksTextView = true // those are key!
         layoutManager.addTextContainer(textContainer)
 
         super.init(frame: .zero, textContainer: textContainer)
@@ -152,7 +153,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         if coordinator.allowCopy { super.copy(sender) }
     }
 
-    private var isAutoPairEnabled: Bool { return !autoPairCompletion.isEmpty }
+    private var isAutoPairEnabled: Bool { !autoPairCompletion.isEmpty }
 
 #if os(iOS)
     override func insertText(_ text: String) {
@@ -194,9 +195,13 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     override func insertText(_ string: Any, replacementRange: NSRange) {
         super.insertText(string, replacementRange: replacementRange)
         guard isAutoPairEnabled              else { return }
-        guard let string = string as? String else { return } // TBD: NSAttrString
+        guard let string = string as? String else {
+            return
+        } // TBD: NSAttrString
 
-        guard let end = autoPairCompletion[string] else { return }
+        guard let end = autoPairCompletion[string] else {
+            return
+        }
         super.insertText(end, replacementRange: selectedRange())
         super.moveBackward(self)
     }
@@ -313,12 +318,11 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
                                             NSAttributedString.Key.font: font,
                                             NSAttributedString.Key.paragraphStyle: paraStyle,
                                             NSAttributedString.Key.foregroundColor: UIColor.gray
-                                        ]
+                        ]
                         )
         }
 
         UIGraphicsPopContext()
-
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {
@@ -345,7 +349,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             coordinator?.setDragSelection(self.dragSelection)
         }
     }
-
 }
 
 protocol UXCodeTextViewDelegate: UXTextViewDelegate {
@@ -406,16 +409,16 @@ extension UXTextView {
 #if os(macOS)
 
 extension NSTextView {
-    var codeTextStorage: NSTextStorage? { return textStorage }
+    var codeTextStorage: NSTextStorage? { textStorage }
 }
 #else // iOS
 extension UITextView {
 
     var string: String { // NeXTstep was right!
         set { text = newValue}
-        get { return text }
+        get { text }
     }
 
-    var codeTextStorage: NSTextStorage? { return textStorage }
+    var codeTextStorage: NSTextStorage? { textStorage }
 }
 #endif // iOS

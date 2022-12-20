@@ -23,7 +23,7 @@ struct EditFeedbackView: View {
     let type: FeedbackType
 
     var pickerRange: [Double] {
-        Array(stride(from: -1 * maxScore, to: maxScore +  0.5, by: 0.5))
+        Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
             .sorted { $0 > $1 }
     }
     var title: String {

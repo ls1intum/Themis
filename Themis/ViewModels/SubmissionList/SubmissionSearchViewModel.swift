@@ -19,10 +19,11 @@ class SubmissionSearchViewModel: ObservableObject {
         }
     }
 
-    // TODO: implement fuzzy search
     func filterSubmissions(search: String) -> [Submission] {
         let search = search.lowercased().trimmingCharacters(in: .whitespaces)
-        guard !search.isEmpty else { return submissions }
+        guard !search.isEmpty else {
+            return submissions
+        }
         return submissions.filter { submission in
             let student = submission.participation.student
             let name = student.name.lowercased().trimmingCharacters(in: .whitespaces)

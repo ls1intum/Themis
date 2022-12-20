@@ -154,12 +154,16 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("unexpected notification object")
                 return
             }
-
-            textViewDidChangeSelection(textView: textView as! UXCodeTextView)
+            
+            textViewDidChangeSelection(textView: textView)
         }
 #elseif os(iOS)
         public func textViewDidChangeSelection(_ textView: UITextView) {
-            textViewDidChangeSelection(textView: textView as! UXCodeTextView)
+            guard let textView = textView as? UXCodeTextView else {
+                assertionFailure("unexpected textView")
+                return
+            }
+            textViewDidChangeSelection(textView: textView)
         }
 #else
 #error("Unsupported OS")
@@ -202,13 +206,13 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         }
 
         var allowCopy: Bool {
-            return parent.flags.contains(.selectable)
+            parent.flags.contains(.selectable)
             || parent.flags.contains(.editable)
         }
     }
 
     public func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
+        Coordinator(self)
     }
 
     private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
@@ -260,7 +264,6 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = source.wrappedValue
             }
-
         }
         textView.setNeedsDisplay()
         let dragSelection = getSelectionFromLine(textView: textView)

@@ -9,6 +9,6 @@ import Foundation
 
 public extension Range<Int> {
     func toNSRange() -> NSRange {
-        return NSRange(location: lowerBound, length: count)
+        NSRange(location: lowerBound, length: count)
     }
 }
