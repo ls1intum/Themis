@@ -10,31 +10,29 @@ struct FiletreeSidebarView: View {
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
-            List {
-                OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
-                    if tree.type == .folder {
+            if let fileTree = cvm.fileTree {
+                List {
+                    OutlineGroup(fileTree, id: \.path, children: \.children) { tree in
                         Text(tree.name)
-                    } else {
-                        Button {
-                            withAnimation {
-                                guard let pId = assessmentViewModel.submission?.participation.id else { return }
-                                cvm.openFile(file: tree, participationId: pId)
+                            .bold(tree == cvm.selectedFile)
+                            .padding(.horizontal)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+                            .cornerRadius(10)
+                            .tag(tree)
+                            .onTapGesture {
+                                if tree.type == .file {
+                                    withAnimation {
+                                        guard let pId = assessmentViewModel.submission?.participation.id else { return }
+                                        cvm.openFile(file: tree, participationId: pId)
+                                    }
+                                }
                             }
-                        } label: {
-                            Text(tree.name)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                        .bold(tree === cvm.selectedFile)
-                        .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
-                        .cornerRadius(10)
                     }
+                    .listRowSeparator(.hidden)
                 }
-                .listRowSeparator(.hidden)
+                .listStyle(.inset)
             }
-            .listStyle(.inset)
         }
     }
-
 }

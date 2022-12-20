@@ -1,13 +1,11 @@
-import SwiftUI
+// swiftlint:disable line_length
 
-// swiftlint:disable type_body_length
-// swiftlint:disable closure_body_length
+import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vm: AssessmentViewModel
     @EnvironmentObject var cvm: CodeEditorViewModel
-    @EnvironmentObject var umlVM: UMLViewModel
 
     @State var showSettings: Bool = false
     @State var showFileTree: Bool = true
@@ -48,13 +46,6 @@ struct AssessmentView: View {
             .padding(.top)
             .padding(.leading, 18)
         }
-        .overlay {
-            ZStack {
-                if umlVM.showUMLFullScreen {
-                    UMLView()
-                }
-            }
-        }
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(Color.primary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -87,8 +78,8 @@ struct AssessmentView: View {
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
                             Task {
-                                if let pId = vm.submission?.participation.id {
-                                    await vm.sendAssessment(participationId: pId, submit: false)
+                                if let id = vm.submission?.id {
+                                    await vm.sendAssessment(participationId: id, submit: false)
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
@@ -102,11 +93,7 @@ struct AssessmentView: View {
                             }
                         }
                     } message: {
-                        Text("""
-                             Either discard the assessment \
-                             and release the lock (recommended) \
-                             or keep the lock and save the assessment without submitting it.
-                             """)
+                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
                     }
                 }
             }
@@ -137,13 +124,6 @@ struct AssessmentView: View {
                     Image(systemName: "gearshape")
                 }
                 .foregroundColor(.white)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                CustomProgressView(progress: vm.feedback.score,
-                                   max: vm.submission?.participation.exercise.maxPoints ?? 0)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                scoreDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -300,40 +280,6 @@ struct AssessmentView: View {
             }
         }
     }
-
-    var scoreColor: Color {
-        guard let max = vm.submission?.participation.exercise.maxPoints else {
-            return Color(.systemRed)
-        }
-        let score = vm.feedback.score
-        if score < max / 3 {
-            return Color(.systemRed)
-        } else if score < max / 3 * 2 {
-            return Color(.systemYellow)
-        } else {
-            return Color(.systemGreen)
-        }
-    }
-
-    var scoreDisplay: some View {
-        Group {
-            if let submission = vm.submission {
-                if submission.buildFailed {
-                    Text("Build failed")
-                        .foregroundColor(.red)
-                } else {
-                    Text("""
-                         \(Double(round(10 * vm.feedback.score) / 10)
-                         .formatted(FloatingPointFormatStyle()))/\
-                         \(submission.participation.exercise.maxPoints
-                         .formatted(FloatingPointFormatStyle()))
-                         """)
-                        .foregroundColor(.white)
-                }
-            }
-        }
-        .fontWeight(.semibold)
-    }
 }
 
 extension Color {
@@ -362,10 +308,8 @@ struct NavigationBarButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
+            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
             .background(Color.secondary)
-            .cornerRadius(20)
-            .fontWeight(.semibold)
+            .cornerRadius(12)
     }
 }

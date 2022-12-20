@@ -11,7 +11,6 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var vm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
-    @StateObject var umlVM = UMLViewModel()
 
     let exercise: Exercise
 
@@ -44,7 +43,6 @@ struct ExerciseView: View {
             AssessmentView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
                 .environmentObject(vm)
                 .environmentObject(cvm)
-                .environmentObject(umlVM)
         }
         .navigationTitle(exercise.title ?? "")
         .onAppear {

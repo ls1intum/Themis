@@ -5,8 +5,6 @@
 //  Created by Andreas Cselovszky on 14.11.22.
 //
 
-// swiftlint:disable line_length
-
 import Foundation
 
 enum FeedbackType {
@@ -16,20 +14,9 @@ enum FeedbackType {
 
 struct AssessmentResult: Encodable {
     var score: Double {
-        let score = feedbacks.reduce(0) { $0 + $1.credits }
-        return score < 0 ? 0 : score
+        feedbacks.reduce(0) { $0 + $1.credits }
     }
-
-    private var _feedbacks: [AssessmentFeedback] = []
-
-    var feedbacks: [AssessmentFeedback] {
-        get {
-            _feedbacks
-        }
-        set(new) {
-            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
-        }
-    }
+    var feedbacks: [AssessmentFeedback]
 
     enum CodingKeys: CodingKey {
         case score
@@ -43,24 +30,15 @@ struct AssessmentResult: Encodable {
     }
 
     var generalFeedback: [AssessmentFeedback] {
-        return feedbacks
-            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
+        feedbacks.filter { $0.type == .general }
     }
-
     var inlineFeedback: [AssessmentFeedback] {
-        feedbacks
-            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
+        feedbacks.filter { $0.type == .inline }
     }
 
-    var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
-    }
-
-    mutating func addFeedback(detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) -> AssessmentFeedback {
-        let text = makeText(file: file, lines: lines, columns: columns)
-        let feedback = AssessmentFeedback(text: text, detailText: detailText, credits: credits, type: type, file: file)
-        feedbacks.append(feedback)
-        return feedback
+    mutating func addFeedback(id: UUID = UUID(), detailText: String, credits: Double, type: FeedbackType,
+                              file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) {
+        feedbacks.append(AssessmentFeedback(id: id, detailText: detailText, credits: credits, type: type, file: file, lines: lines, columns: columns))
     }
 
     mutating func deleteFeedback(id: UUID) {
@@ -73,13 +51,16 @@ struct AssessmentResult: Encodable {
         }
         feedbacks[index].updateFeedback(detailText: detailText, credits: credits)
     }
+}
 
-    func makeText(file: Node?, lines: NSRange?, columns: NSRange?) -> String? {
+struct AssessmentFeedback: Encodable, Identifiable {
+    let id: UUID
+    var text: String {
         guard let file = file, let lines = lines else {
-            return nil
+            return ""
         }
         if lines.location == 0 {
-            return nil
+            return ""
         }
         guard let columns = columns else {
             return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
@@ -88,75 +69,32 @@ struct AssessmentResult: Encodable {
             return file.name + " at Line: \(lines.location) Col: \(columns.location)"
         }
         return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
-    }
-}
-
-struct AssessmentFeedback: Identifiable {
-    // attributes from artemis
-    let id: UUID = UUID()
-    let created: Date = Date()
-    var text: String? /// max length = 500
-    var detailText: String? /// max length = 5000
+    } /// max length = 500
+    var detailText: String /// max length = 5000
     var credits: Double /// score of element
-    var assessmentType: AssessmentType = .MANUAL
 
-    // custom utility attributes
-    var type: FeedbackType
+    let type: FeedbackType
     var file: Node?
+    var lines: NSRange?
+    var columns: NSRange?
+
+    enum CodingKeys: CodingKey {
+        case text
+        case detailText
+        case credits
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(text, forKey: .text)
+        try container.encode(detailText, forKey: .detailText)
+        try container.encode(credits, forKey: .credits)
+    }
 
     mutating func updateFeedback(detailText: String, credits: Double) {
         self.detailText = detailText
         self.credits = credits
     }
-}
-
-// send to artemis
-extension AssessmentFeedback: Encodable {
-    enum EncodingKeys: String, CodingKey {
-        case text
-        case detailText
-        case credits
-        case assessmentType = "type"
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: EncodingKeys.self)
-        try container.encode(text, forKey: .text)
-        try container.encode(detailText, forKey: .detailText)
-        try container.encode(credits, forKey: .credits)
-        try container.encode(assessmentType, forKey: .assessmentType)
-    }
-}
-
-// receive feedbacks from artemis
-extension AssessmentFeedback: Decodable {
-    enum DecodingKeys: String, CodingKey {
-        case text
-        case detailText
-        case credits
-        case assessmentType = "type"
-    }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: DecodingKeys.self)
-        text = try? values.decode(String?.self, forKey: .text)
-        detailText = try? values.decode(String?.self, forKey: .detailText)
-        credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
-        assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        type = text?.contains("at Line:") ?? false ? .inline : .general
-    }
-}
-
-extension AssessmentFeedback: Comparable {
-    static func < (lhs: AssessmentFeedback, rhs: AssessmentFeedback) -> Bool {
-        lhs.created < rhs.created
-    }
-}
-
-enum AssessmentType: String, Codable {
-    case AUTOMATIC
-    case SEMI_AUTOMATIC
-    case MANUAL
 }
 
 enum FeedbackVisibility: String, Codable {
