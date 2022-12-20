@@ -14,6 +14,11 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    var exercise: ExerciseOfSubmission?
+    var readOnly: Bool
+    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var umlVM: UMLViewModel
 
     var body: some View {
         VStack {
@@ -31,27 +36,42 @@ struct CorrectionSidebarView: View {
             switch correctionSidebarStatus {
             case .problemStatement:
                 ScrollView {
-                    ProblemStatementCellView()
+                    ProblemStatementCellView(
+                        problemStatement: exercise?.problemStatement,
+                        feedbacks: assessmentResult.feedbacks,
+                        umlVM: umlVM
+                    )
                 }
             case .correctionGuidelines:
                 ScrollView {
-                    CorrectionGuidelinesCellView()
+                    CorrectionGuidelinesCellView(
+                        gradingCriteria: exercise?.gradingCriteria ?? [],
+                        gradingInstructions: exercise?.gradingInstructions
+                    )
                 }
             case .generalFeedback:
-                GeneralFeedbackCellView()
+                FeedbackListView(
+                    readOnly: readOnly,
+                    assessmentResult: $assessmentResult,
+                    cvm: cvm
+                )
             }
         }
     }
 }
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
-    static let codeEditor = CodeEditorViewModel()
+    static let cvm = CodeEditorViewModel()
+    static let umlVM = UMLViewModel()
+    @State static var assessmentResult = AssessmentResult()
 
     static var previews: some View {
-        CorrectionSidebarView()
-            .environmentObject(assessment)
-            .environmentObject(codeEditor)
-            .previewInterfaceOrientation(.landscapeLeft)
+        CorrectionSidebarView(
+            readOnly: false,
+            assessmentResult: $assessmentResult,
+            cvm: cvm,
+            umlVM: umlVM
+        )
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

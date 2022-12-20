@@ -10,10 +10,12 @@ import SwiftUI
 
 struct FeedbackCellView: View {
 
-    @EnvironmentObject var assessment: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    var readOnly: Bool
+    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var cvm: CodeEditorViewModel
 
-    let feedback: AssessmentFeedback
+    @State var feedback: AssessmentFeedback
+    var editingDisabled: Bool { readOnly || feedback.assessmentType == .AUTOMATIC }
 
     @State var showEditFeedback = false
     var feedbackColor: Color {
@@ -29,7 +31,7 @@ struct FeedbackCellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text(feedback.text.isEmpty ? "Feedback" : feedback.text)
+                Text(feedback.text ?? "Feedback")
                 Spacer()
                 Button {
                     showEditFeedback = true
@@ -38,32 +40,38 @@ struct FeedbackCellView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                 }
-                .disabled(assessment.readOnly)
+                .disabled(readOnly)
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Button(role: .destructive) {
-                    assessment.feedback.deleteFeedback(id: feedback.id)
+                    assessmentResult.deleteFeedback(id: feedback.id)
                     cvm.deleteInlineHighlight(feedback: feedback)
                 } label: {
                     Image(systemName: "trash")
                         .resizable()
                         .frame(width: 15, height: 15)
                 }
-                .disabled(assessment.readOnly)
+                .disabled(readOnly)
                 .buttonStyle(.borderless)
                 .font(.caption)
             }
             Divider()
                 .frame(maxWidth: .infinity)
             HStack {
-                Text(feedback.detailText)
+                Text(feedback.detailText ?? "")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(String(format: "%.1f", feedback.credits))
                     .foregroundColor(feedbackColor)
             }
         }
         .sheet(isPresented: $showEditFeedback) {
-            EditFeedbackView(showEditFeedback: $showEditFeedback, feedback: feedback, edit: true, type: feedback.type)
+            EditFeedbackView(
+                assessmentResult: $assessmentResult,
+                cvm: cvm,
+                type: feedback.type,
+                showSheet: $showEditFeedback,
+                feedback: $feedback
+            )
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 25)

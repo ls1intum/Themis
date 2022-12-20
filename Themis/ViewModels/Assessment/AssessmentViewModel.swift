@@ -4,7 +4,7 @@ import Combine
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: SubmissionForAssessment?
-    @Published var feedback = AssessmentResult(feedbacks: [])
+    @Published var assessmentResult = AssessmentResult()
     @Published var showSubmission = false
 
     let readOnly: Bool
@@ -45,13 +45,17 @@ class AssessmentViewModel: ObservableObject {
             print(error)
         }
         self.submission = nil
-        self.feedback = AssessmentResult(feedbacks: [])
+        self.assessmentResult = AssessmentResult()
     }
 
     @MainActor
     func sendAssessment(participationId: Int, submit: Bool) async {
         do {
-            try await ArtemisAPI.saveAssessment(participationId: participationId, newAssessment: feedback, submit: submit)
+            try await ArtemisAPI.saveAssessment(
+                participationId: participationId,
+                newAssessment: assessmentResult,
+                submit: submit
+            )
         } catch {
             print(error)
         }

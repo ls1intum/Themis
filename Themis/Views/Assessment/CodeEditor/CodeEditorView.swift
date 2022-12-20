@@ -2,8 +2,7 @@ import SwiftUI
 import CodeEditor
 
 struct CodeEditorView: View {
-    @EnvironmentObject var assessmentViewModel: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
 
     @Binding var showFileTree: Bool
 
@@ -19,14 +18,14 @@ struct CodeEditorView: View {
                     HStack {
                         Spacer()
                             .frame(width: showFileTree ? 0 : 40)
-                        TabsView()
+                        TabsView(cvm: cvm)
                     }
-                    CodeView(cvm: cvm, file: file, fontSize: $cvm.editorFontSize, onOpenFeedback: openFeedbackSheet)
-                    /*CodeViewSelect(
-                        cvm: cvm, file: file,
+                    CodeView(
+                        cvm: cvm,
+                        file: file,
                         fontSize: $cvm.editorFontSize,
                         onOpenFeedback: openFeedbackSheet
-                    )*/
+                    )
                 }
             } else {
                 Text("Select a file")

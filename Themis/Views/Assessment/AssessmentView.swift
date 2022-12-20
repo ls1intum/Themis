@@ -6,8 +6,9 @@ import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @EnvironmentObject var vm: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var vm: AssessmentViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
+    @StateObject var umlVM = UMLViewModel()
 
     @State var showSettings = false
     @State var showFileTree = true
@@ -25,13 +26,19 @@ struct AssessmentView: View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView()
+                    FiletreeSidebarView(
+                        participationID: vm.submission?.participation.id,
+                        cvm: cvm
+                    )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
-                CodeEditorView(showFileTree: $showFileTree)
+                CodeEditorView(
+                    cvm: cvm,
+                    showFileTree: $showFileTree
+                )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
@@ -47,6 +54,11 @@ struct AssessmentView: View {
             }
             .padding(.top)
             .padding(.leading, 18)
+        }
+        .overlay {
+            if umlVM.showUMLFullScreen {
+                UMLView(umlVM: umlVM)
+            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(Color.primary, for: .navigationBar)
@@ -158,12 +170,18 @@ struct AssessmentView: View {
             }
         }
         .sheet(isPresented: $showSettings) {
-            AppearanceSettingsView(showSettings: $showSettings)
-                .environmentObject(cvm)
-                .navigationTitle("Appearance settings")
+            AppearanceSettingsView(
+                fontSize: $cvm.editorFontSize
+            )
+            .navigationTitle("Appearance settings")
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $cvm.showAddFeedback, feedback: nil, edit: false, type: .inline)
+            AddFeedbackView(
+                assessmentResult: $vm.assessmentResult,
+                cvm: cvm,
+                type: .inline,
+                showSheet: $cvm.showAddFeedback
+            )
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
@@ -281,9 +299,49 @@ struct AssessmentView: View {
             if correctionAsPlaceholder {
                 EmptyView()
             } else {
-                CorrectionSidebarView()
+                CorrectionSidebarView(
+                    exercise: vm.submission?.participation.exercise,
+                    readOnly: vm.readOnly,
+                    assessmentResult: $vm.assessmentResult,
+                    cvm: cvm,
+                    umlVM: umlVM
+                )
             }
         }
+    }
+
+    var scoreColor: Color {
+        guard let max = vm.submission?.participation.exercise.maxPoints else {
+            return Color(.systemRed)
+        }
+        let score = vm.assessmentResult.score
+        if score < max / 3 {
+            return Color(.systemRed)
+        } else if score < max / 3 * 2 {
+            return Color(.systemYellow)
+        } else {
+            return Color(.systemGreen)
+        }
+    }
+
+    var scoreDisplay: some View {
+        Group {
+            if let submission = vm.submission {
+                if submission.buildFailed {
+                    Text("Build failed")
+                        .foregroundColor(.red)
+                } else {
+                    Text("""
+                         \(Double(round(10 * vm.assessmentResult.score) / 10)
+                         .formatted(FloatingPointFormatStyle()))/\
+                         \(submission.participation.exercise.maxPoints
+                         .formatted(FloatingPointFormatStyle()))
+                         """)
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .fontWeight(.semibold)
     }
 }
 
@@ -298,13 +356,16 @@ extension Color {
 }
 
 struct AssessmentView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
-    static let codeEditor = CodeEditorViewModel()
+    static let avm = AssessmentViewModel(readOnly: false)
+    static let cvm = CodeEditorViewModel()
 
     static var previews: some View {
-        AssessmentView(exerciseId: 5284, exerciseTitle: "Example Exercise")
-            .environmentObject(assessment)
-            .environmentObject(codeEditor)
+        AssessmentView(
+            vm: avm,
+            cvm: cvm,
+            exerciseId: 5284,
+            exerciseTitle: "Example Exercise"
+        )
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
