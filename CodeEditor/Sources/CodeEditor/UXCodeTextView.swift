@@ -285,7 +285,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     }
 
     override func draw(_ rect: CGRect) {
-
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         guard let font else { return }

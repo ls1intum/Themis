@@ -6,6 +6,8 @@
 //  Copyright © 2021 ZeeZide GmbH. All rights reserved.
 //
 
+// swiftlint:disable type_body_length
+
 import SwiftUI
 import UIKit
 
@@ -107,8 +109,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         var parent: UXCodeTextViewRepresentable
 
         var fontSize: CGFloat? {
-            set { if let value = newValue { parent.fontSize?.wrappedValue = value } }
             get { parent.fontSize?.wrappedValue }
+            set { if let value = newValue { parent.fontSize?.wrappedValue = value } }
         }
 
         init(_ parent: UXCodeTextViewRepresentable) {
@@ -228,6 +230,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             if selectionRange == nil {
                 selectionRange = glyphIndex..<glyphIndex + 1
             } else {
+                // swiftlint:disable force_unwrapping
                 if glyphIndex < selectionRange!.lowerBound {
                     selectionRange = glyphIndex..<selectionRange!.upperBound
                 }
