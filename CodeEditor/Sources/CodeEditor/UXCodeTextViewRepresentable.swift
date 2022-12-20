@@ -218,7 +218,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
     private func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
         var selectionRange: Range<Int>?
-       
+
         for point in line?.wrappedValue?.points ?? [] {
             let glyphIndex = getGlyphIndex(textView: textView, point: point)
             if selectionRange == nil {
@@ -260,7 +260,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = source.wrappedValue
             }
-            
+
         }
         textView.setNeedsDisplay()
         let dragSelection = getSelectionFromLine(textView: textView)

@@ -1,7 +1,7 @@
 import SwiftUI
 import CodeEditor
 
-func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
+func ??<T>(lhs: Binding<T?>, rhs: T) -> Binding<T> {
     Binding(
         get: { lhs.wrappedValue ?? rhs },
         set: { lhs.wrappedValue = $0 }
@@ -17,7 +17,6 @@ struct CodeView: View {
     @State var line: Line?
     var onOpenFeedback: (Range<Int>) -> Void
 
-    
     var body: some View {
         ZStack {
             CodeEditor(source: $file.code ?? "loading...",

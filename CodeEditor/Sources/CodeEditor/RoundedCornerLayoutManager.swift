@@ -16,9 +16,9 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         containerOrigin: CGPoint
     ) {
         let firstPosition  = location(forGlyphAt: glyphRange.location).x
-        
+
         let lastPosition: CGFloat
-        
+
         if NSMaxRange(glyphRange) < NSMaxRange(lineGlyphRange) {
             lastPosition = location(forGlyphAt: NSMaxRange(glyphRange)).x
         } else {
@@ -26,18 +26,18 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                 forGlyphAt: NSMaxRange(glyphRange) - 1,
                 effectiveRange: nil).size.width
         }
-        
+
         var lineRect = lineRect
         let height = lineRect.size.height
         lineRect.origin.x += firstPosition
         lineRect.size.width = lastPosition - firstPosition
         lineRect.size.height = height
-        
+
         lineRect.origin.x += containerOrigin.x
         lineRect.origin.y += containerOrigin.y
-        
+
         lineRect = lineRect.integral.insetBy(dx: 0.4, dy: 0.4)
-        ///The roundedReect is responsible for the round Corners
+        /// The roundedReect is responsible for the round Corners
         let path = UIBezierPath(roundedRect: lineRect, cornerRadius: 5)
         path.fill()
     }

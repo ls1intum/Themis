@@ -278,50 +278,49 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         }
         return 30
     }
-    
-    
+
     override func draw(_ rect: CGRect) {
-       
+
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         guard let font else { return }
         guard let lineH = self.font?.lineHeight else { return }
-        
+
         UIGraphicsPushContext(ctx)
-        
+
         let numViewW = numViewWidth()
         ctx.setFillColor(CGColor(gray: 0.0, alpha: 0.12))
         let numBgArea = CGRect(x: 0, y: 0, width: numViewW, height: frame.size.height)
         ctx.fill(numBgArea)
-        
+
         var numberOfLines = 0
         if lineH > 0 {
             numberOfLines = Int((self.contentSize.height - 2 * 8.0) / lineH)
         }
-        
+
         let paraStyle = NSMutableParagraphStyle()
         paraStyle.alignment = .right
         for i in 0..<numberOfLines {
             let lineNum = NSString(format: "%d", i)
-            let xOrigin = CGRectGetMinX(self.bounds)
+            let xOrigin = self.bounds.minX
             let yOrigin = (lineH * CGFloat(i)) + 8.0 - self.contentOffset.y
             if yOrigin < -lineH || yOrigin > self.frame.size.height + lineH {
                 continue
             }
-            
+
             lineNum.draw(in: CGRect(x: xOrigin, y: yOrigin, width: numViewW - 4.0, height: lineH),
                         withAttributes: [
                                             NSAttributedString.Key.font: font,
-                                            NSAttributedString.Key.paragraphStyle : paraStyle,
-                                            NSAttributedString.Key.foregroundColor : UIColor.gray
+                                            NSAttributedString.Key.paragraphStyle: paraStyle,
+                                            NSAttributedString.Key.foregroundColor: UIColor.gray
                                         ]
                         )
         }
-        
+
         UIGraphicsPopContext()
-        
+
     }
-    
+
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
             for hRange in highlightedRanges {
@@ -346,7 +345,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             coordinator?.setDragSelection(self.dragSelection)
         }
     }
-    
 
 }
 
