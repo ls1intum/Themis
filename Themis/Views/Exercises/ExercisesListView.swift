@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ExercisesListView: View {
-    @ObservedObject var courseListVM: CourseListViewModel
-    var courseID: Int
+    var title: String?
+    var exercises: [Exercise]?
 
     var body: some View {
-        courseListVM.courseForID(id: courseID).exercises.flatMap { exerciseList in
+        exercises.map { exerciseList in
             List {
                 ForEach(exerciseList, id: \.id) { exercise in
                     NavigationLink {
@@ -26,12 +26,12 @@ struct ExercisesListView: View {
                         }
                     }
                 }
-            }.navigationTitle(title)
+            }.navigationTitle(navTitle)
         }
     }
 
-    var title: String {
-        return "\(courseListVM.courseForID(id: courseID).title ?? "") Exercises"
+    var navTitle: String {
+        return "\(title ?? "") Exercises"
     }
 
 }
