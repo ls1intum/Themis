@@ -48,7 +48,8 @@ struct ExerciseView: View {
                 vm: avm,
                 cvm: cvm,
                 exerciseId: exercise.id,
-                exerciseTitle: exercise.title ?? ""
+                exerciseTitle: exercise.title ?? "",
+                templateParticipationId: exercise.templateParticipation?.id ?? 0
             )
         }
         .navigationTitle(exercise.title ?? "")

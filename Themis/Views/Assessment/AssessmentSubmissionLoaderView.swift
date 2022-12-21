@@ -21,7 +21,8 @@ struct AssessmentSubmissionLoaderView: View {
             vm: avm,
             cvm: cvm,
             exerciseId: exerciseID,
-            exerciseTitle: exerciseTitle
+            exerciseTitle: exerciseTitle,
+            templateParticipationId: templateParticipationId
         )
         .task {
             await avm.getSubmission(id: submissionID)

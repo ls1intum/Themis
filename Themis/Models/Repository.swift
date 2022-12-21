@@ -177,7 +177,7 @@ class Node: Hashable, ObservableObject {
     private func fetchTemplateCode(templateParticipationId: Int) async {
         if templateCode != nil { return } else {
             do {
-                var relativePath = String(path.dropFirst())
+                let relativePath = String(path.dropFirst())
                 self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
             } catch {
                 print(error)

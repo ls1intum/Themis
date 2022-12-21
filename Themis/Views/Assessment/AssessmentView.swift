@@ -28,7 +28,8 @@ struct AssessmentView: View {
                 if showFileTree {
                     FiletreeSidebarView(
                         participationID: vm.submission?.participation.id,
-                        cvm: cvm
+                        cvm: cvm,
+                        templateParticipationId: templateParticipationId
                     )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
@@ -376,7 +377,8 @@ struct AssessmentView_Previews: PreviewProvider {
             vm: avm,
             cvm: cvm,
             exerciseId: 5284,
-            exerciseTitle: "Example Exercise"
+            exerciseTitle: "Example Exercise",
+            templateParticipationId: 88
         )
             .previewInterfaceOrientation(.landscapeLeft)
     }
