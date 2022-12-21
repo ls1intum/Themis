@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct AssessmentSubmissionLoaderView: View {
-    @StateObject var vm = AssessmentViewModel(readOnly: false)
+    @StateObject var avm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
-    @StateObject var umlVM = UMLViewModel()
 
     var exerciseID: Int
     var submissionID: Int
@@ -18,16 +17,18 @@ struct AssessmentSubmissionLoaderView: View {
     let templateParticipationId: Int
 
     var body: some View {
-        AssessmentView(exerciseId: exerciseID, exerciseTitle: exerciseTitle, templateParticipationId: templateParticipationId)
-            .environmentObject(vm)
-            .environmentObject(cvm)
-            .environmentObject(umlVM)
-            .task {
-                await vm.getSubmission(id: submissionID)
-                if let pId = vm.submission?.participation.id {
-                    await cvm.initFileTree(participationId: pId)
-                }
+        AssessmentView(
+            vm: avm,
+            cvm: cvm,
+            exerciseId: exerciseID,
+            exerciseTitle: exerciseTitle
+        )
+        .task {
+            await avm.getSubmission(id: submissionID)
+            if let pId = avm.submission?.participation.id {
+                await cvm.initFileTree(participationId: pId)
             }
+        }
     }
 }
 

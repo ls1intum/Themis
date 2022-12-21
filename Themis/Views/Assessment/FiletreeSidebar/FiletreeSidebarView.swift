@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct FiletreeSidebarView: View {
-    @EnvironmentObject var assessmentViewModel: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    let participationID: Int?
+    @ObservedObject var cvm: CodeEditorViewModel
 
     let templateParticipationId: Int
 
@@ -19,14 +19,8 @@ struct FiletreeSidebarView: View {
                     } else {
                         Button {
                             withAnimation {
-                                guard let pId = assessmentViewModel.submission?.participation.id else {
-                                    return
-                                }
-                                cvm.openFile(
-                                    file: tree,
-                                    participationId: pId,
-                                    templateParticipationId: templateParticipationId
-                                )
+                                guard let participationID else { return }
+                                cvm.openFile(file: tree, participationId: participationID)
                             }
                         } label: {
                             Text(tree.name)

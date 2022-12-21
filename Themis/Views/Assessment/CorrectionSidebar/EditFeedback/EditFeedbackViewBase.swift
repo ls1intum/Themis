@@ -8,17 +8,18 @@
 import Foundation
 import SwiftUI
 
-struct EditFeedbackView: View {
-    @EnvironmentObject var avm: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
+struct EditFeedbackViewBase: View {
+    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var cvm: CodeEditorViewModel
 
-    @State var feedbackText = ""
+    @Binding var feedback: AssessmentFeedback
+    @State var detailText = ""
     @State var score = 0.0
-    @Binding var showEditFeedback: Bool
+    @Binding var showSheet: Bool
 
     let maxScore = Double(10)
 
-    let feedback: AssessmentFeedback?
+    let title: String?
     let edit: Bool
     let type: FeedbackType
 
@@ -26,26 +27,47 @@ struct EditFeedbackView: View {
         Array(stride(from: -1 * maxScore, to: maxScore +  0.5, by: 0.5))
             .sorted { $0 > $1 }
     }
-    var title: String {
-        edit ? "Edit Feedback" : "Add Feedback"
+
+    func updateFeedback() {
+        feedback.updateFeedback(detailText: detailText, credits: score)
+        assessmentResult.updateFeedback(
+            id: feedback.id,
+            feedback: feedback
+        )
+    }
+
+    func createFeedback() {
+        feedback.detailText = detailText
+        feedback.credits = score
+        cvm.addInlineHighlight(feedbackId: feedback.id)
+        assessmentResult.addFeedback(feedback: feedback)
+    }
+
+    private func setStates() {
+        self.detailText = feedback.detailText ?? ""
+        self.score = feedback.credits
     }
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(title)
+                Text(title ?? "Edit feedback")
                     .font(.largeTitle)
                 Spacer()
                 Button {
-                    updateOrCreateFeedback()
-                    showEditFeedback = false
+                    if edit {
+                        updateFeedback()
+                    } else {
+                        createFeedback()
+                    }
+                    showSheet = false
                 } label: {
                     Text("Save")
                 }.font(.title)
-                    .disabled(feedbackText.isEmpty)
+                    .disabled(detailText.isEmpty)
             }
             HStack {
-                TextField("Enter your feedback here", text: $feedbackText, axis: .vertical)
+                TextField("Enter your feedback here", text: $detailText, axis: .vertical)
                     .submitLabel(.return)
                     .lineLimit(10...40)
                     .padding()
@@ -74,33 +96,5 @@ struct EditFeedbackView: View {
         .onAppear {
             setStates()
         }
-    }
-
-    // will be put into viemodel when restructuring happens
-    private func updateOrCreateFeedback() {
-        if let feedback = feedback, edit {
-            avm.feedback.updateFeedback(id: feedback.id, detailText: feedbackText, credits: score)
-        } else {
-            if type == .inline {
-                let feedback = avm.feedback.addFeedback(
-                    detailText: feedbackText,
-                    credits: score,
-                    type: type,
-                    file: cvm.selectedFile,
-                    lines: cvm.selectedSectionParsed?.0,
-                    columns: cvm.selectedSectionParsed?.1)
-                cvm.addInlineHighlight(feedbackId: feedback.id)
-            } else {
-                _ = avm.feedback.addFeedback(detailText: feedbackText, credits: score, type: type)
-            }
-        }
-    }
-
-    private func setStates() {
-        guard let feedback = feedback else {
-            return
-        }
-        self.feedbackText = feedback.detailText ?? ""
-        self.score = feedback.credits
     }
 }

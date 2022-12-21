@@ -36,15 +36,7 @@ class CodeEditorViewModel: ObservableObject {
         return nil
     }
 
-    func incrementFontSize() {
-        editorFontSize += 1
-    }
-
-    func decrementFontSize() {
-        if editorFontSize > 8 { editorFontSize -= 1 }
-    }
-
-    func openFile(file: Node, participationId: Int, templateParticipationId: Int) {
+    func openFile(file: Node, participationId: Int) {
         if !openFiles.contains(where: { $0.path == file.path }) {
             openFiles.append(file)
             Task {

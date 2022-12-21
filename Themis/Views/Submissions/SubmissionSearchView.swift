@@ -11,7 +11,6 @@ struct SubmissionSearchView: View {
     @StateObject var vm = SubmissionSearchViewModel()
     @StateObject var avm = AssessmentViewModel(readOnly: true)
     @StateObject var cvm = CodeEditorViewModel()
-    @StateObject var umlVM = UMLViewModel()
     @State var search: String = ""
 
     let exercise: Exercise
@@ -35,13 +34,11 @@ struct SubmissionSearchView: View {
         }
         .navigationDestination(isPresented: $avm.showSubmission) {
             AssessmentView(
+                vm: avm,
+                cvm: cvm,
                 exerciseId: exercise.id,
-                exerciseTitle: exercise.title ?? "",
-                templateParticipationId: exercise.templateParticipation?.id ?? -1
+                exerciseTitle: exercise.title ?? ""
             )
-                .environmentObject(avm)
-                .environmentObject(cvm)
-                .environmentObject(umlVM)
         }
     }
 }

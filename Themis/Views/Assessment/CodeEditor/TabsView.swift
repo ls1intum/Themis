@@ -2,7 +2,7 @@ import SwiftUI
 
 // used to show opened tabs on top of CodeView
 struct TabsView: View {
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -54,7 +54,9 @@ struct TabsView: View {
 }
 
 struct TabsView_Previews: PreviewProvider {
+    private static var cvm = CodeEditorViewModel()
+
     static var previews: some View {
-        TabsView()
+        TabsView(cvm: cvm)
     }
 }

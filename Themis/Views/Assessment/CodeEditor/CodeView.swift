@@ -6,7 +6,7 @@ import UIKit
 
 // integrates the UITextView of runestone in SwiftUI
 struct CodeView: UIViewControllerRepresentable {
-    @EnvironmentObject var cvm: CodeEditorViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var file: Node
 
     typealias UIViewControllerType = ViewController
