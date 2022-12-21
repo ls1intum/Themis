@@ -14,15 +14,13 @@ struct AssessmentSubmissionLoaderView: View {
     var exerciseID: Int
     var submissionID: Int
     let exerciseTitle: String
-    let templateParticipationId: Int
 
     var body: some View {
         AssessmentView(
             vm: avm,
             cvm: cvm,
             exerciseId: exerciseID,
-            exerciseTitle: exerciseTitle,
-            templateParticipationId: templateParticipationId
+            exerciseTitle: exerciseTitle
         )
         .task {
             await avm.getSubmission(id: submissionID)
@@ -35,6 +33,6 @@ struct AssessmentSubmissionLoaderView: View {
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise", templateParticipationId: 123123)
+        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
     }
 }

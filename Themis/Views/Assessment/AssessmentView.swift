@@ -20,7 +20,6 @@ struct AssessmentView: View {
 
     let exerciseId: Int
     let exerciseTitle: String
-    let templateParticipationId: Int
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -29,7 +28,7 @@ struct AssessmentView: View {
                     FiletreeSidebarView(
                         participationID: vm.submission?.participation.id,
                         cvm: cvm,
-                        templateParticipationId: templateParticipationId
+                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
                     )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
@@ -377,8 +376,7 @@ struct AssessmentView_Previews: PreviewProvider {
             vm: avm,
             cvm: cvm,
             exerciseId: 5284,
-            exerciseTitle: "Example Exercise",
-            templateParticipationId: 88
+            exerciseTitle: "Example Exercise"
         )
             .previewInterfaceOrientation(.landscapeLeft)
     }

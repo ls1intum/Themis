@@ -13,7 +13,6 @@ struct SubmissionListView: View {
 
     var exerciseId: Int
     let exerciseTitle: String
-    let templateParticipationId: Int
 
     var body: some View {
         List {
@@ -25,8 +24,7 @@ struct SubmissionListView: View {
                         AssessmentSubmissionLoaderView(
                             exerciseID: exerciseId,
                             submissionID: submission.id,
-                            exerciseTitle: exerciseTitle,
-                            templateParticipationId: templateParticipationId
+                            exerciseTitle: exerciseTitle
                         )
                     } label: {
                         Text("Submission \(submission.id) by \(submission.participation.student.name)")
@@ -43,7 +41,7 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise", templateParticipationId: 12)
+            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise")
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

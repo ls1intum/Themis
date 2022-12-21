@@ -34,8 +34,7 @@ struct ExerciseView: View {
                     Section("Submission") {
                         SubmissionListView(
                             exerciseId: exercise.id,
-                            exerciseTitle: exercise.title ?? "",
-                            templateParticipationId: exercise.templateParticipation?.id ?? -1
+                            exerciseTitle: exercise.title ?? ""
                         )
                     }
                 }
@@ -48,8 +47,7 @@ struct ExerciseView: View {
                 vm: avm,
                 cvm: cvm,
                 exerciseId: exercise.id,
-                exerciseTitle: exercise.title ?? "",
-                templateParticipationId: exercise.templateParticipation?.id ?? 0
+                exerciseTitle: exercise.title ?? ""
             )
         }
         .navigationTitle(exercise.title ?? "")

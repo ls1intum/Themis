@@ -7,10 +7,6 @@
 
 import Foundation
 
-struct Participation: Codable {
-    let id: Int
-}
-
 struct Exercise: Codable {
     let id: Int
     let title: String?
@@ -20,8 +16,6 @@ struct Exercise: Codable {
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this might be nil
     let dueDate: String?
-    let templateParticipation: Participation?
-    // let solutionParticipation: Participation check again
 
     init() {
         self.id = -1
@@ -32,7 +26,6 @@ struct Exercise: Codable {
         self.problemStatement = nil
         self.gradingInstructions = nil
         self.dueDate = nil
-        self.templateParticipation = Participation(id: -1)
     }
 
     func parseDate(_ dateString: String?) -> Date? {
