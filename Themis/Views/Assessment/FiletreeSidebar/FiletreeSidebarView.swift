@@ -20,7 +20,10 @@ struct FiletreeSidebarView: View {
                         Button {
                             withAnimation {
                                 guard let participationID else { return }
-                                cvm.openFile(file: tree, participationId: participationID)
+                                cvm.openFile(file: tree,
+                                             participationId: participationID,
+                                             templateParticipationId: templateParticipationId
+                                )
                             }
                         } label: {
                             Text(tree.name)
