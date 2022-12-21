@@ -44,46 +44,31 @@ struct AssessmentResult: Encodable {
 
     var generalFeedback: [AssessmentFeedback] {
         return feedbacks
-            .filter { $0.type == .general }
+            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .inline }
+            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
     }
 
-    mutating func addFeedback(detailText: String, credits: Double, type: FeedbackType, file: Node? = nil, lines: NSRange? = nil, columns: NSRange? = nil) -> AssessmentFeedback {
-        let text = makeText(file: file, lines: lines, columns: columns)
-        let feedback = AssessmentFeedback(text: text, detailText: detailText, credits: credits, type: type, file: file)
+    var automaticFeedback: [AssessmentFeedback] {
+        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
+    }
+
+    mutating func addFeedback(feedback: AssessmentFeedback) {
         feedbacks.append(feedback)
-        return feedback
     }
 
     mutating func deleteFeedback(id: UUID) {
         feedbacks.removeAll { $0.id == id }
     }
 
-    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    mutating func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        feedbacks[index].updateFeedback(detailText: detailText, credits: credits)
-    }
-
-    func makeText(file: Node?, lines: NSRange?, columns: NSRange?) -> String? {
-        guard let file = file, let lines = lines else {
-            return nil
-        }
-        if lines.location == 0 {
-            return nil
-        }
-        guard let columns = columns else {
-            return file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
-        }
-        if columns.length == 0 {
-            return file.name + " at Line: \(lines.location) Col: \(columns.location)"
-        }
-        return file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
+        feedbacks[index] = feedback
     }
 }
 
@@ -100,9 +85,46 @@ struct AssessmentFeedback: Identifiable {
     var type: FeedbackType
     var file: Node?
 
+    init(
+        text: String? = nil,
+        detailText: String? = nil,
+        credits: Double,
+        assessmentType: AssessmentType = .MANUAL,
+        type: FeedbackType,
+        file: Node? = nil,
+        lines: NSRange? = nil,
+        columns: NSRange? = nil
+    ) {
+        self.text = text
+        self.detailText = detailText
+        self.credits = credits
+        self.assessmentType = assessmentType
+        self.type = type
+        self.file = file
+        self.buildLineDescription(lines: lines, columns: columns)
+    }
+
     mutating func updateFeedback(detailText: String, credits: Double) {
         self.detailText = detailText
         self.credits = credits
+    }
+
+    mutating func buildLineDescription(lines: NSRange?, columns: NSRange?) {
+        guard let file = file, let lines = lines else {
+            return
+        }
+        if lines.location == 0 {
+            return
+        }
+        guard let columns else {
+            self.text = file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
+            return
+        }
+        if columns.length == 0 {
+            self.text =  file.name + " at Line: \(lines.location) Col: \(columns.location)"
+        } else {
+            self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
+        }
     }
 }
 
@@ -153,12 +175,6 @@ enum AssessmentType: String, Codable {
     case AUTOMATIC
     case SEMI_AUTOMATIC
     case MANUAL
-}
-
-enum FeedbackVisibility: String, Codable {
-    case ALWAYS
-    case AFTER_DUE_DATE
-    case NEVER
 }
 
 extension ArtemisAPI {

@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct CourseListView: View {
-    @ObservedObject var authenticationVM: AuthenticationViewModel
+    var authenticationVM: AuthenticationViewModel
     @StateObject var courseListVM = CourseListViewModel()
+
     var body: some View {
         NavigationStack {
             List {
                 ForEach(courseListVM.courses, id: \.id) { course in
                     NavigationLink {
-                        ExercisesListView(courseListVM: courseListVM, courseID: course.id)
+                        ExercisesListView(
+                            title: course.title,
+                            exercises: course.exercises
+                        )
                     } label: {
                         HStack {
                             Text(course.title ?? "")
