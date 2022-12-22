@@ -181,7 +181,8 @@ struct AssessmentView: View {
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
             )
         }
         .task(priority: .high) {
@@ -212,8 +213,6 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
-
-                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -272,7 +271,6 @@ struct AssessmentView: View {
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
-                            print(dragWidthRight)
                             if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
