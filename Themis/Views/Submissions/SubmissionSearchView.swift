@@ -51,7 +51,6 @@ extension SubmissionSearchView {
                 .foregroundColor(Color(.label))
                 .frame(width: 20, height: 20)
             TextField("Search for a submission", text: $search)
-                .submitLabel(.search)
         }
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))

@@ -1,7 +1,8 @@
-import SwiftUI
-
+// swiftlint:disable line_length
 // swiftlint:disable type_body_length
 // swiftlint:disable closure_body_length
+
+import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
@@ -9,11 +10,11 @@ struct AssessmentView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
 
-    @State var showSettings: Bool = false
-    @State var showFileTree: Bool = true
+    @State var showSettings = false
+    @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
-    @State private var correctionAsPlaceholder: Bool = true
+    @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
 
     private let minRightSnapWidth: CGFloat = 185
@@ -88,11 +89,14 @@ struct AssessmentView: View {
                         }
                         .foregroundColor(.white)
                     }
-                    .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
+                    .confirmationDialog(
+                        "Cancel Assessment",
+                        isPresented: $showCancelDialog
+                    ) {
                         Button("Save") {
                             Task {
-                                if let pId = vm.submission?.participation.id {
-                                    await vm.sendAssessment(participationId: pId, submit: false)
+                                if let id = vm.submission?.id {
+                                    await vm.sendAssessment(participationId: id, submit: false)
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
@@ -106,11 +110,7 @@ struct AssessmentView: View {
                             }
                         }
                     } message: {
-                        Text("""
-                             Either discard the assessment \
-                             and release the lock (recommended) \
-                             or keep the lock and save the assessment without submitting it.
-                             """)
+                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
                     }
                 }
             }
@@ -124,16 +124,6 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            if cvm.currentlySelecting {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        cvm.showAddFeedback.toggle()
-                    } label: {
-                        Text("Feedback")
-                    }
-                    .disabled(vm.readOnly)
-                }
-            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showSettings.toggle()
@@ -142,56 +132,58 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                CustomProgressView(
-                    progress: vm.assessmentResult.score,
-                    max: vm.submission?.participation.exercise.maxPoints ?? 0
-                )
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                scoreDisplay
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: false)
-                        }
+            if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        cvm.lassoMode.toggle()
+                    } label: {
+                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
+                        Image(systemName: "pencil.and.outline")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, iconDrawingColor)
                     }
-                } label: {
-                    Text("Save")
                 }
-                .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: true)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        Task {
+                            if let pId = vm.submission?.participation.id {
+                                await vm.sendAssessment(participationId: pId, submit: false)
+                            }
                         }
+                    } label: {
+                        Text("Save")
                     }
-                } label: {
-                    Text("Submit")
+                    .buttonStyle(NavigationBarButton())
+                    .disabled(vm.readOnly)
                 }
-                .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        Task {
+                            if let pId = vm.submission?.participation.id {
+                                await vm.sendAssessment(participationId: pId, submit: true)
+                            }
+                        }
+                    } label: {
+                        Text("Submit")
+                    }
+                    .buttonStyle(NavigationBarButton())
+                    .disabled(vm.readOnly)
+                }
             }
         }
         .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                AppearanceSettingsView(
-                    fontSize: $cvm.editorFontSize
-                )
-                    .navigationTitle("Appearance settings")
-            }
+            AppearanceSettingsView(
+                fontSize: $cvm.editorFontSize
+            )
+            .navigationTitle("Appearance settings")
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             AddFeedbackView(
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
             )
         }
         .task(priority: .high) {
@@ -222,8 +214,6 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
-
-                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -282,7 +272,6 @@ struct AssessmentView: View {
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
-                            print(dragWidthRight)
                             if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
@@ -385,10 +374,8 @@ struct NavigationBarButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
+            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
             .background(Color.secondary)
-            .cornerRadius(20)
-            .fontWeight(.semibold)
+            .cornerRadius(12)
     }
 }

@@ -7,8 +7,6 @@
 
 import Foundation
 
-let maxPercentageDifferenceFromBestResultToStillShow = 0.15 // based on experimentation
-
 class SubmissionSearchViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
 
@@ -22,14 +20,15 @@ class SubmissionSearchViewModel: ObservableObject {
     }
 
     func filterSubmissions(search: String) -> [Submission] {
-        if search.isEmpty { return submissions }
-        let searchResults: [SubmissionSearchResult] = submissions
-            .map { submission in SubmissionSearchResult(forText: search, submission: submission) }
-        let scores = searchResults.map(\.score)
-        let bestScore: Double = scores.min()!
-        return searchResults
-            .sorted { $0.score < $1.score }
-            .filter { $0.score <= (1 + maxPercentageDifferenceFromBestResultToStillShow) * bestScore }
-            .map(\.submission)
+        let search = search.lowercased().trimmingCharacters(in: .whitespaces)
+        guard !search.isEmpty else {
+            return submissions
+        }
+        return submissions.filter { submission in
+            let student = submission.participation.student
+            let name = student.name.lowercased().trimmingCharacters(in: .whitespaces)
+            let login = student.login.lowercased().trimmingCharacters(in: .whitespaces)
+            return name.contains(search) || login.contains(search)
+        }
     }
 }

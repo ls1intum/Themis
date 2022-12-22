@@ -41,13 +41,13 @@ class AuthenticationViewModel: ObservableObject {
 
     @Published var username: String = stagingUser ?? ""
     @Published var password: String = stagingPassword ?? ""
-    @Published var rememberMe: Bool = true
+    @Published var rememberMe = true
     /// If this variable is true the User is authenticated
-    @Published var authenticated: Bool = false
+    @Published var authenticated = false
     /// If an 401 Error was catched, this alert will inform the User
-    @Published var invalidCredentialsAlert: Bool = false
+    @Published var invalidCredentialsAlert = false
     /// While Authenticating this variable will be true for the ProgressView
-    @Published var authenticationInProgress: Bool = false
+    @Published var authenticationInProgress = false
 
     private var restControllerInitialized = false
     private var cancellable = Set<AnyCancellable>()
