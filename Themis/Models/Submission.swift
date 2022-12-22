@@ -48,14 +48,14 @@ struct Submission: Codable, Identifiable {
 
 struct ExerciseOfSubmission: Codable {
     let maxPoints: Double
-    let problemStatement: String
+    var problemStatement: String
     let gradingInstructions: String
     let gradingCriteria: [GradingCriterion]?
 }
 
 struct SubmissionForAssessment: Codable {
     let id: Int
-    let participation: ParticipationForAssessment
+    var participation: ParticipationForAssessment
     let feedbacks: [AssessmentFeedback]?
     let results: [SavedAssessmentResults]?
     let buildFailed: Bool
@@ -63,7 +63,7 @@ struct SubmissionForAssessment: Codable {
 
 struct SavedAssessmentResults: Codable {
     let score: Double?
-    let feedbacks: [AssessmentFeedback]
+    let feedbacks: [AssessmentFeedback]?
 }
 
 struct GradingCriterion: Codable, Identifiable {

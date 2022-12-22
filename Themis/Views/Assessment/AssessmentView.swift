@@ -15,6 +15,7 @@ struct AssessmentView: View {
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder: Bool = true
     @State private var showCancelDialog = false
+    @State var showNoSubmissionsAlert = false
 
     private let minRightSnapWidth: CGFloat = 185
 
@@ -93,16 +94,16 @@ struct AssessmentView: View {
                             Task {
                                 if let pId = vm.submission?.participation.id {
                                     await vm.sendAssessment(participationId: pId, submit: false)
-                                    presentationMode.wrappedValue.dismiss()
                                 }
+                                presentationMode.wrappedValue.dismiss()
                             }
                         }
                         Button("Discard", role: .destructive) {
                             Task {
                                 if let id = vm.submission?.id {
                                     await vm.cancelAssessment(submissionId: id)
-                                    presentationMode.wrappedValue.dismiss()
                                 }
+                                presentationMode.wrappedValue.dismiss()
                             }
                         }
                     } message: {
@@ -131,7 +132,12 @@ struct AssessmentView: View {
                     } label: {
                         Text("Feedback")
                     }
-                    .disabled(vm.readOnly)
+                    .disabled(vm.readOnly || vm.loading)
+                }
+            }
+            if vm.loading {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    LoadingSpinnerView(duration: 0.7, lineWidth: 5)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -149,9 +155,6 @@ struct AssessmentView: View {
                 )
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                scoreDisplay
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
                         if let pId = vm.submission?.participation.id {
@@ -162,7 +165,7 @@ struct AssessmentView: View {
                     Text("Save")
                 }
                 .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly)
+                .disabled(vm.readOnly || vm.loading)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -175,7 +178,26 @@ struct AssessmentView: View {
                     Text("Submit")
                 }
                 .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly)
+                .disabled(vm.readOnly || vm.loading)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                 Button {
+                     Task {
+                         await vm.initRandomSubmission(exerciseId: exerciseId)
+                         if vm.submission == nil {
+                             showNoSubmissionsAlert = true
+                         }
+                     }
+                 } label: {
+                     Text("Next")
+                 }
+                 .buttonStyle(NavigationBarButton())
+                 .disabled(vm.readOnly || vm.loading)
+             }
+        }
+        .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
+            Button("OK", role: .cancel) {
+                presentationMode.wrappedValue.dismiss()
             }
         }
         .sheet(isPresented: $showSettings) {
@@ -382,12 +404,13 @@ struct AssessmentView_Previews: PreviewProvider {
 }
 
 struct NavigationBarButton: ButtonStyle {
+    @Environment(\.isEnabled) var isEnabled: Bool
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor(.white)
+            .foregroundColor(Color(.systemBackground))
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
-            .background(Color.secondary)
+            .background(isEnabled ? Color.secondary : Color(.systemGray))
             .cornerRadius(20)
             .fontWeight(.semibold)
     }

@@ -4,10 +4,10 @@ import Combine
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: SubmissionForAssessment?
-    @Published var assessmentResult: AssessmentResult = AssessmentResult()
-    @Published var showSubmission: Bool = false
-
-    let readOnly: Bool
+    @Published var assessmentResult = AssessmentResult()
+    @Published var showSubmission = false
+    @Published var readOnly = true
+    @Published var loading = false
 
     init(readOnly: Bool) {
         self.readOnly = readOnly
@@ -15,6 +15,10 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func initRandomSubmission(exerciseId: Int) async {
+        loading = true
+        defer {
+            loading = false
+        }
         do {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
             assessmentResult.feedbacks = submission?.results?.last?.feedbacks ?? []
@@ -26,6 +30,10 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func getSubmission(id: Int) async {
+        loading = true
+        defer {
+            loading = false
+        }
         do {
             if readOnly {
                 self.submission = try await ArtemisAPI.getSubmissionForReadOnly(participationId: id)
@@ -42,6 +50,10 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func cancelAssessment(submissionId: Int) async {
+        loading = true
+        defer {
+            loading = false
+        }
         do {
             try await ArtemisAPI.cancelAssessment(submissionId: submissionId)
         } catch {
@@ -53,6 +65,10 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func sendAssessment(participationId: Int, submit: Bool) async {
+        loading = true
+        defer {
+            loading = false
+        }
         do {
             try await ArtemisAPI.saveAssessment(
                 participationId: participationId,
