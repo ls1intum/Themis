@@ -80,7 +80,8 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             let nscode = NSString(string: code)
             var paraNumber = lastParaNumber
             
-            nscode.enumerateSubstrings(in: NSMakeRange(charRange.location, lastParaLocation - charRange.location), options: [.byParagraphs, .substringNotRequired, .reverse]) { (substring, substringRange, enclosingRange, stop) in
+            nscode.enumerateSubstrings(in: NSMakeRange(charRange.location, lastParaLocation - charRange.location),
+               options: [.byParagraphs, .substringNotRequired, .reverse]) { (substring, substringRange, enclosingRange, stop) in
                 if enclosingRange.location <= charRange.location {
                     stop.pointee = true
                 }
@@ -93,7 +94,8 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             let code = textStorage?.string ?? ""
             let ns = NSString(string: code)
             var paraNumber = lastParaNumber
-            ns.enumerateSubstrings(in: NSMakeRange(lastParaLocation, charRange.location - lastParaLocation), options: [.byParagraphs, .substringNotRequired]) { (substring, substringRange, enclosingRange, stop) in
+            ns.enumerateSubstrings(in: NSMakeRange(lastParaLocation, charRange.location - lastParaLocation),
+               options: [.byParagraphs, .substringNotRequired]) { (substring, substringRange, enclosingRange, stop) in
                 if enclosingRange.location >= charRange.location {
                     stop.pointee = true
                 }
@@ -105,7 +107,10 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         }
     }
     
-    override func processEditing(for textStorage: NSTextStorage, edited editMask: NSTextStorage.EditActions, range newCharRange: NSRange, changeInLength delta: Int, invalidatedRange invalidatedCharRange: NSRange) {
+    override func processEditing(for textStorage: NSTextStorage,
+                                 edited editMask: NSTextStorage.EditActions,
+                                 range newCharRange: NSRange, changeInLength delta: Int,
+                                 invalidatedRange invalidatedCharRange: NSRange) {
         super.processEditing(for: textStorage, edited: editMask, range: newCharRange, changeInLength: delta, invalidatedRange: invalidatedCharRange)
         if (invalidatedCharRange.location < self.lastParaLocation) {
             self.lastParaLocation = 0
@@ -148,7 +153,11 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             let size = (ln as NSString).size(withAttributes: atts)
             
             gutterRect = gutterRect.offsetBy(dx: 0, dy: gutterRect.height)
-            (ln as NSString).draw(in: CGRect(x: gutterRect.width - 4 - size.width, y: (gutterRect.height - size.height) / 2.0, width: size.width, height: size.height).offsetBy(dx: gutterRect.minX, dy: gutterRect.minY), withAttributes: atts)
+            (ln as NSString).draw(in: CGRect(x: gutterRect.width - 4 - size.width,
+                                             y: (gutterRect.height - size.height) / 2.0,
+                                             width: size.width,
+                                             height: size.height)
+                .offsetBy(dx: gutterRect.minX, dy: gutterRect.minY), withAttributes: atts)
         }
     }
 }
