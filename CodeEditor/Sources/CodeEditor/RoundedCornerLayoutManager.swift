@@ -29,7 +29,6 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     private var lastParaNumber: Int = 0
     
     
-    
     override func drawUnderline(forGlyphRange glyphRange: NSRange,
         underlineType underlineVal: NSUnderlineStyle,
         baselineOffset: CGFloat,
@@ -80,8 +79,8 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             let nscode = NSString(string: code)
             var paraNumber = lastParaNumber
             
-            nscode.enumerateSubstrings(in: NSMakeRange(charRange.location, lastParaLocation - charRange.location),
-               options: [.byParagraphs, .substringNotRequired, .reverse]) { (substring, substringRange, enclosingRange, stop) in
+            nscode.enumerateSubstrings(in: NSRange(location: charRange.location, length: lastParaLocation - charRange.location),
+               options: [.byParagraphs, .substringNotRequired, .reverse]) { _, _, enclosingRange, stop in
                 if enclosingRange.location <= charRange.location {
                     stop.pointee = true
                 }
@@ -94,8 +93,8 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             let code = textStorage?.string ?? ""
             let ns = NSString(string: code)
             var paraNumber = lastParaNumber
-            ns.enumerateSubstrings(in: NSMakeRange(lastParaLocation, charRange.location - lastParaLocation),
-               options: [.byParagraphs, .substringNotRequired]) { (substring, substringRange, enclosingRange, stop) in
+            ns.enumerateSubstrings(in: NSRange(location: lastParaLocation, length: charRange.location - lastParaLocation),
+               options: [.byParagraphs, .substringNotRequired]) { _, _, enclosingRange, stop in
                 if enclosingRange.location >= charRange.location {
                     stop.pointee = true
                 }
@@ -112,7 +111,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                                  range newCharRange: NSRange, changeInLength delta: Int,
                                  invalidatedRange invalidatedCharRange: NSRange) {
         super.processEditing(for: textStorage, edited: editMask, range: newCharRange, changeInLength: delta, invalidatedRange: invalidatedCharRange)
-        if (invalidatedCharRange.location < self.lastParaLocation) {
+        if invalidatedCharRange.location < self.lastParaLocation {
             self.lastParaLocation = 0
             self.lastParaNumber = 0
         }
@@ -127,7 +126,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         var gutterRect = CGRect.zero
         var paraNumber = 0
 
-        enumerateLineFragments(forGlyphRange: glyphsToShow) { (rect, usedRect, textContainer, glyphRange, stop) in
+        enumerateLineFragments(forGlyphRange: glyphsToShow) { rect, _, _, glyphRange, _ in
             
             let charRange = self.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
             let string    = self.textStorage?.string ?? ""

@@ -4,7 +4,9 @@
 //
 //  Created by Andreas Cselovszky on 14.11.22.
 //
+
 // swiftlint:disable line_length
+
 import Foundation
 
 enum FeedbackType {
