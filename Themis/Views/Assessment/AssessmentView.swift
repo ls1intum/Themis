@@ -182,7 +182,8 @@ struct AssessmentView: View {
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
             )
         }
         .task(priority: .high) {

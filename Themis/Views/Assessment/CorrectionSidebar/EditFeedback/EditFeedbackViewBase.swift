@@ -39,7 +39,9 @@ struct EditFeedbackViewBase: View {
     func createFeedback() {
         feedback.detailText = detailText
         feedback.credits = score
-        cvm.addInlineHighlight(feedbackId: feedback.id)
+        if type == .inline {
+            cvm.addInlineHighlight(feedbackId: feedback.id)
+        }
         assessmentResult.addFeedback(feedback: feedback)
     }
 
