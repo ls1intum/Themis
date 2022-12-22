@@ -16,10 +16,12 @@ struct AddFeedbackView: View {
 
     @State var feedback = AssessmentFeedback(credits: 0.0, type: .general)
 
+    var file: Node?
+
     func initFeedback() {
         let lines: NSRange? = cvm.selectedSectionParsed?.0
         let columns: NSRange? = cvm.selectedSectionParsed?.1
-        feedback = AssessmentFeedback(credits: 0.0, type: type, lines: lines, columns: columns)
+        feedback = AssessmentFeedback(credits: 0.0, type: type, file: file, lines: lines, columns: columns)
     }
 
     var body: some View {

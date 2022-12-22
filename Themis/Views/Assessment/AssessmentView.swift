@@ -114,17 +114,15 @@ struct AssessmentView: View {
                     }
                 }
             }
-            if !vm.readOnly {
-                if cvm.currentlySelecting {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            cvm.showAddFeedback.toggle()
-                        } label: {
-                            Text("Feedback")
-                        }
-                        .disabled(vm.readOnly)
-                    }
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack(alignment: .center) {
+                    Text(exerciseTitle)
+                        .bold()
+                        .font(.title)
+                    Image(systemName: vm.readOnly ? "eyeglasses" : "pencil.and.outline")
+                        .font(.title3)
                 }
+                .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -184,7 +182,8 @@ struct AssessmentView: View {
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
             )
         }
         .task(priority: .high) {
