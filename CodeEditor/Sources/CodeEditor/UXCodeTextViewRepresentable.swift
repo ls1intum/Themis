@@ -224,9 +224,10 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
     private func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
         var selectionRange: Range<Int>?
-
         for point in line?.wrappedValue?.points ?? [] {
-            let glyphIndex = getGlyphIndex(textView: textView, point: point)
+            let pointOffset = CGPoint(x: point.x + textView.contentOffset.x,
+                                      y: point.y + textView.contentOffset.y)
+            let glyphIndex = getGlyphIndex(textView: textView, point: pointOffset)
             if selectionRange == nil {
                 selectionRange = glyphIndex..<glyphIndex + 1
             } else {
