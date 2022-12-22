@@ -34,6 +34,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     private var hlTextStorage: CodeAttributedString? {
         textStorage as? CodeAttributedString
     }
+    private var customLayoutManager: RoundedCornerLayoutManager!
 
     /// If the user starts a newline, the editor automagically adds the same
     /// whitespace as on the previous line.
@@ -58,22 +59,23 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     private(set) var themeName = CodeEditor.ThemeName.default {
         didSet {
             highlightr?.setTheme(to: themeName.rawValue)
-            if let font = highlightr?.theme?.codeFont { self.font = font }
+            if let font = highlightr?.theme?.codeFont { self.font = font; self.customLayoutManager.lineNumberFont = font }
         }
     }
 
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
+    
+    
 
     init() {
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
         }
         ?? NSTextStorage()
-
         let layoutManager = RoundedCornerLayoutManager()
+        customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
-
         let textContainer = NSTextContainer()
         textContainer.widthTracksTextView = true // those are key!
         layoutManager.addTextContainer(textContainer)
@@ -285,42 +287,14 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     }
 
     override func draw(_ rect: CGRect) {
+        //print("I have been called")
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
-        guard let font else { return }
-        guard let lineH = self.font?.lineHeight else { return }
-
         UIGraphicsPushContext(ctx)
-
         let numViewW = numViewWidth()
         ctx.setFillColor(CGColor(gray: 0.0, alpha: 0.12))
         let numBgArea = CGRect(x: 0, y: 0, width: numViewW, height: frame.size.height)
         ctx.fill(numBgArea)
-
-        var numberOfLines = 0
-        if lineH > 0 {
-            numberOfLines = Int((self.contentSize.height - 2 * 8.0) / lineH)
-        }
-
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.alignment = .right
-        for i in 0..<numberOfLines {
-            let lineNum = NSString(format: "%d", i)
-            let xOrigin = self.bounds.minX
-            let yOrigin = (lineH * CGFloat(i)) + 8.0 - self.contentOffset.y
-            if yOrigin < -lineH || yOrigin > self.frame.size.height + lineH {
-                continue
-            }
-
-            lineNum.draw(in: CGRect(x: xOrigin, y: yOrigin, width: numViewW - 4.0, height: lineH),
-                        withAttributes: [
-                                            NSAttributedString.Key.font: font,
-                                            NSAttributedString.Key.paragraphStyle: paraStyle,
-                                            NSAttributedString.Key.foregroundColor: UIColor.gray
-                        ]
-                        )
-        }
-
         UIGraphicsPopContext()
     }
 

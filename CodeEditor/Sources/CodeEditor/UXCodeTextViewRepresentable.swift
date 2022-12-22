@@ -342,6 +342,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         return textView
     }
 
+
     public func updateUIView(_ textView: UITextView, context: Context) {
         guard let textView = textView as? UXCodeTextView else {
             assertionFailure("unexpected text view")
