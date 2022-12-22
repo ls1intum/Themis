@@ -76,11 +76,11 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         if charRange.location == lastParaLocation {
             return lastParaNumber
         } else if charRange.location < lastParaLocation {
-            let s = textStorage?.string ?? ""
-            let ns = NSString(string: s)
+            let code = textStorage?.string ?? ""
+            let nscode = NSString(string: code)
             var paraNumber = lastParaNumber
             
-            ns.enumerateSubstrings(in: NSMakeRange(charRange.location, lastParaLocation - charRange.location), options: [.byParagraphs, .substringNotRequired, .reverse]) { (substring, substringRange, enclosingRange, stop) in
+            nscode.enumerateSubstrings(in: NSMakeRange(charRange.location, lastParaLocation - charRange.location), options: [.byParagraphs, .substringNotRequired, .reverse]) { (substring, substringRange, enclosingRange, stop) in
                 if enclosingRange.location <= charRange.location {
                     stop.pointee = true
                 }
@@ -90,8 +90,8 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             lastParaNumber = paraNumber
             return paraNumber
         } else {
-            let s = textStorage?.string ?? ""
-            let ns = NSString(string: s)
+            let code = textStorage?.string ?? ""
+            let ns = NSString(string: code)
             var paraNumber = lastParaNumber
             ns.enumerateSubstrings(in: NSMakeRange(lastParaLocation, charRange.location - lastParaLocation), options: [.byParagraphs, .substringNotRequired]) { (substring, substringRange, enclosingRange, stop) in
                 if enclosingRange.location >= charRange.location {
@@ -131,10 +131,10 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             if charRange.location == paraRange.location {
                 gutterRect = CGRect(x: 0, y: rect.origin.y, width: 40, height: rect.size.height).offsetBy(dx: origin.x, dy: origin.y)
                 paraNumber = self.getParaNumber(for: charRange)
-                let ln = String(format: "%ld", paraNumber + 1) as NSString
-                let size = ln.size(withAttributes: atts)
+                let lineNumber = String(format: "%ld", paraNumber + 1) as NSString
+                let size = lineNumber.size(withAttributes: atts)
                 
-                ln.draw(in: CGRect(x: 0.0,
+                lineNumber.draw(in: CGRect(x: 0.0,
                                    y: (gutterRect.height - size.height) / 2.0,
                                    width: self.gutterWidth,
                                    height: size.height)
