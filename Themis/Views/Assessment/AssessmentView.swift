@@ -1,8 +1,7 @@
-// swiftlint:disable line_length
+import SwiftUI
+
 // swiftlint:disable type_body_length
 // swiftlint:disable closure_body_length
-
-import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
@@ -89,14 +88,11 @@ struct AssessmentView: View {
                         }
                         .foregroundColor(.white)
                     }
-                    .confirmationDialog(
-                        "Cancel Assessment",
-                        isPresented: $showCancelDialog
-                    ) {
+                    .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
                             Task {
-                                if let id = vm.submission?.id {
-                                    await vm.sendAssessment(participationId: id, submit: false)
+                                if let pId = vm.submission?.participation.id {
+                                    await vm.sendAssessment(participationId: pId, submit: false)
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
@@ -110,7 +106,11 @@ struct AssessmentView: View {
                             }
                         }
                     } message: {
-                        Text("Either discard the assessment and release the lock (recommended) or keep the lock and save the assessment without submitting it.")
+                        Text("""
+                             Either discard the assessment \
+                             and release the lock (recommended) \
+                             or keep the lock and save the assessment without submitting it.
+                             """)
                     }
                 }
             }
@@ -132,58 +132,56 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            if !vm.readOnly {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        cvm.lassoMode.toggle()
-                    } label: {
-                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
-                        Image(systemName: "pencil.and.outline")
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, iconDrawingColor)
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        Task {
-                            if let pId = vm.submission?.participation.id {
-                                await vm.sendAssessment(participationId: pId, submit: false)
-                            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CustomProgressView(
+                    progress: vm.assessmentResult.score,
+                    max: vm.submission?.participation.exercise.maxPoints ?? 0
+                )
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                scoreDisplay
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    Task {
+                        if let pId = vm.submission?.participation.id {
+                            await vm.sendAssessment(participationId: pId, submit: false)
                         }
-                    } label: {
-                        Text("Save")
                     }
-                    .buttonStyle(NavigationBarButton())
-                    .disabled(vm.readOnly)
+                } label: {
+                    Text("Save")
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        Task {
-                            if let pId = vm.submission?.participation.id {
-                                await vm.sendAssessment(participationId: pId, submit: true)
-                            }
+                .buttonStyle(NavigationBarButton())
+                .disabled(vm.readOnly)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    Task {
+                        if let pId = vm.submission?.participation.id {
+                            await vm.sendAssessment(participationId: pId, submit: true)
                         }
-                    } label: {
-                        Text("Submit")
                     }
-                    .buttonStyle(NavigationBarButton())
-                    .disabled(vm.readOnly)
+                } label: {
+                    Text("Submit")
                 }
+                .buttonStyle(NavigationBarButton())
+                .disabled(vm.readOnly)
             }
         }
         .sheet(isPresented: $showSettings) {
-            AppearanceSettingsView(
-                fontSize: $cvm.editorFontSize
-            )
-            .navigationTitle("Appearance settings")
+            NavigationStack {
+                AppearanceSettingsView(
+                    fontSize: $cvm.editorFontSize
+                )
+                    .navigationTitle("Appearance settings")
+            }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             AddFeedbackView(
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback,
-                file: cvm.selectedFile
+                showSheet: $cvm.showAddFeedback
             )
         }
         .task(priority: .high) {
@@ -214,6 +212,8 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
+
+                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -272,6 +272,7 @@ struct AssessmentView: View {
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
+                            print(dragWidthRight)
                             if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
@@ -374,8 +375,10 @@ struct NavigationBarButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .padding(EdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
             .background(Color.secondary)
-            .cornerRadius(12)
+            .cornerRadius(20)
+            .fontWeight(.semibold)
     }
 }

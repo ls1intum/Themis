@@ -67,7 +67,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
     
-    
 
     init() {
         let textStorage = highlightr.flatMap {
@@ -283,7 +282,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             setNeedsDisplay()
             oldWidth = self.bounds.width
         }
-        
     }
 
     private func numViewWidth() -> CGFloat {

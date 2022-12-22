@@ -25,7 +25,6 @@
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
-		DA1DC19929522FD10005219D /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19829522FD10005219D /* UMLViewModel.swift */; };
 		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
 		DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */; };
@@ -33,6 +32,9 @@
 		DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */; };
 		DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0F00294A2DF800A7B807 /* AddFeedbackView.swift */; };
 		DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */; };
+		DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C65E2954DE4F005727FB /* UMLViewModel.swift */; };
+		DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */; };
+		DA98C6642954ED89005727FB /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6632954ED89005727FB /* CustomProgressView.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
@@ -110,7 +112,6 @@
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
-		DA1DC19829522FD10005219D /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
 		DA1DC19B2952320E0005219D /* UMLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
 		DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAuthenticationViewModel.swift; sourceTree = "<group>"; };
@@ -118,6 +119,9 @@
 		DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationEnvironmentVariables.swift; sourceTree = "<group>"; };
 		DA3F0F00294A2DF800A7B807 /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFeedbackView.swift; sourceTree = "<group>"; };
 		DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackView.swift; sourceTree = "<group>"; };
+		DA98C65E2954DE4F005727FB /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
+		DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionSearchResult.swift; sourceTree = "<group>"; };
+		DA98C6632954ED89005727FB /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
@@ -254,7 +258,7 @@
 			children = (
 				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
 				E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */,
-				DA1DC19829522FD10005219D /* UMLViewModel.swift */,
+				DA98C65E2954DE4F005727FB /* UMLViewModel.swift */,
 			);
 			name = Assessment;
 			path = Themis/ViewModels/Assessment;
@@ -383,6 +387,7 @@
 		DA249E9429301E1B008DE1D5 /* SubmissionList */ = {
 			isa = PBXGroup;
 			children = (
+				DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */,
 				DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */,
 				E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */,
 			);
@@ -397,6 +402,14 @@
 				DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */,
 			);
 			path = EditFeedback;
+			sourceTree = "<group>";
+		};
+		DA98C6622954ED7B005727FB /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				DA98C6632954ED89005727FB /* CustomProgressView.swift */,
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 		E2192ED1291E47670092CE58 /* REST */ = {
@@ -423,6 +436,7 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DA98C6622954ED7B005727FB /* Custom */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
 				E21AF042292B9D4C0096ACFC /* Assessment */,
 				E2192EE7291EC3100092CE58 /* Authentication */,
@@ -674,6 +688,8 @@
 			files = (
 				E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */,
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */,
+				DA98C6642954ED89005727FB /* CustomProgressView.swift in Sources */,
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				E2E67483292032870081238B /* CourseListViewModel.swift in Sources */,
@@ -687,6 +703,7 @@
 				E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
+				DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */,
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
@@ -720,7 +737,6 @@
 				DA1DC19C2952320E0005219D /* UMLView.swift in Sources */,
 				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
-				DA1DC19929522FD10005219D /* UMLViewModel.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
