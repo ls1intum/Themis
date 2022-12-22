@@ -48,6 +48,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     }
 
     var autoPairCompletion = [ String: String ]()
+    var oldWidth: CGFloat = 0.0
 
     var language: CodeEditor.Language? {
         set {
@@ -275,6 +276,15 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         theme.italicCodeFont = theme.italicCodeFont?.withSize(newSize)
         return true
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if self.bounds.width != oldWidth {
+            setNeedsDisplay()
+            oldWidth = self.bounds.width
+        }
+        
+    }
 
     private func numViewWidth() -> CGFloat {
         let maxNum = 4.0
@@ -287,13 +297,12 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     }
 
     override func draw(_ rect: CGRect) {
-        //print("I have been called")
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
         let numViewW = numViewWidth()
         ctx.setFillColor(CGColor(gray: 0.0, alpha: 0.12))
-        let numBgArea = CGRect(x: 0, y: 0, width: numViewW, height: frame.size.height)
+        let numBgArea = CGRect(x: 0, y: self.contentOffset.y, width: numViewW, height: self.bounds.height)
         ctx.fill(numBgArea)
         UIGraphicsPopContext()
     }
