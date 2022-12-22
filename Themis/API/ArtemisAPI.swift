@@ -7,8 +7,7 @@
 
 import Foundation
 
-// ArtemisAPI is a stateless enum because it cannot be initialized (only static methods)
-enum ArtemisAPI {
+class ArtemisAPI {
     static func sendRequest<T: Decodable>(_ type: T.Type, request: Request) async throws -> T {
         if bearerTokenAuth {
             var request = request

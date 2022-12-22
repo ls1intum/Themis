@@ -31,6 +31,7 @@ struct ExercisesListView: View {
     }
 
     var navTitle: String {
-        "\(title ?? "") Exercises"
+        return "\(title ?? "") Exercises"
     }
+
 }

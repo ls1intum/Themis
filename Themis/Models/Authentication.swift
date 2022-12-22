@@ -28,7 +28,7 @@ class Authentication: NSObject {
 
     let url: URL
 
-    @objc dynamic var authenticated = false
+    @objc dynamic var authenticated: Bool = false
 
     init(for url: URL) {
         self.url = url

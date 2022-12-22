@@ -29,10 +29,10 @@ struct UMLView: View {
                     .scaleEffect(umlVM.scale > 1 ? umlVM.scale : 1)
                     .gesture(
                         // zoom in or out
-                        MagnificationGesture().onChanged({ value in
+                        MagnificationGesture().onChanged({ (value)  in
                             umlVM.scale = value
                         })
-                        .onEnded({ value in
+                        .onEnded({ (value) in
                             withAnimation(.spring()) {
                                 umlVM.scale = value
                             }

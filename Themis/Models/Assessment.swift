@@ -4,7 +4,9 @@
 //
 //  Created by Andreas Cselovszky on 14.11.22.
 //
+
 // swiftlint:disable line_length
+
 import Foundation
 
 enum FeedbackType {
@@ -41,7 +43,7 @@ struct AssessmentResult: Encodable {
     }
 
     var generalFeedback: [AssessmentFeedback] {
-        feedbacks
+        return feedbacks
             .filter { $0.type == .general && $0.assessmentType == .MANUAL }
     }
 
@@ -72,8 +74,8 @@ struct AssessmentResult: Encodable {
 
 struct AssessmentFeedback: Identifiable {
     // attributes from artemis
-    let id = UUID()
-    let created = Date()
+    let id: UUID = UUID()
+    let created: Date = Date()
     var text: String? /// max length = 500
     var detailText: String? /// max length = 5000
     var credits: Double /// score of element
@@ -119,7 +121,7 @@ struct AssessmentFeedback: Identifiable {
             return
         }
         if columns.length == 0 {
-            self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)"
+            self.text =  file.name + " at Line: \(lines.location) Col: \(columns.location)"
         } else {
             self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
         }

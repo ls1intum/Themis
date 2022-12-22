@@ -74,5 +74,6 @@ struct ExerciseView: View {
         }
         .padding()
         .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+
     }
 }

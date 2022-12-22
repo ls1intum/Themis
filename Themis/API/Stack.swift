@@ -37,4 +37,5 @@ class Stack<Element>: ExpressibleByArrayLiteral, Stackable where Element: Equata
     required init(arrayLiteral elements: Stack.Element...) {
         self.storage = elements
     }
+
 }
