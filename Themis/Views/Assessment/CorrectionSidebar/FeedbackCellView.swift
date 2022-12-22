@@ -40,7 +40,7 @@ struct FeedbackCellView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                 }
-                .disabled(editingDisabled)
+                .disabled(readOnly)
                 .buttonStyle(.borderless)
                 .font(.caption)
                 Button(role: .destructive) {
@@ -51,7 +51,7 @@ struct FeedbackCellView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                 }
-                .disabled(editingDisabled)
+                .disabled(readOnly)
                 .buttonStyle(.borderless)
                 .font(.caption)
             }

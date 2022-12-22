@@ -18,4 +18,11 @@ class CourseListViewModel: ObservableObject {
             print(error.localizedDescription)
         }
     }
+
+    func courseForID(id: Int) -> Course {
+        guard let course = courses.first(where: { $0.id == id }) else {
+            fatalError("This CourseID does not exist")
+        }
+        return course
+    }
 }

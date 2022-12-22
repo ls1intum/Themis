@@ -4,8 +4,8 @@ import Combine
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: SubmissionForAssessment?
-    @Published var assessmentResult: AssessmentResult = AssessmentResult()
-    @Published var showSubmission: Bool = false
+    @Published var assessmentResult = AssessmentResult()
+    @Published var showSubmission = false
 
     let readOnly: Bool
 
@@ -19,7 +19,6 @@ class AssessmentViewModel: ObservableObject {
         feedback = AssessmentResult()
         do {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
-            assessmentResult.feedbacks = submission?.results?.last?.feedbacks ?? []
             self.showSubmission = true
         } catch {
             print(error)
@@ -31,10 +30,8 @@ class AssessmentViewModel: ObservableObject {
         do {
             if readOnly {
                 self.submission = try await ArtemisAPI.getSubmissionForReadOnly(participationId: id)
-                assessmentResult.feedbacks = submission?.feedbacks ?? []
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
-                assessmentResult.feedbacks = submission?.results?.last?.feedbacks ?? []
             }
             self.showSubmission = true
         } catch {
