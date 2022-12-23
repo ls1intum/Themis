@@ -125,6 +125,11 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
+            if vm.loading {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    LoadingSpinnerView(duration: 0.7, lineWidth: 5)
+                }
+            }
             if cvm.currentlySelecting {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -133,11 +138,6 @@ struct AssessmentView: View {
                         Text("Feedback")
                     }
                     .disabled(vm.readOnly || vm.loading)
-                }
-            }
-            if vm.loading {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    LoadingSpinnerView(duration: 0.7, lineWidth: 5)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -332,7 +332,7 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 CorrectionSidebarView(
-                    exercise: vm.submission?.participation.exercise,
+                    submission: $vm.submission,
                     readOnly: vm.readOnly,
                     assessmentResult: $vm.assessmentResult,
                     cvm: cvm,

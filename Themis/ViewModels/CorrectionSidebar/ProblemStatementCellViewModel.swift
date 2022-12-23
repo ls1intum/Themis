@@ -39,6 +39,8 @@ class ProblemStatementCellViewModel: ObservableObject {
     @Published var bundledTests: [BundledTest] = []
 
     func convertProblemStatement(problemStatement: String, feedbacks: [AssessmentFeedback], colorScheme: ColorScheme) {
+        problemStatementParts = []
+        bundledTests = []
         var index = problemStatement.startIndex
 
         while index < problemStatement.endIndex {

@@ -53,7 +53,11 @@ struct ExerciseOfSubmission: Codable {
     let gradingCriteria: [GradingCriterion]?
 }
 
-struct SubmissionForAssessment: Codable {
+struct SubmissionForAssessment: Codable, Equatable {
+    static func == (lhs: SubmissionForAssessment, rhs: SubmissionForAssessment) -> Bool {
+        lhs.id == rhs.id
+    }
+
     let id: Int
     var participation: ParticipationForAssessment
     let feedbacks: [AssessmentFeedback]?

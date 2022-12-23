@@ -11,7 +11,7 @@ import MarkdownUI
 
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    var problemStatement: String?
+    @Binding var submission: SubmissionForAssessment?
     var feedbacks: [AssessmentFeedback]
     @ObservedObject var umlVM: UMLViewModel
 
@@ -70,25 +70,27 @@ struct ProblemStatementCellView: View {
             }
         }
         .padding()
-        .onAppear {
-            vm.convertProblemStatement(
-                problemStatement: problemStatement ?? "",
-                feedbacks: feedbacks,
-                colorScheme: colorScheme)
+        .task(id: submission) {
+            if let submission = submission {
+                vm.convertProblemStatement(
+                    problemStatement: submission.participation.exercise.problemStatement,
+                    feedbacks: feedbacks,
+                    colorScheme: colorScheme)
+            }
         }
     }
 }
 
-struct ProblemStatementCellView_Previews: PreviewProvider {
-    static var umlVM = UMLViewModel()
-    static let feedbacks: [AssessmentFeedback] = []
-
-    static var previews: some View {
-        ProblemStatementCellView(
-            problemStatement: "Test",
-            feedbacks: feedbacks,
-            umlVM: umlVM
-        )
-        .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
+// struct ProblemStatementCellView_Previews: PreviewProvider {
+//    static var umlVM = UMLViewModel()
+//    static let feedbacks: [AssessmentFeedback] = []
+//
+//    static var previews: some View {
+//        ProblemStatementCellView(
+//            problemStatement: "Test",
+//            feedbacks: feedbacks,
+//            umlVM: umlVM
+//        )
+//        .previewInterfaceOrientation(.landscapeLeft)
+//    }
+// }
