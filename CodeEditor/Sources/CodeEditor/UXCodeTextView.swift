@@ -85,7 +85,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
             hlTextStorage.highlightDelegate = self
         }
         textContainer.exclusionPaths.append(UIBezierPath(rect: CGRect(x: 0, y: 0, width: Int(numViewWidth()) + 10, height: Int(INT_MAX))))
-        //self.textContainerInset = UIEdgeInsets(top: 8, left: numViewWidth() + 10, bottom: 8, right: 0)
+        // self.textContainerInset = UIEdgeInsets(top: 8, left: numViewWidth() + 10, bottom: 8, right: 0)
 #if os(macOS)
         isVerticallyResizable = true
         maxSize               = .init(width: 0, height: 1_000_000)

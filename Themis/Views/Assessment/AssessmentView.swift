@@ -124,6 +124,18 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
+            if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        cvm.lassoMode.toggle()
+                    } label: {
+                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
+                        Image(systemName: "pencil.and.outline")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, iconDrawingColor)
+                    }
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showSettings.toggle()
