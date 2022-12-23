@@ -28,7 +28,8 @@ struct AssessmentView: View {
                 if showFileTree {
                     FiletreeSidebarView(
                         participationID: vm.submission?.participation.id,
-                        cvm: cvm
+                        cvm: cvm,
+                        loading: vm.loading
                     )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
@@ -154,6 +155,9 @@ struct AssessmentView: View {
                     max: vm.submission?.participation.exercise.maxPoints ?? 0
                 )
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                 scoreDisplay
+             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
@@ -336,7 +340,8 @@ struct AssessmentView: View {
                     readOnly: vm.readOnly,
                     assessmentResult: $vm.assessmentResult,
                     cvm: cvm,
-                    umlVM: umlVM
+                    umlVM: umlVM,
+                    loading: vm.loading
                 )
             }
         }

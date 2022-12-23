@@ -45,9 +45,9 @@ struct ProblemStatementCellView: View {
                                 .background(Color(.systemBackground))
                         }
                     }
+
                 }
             }
-
             ForEach(vm.problemStatementParts, id: \.text) { part in
                 if let uml = part as? ProblemStatementPlantUML {
                     Button(action: {

@@ -41,6 +41,7 @@
 		E1C09D3F2946A50F00EC709B /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */; };
 		E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */; };
 		E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */; };
+		E1DE5B8529560F3C00C2DF38 /* ConditionalRedactedViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DE5B8429560F3B00C2DF38 /* ConditionalRedactedViewModifier.swift */; };
 		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
 		E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED4291E57640092CE58 /* HTTPMethod.swift */; };
 		E2192ED7291E57810092CE58 /* RESTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED6291E57810092CE58 /* RESTError.swift */; };
@@ -135,6 +136,7 @@
 		E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchView.swift; sourceTree = "<group>"; };
 		E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchViewModel.swift; sourceTree = "<group>"; };
+		E1DE5B8429560F3B00C2DF38 /* ConditionalRedactedViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalRedactedViewModifier.swift; sourceTree = "<group>"; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
 		E2192ED4291E57640092CE58 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		E2192ED6291E57810092CE58 /* RESTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 			children = (
 				E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */,
 				E148C06B2954E942004794BC /* LoadingSpinnerView.swift */,
+				E1DE5B8429560F3B00C2DF38 /* ConditionalRedactedViewModifier.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -748,6 +751,7 @@
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
 				DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */,
 				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
+				E1DE5B8529560F3C00C2DF38 /* ConditionalRedactedViewModifier.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,

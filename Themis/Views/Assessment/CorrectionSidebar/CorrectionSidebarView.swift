@@ -15,10 +15,11 @@ struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
     @Binding var submission: SubmissionForAssessment?
-    var readOnly: Bool
+    let readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
+    let loading: Bool
 
     var body: some View {
         VStack {
@@ -32,31 +33,34 @@ struct CorrectionSidebarView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
-
-            switch correctionSidebarStatus {
-            case .problemStatement:
-                ScrollView {
-                    ProblemStatementCellView(
-                        submission: $submission,
-                        feedbacks: assessmentResult.feedbacks,
-                        umlVM: umlVM
+            if !loading {
+                switch correctionSidebarStatus {
+                case .problemStatement:
+                    ScrollView {
+                        ProblemStatementCellView(
+                            submission: $submission,
+                            feedbacks: assessmentResult.feedbacks,
+                            umlVM: umlVM
+                        )
+                    }
+                case .correctionGuidelines:
+                    ScrollView {
+                        CorrectionGuidelinesCellView(
+                            gradingCriteria: submission?.participation.exercise.gradingCriteria ?? [],
+                            gradingInstructions: submission?.participation.exercise.gradingInstructions
+                        )
+                    }
+                case .generalFeedback:
+                    FeedbackListView(
+                        readOnly: readOnly,
+                        assessmentResult: $assessmentResult,
+                        cvm: cvm
                     )
                 }
-            case .correctionGuidelines:
-                ScrollView {
-                    CorrectionGuidelinesCellView(
-                        gradingCriteria: submission?.participation.exercise.gradingCriteria ?? [],
-                        gradingInstructions: submission?.participation.exercise.gradingInstructions
-                    )
-                }
-            case .generalFeedback:
-                FeedbackListView(
-                    readOnly: readOnly,
-                    assessmentResult: $assessmentResult,
-                    cvm: cvm
-                )
             }
+            Spacer()
         }
+        .frame(maxHeight: .infinity, alignment: .center)
     }
 }
 
