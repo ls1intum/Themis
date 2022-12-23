@@ -27,7 +27,7 @@ struct SubmissionSearchResult {
     }
 
     private static func levDisCaseInsensitiveTrimmed(_ w1: String, _ w2: String) -> Int {
-        return levDis(
+        levDis(
             w1.lowercased().trimmingCharacters(in: .whitespaces),
             w2.lowercased().trimmingCharacters(in: .whitespaces)
         )

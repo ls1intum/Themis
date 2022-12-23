@@ -9,11 +9,11 @@ struct AssessmentView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
 
-    @State var showSettings: Bool = false
-    @State var showFileTree: Bool = true
+    @State var showSettings = false
+    @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
-    @State private var correctionAsPlaceholder: Bool = true
+    @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
 
     private let minRightSnapWidth: CGFloat = 185
@@ -124,14 +124,16 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            if cvm.currentlySelecting {
+            if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        cvm.showAddFeedback.toggle()
+                        cvm.lassoMode.toggle()
                     } label: {
-                        Text("Feedback")
+                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
+                        Image(systemName: "pencil.and.outline")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, iconDrawingColor)
                     }
-                    .disabled(vm.readOnly)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -191,7 +193,8 @@ struct AssessmentView: View {
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
             )
         }
         .task(priority: .high) {
@@ -222,8 +225,6 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
-
-                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -282,7 +283,6 @@ struct AssessmentView: View {
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
-                            print(dragWidthRight)
                             if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
