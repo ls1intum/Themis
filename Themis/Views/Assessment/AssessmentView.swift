@@ -327,7 +327,6 @@ struct AssessmentView: View {
         .frame(width: 7)
     }
     var correctionWithPlaceholder: some View {
-        // TODO: ViewModifier for conditional redacted + remove redacted and remove text when to small as way to laggy
         VStack {
             if correctionAsPlaceholder {
                 EmptyView()

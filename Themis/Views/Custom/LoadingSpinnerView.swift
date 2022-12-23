@@ -10,8 +10,6 @@ import SwiftUI
 struct LoadingSpinnerView: View {
     var duration: Double = 0.7 // per spin
     var lineWidth: Double = 8
-    @State var spinnerStart = 0.0
-    @State var spinnerEnd = 0.03
     @State var currDegree = Angle.degrees(540)
 
     var body: some View {
@@ -34,10 +32,12 @@ struct LoadingSpinnerView: View {
         }
         .frame(width: 20)
         .onAppear {
-            withAnimation(.linear(duration: duration)
-                .repeatForever(autoreverses: false)
-            ) {
-                currDegree += .degrees(360)
+            DispatchQueue.main.async {
+                withAnimation(.linear(duration: duration)
+                    .repeatForever(autoreverses: false)
+                ) {
+                    currDegree += .degrees(360)
+                }
             }
         }
     }

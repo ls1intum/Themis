@@ -89,6 +89,6 @@ struct ProblemStatementCellView_Previews: PreviewProvider {
             feedbacks: feedbacks,
             umlVM: umlVM
         )
-            .previewInterfaceOrientation(.landscapeLeft)
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }
