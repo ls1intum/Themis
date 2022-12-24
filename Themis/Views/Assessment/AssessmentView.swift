@@ -197,6 +197,15 @@ struct AssessmentView: View {
                 file: cvm.selectedFile
             )
         }
+        .sheet(isPresented: $cvm.showEditFeedback) {
+            if var feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
+                EditFeedbackView(assessmentResult: $vm.assessmentResult,
+                                 cvm: cvm,
+                                 type: .inline,
+                                 showSheet: $cvm.showEditFeedback,
+                                 feedback: Binding(get: { feedback }, set: { feedback = $0 }))
+            }
+        }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
