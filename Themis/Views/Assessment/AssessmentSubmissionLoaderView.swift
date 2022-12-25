@@ -29,10 +29,10 @@ struct AssessmentSubmissionLoaderView: View {
             }
         }
     }
+}
 
-    struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
-        static var previews: some View {
-            AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
-        }
+struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise")
     }
 }

@@ -8,21 +8,22 @@
 import Foundation
 
 class ExerciseViewModel: ObservableObject {
-    var exercise: Exercise
+    @Published var exercise: Exercise?
     @Published var exerciseStats: ExerciseForAssessment?
 
-    init(exercise: Exercise? = nil) {
-        if let exercise {
-            self.exercise = exercise
-        } else {
-            self.exercise = Exercise()
+    @MainActor
+    func fetchExercise(exerciseId: Int) async {
+        do {
+            self.exercise = try await ArtemisAPI.getExercise(exerciseId: exerciseId)
+        } catch {
+            print(error)
         }
     }
 
     @MainActor
-    func fetchExerciseStats() async {
+    func fetchExerciseStats(exerciseId: Int) async {
         do {
-            self.exerciseStats = try await ArtemisAPI.getExerciseStats(exerciseId: exercise.id)
+            self.exerciseStats = try await ArtemisAPI.getExerciseStats(exerciseId: exerciseId)
         } catch let error {
             print(error.localizedDescription)
         }

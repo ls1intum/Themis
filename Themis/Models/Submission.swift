@@ -51,6 +51,11 @@ struct ExerciseOfSubmission: Codable {
     let problemStatement: String
     let gradingInstructions: String
     let gradingCriteria: [GradingCriterion]?
+    let templateParticipation: TemplateParticipation
+}
+
+struct TemplateParticipation: Codable {
+    let id: Int
 }
 
 struct SubmissionForAssessment: Codable {

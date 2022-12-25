@@ -27,7 +27,8 @@ struct AssessmentView: View {
                 if showFileTree {
                     FiletreeSidebarView(
                         participationID: vm.submission?.participation.id,
-                        cvm: cvm
+                        cvm: cvm,
+                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
                     )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
