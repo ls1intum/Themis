@@ -46,7 +46,6 @@ struct Exercise: Codable {
 struct DueDateStat: Codable {
     let inTime: Int
     let late: Int
-
 }
 /// This Struct represents the Statstics for a an Exercise
 struct ExerciseForAssessment: Codable {

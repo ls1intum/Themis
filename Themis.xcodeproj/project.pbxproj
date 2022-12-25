@@ -25,19 +25,21 @@
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
+		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
 		DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */; };
 		DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */; };
 		DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */; };
 		DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0F00294A2DF800A7B807 /* AddFeedbackView.swift */; };
 		DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */; };
-		DA94AD3E294791500027B303 /* SubmissionSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA94AD3D294791500027B303 /* SubmissionSearchResult.swift */; };
+		DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C65E2954DE4F005727FB /* UMLViewModel.swift */; };
+		DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */; };
+		DA98C6642954ED89005727FB /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6632954ED89005727FB /* CustomProgressView.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
 		E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */; };
 		E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BF8881291EEF2900B8FA06 /* Course.swift */; };
-		E1C09D3F2946A50F00EC709B /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */; };
 		E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */; };
 		E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */; };
 		E2192ED3291E47820092CE58 /* RESTController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED2291E47820092CE58 /* RESTController.swift */; };
@@ -49,18 +51,9 @@
 		E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2192EE0291E6F780092CE58 /* KeychainAccess */; };
 		E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE2291E74620092CE58 /* AuthenticationViewModel.swift */; };
 		E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */; };
-		E21AF018292B9B370096ACFC /* Runestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF017292B9B370096ACFC /* Runestone */; };
-		E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF034292B9D0A0096ACFC /* TreeSitterJava */; };
-		E21AF037292B9D0A0096ACFC /* TreeSitterJavaQueries in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */; };
-		E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */; };
-		E21AF03B292B9D0A0096ACFC /* TreeSitterLanguagesCommon in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */; };
-		E21AF03D292B9D0A0096ACFC /* TreeSitterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */; };
-		E21AF03F292B9D0A0096ACFC /* TreeSitterSwiftQueries in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */; };
-		E21AF041292B9D0A0096ACFC /* TreeSitterSwiftRunestone in Frameworks */ = {isa = PBXBuildFile; productRef = E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */; };
 		E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */; };
 		E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF047292B9D4C0096ACFC /* CodeView.swift */; };
 		E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF048292B9D4C0096ACFC /* TabsView.swift */; };
-		E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */; };
 		E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */; };
 		E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04E292B9D4C0096ACFC /* HighlightName.swift */; };
 		E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */; };
@@ -68,14 +61,15 @@
 		E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE6382935214E00FAD327 /* ExerciseView.swift */; };
 		E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */; };
 		E2CAE63E29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */; };
+		E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481C294626AD00DAF0CC /* DrawingShape.swift */; };
+		E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */; };
+		E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3852929437F9100F5854D /* CodeEditor */; };
 		E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E460DC29292ECF00ECC0A5 /* Stack.swift */; };
 		E2E67483292032870081238B /* CourseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67482292032870081238B /* CourseListViewModel.swift */; };
 		E2E67485292033EE0081238B /* CourseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67484292033EE0081238B /* CourseListView.swift */; };
 		E2E6748829203E350081238B /* ExercisesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExercisesListView.swift */; };
 		E2E6748B2920419B0081238B /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748A2920419B0081238B /* Exercise.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
-		F90027DA2944183300C55F52 /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90027D92944183300C55F52 /* UMLView.swift */; };
-		F90027DE2945FE0500C55F52 /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90027DD2945FE0500C55F52 /* UMLViewModel.swift */; };
 		F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */ = {isa = PBXBuildFile; productRef = F911B9BF29392668003CF4C8 /* TouchVisualizer */; };
 /* End PBXBuildFile section */
 
@@ -118,19 +112,21 @@
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
+		DA1DC19B2952320E0005219D /* UMLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
 		DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAuthenticationViewModel.swift; sourceTree = "<group>"; };
 		DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPreview.swift; sourceTree = "<group>"; };
 		DA295CC5293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationEnvironmentVariables.swift; sourceTree = "<group>"; };
 		DA3F0F00294A2DF800A7B807 /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFeedbackView.swift; sourceTree = "<group>"; };
 		DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackView.swift; sourceTree = "<group>"; };
-		DA94AD3D294791500027B303 /* SubmissionSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchResult.swift; sourceTree = "<group>"; };
+		DA98C65E2954DE4F005727FB /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
+		DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionSearchResult.swift; sourceTree = "<group>"; };
+		DA98C6632954ED89005727FB /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
 		E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorViewModel.swift; sourceTree = "<group>"; };
 		E1BF8881291EEF2900B8FA06 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Themis/Models/Course.swift; sourceTree = SOURCE_ROOT; };
-		E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchView.swift; sourceTree = "<group>"; };
 		E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionSearchViewModel.swift; sourceTree = "<group>"; };
 		E2192ED2291E47820092CE58 /* RESTController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTController.swift; sourceTree = "<group>"; };
@@ -144,7 +140,6 @@
 		E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentViewModel.swift; path = Themis/ViewModels/Assessment/AssessmentViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E21AF047292B9D4C0096ACFC /* CodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CodeView.swift; path = Themis/Views/Assessment/CodeEditor/CodeView.swift; sourceTree = SOURCE_ROOT; };
 		E21AF048292B9D4C0096ACFC /* TabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsView.swift; path = Themis/Views/Assessment/CodeEditor/TabsView.swift; sourceTree = SOURCE_ROOT; };
-		E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThemeSettings.swift; path = Themis/Models/Appearance/ThemeSettings.swift; sourceTree = SOURCE_ROOT; };
 		E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditorFontSizeStepper.swift; path = Themis/Views/AppearanceSettings/EditorFontSizeStepper.swift; sourceTree = SOURCE_ROOT; };
 		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighlightName.swift; path = Themis/Models/Appearance/HighlightName.swift; sourceTree = SOURCE_ROOT; };
 		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppearanceSettingsView.swift; path = Themis/Views/AppearanceSettings/AppearanceSettingsView.swift; sourceTree = SOURCE_ROOT; };
@@ -152,14 +147,15 @@
 		E2CAE6382935214E00FAD327 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentSubmissionLoaderView.swift; sourceTree = "<group>"; };
+		E2DC481C294626AD00DAF0CC /* DrawingShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingShape.swift; sourceTree = "<group>"; };
+		E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingEngine.swift; sourceTree = "<group>"; };
+		E2E3852B2943800100F5854D /* CodeEditor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodeEditor; sourceTree = "<group>"; };
 		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
 		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListViewModel.swift; path = Themis/ViewModels/CourseList/CourseListViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListView.swift; path = Themis/Views/Courses/CourseListView.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExercisesListView.swift; path = Themis/Views/Exercises/ExercisesListView.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
-		F90027D92944183300C55F52 /* UMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
-		F90027DD2945FE0500C55F52 /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,16 +163,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E21AF03B292B9D0A0096ACFC /* TreeSitterLanguagesCommon in Frameworks */,
-				E21AF037292B9D0A0096ACFC /* TreeSitterJavaQueries in Frameworks */,
-				E21AF03D292B9D0A0096ACFC /* TreeSitterSwift in Frameworks */,
-				E21AF018292B9B370096ACFC /* Runestone in Frameworks */,
-				E21AF03F292B9D0A0096ACFC /* TreeSitterSwiftQueries in Frameworks */,
-				E21AF041292B9D0A0096ACFC /* TreeSitterSwiftRunestone in Frameworks */,
-				E21AF035292B9D0A0096ACFC /* TreeSitterJava in Frameworks */,
+				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
 				F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */,
-				E21AF039292B9D0A0096ACFC /* TreeSitterJavaRunestone in Frameworks */,
 				833160BA2932D79700571211 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,7 +238,6 @@
 			isa = PBXGroup;
 			children = (
 				E21AF04E292B9D4C0096ACFC /* HighlightName.swift */,
-				E21AF04A292B9D4C0096ACFC /* ThemeSettings.swift */,
 			);
 			name = Appearance;
 			path = Themis/Models/Appearance;
@@ -268,9 +256,9 @@
 		4065F859292E8A90005DAEE8 /* Assessment */ = {
 			isa = PBXGroup;
 			children = (
-				F90027DD2945FE0500C55F52 /* UMLViewModel.swift */,
 				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
 				E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */,
+				DA98C65E2954DE4F005727FB /* UMLViewModel.swift */,
 			);
 			name = Assessment;
 			path = Themis/ViewModels/Assessment;
@@ -297,6 +285,7 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
+				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
 				83396D4729155936003EF727 /* ThemisUITests */,
@@ -387,12 +376,20 @@
 			path = Submissions;
 			sourceTree = "<group>";
 		};
+		DA1DC19A2952320E0005219D /* UML */ = {
+			isa = PBXGroup;
+			children = (
+				DA1DC19B2952320E0005219D /* UMLView.swift */,
+			);
+			path = UML;
+			sourceTree = "<group>";
+		};
 		DA249E9429301E1B008DE1D5 /* SubmissionList */ = {
 			isa = PBXGroup;
 			children = (
+				DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */,
 				DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */,
 				E1DC9BA4293D28E900674F5B /* SubmissionSearchViewModel.swift */,
-				DA94AD3D294791500027B303 /* SubmissionSearchResult.swift */,
 			);
 			path = SubmissionList;
 			sourceTree = "<group>";
@@ -407,10 +404,10 @@
 			path = EditFeedback;
 			sourceTree = "<group>";
 		};
-		E1C09D3D2946A4ED00EC709B /* Custom */ = {
+		DA98C6622954ED7B005727FB /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				E1C09D3E2946A50F00EC709B /* CustomProgressView.swift */,
+				DA98C6632954ED89005727FB /* CustomProgressView.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -439,7 +436,7 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E1C09D3D2946A4ED00EC709B /* Custom */,
+				DA98C6622954ED7B005727FB /* Custom */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
 				E21AF042292B9D4C0096ACFC /* Assessment */,
 				E2192EE7291EC3100092CE58 /* Authentication */,
@@ -466,12 +463,12 @@
 		E21AF042292B9D4C0096ACFC /* Assessment */ = {
 			isa = PBXGroup;
 			children = (
-				F90027DC2945FD8E00C55F52 /* UML */,
 				E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */,
 				E21AF052292B9D4C0096ACFC /* AssessmentView.swift */,
-				0BEC4C33292EA18000F9F802 /* FiletreeSidebar */,
 				E21AF045292B9D4C0096ACFC /* CodeEditor */,
 				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
+				0BEC4C33292EA18000F9F802 /* FiletreeSidebar */,
+				DA1DC19A2952320E0005219D /* UML */,
 			);
 			name = Assessment;
 			path = Themis/Views/Assessment;
@@ -480,6 +477,7 @@
 		E21AF045292B9D4C0096ACFC /* CodeEditor */ = {
 			isa = PBXGroup;
 			children = (
+				E2DC481B294626A200DAF0CC /* Drawing */,
 				E21AF047292B9D4C0096ACFC /* CodeView.swift */,
 				E21AF048292B9D4C0096ACFC /* TabsView.swift */,
 				0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */,
@@ -494,6 +492,15 @@
 				E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */,
 			);
 			path = ExerciseViewModel;
+			sourceTree = "<group>";
+		};
+		E2DC481B294626A200DAF0CC /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */,
+				E2DC481C294626AD00DAF0CC /* DrawingShape.swift */,
+			);
+			path = Drawing;
 			sourceTree = "<group>";
 		};
 		E2E674812920326F0081238B /* Courses */ = {
@@ -515,14 +522,6 @@
 			path = Themis/Views/Exercises;
 			sourceTree = SOURCE_ROOT;
 		};
-		F90027DC2945FD8E00C55F52 /* UML */ = {
-			isa = PBXGroup;
-			children = (
-				F90027D92944183300C55F52 /* UMLView.swift */,
-			);
-			path = UML;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -542,16 +541,9 @@
 			name = Themis;
 			packageProductDependencies = (
 				E2192EE0291E6F780092CE58 /* KeychainAccess */,
-				E21AF017292B9B370096ACFC /* Runestone */,
-				E21AF034292B9D0A0096ACFC /* TreeSitterJava */,
-				E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */,
-				E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */,
-				E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */,
-				E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */,
-				E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */,
-				E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */,
 				833160B92932D79700571211 /* MarkdownUI */,
 				F911B9BF29392668003CF4C8 /* TouchVisualizer */,
+				E2E3852929437F9100F5854D /* CodeEditor */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -627,10 +619,9 @@
 			mainGroup = 83396D2129155934003EF727;
 			packageReferences = (
 				E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */,
-				E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */,
 				833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				F911B9BE29392668003CF4C8 /* XCRemoteSwiftPackageReference "TouchVisualizer" */,
+				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -686,7 +677,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n  export PATH=\"$PATH:/opt/homebrew/bin\"\n  if which swiftlint > /dev/null; then\n    swiftlint --fix && swiftlint --config swiftlint.yml\n  else\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n  fi\nfi\n";
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n  export PATH=\"$PATH:/opt/homebrew/bin\"\n  if which swiftlint > /dev/null; then\n    swiftlint --fix --config swiftlint.yml && swiftlint --config swiftlint.yml\n  else\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n  fi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -695,7 +686,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */,
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */,
+				DA98C6642954ED89005727FB /* CustomProgressView.swift in Sources */,
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				E2E67483292032870081238B /* CourseListViewModel.swift in Sources */,
@@ -707,9 +701,9 @@
 				E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */,
 				E2E6748B2920419B0081238B /* Exercise.swift in Sources */,
 				E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */,
-				F90027DA2944183300C55F52 /* UMLView.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
+				DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */,
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
@@ -728,13 +722,10 @@
 				E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
 				E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */,
-				DA94AD3E294791500027B303 /* SubmissionSearchResult.swift in Sources */,
 				E2192EE3291E74620092CE58 /* AuthenticationViewModel.swift in Sources */,
 				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
 				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
-				F90027DE2945FE0500C55F52 /* UMLViewModel.swift in Sources */,
-				E21AF056292B9D4C0096ACFC /* ThemeSettings.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
 				E2E67485292033EE0081238B /* CourseListView.swift in Sources */,
@@ -743,12 +734,13 @@
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
 				DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */,
+				DA1DC19C2952320E0005219D /* UMLView.swift in Sources */,
 				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
-				E1C09D3F2946A50F00EC709B /* CustomProgressView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
+				E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1096,20 +1088,12 @@
 				kind = branch;
 			};
 		};
-		E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */ = {
+		E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/simonbs/Runestone.git";
+			repositoryURL = "https://github.com/ZeeZide/CodeEditor.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.9;
-			};
-		};
-		E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/simonbs/TreeSitterLanguages.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.3;
+				branch = main;
+				kind = branch;
 			};
 		};
 		F911B9BE29392668003CF4C8 /* XCRemoteSwiftPackageReference "TouchVisualizer" */ = {
@@ -1133,45 +1117,10 @@
 			package = E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
 		};
-		E21AF017292B9B370096ACFC /* Runestone */ = {
+		E2E3852929437F9100F5854D /* CodeEditor */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E21AF016292B9B370096ACFC /* XCRemoteSwiftPackageReference "Runestone" */;
-			productName = Runestone;
-		};
-		E21AF034292B9D0A0096ACFC /* TreeSitterJava */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterJava;
-		};
-		E21AF036292B9D0A0096ACFC /* TreeSitterJavaQueries */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterJavaQueries;
-		};
-		E21AF038292B9D0A0096ACFC /* TreeSitterJavaRunestone */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterJavaRunestone;
-		};
-		E21AF03A292B9D0A0096ACFC /* TreeSitterLanguagesCommon */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterLanguagesCommon;
-		};
-		E21AF03C292B9D0A0096ACFC /* TreeSitterSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterSwift;
-		};
-		E21AF03E292B9D0A0096ACFC /* TreeSitterSwiftQueries */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterSwiftQueries;
-		};
-		E21AF040292B9D0A0096ACFC /* TreeSitterSwiftRunestone */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E21AF033292B9D0A0096ACFC /* XCRemoteSwiftPackageReference "TreeSitterLanguages" */;
-			productName = TreeSitterSwiftRunestone;
+			package = E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */;
+			productName = CodeEditor;
 		};
 		F911B9BF29392668003CF4C8 /* TouchVisualizer */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -111,7 +111,7 @@ class Node: Hashable, ObservableObject {
         print("\(spaces)\(name) - \(type.rawValue) - \(self.path)")
         guard let children else { return desc }
         for child in children {
-            desc += child.prettyPrint(spaces: newSpaces)  + "\n"
+            desc += child.prettyPrint(spaces: newSpaces) + "\n"
         }
         return desc
     }
@@ -212,7 +212,9 @@ extension ArtemisAPI {
 
         let convertedStructure = files.sorted { $0.key < $1.key }
             .map {
-                guard let path = URL(string: $0.key) else { return ([""], $0.value)}
+                guard let path = URL(string: $0.key) else {
+                    return ([""], $0.value)
+                }
                 return (path.pathComponents, $0.value)
             }
             .filter { $0.0 != [""] }
@@ -225,7 +227,7 @@ extension ArtemisAPI {
 
         let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
         let timeInterval = Double(nanoTime) / 1_000_000_000
-
+        
         print("Time to evaluate Parse: \(timeInterval) seconds")
         root.flatMap()
         return root
@@ -252,5 +254,4 @@ extension ArtemisAPI {
             }
         }
     }
-
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 class UMLViewModel: ObservableObject {
     @Published var imageURL: String?
-    @Published var showUMLFullScreen: Bool = false
+    @Published var showUMLFullScreen = false
     @Published var viewOffset: CGSize = .zero
     @Published var bgOpacity: Double = 1
     @Published var scale: CGFloat = 1

@@ -41,5 +41,4 @@ struct FiletreeSidebarView: View {
             .listStyle(.inset)
         }
     }
-
 }

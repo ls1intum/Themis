@@ -68,7 +68,6 @@ struct ProblemStatementCellView: View {
                         .setImageHandler(.assetImage(), forURLScheme: "asset")
                 }
             }
-
         }
         .padding()
         .onAppear {

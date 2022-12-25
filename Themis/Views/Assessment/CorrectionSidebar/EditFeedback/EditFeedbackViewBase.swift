@@ -24,7 +24,7 @@ struct EditFeedbackViewBase: View {
     let type: FeedbackType
 
     var pickerRange: [Double] {
-        Array(stride(from: -1 * maxScore, to: maxScore +  0.5, by: 0.5))
+        Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
             .sorted { $0 > $1 }
     }
 
@@ -39,7 +39,9 @@ struct EditFeedbackViewBase: View {
     func createFeedback() {
         feedback.detailText = detailText
         feedback.credits = score
-        cvm.addInlineHighlight(feedbackId: feedback.id)
+        if type == .inline {
+            cvm.addInlineHighlight(feedbackId: feedback.id)
+        }
         assessmentResult.addFeedback(feedback: feedback)
     }
 

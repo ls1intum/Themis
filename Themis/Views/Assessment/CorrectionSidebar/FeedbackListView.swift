@@ -72,7 +72,6 @@ struct FeedbackListView: View {
                     }.padding()
                 }.headerProminence(.increased)
             }
-
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             Spacer()
