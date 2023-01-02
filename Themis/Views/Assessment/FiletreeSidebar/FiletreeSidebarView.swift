@@ -4,6 +4,8 @@ struct FiletreeSidebarView: View {
     let participationID: Int?
     @ObservedObject var cvm: CodeEditorViewModel
 
+    let templateParticipationId: Int
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Filetree")
@@ -18,7 +20,10 @@ struct FiletreeSidebarView: View {
                         Button {
                             withAnimation {
                                 guard let participationID else { return }
-                                cvm.openFile(file: tree, participationId: participationID)
+                                cvm.openFile(file: tree,
+                                             participationId: participationID,
+                                             templateParticipationId: templateParticipationId
+                                )
                             }
                         } label: {
                             Text(tree.name)
