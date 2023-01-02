@@ -9,11 +9,11 @@ struct AssessmentView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
 
-    @State var showSettings: Bool = false
-    @State var showFileTree: Bool = true
+    @State var showSettings = false
+    @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
-    @State private var correctionAsPlaceholder: Bool = true
+    @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
 
@@ -30,6 +30,7 @@ struct AssessmentView: View {
                         participationID: vm.submission?.participation.id,
                         cvm: cvm,
                         loading: vm.loading
+                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
                     )
                         .padding(.top, 50)
                         .frame(width: dragWidthLeft)
@@ -131,14 +132,16 @@ struct AssessmentView: View {
                     LoadingSpinnerView(duration: 0.7, lineWidth: 5)
                 }
             }
-            if cvm.currentlySelecting {
+            if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        cvm.showAddFeedback.toggle()
+                        cvm.lassoMode.toggle()
                     } label: {
-                        Text("Feedback")
+                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
+                        Image(systemName: "pencil.and.outline")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, iconDrawingColor)
                     }
-                    .disabled(vm.readOnly || vm.loading)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -217,7 +220,8 @@ struct AssessmentView: View {
                 assessmentResult: $vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
-                showSheet: $cvm.showAddFeedback
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
             )
         }
         .task(priority: .high) {
@@ -248,8 +252,6 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
-
-                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -308,7 +310,6 @@ struct AssessmentView: View {
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
-                            print(dragWidthRight)
                             if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
