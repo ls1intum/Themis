@@ -2,10 +2,11 @@
 //  CustomProgressView.swift
 //  Themis
 //
-//  Created by Andreas Cselovszky on 12.12.22.
+//  Created by Andreas Cselovszky on 02.01.23.
 //
 
 import SwiftUI
+import Foundation
 
 struct CustomProgressView: View {
 

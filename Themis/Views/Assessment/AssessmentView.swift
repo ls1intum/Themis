@@ -29,7 +29,7 @@ struct AssessmentView: View {
                     FiletreeSidebarView(
                         participationID: vm.submission?.participation.id,
                         cvm: cvm,
-                        loading: vm.loading
+                        loading: vm.loading,
                         templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
                     )
                         .padding(.top, 50)
@@ -160,7 +160,7 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                  scoreDisplay
-             }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
@@ -200,7 +200,7 @@ struct AssessmentView: View {
                  }
                  .buttonStyle(NavigationBarButton())
                  .disabled(vm.readOnly || vm.loading)
-             }
+            }
         }
         .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
             Button("OK", role: .cancel) {

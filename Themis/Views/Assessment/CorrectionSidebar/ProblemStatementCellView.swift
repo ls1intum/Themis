@@ -45,7 +45,6 @@ struct ProblemStatementCellView: View {
                                 .background(Color(.systemBackground))
                         }
                     }
-
                 }
             }
             ForEach(vm.problemStatementParts, id: \.text) { part in
