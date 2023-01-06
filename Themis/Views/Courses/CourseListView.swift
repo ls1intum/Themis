@@ -20,9 +20,13 @@ struct CourseListView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { logoutButton }
                 ToolbarItem(placement: .primaryAction) {
-                    Picker("", selection: $courseListVM.shownCourse) {
-                        ForEach(courseListVM.pickerCourses, id: \.self) { course in
-                            Text(course?.title ?? "No course")
+                    Picker("", selection: $courseListVM.shownCourseID) {
+                        ForEach(courseListVM.pickerCourseIDs, id: \.self) { courseID in
+                            if courseID == nil {
+                                Text("No course")
+                            } else {
+                                Text(courseListVM.courseForID(id: courseID!)?.title ?? "Invalid")
+                            }
                         }
                     }
                 }
