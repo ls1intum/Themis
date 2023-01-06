@@ -31,7 +31,7 @@ class Node: Hashable, ObservableObject {
     var templateCode: String?
     @Published var diffLinesAdded: [Int] = [] // line numbers of changed lines starting from 1
     @Published var diffLinesRemoved: [Int] = []
-    private var diffCalculated: Bool = false
+    private var diffCalculated = false
     /// property that calculates a lines character range to get line number of selectedTextRange
     var lines: [NSRange]? {
         if let code = code {

@@ -13,26 +13,22 @@ struct CourseListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(courseListVM.courses, id: \.id) { course in
-                    NavigationLink {
-                        ExercisesListView(
-                            title: course.title,
-                            exercises: course.exercises
-                        )
-                    } label: {
-                        HStack {
-                            Text(course.title ?? "")
-                            Spacer()
-                            Text(course.shortName ?? "")
+            ExercisesListView(
+                exercises: courseListVM.shownCourse?.exercises ?? []
+            )
+            .navigationTitle(navTitle)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { logoutButton }
+                ToolbarItem(placement: .primaryAction) {
+                    Picker("", selection: $courseListVM.shownCourse) {
+                        ForEach(courseListVM.pickerCourses, id: \.self) { course in
+                            Text(course?.title ?? "No course")
                         }
                     }
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) { logoutButton }
-            }
-        }.task {
+        }
+        .task {
             await courseListVM.fetchAllCourses()
         }
     }
@@ -45,5 +41,12 @@ struct CourseListView: View {
         } label: {
             Text("Logout")
         }
+    }
+    
+    var navTitle: String {
+        guard let shownCourse = courseListVM.shownCourse else {
+            return "No course"
+        }
+        return "\(shownCourse.title) Exercises"
     }
 }
