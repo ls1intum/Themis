@@ -8,6 +8,7 @@
 import SwiftUI
 
 class CourseListViewModel: ObservableObject {
+    @Published var loading = false
     @Published var courses: [Course] = []
     
     private static var shownCourseIDKey = "shownCourseID"
@@ -44,6 +45,10 @@ class CourseListViewModel: ObservableObject {
 
     @MainActor
     func fetchAllCourses() async {
+        loading = true
+        defer {
+            loading = false
+        }
         do {
             self.courses = try await ArtemisAPI.getAllCourses()
             if shownCourseID == nil {

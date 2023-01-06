@@ -13,9 +13,15 @@ struct CourseListView: View {
 
     var body: some View {
         NavigationStack {
-            ExercisesListView(
-                exercises: courseListVM.shownCourse?.exercises ?? []
-            )
+            Group {
+                if courseListVM.loading {
+                    ProgressView()
+                } else {
+                    ExercisesListView(
+                        exercises: courseListVM.shownCourse?.exercises ?? []
+                    )
+                }
+            }
             .navigationTitle(navTitle)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { logoutButton }
@@ -48,6 +54,9 @@ struct CourseListView: View {
     }
     
     var navTitle: String {
+        if courseListVM.loading {
+            return ""
+        }
         guard let shownCourse = courseListVM.shownCourse else {
             return "No course"
         }
