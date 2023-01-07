@@ -1,5 +1,5 @@
 //
-//  CourseListViewModel.swift
+//  CourseViewModel.swift
 //  Themis
 //
 //  Created by Tom Rudnick on 12.11.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class CourseListViewModel: ObservableObject {
+class CourseViewModel: ObservableObject {
     @Published var loading = false
     @Published var courses: [Course] = []
     

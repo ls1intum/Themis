@@ -1,5 +1,5 @@
 //
-//  CourseListView.swift
+//  CourseView.swift
 //  Themis
 //
 //  Created by Tom Rudnick on 12.11.22.
@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct CourseListView: View {
+struct CourseView: View {
     var authenticationVM: AuthenticationViewModel
-    @StateObject var courseListVM = CourseListViewModel()
+    @StateObject var courseVM = CourseViewModel()
 
     var body: some View {
         NavigationStack {
             Group {
-                if courseListVM.loading {
+                if courseVM.loading {
                     ProgressView()
                 } else {
                     ExercisesListView(
-                        exercises: courseListVM.shownCourse?.exercises ?? []
+                        exercises: courseVM.shownCourse?.exercises ?? []
                     )
                 }
             }
@@ -26,12 +26,12 @@ struct CourseListView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { logoutButton }
                 ToolbarItem(placement: .primaryAction) {
-                    Picker("", selection: $courseListVM.shownCourseID) {
-                        ForEach(courseListVM.pickerCourseIDs, id: \.self) { courseID in
+                    Picker("", selection: $courseVM.shownCourseID) {
+                        ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
                             if courseID == nil {
                                 Text("No course")
                             } else {
-                                Text(courseListVM.courseForID(id: courseID!)?.title ?? "Invalid")
+                                Text(courseVM.courseForID(id: courseID!)?.title ?? "Invalid")
                             }
                         }
                     }
@@ -39,7 +39,7 @@ struct CourseListView: View {
             }
         }
         .task {
-            await courseListVM.fetchAllCourses()
+            await courseVM.fetchAllCourses()
         }
     }
 
@@ -54,12 +54,12 @@ struct CourseListView: View {
     }
     
     var navTitle: String {
-        if courseListVM.loading {
+        if courseVM.loading {
             return ""
         }
-        guard let shownCourse = courseListVM.shownCourse else {
+        guard let shownCourse = courseVM.shownCourse else {
             return "No course"
         }
-        return "\(shownCourse.title) Exercises"
+        return shownCourse.title
     }
 }

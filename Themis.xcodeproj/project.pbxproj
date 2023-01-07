@@ -35,6 +35,7 @@
 		DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C65E2954DE4F005727FB /* UMLViewModel.swift */; };
 		DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */; };
 		DA98C6642954ED89005727FB /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6632954ED89005727FB /* CustomProgressView.swift */; };
+		DAECE701296A1BC80025F875 /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECE700296A1BC80025F875 /* CourseView.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
@@ -66,7 +67,6 @@
 		E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3852929437F9100F5854D /* CodeEditor */; };
 		E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E460DC29292ECF00ECC0A5 /* Stack.swift */; };
 		E2E67483292032870081238B /* CourseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67482292032870081238B /* CourseListViewModel.swift */; };
-		E2E67485292033EE0081238B /* CourseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E67484292033EE0081238B /* CourseListView.swift */; };
 		E2E6748829203E350081238B /* ExercisesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExercisesListView.swift */; };
 		E2E6748B2920419B0081238B /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748A2920419B0081238B /* Exercise.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
@@ -122,6 +122,7 @@
 		DA98C65E2954DE4F005727FB /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
 		DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionSearchResult.swift; sourceTree = "<group>"; };
 		DA98C6632954ED89005727FB /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
+		DAECE700296A1BC80025F875 /* CourseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
@@ -152,7 +153,6 @@
 		E2E3852B2943800100F5854D /* CodeEditor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodeEditor; sourceTree = "<group>"; };
 		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
 		E2E67482292032870081238B /* CourseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListViewModel.swift; path = Themis/ViewModels/CourseList/CourseListViewModel.swift; sourceTree = SOURCE_ROOT; };
-		E2E67484292033EE0081238B /* CourseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseListView.swift; path = Themis/Views/Courses/CourseListView.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExercisesListView.swift; path = Themis/Views/Exercises/ExercisesListView.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
@@ -412,6 +412,14 @@
 			path = Custom;
 			sourceTree = "<group>";
 		};
+		DAECE6FF296A1BC80025F875 /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				DAECE700296A1BC80025F875 /* CourseView.swift */,
+			);
+			path = Courses;
+			sourceTree = "<group>";
+		};
 		E2192ED1291E47670092CE58 /* REST */ = {
 			isa = PBXGroup;
 			children = (
@@ -436,12 +444,12 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DAECE6FF296A1BC80025F875 /* Courses */,
 				DA98C6622954ED7B005727FB /* Custom */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
 				E21AF042292B9D4C0096ACFC /* Assessment */,
 				E2192EE7291EC3100092CE58 /* Authentication */,
 				83396D2F29155935003EF727 /* ContentView.swift */,
-				E2E674812920326F0081238B /* Courses */,
 				E2E6748629203E280081238B /* Exercises */,
 				DA0687C0292FB4610091B88A /* Submissions */,
 			);
@@ -502,15 +510,6 @@
 			);
 			path = Drawing;
 			sourceTree = "<group>";
-		};
-		E2E674812920326F0081238B /* Courses */ = {
-			isa = PBXGroup;
-			children = (
-				E2E67484292033EE0081238B /* CourseListView.swift */,
-			);
-			name = Courses;
-			path = Themis/Views/Courses;
-			sourceTree = SOURCE_ROOT;
 		};
 		E2E6748629203E280081238B /* Exercises */ = {
 			isa = PBXGroup;
@@ -709,6 +708,7 @@
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
+				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
 				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
@@ -728,7 +728,6 @@
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
-				E2E67485292033EE0081238B /* CourseListView.swift in Sources */,
 				DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */,
 				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
