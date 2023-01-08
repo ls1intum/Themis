@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
-    @StateObject var avm = AssessmentViewModel(readOnly: false)
-    @StateObject var cvm = CodeEditorViewModel()
+    @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
+    @StateObject var codeEditorVM = CodeEditorViewModel()
 
     let exercise: Exercise
 
@@ -25,7 +25,7 @@ struct ExerciseView: View {
                     }
                     Button {
                         Task {
-                            await avm.initRandomSubmission(exerciseId: exercise.id)
+                            await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
                         }
                     } label: {
                         Text("Start new Assessment")
@@ -42,10 +42,10 @@ struct ExerciseView: View {
                 ProgressView()
             }
         }
-        .navigationDestination(isPresented: $avm.showSubmission) {
+        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
-                vm: avm,
-                cvm: cvm,
+                vm: assessmentVM,
+                cvm: codeEditorVM,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? ""
             )
@@ -78,5 +78,20 @@ struct ExerciseView: View {
         }
         .padding()
         .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+    }
+}
+
+struct ExerciseView_Previews: PreviewProvider {
+    static var exerciseVM = ExerciseViewModel()
+    static var avm = AssessmentViewModel(readOnly: false)
+    static var cvm = CodeEditorViewModel()
+    static let exercise = Exercise()
+
+    static var previews: some View {
+        ExerciseView(
+            exerciseVM: exerciseVM,
+            exercise: exercise
+        )
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }
