@@ -63,6 +63,7 @@
 		E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE6382935214E00FAD327 /* ExerciseView.swift */; };
 		E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */; };
 		E2CAE63E29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */; };
+		E2D82F10296C14A800761F66 /* CourseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D82F0F296C14A800761F66 /* CourseViewModel.swift */; };
 		E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481C294626AD00DAF0CC /* DrawingShape.swift */; };
 		E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */; };
 		E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3852929437F9100F5854D /* CodeEditor */; };
@@ -149,6 +150,7 @@
 		E2CAE6382935214E00FAD327 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentSubmissionLoaderView.swift; sourceTree = "<group>"; };
+		E2D82F0F296C14A800761F66 /* CourseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseViewModel.swift; sourceTree = "<group>"; };
 		E2DC481C294626AD00DAF0CC /* DrawingShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingShape.swift; sourceTree = "<group>"; };
 		E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingEngine.swift; sourceTree = "<group>"; };
 		E2E3852B2943800100F5854D /* CodeEditor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodeEditor; sourceTree = "<group>"; };
