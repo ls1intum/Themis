@@ -8,7 +8,7 @@ struct AssessmentView: View {
     @ObservedObject var vm: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
-
+    
     @State var showSettings = false
     @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
@@ -16,12 +16,12 @@ struct AssessmentView: View {
     @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
-
+    
     private let minRightSnapWidth: CGFloat = 185
-
+    
     let exerciseId: Int
     let exerciseTitle: String
-
+    
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
@@ -32,8 +32,8 @@ struct AssessmentView: View {
                         loading: vm.loading,
                         templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
                     )
-                        .padding(.top, 50)
-                        .frame(width: dragWidthLeft)
+                    .padding(.top, 50)
+                    .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
@@ -41,7 +41,7 @@ struct AssessmentView: View {
                     cvm: cvm,
                     showFileTree: $showFileTree
                 )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
                 correctionWithPlaceholder
@@ -159,7 +159,7 @@ struct AssessmentView: View {
                 )
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                 scoreDisplay
+                scoreDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -188,18 +188,18 @@ struct AssessmentView: View {
                 .disabled(vm.readOnly || vm.loading)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                 Button {
-                     Task {
-                         await vm.initRandomSubmission(exerciseId: exerciseId)
-                         if vm.submission == nil {
-                             showNoSubmissionsAlert = true
-                         }
-                     }
-                 } label: {
-                     Text("Next")
-                 }
-                 .buttonStyle(NavigationBarButton())
-                 .disabled(vm.readOnly || vm.loading)
+                Button {
+                    Task {
+                        await vm.initRandomSubmission(exerciseId: exerciseId)
+                        if vm.submission == nil {
+                            showNoSubmissionsAlert = true
+                        }
+                    }
+                } label: {
+                    Text("Next")
+                }
+                .buttonStyle(NavigationBarButton())
+                .disabled(vm.readOnly || vm.loading)
             }
         }
         .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
@@ -212,7 +212,7 @@ struct AssessmentView: View {
                 AppearanceSettingsView(
                     fontSize: $cvm.editorFontSize
                 )
-                    .navigationTitle("Appearance settings")
+                .navigationTitle("Appearance settings")
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
@@ -234,7 +234,7 @@ struct AssessmentView: View {
         ZStack {
             Color.primary
                 .frame(maxWidth: 7, maxHeight: .infinity)
-
+            
             Rectangle()
                 .opacity(0)
                 .frame(width: 20, height: 50)
@@ -298,7 +298,7 @@ struct AssessmentView: View {
                             let minWidth: CGFloat = 0
                             let screenWidth: CGFloat = UIScreen.main.bounds.size.width
                             let maxWidth: CGFloat = screenWidth * 0.3 > minRightSnapWidth ? screenWidth * 0.3 : 1.5 * minRightSnapWidth
-
+                            
                             let delta = gesture.translation.width
                             dragWidthRight -= delta
                             if dragWidthRight > maxWidth {
@@ -306,7 +306,7 @@ struct AssessmentView: View {
                             } else if dragWidthRight < minWidth {
                                 dragWidthRight = minWidth
                             }
-
+                            
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
@@ -316,7 +316,7 @@ struct AssessmentView: View {
                         }
                 )
                 .zIndex(1)
-
+            
             if dragWidthRight > 0 {
                 Color.primary
                     .frame(maxWidth: 7, maxHeight: .infinity)
@@ -337,7 +337,11 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 CorrectionSidebarView(
-                    submission: $vm.submission,
+                    problemStatement: Binding(
+                        get: { vm.submission?.participation.exercise.problemStatement ?? "" },
+                        set: { vm.submission?.participation.exercise.problemStatement = $0 }
+                    ),
+                    exercise: vm.submission?.participation.exercise,
                     readOnly: vm.readOnly,
                     assessmentResult: $vm.assessmentResult,
                     cvm: cvm,
@@ -347,7 +351,7 @@ struct AssessmentView: View {
             }
         }
     }
-
+    
     var scoreColor: Color {
         guard let max = vm.submission?.participation.exercise.maxPoints else {
             return Color(.systemRed)
@@ -361,7 +365,7 @@ struct AssessmentView: View {
             return Color(.systemGreen)
         }
     }
-
+    
     var scoreDisplay: some View {
         Group {
             if let submission = vm.submission {
@@ -375,7 +379,7 @@ struct AssessmentView: View {
                          \(submission.participation.exercise.maxPoints
                          .formatted(FloatingPointFormatStyle()))
                          """)
-                        .foregroundColor(.white)
+                    .foregroundColor(.white)
                 }
             }
         }
@@ -387,36 +391,23 @@ extension Color {
     public static var primary: Color {
         Color("primary")
     }
-
+    
     public static var secondary: Color {
         Color("secondary")
     }
 }
 
-struct AssessmentView_Previews: PreviewProvider {
-    static let avm = AssessmentViewModel(readOnly: false)
-    static let cvm = CodeEditorViewModel()
-
-    static var previews: some View {
-        AssessmentView(
-            vm: avm,
-            cvm: cvm,
-            exerciseId: 5284,
-            exerciseTitle: "Example Exercise"
-        )
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
-
-struct NavigationBarButton: ButtonStyle {
-    @Environment(\.isEnabled) var isEnabled: Bool
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(Color(.systemBackground))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(isEnabled ? Color.secondary : Color(.systemGray))
-            .cornerRadius(20)
-            .fontWeight(.semibold)
-    }
-}
+// struct AssessmentView_Previews: PreviewProvider {
+//    static let avm = AssessmentViewModel(readOnly: false)
+//    static let cvm = CodeEditorViewModel()
+//
+//    static var previews: some View {
+//        AssessmentView(
+//            vm: avm,
+//            cvm: cvm,
+//            exerciseId: 5284,
+//            exerciseTitle: "Example Exercise"
+//        )
+//            .previewInterfaceOrientation(.landscapeLeft)
+//    }
+// }

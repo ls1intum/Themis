@@ -24,6 +24,7 @@ class AssessmentViewModel: ObservableObject {
             assessmentResult.feedbacks = submission?.results?.last?.feedbacks ?? []
             self.showSubmission = true
         } catch {
+            self.submission = nil
             print(error)
         }
     }

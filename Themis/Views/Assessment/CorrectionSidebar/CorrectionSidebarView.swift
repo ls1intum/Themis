@@ -14,7 +14,8 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    @Binding var submission: SubmissionForAssessment?
+    @Binding var problemStatement: String
+    let exercise: ExerciseOfSubmission?
     let readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
@@ -38,7 +39,7 @@ struct CorrectionSidebarView: View {
                 case .problemStatement:
                     ScrollView {
                         ProblemStatementCellView(
-                            submission: $submission,
+                            problemStatement: $problemStatement,
                             feedbacks: assessmentResult.feedbacks,
                             umlVM: umlVM
                         )
@@ -46,8 +47,8 @@ struct CorrectionSidebarView: View {
                 case .correctionGuidelines:
                     ScrollView {
                         CorrectionGuidelinesCellView(
-                            gradingCriteria: submission?.participation.exercise.gradingCriteria ?? [],
-                            gradingInstructions: submission?.participation.exercise.gradingInstructions
+                            gradingCriteria: exercise?.gradingCriteria ?? [],
+                            gradingInstructions: exercise?.gradingInstructions
                         )
                     }
                 case .generalFeedback:
@@ -64,20 +65,22 @@ struct CorrectionSidebarView: View {
     }
 }
 
-// struct CorrectionSidebarView_Previews: PreviewProvider {
-//    static let cvm = CodeEditorViewModel()
-//    static let umlVM = UMLViewModel()
-//    @State static var assessmentResult = AssessmentResult()
-//    @State stati
-//
-//    static var previews: some View {
-//        CorrectionSidebarView(
-//            readOnly: false,
-//            assessmentResult: $assessmentResult,
-//            cvm: cvm,
-//            umlVM: umlVM,
-//            submission: Submi
-//        )
-//        .previewInterfaceOrientation(.landscapeLeft)
-//    }
-// }
+ struct CorrectionSidebarView_Previews: PreviewProvider {
+    static let cvm = CodeEditorViewModel()
+    static let umlVM = UMLViewModel()
+    @State static var assessmentResult = AssessmentResult()
+    @State static var problemStatement: String = "test"
+
+    static var previews: some View {
+        CorrectionSidebarView(
+            problemStatement: $problemStatement,
+            exercise: nil,
+            readOnly: false,
+            assessmentResult: $assessmentResult,
+            cvm: cvm,
+            umlVM: umlVM,
+            loading: true
+        )
+        .previewInterfaceOrientation(.landscapeLeft)
+    }
+ }

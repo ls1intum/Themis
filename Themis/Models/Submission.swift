@@ -37,7 +37,7 @@ struct ParticipationForAssessment: Codable {
     let id: Int
     let repositoryUrl: String
     let userIndependentRepositoryUrl: String
-    let exercise: ExerciseOfSubmission
+    var exercise: ExerciseOfSubmission
 }
 
 struct Submission: Codable, Identifiable {
@@ -59,15 +59,15 @@ struct TemplateParticipation: Codable {
 }
 
 struct SubmissionForAssessment: Codable, Equatable {
-    static func == (lhs: SubmissionForAssessment, rhs: SubmissionForAssessment) -> Bool {
-        lhs.id == rhs.id
-    }
-
     let id: Int
     var participation: ParticipationForAssessment
     let feedbacks: [AssessmentFeedback]?
     let results: [SavedAssessmentResults]?
     let buildFailed: Bool
+    
+    static func == (lhs: SubmissionForAssessment, rhs: SubmissionForAssessment) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 struct SavedAssessmentResults: Codable {

@@ -11,17 +11,17 @@ import MarkdownUI
 
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var submission: SubmissionForAssessment?
+    @Binding var problemStatement: String
     var feedbacks: [AssessmentFeedback]
     @ObservedObject var umlVM: UMLViewModel
-
+    
     @StateObject var vm = ProblemStatementCellViewModel()
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Problem Statement")
                 .font(.largeTitle)
-
+            
             ZStack {
                 Divider()
                     .frame(height: 5)
@@ -69,27 +69,26 @@ struct ProblemStatementCellView: View {
             }
         }
         .padding()
-        .task(id: submission) {
-            if let submission = submission {
-                vm.convertProblemStatement(
-                    problemStatement: submission.participation.exercise.problemStatement,
-                    feedbacks: feedbacks,
-                    colorScheme: colorScheme)
-            }
+        .task(id: problemStatement) {
+            vm.convertProblemStatement(
+                problemStatement: problemStatement,
+                feedbacks: feedbacks,
+                colorScheme: colorScheme)
         }
     }
 }
 
-// struct ProblemStatementCellView_Previews: PreviewProvider {
-//    static var umlVM = UMLViewModel()
-//    static let feedbacks: [AssessmentFeedback] = []
-//
-//    static var previews: some View {
-//        ProblemStatementCellView(
-//            problemStatement: "Test",
-//            feedbacks: feedbacks,
-//            umlVM: umlVM
-//        )
-//        .previewInterfaceOrientation(.landscapeLeft)
-//    }
-// }
+struct ProblemStatementCellView_Previews: PreviewProvider {
+    static var umlVM = UMLViewModel()
+    static let feedbacks: [AssessmentFeedback] = []
+    @State static var problemStatement: String = "test"
+    
+    static var previews: some View {
+        ProblemStatementCellView(
+            problemStatement: $problemStatement,
+            feedbacks: feedbacks,
+            umlVM: umlVM
+        )
+        .previewInterfaceOrientation(.landscapeLeft)
+    }
+}

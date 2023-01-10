@@ -103,7 +103,6 @@ class ProblemStatementCellViewModel: ObservableObject {
 
             let scoreSubstring = String(line[rangeStart.lowerBound...].dropFirst().dropFirst().dropLast())
 
-            print(scoreSubstring)
             let scoreSubstringArray = scoreSubstring.components(separatedBy: ",").map { Int($0) ?? 0 }
 
             let lineScore = " (\(scoreSubstringArray.reduce(0, +)) of \(scoreSubstringArray.count) tests passing)** "
