@@ -129,7 +129,9 @@ struct AssessmentView: View {
             }
             if vm.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    LoadingSpinnerView(duration: 0.7, lineWidth: 5)
+                    ProgressView()
+                        .frame(width: 20)
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
             if !vm.readOnly {
