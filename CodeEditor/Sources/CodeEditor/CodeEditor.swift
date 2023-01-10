@@ -243,7 +243,9 @@ public struct CodeEditor: View {
                 dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>? = nil,
                 showAddFeedback: Binding<Bool>,
-                selectedSection: Binding<NSRange?>) {
+                showEditFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>,
+                feedbackForSelectionId: Binding<String>) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -260,7 +262,9 @@ public struct CodeEditor: View {
         self.dragSelection = dragSelection
         self.line = line
         self.showAddFeedback = showAddFeedback
+        self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
+        self.feedbackForSelectionId = feedbackForSelectionId
     }
 
     /**
@@ -301,7 +305,9 @@ public struct CodeEditor: View {
                 dragSelection: Binding<Range<Int>?>? = nil,
                 line: Binding<Line?>? = nil,
                 showAddFeedback: Binding<Bool>,
-                selectedSection: Binding<NSRange?>) {
+                showEditFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>,
+                feedbackForSelectionId: Binding<String>) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -316,7 +322,9 @@ public struct CodeEditor: View {
                   dragSelection: dragSelection,
                   line: line,
                   showAddFeedback: showAddFeedback,
-                  selectedSection: selectedSection)
+                  showEditFeedback: showEditFeedback,
+                  selectedSection: selectedSection,
+                  feedbackForSelectionId: feedbackForSelectionId)
     }
 
     private var source: Binding<String>
@@ -333,7 +341,9 @@ public struct CodeEditor: View {
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
+    private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
+    private var feedbackForSelectionId: Binding<String>
 
     public var body: some View {
         UXCodeTextViewRepresentable(source: source,
@@ -350,6 +360,8 @@ public struct CodeEditor: View {
                                     dragSelection: dragSelection,
                                     line: line,
                                     showAddFeedback: showAddFeedback,
-                                    selectedSection: selectedSection)
+                                    showEditFeedback: showEditFeedback,
+                                    selectedSection: selectedSection,
+                                    feedbackForSelectionId: feedbackForSelectionId)
     }
 }

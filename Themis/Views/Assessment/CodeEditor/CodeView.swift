@@ -27,7 +27,9 @@ struct CodeView: View {
                    dragSelection: $dragSelection,
                    line: $line,
                    showAddFeedback: $cvm.showAddFeedback,
-                   selectedSection: $cvm.selectedSection)
+                   showEditFeedback: $cvm.showEditFeedback,
+                   selectedSection: $cvm.selectedSection,
+                   feedbackForSelectionId: $cvm.feedbackForSelectionId)
     }
     
     var editorInLassoMode: some View {
