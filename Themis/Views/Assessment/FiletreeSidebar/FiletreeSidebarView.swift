@@ -3,6 +3,7 @@ import SwiftUI
 struct FiletreeSidebarView: View {
     let participationID: Int?
     @ObservedObject var cvm: CodeEditorViewModel
+    let loading: Bool
 
     let templateParticipationId: Int
 
@@ -12,33 +13,37 @@ struct FiletreeSidebarView: View {
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
-            List {
-                OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
-                    if tree.type == .folder {
-                        Text(tree.name)
-                    } else {
-                        Button {
-                            withAnimation {
-                                guard let participationID else { return }
-                                cvm.openFile(file: tree,
+            if !loading {
+                List {
+                    OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
+                        if tree.type == .folder {
+                            Text(tree.name)
+                        } else {
+                            Button {
+                                withAnimation {
+                                    guard let participationID else { return }
+                                    cvm.openFile(file: tree,
                                              participationId: participationID,
                                              templateParticipationId: templateParticipationId
-                                )
+                                    )
+                                }
+                            } label: {
+                                Text(tree.name)
                             }
-                        } label: {
-                            Text(tree.name)
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.horizontal)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            .bold(tree === cvm.selectedFile)
+                            .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+                            .cornerRadius(10)
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                        .bold(tree === cvm.selectedFile)
-                        .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
-                        .cornerRadius(10)
                     }
+                    .listRowSeparator(.hidden)
                 }
-                .listRowSeparator(.hidden)
+                .listStyle(.inset)
             }
-            .listStyle(.inset)
+            Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

@@ -11,17 +11,17 @@ import MarkdownUI
 
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    var problemStatement: String?
+    @Binding var problemStatement: String
     var feedbacks: [AssessmentFeedback]
     @ObservedObject var umlVM: UMLViewModel
-
+    
     @StateObject var vm = ProblemStatementCellViewModel()
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Problem Statement")
                 .font(.largeTitle)
-
+            
             ZStack {
                 Divider()
                     .frame(height: 5)
@@ -47,7 +47,6 @@ struct ProblemStatementCellView: View {
                     }
                 }
             }
-
             ForEach(vm.problemStatementParts, id: \.text) { part in
                 if let uml = part as? ProblemStatementPlantUML {
                     Button(action: {
@@ -70,9 +69,9 @@ struct ProblemStatementCellView: View {
             }
         }
         .padding()
-        .onAppear {
+        .task(id: problemStatement) {
             vm.convertProblemStatement(
-                problemStatement: problemStatement ?? "",
+                problemStatement: problemStatement,
                 feedbacks: feedbacks,
                 colorScheme: colorScheme)
         }
@@ -82,13 +81,14 @@ struct ProblemStatementCellView: View {
 struct ProblemStatementCellView_Previews: PreviewProvider {
     static var umlVM = UMLViewModel()
     static let feedbacks: [AssessmentFeedback] = []
-
+    @State static var problemStatement: String = "test"
+    
     static var previews: some View {
         ProblemStatementCellView(
-            problemStatement: "Test",
+            problemStatement: $problemStatement,
             feedbacks: feedbacks,
             umlVM: umlVM
         )
-            .previewInterfaceOrientation(.landscapeLeft)
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

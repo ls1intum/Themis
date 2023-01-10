@@ -14,11 +14,13 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    var exercise: ExerciseOfSubmission?
-    var readOnly: Bool
+    @Binding var problemStatement: String
+    let exercise: ExerciseOfSubmission?
+    let readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
+    let loading: Bool
 
     var body: some View {
         VStack {
@@ -32,46 +34,53 @@ struct CorrectionSidebarView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
-
-            switch correctionSidebarStatus {
-            case .problemStatement:
-                ScrollView {
-                    ProblemStatementCellView(
-                        problemStatement: exercise?.problemStatement,
-                        feedbacks: assessmentResult.feedbacks,
-                        umlVM: umlVM
+            if !loading {
+                switch correctionSidebarStatus {
+                case .problemStatement:
+                    ScrollView {
+                        ProblemStatementCellView(
+                            problemStatement: $problemStatement,
+                            feedbacks: assessmentResult.feedbacks,
+                            umlVM: umlVM
+                        )
+                    }
+                case .correctionGuidelines:
+                    ScrollView {
+                        CorrectionGuidelinesCellView(
+                            gradingCriteria: exercise?.gradingCriteria ?? [],
+                            gradingInstructions: exercise?.gradingInstructions
+                        )
+                    }
+                case .generalFeedback:
+                    FeedbackListView(
+                        readOnly: readOnly,
+                        assessmentResult: $assessmentResult,
+                        cvm: cvm
                     )
                 }
-            case .correctionGuidelines:
-                ScrollView {
-                    CorrectionGuidelinesCellView(
-                        gradingCriteria: exercise?.gradingCriteria ?? [],
-                        gradingInstructions: exercise?.gradingInstructions
-                    )
-                }
-            case .generalFeedback:
-                FeedbackListView(
-                    readOnly: readOnly,
-                    assessmentResult: $assessmentResult,
-                    cvm: cvm
-                )
             }
+            Spacer()
         }
+        .frame(maxHeight: .infinity, alignment: .center)
     }
 }
 
-struct CorrectionSidebarView_Previews: PreviewProvider {
+ struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
+    @State static var problemStatement: String = "test"
 
     static var previews: some View {
         CorrectionSidebarView(
+            problemStatement: $problemStatement,
+            exercise: nil,
             readOnly: false,
             assessmentResult: $assessmentResult,
             cvm: cvm,
-            umlVM: umlVM
+            umlVM: umlVM,
+            loading: true
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }
-}
+ }
