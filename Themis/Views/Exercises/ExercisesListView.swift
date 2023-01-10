@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ExercisesListView: View {
-    var title: String?
     var exercises: [Exercise]?
 
     var body: some View {
@@ -26,11 +25,7 @@ struct ExercisesListView: View {
                         }
                     }
                 }
-            }.navigationTitle(navTitle)
+            }
         }
-    }
-
-    var navTitle: String {
-        "\(title ?? "") Exercises"
     }
 }

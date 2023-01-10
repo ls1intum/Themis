@@ -14,7 +14,7 @@ struct ContentView: View {
         VStack {
             if authenticationVM.authenticated {
                 // AssessmentView()
-                CourseListView(authenticationVM: authenticationVM)
+                CourseView(authenticationVM: authenticationVM)
                 // SubmissionListView(exerciseId: 5284, exerciseTitle: "123123", templateParticipationId: 123)
             } else {
                 AuthenticationView(authenticationVM: authenticationVM)
