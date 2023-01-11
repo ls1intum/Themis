@@ -12,42 +12,47 @@ struct EditFeedbackViewBase: View {
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
-    @Binding var feedback: AssessmentFeedback
     @State var detailText = ""
     @State var score = 0.0
     @Binding var showSheet: Bool
+    
+    var idForUpdate: UUID?
 
     let maxScore = Double(10)
 
     let title: String?
     let edit: Bool
     let type: FeedbackType
+    var file: Node?
 
     var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
             .sorted { $0 > $1 }
     }
 
-    func updateFeedback() {
-        feedback.updateFeedback(detailText: detailText, credits: score)
-        assessmentResult.updateFeedback(
-            id: feedback.id,
-            feedback: feedback
-        )
+    private func updateFeedback() {
+        if let id = idForUpdate {
+            assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score)
+        }
     }
 
-    func createFeedback() {
-        feedback.detailText = detailText
-        feedback.credits = score
+    private func createFeedback() {
         if type == .inline {
+            let lines: NSRange? = cvm.selectedSectionParsed?.0
+            let columns: NSRange? = cvm.selectedSectionParsed?.1
+            let feedback = AssessmentFeedback(detailText: detailText, credits: score, type: type, file: file, lines: lines, columns: columns)
+            assessmentResult.addFeedback(feedback: feedback)
             cvm.addInlineHighlight(feedbackId: feedback.id)
+        } else {
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: .general))
         }
-        assessmentResult.addFeedback(feedback: feedback)
     }
 
     private func setStates() {
-        self.detailText = feedback.detailText ?? ""
-        self.score = feedback.credits
+        if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
+            self.detailText = feedback.detailText ?? ""
+            self.score = feedback.credits
+        }
     }
 
     var body: some View {

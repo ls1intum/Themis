@@ -200,12 +200,12 @@ struct AssessmentView: View {
             )
         }
         .sheet(isPresented: $cvm.showEditFeedback) {
-            if var feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
+            if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
                 EditFeedbackView(assessmentResult: $vm.assessmentResult,
                                  cvm: cvm,
                                  type: .inline,
                                  showSheet: $cvm.showEditFeedback,
-                                 feedback: Binding(get: { feedback }, set: { feedback = $0 }))
+                                 idForUpdate: feedback.id)
             }
         }
         .task(priority: .high) {
