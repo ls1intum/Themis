@@ -24,8 +24,7 @@ struct EditorFontSizeStepperView: View {
 
     var body: some View {
         HStack {
-            Text("Font size").bold()
-            Spacer()
+            Image(systemName: "textformat.size")
             Button(action: decrementFontSize) {
                 Label("", systemImage: "minus")
             }.backgroundStyle(Color.gray)

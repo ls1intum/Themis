@@ -9,7 +9,6 @@ struct AssessmentView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
 
-    @State var showSettings = false
     @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
@@ -138,12 +137,7 @@ struct AssessmentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showSettings.toggle()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .foregroundColor(.white)
+                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 CustomProgressView(
@@ -179,14 +173,6 @@ struct AssessmentView: View {
                 }
                 .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly)
-            }
-        }
-        .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                AppearanceSettingsView(
-                    fontSize: $cvm.editorFontSize
-                )
-                    .navigationTitle("Appearance settings")
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
