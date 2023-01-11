@@ -30,7 +30,7 @@ struct AssessmentView: View {
                         participationID: vm.submission?.participation.id,
                         cvm: cvm,
                         loading: vm.loading,
-                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
+                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation?.id ?? -1
                     )
                     .padding(.top, 50)
                     .frame(width: dragWidthLeft)
