@@ -35,6 +35,7 @@ struct FeedbackListView: View {
                             feedback: feedback
                         )
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color(UIColor.systemBackground))
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
@@ -48,6 +49,7 @@ struct FeedbackListView: View {
                             feedback: feedback
                         )
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color(UIColor.systemBackground))
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
@@ -64,6 +66,7 @@ struct FeedbackListView: View {
                             cvm: cvm,
                             feedback: feedback)
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color(UIColor.systemBackground))
                     }
                 } header: {
                     HStack {

@@ -17,7 +17,7 @@ struct CodeEditorView: View {
                 VStack {
                     HStack {
                         Spacer()
-                            .frame(width: showFileTree ? 0 : 40)
+                            .frame(width: showFileTree ? 0 : 55)
                         TabsView(cvm: cvm)
                     }
                     CodeView(
@@ -32,6 +32,5 @@ struct CodeEditorView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
     }
 }
