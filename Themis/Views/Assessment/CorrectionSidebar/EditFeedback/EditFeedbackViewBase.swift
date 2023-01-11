@@ -40,7 +40,7 @@ struct EditFeedbackViewBase: View {
         feedback.detailText = detailText
         feedback.credits = score
         if type == .inline {
-            cvm.addInlineHighlight(feedbackId: feedback.id)
+            cvm.addInlineHighlight(feedbackID: feedback.id)
         }
         assessmentResult.addFeedback(feedback: feedback)
     }

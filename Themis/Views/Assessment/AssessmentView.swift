@@ -125,39 +125,66 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    print("undo")
-                    print(vm.assessmentResult.feedbacks[0].type)
-                    withAnimation(.easeInOut) {
-                        cvm.undo()
-                        vm.assessmentResult.undo()
-                    }
-                } label: {
-                    HStack {
-                        Image(systemName: "arrow.uturn.backward")
-                    }
-                    .foregroundColor(!vm.assessmentResult.canUndo() ? .gray : .white)
-                }
-                .disabled(!vm.assessmentResult.canUndo())
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    print("redo")
-                    print(vm.assessmentResult.feedbacks[0].type)
-                    withAnimation(.easeInOut) {
-                        cvm.redo()
-                        vm.assessmentResult.redo()
-                    }
-                } label: {
-                    HStack {
-                        Image(systemName: "arrow.uturn.forward")
-                    }
-                    .foregroundColor(!vm.assessmentResult.canRedo() ? .gray : .white)
-                }
-                .disabled(!vm.assessmentResult.canRedo())
-            }
             if !vm.readOnly {
+                if !cvm.lassoMode {
+                    // undo and redo buttons for non pencil mode (only undo/redo of general feedbacks possible)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            withAnimation(.easeInOut) {
+                                vm.assessmentResult.undo()
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.uturn.backward")
+                            }
+                            .foregroundColor(!vm.assessmentResult.canUndo() ? .gray : .white)
+                        }
+                        .disabled(!vm.assessmentResult.canUndo())
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            withAnimation(.easeInOut) {
+                                vm.assessmentResult.redo()
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.uturn.forward")
+                            }
+                            .foregroundColor(!vm.assessmentResult.canRedo() ? .gray : .white)
+                        }
+                        .disabled(!vm.assessmentResult.canRedo())
+                    }
+                } else {
+                    // undo and redo buttons for pencil mode (only undo/redo of inline feedbacks possible)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            withAnimation(.easeInOut) {
+                                cvm.undo()
+                                vm.assessmentResult.undo()
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.uturn.backward")
+                            }
+                            .foregroundColor(!canUndo() ? .gray : .white)
+                        }
+                        .disabled(!canUndo())
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            withAnimation(.easeInOut) {
+                                cvm.redo()
+                                vm.assessmentResult.redo()
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.uturn.forward")
+                            }
+                            .foregroundColor(!canRedo() ? .gray : .white)
+                        }
+                        .disabled(!canRedo())
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.lassoMode.toggle()

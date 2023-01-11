@@ -12,7 +12,7 @@ enum FeedbackType {
     case general
 }
 
-class AssessmentResult: Encodable {
+class AssessmentResult: Encodable, ObservableObject {
     private var undoManager = UndoManager()
     
     var score: Double {
@@ -20,14 +20,20 @@ class AssessmentResult: Encodable {
         return score < 0 ? 0 : score
     }
 
-    private var _feedbacks: [AssessmentFeedback] = []
+    @Published var feedbacks: [AssessmentFeedback] = [] {
+        didSet {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.feedbacks = oldValue
+            }
+        }
+    }
 
-    var feedbacks: [AssessmentFeedback] {
+    private var computedFeedbacks: [AssessmentFeedback] {
         get {
-            _feedbacks
+            feedbacks
         }
         set(new) {
-            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+            feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
         }
     }
 
@@ -43,59 +49,29 @@ class AssessmentResult: Encodable {
     }
 
     var generalFeedback: [AssessmentFeedback] {
-        feedbacks
+        computedFeedbacks
             .filter { $0.type == .general && $0.assessmentType == .MANUAL }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
-        feedbacks
+        computedFeedbacks
             .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
+        computedFeedbacks.filter { $0.assessmentType == .AUTOMATIC }
     }
-
-//    mutating func addFeedback(feedback: AssessmentFeedback) {
-//        undoManager.registerUndo(withTarget: self) { target in
-//            target.deleteFeedback(id: feedback.id)
-//        }
-//        feedbacks.append(feedback)
-//    }
     
     func addFeedback(feedback: AssessmentFeedback) {
-        undoManager.registerUndo(withTarget: self) { target in
-//            target.feedbacks.removeAll { $0.id == feedback.id }
-            target.deleteFeedback(feedback: feedback)
-        }
-        feedbacks.append(feedback)
+        computedFeedbacks.append(feedback)
         print(feedbacks.count)
     }
-
-//    func deleteFeedback(id: UUID) {
-//        feedbacks.removeAll { $0.id == id }
-//    }
     
     func deleteFeedback(feedback: AssessmentFeedback) {
-        undoManager.registerUndo(withTarget: self) { target in
-            target.addFeedback(feedback: feedback)
-//            target.feedbacks.append(feedback)
-        }
-        feedbacks.removeAll { $0.id == feedback.id }
+        computedFeedbacks.removeAll { $0.id == feedback.id }
         print(feedbacks.count)
     }
-    
-//    mutating func deleteFeedback(id: UUID) {
-//        feedbacks.removeAll { $0.id == id }
-//    }
 
-//    mutating func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
-//        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
-//            return
-//        }
-//        feedbacks[index] = feedback
-//    }
-    
     func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
@@ -112,7 +88,7 @@ class AssessmentResult: Encodable {
     }
 
     func canUndo() -> Bool {
-        undoManager.canUndo
+        undoManager.canUndo && computedFeedbacks.contains { $0.assessmentType == .MANUAL }
     }
 
     func canRedo() -> Bool {
@@ -128,7 +104,7 @@ struct AssessmentFeedback: Identifiable {
     var detailText: String? /// max length = 5000
     var credits: Double /// score of element
     var assessmentType: AssessmentType = .MANUAL
-
+//    var selectedSection: NSRange?
     // custom utility attributes
     var type: FeedbackType
     var file: Node?

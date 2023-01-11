@@ -18,7 +18,13 @@ class CodeEditorViewModel: ObservableObject {
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
     @Published var selectedSection: NSRange?
-    @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
+    @Published var inlineHighlights: [String: [HighlightedRange]] = [:] {
+        didSet {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.inlineHighlights = oldValue
+            }
+        }
+    }
     @Published var showAddFeedback = false
     @Published var lassoMode = false
 
@@ -67,37 +73,23 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
 
-    func addInlineHighlight(feedbackId: UUID) {
-        undoManager.registerUndo(withTarget: self) { target in
-            if let file = target.selectedFile {
-                target.inlineHighlights[file.path]?.removeAll { $0.id == feedbackId.uuidString }
-            }
-        }
+    func addInlineHighlight(feedbackID: UUID) {
         if let file = selectedFile, let selectedSection = selectedSection {
             if (inlineHighlights.contains { $0.key == file.path }) {
-                inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackId.uuidString,
+                inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackID.uuidString,
                                                                      range: selectedSection,
                                                                      color: UIColor.systemYellow,
                                                                      cornerRadius: 8))
             } else {
-                inlineHighlights[file.path] = [HighlightedRange(id: feedbackId.uuidString,
+                inlineHighlights[file.path] = [HighlightedRange(id: feedbackID.uuidString,
                                                                 range: selectedSection,
                                                                 color: UIColor.systemYellow,
                                                                 cornerRadius: 8)]
             }
         }
     }
-//
-//    private func deleteInlineHighlightHelper(feedbackID: UUID) {
-//        if let file = selectedFile {
-//            inlineHighlights[file.path]?.removeAll { $0.id == feedbackID.uuidString }
-//        }
-//    }
-
+    
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
-        undoManager.registerUndo(withTarget: self) { target in
-            target.addInlineHighlight(feedbackId: feedback.id)
-        }
         if let filePath = feedback.file?.path {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
