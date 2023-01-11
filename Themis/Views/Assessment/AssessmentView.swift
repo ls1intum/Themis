@@ -125,6 +125,38 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    print("undo")
+                    print(vm.assessmentResult.feedbacks[0].type)
+                    withAnimation(.easeInOut) {
+                        cvm.undo()
+                        vm.assessmentResult.undo()
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "arrow.uturn.backward")
+                    }
+                    .foregroundColor(!vm.assessmentResult.canUndo() ? .gray : .white)
+                }
+                .disabled(!vm.assessmentResult.canUndo())
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    print("redo")
+                    print(vm.assessmentResult.feedbacks[0].type)
+                    withAnimation(.easeInOut) {
+                        cvm.redo()
+                        vm.assessmentResult.redo()
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "arrow.uturn.forward")
+                    }
+                    .foregroundColor(!vm.assessmentResult.canRedo() ? .gray : .white)
+                }
+                .disabled(!vm.assessmentResult.canRedo())
+            }
             if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -354,6 +386,14 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
+    }
+    
+    func canUndo() -> Bool {
+        vm.assessmentResult.canUndo() && cvm.canUndo()
+    }
+    
+    func canRedo() -> Bool {
+        vm.assessmentResult.canRedo() && cvm.canRedo()
     }
 }
 

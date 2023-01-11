@@ -5,8 +5,6 @@
 //  Created by Andreas Cselovszky on 14.11.22.
 //
 
-// swiftlint:disable line_length
-
 import Foundation
 
 enum FeedbackType {
@@ -14,7 +12,9 @@ enum FeedbackType {
     case general
 }
 
-struct AssessmentResult: Encodable {
+class AssessmentResult: Encodable {
+    private var undoManager = UndoManager()
+    
     var score: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
@@ -56,19 +56,67 @@ struct AssessmentResult: Encodable {
         feedbacks.filter { $0.assessmentType == .AUTOMATIC }
     }
 
-    mutating func addFeedback(feedback: AssessmentFeedback) {
+//    mutating func addFeedback(feedback: AssessmentFeedback) {
+//        undoManager.registerUndo(withTarget: self) { target in
+//            target.deleteFeedback(id: feedback.id)
+//        }
+//        feedbacks.append(feedback)
+//    }
+    
+    func addFeedback(feedback: AssessmentFeedback) {
+        undoManager.registerUndo(withTarget: self) { target in
+//            target.feedbacks.removeAll { $0.id == feedback.id }
+            target.deleteFeedback(feedback: feedback)
+        }
         feedbacks.append(feedback)
+        print(feedbacks.count)
     }
 
-    mutating func deleteFeedback(id: UUID) {
-        feedbacks.removeAll { $0.id == id }
+//    func deleteFeedback(id: UUID) {
+//        feedbacks.removeAll { $0.id == id }
+//    }
+    
+    func deleteFeedback(feedback: AssessmentFeedback) {
+        undoManager.registerUndo(withTarget: self) { target in
+            target.addFeedback(feedback: feedback)
+//            target.feedbacks.append(feedback)
+        }
+        feedbacks.removeAll { $0.id == feedback.id }
+        print(feedbacks.count)
     }
+    
+//    mutating func deleteFeedback(id: UUID) {
+//        feedbacks.removeAll { $0.id == id }
+//    }
 
-    mutating func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
+//    mutating func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
+//        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+//            return
+//        }
+//        feedbacks[index] = feedback
+//    }
+    
+    func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
         feedbacks[index] = feedback
+    }
+    
+    func undo() {
+        undoManager.undo()
+    }
+
+    func redo() {
+        undoManager.redo()
+    }
+
+    func canUndo() -> Bool {
+        undoManager.canUndo
+    }
+
+    func canRedo() -> Bool {
+        undoManager.canRedo
     }
 }
 

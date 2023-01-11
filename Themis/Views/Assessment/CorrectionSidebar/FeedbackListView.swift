@@ -89,7 +89,7 @@ struct FeedbackListView: View {
         indexSet
             .map { assessmentResult.feedbacks[$0] }
             .forEach {
-                assessmentResult.deleteFeedback(id: $0.id)
+                assessmentResult.deleteFeedback(feedback: $0)
                 cvm.deleteInlineHighlight(feedback: $0)
             }
     }

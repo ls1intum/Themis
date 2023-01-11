@@ -7,9 +7,12 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 import CodeEditor
 
 class CodeEditorViewModel: ObservableObject {
+    private var undoManager = UndoManager()
+    
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
@@ -65,6 +68,11 @@ class CodeEditorViewModel: ObservableObject {
     }
 
     func addInlineHighlight(feedbackId: UUID) {
+        undoManager.registerUndo(withTarget: self) { target in
+            if let file = target.selectedFile {
+                target.inlineHighlights[file.path]?.removeAll { $0.id == feedbackId.uuidString }
+            }
+        }
         if let file = selectedFile, let selectedSection = selectedSection {
             if (inlineHighlights.contains { $0.key == file.path }) {
                 inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackId.uuidString,
@@ -79,10 +87,35 @@ class CodeEditorViewModel: ObservableObject {
             }
         }
     }
+//
+//    private func deleteInlineHighlightHelper(feedbackID: UUID) {
+//        if let file = selectedFile {
+//            inlineHighlights[file.path]?.removeAll { $0.id == feedbackID.uuidString }
+//        }
+//    }
 
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
+        undoManager.registerUndo(withTarget: self) { target in
+            target.addInlineHighlight(feedbackId: feedback.id)
+        }
         if let filePath = feedback.file?.path {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
+    }
+    
+    func undo() {
+        undoManager.undo()
+    }
+
+    func redo() {
+        undoManager.redo()
+    }
+
+    func canUndo() -> Bool {
+        undoManager.canUndo
+    }
+
+    func canRedo() -> Bool {
+        undoManager.canRedo
     }
 }
