@@ -7,12 +7,21 @@
 
 import Foundation
 
-struct Course: Codable {
+struct Course: Codable, Hashable {
     let id: Int
-    let title: String?
+    let title: String
     let description: String?
     let shortName: String?
     let exercises: [Exercise]?
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Course, rhs: Course) -> Bool {
+        // exercises are not equated
+        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.description == rhs.description && lhs.shortName == rhs.shortName
+    }
 }
 
 extension ArtemisAPI {

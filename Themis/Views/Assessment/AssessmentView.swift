@@ -27,9 +27,10 @@ struct AssessmentView: View {
                 if showFileTree {
                     FiletreeSidebarView(
                         participationID: vm.submission?.participation.id,
-                        cvm: cvm
+                        cvm: cvm,
+                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
                     )
-                        .padding(.top, 50)
+                        .padding(.top, 35)
                         .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
@@ -51,8 +52,8 @@ struct AssessmentView: View {
                 Image(systemName: "sidebar.left")
                     .font(.system(size: 23))
             }
-            .padding(.top)
-            .padding(.leading, 18)
+            .padding(.top, 4)
+            .padding(.leading, 13)
         }
         .overlay {
             if umlVM.showUMLFullScreen {

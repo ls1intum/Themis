@@ -47,7 +47,6 @@ struct TabsView: View {
                 .onChange(of: cvm.selectedFile, perform: { file in
                     scrollReader.scrollTo(file, anchor: nil)
                 })
-                .padding()
             }
         }
     }

@@ -21,7 +21,11 @@ struct SubmissionListView: View {
             } else {
                 ForEach(submissionListVM.submissions, id: \.id) { submission in
                     NavigationLink {
-                        AssessmentSubmissionLoaderView(exerciseID: exerciseId, submissionID: submission.id, exerciseTitle: exerciseTitle)
+                        AssessmentSubmissionLoaderView(
+                            exerciseID: exerciseId,
+                            submissionID: submission.id,
+                            exerciseTitle: exerciseTitle
+                        )
                     } label: {
                         Text("Submission \(submission.id) by \(submission.participation.student.name)")
                     }
