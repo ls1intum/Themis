@@ -399,17 +399,17 @@ extension Color {
     }
 }
 
-// struct AssessmentView_Previews: PreviewProvider {
-//    static let avm = AssessmentViewModel(readOnly: false)
-//    static let cvm = CodeEditorViewModel()
-//
-//    static var previews: some View {
-//        AssessmentView(
-//            vm: avm,
-//            cvm: cvm,
-//            exerciseId: 5284,
-//            exerciseTitle: "Example Exercise"
-//        )
-//            .previewInterfaceOrientation(.landscapeLeft)
-//    }
-// }
+ struct AssessmentView_Previews: PreviewProvider {
+    static let avm = AssessmentViewModel(readOnly: false)
+    static let cvm = CodeEditorViewModel()
+
+    static var previews: some View {
+        AssessmentView(
+            vm: avm,
+            cvm: cvm,
+            exerciseId: 5284,
+            exerciseTitle: "Example Exercise"
+        )
+            .previewInterfaceOrientation(.landscapeLeft)
+    }
+ }
