@@ -72,7 +72,7 @@ struct AssessmentResult: Encodable {
     }
 }
 
-class AssessmentFeedback: Identifiable, Decodable {
+struct AssessmentFeedback: Identifiable, Hashable {
     // attributes from artemis
     let id = UUID()
     let created = Date()
@@ -104,12 +104,12 @@ class AssessmentFeedback: Identifiable, Decodable {
         self.buildLineDescription(lines: lines, columns: columns)
     }
 
-    func updateFeedback(detailText: String, credits: Double) {
+    mutating func updateFeedback(detailText: String, credits: Double) {
         self.detailText = detailText
         self.credits = credits
     }
 
-    func buildLineDescription(lines: NSRange?, columns: NSRange?) {
+    mutating func buildLineDescription(lines: NSRange?, columns: NSRange?) {
         guard let file = file, let lines = lines else {
             return
         }
@@ -125,23 +125,6 @@ class AssessmentFeedback: Identifiable, Decodable {
         } else {
             self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
         }
-    }
-    
-    // conformance to decodable (receive from artemis)
-    enum DecodingKeys: String, CodingKey {
-        case text
-        case detailText
-        case credits
-        case assessmentType = "type"
-    }
-
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: DecodingKeys.self)
-        text = try? values.decode(String?.self, forKey: .text)
-        detailText = try? values.decode(String?.self, forKey: .detailText)
-        credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
-        assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        type = text?.contains("at Line:") ?? false ? .inline : .general
     }
 }
 
@@ -163,11 +146,26 @@ extension AssessmentFeedback: Encodable {
     }
 }
 
-extension AssessmentFeedback: Comparable {
-    static func == (lhs: AssessmentFeedback, rhs: AssessmentFeedback) -> Bool {
-        lhs.id == rhs.id
+// receive feedbacks from artemis
+extension AssessmentFeedback: Decodable {
+    enum DecodingKeys: String, CodingKey {
+        case text
+        case detailText
+        case credits
+        case assessmentType = "type"
     }
-    
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: DecodingKeys.self)
+        text = try? values.decode(String?.self, forKey: .text)
+        detailText = try? values.decode(String?.self, forKey: .detailText)
+        credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
+        assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
+        type = text?.contains("at Line:") ?? false ? .inline : .general
+    }
+}
+
+extension AssessmentFeedback: Comparable {
     static func < (lhs: AssessmentFeedback, rhs: AssessmentFeedback) -> Bool {
         lhs.created < rhs.created
     }

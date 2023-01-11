@@ -41,7 +41,7 @@ struct FeedbackListView: View {
                 }.headerProminence(.increased)
 
                 Section {
-                    ForEach(assessmentResult.inlineFeedback) { feedback in
+                    ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
