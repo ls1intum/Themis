@@ -60,6 +60,7 @@ struct AssessmentView: View {
                 UMLView(umlVM: umlVM)
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(Color.primary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
