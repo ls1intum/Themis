@@ -13,14 +13,14 @@ struct EditFeedbackView: View {
     let type: FeedbackType
 
     @Binding var showSheet: Bool
-    @Binding var feedback: AssessmentFeedback
+    var idForUpdate: UUID
 
     var body: some View {
         EditFeedbackViewBase(
             assessmentResult: $assessmentResult,
             cvm: cvm,
-            feedback: $feedback,
             showSheet: $showSheet,
+            idForUpdate: idForUpdate,
             title: "Edit feedback",
             edit: true,
             type: type

@@ -313,7 +313,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
                     [
                         .foregroundColor: UIColor.blue,
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: hRange.color
+                        .underlineColor: hRange.color,
+                        .link: hRange.id // equals feedback id
                     ]
                     , range: hRange.range)
             }
