@@ -70,7 +70,7 @@ struct FeedbackCellView: View {
                 cvm: cvm,
                 type: feedback.type,
                 showSheet: $showEditFeedback,
-                feedback: $feedback
+                idForUpdate: feedback.id
             )
         }
         .padding()

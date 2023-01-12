@@ -27,7 +27,7 @@ struct FeedbackListView: View {
                     }
                     .disabled(readOnly)
                 }.padding()) {
-                    ForEach(assessmentResult.generalFeedback) { feedback in
+                    ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
@@ -41,7 +41,7 @@ struct FeedbackListView: View {
                 }.headerProminence(.increased)
 
                 Section {
-                    ForEach(assessmentResult.inlineFeedback) { feedback in
+                    ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
@@ -59,7 +59,7 @@ struct FeedbackListView: View {
                     }.padding()
                 }.headerProminence(.increased)
                 Section {
-                    ForEach(assessmentResult.automaticFeedback) { feedback in
+                    ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,

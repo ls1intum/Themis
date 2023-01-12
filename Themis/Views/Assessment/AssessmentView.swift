@@ -62,6 +62,7 @@ struct AssessmentView: View {
                 UMLView(umlVM: umlVM)
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(Color.primary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -225,6 +226,15 @@ struct AssessmentView: View {
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile
             )
+        }
+        .sheet(isPresented: $cvm.showEditFeedback) {
+            if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
+                EditFeedbackView(assessmentResult: $vm.assessmentResult,
+                                 cvm: cvm,
+                                 type: .inline,
+                                 showSheet: $cvm.showEditFeedback,
+                                 idForUpdate: feedback.id)
+            }
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
