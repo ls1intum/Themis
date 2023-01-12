@@ -44,14 +44,16 @@ struct EditFeedbackViewBase: View {
             assessmentResult.addFeedback(feedback: feedback)
             cvm.addInlineHighlight(feedbackId: feedback.id)
         } else {
-            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: .general))
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: type))
         }
     }
 
     private func setStates() {
-        if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
-            self.detailText = feedback.detailText ?? ""
-            self.score = feedback.credits
+        if idForUpdate != nil {
+            if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
+                self.detailText = feedback.detailText ?? ""
+                self.score = feedback.credits
+            }
         }
     }
 
