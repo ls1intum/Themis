@@ -62,7 +62,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 dragSelection: Binding<Range<Int>?>?,
                 line: Binding<Line?>?,
                 showAddFeedback: Binding<Bool>,
-                selectedSection: Binding<NSRange?>) {
+                showEditFeedback: Binding<Bool>,
+                selectedSection: Binding<NSRange?>,
+                feedbackForSelectionId: Binding<String>) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -76,7 +78,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.dragSelection = dragSelection
         self.line = line
         self.showAddFeedback = showAddFeedback
+        self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
+        self.feedbackForSelectionId = feedbackForSelectionId
     }
 
     private var source: Binding<String>
@@ -92,7 +96,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var dragSelection: Binding<Range<Int>?>?
     private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
+    private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
+    private var feedbackForSelectionId: Binding<String>
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -180,6 +186,15 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 additionalActions.append(feedbackAction)
             }
             return UIMenu(children: additionalActions + suggestedActions)
+        }
+        
+        public func textView(_ textView: UITextView, shouldInteractWith URL: URL,
+                             in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+            if interaction == .invokeDefaultAction {
+                self.parent.feedbackForSelectionId.wrappedValue = URL.absoluteString
+                self.parent.showEditFeedback.wrappedValue = true
+            }
+            return false
         }
 
         private func textViewDidChangeSelection(textView: UXCodeTextView) {

@@ -36,10 +36,11 @@ struct BundledTest: Equatable {
 class ProblemStatementCellViewModel: ObservableObject {
 
     @Published var problemStatementParts: [any ProblemStatementPart] = []
-
     @Published var bundledTests: [BundledTest] = []
 
     func convertProblemStatement(problemStatement: String, feedbacks: [AssessmentFeedback], colorScheme: ColorScheme) {
+        problemStatementParts = []
+        bundledTests = []
         var index = problemStatement.startIndex
 
         while index < problemStatement.endIndex {
@@ -102,7 +103,7 @@ class ProblemStatementCellViewModel: ObservableObject {
 
             let scoreSubstring = String(line[rangeStart.lowerBound...].dropFirst().dropFirst().dropLast())
 
-            let scoreSubstringArray = scoreSubstring.components(separatedBy: ",").map { Int($0)! }
+            let scoreSubstringArray = scoreSubstring.components(separatedBy: ",").map { Int($0) ?? 0 }
 
             let lineScore = " (\(scoreSubstringArray.reduce(0, +)) of \(scoreSubstringArray.count) tests passing)** "
 

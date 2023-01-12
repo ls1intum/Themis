@@ -64,15 +64,16 @@ struct AssessmentResult: Encodable {
         feedbacks.removeAll { $0.id == id }
     }
 
-    mutating func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
+    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        feedbacks[index] = feedback
+        feedbacks[index].detailText = detailText
+        feedbacks[index].credits = credits
     }
 }
 
-struct AssessmentFeedback: Identifiable {
+struct AssessmentFeedback: Identifiable, Hashable {
     // attributes from artemis
     let id = UUID()
     let created = Date()
