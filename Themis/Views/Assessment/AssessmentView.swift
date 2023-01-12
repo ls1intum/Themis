@@ -1,18 +1,19 @@
 import SwiftUI
 
 // swiftlint:disable type_body_length
+// swiftlint:disable closure_body_length
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @EnvironmentObject var vm: AssessmentViewModel
-    @EnvironmentObject var cvm: CodeEditorViewModel
-    @EnvironmentObject var umlVM: UMLViewModel
+    @ObservedObject var vm: AssessmentViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
+    @StateObject var umlVM = UMLViewModel()
 
-    @State var showSettings: Bool = false
-    @State var showFileTree: Bool = true
+    @State var showSettings = false
+    @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
-    @State private var correctionAsPlaceholder: Bool = true
+    @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
 
     private let minRightSnapWidth: CGFloat = 185
@@ -24,13 +25,20 @@ struct AssessmentView: View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView()
-                        .padding(.top, 50)
+                    FiletreeSidebarView(
+                        participationID: vm.submission?.participation.id,
+                        cvm: cvm,
+                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation.id ?? -1
+                    )
+                        .padding(.top, 35)
                         .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
-                CodeEditorView(showFileTree: $showFileTree)
+                CodeEditorView(
+                    cvm: cvm,
+                    showFileTree: $showFileTree
+                )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
                     .edgesIgnoringSafeArea(.bottom)
@@ -44,14 +52,12 @@ struct AssessmentView: View {
                 Image(systemName: "sidebar.left")
                     .font(.system(size: 23))
             }
-            .padding(.top)
-            .padding(.leading, 18)
+            .padding(.top, 4)
+            .padding(.leading, 13)
         }
         .overlay {
-            ZStack {
-                if umlVM.showUMLFullScreen {
-                    UMLView()
-                }
+            if umlVM.showUMLFullScreen {
+                UMLView(umlVM: umlVM)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -119,14 +125,16 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            if cvm.currentlySelecting {
+            if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        cvm.showAddFeedback.toggle()
+                        cvm.lassoMode.toggle()
                     } label: {
-                        Text("Feedback")
+                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
+                        Image(systemName: "pencil.and.outline")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, iconDrawingColor)
                     }
-                    .disabled(vm.readOnly)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -138,8 +146,10 @@ struct AssessmentView: View {
                 .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                CustomProgressView(progress: vm.feedback.score,
-                                   max: vm.submission?.participation.exercise.maxPoints ?? 0)
+                CustomProgressView(
+                    progress: vm.assessmentResult.score,
+                    max: vm.submission?.participation.exercise.maxPoints ?? 0
+                )
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 scoreDisplay
@@ -173,12 +183,20 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
-                AppearanceSettingsView(showSettings: $showSettings)
+                AppearanceSettingsView(
+                    fontSize: $cvm.editorFontSize
+                )
                     .navigationTitle("Appearance settings")
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
-            EditFeedbackView(showEditFeedback: $cvm.showAddFeedback, feedback: nil, edit: false, type: .inline)
+            AddFeedbackView(
+                assessmentResult: $vm.assessmentResult,
+                cvm: cvm,
+                type: .inline,
+                showSheet: $cvm.showAddFeedback,
+                file: cvm.selectedFile
+            )
         }
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
@@ -208,8 +226,6 @@ struct AssessmentView: View {
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
                             }
-
-                            print(dragWidthLeft)
                         }
                 )
             Image(systemName: "minus")
@@ -268,7 +284,6 @@ struct AssessmentView: View {
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
                         }
                         .onEnded {_ in
-                            print(dragWidthRight)
                             if dragWidthRight < minRightSnapWidth {
                                 dragWidthRight = 0
                             }
@@ -296,7 +311,13 @@ struct AssessmentView: View {
             if correctionAsPlaceholder {
                 EmptyView()
             } else {
-                CorrectionSidebarView()
+                CorrectionSidebarView(
+                    exercise: vm.submission?.participation.exercise,
+                    readOnly: vm.readOnly,
+                    assessmentResult: $vm.assessmentResult,
+                    cvm: cvm,
+                    umlVM: umlVM
+                )
             }
         }
     }
@@ -305,7 +326,7 @@ struct AssessmentView: View {
         guard let max = vm.submission?.participation.exercise.maxPoints else {
             return Color(.systemRed)
         }
-        let score = vm.feedback.score
+        let score = vm.assessmentResult.score
         if score < max / 3 {
             return Color(.systemRed)
         } else if score < max / 3 * 2 {
@@ -323,8 +344,10 @@ struct AssessmentView: View {
                         .foregroundColor(.red)
                 } else {
                     Text("""
-                         \(vm.feedback.score.formatted(FloatingPointFormatStyle()))/\
-                         \(submission.participation.exercise.maxPoints.formatted(FloatingPointFormatStyle()))
+                         \(Double(round(10 * vm.assessmentResult.score) / 10)
+                         .formatted(FloatingPointFormatStyle()))/\
+                         \(submission.participation.exercise.maxPoints
+                         .formatted(FloatingPointFormatStyle()))
                          """)
                         .foregroundColor(.white)
                 }
@@ -345,13 +368,16 @@ extension Color {
 }
 
 struct AssessmentView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
-    static let codeEditor = CodeEditorViewModel()
+    static let avm = AssessmentViewModel(readOnly: false)
+    static let cvm = CodeEditorViewModel()
 
     static var previews: some View {
-        AssessmentView(exerciseId: 5284, exerciseTitle: "Example Exercise")
-            .environmentObject(assessment)
-            .environmentObject(codeEditor)
+        AssessmentView(
+            vm: avm,
+            cvm: cvm,
+            exerciseId: 5284,
+            exerciseTitle: "Example Exercise"
+        )
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

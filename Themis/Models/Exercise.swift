@@ -7,13 +7,6 @@
 
 import Foundation
 
-struct Participation: Codable {
-    let id: Int
-    let testRun: Bool
-    let repositoryUrl: String
-    let userIndependentRepositoryUrl: String
-}
-
 struct Exercise: Codable {
     let id: Int
     let title: String?
@@ -23,8 +16,6 @@ struct Exercise: Codable {
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this might be nil
     let dueDate: String?
-    // let templateParticipation: Participation check again
-    // let solutionParticipation: Participation check again
 
     init() {
         self.id = -1
@@ -55,7 +46,6 @@ struct Exercise: Codable {
 struct DueDateStat: Codable {
     let inTime: Int
     let late: Int
-
 }
 /// This Struct represents the Statstics for a an Exercise
 struct ExerciseForAssessment: Codable {

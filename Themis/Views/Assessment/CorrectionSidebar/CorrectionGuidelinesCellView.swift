@@ -8,14 +8,8 @@
 import SwiftUI
 
 struct CorrectionGuidelinesCellView: View {
-    @EnvironmentObject var assessment: AssessmentViewModel
-
-    var gradingCriteria: [GradingCriterion] {
-        guard let criteria = assessment.submission?.participation.exercise.gradingCriteria else {
-            return []
-        }
-        return criteria
-    }
+    let gradingCriteria: [GradingCriterion]
+    let gradingInstructions: String?
 
     var body: some View {
 
@@ -26,7 +20,7 @@ struct CorrectionGuidelinesCellView: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text("Assessment Instructions").font(.title2)
 
-                Text(assessment.submission?.participation.exercise.gradingInstructions ?? "").padding()
+                Text(gradingInstructions ?? "").padding()
             }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -43,11 +37,8 @@ struct CorrectionGuidelinesCellView: View {
 }
 
 struct CorrectionGuidelinesCellView_Previews: PreviewProvider {
-    static var assessment = AssessmentViewModel(readOnly: false)
-
     static var previews: some View {
-        CorrectionGuidelinesCellView()
-            .environmentObject(assessment)
+        CorrectionGuidelinesCellView(gradingCriteria: [], gradingInstructions: nil)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

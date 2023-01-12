@@ -9,15 +9,14 @@ import SwiftUI
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
-    @StateObject var vm = AssessmentViewModel(readOnly: false)
+    @StateObject var avm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
-    @StateObject var umlVM = UMLViewModel()
 
     let exercise: Exercise
 
     var body: some View {
         VStack {
-            if exerciseVM.exerciseStats != nil {
+            if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil {
                 Form {
                     HStack {
                         Text("Assessed:")
@@ -26,31 +25,37 @@ struct ExerciseView: View {
                     }
                     Button {
                         Task {
-                            await vm.initRandomSubmission(exerciseId: exercise.id)
+                            await avm.initRandomSubmission(exerciseId: exercise.id)
                         }
                     } label: {
                         Text("Start new Assessment")
                             .foregroundColor(.green)
                     }
                     Section("Submission") {
-                        SubmissionListView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
+                        SubmissionListView(
+                            exerciseId: exercise.id,
+                            exerciseTitle: exercise.title ?? ""
+                        )
                     }
                 }
             } else {
                 ProgressView()
             }
         }
-        .navigationDestination(isPresented: $vm.showSubmission) {
-            AssessmentView(exerciseId: exercise.id, exerciseTitle: exercise.title ?? "")
-                .environmentObject(vm)
-                .environmentObject(cvm)
-                .environmentObject(umlVM)
+        .navigationDestination(isPresented: $avm.showSubmission) {
+            AssessmentView(
+                vm: avm,
+                cvm: cvm,
+                exerciseId: exercise.id,
+                exerciseTitle: exercise.title ?? ""
+            )
         }
         .navigationTitle(exercise.title ?? "")
         .onAppear {
-            self.exerciseVM.exercise = exercise
+            exerciseVM.exercise = exercise
             Task {
-                await exerciseVM.fetchExerciseStats()
+                await exerciseVM.fetchExercise(exerciseId: exercise.id)
+                await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
             }
         }
         .toolbar {
@@ -73,6 +78,5 @@ struct ExerciseView: View {
         }
         .padding()
         .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-
     }
 }

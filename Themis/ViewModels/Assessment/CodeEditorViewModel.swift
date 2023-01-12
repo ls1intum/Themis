@@ -6,18 +6,18 @@
 //
 
 import Foundation
-import Runestone
 import UIKit
+import CodeEditor
 
 class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
-    @Published var currentlySelecting: Bool = false
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
-    @Published var showAddFeedback: Bool = false
+    @Published var showAddFeedback = false
+    @Published var lassoMode = false
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {
@@ -36,19 +36,12 @@ class CodeEditorViewModel: ObservableObject {
         return nil
     }
 
-    func incrementFontSize() {
-        editorFontSize += 1
-    }
-
-    func decrementFontSize() {
-        if editorFontSize > 8 { editorFontSize -= 1 }
-    }
-
-    func openFile(file: Node, participationId: Int) {
+    func openFile(file: Node, participationId: Int, templateParticipationId: Int) {
         if !openFiles.contains(where: { $0.path == file.path }) {
             openFiles.append(file)
             Task {
-                try await file.fetchCode(participationId: participationId)
+                await file.fetchCode(participationId: participationId)
+                await file.calculateDiff(templateParticipationId: templateParticipationId)
             }
         }
         selectedFile = file
