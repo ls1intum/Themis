@@ -26,7 +26,9 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
     @Published var showAddFeedback = false
+    @Published var showEditFeedback = false
     @Published var lassoMode = false
+    @Published var feedbackForSelectionId = ""
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {

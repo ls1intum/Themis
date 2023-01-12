@@ -27,7 +27,7 @@ struct FeedbackListView: View {
                     }
                     .disabled(readOnly)
                 }.padding()) {
-                    ForEach(assessmentResult.generalFeedback) { feedback in
+                    ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
@@ -35,12 +35,13 @@ struct FeedbackListView: View {
                             feedback: feedback
                         )
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color(UIColor.systemBackground))
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
 
                 Section {
-                    ForEach(assessmentResult.inlineFeedback) { feedback in
+                    ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
@@ -48,6 +49,7 @@ struct FeedbackListView: View {
                             feedback: feedback
                         )
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color(UIColor.systemBackground))
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
@@ -57,13 +59,14 @@ struct FeedbackListView: View {
                     }.padding()
                 }.headerProminence(.increased)
                 Section {
-                    ForEach(assessmentResult.automaticFeedback) { feedback in
+                    ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
                             feedback: feedback)
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color(UIColor.systemBackground))
                     }
                 } header: {
                     HStack {

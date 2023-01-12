@@ -5,6 +5,8 @@
 //  Created by Andreas Cselovszky on 14.11.22.
 //
 
+// swiftlint:disable line_length
+
 import Foundation
 
 enum FeedbackType {
@@ -72,11 +74,12 @@ class AssessmentResult: Encodable, ObservableObject {
         print(feedbacks.count)
     }
 
-    func updateFeedback(id: UUID, feedback: AssessmentFeedback) {
+    func updateFeedback(id: UUID, feedback: AssessmentFeedback, detailText: String, credits: Double) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        feedbacks[index] = feedback
+        feedbacks[index].detailText = detailText
+        feedbacks[index].credits = credits
     }
     
     func undo() {
@@ -96,7 +99,7 @@ class AssessmentResult: Encodable, ObservableObject {
     }
 }
 
-struct AssessmentFeedback: Identifiable {
+struct AssessmentFeedback: Identifiable, Hashable {
     // attributes from artemis
     let id = UUID()
     let created = Date()

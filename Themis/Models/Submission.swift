@@ -37,7 +37,7 @@ struct ParticipationForAssessment: Codable {
     let id: Int
     let repositoryUrl: String
     let userIndependentRepositoryUrl: String
-    let exercise: ExerciseOfSubmission
+    var exercise: ExerciseOfSubmission
 }
 
 struct Submission: Codable, Identifiable {
@@ -48,27 +48,31 @@ struct Submission: Codable, Identifiable {
 
 struct ExerciseOfSubmission: Codable {
     let maxPoints: Double
-    let problemStatement: String
+    var problemStatement: String
     let gradingInstructions: String
     let gradingCriteria: [GradingCriterion]?
-    let templateParticipation: TemplateParticipation
+    let templateParticipation: TemplateParticipation?
 }
 
 struct TemplateParticipation: Codable {
     let id: Int
 }
 
-struct SubmissionForAssessment: Codable {
+struct SubmissionForAssessment: Codable, Equatable {
     let id: Int
-    let participation: ParticipationForAssessment
+    var participation: ParticipationForAssessment
     let feedbacks: [AssessmentFeedback]?
     let results: [SavedAssessmentResults]?
     let buildFailed: Bool
+    
+    static func == (lhs: SubmissionForAssessment, rhs: SubmissionForAssessment) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 struct SavedAssessmentResults: Codable {
     let score: Double?
-    let feedbacks: [AssessmentFeedback]
+    let feedbacks: [AssessmentFeedback]?
 }
 
 struct GradingCriterion: Codable, Identifiable {
