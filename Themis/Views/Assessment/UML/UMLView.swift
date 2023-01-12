@@ -10,7 +10,7 @@ import CachedAsyncImage
 
 struct UMLView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var umlVM: UMLViewModel
+    @ObservedObject var umlVM: UMLViewModel
     @State var viewOffset: CGSize = .zero
     @State private var currentTranslation: CGSize = .zero
 
@@ -78,5 +78,5 @@ struct UMLView: View {
 }
 
 extension URLCache {
-    static let imageCache = URLCache(memoryCapacity: 512*1000*1000, diskCapacity: 10*1000*1000*1000)
+    static let imageCache = URLCache(memoryCapacity: 512 * 1000 * 1000, diskCapacity: 10 * 1000 * 1000 * 1000)
 }
