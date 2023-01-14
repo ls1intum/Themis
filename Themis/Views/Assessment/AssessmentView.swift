@@ -15,6 +15,7 @@ struct AssessmentView: View {
     @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
+    @State var showStepper = false
     
     private let minRightSnapWidth: CGFloat = 185
     
@@ -147,7 +148,7 @@ struct AssessmentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
+                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 CustomProgressView(
