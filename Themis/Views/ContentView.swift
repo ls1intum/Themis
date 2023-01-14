@@ -20,11 +20,13 @@ struct ContentView: View {
                 AuthenticationView(authenticationVM: authenticationVM)
             }
         }
-        .onAppear {
-            if bearerTokenAuth {
+        // TODO: remove after bearer token auth is gone
+        .task {
+            if Authentication.shared.isBearerTokenAuthNeeded() {
                 authenticationVM.searchForToken()
             }
         }
+        // end TODO
     }
 }
 

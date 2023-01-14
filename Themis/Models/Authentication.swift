@@ -24,6 +24,46 @@ class Authentication: NSObject {
     }
     @objc dynamic var token: String?
     let keychain: Keychain
+    
+    private func getArtemisMajorVersion() async throws -> Int? {
+        let request = URLRequest(url: RESTController.shared.baseURL)
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let version = (response as? HTTPURLResponse)?.value(forHTTPHeaderField: "Content-Version") as? String else {
+            return nil
+        }
+        guard let major = version.split(separator: ".").first else {
+            return nil
+        }
+        return Int(major)
+    }
+    
+    private var needsBearerTokenAuth = false
+    private var needsBearerTokenAuthLoaded = false
+    
+    private func fetchNeedsBearerTokenAuth() async {
+        if let mVersion = try? await getArtemisMajorVersion() {
+            needsBearerTokenAuth = mVersion < 6
+            needsBearerTokenAuthLoaded = true
+        } else {
+            // for now just try using cookies
+            needsBearerTokenAuth = false
+            needsBearerTokenAuthLoaded = false
+        }
+    }
+    
+    func isBearerTokenAuthNeeded() -> Bool {
+        if needsBearerTokenAuthLoaded {
+            return needsBearerTokenAuth
+        }
+        Task {
+            await fetchNeedsBearerTokenAuth()
+        }
+        return needsBearerTokenAuth
+    }
+    
+    func invalidateNeedsBearerToken() {
+        needsBearerTokenAuthLoaded = false
+    }
     // end TODO
 
     let url: URL
@@ -85,7 +125,7 @@ class Authentication: NSObject {
     func auth(username: String, password: String, rememberMe: Bool = false) async throws {
         let body = AuthBody(username: username, password: password, rememberMe: rememberMe)
         let request = Request(method: .post, path: "/api/authenticate", body: body)
-        if bearerTokenAuth {
+        if try await self.isBearerTokenAuthNeeded() {
             self.token = try await RESTController.shared.sendRequest(request) { try parseAuth(data: $0) }
         } else {
             try await RESTController.shared.sendRequest(request)
@@ -97,6 +137,7 @@ class Authentication: NSObject {
         let request = Request(method: .post, path: "/api/logout")
         try await RESTController.shared.sendRequest(request)
         checkAuth()
+        invalidateNeedsBearerToken()
     }
 
     func checkAuth() {

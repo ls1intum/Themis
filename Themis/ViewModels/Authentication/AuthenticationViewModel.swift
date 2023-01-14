@@ -23,6 +23,9 @@ class AuthenticationViewModel: ObservableObject {
                 RESTController.shared = RESTController(baseURL: url)
                 restControllerInitialized = true
             }
+            // TODO: remove after bearer tokens are gone
+            Authentication.shared.invalidateNeedsBearerToken()
+            // end TODO
         }
     }
 
@@ -59,7 +62,7 @@ class AuthenticationViewModel: ObservableObject {
             restControllerInitialized = true
             Authentication.shared = Authentication(for: serverURL)
         }
-        if bearerTokenAuth {
+        if Authentication.shared.isBearerTokenAuthNeeded() {
             observeAuthenticationToken()
         } else {
             observeAuthenticationStatus()
@@ -101,7 +104,8 @@ class AuthenticationViewModel: ObservableObject {
             .receive(on: RunLoop.main)
             .sink { token in
                 self.authenticated = token != nil
-            }.store(in: &cancellable)
+            }
+            .store(in: &cancellable)
     }
     // end TODO
 
@@ -116,7 +120,7 @@ class AuthenticationViewModel: ObservableObject {
         }
         do {
             try await Authentication.shared.auth(username: username, password: password, rememberMe: rememberMe)
-            if bearerTokenAuth {
+            if Authentication.shared.isBearerTokenAuthNeeded() {
                 if let token = Authentication.shared.token {
                     Authentication.shared.storeTokenInKeychain(token: token)
                 }
@@ -138,7 +142,7 @@ class AuthenticationViewModel: ObservableObject {
 
     /// Logs the User out by deleting the cookie
     func logout() async {
-        if bearerTokenAuth {
+        if Authentication.shared.isBearerTokenAuthNeeded() {
             Authentication.shared.deleteToken()
         } else {
             do {
