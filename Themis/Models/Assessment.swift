@@ -20,7 +20,7 @@ struct AssessmentResult: Encodable {
         return score < 0 ? 0 : score
     }
 
-    private var _feedbacks: [AssessmentFeedback] = []
+    var _feedbacks: [AssessmentFeedback] = []
 
     var feedbacks: [AssessmentFeedback] {
         get {
@@ -34,12 +34,16 @@ struct AssessmentResult: Encodable {
     enum CodingKeys: CodingKey {
         case score
         case feedbacks
+        case testCaseCount
+        case passedTestCaseCount
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(score, forKey: .score)
         try container.encode(feedbacks, forKey: .feedbacks)
+        try container.encode(automaticFeedback.count, forKey: .testCaseCount)
+        try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
     }
 
     var generalFeedback: [AssessmentFeedback] {
@@ -82,6 +86,7 @@ struct AssessmentFeedback: Identifiable, Hashable {
     var reference: String?
     var credits: Double /// score of element
     var assessmentType: AssessmentType = .MANUAL
+    var positive: Bool
 
     // custom utility attributes
     var type: FeedbackType
@@ -103,6 +108,7 @@ struct AssessmentFeedback: Identifiable, Hashable {
         self.assessmentType = assessmentType
         self.type = type
         self.file = file
+        self.positive = true
         self.buildLineDescription(lines: lines, columns: columns)
     }
 
@@ -138,6 +144,7 @@ extension AssessmentFeedback: Encodable {
         case detailText
         case reference
         case credits
+        case positive
         case assessmentType = "type"
     }
 
@@ -147,6 +154,7 @@ extension AssessmentFeedback: Encodable {
         try container.encode(detailText, forKey: .detailText)
         try container.encode(reference, forKey: .reference)
         try container.encode(credits, forKey: .credits)
+        try container.encode(positive, forKey: .positive)
         try container.encode(assessmentType, forKey: .assessmentType)
     }
 }
@@ -158,6 +166,7 @@ extension AssessmentFeedback: Decodable {
         case detailText
         case credits
         case assessmentType = "type"
+        case positive
     }
 
     init(from decoder: Decoder) throws {
@@ -166,6 +175,7 @@ extension AssessmentFeedback: Decodable {
         detailText = try? values.decode(String?.self, forKey: .detailText)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
+        positive = try values.decode(Bool.self, forKey: .positive)
         type = text?.contains("at line") ?? false ? .inline : .general
     }
 }
@@ -178,7 +188,6 @@ extension AssessmentFeedback: Comparable {
 
 enum AssessmentType: String, Codable {
     case AUTOMATIC
-    case SEMI_AUTOMATIC
     case MANUAL
 }
 
