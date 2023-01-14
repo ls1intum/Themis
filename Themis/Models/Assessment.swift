@@ -20,7 +20,7 @@ struct AssessmentResult: Encodable {
         return score < 0 ? 0 : score
     }
 
-    var _feedbacks: [AssessmentFeedback] = []
+    private var _feedbacks: [AssessmentFeedback] = []
 
     var feedbacks: [AssessmentFeedback] {
         get {
