@@ -37,41 +37,30 @@ class Authentication: NSObject {
         return Int(major)
     }
     
-    private var needsBearerTokenAuth = false
-    private var needsBearerTokenAuthLoaded = false
-    
+    private var bearerTokenAuthNeeded = false
     private func fetchNeedsBearerTokenAuth() async {
         if let mVersion = try? await getArtemisMajorVersion() {
-            needsBearerTokenAuth = mVersion < 6
-            needsBearerTokenAuthLoaded = true
+            bearerTokenAuthNeeded = mVersion < 6
         } else {
-            // for now just try using cookies
-            needsBearerTokenAuth = false
-            needsBearerTokenAuthLoaded = false
+            print("Fetching bearer token auth info did not work! Trying again...")
+            try? await Task.sleep(until: .now + .seconds(5), clock: .continuous)
+            await fetchNeedsBearerTokenAuth()
         }
     }
     
     func isBearerTokenAuthNeeded() -> Bool {
-        if needsBearerTokenAuthLoaded {
-            return needsBearerTokenAuth
-        }
+        print("loading...")
         Task {
             await fetchNeedsBearerTokenAuth()
         }
-        return needsBearerTokenAuth
-    }
-    
-    func invalidateNeedsBearerToken() {
-        needsBearerTokenAuthLoaded = false
+        print("loaded: bearerTokenAuthNeeded = \(bearerTokenAuthNeeded)")
+        return bearerTokenAuthNeeded
     }
     // end TODO
 
-    let url: URL
-
     @objc dynamic var authenticated = false
 
-    init(for url: URL) {
-        self.url = url
+    override init() {
         keychain = Keychain(service: "feedback2go.auth")
         super.init()
     }
@@ -125,7 +114,7 @@ class Authentication: NSObject {
     func auth(username: String, password: String, rememberMe: Bool = false) async throws {
         let body = AuthBody(username: username, password: password, rememberMe: rememberMe)
         let request = Request(method: .post, path: "/api/authenticate", body: body)
-        if try await self.isBearerTokenAuthNeeded() {
+        if self.isBearerTokenAuthNeeded() {
             self.token = try await RESTController.shared.sendRequest(request) { try parseAuth(data: $0) }
         } else {
             try await RESTController.shared.sendRequest(request)
@@ -137,11 +126,10 @@ class Authentication: NSObject {
         let request = Request(method: .post, path: "/api/logout")
         try await RESTController.shared.sendRequest(request)
         checkAuth()
-        invalidateNeedsBearerToken()
     }
 
     func checkAuth() {
-        let cookie = HTTPCookieStorage.shared.cookies(for: url)?.first { cookie in
+        let cookie = HTTPCookieStorage.shared.cookies(for: RESTController.shared.baseURL)?.first { cookie in
             guard let exp = cookie.expiresDate else {
                 return false
             }

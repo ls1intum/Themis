@@ -23,9 +23,6 @@ class AuthenticationViewModel: ObservableObject {
                 RESTController.shared = RESTController(baseURL: url)
                 restControllerInitialized = true
             }
-            // TODO: remove after bearer tokens are gone
-            Authentication.shared.invalidateNeedsBearerToken()
-            // end TODO
         }
     }
 
@@ -60,7 +57,7 @@ class AuthenticationViewModel: ObservableObject {
         if let serverURL = generateURL(serverURL: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
-            Authentication.shared = Authentication(for: serverURL)
+            Authentication.shared = Authentication()
         }
         if Authentication.shared.isBearerTokenAuthNeeded() {
             observeAuthenticationToken()
