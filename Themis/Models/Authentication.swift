@@ -49,11 +49,9 @@ class Authentication: NSObject {
     }
     
     func isBearerTokenAuthNeeded() -> Bool {
-        print("loading...")
         Task {
             await fetchNeedsBearerTokenAuth()
         }
-        print("loaded: bearerTokenAuthNeeded = \(bearerTokenAuthNeeded)")
         return bearerTokenAuthNeeded
     }
     // end TODO
