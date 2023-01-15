@@ -9,13 +9,13 @@ struct AssessmentView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
     
-    @State var showSettings = false
     @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
+    @State var showStepper = false
     
     private let minRightSnapWidth: CGFloat = 185
     
@@ -207,12 +207,7 @@ struct AssessmentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showSettings.toggle()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .foregroundColor(.white)
+                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 CustomProgressView(
@@ -267,14 +262,6 @@ struct AssessmentView: View {
         .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
             Button("OK", role: .cancel) {
                 presentationMode.wrappedValue.dismiss()
-            }
-        }
-        .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                AppearanceSettingsView(
-                    fontSize: $cvm.editorFontSize
-                )
-                .navigationTitle("Appearance settings")
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {

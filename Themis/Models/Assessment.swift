@@ -42,12 +42,16 @@ class AssessmentResult: Encodable, ObservableObject {
     enum CodingKeys: CodingKey {
         case score
         case feedbacks
+        case testCaseCount
+        case passedTestCaseCount
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(score, forKey: .score)
         try container.encode(feedbacks, forKey: .feedbacks)
+        try container.encode(automaticFeedback.count, forKey: .testCaseCount)
+        try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
     }
 
     var generalFeedback: [AssessmentFeedback] {
@@ -105,9 +109,11 @@ struct AssessmentFeedback: Identifiable, Hashable {
     let created = Date()
     var text: String? /// max length = 500
     var detailText: String? /// max length = 5000
+    var reference: String?
     var credits: Double /// score of element
     var assessmentType: AssessmentType = .MANUAL
-//    var selectedSection: NSRange?
+    var positive: Bool
+
     // custom utility attributes
     var type: FeedbackType
     var file: Node?
@@ -128,6 +134,7 @@ struct AssessmentFeedback: Identifiable, Hashable {
         self.assessmentType = assessmentType
         self.type = type
         self.file = file
+        self.positive = true
         self.buildLineDescription(lines: lines, columns: columns)
     }
 
@@ -143,14 +150,15 @@ struct AssessmentFeedback: Identifiable, Hashable {
         if lines.location == 0 {
             return
         }
+        self.reference = "file:" + file.path + "_line:\(lines.location)"
         guard let columns else {
-            self.text = file.name + " at Lines: \(lines.location)-\(lines.location + lines.length)"
+            self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
             return
         }
         if columns.length == 0 {
-            self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)"
+            self.text = "File " + file.path + " at line \(lines.location) column \(columns.location)"
         } else {
-            self.text = file.name + " at Line: \(lines.location) Col: \(columns.location)-\(columns.location + columns.length)"
+            self.text = "File " + file.path + " at line \(lines.location) column \(columns.location)-\(columns.location + columns.length)"
         }
     }
 }
@@ -160,7 +168,9 @@ extension AssessmentFeedback: Encodable {
     enum EncodingKeys: String, CodingKey {
         case text
         case detailText
+        case reference
         case credits
+        case positive
         case assessmentType = "type"
     }
 
@@ -168,7 +178,9 @@ extension AssessmentFeedback: Encodable {
         var container = encoder.container(keyedBy: EncodingKeys.self)
         try container.encode(text, forKey: .text)
         try container.encode(detailText, forKey: .detailText)
+        try container.encode(reference, forKey: .reference)
         try container.encode(credits, forKey: .credits)
+        try container.encode(positive, forKey: .positive)
         try container.encode(assessmentType, forKey: .assessmentType)
     }
 }
@@ -180,6 +192,7 @@ extension AssessmentFeedback: Decodable {
         case detailText
         case credits
         case assessmentType = "type"
+        case positive
     }
 
     init(from decoder: Decoder) throws {
@@ -188,7 +201,8 @@ extension AssessmentFeedback: Decodable {
         detailText = try? values.decode(String?.self, forKey: .detailText)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        type = text?.contains("at Line:") ?? false ? .inline : .general
+        positive = try values.decode(Bool.self, forKey: .positive)
+        type = text?.contains("at line") ?? false ? .inline : .general
     }
 }
 
@@ -200,7 +214,6 @@ extension AssessmentFeedback: Comparable {
 
 enum AssessmentType: String, Codable {
     case AUTOMATIC
-    case SEMI_AUTOMATIC
     case MANUAL
 }
 

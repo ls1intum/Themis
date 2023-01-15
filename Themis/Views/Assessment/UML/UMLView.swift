@@ -1,52 +1,63 @@
 //
-//  ImageView.swift
+//  UMLView.swift
 //  Themis
 //
 //  Created by Evan Christopher on 10.12.22.
 //
-
 import Foundation
 import SwiftUI
+import CachedAsyncImage
 
 struct UMLView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var umlVM: UMLViewModel
-    @GestureState var draggingOffset: CGSize = .zero
+    @State var viewOffset: CGSize = .zero
+    @State private var currentTranslation: CGSize = .zero
 
     var body: some View {
         ZStack {
             if colorScheme == .light {
-                Color.white.ignoresSafeArea().opacity(umlVM.bgOpacity)
+                Color.gray.ignoresSafeArea().opacity(0.6)
             } else {
-                Color.black.ignoresSafeArea().opacity(umlVM.bgOpacity)
+                Color.black.ignoresSafeArea().opacity(0.9)
             }
 
-            AsyncImage(url: URL(string: umlVM.imageURL ?? "")) { image in
+            CachedAsyncImage(url: URL(string: umlVM.imageURL ?? ""), urlCache: .imageCache) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
-                    .offset(y: umlVM.viewOffset.height)
-                    .opacity(umlVM.bgOpacity)
-                    .scaleEffect(umlVM.scale > 1 ? umlVM.scale : 1)
+                    .offset(x: viewOffset.width + currentTranslation.width, y: viewOffset.height + currentTranslation.height)
+                    .scaleEffect(umlVM.scale)
                     .gesture(
                         // zoom in or out
-                        MagnificationGesture().onChanged({ value in
-                            umlVM.scale = value
-                        })
-                        .onEnded({ value in
-                            withAnimation(.spring()) {
-                                umlVM.scale = value
+                        MagnificationGesture()
+                            .onChanged { value in
+                                umlVM.scale = value.magnitude
                             }
-                        })
-                        .simultaneously(with: TapGesture(count: 2).onEnded({
-                            withAnimation {
-                                // double tap to zoom in (2x scale)
-                                umlVM.scale = umlVM.scale > 1 ? 1 : 2
-                            }
-                        })
-                    )
+                            .simultaneously(with: TapGesture(count: 2)
+                                .onEnded({
+                                    withAnimation(.spring()) { umlVM.scale = umlVM.scale > 1 ? 1 : 2 } // double tap to zoom in (2x scale)
+                                })
+                            )
+                            .simultaneously(with: DragGesture()
+                                .onChanged { value in
+                                    withAnimation(.default) {
+                                        currentTranslation = value.translation
+                                    }
+                                }
+
+                                .onEnded { value in
+                                    withAnimation(.default) {
+                                        self.viewOffset.width += value.translation.width
+                                        self.viewOffset.height += value.translation.height
+                                        self.currentTranslation = .zero
+                                    }
+                                }
+                            )
                     )
             } placeholder: {
                 ProgressView()
+            }.onDisappear {
+                umlVM.scale = 1
             }
         }
         .overlay(
@@ -58,19 +69,14 @@ struct UMLView: View {
                 Image(systemName: "xmark")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.gray.opacity(0.6))
+                    .background(Color.gray.opacity(0.7))
                     .clipShape(Circle())
             }).padding(5),
             alignment: .topTrailing
         )
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    umlVM.onChange(value: gesture.translation)
-                }
-                .onEnded { value in
-                    umlVM.onEnd(value: value)
-                }
-        )
     }
+}
+
+extension URLCache {
+    static let imageCache = URLCache(memoryCapacity: 512 * 1000 * 1000, diskCapacity: 10 * 1000 * 1000 * 1000)
 }
