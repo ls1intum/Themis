@@ -46,6 +46,7 @@ struct ExerciseView: View {
             AssessmentView(
                 vm: avm,
                 cvm: cvm,
+                ar: avm.assessmentResult,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? ""
             )

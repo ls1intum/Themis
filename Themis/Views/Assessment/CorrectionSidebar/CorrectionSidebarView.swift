@@ -17,7 +17,7 @@ struct CorrectionSidebarView: View {
     @Binding var problemStatement: String
     let exercise: ExerciseOfSubmission?
     let readOnly: Bool
-    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
     let loading: Bool
@@ -54,7 +54,7 @@ struct CorrectionSidebarView: View {
                 case .generalFeedback:
                     FeedbackListView(
                         readOnly: readOnly,
-                        assessmentResult: $assessmentResult,
+                        assessmentResult: assessmentResult,
                         cvm: cvm
                     )
                 }
@@ -76,7 +76,7 @@ struct CorrectionSidebarView: View {
             problemStatement: $problemStatement,
             exercise: nil,
             readOnly: false,
-            assessmentResult: $assessmentResult,
+            assessmentResult: assessmentResult,
             cvm: cvm,
             umlVM: umlVM,
             loading: true

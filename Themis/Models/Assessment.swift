@@ -14,8 +14,14 @@ enum FeedbackType {
     case general
 }
 
+/// class to share UndoManager between CodeEditorViewModel and AssessmentResult
+class UndoManagerSingleton {
+    static let shared = UndoManagerSingleton()
+    let undoManager = UndoManager()
+}
+
 class AssessmentResult: Encodable, ObservableObject {
-    private var undoManager = UndoManager()
+    let undoManager = UndoManagerSingleton.shared.undoManager
     
     var score: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
@@ -30,7 +36,7 @@ class AssessmentResult: Encodable, ObservableObject {
         }
     }
 
-    private var computedFeedbacks: [AssessmentFeedback] {
+    var computedFeedbacks: [AssessmentFeedback] {
         get {
             feedbacks
         }
@@ -67,37 +73,43 @@ class AssessmentResult: Encodable, ObservableObject {
     var automaticFeedback: [AssessmentFeedback] {
         computedFeedbacks.filter { $0.assessmentType == .AUTOMATIC }
     }
-    
+
     func addFeedback(feedback: AssessmentFeedback) {
+        if feedback.type == .inline {
+            undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+        }
         computedFeedbacks.append(feedback)
-        print(feedbacks.count)
-    }
-    
-    func deleteFeedback(feedback: AssessmentFeedback) {
-        computedFeedbacks.removeAll { $0.id == feedback.id }
-        print(feedbacks.count)
+        print(computedFeedbacks.count)
     }
 
-    func updateFeedback(id: UUID, feedback: AssessmentFeedback, detailText: String, credits: Double) {
+    func deleteFeedback(id: UUID) {
+         if computedFeedbacks.contains { $0.id == id && $0.type == .inline } {
+             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+         }
+        computedFeedbacks.removeAll { $0.id == id }
+        print(computedFeedbacks.count)
+    }
+
+    func updateFeedback(id: UUID, detailText: String, credits: Double) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        feedbacks[index].detailText = detailText
-        feedbacks[index].credits = credits
+        computedFeedbacks[index].detailText = detailText
+        computedFeedbacks[index].credits = credits
     }
     
     func undo() {
         undoManager.undo()
     }
-
+    
     func redo() {
         undoManager.redo()
     }
-
+    
     func canUndo() -> Bool {
-        undoManager.canUndo && computedFeedbacks.contains { $0.assessmentType == .MANUAL }
+        undoManager.canUndo
     }
-
+    
     func canRedo() -> Bool {
         undoManager.canRedo
     }

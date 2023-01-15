@@ -11,7 +11,7 @@ import SwiftUI
 import CodeEditor
 
 class CodeEditorViewModel: ObservableObject {
-    private var undoManager = UndoManager()
+    let undoManager = UndoManagerSingleton.shared.undoManager
     
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
@@ -75,41 +75,30 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
 
-    func addInlineHighlight(feedbackID: UUID) {
+    func addInlineHighlight(feedbackId: UUID) {
         if let file = selectedFile, let selectedSection = selectedSection {
             if (inlineHighlights.contains { $0.key == file.path }) {
-                inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackID.uuidString,
+                inlineHighlights[file.path]?.append(HighlightedRange(id: feedbackId.uuidString,
                                                                      range: selectedSection,
                                                                      color: UIColor.systemYellow,
                                                                      cornerRadius: 8))
             } else {
-                inlineHighlights[file.path] = [HighlightedRange(id: feedbackID.uuidString,
+                inlineHighlights[file.path] = [HighlightedRange(id: feedbackId.uuidString,
                                                                 range: selectedSection,
                                                                 color: UIColor.systemYellow,
                                                                 cornerRadius: 8)]
             }
         }
+        undoManager.endUndoGrouping() /// undo group with addFeedback in AssessmentResult
     }
     
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
-    }
-    
-    func undo() {
-        undoManager.undo()
-    }
-
-    func redo() {
-        undoManager.redo()
-    }
-
-    func canUndo() -> Bool {
-        undoManager.canUndo
-    }
-
-    func canRedo() -> Bool {
-        undoManager.canRedo
+        
+        if feedback.type == .inline {
+            undoManager.endUndoGrouping() /// undo group with deleteFeedback in AssessmentResult
+        }
     }
 }
