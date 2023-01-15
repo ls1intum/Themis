@@ -245,7 +245,9 @@ public struct CodeEditor: View {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                scrollToRange: ReferenceTypeRange,
+                containerHeight: ReferenceTypeSize) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -265,6 +267,8 @@ public struct CodeEditor: View {
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.scrollToRange = scrollToRange
+        self.containerHeight = containerHeight
     }
 
     /**
@@ -307,7 +311,9 @@ public struct CodeEditor: View {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                scrollToRange: ReferenceTypeRange,
+                containerHeight: ReferenceTypeSize) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -324,7 +330,9 @@ public struct CodeEditor: View {
                   showAddFeedback: showAddFeedback,
                   showEditFeedback: showEditFeedback,
                   selectedSection: selectedSection,
-                  feedbackForSelectionId: feedbackForSelectionId)
+                  feedbackForSelectionId: feedbackForSelectionId,
+                  scrollToRange: scrollToRange,
+                  containerHeight: containerHeight)
     }
 
     private var source: Binding<String>
@@ -344,6 +352,8 @@ public struct CodeEditor: View {
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var scrollToRange: ReferenceTypeRange
+    private var containerHeight: ReferenceTypeSize
 
     public var body: some View {
         UXCodeTextViewRepresentable(source: source,
@@ -362,6 +372,8 @@ public struct CodeEditor: View {
                                     showAddFeedback: showAddFeedback,
                                     showEditFeedback: showEditFeedback,
                                     selectedSection: selectedSection,
-                                    feedbackForSelectionId: feedbackForSelectionId)
+                                    feedbackForSelectionId: feedbackForSelectionId,
+                                    scrollToRange: scrollToRange,
+                                    containerHeight: containerHeight)
     }
 }

@@ -18,3 +18,12 @@ extension NSRange {
         return (lower..<upper + 1).toNSRange()
     }
 }
+
+// used to safely reset the scrollToRange from within view update
+public class ReferenceTypeRange {
+    public var value: NSRange?
+    
+    public init(value: NSRange? = nil) {
+        self.value = value
+    }
+}

@@ -64,7 +64,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                scrollToRange: ReferenceTypeRange,
+                containerHeight: ReferenceTypeSize) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -81,6 +83,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.scrollToRange = scrollToRange
+        self.containerHeight = containerHeight
     }
 
     private var source: Binding<String>
@@ -99,6 +103,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var scrollToRange: ReferenceTypeRange
+    private var containerHeight: ReferenceTypeSize
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -276,6 +282,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.autoPairCompletion   = autoPairs
 
         if source.wrappedValue != textView.string {
+            // reset contentoffset when switching files
+            textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
             if let textStorage = textView.codeTextStorage {
                 textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length),
                                               with: source.wrappedValue)
@@ -311,6 +319,43 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = highlightedRanges
+        
+        if containerHeight.heightValue == 0.0 {
+            containerHeight.heightValue = textView.frame.height
+        }
+        
+        if let range = scrollToRange.value {
+            scrollToRange(textView: textView, range: range)
+            self.scrollToRange.value = nil
+        }
+    }
+    
+    private func scrollToRange(textView: UXCodeTextView, range: NSRange) {
+        let visibleHeight = containerHeight.heightValue
+        let contentHeight = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT))).height
+        
+        print("visible height: \(visibleHeight)")
+        print("content height: \(contentHeight)")
+        if contentHeight > visibleHeight {
+            // hack to get UITextRange
+            textView.selectedRange = range
+            let textRange = textView.selectedTextRange
+            textView.selectedRange = NSRange(location: 0, length: 0)
+            
+            if let textRange = textRange {
+                let rangeOffsetY = textView.firstRect(for: textRange).origin.y
+                // handle cases where offsetting it to the center is not wanted
+                // otherwise the scrollview would jump back on next interaction since min/max scroll range is exceeded
+                if rangeOffsetY < (visibleHeight / 2) {
+                    textView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else if (contentHeight - rangeOffsetY) < (visibleHeight / 2) {
+                    let bottomOffsetY = contentHeight - visibleHeight
+                    textView.setContentOffset(CGPoint(x: 0, y: bottomOffsetY), animated: true)
+                } else {
+                    textView.setContentOffset(CGPoint(x: 0, y: rangeOffsetY - (visibleHeight / 2)), animated: true)
+                }
+            }
+        }
     }
 
 #if os(macOS)
