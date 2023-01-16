@@ -86,6 +86,8 @@ class CodeEditorViewModel: ObservableObject {
 
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
+            let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
+            scrollUtils.offsets = scrollUtils.offsets.filter({ $0.key != highlight?.range })
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
     }

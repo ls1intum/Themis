@@ -319,7 +319,6 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {
-            scrollUtils.offsets = [:]
             highlightedRanges.forEach { range in
                 scrollUtils.offsets[range.range] =
                 textView.layoutManager.boundingRect(forGlyphRange: range.range, in: textView.textContainer).origin.y
