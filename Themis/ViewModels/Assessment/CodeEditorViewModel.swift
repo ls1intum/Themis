@@ -21,8 +21,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var lassoMode = false
     @Published var feedbackForSelectionId = ""
     
-    var scrollToRange = ReferenceTypeRange(value: nil)
-    var codeViewHeight = ReferenceTypeSize(heightValue: 0.0)
+    var scrollUtils = ScrollUtils(range: nil, offsets: [:])
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {

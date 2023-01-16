@@ -30,8 +30,7 @@ struct CodeView: View {
                    showEditFeedback: $cvm.showEditFeedback,
                    selectedSection: $cvm.selectedSection,
                    feedbackForSelectionId: $cvm.feedbackForSelectionId,
-                   scrollToRange: cvm.scrollToRange,
-                   containerHeight: cvm.codeViewHeight)
+                   scrollUtils: cvm.scrollUtils)
     }
     
     var editorInLassoMode: some View {

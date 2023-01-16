@@ -58,7 +58,7 @@ struct FeedbackListView: View {
                                 withAnimation {
                                     cvm.openFile(file: file, participationId: pId, templateParticipationId: templatePId)
                                 }
-                                cvm.scrollToRange.value = cvm.inlineHighlights[file.path]?.first {
+                                cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
                                     $0.id == feedback.id.uuidString
                                 }?.range
                             }
