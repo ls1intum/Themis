@@ -29,7 +29,8 @@ struct CodeView: View {
                    showAddFeedback: $cvm.showAddFeedback,
                    showEditFeedback: $cvm.showEditFeedback,
                    selectedSection: $cvm.selectedSection,
-                   feedbackForSelectionId: $cvm.feedbackForSelectionId)
+                   feedbackForSelectionId: $cvm.feedbackForSelectionId,
+                   scrollUtils: cvm.scrollUtils)
     }
     
     var editorInLassoMode: some View {

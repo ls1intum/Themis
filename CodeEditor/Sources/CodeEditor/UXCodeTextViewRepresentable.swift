@@ -64,7 +64,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -81,6 +82,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.scrollUtils = scrollUtils
     }
 
     private var source: Binding<String>
@@ -99,6 +101,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var scrollUtils: ScrollUtils
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -276,6 +279,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.autoPairCompletion   = autoPairs
 
         if source.wrappedValue != textView.string {
+            // reset contentoffset when switching files as it is not stored and content heights of files vary
+            textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
             if let textStorage = textView.codeTextStorage {
                 textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length),
                                               with: source.wrappedValue)
@@ -311,6 +316,41 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = highlightedRanges
+        
+        // check if textView's layout is completed and store offsets of all inline highlights
+        if textView.frame.height > 0 {
+            highlightedRanges.forEach { range in
+                scrollUtils.offsets[range.range] =
+                textView.layoutManager.boundingRect(forGlyphRange: range.range, in: textView.textContainer).origin.y
+            }
+        }
+
+            if let range =
+                scrollUtils.range {
+                DispatchQueue.main.async {
+                    scrollToRange(textView: textView, range: range)
+                }
+                self.scrollUtils.range = nil
+            }
+    }
+    
+    private func scrollToRange(textView: UXCodeTextView, range: NSRange) {
+        let visibleHeight = textView.visibleSize.height
+        let contentHeight = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT))).height
+        
+        if contentHeight > visibleHeight {
+            let rangeOffsetY = scrollUtils.offsets[range] ?? 0.0
+                // handle cases where offsetting it to the center is not wanted
+                // otherwise the scrollview would jump back on next interaction since min/max scroll range is exceeded
+                if rangeOffsetY < (visibleHeight / 2) {
+                    textView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else if (contentHeight - rangeOffsetY) < (visibleHeight / 2) {
+                    let bottomOffsetY = contentHeight - visibleHeight
+                    textView.setContentOffset(CGPoint(x: 0, y: bottomOffsetY), animated: true)
+                } else {
+                    textView.setContentOffset(CGPoint(x: 0, y: rangeOffsetY - (visibleHeight / 2)), animated: true)
+                }
+        }
     }
 
 #if os(macOS)

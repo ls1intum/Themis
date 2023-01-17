@@ -245,7 +245,8 @@ public struct CodeEditor: View {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -265,6 +266,7 @@ public struct CodeEditor: View {
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.scrollUtils = scrollUtils
     }
 
     /**
@@ -307,7 +309,8 @@ public struct CodeEditor: View {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                scrollUtils: ScrollUtils) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -324,7 +327,8 @@ public struct CodeEditor: View {
                   showAddFeedback: showAddFeedback,
                   showEditFeedback: showEditFeedback,
                   selectedSection: selectedSection,
-                  feedbackForSelectionId: feedbackForSelectionId)
+                  feedbackForSelectionId: feedbackForSelectionId,
+                  scrollUtils: scrollUtils)
     }
 
     private var source: Binding<String>
@@ -344,24 +348,26 @@ public struct CodeEditor: View {
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var scrollUtils: ScrollUtils
 
     public var body: some View {
-        UXCodeTextViewRepresentable(source: source,
-                                    selection: selection,
-                                    language: language,
-                                    theme: themeName,
-                                    fontSize: fontSize,
-                                    flags: flags,
-                                    indentStyle: indentStyle,
-                                    autoPairs: autoPairs,
-                                    inset: inset,
-                                    autoscroll: autoscroll,
-                                    highlightedRanges: highlightedRanges,
-                                    dragSelection: dragSelection,
-                                    line: line,
-                                    showAddFeedback: showAddFeedback,
-                                    showEditFeedback: showEditFeedback,
-                                    selectedSection: selectedSection,
-                                    feedbackForSelectionId: feedbackForSelectionId)
+            UXCodeTextViewRepresentable(source: source,
+                                        selection: selection,
+                                        language: language,
+                                        theme: themeName,
+                                        fontSize: fontSize,
+                                        flags: flags,
+                                        indentStyle: indentStyle,
+                                        autoPairs: autoPairs,
+                                        inset: inset,
+                                        autoscroll: autoscroll,
+                                        highlightedRanges: highlightedRanges,
+                                        dragSelection: dragSelection,
+                                        line: line,
+                                        showAddFeedback: showAddFeedback,
+                                        showEditFeedback: showEditFeedback,
+                                        selectedSection: selectedSection,
+                                        feedbackForSelectionId: feedbackForSelectionId,
+                                        scrollUtils: scrollUtils)
     }
 }
