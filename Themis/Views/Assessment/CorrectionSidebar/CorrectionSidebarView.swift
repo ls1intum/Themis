@@ -21,6 +21,9 @@ struct CorrectionSidebarView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
     let loading: Bool
+    
+    var pId: Int?
+    var templatePId: Int?
 
     var body: some View {
         VStack {
@@ -55,7 +58,9 @@ struct CorrectionSidebarView: View {
                     FeedbackListView(
                         readOnly: readOnly,
                         assessmentResult: $assessmentResult,
-                        cvm: cvm
+                        cvm: cvm,
+                        pId: pId,
+                        templatePId: templatePId
                     )
                 }
             }

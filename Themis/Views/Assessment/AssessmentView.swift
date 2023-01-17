@@ -353,7 +353,9 @@ struct AssessmentView: View {
                     assessmentResult: $vm.assessmentResult,
                     cvm: cvm,
                     umlVM: umlVM,
-                    loading: vm.loading
+                    loading: vm.loading,
+                    pId: vm.submission?.participation.id,
+                    templatePId: vm.submission?.participation.exercise.templateParticipation?.id
                 )
             }
         }
