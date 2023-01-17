@@ -245,7 +245,7 @@ public struct CodeEditor: View {
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
-                pencilOnly: Binding<Bool>) {
+                pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection   = selection
@@ -309,7 +309,7 @@ public struct CodeEditor: View {
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
-                pencilOnly: Binding<Bool>) {
+                pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
@@ -327,7 +327,7 @@ public struct CodeEditor: View {
                   showEditFeedback: showEditFeedback,
                   selectedSection: selectedSection,
                   feedbackForSelectionId: feedbackForSelectionId,
-                  pencilOnly: pencilOnly)
+                  pencilOnly: pencilOnly,
                   scrollUtils: scrollUtils)
     }
 
@@ -367,6 +367,7 @@ public struct CodeEditor: View {
                                     showEditFeedback: showEditFeedback,
                                     selectedSection: selectedSection,
                                     feedbackForSelectionId: feedbackForSelectionId,
-                                    pencilOnly: pencilOnly)
+                                    pencilOnly: pencilOnly,
+                                    scrollUtils: scrollUtils)
     }
 }

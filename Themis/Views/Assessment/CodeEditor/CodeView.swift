@@ -28,7 +28,8 @@ struct CodeView: View {
                    showEditFeedback: $cvm.showEditFeedback,
                    selectedSection: $cvm.selectedSection,
                    feedbackForSelectionId: $cvm.feedbackForSelectionId,
-                   pencilOnly: $cvm.lassoMode)
+                   pencilOnly: $cvm.pencilMode,
+                   scrollUtils: cvm.scrollUtils)
         .onChange(of: dragSelection) { newValue in
             if let newValue {
                 onOpenFeedback(newValue)

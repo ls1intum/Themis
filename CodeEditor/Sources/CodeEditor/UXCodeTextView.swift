@@ -331,7 +331,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 ctx.addPath(path)
                 ctx.drawPath(using: .fillStroke)
             }
-            print("Rects: \(rects)")
         }
         UIGraphicsPopContext()
     }

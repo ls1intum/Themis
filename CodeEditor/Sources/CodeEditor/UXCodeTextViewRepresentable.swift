@@ -65,7 +65,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
-                pencilOnly: Binding<Bool>) {
+                pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection = selection
