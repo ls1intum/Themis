@@ -20,6 +20,8 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var lassoMode = false
     @Published var feedbackForSelectionId = ""
+    
+    var scrollUtils = ScrollUtils(range: nil, offsets: [:])
 
     var selectedSectionParsed: (NSRange, NSRange?)? {
         if let selectedFile = selectedFile, let selectedSection = selectedSection, let lines = selectedFile.lines {
@@ -84,6 +86,8 @@ class CodeEditorViewModel: ObservableObject {
 
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
+            let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
+            scrollUtils.offsets = scrollUtils.offsets.filter({ $0.key != highlight?.range })
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
     }

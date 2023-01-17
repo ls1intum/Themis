@@ -246,6 +246,7 @@ public struct CodeEditor: View {
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
                 pencilOnly: Binding<Bool>) {
+                scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -265,6 +266,7 @@ public struct CodeEditor: View {
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
         self.pencilOnly = pencilOnly
+        self.scrollUtils = scrollUtils
     }
 
     /**
@@ -308,6 +310,7 @@ public struct CodeEditor: View {
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
                 pencilOnly: Binding<Bool>) {
+                scrollUtils: ScrollUtils) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -325,6 +328,7 @@ public struct CodeEditor: View {
                   selectedSection: selectedSection,
                   feedbackForSelectionId: feedbackForSelectionId,
                   pencilOnly: pencilOnly)
+                  scrollUtils: scrollUtils)
     }
 
     private var source: Binding<String>
@@ -344,20 +348,21 @@ public struct CodeEditor: View {
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
     private var pencilOnly: Binding<Bool>
+    private var scrollUtils: ScrollUtils
 
     public var body: some View {
-        UXCodeTextViewRepresentable(source: source,
-                                    selection: selection,
-                                    language: language,
-                                    theme: themeName,
-                                    fontSize: fontSize,
-                                    flags: flags,
-                                    indentStyle: indentStyle,
-                                    autoPairs: autoPairs,
-                                    inset: inset,
-                                    autoscroll: autoscroll,
-                                    highlightedRanges: highlightedRanges,
-                                    dragSelection: dragSelection,
+            UXCodeTextViewRepresentable(source: source,
+                                        selection: selection,
+                                        language: language,
+                                        theme: themeName,
+                                        fontSize: fontSize,
+                                        flags: flags,
+                                        indentStyle: indentStyle,
+                                        autoPairs: autoPairs,
+                                        inset: inset,
+                                        autoscroll: autoscroll,
+                                        highlightedRanges: highlightedRanges,
+                                        dragSelection: dragSelection,
                                     showAddFeedback: showAddFeedback,
                                     showEditFeedback: showEditFeedback,
                                     selectedSection: selectedSection,
