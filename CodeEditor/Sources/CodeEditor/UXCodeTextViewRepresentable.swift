@@ -61,11 +61,11 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 autoscroll: Bool,
                 highlightedRanges: [HighlightedRange],
                 dragSelection: Binding<Range<Int>?>?,
-                line: Binding<Line?>?,
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection = selection
@@ -78,11 +78,11 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
-        self.line = line
         self.showAddFeedback = showAddFeedback
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.pencilOnly = pencilOnly
         self.scrollUtils = scrollUtils
     }
 
@@ -97,11 +97,11 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
     private var dragSelection: Binding<Range<Int>?>?
-    private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var pencilOnly: Binding<Bool>
     private var scrollUtils: ScrollUtils
 
     // The inner `value` is true, exactly when execution is inside
@@ -230,36 +230,14 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             parent.flags.contains(.selectable)
             || parent.flags.contains(.editable)
         }
+        
+        public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            scrollView.setNeedsDisplay()
+        }
     }
 
     public func makeCoordinator() -> Coordinator {
         Coordinator(self)
-    }
-
-    private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
-        let point = CGPoint(x: point.x, y: point.y - (fontSize?.wrappedValue ?? 0.0) / 2.0)
-        return textView.layoutManager.glyphIndex(for: point, in: textView.textContainer)
-    }
-
-    private func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
-        var selectionRange: Range<Int>?
-        for point in line?.wrappedValue?.points ?? [] {
-            let pointOffset = CGPoint(x: point.x + textView.contentOffset.x,
-                                      y: point.y + textView.contentOffset.y)
-            let glyphIndex = getGlyphIndex(textView: textView, point: pointOffset)
-            if selectionRange == nil {
-                selectionRange = glyphIndex..<glyphIndex + 1
-            } else {
-                // swiftlint:disable force_unwrapping
-                if glyphIndex < selectionRange!.lowerBound {
-                    selectionRange = glyphIndex..<selectionRange!.upperBound
-                }
-                if glyphIndex > selectionRange!.upperBound {
-                    selectionRange = selectionRange!.lowerBound..<glyphIndex + 1
-                }
-            }
-        }
-        return selectionRange
     }
 
     private func updateTextView(_ textView: UXCodeTextView) {
@@ -291,9 +269,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             }
         }
         textView.setNeedsDisplay()
-        let dragSelection = getSelectionFromLine(textView: textView)
-        textView.dragSelection = dragSelection
-
+        textView.pencilOnly = pencilOnly.wrappedValue
+        textView.dragSelection = self.dragSelection?.wrappedValue
+       
         if let selection = selection {
             let range = selection.wrappedValue
 
