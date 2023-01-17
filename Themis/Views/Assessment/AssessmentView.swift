@@ -219,7 +219,8 @@ struct AssessmentView: View {
                 cvm: cvm,
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
-                file: cvm.selectedFile
+                file: cvm.selectedFile,
+                exercise: vm.submission?.participation.exercise
             )
         }
         .sheet(isPresented: $cvm.showEditFeedback) {
@@ -228,7 +229,8 @@ struct AssessmentView: View {
                                  cvm: cvm,
                                  type: .inline,
                                  showSheet: $cvm.showEditFeedback,
-                                 idForUpdate: feedback.id)
+                                 idForUpdate: feedback.id,
+                                 exercise: vm.submission?.participation.exercise)
             }
         }
         .task(priority: .high) {

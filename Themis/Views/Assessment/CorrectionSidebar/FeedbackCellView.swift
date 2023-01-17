@@ -27,6 +27,8 @@ struct FeedbackCellView: View {
             return Color(.label)
         }
     }
+    
+    let exercise: ExerciseOfSubmission?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -70,7 +72,8 @@ struct FeedbackCellView: View {
                 cvm: cvm,
                 type: feedback.type,
                 showSheet: $showEditFeedback,
-                idForUpdate: feedback.id
+                idForUpdate: feedback.id,
+                exercise: nil
             )
         }
         .padding()

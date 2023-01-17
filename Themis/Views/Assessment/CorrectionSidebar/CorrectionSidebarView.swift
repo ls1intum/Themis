@@ -24,7 +24,7 @@ struct CorrectionSidebarView: View {
     
     var pId: Int?
     var templatePId: Int?
-
+    
     var body: some View {
         VStack {
             Picker(selection: $correctionSidebarStatus, label: Text("")) {
@@ -60,7 +60,8 @@ struct CorrectionSidebarView: View {
                         assessmentResult: $assessmentResult,
                         cvm: cvm,
                         pId: pId,
-                        templatePId: templatePId
+                        templatePId: templatePId,
+                        exercise: exercise
                     )
                 }
             }

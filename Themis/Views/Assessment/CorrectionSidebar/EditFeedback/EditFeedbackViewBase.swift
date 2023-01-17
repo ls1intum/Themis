@@ -24,6 +24,8 @@ struct EditFeedbackViewBase: View {
     let edit: Bool
     let type: FeedbackType
     var file: Node?
+    
+    let gradingCriteria: [GradingCriterion]
 
     var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
@@ -100,6 +102,14 @@ struct EditFeedbackViewBase: View {
                 .frame(maxWidth: 150)
             }
             Spacer()
+            
+            ScrollView(.vertical) {
+                VStack {
+                    ForEach(gradingCriteria) { gradingCriterion in
+                        GradingCriteriaCellView(gradingCriterion: gradingCriterion)
+                    }
+                }
+            }
         }
         .padding()
         .onAppear {

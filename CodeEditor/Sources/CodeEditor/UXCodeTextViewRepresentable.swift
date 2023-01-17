@@ -262,6 +262,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         return selectionRange
     }
 
+    // swiftlint:disable function_body_length
     private func updateTextView(_ textView: UXCodeTextView) {
         isCurrentlyUpdatingView.value = true
         defer {

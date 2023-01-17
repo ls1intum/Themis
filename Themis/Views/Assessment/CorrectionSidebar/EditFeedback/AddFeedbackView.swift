@@ -15,6 +15,8 @@ struct AddFeedbackView: View {
     @Binding var showSheet: Bool
     
     var file: Node?
+    
+    let exercise: ExerciseOfSubmission?
 
     var body: some View {
         EditFeedbackViewBase(
@@ -24,7 +26,8 @@ struct AddFeedbackView: View {
             title: "Add feedback",
             edit: false,
             type: type,
-            file: file
+            file: file,
+            gradingCriteria: exercise?.gradingCriteria ?? []
         )
     }
 }

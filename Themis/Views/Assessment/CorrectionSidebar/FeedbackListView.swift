@@ -17,6 +17,8 @@ struct FeedbackListView: View {
     var pId: Int?
     var templatePId: Int?
     
+    let exercise: ExerciseOfSubmission?
+    
     var body: some View {
         VStack(alignment: .leading) {
             List {
@@ -35,7 +37,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
-                            feedback: feedback
+                            feedback: feedback,
+                            exercise: exercise
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -49,7 +52,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
-                            feedback: feedback
+                            feedback: feedback,
+                            exercise: exercise
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -77,7 +81,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
-                            feedback: feedback)
+                            feedback: feedback,
+                            exercise: exercise)
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
                     }
@@ -96,7 +101,8 @@ struct FeedbackListView: View {
                 assessmentResult: $assessmentResult,
                 cvm: cvm,
                 type: .general,
-                showSheet: $showAddFeedback
+                showSheet: $showAddFeedback,
+                exercise: exercise
             )
         }
     }
@@ -120,7 +126,8 @@ struct FeedbackListView_Previews: PreviewProvider {
         FeedbackListView(
             readOnly: false,
             assessmentResult: $assessmentResult,
-            cvm: codeEditor
+            cvm: codeEditor,
+            exercise: nil
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

@@ -14,6 +14,8 @@ struct EditFeedbackView: View {
 
     @Binding var showSheet: Bool
     var idForUpdate: UUID
+    
+    let exercise: ExerciseOfSubmission?
 
     var body: some View {
         EditFeedbackViewBase(
@@ -23,7 +25,8 @@ struct EditFeedbackView: View {
             idForUpdate: idForUpdate,
             title: "Edit feedback",
             edit: true,
-            type: type
+            type: type,
+            gradingCriteria: exercise?.gradingCriteria ?? []
         )
     }
 }
