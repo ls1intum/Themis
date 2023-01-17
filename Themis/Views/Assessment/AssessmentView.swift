@@ -62,6 +62,10 @@ struct AssessmentView: View {
         }
         .onAppear {
             vm.assessmentResult.undoManager.removeAllActions() /// to avoid the undo and redo of automatic feedbacks
+            vm.assessmentResult.sort()
+        }
+        .onDisappear {
+            vm.assessmentResult.undoManager.removeAllActions()
         }
         .overlay {
             if umlVM.showUMLFullScreen {

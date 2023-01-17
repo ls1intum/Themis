@@ -98,6 +98,10 @@ class AssessmentResult: Encodable, ObservableObject {
         computedFeedbacks[index].credits = credits
     }
     
+    func sort() {
+        feedbacks = feedbacks.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+    }
+    
     func undo() {
         undoManager.undo()
     }
