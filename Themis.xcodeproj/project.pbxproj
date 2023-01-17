@@ -59,7 +59,6 @@
 		E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF048292B9D4C0096ACFC /* TabsView.swift */; };
 		E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */; };
 		E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF04E292B9D4C0096ACFC /* HighlightName.swift */; };
-		E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */; };
 		E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF052292B9D4C0096ACFC /* AssessmentView.swift */; };
 		E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE6382935214E00FAD327 /* ExerciseView.swift */; };
 		E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */; };
@@ -149,7 +148,6 @@
 		E21AF048292B9D4C0096ACFC /* TabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsView.swift; path = Themis/Views/Assessment/CodeEditor/TabsView.swift; sourceTree = SOURCE_ROOT; };
 		E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditorFontSizeStepper.swift; path = Themis/Views/AppearanceSettings/EditorFontSizeStepper.swift; sourceTree = SOURCE_ROOT; };
 		E21AF04E292B9D4C0096ACFC /* HighlightName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighlightName.swift; path = Themis/Models/Appearance/HighlightName.swift; sourceTree = SOURCE_ROOT; };
-		E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppearanceSettingsView.swift; path = Themis/Views/AppearanceSettings/AppearanceSettingsView.swift; sourceTree = SOURCE_ROOT; };
 		E21AF052292B9D4C0096ACFC /* AssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentView.swift; path = Themis/Views/Assessment/AssessmentView.swift; sourceTree = SOURCE_ROOT; };
 		E2CAE6382935214E00FAD327 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
@@ -233,7 +231,6 @@
 		4065F856292E87AB005DAEE8 /* AppearanceSettings */ = {
 			isa = PBXGroup;
 			children = (
-				E21AF050292B9D4C0096ACFC /* AppearanceSettingsView.swift */,
 				E21AF04D292B9D4C0096ACFC /* EditorFontSizeStepper.swift */,
 			);
 			name = AppearanceSettings;
@@ -742,7 +739,6 @@
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
 				DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */,
 				DA1DC19C2952320E0005219D /* UMLView.swift in Sources */,
-				E21AF059292B9D4C0096ACFC /* AppearanceSettingsView.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				DA3978E6296C16D200734E01 /* CourseViewModel.swift in Sources */,
