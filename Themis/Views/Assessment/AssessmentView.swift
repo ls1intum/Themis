@@ -16,6 +16,8 @@ struct AssessmentView: View {
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
     @State var showStepper = false
+    @State var showSubmitConfirmation = false
+    @State var showNavigationOptions = false
     
     private let minRightSnapWidth: CGFloat = 185
     
@@ -174,27 +176,9 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: true)
-                        }
-                    }
+                    showSubmitConfirmation.toggle()
                 } label: {
                     Text("Submit")
-                }
-                .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly || vm.loading)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        await vm.initRandomSubmission(exerciseId: exerciseId)
-                        if vm.submission == nil {
-                            showNoSubmissionsAlert = true
-                        }
-                    }
-                } label: {
-                    Text("Next")
                 }
                 .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly || vm.loading)
@@ -202,6 +186,30 @@ struct AssessmentView: View {
         }
         .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
             Button("OK", role: .cancel) {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
+        .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
+            Button("Yes") {
+                Task {
+                    if let pId = vm.submission?.participation.id {
+                        await vm.sendAssessment(participationId: pId, submit: true)
+                    }
+                    showNavigationOptions.toggle()
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
+            Button("Next Submission") {
+                Task {
+                    await vm.initRandomSubmission(exerciseId: exerciseId)
+                    if vm.submission == nil {
+                        showNoSubmissionsAlert = true
+                    }
+                }
+            }
+            Button("Finish assessing") {
                 presentationMode.wrappedValue.dismiss()
             }
         }
