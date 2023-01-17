@@ -63,7 +63,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -79,6 +80,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.pencilOnly = pencilOnly
     }
 
     private var source: Binding<String>
@@ -96,6 +98,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var pencilOnly: Binding<Bool>
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -260,9 +263,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             }
         }
         textView.setNeedsDisplay()
-        //let dragSelection = getSelectionFromLine(textView: textView)
-        //textView.dragSelection = dragSelection
-
+        textView.pencilOnly = pencilOnly.wrappedValue
+        textView.dragSelection = self.dragSelection?.wrappedValue
+       
         if let selection = selection {
             let range = selection.wrappedValue
 

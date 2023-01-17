@@ -27,7 +27,18 @@ struct CodeView: View {
                    showAddFeedback: $cvm.showAddFeedback,
                    showEditFeedback: $cvm.showEditFeedback,
                    selectedSection: $cvm.selectedSection,
-                   feedbackForSelectionId: $cvm.feedbackForSelectionId)
+                   feedbackForSelectionId: $cvm.feedbackForSelectionId,
+                   pencilOnly: $cvm.lassoMode)
+        .onChange(of: dragSelection) { newValue in
+            if let newValue {
+                onOpenFeedback(newValue)
+            }
+        }
+        .onChange(of: cvm.showAddFeedback) { newValue in
+            if !newValue {
+                dragSelection = nil
+            }
+        }
     }
     
     

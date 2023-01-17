@@ -244,7 +244,8 @@ public struct CodeEditor: View {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -263,6 +264,7 @@ public struct CodeEditor: View {
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.pencilOnly = pencilOnly
     }
 
     /**
@@ -304,7 +306,8 @@ public struct CodeEditor: View {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -320,7 +323,8 @@ public struct CodeEditor: View {
                   showAddFeedback: showAddFeedback,
                   showEditFeedback: showEditFeedback,
                   selectedSection: selectedSection,
-                  feedbackForSelectionId: feedbackForSelectionId)
+                  feedbackForSelectionId: feedbackForSelectionId,
+                  pencilOnly: pencilOnly)
     }
 
     private var source: Binding<String>
@@ -339,6 +343,7 @@ public struct CodeEditor: View {
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var pencilOnly: Binding<Bool>
 
     public var body: some View {
         UXCodeTextViewRepresentable(source: source,
@@ -356,6 +361,7 @@ public struct CodeEditor: View {
                                     showAddFeedback: showAddFeedback,
                                     showEditFeedback: showEditFeedback,
                                     selectedSection: selectedSection,
-                                    feedbackForSelectionId: feedbackForSelectionId)
+                                    feedbackForSelectionId: feedbackForSelectionId,
+                                    pencilOnly: pencilOnly)
     }
 }

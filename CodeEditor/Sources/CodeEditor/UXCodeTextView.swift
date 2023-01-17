@@ -69,9 +69,16 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
 
     private var line = [CGPoint]()
-    private var rects = [CGRect]()
     
-    var pencilOnly = true
+    var pencilOnly: Bool = false {
+        didSet {
+            if pencilOnly {
+                self.panGestureRecognizer.minimumNumberOfTouches = 1
+            } else {
+                self.panGestureRecognizer.minimumNumberOfTouches = 2
+            }
+        }
+    }
     
     
     init() {
@@ -107,7 +114,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         usesRuler                            = false
 #endif
         self.panGestureRecognizer.allowedTouchTypes = [UITouch.TouchType.direct.rawValue as NSNumber]
-        self.panGestureRecognizer.minimumNumberOfTouches = 2
+        self.panGestureRecognizer.minimumNumberOfTouches = 1
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -312,11 +319,19 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         let numBgArea = CGRect(x: 0, y: self.contentOffset.y, width: numViewW, height: self.bounds.height)
         ctx.fill(numBgArea)
         
-        ctx.setFillColor(CGColor(red: 0.4, green: 0.1, blue: 0.1, alpha: 0.4))
-        if dragSelection != nil {
+        ctx.setFillColor(CGColor(red: 1.0, green: 0.78, blue: 0.23, alpha: 0.8))
+        ctx.setStrokeColor(CGColor(red: 1.0, green: 0.78, blue: 0.23, alpha: 0.8))
+        if let dragSelection {
+            guard let position1 = self.position(from: self.beginningOfDocument, offset: dragSelection.lowerBound),
+                  let position2 = self.position(from: self.beginningOfDocument, offset: dragSelection.endIndex),
+                  let range = self.textRange(from: position1, to: position2) else { UIGraphicsPopContext(); return }
+            let rects = self.selectionRects(for: range).map(\.rect).filter { $0.width > 0.001 && $0.height > 0.001 }
             for rect in rects {
-                ctx.fill(rect)
+                let path = CGPath(roundedRect: rect, cornerWidth: 5.0, cornerHeight: 5.0, transform: nil)
+                ctx.addPath(path)
+                ctx.drawPath(using: .fillStroke)
             }
+            print("Rects: \(rects)")
         }
         UIGraphicsPopContext()
     }
@@ -337,23 +352,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
     }
-    
-
-    
-    func highlightDrag() {
-        if let dragSelection {
-            self.textStorage.beginEditing()
-            self.textStorage.addAttributes(
-                [
-                    .foregroundColor: UIColor.blue,
-                    .underlineStyle: NSUnderlineStyle.single.rawValue,
-                    .underlineColor: UIColor.yellow.withAlphaComponent(0.5)
-                ]
-                , range: dragSelection.toNSRange().makeSafeFor(self.text))
-            self.textStorage.endEditing()
-        }
-    }
-    
+        
     
     private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
         let point = CGPoint(x: point.x, y: point.y - (self.font?.pointSize ?? 0.0) / 2.0)
@@ -382,7 +381,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
-            print("touch began")
             line.removeAll()
             setNeedsDisplay()
         }
@@ -392,13 +390,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             let newTouchPoint = touch.location(in: self)
-            print(newTouchPoint)
             line.append(newTouchPoint)
             self.dragSelection = getSelectionFromLine()
-            guard let position1 = self.position(from: self.beginningOfDocument, offset: dragSelection!.lowerBound),
-                  let position2 = self.position(from: self.beginningOfDocument, offset: dragSelection!.endIndex),
-                  let range = self.textRange(from: position1, to: position2) else { UIGraphicsPopContext(); return }
-            self.rects = self.selectionRects(for: range).map(\.rect)
+            
             
             setNeedsDisplay()
         }
@@ -407,7 +401,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        let coordinator = delegate as? UXCodeTextViewDelegate
+        coordinator?.setDragSelection(dragSelection)
     }
 }
 
