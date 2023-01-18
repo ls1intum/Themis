@@ -26,6 +26,8 @@ struct ExerciseView: View {
                     Button {
                         Task {
                             await avm.initRandomSubmission(exerciseId: exercise.id)
+//                            avm.assessmentResult.sort()
+                            UndoManagerSingleton.shared.undoManager.removeAllActions()
                         }
                     } label: {
                         Text("Start new Assessment")

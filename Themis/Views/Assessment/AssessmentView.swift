@@ -60,10 +60,6 @@ struct AssessmentView: View {
             .padding(.top, 4)
             .padding(.leading, 13)
         }
-        .onAppear {
-            vm.assessmentResult.undoManager.removeAllActions() /// to avoid the undo and redo of automatic feedbacks
-            vm.assessmentResult.sort()
-        }
         .onDisappear {
             vm.assessmentResult.undoManager.removeAllActions()
         }
@@ -170,6 +166,10 @@ struct AssessmentView: View {
                     }
                     .disabled(!vm.assessmentResult.canRedo())
                 }
+//                HStack {
+//                    
+//                }
+                //                .animation(Animation.easeInOut(duration: 0.6))
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.lassoMode.toggle()
@@ -182,7 +182,7 @@ struct AssessmentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
+                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper.animation())
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 CustomProgressView(
