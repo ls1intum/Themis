@@ -27,7 +27,7 @@ class CodeEditorViewModel: ObservableObject {
     }
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
-    @Published var lassoMode = false
+    @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
