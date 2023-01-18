@@ -28,8 +28,7 @@ struct AssessmentSubmissionLoaderView: View {
             if let pId = avm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
             }
-            avm.assessmentResult.sort()
-            avm.assessmentResult.undoManager.removeAllActions() /// to avoid the undo and redo of automatic feedbacks
+            UndoManagerSingleton.shared.undoManager.removeAllActions() /// to avoid the undo and redo of automatic feedbacks
         }
     }
 }

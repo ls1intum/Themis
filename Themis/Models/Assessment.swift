@@ -83,7 +83,7 @@ class AssessmentResult: Encodable, ObservableObject {
     }
 
     func deleteFeedback(id: UUID) {
-         if computedFeedbacks.contains { $0.id == id && $0.type == .inline } {
+        if computedFeedbacks.contains(where: { $0.id == id && $0.type == .inline }) {
              undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
@@ -96,10 +96,6 @@ class AssessmentResult: Encodable, ObservableObject {
         }
         computedFeedbacks[index].detailText = detailText
         computedFeedbacks[index].credits = credits
-    }
-    
-    func sort() {
-        feedbacks = feedbacks.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
     }
     
     func undo() {

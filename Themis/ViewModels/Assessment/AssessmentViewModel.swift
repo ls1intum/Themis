@@ -21,7 +21,7 @@ class AssessmentViewModel: ObservableObject {
         }
         do {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
-            assessmentResult.feedbacks = submission?.results?.last?.feedbacks ?? []
+            assessmentResult.computedFeedbacks = submission?.results?.last?.feedbacks ?? []
             self.showSubmission = true
         } catch {
             self.submission = nil
@@ -38,10 +38,10 @@ class AssessmentViewModel: ObservableObject {
         do {
             if readOnly {
                 self.submission = try await ArtemisAPI.getSubmissionForReadOnly(participationId: id)
-                assessmentResult.feedbacks = submission?.feedbacks ?? []
+                assessmentResult.computedFeedbacks = submission?.feedbacks ?? []
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
-                assessmentResult.feedbacks = submission?.results?.last?.feedbacks ?? []
+                assessmentResult.computedFeedbacks = submission?.results?.last?.feedbacks ?? []
             }
             self.showSubmission = true
         } catch {
