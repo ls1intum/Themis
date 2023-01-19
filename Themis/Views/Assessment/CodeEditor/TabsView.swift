@@ -1,4 +1,6 @@
 import SwiftUI
+import SwiftUIReorderableForEach
+
 
 // used to show opened tabs on top of CodeView
 struct TabsView: View {
@@ -9,7 +11,7 @@ struct TabsView: View {
             ScrollViewReader { scrollReader in
                 HStack(spacing: 0) {
                     Divider()
-                    ForEach(cvm.openFiles, id: \.path) { file in
+                    ReorderableForEach($cvm.openFiles, allowReordering: .constant(true)) { file, _ in
                         ZStack {
                             Rectangle()
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
