@@ -67,8 +67,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
     
-
-    private var line = [CGPoint]()
+    private var firstPoint: CGPoint?
+    private var secondPoint: CGPoint?
     
     var pencilOnly: Bool = false {
         didSet {
@@ -359,28 +359,21 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
 
     private func getSelectionFromLine() -> Range<Int>? {
-        var selectionRange: Range<Int>?
-        for point in line {
-            let glyphIndex = getGlyphIndex(textView: self, point: point)
-            if selectionRange == nil {
-                selectionRange = glyphIndex..<glyphIndex + 1
-            } else {
-                // swiftlint:disable force_unwrapping
-                if glyphIndex < selectionRange!.lowerBound {
-                    selectionRange = glyphIndex..<selectionRange!.upperBound
-                }
-                if glyphIndex > selectionRange!.upperBound {
-                    selectionRange = selectionRange!.lowerBound..<glyphIndex + 1
-                }
-            }
+        guard let firstPoint, let secondPoint else { return nil }
+        let firstGlyphIndex = getGlyphIndex(textView: self, point: firstPoint)
+        let secondGlyphIndex = getGlyphIndex(textView: self, point: secondPoint)
+        if secondGlyphIndex < firstGlyphIndex {
+            return secondGlyphIndex..<firstGlyphIndex + 1
+        } else {
+            return firstGlyphIndex..<secondGlyphIndex + 1
         }
-        return selectionRange
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
-            line.removeAll()
+            self.firstPoint = touch.location(in: self)
             setNeedsDisplay()
         }
     }
@@ -388,11 +381,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
-            let newTouchPoint = touch.location(in: self)
-            line.append(newTouchPoint)
+            self.secondPoint = touch.location(in: self)
             self.dragSelection = getSelectionFromLine()
-            
-            
             setNeedsDisplay()
         }
     }

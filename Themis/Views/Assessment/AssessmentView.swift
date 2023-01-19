@@ -142,9 +142,10 @@ struct AssessmentView: View {
                     Button {
                         cvm.pencilMode.toggle()
                     } label: {
-                        let image: String = cvm.pencilMode ? "hand.draw" : "pencil.and.outline" 
-                        Image(systemName: image)
+                        let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
+                        Image(systemName: "hand.draw")
                             .symbolRenderingMode(.palette)
+                            .foregroundColor(iconDrawingColor)
                     }
                 }
             }
