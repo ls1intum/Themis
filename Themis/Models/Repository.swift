@@ -29,8 +29,8 @@ class Node: Hashable, ObservableObject {
     var children: [Node]?
     @Published var code: String?
     var templateCode: String?
-    @Published var diffLinesAdded: [Int] = [] // line numbers of changed lines starting from 1
-    @Published var diffLinesRemoved: [Int] = []
+    var diffLinesAdded: [Range<String.Index>] = [] // line numbers of changed lines starting from 1
+    var diffLinesRemoved: [Range<String.Index>] = []
     private var diffCalculated = false
     /// property that calculates a lines character range to get line number of selectedTextRange
     var lines: [NSRange]? {
@@ -137,14 +137,13 @@ class Node: Hashable, ObservableObject {
         hasher.combine(path)
     }
 
-    @MainActor
-    public func calculateDiff(templateParticipationId: Int) async {
+    public func calculateDiff(templateParticipationId: Int) async -> ([Range<String.Index>], [Range<String.Index>])? {
         // only calculate once
         if diffCalculated {
-            return
+            return (diffLinesAdded, diffLinesRemoved)
         }
         guard let code = self.code else {
-            return
+            return nil
         }
         diffCalculated = true
         if templateCode == nil {
@@ -152,26 +151,40 @@ class Node: Hashable, ObservableObject {
         }
         guard let tcode = templateCode else {
             diffCalculated = false
-            return
+            return nil
         }
+        
+        // get ranges
+        var stringOffsets = [Range<String.Index>]()
+        var startStringIndex = code.startIndex
+        var offset = 0
+        code.forEach { ch in
+            offset += ch.utf8.count
+            if ch.isNewline {
+                stringOffsets.append(startStringIndex..<code.index(startStringIndex, offsetBy: offset))
+                startStringIndex = code.index(startStringIndex, offsetBy: offset)
+                offset = 0
+            }
+        }
+        stringOffsets.append(startStringIndex..<code.endIndex)
+        
+        // calculate diff
         let base = tcode.components(separatedBy: .newlines)
         let new = code.components(separatedBy: .newlines)
-
         let diff = new.difference(from: base)
-        var added = [Int]()
-        var removed = [Int]()
+        var added = [Range<String.Index>]()
+        var removed = [Range<String.Index>]()
         diff.forEach { change in
             switch change {
             case .insert(offset: let offset, element: _, associatedWith: _):
-                added.append(offset + 1) // +1 as lines are starting from 1
+                added.append(stringOffsets[offset])
             case .remove(offset: let offset, element: _, associatedWith: _):
-                removed.append(offset + 1)
+                removed.append(stringOffsets[offset])
             }
         }
-        self.diffLinesAdded = added
-        self.diffLinesRemoved = removed
-        print("added: \(diffLinesAdded)") // print as long as no highlighting exists
-        print("removed: \(diffLinesRemoved)")
+        diffLinesAdded = added
+        diffLinesRemoved = removed
+        return (added, removed)
     }
 
     private func fetchTemplateCode(templateParticipationId: Int) async {
