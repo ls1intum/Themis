@@ -46,26 +46,15 @@ class CodeEditorViewModel: ObservableObject {
             openFiles.append(file)
             Task {
                 await file.fetchCode(participationId: participationId)
-                if let (rangesAdded, rangesRemoved) = await file.calculateDiff(templateParticipationId: templateParticipationId) {
+                if let changedRanges = await file.calculateDiff(templateParticipationId: templateParticipationId) {
                     var ranges = [HighlightedRange]()
-                    for range in rangesAdded {
-                        print(range)
+                    for range in changedRanges {
                         ranges.append(
                             HighlightedRange(
                                 id: UUID().uuidString,
                                 range: NSRange(range, in: file.code ?? ""),
-                                color: UIColor.systemGreen,
-                                cornerRadius: 8
-                            )
-                        )
-                    }
-                    for range in rangesRemoved {
-                        ranges.append(
-                            HighlightedRange(
-                                id: UUID().uuidString,
-                                range: NSRange(range, in: file.code ?? ""),
-                                color: UIColor.systemRed,
-                                cornerRadius: 8
+                                color: UIColor.systemGreen.withAlphaComponent(0.5),
+                                cornerRadius: 0
                             )
                         )
                     }
