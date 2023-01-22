@@ -20,7 +20,6 @@ typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
 #endif
 
-// swiftlint:disable type_body_length
 /**
  * Subclass of NSTextView/UITextView which adds some code editing features to
  * the respective Cocoa views.

@@ -58,6 +58,9 @@ struct EditFeedbackViewBase: View {
             }
         }
     }
+    
+    func setGradingCriteriaStates(detailText: String, score: Double) {
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -78,6 +81,7 @@ struct EditFeedbackViewBase: View {
                     .disabled(detailText.isEmpty)
             }
             HStack {
+                
                 TextField("Enter your feedback here", text: $detailText, axis: .vertical)
                     .submitLabel(.return)
                     .lineLimit(10...40)
@@ -100,13 +104,14 @@ struct EditFeedbackViewBase: View {
                 }
                 .pickerStyle(.wheel)
                 .frame(maxWidth: 150)
+                .animation(.default, value: score)
             }
             Spacer()
             
             ScrollView(.vertical) {
                 VStack {
                     ForEach(gradingCriteria) { gradingCriterion in
-                        GradingCriteriaCellView(gradingCriterion: gradingCriterion)
+                        GradingCriteriaCellView(gradingCriterion: gradingCriterion, detailText: $detailText, score: $score)
                     }
                 }
             }
