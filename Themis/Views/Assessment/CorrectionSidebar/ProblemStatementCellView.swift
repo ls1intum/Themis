@@ -64,6 +64,10 @@ struct ProblemStatementCellView: View {
                     })
                 } else {
                     Markdown(part.text)
+                        .markdownTextStyle(\.code) {
+                            FontFamilyVariant(.monospaced)
+                            ForegroundColor(.red)
+                        }
                         .markdownImageProvider(.asset)
                 }
             }
