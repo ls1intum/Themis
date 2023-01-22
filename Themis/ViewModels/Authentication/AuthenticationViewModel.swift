@@ -59,12 +59,9 @@ class AuthenticationViewModel: ObservableObject {
             restControllerInitialized = true
             Authentication.shared = Authentication()
         }
-        if Authentication.shared.isBearerTokenAuthNeeded() {
-            observeAuthenticationToken()
-        } else {
-            observeAuthenticationStatus()
-            Authentication.shared.checkAuth()
-        }
+        observeAuthenticationToken() // TODO: remove once bearer token auth is no longer supported
+        observeAuthenticationStatus()
+        Authentication.shared.checkAuth()
     }
 
     private func generateURL(serverURL: String) -> URL? {
