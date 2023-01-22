@@ -26,7 +26,7 @@ typealias UXTextViewDelegate  = UITextViewDelegate
  *
  * Currently pretty tightly coupled to `CodeEditor`.
  */
-final class UXCodeTextView: UXTextView, HighlightDelegate {
+final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate {
 
     fileprivate let highlightr = Highlightr()
 
@@ -66,7 +66,20 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
     
-
+    private var firstPoint: CGPoint?
+    private var secondPoint: CGPoint?
+    
+    var pencilOnly: Bool = false {
+        didSet {
+            if pencilOnly {
+                self.panGestureRecognizer.minimumNumberOfTouches = 1
+            } else {
+                self.panGestureRecognizer.minimumNumberOfTouches = 2
+            }
+        }
+    }
+    
+    
     init() {
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
@@ -99,6 +112,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         isAutomaticQuoteSubstitutionEnabled  = false
         usesRuler                            = false
 #endif
+        self.panGestureRecognizer.allowedTouchTypes = [UITouch.TouchType.direct.rawValue as NSNumber]
+        self.panGestureRecognizer.minimumNumberOfTouches = 1
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -302,8 +317,24 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
         ctx.setFillColor(CGColor(gray: 0.0, alpha: 0.12))
         let numBgArea = CGRect(x: 0, y: self.contentOffset.y, width: numViewW, height: self.bounds.height)
         ctx.fill(numBgArea)
+        
+        ctx.setFillColor(CGColor(red: 1.0, green: 0.78, blue: 0.23, alpha: 0.8))
+        ctx.setStrokeColor(CGColor(red: 1.0, green: 0.78, blue: 0.23, alpha: 0.8))
+        if let dragSelection {
+            guard let position1 = self.position(from: self.beginningOfDocument, offset: dragSelection.lowerBound),
+                  let position2 = self.position(from: self.beginningOfDocument, offset: dragSelection.endIndex),
+                  let range = self.textRange(from: position1, to: position2) else { UIGraphicsPopContext(); return }
+            let rects = self.selectionRects(for: range).map(\.rect).filter { $0.width > 0.001 && $0.height > 0.001 }
+            for rect in rects {
+                let path = CGPath(roundedRect: rect, cornerWidth: 5.0, cornerHeight: 5.0, transform: nil)
+                ctx.addPath(path)
+                ctx.drawPath(using: .fillStroke)
+            }
+        }
         UIGraphicsPopContext()
     }
+    
+    
 
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
@@ -317,18 +348,49 @@ final class UXCodeTextView: UXTextView, HighlightDelegate {
                     ]
                     , range: hRange.range)
             }
-            if let dragSelection {
-                self.textStorage.addAttributes(
-                    [
-                        .foregroundColor: UIColor.blue,
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: UIColor.yellow.withAlphaComponent(0.5)
-                    ]
-                    , range: dragSelection.toNSRange().makeSafeFor(text))
-            }
-            let coordinator = self.delegate as? UXCodeTextViewDelegate
-            coordinator?.setDragSelection(self.dragSelection)
         }
+    }
+        
+    
+    private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
+        let point = CGPoint(x: point.x, y: point.y - (self.font?.pointSize ?? 0.0) / 2.0)
+        return self.layoutManager.glyphIndex(for: point, in: textView.textContainer)
+    }
+
+    private func getSelectionFromLine() -> Range<Int>? {
+        guard let firstPoint, let secondPoint else { return nil }
+        let firstGlyphIndex = getGlyphIndex(textView: self, point: firstPoint)
+        let secondGlyphIndex = getGlyphIndex(textView: self, point: secondPoint)
+        if secondGlyphIndex < firstGlyphIndex {
+            return secondGlyphIndex..<firstGlyphIndex + 1
+        } else {
+            return firstGlyphIndex..<secondGlyphIndex + 1
+        }
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        if pencilOnly && touch.type == .pencil || !pencilOnly {
+            self.firstPoint = touch.location(in: self)
+            setNeedsDisplay()
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        if pencilOnly && touch.type == .pencil || !pencilOnly {
+            self.secondPoint = touch.location(in: self)
+            self.dragSelection = getSelectionFromLine()
+            setNeedsDisplay()
+        }
+    }
+        
+    
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let coordinator = delegate as? UXCodeTextViewDelegate
+        coordinator?.setDragSelection(dragSelection)
     }
 }
 

@@ -241,11 +241,11 @@ public struct CodeEditor: View {
                 autoscroll: Bool = true,
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
-                line: Binding<Line?>? = nil,
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection   = selection
@@ -261,11 +261,11 @@ public struct CodeEditor: View {
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
-        self.line = line
         self.showAddFeedback = showAddFeedback
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.pencilOnly = pencilOnly
         self.scrollUtils = scrollUtils
     }
 
@@ -305,11 +305,11 @@ public struct CodeEditor: View {
                 inset: CGSize? = nil,
                 highlightedRanges: [HighlightedRange] = [],
                 dragSelection: Binding<Range<Int>?>? = nil,
-                line: Binding<Line?>? = nil,
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
@@ -323,11 +323,11 @@ public struct CodeEditor: View {
                   inset: inset,
                   highlightedRanges: highlightedRanges,
                   dragSelection: dragSelection,
-                  line: line,
                   showAddFeedback: showAddFeedback,
                   showEditFeedback: showEditFeedback,
                   selectedSection: selectedSection,
                   feedbackForSelectionId: feedbackForSelectionId,
+                  pencilOnly: pencilOnly,
                   scrollUtils: scrollUtils)
     }
 
@@ -343,11 +343,11 @@ public struct CodeEditor: View {
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
     private var dragSelection: Binding<Range<Int>?>?
-    private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var pencilOnly: Binding<Bool>
     private var scrollUtils: ScrollUtils
 
     public var body: some View {
@@ -363,11 +363,11 @@ public struct CodeEditor: View {
                                         autoscroll: autoscroll,
                                         highlightedRanges: highlightedRanges,
                                         dragSelection: dragSelection,
-                                        line: line,
-                                        showAddFeedback: showAddFeedback,
-                                        showEditFeedback: showEditFeedback,
-                                        selectedSection: selectedSection,
-                                        feedbackForSelectionId: feedbackForSelectionId,
-                                        scrollUtils: scrollUtils)
+                                    showAddFeedback: showAddFeedback,
+                                    showEditFeedback: showEditFeedback,
+                                    selectedSection: selectedSection,
+                                    feedbackForSelectionId: feedbackForSelectionId,
+                                    pencilOnly: pencilOnly,
+                                    scrollUtils: scrollUtils)
     }
 }
