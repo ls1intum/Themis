@@ -27,7 +27,6 @@ struct GradingCriteriaCellView: View {
             
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
                 Button {
-//                    self.detailText?.wrappedValue = instruction.instructionDescription
                     self.detailText?.wrappedValue = instruction.feedback
                     self.score?.wrappedValue = instruction.credits
                 } label: {

@@ -58,9 +58,6 @@ struct EditFeedbackViewBase: View {
             }
         }
     }
-    
-    func setGradingCriteriaStates(detailText: String, score: Double) {
-    }
 
     var body: some View {
         VStack(alignment: .leading) {
