@@ -43,7 +43,6 @@ public struct IconFinder {
     public func icon(for language: LanguageIcon, style: Style) -> SVGView {
         let path = getURLString(for: language, style: style)
         guard let url = Bundle.module.url(forResource: path, withExtension: "svg") else {
-            print("URL not found")
             return fallbackIcon(for: language, style: style == .plain ? .original : .plain)
         }
         return SVGView(contentsOf: url)
