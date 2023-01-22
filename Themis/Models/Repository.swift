@@ -57,6 +57,12 @@ class Node: Hashable, ObservableObject {
         }
         return .other
     }
+    
+    var fileExtensionString: String {
+        let components = name.components(separatedBy: ".")
+        let extensionString = components.last ?? ""
+        return extensionString
+    }
 
     init(type: FileType, name: String) {
         self.name = name

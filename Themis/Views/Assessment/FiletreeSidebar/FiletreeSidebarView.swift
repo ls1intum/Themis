@@ -1,4 +1,5 @@
 import SwiftUI
+import DeviconWrapper
 
 struct FiletreeSidebarView: View {
     let participationID: Int?
@@ -28,7 +29,7 @@ struct FiletreeSidebarView: View {
                                     )
                                 }
                             } label: {
-                                Text(tree.name)
+                                fileView(tree: tree)
                             }
                             .buttonStyle(PlainButtonStyle())
                             .padding(.horizontal)
@@ -45,5 +46,24 @@ struct FiletreeSidebarView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    @ViewBuilder
+    func fileView(tree: Node) -> some View {
+        HStack {
+            iconView(fileExtension: tree.fileExtensionString)
+            Text(tree.name)
+        }
+    }
+    
+    @ViewBuilder
+    func iconView(fileExtension: String) -> some View {
+        let iconFinder = IconFinder()
+        Group {
+            if let image = iconFinder.icon(for: fileExtension, style: .original) {
+                image
+            } else {
+                EmptyView()
+            }
+        }.frame(width: 20, height: 20)
     }
 }
