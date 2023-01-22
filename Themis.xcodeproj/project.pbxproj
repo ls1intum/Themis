@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */; };
 		0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */; };
-		833160BA2932D79700571211 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 833160B92932D79700571211 /* MarkdownUI */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -24,6 +23,7 @@
 		8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */; };
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
+		838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 838E4AA5297DADF00057E6E6 /* MarkdownUI */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
 		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
@@ -170,9 +170,9 @@
 				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
 				F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */,
+				838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */,
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
 				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
-				833160BA2932D79700571211 /* MarkdownUI in Frameworks */,
 				E2896225297DD0E30085AD98 /* DeviconWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -555,12 +555,12 @@
 			name = Themis;
 			packageProductDependencies = (
 				E2192EE0291E6F780092CE58 /* KeychainAccess */,
-				833160B92932D79700571211 /* MarkdownUI */,
 				F911B9BF29392668003CF4C8 /* TouchVisualizer */,
 				F9032CA4294A159700B2DED5 /* CachedAsyncImage */,
 				E2E3852929437F9100F5854D /* CodeEditor */,
 				E536EAD0297458240078E077 /* SwiftUIReorderableForEach */,
 				E2896224297DD0E30085AD98 /* DeviconWrapper */,
+				838E4AA5297DADF00057E6E6 /* MarkdownUI */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -636,11 +636,11 @@
 			mainGroup = 83396D2129155934003EF727;
 			packageReferences = (
 				E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				F911B9BE29392668003CF4C8 /* XCRemoteSwiftPackageReference "TouchVisualizer" */,
 				F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
+				838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -1091,12 +1091,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+		838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
 			};
 		};
 		E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
@@ -1142,9 +1142,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		833160B92932D79700571211 /* MarkdownUI */ = {
+		838E4AA5297DADF00057E6E6 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 833160B82932D79700571211 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			package = 838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
 		};
 		E2192EE0291E6F780092CE58 /* KeychainAccess */ = {
