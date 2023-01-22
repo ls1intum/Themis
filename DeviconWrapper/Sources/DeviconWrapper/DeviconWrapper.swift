@@ -2,11 +2,13 @@ import SwiftUI
 import SVGView
 
 public enum LanguageIcon: String {
-    case swift = "swift"
-    case python = "python"
-    case c = "c"
-    case rust = "rust"
-    case java = "java"
+    case swift
+    case python
+    case c
+    case rust
+    case java
+    case gradle
+    case bash
 }
 
 public enum Style: String {
@@ -25,7 +27,12 @@ public struct IconFinder {
         "py" : .python,
         "java" : .java,
         "swift" : .swift,
-        "rs" : .rust
+        "rs" : .rust,
+        "gradle" : .gradle,
+        "jar" : .java,
+        "bat" : .bash,
+        "cmd" : .bash,
+        "sh" : .bash
     ]
     
     public func icon(for fileExtension: String, style: Style) -> SVGView? {

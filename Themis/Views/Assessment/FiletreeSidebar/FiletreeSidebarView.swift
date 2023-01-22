@@ -18,7 +18,11 @@ struct FiletreeSidebarView: View {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
                         if tree.type == .folder {
-                            Text(tree.name)
+                            HStack {
+                                Image(systemName: "folder")
+                                Text(tree.name)
+                            }
+                           
                         } else {
                             Button {
                                 withAnimation {
@@ -62,7 +66,7 @@ struct FiletreeSidebarView: View {
             if let image = iconFinder.icon(for: fileExtension, style: .original) {
                 image
             } else {
-                EmptyView()
+                Spacer()
             }
         }.frame(width: 20, height: 20)
     }
