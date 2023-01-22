@@ -17,6 +17,7 @@ class AuthenticationViewModel: ObservableObject {
                 return
             }
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
+            Authentication.shared.resetBearerTokenAuthCache()
             if restControllerInitialized {
                 RESTController.shared.baseURL = url
             } else {

@@ -48,11 +48,20 @@ class Authentication: NSObject {
         }
     }
     
+    private var bearerTokenAuthNeededCached = false
+    
     func isBearerTokenAuthNeeded() -> Bool {
-        Task {
-            await fetchNeedsBearerTokenAuth()
+        if !bearerTokenAuthNeededCached {
+            Task {
+                await fetchNeedsBearerTokenAuth()
+                bearerTokenAuthNeededCached = true
+            }
         }
         return bearerTokenAuthNeeded
+    }
+    
+    func resetBearerTokenAuthCache() {
+        bearerTokenAuthNeededCached = false
     }
     // end TODO
 
