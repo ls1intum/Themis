@@ -151,6 +151,7 @@
 		E2CAE6382935214E00FAD327 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		E2CAE63D29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentSubmissionLoaderView.swift; sourceTree = "<group>"; };
+		E2D7BE6A297DCAB5000D1469 /* DeviconWrapper */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DeviconWrapper; sourceTree = "<group>"; };
 		E2DC481C294626AD00DAF0CC /* DrawingShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingShape.swift; sourceTree = "<group>"; };
 		E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingEngine.swift; sourceTree = "<group>"; };
 		E2E3852B2943800100F5854D /* CodeEditor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodeEditor; sourceTree = "<group>"; };
@@ -279,6 +280,7 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
+				E2D7BE69297DCAB5000D1469 /* Packages */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
@@ -503,6 +505,14 @@
 				E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */,
 			);
 			path = ExerciseViewModel;
+			sourceTree = "<group>";
+		};
+		E2D7BE69297DCAB5000D1469 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E2D7BE6A297DCAB5000D1469 /* DeviconWrapper */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		E2DC481B294626A200DAF0CC /* Drawing */ = {
