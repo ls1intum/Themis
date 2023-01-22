@@ -4,8 +4,8 @@ import UIKit
 
 // Custom stepper to adjust font size with input field
 struct EditorFontSizeStepperView: View {
-
     @Binding var fontSize: CGFloat
+    @Binding var showStepper: Bool
 
     func ensureLargeEnoughFontSize() {
         if fontSize < 8 {
@@ -24,21 +24,31 @@ struct EditorFontSizeStepperView: View {
 
     var body: some View {
         HStack {
-            Text("Font size").bold()
-            Spacer()
-            Button(action: decrementFontSize) {
-                Label("", systemImage: "minus")
-            }.backgroundStyle(Color.gray)
-            TextField("", value: $fontSize, formatter: NumberFormatter())
-                .onSubmit {
-                    ensureLargeEnoughFontSize()
+            Image(systemName: "textformat.size")
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.6)) {
+                        showStepper.toggle()
+                    }
                 }
-                .keyboardType(.numberPad)
-                .fixedSize()
-                .padding(5)
-            Button(action: incrementFontSize) {
-                Label("", systemImage: "plus")
-            }.backgroundStyle(Color.gray)
+                .foregroundStyle(showStepper ? .yellow : .gray)
+
+            if showStepper {
+                Button(action: decrementFontSize) {
+                    Label("", systemImage: "minus")
+                }.backgroundStyle(Color.gray)
+                
+                TextField("", value: $fontSize, formatter: NumberFormatter())
+                    .onSubmit {
+                        ensureLargeEnoughFontSize()
+                    }
+                    .keyboardType(.numberPad)
+                    .fixedSize()
+                    .padding(5)
+                
+                Button(action: incrementFontSize) {
+                    Label("", systemImage: "plus")
+                }.backgroundStyle(Color.gray)
+            }
         }.padding(15)
     }
 }

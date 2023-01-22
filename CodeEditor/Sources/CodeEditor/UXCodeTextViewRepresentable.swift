@@ -7,6 +7,7 @@
 //
 
 // swiftlint:disable type_body_length
+// swiftlint:disable function_body_length
 
 import SwiftUI
 import UIKit
@@ -60,11 +61,12 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 autoscroll: Bool,
                 highlightedRanges: [HighlightedRange],
                 dragSelection: Binding<Range<Int>?>?,
-                line: Binding<Line?>?,
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>) {
+                feedbackForSelectionId: Binding<String>,
+                pencilOnly: Binding<Bool>,
+                scrollUtils: ScrollUtils) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -76,11 +78,12 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
-        self.line = line
         self.showAddFeedback = showAddFeedback
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
         self.feedbackForSelectionId = feedbackForSelectionId
+        self.pencilOnly = pencilOnly
+        self.scrollUtils = scrollUtils
     }
 
     private var source: Binding<String>
@@ -94,11 +97,12 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
     private var dragSelection: Binding<Range<Int>?>?
-    private var line: Binding<Line?>?
     private var showAddFeedback: Binding<Bool>
     private var showEditFeedback: Binding<Bool>
     private var selectedSection: Binding<NSRange?>
     private var feedbackForSelectionId: Binding<String>
+    private var pencilOnly: Binding<Bool>
+    private var scrollUtils: ScrollUtils
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -226,36 +230,14 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             parent.flags.contains(.selectable)
             || parent.flags.contains(.editable)
         }
+        
+        public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            scrollView.setNeedsDisplay()
+        }
     }
 
     public func makeCoordinator() -> Coordinator {
         Coordinator(self)
-    }
-
-    private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
-        let point = CGPoint(x: point.x, y: point.y - (fontSize?.wrappedValue ?? 0.0) / 2.0)
-        return textView.layoutManager.glyphIndex(for: point, in: textView.textContainer)
-    }
-
-    private func getSelectionFromLine(textView: UXCodeTextView) -> Range<Int>? {
-        var selectionRange: Range<Int>?
-        for point in line?.wrappedValue?.points ?? [] {
-            let pointOffset = CGPoint(x: point.x + textView.contentOffset.x,
-                                      y: point.y + textView.contentOffset.y)
-            let glyphIndex = getGlyphIndex(textView: textView, point: pointOffset)
-            if selectionRange == nil {
-                selectionRange = glyphIndex..<glyphIndex + 1
-            } else {
-                // swiftlint:disable force_unwrapping
-                if glyphIndex < selectionRange!.lowerBound {
-                    selectionRange = glyphIndex..<selectionRange!.upperBound
-                }
-                if glyphIndex > selectionRange!.upperBound {
-                    selectionRange = selectionRange!.lowerBound..<glyphIndex + 1
-                }
-            }
-        }
-        return selectionRange
     }
 
     private func updateTextView(_ textView: UXCodeTextView) {
@@ -276,6 +258,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.autoPairCompletion   = autoPairs
 
         if source.wrappedValue != textView.string {
+            // reset contentoffset when switching files as it is not stored and content heights of files vary
+            textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
             if let textStorage = textView.codeTextStorage {
                 textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length),
                                               with: source.wrappedValue)
@@ -285,9 +269,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
             }
         }
         textView.setNeedsDisplay()
-        let dragSelection = getSelectionFromLine(textView: textView)
-        textView.dragSelection = dragSelection
-
+        textView.pencilOnly = pencilOnly.wrappedValue
+        textView.dragSelection = self.dragSelection?.wrappedValue
+       
         if let selection = selection {
             let range = selection.wrappedValue
 
@@ -311,6 +295,41 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = highlightedRanges
+        
+        // check if textView's layout is completed and store offsets of all inline highlights
+        if textView.frame.height > 0 {
+            highlightedRanges.forEach { range in
+                scrollUtils.offsets[range.range] =
+                textView.layoutManager.boundingRect(forGlyphRange: range.range, in: textView.textContainer).origin.y
+            }
+        }
+
+            if let range =
+                scrollUtils.range {
+                DispatchQueue.main.async {
+                    scrollToRange(textView: textView, range: range)
+                }
+                self.scrollUtils.range = nil
+            }
+    }
+    
+    private func scrollToRange(textView: UXCodeTextView, range: NSRange) {
+        let visibleHeight = textView.visibleSize.height
+        let contentHeight = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT))).height
+        
+        if contentHeight > visibleHeight {
+            let rangeOffsetY = scrollUtils.offsets[range] ?? 0.0
+                // handle cases where offsetting it to the center is not wanted
+                // otherwise the scrollview would jump back on next interaction since min/max scroll range is exceeded
+                if rangeOffsetY < (visibleHeight / 2) {
+                    textView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else if (contentHeight - rangeOffsetY) < (visibleHeight / 2) {
+                    let bottomOffsetY = contentHeight - visibleHeight
+                    textView.setContentOffset(CGPoint(x: 0, y: bottomOffsetY), animated: true)
+                } else {
+                    textView.setContentOffset(CGPoint(x: 0, y: rangeOffsetY - (visibleHeight / 2)), animated: true)
+                }
+        }
     }
 
 #if os(macOS)

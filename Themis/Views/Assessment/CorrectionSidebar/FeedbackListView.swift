@@ -11,9 +11,12 @@ struct FeedbackListView: View {
     var readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
-
+    
     @State var showAddFeedback = false
-
+    
+    var pId: Int?
+    var templatePId: Int?
+    
     var body: some View {
         VStack(alignment: .leading) {
             List {
@@ -34,12 +37,12 @@ struct FeedbackListView: View {
                             cvm: cvm,
                             feedback: feedback
                         )
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color(UIColor.systemBackground))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color(UIColor.systemBackground))
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
-
+                
                 Section {
                     ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                         FeedbackCellView(
@@ -48,8 +51,18 @@ struct FeedbackListView: View {
                             cvm: cvm,
                             feedback: feedback
                         )
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color(UIColor.systemBackground))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color(UIColor.systemBackground))
+                        .onTapGesture {
+                            if let file = feedback.file, let pId = pId, let templatePId = templatePId {
+                                withAnimation {
+                                    cvm.openFile(file: file, participationId: pId, templateParticipationId: templatePId)
+                                }
+                                cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
+                                    $0.id == feedback.id.uuidString
+                                }?.range
+                            }
+                        }
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
@@ -65,8 +78,8 @@ struct FeedbackListView: View {
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
                             feedback: feedback)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color(UIColor.systemBackground))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color(UIColor.systemBackground))
                     }
                 } header: {
                     HStack {
@@ -87,7 +100,7 @@ struct FeedbackListView: View {
             )
         }
     }
-
+    
     private func delete(at indexSet: IndexSet) {
         indexSet
             .map { assessmentResult.feedbacks[$0] }
@@ -102,7 +115,7 @@ struct FeedbackListView_Previews: PreviewProvider {
     static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
-
+    
     static var previews: some View {
         FeedbackListView(
             readOnly: false,

@@ -9,13 +9,15 @@ struct AssessmentView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @StateObject var umlVM = UMLViewModel()
     
-    @State var showSettings = false
     @State var showFileTree = true
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder = true
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
+    @State var showStepper = false
+    @State var showSubmitConfirmation = false
+    @State var showNavigationOptions = false
     
     private let minRightSnapWidth: CGFloat = 185
     
@@ -138,22 +140,17 @@ struct AssessmentView: View {
             if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        cvm.lassoMode.toggle()
+                        cvm.pencilMode.toggle()
                     } label: {
-                        let iconDrawingColor: Color = cvm.lassoMode ? .yellow : .gray
-                        Image(systemName: "pencil.and.outline")
+                        let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
+                        Image(systemName: "hand.draw")
                             .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, iconDrawingColor)
+                            .foregroundColor(iconDrawingColor)
                     }
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showSettings.toggle()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .foregroundColor(.white)
+                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 CustomProgressView(
@@ -179,27 +176,9 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: true)
-                        }
-                    }
+                    showSubmitConfirmation.toggle()
                 } label: {
                     Text("Submit")
-                }
-                .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly || vm.loading)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        await vm.initRandomSubmission(exerciseId: exerciseId)
-                        if vm.submission == nil {
-                            showNoSubmissionsAlert = true
-                        }
-                    }
-                } label: {
-                    Text("Next")
                 }
                 .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly || vm.loading)
@@ -210,12 +189,28 @@ struct AssessmentView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
-        .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                AppearanceSettingsView(
-                    fontSize: $cvm.editorFontSize
-                )
-                .navigationTitle("Appearance settings")
+        .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
+            Button("Yes") {
+                Task {
+                    if let pId = vm.submission?.participation.id {
+                        await vm.sendAssessment(participationId: pId, submit: true)
+                    }
+                    showNavigationOptions.toggle()
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
+            Button("Next Submission") {
+                Task {
+                    await vm.initRandomSubmission(exerciseId: exerciseId)
+                    if vm.submission == nil {
+                        showNoSubmissionsAlert = true
+                    }
+                }
+            }
+            Button("Finish assessing") {
+                presentationMode.wrappedValue.dismiss()
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
@@ -358,7 +353,9 @@ struct AssessmentView: View {
                     assessmentResult: $vm.assessmentResult,
                     cvm: cvm,
                     umlVM: umlVM,
-                    loading: vm.loading
+                    loading: vm.loading,
+                    pId: vm.submission?.participation.id,
+                    templatePId: vm.submission?.participation.exercise.templateParticipation?.id
                 )
             }
         }

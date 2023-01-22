@@ -64,7 +64,11 @@ struct ProblemStatementCellView: View {
                     })
                 } else {
                     Markdown(part.text)
-                        .setImageHandler(.assetImage(), forURLScheme: "asset")
+                        .markdownTextStyle(\.code) {
+                            FontFamilyVariant(.monospaced)
+                            ForegroundColor(.red)
+                        }
+                        .markdownImageProvider(.asset)
                 }
             }
         }
