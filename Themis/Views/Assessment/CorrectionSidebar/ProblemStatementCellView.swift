@@ -64,7 +64,7 @@ struct ProblemStatementCellView: View {
                     })
                 } else {
                     Markdown(part.text)
-                        .setImageHandler(.assetImage(), forURLScheme: "asset")
+                        .markdownImageProvider(.asset)
                 }
             }
         }
