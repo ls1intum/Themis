@@ -17,7 +17,7 @@ struct CodeView: View {
     var onOpenFeedback: (Range<Int>) -> Void
 
     var editorItself: some View {
-        CodeEditor(source: $file.code ?? "loading...",
+        UXCodeTextViewRepresentable(source: $file.code ?? "loading...",
                    language: .swift,
                    theme: theme,
                    fontSize: $fontSize,

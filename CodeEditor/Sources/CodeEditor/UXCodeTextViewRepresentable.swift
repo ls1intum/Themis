@@ -21,7 +21,7 @@ typealias UXViewRepresentable = UIViewRepresentable
 /**
  * Move the gritty details out of the main representable.
  */
-struct UXCodeTextViewRepresentable: UXViewRepresentable {
+public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
     /**
      * Configures a CodeEditor View with the given parameters.
@@ -50,15 +50,14 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
      */
 
     public init(source: Binding<String>,
-                selection: Binding<Range<String.Index>>?,
-                language: CodeEditor.Language?,
-                theme: CodeEditor.ThemeName,
-                fontSize: Binding<CGFloat>?,
-                flags: CodeEditor.Flags,
-                indentStyle: CodeEditor.IndentStyle,
-                autoPairs: [ String: String ],
-                inset: CGSize,
-                autoscroll: Bool,
+                selection: Binding<Range<String.Index>>? = nil,
+                language: CodeEditor.Language? = nil,
+                theme: CodeEditor.ThemeName = .default,
+                fontSize: Binding<CGFloat>? = nil,
+                flags: CodeEditor.Flags = .defaultEditorFlags,
+                indentStyle: CodeEditor.IndentStyle = .system,
+//                autoPairs: [ String: String ]? = nil,
+//                autoscroll: Bool,
                 highlightedRanges: [HighlightedRange],
                 dragSelection: Binding<Range<Int>?>?,
                 showAddFeedback: Binding<Bool>,
@@ -74,8 +73,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.themeName   = theme
         self.flags       = flags
         self.indentStyle = indentStyle
-        self.autoPairs   = autoPairs
-        self.autoscroll = autoscroll
+//        self.autoPairs   = autoPairs ?? language.flatMap({ CodeEditor.defaultAutoPairs[$0] })
+//        ?? [:]
+//        self.autoscroll = autoscroll
         self.highlightedRanges = highlightedRanges
         self.dragSelection = dragSelection
         self.showAddFeedback = showAddFeedback
@@ -93,8 +93,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private let themeName: CodeEditor.ThemeName
     private let flags: CodeEditor.Flags
     private let indentStyle: CodeEditor.IndentStyle
-    private let autoPairs: [ String: String ]
-    private let autoscroll: Bool
+//    private let autoPairs: [ String: String ]
+//    private let autoscroll: Bool
     private var highlightedRanges: [HighlightedRange]
     private var dragSelection: Binding<Range<Int>?>?
     private var showAddFeedback: Binding<Bool>
@@ -255,7 +255,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
         textView.indentStyle          = indentStyle
         textView.isSmartIndentEnabled = flags.contains(.smartIndent)
-        textView.autoPairCompletion   = autoPairs
+//        textView.autoPairCompletion   = autoPairs
 
         if source.wrappedValue != textView.string {
             // reset contentoffset when switching files as it is not stored and content heights of files vary
@@ -285,9 +285,9 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #error("Unsupported OS")
 #endif
 
-                if autoscroll {
-                    textView.scrollRangeToVisible(nsrange)
-                }
+//                if autoscroll {
+//                    textView.scrollRangeToVisible(nsrange)
+//                }
             }
         }
 
