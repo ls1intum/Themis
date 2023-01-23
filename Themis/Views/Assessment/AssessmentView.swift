@@ -137,28 +137,26 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
-            if !vm.readOnly {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        cvm.pencilMode.toggle()
-                    } label: {
-                        let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
-                        Image(systemName: "hand.draw")
-                            .symbolRenderingMode(.palette)
-                            .foregroundColor(iconDrawingColor)
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                HStack {
+                    if !vm.readOnly {
+                        Button {
+                            cvm.pencilMode.toggle()
+                        } label: {
+                            let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
+                            Image(systemName: "hand.draw")
+                                .symbolRenderingMode(.palette)
+                                .foregroundColor(iconDrawingColor)
+                        }
                     }
-                }
+                    EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
+                .transition(.opacity)
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: vm.assessmentResult.score,
                     max: vm.submission?.participation.exercise.maxPoints ?? 0
                 )
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
                 scoreDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -393,6 +391,7 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
+        .background(Color.primary)
     }
 }
 

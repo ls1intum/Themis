@@ -26,7 +26,7 @@ struct EditorFontSizeStepperView: View {
         HStack {
             Image(systemName: "textformat.size")
                 .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.6)) {
+                    withAnimation(.easeOut(duration: 0.5)) {
                         showStepper.toggle()
                     }
                 }
@@ -41,14 +41,14 @@ struct EditorFontSizeStepperView: View {
                     .onSubmit {
                         ensureLargeEnoughFontSize()
                     }
+                    .foregroundColor(.white)
                     .keyboardType(.numberPad)
                     .fixedSize()
-                    .padding(5)
                 
                 Button(action: incrementFontSize) {
                     Label("", systemImage: "plus")
                 }.backgroundStyle(Color.gray)
             }
-        }.padding(15)
+        }
     }
 }
