@@ -27,6 +27,11 @@ struct FeedbackCellView: View {
             return Color(.label)
         }
     }
+    
+    var pId: Int?
+    var templatePId: Int?
+    
+    @State var isTapped = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -64,6 +69,27 @@ struct FeedbackCellView: View {
                     .foregroundColor(feedbackColor)
             }
         }
+        .onTapGesture {
+            if feedback.type == .inline {
+                withAnimation(.linear) {
+                    isTapped = true
+                }
+                if let file = feedback.file, let pId = pId, let templatePId = templatePId {
+                    withAnimation {
+                        cvm.openFile(file: file, participationId: pId, templateParticipationId: templatePId)
+                    }
+                    cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
+                        $0.id == feedback.id.uuidString
+                    }?.range
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    withAnimation(.linear) {
+                        isTapped = false
+                    }
+                }
+            }
+        }
+        .scaleEffect(isTapped ? 1.05 : 1.0)
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
                 assessmentResult: assessmentResult,
@@ -75,6 +101,7 @@ struct FeedbackCellView: View {
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 25)
-            .stroke(lineWidth: 2))
+            .stroke(lineWidth: 2)
+            .scaleEffect(isTapped ? 1.05 : 1.0))
     }
 }

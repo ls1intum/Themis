@@ -18,5 +18,6 @@ struct NavigationBarButton: ButtonStyle {
             .cornerRadius(20)
             .fontWeight(.semibold)
             .scaleEffect(configuration.isPressed ? 1.1 : 1)
+            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }

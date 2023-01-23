@@ -13,7 +13,6 @@ struct FeedbackListView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     
     @State var showAddFeedback = false
-    @State var isTapped = false
     
     var pId: Int?
     var templatePId: Int?
@@ -50,29 +49,12 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: assessmentResult,
                             cvm: cvm,
-                            feedback: feedback
+                            feedback: feedback,
+                            pId: pId,
+                            templatePId: templatePId
                         )
-                        .scaleEffect(isTapped ? 1.1 : 1)
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
-                        .onTapGesture {
-                            withAnimation(.linear) {
-                                self.isTapped = true
-                            }
-                            if let file = feedback.file, let pId = pId, let templatePId = templatePId {
-                                withAnimation {
-                                    cvm.openFile(file: file, participationId: pId, templateParticipationId: templatePId)
-                                }
-                                cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
-                                    $0.id == feedback.id.uuidString
-                                }?.range
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                withAnimation(.linear) {
-                                    self.isTapped = false
-                                }
-                            }
-                        }
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
@@ -87,7 +69,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: assessmentResult,
                             cvm: cvm,
-                            feedback: feedback)
+                            feedback: feedback
+                        )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
                     }
