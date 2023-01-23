@@ -302,12 +302,8 @@ extension ArtemisAPI {
             .map { (path: Stack(storage: $0.0.reversed()), type: $0.1) }
 
         let root = Node(type: .folder, name: "")
-        let start = DispatchTime.now()
         parseFileTree(node: root, paths: convertedStructure)
-        let end = DispatchTime.now()
 
-        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-        let timeInterval = Double(nanoTime) / 1_000_000_000
         
         root.flatMap()
         return root
