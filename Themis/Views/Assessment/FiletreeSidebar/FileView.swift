@@ -11,13 +11,13 @@ struct FileView: View {
     var file: Node
     var body: some View {
         HStack {
-            iconView(file: file)
+            iconView()
             Text(file.name)
         }
     }
     
     @ViewBuilder
-    func iconView(file: Node) -> some View {
+    func iconView() -> some View {
         Group {
             if let language = file.language(), let image = image(for: language, style: .original) {
                 image
