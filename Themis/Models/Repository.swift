@@ -105,6 +105,7 @@ class Node: Hashable, ObservableObject {
     private let languageDict: [String: Language] = [
         "c" : .c,
         "py" : .python,
+        "pyw": .python,
         "java" : .java,
         "swift" : .swift,
         "rs" : .rust,
