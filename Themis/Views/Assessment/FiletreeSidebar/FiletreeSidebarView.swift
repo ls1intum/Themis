@@ -17,7 +17,11 @@ struct FiletreeSidebarView: View {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
                         if tree.type == .folder {
-                            Text(tree.name)
+                            HStack {
+                                Image(systemName: "folder")
+                                Text(tree.name)
+                            }
+                           
                         } else {
                             Button {
                                 withAnimation {
@@ -28,7 +32,7 @@ struct FiletreeSidebarView: View {
                                     )
                                 }
                             } label: {
-                                Text(tree.name)
+                                FileView(file: tree)
                             }
                             .buttonStyle(PlainButtonStyle())
                             .padding(.horizontal)
@@ -46,4 +50,5 @@ struct FiletreeSidebarView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+
 }
