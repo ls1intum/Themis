@@ -354,7 +354,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         UIGraphicsPopContext()
     }
-    
 
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
