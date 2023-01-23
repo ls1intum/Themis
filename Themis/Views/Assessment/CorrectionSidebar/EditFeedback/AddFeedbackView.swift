@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddFeedbackView: View {
-    @ObservedObject var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     let type: FeedbackType
 

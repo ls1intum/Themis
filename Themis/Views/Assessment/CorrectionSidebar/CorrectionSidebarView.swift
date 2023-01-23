@@ -17,7 +17,7 @@ struct CorrectionSidebarView: View {
     @Binding var problemStatement: String
     let exercise: ExerciseOfSubmission?
     let readOnly: Bool
-    @ObservedObject var assessmentResult: AssessmentResult
+    @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
     let loading: Bool
@@ -70,7 +70,7 @@ struct CorrectionSidebarView: View {
     }
 }
 
- struct CorrectionSidebarView_Previews: PreviewProvider {
+struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
@@ -81,7 +81,7 @@ struct CorrectionSidebarView: View {
             problemStatement: $problemStatement,
             exercise: nil,
             readOnly: false,
-            assessmentResult: assessmentResult,
+            assessmentResult: $assessmentResult,
             cvm: cvm,
             umlVM: umlVM,
             loading: true

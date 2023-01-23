@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct EditFeedbackViewBase: View {
-    @ObservedObject var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var detailText = ""

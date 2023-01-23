@@ -4,7 +4,7 @@ import Combine
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: SubmissionForAssessment?
-    @ObservedObject var assessmentResult = AssessmentResult()
+    @Published var assessmentResult = AssessmentResult()
     @Published var showSubmission = false
     @Published var readOnly = true
     @Published var loading = false
@@ -23,6 +23,7 @@ class AssessmentViewModel: ObservableObject {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
             assessmentResult.computedFeedbacks = submission?.results?.last?.feedbacks ?? []
             self.showSubmission = true
+            UndoManagerSingleton.shared.undoManager.removeAllActions()
         } catch {
             self.submission = nil
             print(error)
@@ -42,6 +43,7 @@ class AssessmentViewModel: ObservableObject {
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
                 assessmentResult.computedFeedbacks = submission?.results?.last?.feedbacks ?? []
+                UndoManagerSingleton.shared.undoManager.removeAllActions()
             }
             self.showSubmission = true
         } catch {

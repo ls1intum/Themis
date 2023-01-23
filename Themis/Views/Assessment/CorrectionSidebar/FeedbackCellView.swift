@@ -11,7 +11,7 @@ import SwiftUI
 struct FeedbackCellView: View {
 
     var readOnly: Bool
-    @ObservedObject var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback

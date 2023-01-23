@@ -166,10 +166,6 @@ struct AssessmentView: View {
                     }
                     .disabled(!vm.assessmentResult.canRedo())
                 }
-//                HStack {
-//                    
-//                }
-                //                .animation(Animation.easeInOut(duration: 0.6))
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.pencilMode.toggle()
@@ -382,7 +378,7 @@ struct AssessmentView: View {
                     ),
                     exercise: vm.submission?.participation.exercise,
                     readOnly: vm.readOnly,
-                    assessmentResult: vm.assessmentResult,
+                    assessmentResult: $vm.assessmentResult,
                     cvm: cvm,
                     umlVM: umlVM,
                     loading: vm.loading,
