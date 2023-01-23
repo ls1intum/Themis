@@ -150,6 +150,7 @@ struct AssessmentView: View {
                         }
                     }
                     EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
+                }
                 .transition(.opacity)
             }
             ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -159,6 +160,7 @@ struct AssessmentView: View {
                 )
                 scoreDisplay
             }
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
