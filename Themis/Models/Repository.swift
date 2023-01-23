@@ -21,6 +21,21 @@ enum FileExtension: String, Codable {
     case other = "OTHER"
 }
 
+public enum Language: String {
+    case swift
+    case python
+    case c
+    case rust
+    case java
+    case gradle
+    case bash
+}
+
+public enum Style: String {
+    case original
+    case plain
+}
+
 class Node: Hashable, ObservableObject {
 
     var parent: Node?
@@ -87,7 +102,26 @@ class Node: Hashable, ObservableObject {
     var path: String {
         calculatePath().joined(separator: "/")
     }
-
+    
+    private let languageDict: [String: Language] = [
+        "c" : .c,
+        "py" : .python,
+        "java" : .java,
+        "swift" : .swift,
+        "rs" : .rust,
+        "gradle" : .gradle,
+        "jar" : .java,
+        "bat" : .bash,
+        "cmd" : .bash,
+        "sh" : .bash
+    ]
+    
+    public func language() -> Language? {
+        guard let language = languageDict[self.fileExtensionString] else { return nil }
+        return language
+    }
+    
+    
     /// This Method will flatMap children that have only one folder
     func flatMap() {
         guard let children, type == .folder else { return }
