@@ -220,17 +220,19 @@ struct AssessmentView: View {
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
-                exercise: vm.submission?.participation.exercise
+                gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? []
             )
         }
         .sheet(isPresented: $cvm.showEditFeedback) {
             if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
-                EditFeedbackView(assessmentResult: $vm.assessmentResult,
-                                 cvm: cvm,
-                                 type: .inline,
-                                 showSheet: $cvm.showEditFeedback,
-                                 idForUpdate: feedback.id,
-                                 exercise: vm.submission?.participation.exercise)
+                EditFeedbackView(
+                    assessmentResult: $vm.assessmentResult,
+                    cvm: cvm,
+                    type: .inline,
+                    showSheet: $cvm.showEditFeedback,
+                    idForUpdate: feedback.id,
+                    gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? []
+                )
             }
         }
         .task(priority: .high) {

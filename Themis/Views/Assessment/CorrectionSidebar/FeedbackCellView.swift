@@ -28,7 +28,7 @@ struct FeedbackCellView: View {
         }
     }
     
-    let exercise: ExerciseOfSubmission?
+    let gradingCriteria: [GradingCriterion]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -73,7 +73,7 @@ struct FeedbackCellView: View {
                 type: feedback.type,
                 showSheet: $showEditFeedback,
                 idForUpdate: feedback.id,
-                exercise: nil
+                gradingCriteria: gradingCriteria
             )
         }
         .padding()

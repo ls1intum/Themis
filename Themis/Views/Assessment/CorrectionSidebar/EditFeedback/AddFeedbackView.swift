@@ -16,7 +16,7 @@ struct AddFeedbackView: View {
     
     var file: Node?
     
-    let exercise: ExerciseOfSubmission?
+    let gradingCriteria: [GradingCriterion]
 
     var body: some View {
         EditFeedbackViewBase(
@@ -27,7 +27,7 @@ struct AddFeedbackView: View {
             edit: false,
             type: type,
             file: file,
-            gradingCriteria: exercise?.gradingCriteria ?? []
+            gradingCriteria: gradingCriteria
         )
     }
 }

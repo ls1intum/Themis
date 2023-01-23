@@ -20,6 +20,7 @@ typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
 #endif
 
+// swiftlint:disable type_body_length
 /**
  * Subclass of NSTextView/UITextView which adds some code editing features to
  * the respective Cocoa views.
@@ -69,7 +70,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
     
-    var pencilOnly: Bool = false {
+    var pencilOnly = false {
         didSet {
             if pencilOnly {
                 self.panGestureRecognizer.minimumNumberOfTouches = 1
@@ -334,7 +335,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         UIGraphicsPopContext()
     }
     
-    
 
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
@@ -366,7 +366,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         } else {
             return firstGlyphIndex..<secondGlyphIndex + 1
         }
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -386,7 +385,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
         
-    
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let coordinator = delegate as? UXCodeTextViewDelegate

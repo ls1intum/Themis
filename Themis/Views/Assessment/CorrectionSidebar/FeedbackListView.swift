@@ -17,7 +17,7 @@ struct FeedbackListView: View {
     var pId: Int?
     var templatePId: Int?
     
-    let exercise: ExerciseOfSubmission?
+    let gradingCriteria: [GradingCriterion]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -38,7 +38,7 @@ struct FeedbackListView: View {
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
                             feedback: feedback,
-                            exercise: exercise
+                            gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -53,7 +53,7 @@ struct FeedbackListView: View {
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
                             feedback: feedback,
-                            exercise: exercise
+                            gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -82,7 +82,8 @@ struct FeedbackListView: View {
                             assessmentResult: $assessmentResult,
                             cvm: cvm,
                             feedback: feedback,
-                            exercise: exercise)
+                            gradingCriteria: gradingCriteria
+                        )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
                     }
@@ -102,7 +103,7 @@ struct FeedbackListView: View {
                 cvm: cvm,
                 type: .general,
                 showSheet: $showAddFeedback,
-                exercise: exercise
+                gradingCriteria: gradingCriteria
             )
         }
     }
@@ -127,7 +128,7 @@ struct FeedbackListView_Previews: PreviewProvider {
             readOnly: false,
             assessmentResult: $assessmentResult,
             cvm: codeEditor,
-            exercise: nil
+            gradingCriteria: []
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

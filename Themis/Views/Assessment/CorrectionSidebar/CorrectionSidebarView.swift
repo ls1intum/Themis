@@ -61,7 +61,7 @@ struct CorrectionSidebarView: View {
                         cvm: cvm,
                         pId: pId,
                         templatePId: templatePId,
-                        exercise: exercise
+                        gradingCriteria: exercise?.gradingCriteria ?? []
                     )
                 }
             }
