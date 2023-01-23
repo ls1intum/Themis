@@ -137,22 +137,32 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                HStack {
-                    if !vm.readOnly {
-                        Button {
-                            cvm.pencilMode.toggle()
-                        } label: {
-                            let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
-                            Image(systemName: "hand.draw")
-                                .symbolRenderingMode(.palette)
-                                .foregroundColor(iconDrawingColor)
-                        }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if !vm.readOnly {
+                    Button {
+                        cvm.pencilMode.toggle()
+                    } label: {
+                        let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
+                        Image(systemName: "hand.draw")
+                            .symbolRenderingMode(.palette)
+                            .foregroundColor(iconDrawingColor)
                     }
-                    EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
                 }
-                .transition(.opacity)
             }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showStepper.toggle()
+                } label: {
+                    let iconColor: Color = showStepper ? .yellow : .gray
+                    Image(systemName: "textformat.size")
+                        .foregroundColor(iconColor)
+                }
+                .popover(isPresented: $showStepper) {
+                    EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
+                }
+            }
+            
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: vm.assessmentResult.score,
