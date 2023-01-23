@@ -17,5 +17,6 @@ struct NavigationBarButton: ButtonStyle {
             .background(isEnabled ? Color.secondary : Color(.systemGray))
             .cornerRadius(20)
             .fontWeight(.semibold)
+            .scaleEffect(configuration.isPressed ? 1.1 : 1)
     }
 }
