@@ -20,15 +20,6 @@ enum FileExtension: String, Codable {
     case other = "OTHER"
 }
 
-public enum Language: String {
-    case swift
-    case python
-    case c
-    case rust
-    case java
-    case gradle
-    case bash
-}
 
 public enum Style: String {
     case original
@@ -102,19 +93,6 @@ class Node: Hashable, ObservableObject {
         calculatePath().joined(separator: "/")
     }
     
-    private let languageDict: [String: Language] = [
-        "c" : .c,
-        "py" : .python,
-        "pyw": .python,
-        "java" : .java,
-        "swift" : .swift,
-        "rs" : .rust,
-        "gradle" : .gradle,
-        "jar" : .java,
-        "bat" : .bash,
-        "cmd" : .bash,
-        "sh" : .bash
-    ]
     
     public func language() -> Language? {
         guard let language = languageDict[self.fileExtensionString] else { return nil }
@@ -225,6 +203,68 @@ class Node: Hashable, ObservableObject {
             }
         }
     }
+    
+    private let languageDict: [String: Language] = [
+        "c" : .c,
+        "h" : .c,
+        "py" : .python,
+        "pyw": .python,
+        "java" : .java,
+        "swift" : .swift,
+        "rs" : .rust,
+        "gradle" : .gradle,
+        "jar" : .java,
+        "bat" : .bash,
+        "cmd" : .bash,
+        "sh" : .bash,
+        "js" : .javascript,
+        "dart" : .dart,
+        "groovy" : .groovy,
+        "hs" : .haskell,
+        "kt" : .kotlin,
+        "ktm" : .kotlin,
+        "scala" : .scala,
+        "sc" : .scala,
+        "ts" : .typescript,
+        "r" : .r,
+        "rb" : .ruby,
+        "sass" : .sass,
+        "scss" : .sass,
+        "spring" : .spring,
+        "sql" : .sqlite,
+        "ssh" : .ssh,
+        "svelte" : .svelte,
+        "twcss" : .tailwindcss,
+        "tf" : .tensorflow,
+        "tfvars" : .terraform,
+        "3js" : .threejs,
+        "typo3" : .typo3,
+        "code-workspace" : .vscode,
+        "vue" : .vuejs,
+        "webpack" : .webpack,
+        "xcodeproj" : .xcode,
+        "yarn" : .yarn,
+        "ino" : .arduino,
+        "cmake" : .cmake,
+        "cmake.in" : .cmake,
+        "coffee" : .coffeescript,
+        "css" : .css3,
+        "dockerfile" : .docker,
+        "graphql" : .graphql,
+        "grunt" : .grunt,
+        "gulp" : .gulp,
+        "html" : .html5,
+        "iml" : .intellij,
+        "jl" : .julia,
+        "ipynb" : .jupyter,
+        "tex" : .latex,
+        "lua" : .lua,
+        "md" : .markdown,
+        "m" : .matlab,
+        "mongo" : .mongodb,
+        "ml" : .ocaml,
+        "mli" : .ocaml
+    ]
 }
 
 extension ArtemisAPI {
