@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import DeviconWrapper
 
 enum FileType: String, Codable {
     case folder = "FOLDER"
