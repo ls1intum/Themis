@@ -28,8 +28,8 @@ struct FeedbackCellView: View {
         }
     }
     
-    var pId: Int?
-    var templatePId: Int?
+    var participationId: Int?
+    var templateParticipationId: Int?
     
     @State var isTapped = false
 
@@ -74,9 +74,9 @@ struct FeedbackCellView: View {
                 withAnimation(.linear) {
                     isTapped = true
                 }
-                if let file = feedback.file, let pId = pId, let templatePId = templatePId {
+                if let file = feedback.file, let participationId = participationId, let templateParticipationId = templateParticipationId {
                     withAnimation {
-                        cvm.openFile(file: file, participationId: pId, templateParticipationId: templatePId)
+                        cvm.openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
                     }
                     cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
                         $0.id == feedback.id.uuidString

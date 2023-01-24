@@ -14,8 +14,8 @@ struct FeedbackListView: View {
     
     @State var showAddFeedback = false
     
-    var pId: Int?
-    var templatePId: Int?
+    var participationId: Int?
+    var templateParticipationId: Int?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -50,8 +50,8 @@ struct FeedbackListView: View {
                             assessmentResult: assessmentResult,
                             cvm: cvm,
                             feedback: feedback,
-                            pId: pId,
-                            templatePId: templatePId
+                            participationId: participationId,
+                            templateParticipationId: templateParticipationId
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
