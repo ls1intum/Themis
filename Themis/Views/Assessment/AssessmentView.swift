@@ -134,6 +134,7 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
+            
             if vm.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
@@ -141,31 +142,8 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
+            
             if !vm.readOnly {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        withAnimation(.easeInOut) {
-                            vm.assessmentResult.undo()
-                        }
-                    } label: {
-                        let undoIconColor: Color = !vm.assessmentResult.canUndo() ? .gray : .white
-                        Image(systemName: "arrow.uturn.backward")
-                            .foregroundStyle(undoIconColor)
-                    }
-                    .disabled(!vm.assessmentResult.canUndo())
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        withAnimation(.easeInOut) {
-                            vm.assessmentResult.redo()
-                        }
-                    } label: {
-                        let redoIconColor: Color = !vm.assessmentResult.canRedo() ? .gray : .white
-                        Image(systemName: "arrow.uturn.forward")
-                            .foregroundStyle(redoIconColor)
-                    }
-                    .disabled(!vm.assessmentResult.canRedo())
-                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.pencilMode.toggle()
@@ -177,16 +155,24 @@ struct AssessmentView: View {
                     }
                 }
             }
+
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper.animation())
+                Button {
+                    showStepper.toggle()
+                } label: {
+                    let iconColor: Color = showStepper ? .yellow : .gray
+                    Image(systemName: "textformat.size")
+                        .foregroundColor(iconColor)
+                }
+                .popover(isPresented: $showStepper) {
+                    EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
+                }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: vm.assessmentResult.score,
                     max: vm.submission?.participation.exercise.maxPoints ?? 0
                 )
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
                 scoreDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -421,6 +407,7 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
+        .background(Color.primary)
     }
 }
 

@@ -4,8 +4,8 @@ import UIKit
 
 // Custom stepper to adjust font size with input field
 struct EditorFontSizeStepperView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var fontSize: CGFloat
-    @Binding var showStepper: Bool
 
     func ensureLargeEnoughFontSize() {
         if fontSize < 8 {
@@ -24,31 +24,33 @@ struct EditorFontSizeStepperView: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "textformat.size")
-                .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.6)) {
-                        showStepper.toggle()
-                    }
-                }
-                .foregroundStyle(showStepper ? .yellow : .gray)
-
-            if showStepper {
-                Button(action: decrementFontSize) {
-                    Label("", systemImage: "minus")
-                }.backgroundStyle(Color.gray)
-                
-                TextField("", value: $fontSize, formatter: NumberFormatter())
-                    .onSubmit {
-                        ensureLargeEnoughFontSize()
-                    }
-                    .keyboardType(.numberPad)
-                    .fixedSize()
-                    .padding(5)
-                
-                Button(action: incrementFontSize) {
-                    Label("", systemImage: "plus")
-                }.backgroundStyle(Color.gray)
+            Button(action: decrementFontSize) {
+                Image(systemName: "minus")
             }
+            .backgroundStyle(Color.gray)
+            
+            TextField("", value: $fontSize, formatter: NumberFormatter())
+                .onSubmit {
+                    ensureLargeEnoughFontSize()
+                }
+                .foregroundColor(colorScheme == .light ? .black : .white)
+                .keyboardType(.numberPad)
+                .fixedSize()
+                .frame(width: 30)
+            
+            Button(action: incrementFontSize) {
+                Image(systemName: "plus")
+            }.backgroundStyle(Color.gray)
         }
+        .padding(20)
+    }
+}
+
+struct FontSizeStepperView_Previews: PreviewProvider {
+    @State static var fontSize: CGFloat = 14
+    
+    static var previews: some View {
+        EditorFontSizeStepperView(fontSize: $fontSize)
+            .background(Color.primary)
     }
 }
