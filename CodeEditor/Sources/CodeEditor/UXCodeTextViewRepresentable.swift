@@ -5,8 +5,10 @@
 //  Created by Helge Heß.
 //  Copyright © 2021 ZeeZide GmbH. All rights reserved.
 //
+
 // swiftlint:disable type_body_length
 // swiftlint:disable function_body_length
+
 import SwiftUI
 import UIKit
 
@@ -27,7 +29,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
      * - Parameters:
      *   - source:      A binding to a String that holds the source code to be
      *                  edited (or displayed).
-     *   - language:    Optionally set a language (e.g. `.swift`), otherwise
+     *   - language:    Optionally set a language (e.g. `.swift`), otherwise
      *                  Highlight.js will attempt to detect the language.
      *   - theme:       The name of the theme to use.
      *   - fontSize:    On macOS this Binding can be used to persist the size of
@@ -111,6 +113,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     @State private var isCurrentlyUpdatingView = ReferenceTypeBool(value: false)
 
     // MARK: - TextView Delegate  Coordinator
+
     public final class Coordinator: NSObject, UXCodeTextViewDelegate {
 
         var parent: UXCodeTextViewRepresentable
@@ -357,6 +360,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         updateTextView(textView)
     }
 #else // iOS etc
+
     public func makeUIView(context: Context) -> UITextView {
         let textView = UXCodeTextView()
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]

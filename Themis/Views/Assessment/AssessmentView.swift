@@ -240,7 +240,7 @@ struct AssessmentView: View {
         .sheet(isPresented: $cvm.showEditFeedback) {
             if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
                 EditFeedbackView(
-                    assessmentResult: $vm.assessmentResult,
+                    assessmentResult: vm.assessmentResult,
                     cvm: cvm,
                     type: .inline,
                     showSheet: $cvm.showEditFeedback,
