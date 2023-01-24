@@ -9,8 +9,7 @@ import SwiftUI
 
 struct SubmissionListView: View {
 
-    @StateObject var submissionListVM = SubmissionListViewModel()
-
+    var submissionListVM = SubmissionListViewModel()
     var exerciseId: Int
     let exerciseTitle: String
 
@@ -27,22 +26,17 @@ struct SubmissionListView: View {
                             exerciseTitle: exerciseTitle
                         )
                     } label: {
-                        Text("Submission \(submission.id) by \(submission.participation.student.name)")
+                        Text("Submission \(submission.id)")
                     }
                 }
             }
-        }
-        .task {
-            await submissionListVM.fetchTutorSubmissions(exerciseId: exerciseId)
         }
     }
 }
 
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticatedPreview {
-            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise")
-        }
+        SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise")
         .previewInterfaceOrientation(.landscapeLeft)
     }
 }
