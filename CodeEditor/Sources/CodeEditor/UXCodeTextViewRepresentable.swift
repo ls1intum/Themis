@@ -379,6 +379,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.spellCheckingType = .no
         textView.smartQuotesType = .no
 #endif
+        updateTextView(textView)
         return textView
     }
 
