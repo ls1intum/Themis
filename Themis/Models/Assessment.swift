@@ -45,7 +45,7 @@ struct AssessmentResult: Encodable {
         try container.encode(score, forKey: .score)
         try container.encode(feedbacks, forKey: .feedbacks)
         try container.encode(automaticFeedback.count, forKey: .testCaseCount)
-        try container.encode(automaticFeedback.filter { $0.positive ?? false } .count, forKey: .passedTestCaseCount)
+        try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
     }
 
     var generalFeedback: [AssessmentFeedback] {
