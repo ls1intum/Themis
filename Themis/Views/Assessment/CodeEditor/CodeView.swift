@@ -15,22 +15,25 @@ struct CodeView: View {
     @Binding var fontSize: CGFloat
     @State var dragSelection: Range<Int>?
     var onOpenFeedback: (Range<Int>) -> Void
-
+    
     var editorItself: some View {
-        CodeEditor(source: $file.code ?? "loading...",
-                   language: .swift,
-                   theme: theme,
-                   fontSize: $fontSize,
-                   flags: editorFlags,
-                   highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
-                   dragSelection: $dragSelection,
-                   showAddFeedback: $cvm.showAddFeedback,
-                   showEditFeedback: $cvm.showEditFeedback,
-                   selectedSection: $cvm.selectedSection,
-                   feedbackForSelectionId: $cvm.feedbackForSelectionId,
-                   pencilOnly: $cvm.pencilMode,
-                   scrollUtils: cvm.scrollUtils,
-                   diffLines: file.diffLines
+        UXCodeTextViewRepresentable(
+            editorBindings: EditorBindings(
+                source: $file.code ?? "loading...",
+                fontSize: $fontSize,
+                language: .swift,
+                themeName: theme,
+                flags: editorFlags,
+                highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
+                dragSelection: $dragSelection,
+                showAddFeedback: $cvm.showAddFeedback,
+                showEditFeedback: $cvm.showEditFeedback,
+                selectedSection: $cvm.selectedSection,
+                feedbackForSelectionId: $cvm.feedbackForSelectionId,
+                pencilOnly: $cvm.pencilMode,
+                scrollUtils: cvm.scrollUtils,
+                diffLines: file.diffLines
+            )
         )
         .onChange(of: dragSelection) { newValue in
             if let newValue {
@@ -48,7 +51,7 @@ struct CodeView: View {
     var body: some View {
         editorItself
     }
-
+    
     var editorFlags: CodeEditor.Flags {
         if colorScheme == .dark {
             return [.selectable, .blackBackground]
@@ -56,7 +59,7 @@ struct CodeView: View {
             return .selectable
         }
     }
-
+    
     var theme: CodeEditor.ThemeName {
         if colorScheme == .dark {
             return .ocean

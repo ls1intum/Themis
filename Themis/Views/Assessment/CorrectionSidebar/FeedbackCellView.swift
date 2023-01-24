@@ -15,7 +15,7 @@ struct FeedbackCellView: View {
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly || feedback.assessmentType == .AUTOMATIC }
+    var editingDisabled: Bool { readOnly || feedback.assessmentType.isAutomatic }
 
     @State var showEditFeedback = false
     var feedbackColor: Color {
@@ -32,6 +32,8 @@ struct FeedbackCellView: View {
     var templateParticipationId: Int?
     
     @State var isTapped = false
+    
+    let gradingCriteria: [GradingCriterion]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -96,7 +98,8 @@ struct FeedbackCellView: View {
                 cvm: cvm,
                 type: feedback.type,
                 showSheet: $showEditFeedback,
-                idForUpdate: feedback.id
+                idForUpdate: feedback.id,
+                gradingCriteria: gradingCriteria
             )
         }
         .padding()
