@@ -15,7 +15,9 @@ struct Exercise: Codable {
     let assessmentType: String?
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this might be nil
+    let releaseDate: String?
     let dueDate: String?
+    let assessmentDueDate: String?
 
     init() {
         self.id = -1
@@ -25,21 +27,43 @@ struct Exercise: Codable {
         self.assessmentType = nil
         self.problemStatement = nil
         self.gradingInstructions = nil
+        self.releaseDate = nil
         self.dueDate = nil
+        self.assessmentDueDate = nil
     }
-
-    func parseDate(_ dateString: String?) -> Date? {
-        guard let dateString else { return nil }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        return dateFormatter.date(from: dateString)
+    
+    private func dateNow() -> String {
+        ArtemisDateHelpers.stringifyDate(Date.now) ?? ""
     }
-
-    func getReadableDateString(_ dateString: String?) -> String {
-        guard let date = parseDate(dateString) else { return "" }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
-        return dateFormatter.string(from: date)
+    
+    func isFormer() -> Bool {
+        guard let assessmentDueDate else {
+            return false
+        }
+        return assessmentDueDate < dateNow()
+    }
+    
+    func isCurrent() -> Bool {
+        // exercises without release date are future exercises
+        guard let releaseDate else {
+            return false
+        }
+        if releaseDate >= dateNow() {
+            return false
+        }
+        // exercises without assessment due date are current exercises
+        guard let assessmentDueDate else {
+            return true
+        }
+        return dateNow() < assessmentDueDate
+    }
+    
+    func isFuture() -> Bool {
+        // exercises without a release date are future exercises
+        guard let releaseDate else {
+            return true
+        }
+        return dateNow() < releaseDate
     }
 }
 
@@ -62,6 +86,17 @@ struct ExerciseForAssessment: Codable {
 
 }
 
+struct ExerciseStatistics: Codable {
+    let averageScoreOfExercise: Double?
+    let maxPointsOfExercise: Double?
+    let scoreDistribution: [Int]?
+    let numberOfExerciseScores: Int?
+    let numberOfParticipations: Int?
+    let numberOfStudentsOrTeamsInCourse: Int?
+    let numberOfPosts: Int?
+    let numberOfResolvedPosts: Int?
+}
+
 extension ArtemisAPI {
     static func getExercise(exerciseId: Int) async throws -> Exercise {
         let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/for-assessment-dashboard")
@@ -71,5 +106,13 @@ extension ArtemisAPI {
     static func getExerciseStats(exerciseId: Int) async throws -> ExerciseForAssessment {
         let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/stats-for-assessment-dashboard")
         return try await sendRequest(ExerciseForAssessment.self, request: request)
+    }
+    
+    static func getExerciseStatsForDashboard(exerciseId: Int) async throws -> ExerciseStatistics {
+        let request = Request(method: .get,
+                              path: "api/management/statistics/exercise-statistics",
+                              params: [URLQueryItem(name: "exerciseId", value: String(exerciseId))]
+        )
+        return try await sendRequest(ExerciseStatistics.self, request: request)
     }
 }

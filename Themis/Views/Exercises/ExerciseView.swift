@@ -9,45 +9,45 @@ import SwiftUI
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
-    @StateObject var avm = AssessmentViewModel(readOnly: false)
-    @StateObject var cvm = CodeEditorViewModel()
+    @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
+    @StateObject var codeEditorVM = CodeEditorViewModel()
+    @StateObject var submissionListVM = SubmissionListViewModel()
 
     let exercise: Exercise
 
     var body: some View {
         VStack {
-            if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil {
+            if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
+
                 Form {
-                    HStack {
-                        Text("Assessed:")
-                        Spacer()
-                        Text(exerciseVM.reviewStudents)
-                    }
-                    Button {
-                        Task {
-                            await avm.initRandomSubmission(exerciseId: exercise.id)
-//                            avm.assessmentResult.sort()
-                            UndoManagerSingleton.shared.undoManager.removeAllActions()
+                    if !submissionListVM.submissions.isEmpty {
+                        Section("Open submissions") {
+                            SubmissionListView(
+                                submissionListVM: submissionListVM,
+                                exerciseId: exercise.id,
+                                exerciseTitle: exercise.title ?? ""
+                            )
                         }
-                    } label: {
-                        Text("Start new Assessment")
-                            .foregroundColor(.green)
                     }
-                    Section("Submission") {
-                        SubmissionListView(
-                            exerciseId: exercise.id,
-                            exerciseTitle: exercise.title ?? ""
-                        )
+
+                    Section("Statistics") {
+                        HStack {
+                            Spacer()
+                            CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
+                            CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
+                            CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
+                            Spacer()
+                        }
                     }
                 }
             } else {
                 ProgressView()
             }
         }
-        .navigationDestination(isPresented: $avm.showSubmission) {
+        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
-                vm: avm,
-                cvm: cvm,
+                vm: assessmentVM,
+                cvm: codeEditorVM,
                 ar: avm.assessmentResult,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? ""
@@ -59,12 +59,26 @@ struct ExerciseView: View {
             Task {
                 await exerciseVM.fetchExercise(exerciseId: exercise.id)
                 await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
+                await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
+                await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
             }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: SubmissionSearchView(exercise: exercise)) {
                     searchButton
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination:
+                                AssessmentView(
+                                    vm: assessmentVM,
+                                    cvm: codeEditorVM,
+                                    exerciseId: exercise.id,
+                                    exerciseTitle: exercise.title ?? ""
+                                )
+                ) {
+                    startNewAssessmentButton
                 }
             }
         }
@@ -81,5 +95,23 @@ struct ExerciseView: View {
         }
         .padding()
         .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+    }
+    private var startNewAssessmentButton: some View {
+        Button {
+            Task {
+                await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
+                UndoManagerSingleton.shared.undoManager.removeAllActions()
+            }
+        } label: {
+            Text("Start Assessment")
+        }
+        .buttonStyle(NavigationBarButton())
+    }
+}
+
+struct ExerciseView_Previews: PreviewProvider {
+    static var previews: some View {
+        ExerciseView(exercise: Exercise())
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }

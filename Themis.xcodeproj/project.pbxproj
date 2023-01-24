@@ -36,6 +36,8 @@
 		DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C65E2954DE4F005727FB /* UMLViewModel.swift */; };
 		DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */; };
 		DAECE701296A1BC80025F875 /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECE700296A1BC80025F875 /* CourseView.swift */; };
+		DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */; };
+		DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFA3FC297F12A800EA72B8 /* ExerciseListItem.swift */; };
 		E119ED992922D89900626DEA /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED982922D89900626DEA /* Submission.swift */; };
 		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
@@ -75,6 +77,7 @@
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
 		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */ = {isa = PBXBuildFile; productRef = F911B9BF29392668003CF4C8 /* TouchVisualizer */; };
+		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +130,8 @@
 		DA98C65E2954DE4F005727FB /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
 		DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionSearchResult.swift; sourceTree = "<group>"; };
 		DAECE700296A1BC80025F875 /* CourseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
+		DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisDateHelpers.swift; sourceTree = "<group>"; };
+		DAFFA3FC297F12A800EA72B8 /* ExerciseListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListItem.swift; sourceTree = "<group>"; };
 		E119ED982922D89900626DEA /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Submission.swift; path = Themis/Models/Submission.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
@@ -162,6 +167,7 @@
 		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExercisesListView.swift; path = Themis/Views/Exercises/ExercisesListView.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
+		F9224439297BFD1A008E4374 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,6 +424,7 @@
 			children = (
 				E168C722296DCCE100A1D1D4 /* NavigationBarButtonStyle.swift */,
 				E168C726296DDB3D00A1D1D4 /* CustomProgressView.swift */,
+				F9224439297BFD1A008E4374 /* CircularProgressView.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -446,6 +453,7 @@
 			children = (
 				E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */,
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
+				DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */,
 			);
 			name = API;
 			path = Themis/API;
@@ -533,6 +541,7 @@
 			children = (
 				E2E6748729203E350081238B /* ExercisesListView.swift */,
 				E2CAE6382935214E00FAD327 /* ExerciseView.swift */,
+				DAFFA3FC297F12A800EA72B8 /* ExerciseListItem.swift */,
 			);
 			name = Exercises;
 			path = Themis/Views/Exercises;
@@ -708,15 +717,18 @@
 			files = (
 				E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */,
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */,
 				DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */,
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
+				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */,
 				E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */,
 				E2E6748829203E350081238B /* ExercisesListView.swift in Sources */,
 				E168C723296DCCE100A1D1D4 /* NavigationBarButtonStyle.swift in Sources */,
 				E2CAE63E29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift in Sources */,
+				F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */,
 				E1BF8882291EEF2900B8FA06 /* Course.swift in Sources */,
 				E2192ED5291E57640092CE58 /* HTTPMethod.swift in Sources */,
 				E2E6748B2920419B0081238B /* Exercise.swift in Sources */,
