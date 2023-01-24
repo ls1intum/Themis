@@ -57,7 +57,7 @@ struct CorrectionSidebarView: View {
                 case .generalFeedback:
                     FeedbackListView(
                         readOnly: readOnly,
-                        assessmentResult: $assessmentResult,
+                        assessmentResult: assessmentResult,
                         cvm: cvm,
                         pId: pId,
                         templatePId: templatePId
@@ -70,7 +70,7 @@ struct CorrectionSidebarView: View {
     }
 }
 
- struct CorrectionSidebarView_Previews: PreviewProvider {
+struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()

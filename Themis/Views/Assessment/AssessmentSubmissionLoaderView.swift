@@ -19,6 +19,7 @@ struct AssessmentSubmissionLoaderView: View {
         AssessmentView(
             vm: avm,
             cvm: cvm,
+            ar: avm.assessmentResult,
             exerciseId: exerciseID,
             exerciseTitle: exerciseTitle
         )

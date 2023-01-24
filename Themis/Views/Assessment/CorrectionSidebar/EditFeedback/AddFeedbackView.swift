@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddFeedbackView: View {
-    @Binding var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     let type: FeedbackType
 
@@ -18,7 +18,7 @@ struct AddFeedbackView: View {
 
     var body: some View {
         EditFeedbackViewBase(
-            assessmentResult: $assessmentResult,
+            assessmentResult: assessmentResult,
             cvm: cvm,
             showSheet: $showSheet,
             title: "Add feedback",
