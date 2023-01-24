@@ -11,7 +11,7 @@ import SwiftUI
 struct FeedbackCellView: View {
 
     var readOnly: Bool
-    @Binding var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
@@ -92,7 +92,7 @@ struct FeedbackCellView: View {
         .scaleEffect(isTapped ? 1.05 : 1.0)
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
-                assessmentResult: $assessmentResult,
+                assessmentResult: assessmentResult,
                 cvm: cvm,
                 type: feedback.type,
                 showSheet: $showEditFeedback,

@@ -7,15 +7,24 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 import CodeEditor
 
 class CodeEditorViewModel: ObservableObject {
+    let undoManager = UndoManagerSingleton.shared.undoManager
+    
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
     @Published var editorFontSize = CGFloat(14) // Default font size
     @Published var selectedSection: NSRange?
-    @Published var inlineHighlights: [String: [HighlightedRange]] = [:]
+    @Published var inlineHighlights: [String: [HighlightedRange]] = [:] {
+        didSet {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.inlineHighlights = oldValue
+            }
+        }
+    }
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
     @Published var pencilMode = true
@@ -82,13 +91,18 @@ class CodeEditorViewModel: ObservableObject {
                                                                 cornerRadius: 8)]
             }
         }
+        undoManager.endUndoGrouping() /// undo group with addFeedback in AssessmentResult
     }
-
+    
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
             let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
             scrollUtils.offsets = scrollUtils.offsets.filter({ $0.key != highlight?.range })
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
+        }
+        
+        if feedback.type == .inline {
+            undoManager.endUndoGrouping() /// undo group with deleteFeedback in AssessmentResult
         }
     }
 }
