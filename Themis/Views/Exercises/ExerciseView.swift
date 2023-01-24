@@ -12,13 +12,13 @@ struct ExerciseView: View {
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var codeEditorVM = CodeEditorViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
-
+    
     let exercise: Exercise
-
+    
     var body: some View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
-
+                
                 Form {
                     if !submissionListVM.submissions.isEmpty {
                         Section("Open submissions") {
@@ -29,7 +29,7 @@ struct ExerciseView: View {
                             )
                         }
                     }
-
+                    
                     Section("Statistics") {
                         HStack {
                             Spacer()
@@ -48,7 +48,7 @@ struct ExerciseView: View {
             AssessmentView(
                 vm: assessmentVM,
                 cvm: codeEditorVM,
-                ar: avm.assessmentResult,
+                ar: assessmentVM.assessmentResult,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? ""
             )
@@ -74,6 +74,7 @@ struct ExerciseView: View {
                                 AssessmentView(
                                     vm: assessmentVM,
                                     cvm: codeEditorVM,
+                                    ar: assessmentVM.assessmentResult,
                                     exerciseId: exercise.id,
                                     exerciseTitle: exercise.title ?? ""
                                 )
@@ -83,7 +84,7 @@ struct ExerciseView: View {
             }
         }
     }
-
+    
     private var searchButton: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -112,6 +113,6 @@ struct ExerciseView: View {
 struct ExerciseView_Previews: PreviewProvider {
     static var previews: some View {
         ExerciseView(exercise: Exercise())
-        .previewInterfaceOrientation(.landscapeLeft)
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
