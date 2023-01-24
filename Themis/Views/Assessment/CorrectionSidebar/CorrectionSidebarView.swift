@@ -22,9 +22,10 @@ struct CorrectionSidebarView: View {
     @ObservedObject var umlVM: UMLViewModel
     let loading: Bool
     
-    var pId: Int?
-    var templatePId: Int?
-    
+
+    var participationId: Int?
+    var templateParticipationId: Int?
+
     var body: some View {
         VStack {
             Picker(selection: $correctionSidebarStatus, label: Text("")) {
@@ -57,10 +58,10 @@ struct CorrectionSidebarView: View {
                 case .generalFeedback:
                     FeedbackListView(
                         readOnly: readOnly,
-                        assessmentResult: $assessmentResult,
+                        assessmentResult: assessmentResult,
                         cvm: cvm,
-                        pId: pId,
-                        templatePId: templatePId,
+                        participationId: participationId,
+                        templateParticipationId: templateParticipationId,
                         gradingCriteria: exercise?.gradingCriteria ?? []
                     )
                 }
@@ -71,7 +72,7 @@ struct CorrectionSidebarView: View {
     }
 }
 
- struct CorrectionSidebarView_Previews: PreviewProvider {
+struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()

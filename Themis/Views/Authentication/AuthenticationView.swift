@@ -75,11 +75,9 @@ struct AuthenticationView: View {
                     Text("Sign in")
                 }
             }
-            .foregroundColor(.white)
-            .frame(width: 500, height: 50)
-            .background(authenticationVM.loginDisabled ? Color.gray : Color.blue)
-            .cornerRadius(10)
-        }.disabled(authenticationVM.loginDisabled)
+        }
+        .disabled(authenticationVM.loginDisabled)
+        .buttonStyle(LoginButtonStyle(loginDisabled: authenticationVM.loginDisabled))
     }
 
     var passwordField: some View {
@@ -123,5 +121,18 @@ struct LoginTextFieldStyle: TextFieldStyle {
             .frame(width: 500, height: 50)
             .background(validInput ? (colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6)) : Color.red)
             .cornerRadius(10)
+    }
+}
+
+struct LoginButtonStyle: ButtonStyle {
+    var loginDisabled: Bool
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.white)
+            .frame(width: 500, height: 50)
+            .background(loginDisabled ? Color.gray : Color.blue)
+            .cornerRadius(10)
+            .scaleEffect(configuration.isPressed ? 1.1 : 1)
+            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }

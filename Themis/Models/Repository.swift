@@ -20,6 +20,12 @@ enum FileExtension: String, Codable {
     case other = "OTHER"
 }
 
+
+public enum Style: String {
+    case original
+    case plain
+}
+
 class Node: Hashable, ObservableObject {
 
     var parent: Node?
@@ -56,6 +62,12 @@ class Node: Hashable, ObservableObject {
         }
         return .other
     }
+    
+    var fileExtensionString: String {
+        let components = name.components(separatedBy: ".")
+        let extensionString = components.last ?? ""
+        return extensionString
+    }
 
     init(type: FileType, name: String) {
         self.name = name
@@ -80,7 +92,14 @@ class Node: Hashable, ObservableObject {
     var path: String {
         calculatePath().joined(separator: "/")
     }
-
+    
+    
+    public func language() -> Language? {
+        guard let language = languageDict[self.fileExtensionString] else { return nil }
+        return language
+    }
+    
+    
     /// This Method will flatMap children that have only one folder
     func flatMap() {
         guard let children, type == .folder else { return }
@@ -184,6 +203,68 @@ class Node: Hashable, ObservableObject {
             }
         }
     }
+    
+    private let languageDict: [String: Language] = [
+        "c": .c,
+        "h": .c,
+        "py": .python,
+        "pyw": .python,
+        "java": .java,
+        "swift": .swift,
+        "rs": .rust,
+        "gradle": .gradle,
+        "jar": .java,
+        "bat": .bash,
+        "cmd": .bash,
+        "sh": .bash,
+        "js": .javascript,
+        "dart": .dart,
+        "groovy": .groovy,
+        "hs": .haskell,
+        "kt": .kotlin,
+        "ktm": .kotlin,
+        "scala": .scala,
+        "sc": .scala,
+        "ts": .typescript,
+        "r": .r,
+        "rb": .ruby,
+        "sass": .sass,
+        "scss": .sass,
+        "spring": .spring,
+        "sql": .sqlite,
+        "ssh": .ssh,
+        "svelte": .svelte,
+        "twcss": .tailwindcss,
+        "tf": .tensorflow,
+        "tfvars": .terraform,
+        "3js": .threejs,
+        "typo3": .typo3,
+        "code-workspace": .vscode,
+        "vue": .vuejs,
+        "webpack": .webpack,
+        "xcodeproj": .xcode,
+        "yarn": .yarn,
+        "ino": .arduino,
+        "cmake": .cmake,
+        "cmake.in": .cmake,
+        "coffee": .coffeescript,
+        "css": .css3,
+        "dockerfile": .docker,
+        "graphql": .graphql,
+        "grunt": .grunt,
+        "gulp": .gulp,
+        "html": .html5,
+        "iml": .intellij,
+        "jl": .julia,
+        "ipynb": .jupyter,
+        "tex": .latex,
+        "lua": .lua,
+        "md": .markdown,
+        "m": .matlab,
+        "mongo": .mongodb,
+        "ml": .ocaml,
+        "mli": .ocaml
+    ]
 }
 
 extension ArtemisAPI {
@@ -221,14 +302,9 @@ extension ArtemisAPI {
             .map { (path: Stack(storage: $0.0.reversed()), type: $0.1) }
 
         let root = Node(type: .folder, name: "")
-        let start = DispatchTime.now()
         parseFileTree(node: root, paths: convertedStructure)
-        let end = DispatchTime.now()
 
-        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-        let timeInterval = Double(nanoTime) / 1_000_000_000
         
-        print("Time to evaluate Parse: \(timeInterval) seconds")
         root.flatMap()
         return root
     }
