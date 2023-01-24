@@ -176,7 +176,6 @@ class Node: Hashable, ObservableObject {
             diffCalculated = false
             return
         }
-        print(tcode)
         let base = tcode.components(separatedBy: .newlines)
         let new = code.components(separatedBy: .newlines)
 
