@@ -246,7 +246,8 @@ public struct CodeEditor: View {
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
                 pencilOnly: Binding<Bool>,
-                scrollUtils: ScrollUtils) {
+                scrollUtils: ScrollUtils,
+                diffLines: [Int]) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -267,6 +268,7 @@ public struct CodeEditor: View {
         self.feedbackForSelectionId = feedbackForSelectionId
         self.pencilOnly = pencilOnly
         self.scrollUtils = scrollUtils
+        self.diffLines = diffLines
     }
 
     /**
@@ -310,7 +312,8 @@ public struct CodeEditor: View {
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
                 pencilOnly: Binding<Bool>,
-                scrollUtils: ScrollUtils) {
+                scrollUtils: ScrollUtils,
+                diffLines: [Int]) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -328,7 +331,8 @@ public struct CodeEditor: View {
                   selectedSection: selectedSection,
                   feedbackForSelectionId: feedbackForSelectionId,
                   pencilOnly: pencilOnly,
-                  scrollUtils: scrollUtils)
+                  scrollUtils: scrollUtils,
+                  diffLines: diffLines)
     }
 
     private var source: Binding<String>
@@ -349,6 +353,7 @@ public struct CodeEditor: View {
     private var feedbackForSelectionId: Binding<String>
     private var pencilOnly: Binding<Bool>
     private var scrollUtils: ScrollUtils
+    private var diffLines: [Int]
 
     public var body: some View {
             UXCodeTextViewRepresentable(source: source,
@@ -368,6 +373,7 @@ public struct CodeEditor: View {
                                     selectedSection: selectedSection,
                                     feedbackForSelectionId: feedbackForSelectionId,
                                     pencilOnly: pencilOnly,
-                                    scrollUtils: scrollUtils)
+                                    scrollUtils: scrollUtils,
+                                        diffLines: diffLines)
     }
 }

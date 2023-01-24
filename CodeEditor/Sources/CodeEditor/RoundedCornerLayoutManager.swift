@@ -13,6 +13,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     var lineNumberTextColor: UIColor = .gray
     var gutterWidth: CGFloat = 0.0
     let paraStyle = NSMutableParagraphStyle()
+    var diffLines = [Int]()
     
     
     override init() {
@@ -71,7 +72,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         return maxNum * width + 4.0 * 2
     }
     
-    private func getParaNumber(for charRange: NSRange) -> Int {
+    func getParaNumber(for charRange: NSRange) -> Int {
         if charRange.location == lastParaLocation {
             return lastParaNumber
         } else if charRange.location < lastParaLocation {
@@ -125,7 +126,11 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                                                    .paragraphStyle: paraStyle]
         var gutterRect = CGRect.zero
         var paraNumber = 0
-
+        var currLine = 0
+        let ctx = UIGraphicsGetCurrentContext()
+        guard let ctx else { return }
+        UIGraphicsPushContext(ctx)
+        
         enumerateLineFragments(forGlyphRange: glyphsToShow) { rect, _, _, glyphRange, _ in
             
             let charRange = self.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
@@ -137,7 +142,6 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                 paraNumber = self.getParaNumber(for: charRange)
                 let lineNumber = String(format: "%ld", paraNumber + 1) as NSString
                 let size = lineNumber.size(withAttributes: atts)
-                
                 lineNumber.draw(in: CGRect(x: 0.0,
                                    y: (gutterRect.height - size.height) / 2.0,
                                    width: self.gutterWidth,
@@ -145,7 +149,16 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                     .offsetBy(dx: 0.0, dy: gutterRect.minY),
                         withAttributes: atts)
             }
+            // draw diff lines
+            ctx.setFillColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
+            ctx.setStrokeColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
+            if self.diffLines.contains(where: { Int(String(format: "%ld", paraNumber)) == $0 }) {
+                let path = CGPath(rect: rect.offsetBy(dx: 3, dy: origin.y), transform: nil)
+                ctx.addPath(path)
+                ctx.drawPath(using: .fillStroke)
+            }
         }
+        UIGraphicsPopContext()
 
         if NSMaxRange(glyphsToShow) > numberOfGlyphs {
             let ln = String(format: "%ld", paraNumber + 2)

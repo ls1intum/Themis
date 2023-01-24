@@ -34,7 +34,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     private var hlTextStorage: CodeAttributedString? {
         textStorage as? CodeAttributedString
     }
-    private var customLayoutManager: RoundedCornerLayoutManager!
+    var customLayoutManager: RoundedCornerLayoutManager!
 
     /// If the user starts a newline, the editor automagically adds the same
     /// whitespace as on the previous line.
@@ -80,7 +80,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
-    var diffDrawn = false
+    var diffLines = [Int]()
     
     init() {
         let textStorage = highlightr.flatMap {
@@ -88,6 +88,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         ?? NSTextStorage()
         let layoutManager = RoundedCornerLayoutManager()
+        layoutManager.diffLines = diffLines
         customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer()
@@ -312,7 +313,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
 
     override func draw(_ rect: CGRect) {
-        // drawDiff()
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
@@ -335,24 +335,22 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
         
-        ctx.setFillColor(CGColor(red: 0, green: 1, blue: 0, alpha: 0.4))
-        ctx.setStrokeColor(CGColor(red: 0, green: 1, blue: 0, alpha: 0.4))
-        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, _, _ in
-            let path = CGPath(rect: rect, transform: nil)
-            ctx.addPath(path)
-            ctx.drawPath(using: .fillStroke)
-        }
+//        var currLine = 0
+//        ctx.setFillColor(CGColor(red: 0, green: 1, blue: 0, alpha: 0.4))
+//        ctx.setStrokeColor(CGColor(red: 0, green: 1, blue: 0, alpha: 0.4))
+//        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, _, _ in
+//            if self.diffLines.contains(where: { currLine == $0 }) {
+//                let path = CGPath(rect: rect.offsetBy(dx: 0, dy: (self.font?.pointSize ?? 0.0) / 2.0), transform: nil)
+//                ctx.addPath(path)
+//                ctx.drawPath(using: .fillStroke)
+//            }
+//            currLine += 1
+//        }
         UIGraphicsPopContext()
     }
     
     
     func drawDiff() {
-        guard !diffDrawn else {
-            return
-        }
-        defer {
-            diffDrawn = true
-        }
         guard let ctx = UIGraphicsGetCurrentContext() else {
             return
         }

@@ -66,7 +66,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 selectedSection: Binding<NSRange?>,
                 feedbackForSelectionId: Binding<String>,
                 pencilOnly: Binding<Bool>,
-                scrollUtils: ScrollUtils) {
+                scrollUtils: ScrollUtils,
+                diffLines: [Int]) {
         self.source      = source
         self.selection = selection
         self.fontSize    = fontSize
@@ -84,6 +85,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.feedbackForSelectionId = feedbackForSelectionId
         self.pencilOnly = pencilOnly
         self.scrollUtils = scrollUtils
+        self.diffLines = diffLines
     }
 
     private var source: Binding<String>
@@ -103,6 +105,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
     private var feedbackForSelectionId: Binding<String>
     private var pencilOnly: Binding<Bool>
     private var scrollUtils: ScrollUtils
+    private var diffLines: [Int]
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -295,6 +298,8 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = flags.contains(.selectable)
         textView.backgroundColor = flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = highlightedRanges
+        textView.diffLines = diffLines
+        textView.customLayoutManager.diffLines = diffLines
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {
@@ -366,6 +371,7 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.highlightedRanges = highlightedRanges
+        textView.diffLines = diffLines
 #if os(iOS)
         textView.autocapitalizationType = .none
         textView.smartDashesType = .no
@@ -373,11 +379,6 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.spellCheckingType = .no
         textView.smartQuotesType = .no
 #endif
-//        let diffView = UIImageView()
-//        diffView.image = textView.diffImage
-//        diffView.frame = textView.frame
-//        textView.addSubview(diffView)
-//        updateTextView(textView)
         return textView
     }
 

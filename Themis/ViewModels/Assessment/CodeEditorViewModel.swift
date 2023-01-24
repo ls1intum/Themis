@@ -46,24 +46,7 @@ class CodeEditorViewModel: ObservableObject {
             openFiles.append(file)
             Task {
                 await file.fetchCode(participationId: participationId)
-                if let changedRanges = await file.calculateDiff(templateParticipationId: templateParticipationId) {
-                    var ranges = [HighlightedRange]()
-                    for range in changedRanges {
-                        ranges.append(
-                            HighlightedRange(
-                                id: UUID().uuidString,
-                                range: NSRange(range, in: file.code ?? ""),
-                                color: UIColor.systemGreen.withAlphaComponent(0.5),
-                                cornerRadius: 0
-                            )
-                        )
-                    }
-                    if inlineHighlights.contains(where: { $0.key == file.path }) {
-                        inlineHighlights[file.path]?.append(contentsOf: ranges)
-                    } else {
-                        inlineHighlights[file.path] = ranges
-                    }
-                }
+                await file.calculateDiff(templateParticipationId: templateParticipationId)
             }
         }
         selectedFile = file
@@ -88,7 +71,6 @@ class CodeEditorViewModel: ObservableObject {
     
     func addInlineHighlight(feedbackId: UUID) {
         if let file = selectedFile, let selectedSection = selectedSection {
-            print(selectedSection)
             if (inlineHighlights.contains { $0.key == file.path }) {
                 inlineHighlights[file.path]?.append(
                     HighlightedRange(
