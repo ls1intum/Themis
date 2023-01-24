@@ -41,7 +41,9 @@ class AssessmentResult: Encodable, ObservableObject {
             feedbacks
         }
         set(new) {
-            feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+            feedbacks = new.sorted(by: >).sorted {
+                $0.assessmentType.isManual && $1.assessmentType.isAutomatic
+            }
         }
     }
 
@@ -61,17 +63,17 @@ class AssessmentResult: Encodable, ObservableObject {
     }
 
     var generalFeedback: [AssessmentFeedback] {
-        computedFeedbacks
-            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
+        feedbacks
+            .filter { $0.type == .general && $0.assessmentType.isManual }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
-        computedFeedbacks
-            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
+        feedbacks
+            .filter { $0.type == .inline && $0.assessmentType.isManual }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        computedFeedbacks.filter { $0.assessmentType == .AUTOMATIC }
+        feedbacks.filter { $0.assessmentType.isAutomatic }
     }
 
     func addFeedback(feedback: AssessmentFeedback) {
@@ -213,7 +215,8 @@ extension AssessmentFeedback: Decodable {
         detailText = try? values.decode(String?.self, forKey: .detailText)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        positive = try values.decode(Bool.self, forKey: .positive)
+        // assessment type `MANUAL_UNREFERENCED` does not have positive
+        positive = (try? values.decode(Bool?.self, forKey: .positive)) ?? false
         type = text?.contains("at line") ?? false ? .inline : .general
     }
 }
@@ -224,9 +227,20 @@ extension AssessmentFeedback: Comparable {
     }
 }
 
+// https://github.com/ls1intum/Artemis/blob/develop/src/main/java/de/tum/in/www1/artemis/domain/enumeration/FeedbackType.java
 enum AssessmentType: String, Codable {
     case AUTOMATIC
+    case AUTOMATIC_ADAPTED
     case MANUAL
+    case MANUAL_UNREFERENCED
+    
+    var isManual: Bool {
+        self == .MANUAL || self == .MANUAL_UNREFERENCED
+    }
+    
+    var isAutomatic: Bool {
+        self == .AUTOMATIC || self == .AUTOMATIC_ADAPTED
+    }
 }
 
 extension ArtemisAPI {

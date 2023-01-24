@@ -15,7 +15,7 @@ struct FeedbackCellView: View {
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly || feedback.assessmentType == .AUTOMATIC }
+    var editingDisabled: Bool { readOnly || feedback.assessmentType.isAutomatic }
 
     @State var showEditFeedback = false
     var feedbackColor: Color {
