@@ -134,6 +134,7 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
+            
             if vm.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
@@ -141,8 +142,9 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if !vm.readOnly {
+            
+            if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.pencilMode.toggle()
                     } label: {
@@ -153,7 +155,7 @@ struct AssessmentView: View {
                     }
                 }
             }
-            
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showStepper.toggle()
@@ -166,7 +168,6 @@ struct AssessmentView: View {
                     EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
                 }
             }
-            
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: vm.assessmentResult.score,
@@ -174,7 +175,6 @@ struct AssessmentView: View {
                 )
                 scoreDisplay
             }
-
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {

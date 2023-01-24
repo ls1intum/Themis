@@ -25,7 +25,7 @@ struct EditorFontSizeStepperView: View {
     var body: some View {
         HStack {
             Button(action: decrementFontSize) {
-                Label("", systemImage: "minus")
+                Image(systemName: "minus")
             }
             .backgroundStyle(Color.gray)
             
@@ -39,11 +39,10 @@ struct EditorFontSizeStepperView: View {
                 .frame(width: 30)
             
             Button(action: incrementFontSize) {
-                Label("", systemImage: "plus")
+                Image(systemName: "plus")
             }.backgroundStyle(Color.gray)
         }
-        .padding(.leading, 17)
-        .padding(.trailing, 10)
+        .padding(20)
     }
 }
 
