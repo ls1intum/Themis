@@ -17,6 +17,7 @@ class AuthenticationViewModel: ObservableObject {
                 return
             }
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
+            Authentication.shared.resetBearerTokenAuthCache()
             if restControllerInitialized {
                 RESTController.shared.baseURL = url
             } else {
@@ -57,14 +58,11 @@ class AuthenticationViewModel: ObservableObject {
         if let serverURL = generateURL(serverURL: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
-            Authentication.shared = Authentication(for: serverURL)
+            Authentication.shared = Authentication()
         }
-        if bearerTokenAuth {
-            observeAuthenticationToken()
-        } else {
-            observeAuthenticationStatus()
-            Authentication.shared.checkAuth()
-        }
+        observeAuthenticationToken() // TODO: remove once bearer token auth is no longer supported
+        observeAuthenticationStatus()
+        Authentication.shared.checkAuth()
     }
 
     private func generateURL(serverURL: String) -> URL? {
@@ -101,7 +99,8 @@ class AuthenticationViewModel: ObservableObject {
             .receive(on: RunLoop.main)
             .sink { token in
                 self.authenticated = token != nil
-            }.store(in: &cancellable)
+            }
+            .store(in: &cancellable)
     }
     // end TODO
 
@@ -116,7 +115,7 @@ class AuthenticationViewModel: ObservableObject {
         }
         do {
             try await Authentication.shared.auth(username: username, password: password, rememberMe: rememberMe)
-            if bearerTokenAuth {
+            if Authentication.shared.isBearerTokenAuthNeeded() {
                 if let token = Authentication.shared.token {
                     Authentication.shared.storeTokenInKeychain(token: token)
                 }
@@ -138,7 +137,7 @@ class AuthenticationViewModel: ObservableObject {
 
     /// Logs the User out by deleting the cookie
     func logout() async {
-        if bearerTokenAuth {
+        if Authentication.shared.isBearerTokenAuthNeeded() {
             Authentication.shared.deleteToken()
         } else {
             do {
