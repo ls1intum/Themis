@@ -45,7 +45,7 @@ struct AssessmentResult: Encodable {
         try container.encode(score, forKey: .score)
         try container.encode(feedbacks, forKey: .feedbacks)
         try container.encode(automaticFeedback.count, forKey: .testCaseCount)
-        try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
+        try container.encode(automaticFeedback.filter { $0.positive ?? false } .count, forKey: .passedTestCaseCount)
     }
 
     var generalFeedback: [AssessmentFeedback] {
@@ -177,7 +177,8 @@ extension AssessmentFeedback: Decodable {
         detailText = try? values.decode(String?.self, forKey: .detailText)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        positive = try values.decode(Bool.self, forKey: .positive)
+        // assessment type `MANUAL_UNREFERENCED` does not have positive
+        positive = (try? values.decode(Bool?.self, forKey: .positive)) ?? false
         type = text?.contains("at line") ?? false ? .inline : .general
     }
 }
