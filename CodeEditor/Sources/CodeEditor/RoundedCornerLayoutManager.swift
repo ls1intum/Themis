@@ -14,6 +14,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     var gutterWidth: CGFloat = 0.0
     let paraStyle = NSMutableParagraphStyle()
     var diffLines = [Int]()
+    var isNewFile = false
     
     
     override init() {
@@ -72,7 +73,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         return maxNum * width + 4.0 * 2
     }
     
-    func getParaNumber(for charRange: NSRange) -> Int {
+    private func getParaNumber(for charRange: NSRange) -> Int {
         if charRange.location == lastParaLocation {
             return lastParaNumber
         } else if charRange.location < lastParaLocation {
@@ -152,7 +153,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             // draw diff lines
             ctx.setFillColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
             ctx.setStrokeColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
-            if self.diffLines.contains(where: { Int(String(format: "%ld", paraNumber)) == $0 }) {
+            if self.isNewFile || self.diffLines.contains(where: { Int(String(format: "%ld", paraNumber)) == $0 }) {
                 let path = CGPath(rect: rect.offsetBy(dx: 3, dy: origin.y), transform: nil)
                 ctx.addPath(path)
                 ctx.drawPath(using: .fillStroke)

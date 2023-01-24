@@ -81,6 +81,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     var diffLines = [Int]()
+    var isNewFile = false
     
     init() {
         let textStorage = highlightr.flatMap {
@@ -89,6 +90,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         ?? NSTextStorage()
         let layoutManager = RoundedCornerLayoutManager()
         layoutManager.diffLines = diffLines
+        layoutManager.isNewFile = isNewFile
         customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer()

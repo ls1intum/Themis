@@ -36,6 +36,7 @@ class Node: Hashable, ObservableObject {
     @Published var code: String?
     var templateCode: String?
     @Published var diffLines: [Int] = []
+    @Published var isNewFile = false
     private var diffCalculated = false
     /// property that calculates a lines character range to get line number of selectedTextRange
     var lines: [NSRange]? {
@@ -168,10 +169,14 @@ class Node: Hashable, ObservableObject {
         if templateCode == nil {
             await fetchTemplateCode(templateParticipationId: templateParticipationId)
         }
+        if isNewFile {
+            return
+        }
         guard let tcode = templateCode else {
             diffCalculated = false
             return
         }
+        print(tcode)
         let base = tcode.components(separatedBy: .newlines)
         let new = code.components(separatedBy: .newlines)
 
@@ -187,12 +192,15 @@ class Node: Hashable, ObservableObject {
         }
         self.diffLines = diffLines
     }
-
+    
+    @MainActor
     private func fetchTemplateCode(templateParticipationId: Int) async {
         if templateCode != nil { return } else {
             do {
                 let relativePath = String(path.dropFirst())
                 self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
+            } catch RESTError.notFound {
+                self.isNewFile = true
             } catch {
                 print(error)
             }

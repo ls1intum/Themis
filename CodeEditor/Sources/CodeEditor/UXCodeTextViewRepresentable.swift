@@ -241,8 +241,8 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = editorBindings.flags.contains(.selectable)
         textView.backgroundColor = editorBindings.flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = editorBindings.highlightedRanges
-        textView.diffLines = editorBindings.diffLines
         textView.customLayoutManager.diffLines = editorBindings.diffLines
+        textView.customLayoutManager.isNewFile = editorBindings.isNewFile
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {
@@ -314,7 +314,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.highlightedRanges = editorBindings.highlightedRanges
-        textView.diffLines = editorBindings.diffLines
 #if os(iOS)
         textView.autocapitalizationType = .none
         textView.smartDashesType = .no

@@ -32,7 +32,8 @@ struct CodeView: View {
                 feedbackForSelectionId: $cvm.feedbackForSelectionId,
                 pencilOnly: $cvm.pencilMode,
                 scrollUtils: cvm.scrollUtils,
-                diffLines: file.diffLines
+                diffLines: file.diffLines,
+                isNewFile: file.isNewFile
             )
         )
         .onChange(of: dragSelection) { newValue in

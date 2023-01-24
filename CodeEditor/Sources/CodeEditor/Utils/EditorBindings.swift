@@ -19,6 +19,7 @@ public struct EditorBindings {
     public var pencilOnly: Binding<Bool>
     public var scrollUtils: ScrollUtils
     public var diffLines: [Int]
+    public var isNewFile: Bool
     
     public init(source: Binding<String>,
                 selection: Binding<Range<String.Index>>? = nil,
@@ -35,7 +36,8 @@ public struct EditorBindings {
                 feedbackForSelectionId: Binding<String>,
                 pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils,
-                diffLines: [Int]) {
+                diffLines: [Int],
+                isNewFile: Bool) {
         self.source = source
         self.selection = selection
         self.fontSize = fontSize
@@ -52,5 +54,6 @@ public struct EditorBindings {
         self.pencilOnly = pencilOnly
         self.scrollUtils = scrollUtils
         self.diffLines = diffLines
+        self.isNewFile = isNewFile
     }
 }
