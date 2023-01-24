@@ -7,6 +7,7 @@ struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var vm: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var ar: AssessmentResult
     @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
@@ -58,6 +59,9 @@ struct AssessmentView: View {
             }
             .padding(.top, 4)
             .padding(.leading, 13)
+        }
+        .onDisappear {
+            vm.assessmentResult.undoManager.removeAllActions()
         }
         .overlay {
             if umlVM.showUMLFullScreen {
@@ -138,6 +142,30 @@ struct AssessmentView: View {
                 }
             }
             if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            vm.assessmentResult.undo()
+                        }
+                    } label: {
+                        let undoIconColor: Color = !vm.assessmentResult.canUndo() ? .gray : .white
+                        Image(systemName: "arrow.uturn.backward")
+                            .foregroundStyle(undoIconColor)
+                    }
+                    .disabled(!vm.assessmentResult.canUndo())
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            vm.assessmentResult.redo()
+                        }
+                    } label: {
+                        let redoIconColor: Color = !vm.assessmentResult.canRedo() ? .gray : .white
+                        Image(systemName: "arrow.uturn.forward")
+                            .foregroundStyle(redoIconColor)
+                    }
+                    .disabled(!vm.assessmentResult.canRedo())
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.pencilMode.toggle()
@@ -150,7 +178,7 @@ struct AssessmentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
+                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper.animation())
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 CustomProgressView(
@@ -215,7 +243,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             AddFeedbackView(
-                assessmentResult: $vm.assessmentResult,
+                assessmentResult: vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
@@ -224,7 +252,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showEditFeedback) {
             if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
-                EditFeedbackView(assessmentResult: $vm.assessmentResult,
+                EditFeedbackView(assessmentResult: vm.assessmentResult,
                                  cvm: cvm,
                                  type: .inline,
                                  showSheet: $cvm.showEditFeedback,
@@ -414,6 +442,7 @@ extension Color {
         AssessmentView(
             vm: avm,
             cvm: cvm,
+            ar: avm.assessmentResult,
             exerciseId: 5284,
             exerciseTitle: "Example Exercise"
         )

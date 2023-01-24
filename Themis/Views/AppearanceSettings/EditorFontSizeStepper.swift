@@ -49,6 +49,6 @@ struct EditorFontSizeStepperView: View {
                     Label("", systemImage: "plus")
                 }.backgroundStyle(Color.gray)
             }
-        }.padding(15)
+        }
     }
 }
