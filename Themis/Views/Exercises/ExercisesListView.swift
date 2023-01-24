@@ -7,25 +7,80 @@
 
 import SwiftUI
 
-struct ExercisesListView: View {
-    var exercises: [Exercise]?
+struct ExerciseDateProperty: Hashable {
+    let name: String
+    let dateKeyPath: KeyPath<Exercise, String?>
+}
 
+struct ExercisesListView: View {
+    var exercises: [Exercise]
+    
+    private let dueDate = ExerciseDateProperty(name: "Due Date", dateKeyPath: \.dueDate)
+    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment Due Date", dateKeyPath: \.assessmentDueDate)
+    private let releaseDate = ExerciseDateProperty(name: "Release Date", dateKeyPath: \.releaseDate)
+    
     var body: some View {
-        exercises.map { exerciseList in
+        VStack(alignment: .leading) {
             List {
-                ForEach(exerciseList, id: \.id) { exercise in
-                    NavigationLink {
-                        ExerciseView(exercise: exercise)
-                    } label: {
-                        HStack {
-                            Text(exercise.title ?? "")
-                            Spacer()
-                            Text("Due Date:")
-                            Text(exercise.getReadableDateString(exercise.dueDate))
+                exerciseSection(
+                    title: "Former Exercises",
+                    dateProperties: [
+                        dueDate,
+                        assessmentDueDate
+                    ],
+                    predicate: { $0.isFormer() }
+                )
+                
+                exerciseSection(
+                    title: "Current Exercises",
+                    dateProperties: [
+                        dueDate,
+                        assessmentDueDate
+                    ],
+                    predicate: { $0.isCurrent() }
+                )
+                
+                exerciseSection(
+                    title: "Future Exercises",
+                    dateProperties: [
+                        releaseDate
+                    ],
+                    predicate: { $0.isFuture() }
+                )
+            }.listStyle(.sidebar)
+        }
+    }
+    
+    private func exerciseSection(
+        title: String,
+        dateProperties: [ExerciseDateProperty],
+        predicate: (Exercise) -> Bool
+    ) -> some View {
+        let shownExercises = exercises.filter(predicate)
+        return Group {
+            if shownExercises.isEmpty {
+                EmptyView()
+            } else {
+                Section(header: HStack {
+                    Text(title)
+                    Spacer()
+                }) {
+                    ForEach(shownExercises, id: \.id) { exercise in
+                        NavigationLink {
+                            ExerciseView(exercise: exercise)
+                        } label: {
+                            ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }
                     }
                 }
             }
         }
+    }
+}
+
+struct ExercisesListView_Previews: PreviewProvider {
+    static var previews: some View {
+        ExercisesListView(exercises: [])
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
