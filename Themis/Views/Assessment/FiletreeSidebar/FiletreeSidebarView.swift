@@ -17,25 +17,9 @@ struct FiletreeSidebarView: View {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
                         if tree.type == .folder {
-                            Text(tree.name)
+                            nodeFolderView(folder: tree)
                         } else {
-                            Button {
-                                withAnimation {
-                                    guard let participationID else { return }
-                                    cvm.openFile(file: tree,
-                                             participationId: participationID,
-                                             templateParticipationId: templateParticipationId
-                                    )
-                                }
-                            } label: {
-                                Text(tree.name)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                            .bold(tree === cvm.selectedFile)
-                            .background(tree === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
-                            .cornerRadius(10)
+                            nodeFileView(file: tree)
                         }
                     }
                     .listRowSeparator(.hidden)
@@ -46,4 +30,34 @@ struct FiletreeSidebarView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+    
+    @ViewBuilder
+    func nodeFolderView(folder: Node) -> some View{
+        HStack {
+            Image(systemName: "folder")
+            Text(folder.name)
+        }
+    }
+    
+    @ViewBuilder
+    func nodeFileView(file: Node) -> some View {
+        Button {
+            withAnimation {
+                guard let participationID else { return }
+                cvm.openFile(file: file,
+                         participationId: participationID,
+                         templateParticipationId: templateParticipationId
+                )
+            }
+        } label: {
+            FileView(file: file)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .padding(.horizontal)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .bold(file === cvm.selectedFile)
+        .background(file === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+        .cornerRadius(10)
+    }
+
 }
