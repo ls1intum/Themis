@@ -35,8 +35,8 @@ class Node: Hashable, ObservableObject {
     var children: [Node]?
     @Published var code: String?
     var templateCode: String?
-    @Published var diffLinesAdded: [Int] = [] // line numbers of changed lines starting from 1
-    @Published var diffLinesRemoved: [Int] = []
+    @Published var diffLines: [Int] = []
+    @Published var isNewFile = false
     private var diffCalculated = false
     /// property that calculates a lines character range to get line number of selectedTextRange
     var lines: [NSRange]? {
@@ -169,6 +169,9 @@ class Node: Hashable, ObservableObject {
         if templateCode == nil {
             await fetchTemplateCode(templateParticipationId: templateParticipationId)
         }
+        if isNewFile {
+            return
+        }
         guard let tcode = templateCode else {
             diffCalculated = false
             return
@@ -177,27 +180,26 @@ class Node: Hashable, ObservableObject {
         let new = code.components(separatedBy: .newlines)
 
         let diff = new.difference(from: base)
-        var added = [Int]()
-        var removed = [Int]()
+        var diffLines = [Int]()
         diff.forEach { change in
             switch change {
             case .insert(offset: let offset, element: _, associatedWith: _):
-                added.append(offset + 1) // +1 as lines are starting from 1
+                diffLines.append(offset)
             case .remove(offset: let offset, element: _, associatedWith: _):
-                removed.append(offset + 1)
+                diffLines.append(offset)
             }
         }
-        self.diffLinesAdded = added
-        self.diffLinesRemoved = removed
-        print("added: \(diffLinesAdded)") // print as long as no highlighting exists
-        print("removed: \(diffLinesRemoved)")
+        self.diffLines = diffLines
     }
-
+    
+    @MainActor
     private func fetchTemplateCode(templateParticipationId: Int) async {
         if templateCode != nil { return } else {
             do {
                 let relativePath = String(path.dropFirst())
                 self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
+            } catch RESTError.notFound {
+                self.isNewFile = true
             } catch {
                 print(error)
             }

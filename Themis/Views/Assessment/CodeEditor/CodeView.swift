@@ -31,7 +31,10 @@ struct CodeView: View {
                 selectedSection: $cvm.selectedSection,
                 feedbackForSelectionId: $cvm.feedbackForSelectionId,
                 pencilOnly: $cvm.pencilMode,
-                scrollUtils: cvm.scrollUtils)
+                scrollUtils: cvm.scrollUtils,
+                diffLines: file.diffLines,
+                isNewFile: file.isNewFile
+            )
         )
         .onChange(of: dragSelection) { newValue in
             if let newValue {
