@@ -14,8 +14,8 @@ struct FeedbackListView: View {
     
     @State var showAddFeedback = false
     
-    var pId: Int?
-    var templatePId: Int?
+    var participationId: Int?
+    var templateParticipationId: Int?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,20 +49,12 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: assessmentResult,
                             cvm: cvm,
-                            feedback: feedback
+                            feedback: feedback,
+                            participationId: participationId,
+                            templateParticipationId: templateParticipationId
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
-                        .onTapGesture {
-                            if let file = feedback.file, let pId = pId, let templatePId = templatePId {
-                                withAnimation {
-                                    cvm.openFile(file: file, participationId: pId, templateParticipationId: templatePId)
-                                }
-                                cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
-                                    $0.id == feedback.id.uuidString
-                                }?.range
-                            }
-                        }
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
@@ -77,7 +69,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: assessmentResult,
                             cvm: cvm,
-                            feedback: feedback)
+                            feedback: feedback
+                        )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
                     }

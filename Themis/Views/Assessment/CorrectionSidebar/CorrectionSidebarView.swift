@@ -22,8 +22,8 @@ struct CorrectionSidebarView: View {
     @ObservedObject var umlVM: UMLViewModel
     let loading: Bool
     
-    var pId: Int?
-    var templatePId: Int?
+    var participationId: Int?
+    var templateParticipationId: Int?
 
     var body: some View {
         VStack {
@@ -59,8 +59,8 @@ struct CorrectionSidebarView: View {
                         readOnly: readOnly,
                         assessmentResult: assessmentResult,
                         cvm: cvm,
-                        pId: pId,
-                        templatePId: templatePId
+                        participationId: participationId,
+                        templateParticipationId: templateParticipationId
                     )
                 }
             }

@@ -368,8 +368,8 @@ struct AssessmentView: View {
                     cvm: cvm,
                     umlVM: umlVM,
                     loading: vm.loading,
-                    pId: vm.submission?.participation.id,
-                    templatePId: vm.submission?.participation.exercise.templateParticipation?.id
+                    participationId: vm.submission?.participation.id,
+                    templateParticipationId: vm.submission?.participation.exercise.templateParticipation?.id
                 )
             }
         }
