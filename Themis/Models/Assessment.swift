@@ -41,7 +41,7 @@ class AssessmentResult: Encodable, ObservableObject {
             feedbacks
         }
         set(new) {
-            _feedbacks = new.sorted(by: >).sorted {
+            feedbacks = new.sorted(by: >).sorted {
                 $0.assessmentType.isManual && $1.assessmentType.isAutomatic
             }
         }
