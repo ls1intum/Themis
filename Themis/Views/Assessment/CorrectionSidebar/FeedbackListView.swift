@@ -17,6 +17,8 @@ struct FeedbackListView: View {
     var participationId: Int?
     var templateParticipationId: Int?
     
+    let gradingCriteria: [GradingCriterion]
+    
     var body: some View {
         VStack(alignment: .leading) {
             List {
@@ -35,7 +37,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: assessmentResult,
                             cvm: cvm,
-                            feedback: feedback
+                            feedback: feedback,
+                            gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -51,7 +54,8 @@ struct FeedbackListView: View {
                             cvm: cvm,
                             feedback: feedback,
                             participationId: participationId,
-                            templateParticipationId: templateParticipationId
+                            templateParticipationId: templateParticipationId,
+                            gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -69,7 +73,8 @@ struct FeedbackListView: View {
                             readOnly: readOnly,
                             assessmentResult: assessmentResult,
                             cvm: cvm,
-                            feedback: feedback
+                            feedback: feedback,
+                            gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color(UIColor.systemBackground))
@@ -89,7 +94,8 @@ struct FeedbackListView: View {
                 assessmentResult: assessmentResult,
                 cvm: cvm,
                 type: .general,
-                showSheet: $showAddFeedback
+                showSheet: $showAddFeedback,
+                gradingCriteria: gradingCriteria
             )
         }
     }
@@ -115,7 +121,8 @@ struct FeedbackListView: View {
         FeedbackListView(
             readOnly: false,
             assessmentResult: assessmentResult,
-            cvm: codeEditor
+            cvm: codeEditor,
+            gradingCriteria: []
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }
