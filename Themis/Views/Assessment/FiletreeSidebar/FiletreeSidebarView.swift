@@ -32,7 +32,7 @@ struct FiletreeSidebarView: View {
     }
     
     @ViewBuilder
-    func nodeFolderView(folder: Node) -> some View{
+    func nodeFolderView(folder: Node) -> some View {
         HStack {
             Image(systemName: "folder")
             Text(folder.name)
@@ -59,5 +59,4 @@ struct FiletreeSidebarView: View {
         .background(file === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
         .cornerRadius(10)
     }
-
 }

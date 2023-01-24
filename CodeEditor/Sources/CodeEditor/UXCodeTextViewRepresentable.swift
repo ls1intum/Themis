@@ -373,7 +373,11 @@ struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.spellCheckingType = .no
         textView.smartQuotesType = .no
 #endif
-        updateTextView(textView)
+//        let diffView = UIImageView()
+//        diffView.image = textView.diffImage
+//        diffView.frame = textView.frame
+//        textView.addSubview(diffView)
+//        updateTextView(textView)
         return textView
     }
 

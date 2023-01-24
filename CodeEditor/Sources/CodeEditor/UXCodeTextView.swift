@@ -20,7 +20,7 @@ typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
 #endif
 
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 /**
  * Subclass of NSTextView/UITextView which adds some code editing features to
  * the respective Cocoa views.
@@ -80,6 +80,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    var diffDrawn = false
     
     init() {
         let textStorage = highlightr.flatMap {
@@ -311,6 +312,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
 
     override func draw(_ rect: CGRect) {
+        // drawDiff()
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
@@ -332,10 +334,25 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 ctx.drawPath(using: .fillStroke)
             }
         }
+        
+        ctx.setFillColor(CGColor(red: 0, green: 1, blue: 0, alpha: 0.4))
+        ctx.setStrokeColor(CGColor(red: 0, green: 1, blue: 0, alpha: 0.4))
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, _, _ in
+            let path = CGPath(rect: rect, transform: nil)
+            ctx.addPath(path)
+            ctx.drawPath(using: .fillStroke)
+        }
         UIGraphicsPopContext()
     }
     
+    
     func drawDiff() {
+        guard !diffDrawn else {
+            return
+        }
+        defer {
+            diffDrawn = true
+        }
         guard let ctx = UIGraphicsGetCurrentContext() else {
             return
         }
@@ -347,7 +364,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         ctx.setLineWidth(2)
         ctx.setFillColor(CGColor(red: 1.0, green: 0, blue: 0, alpha: 0.8))
         ctx.setStrokeColor(CGColor(red: 1.0, green: 0, blue: 0, alpha: 0.8))
-        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, glyphRange, _ in
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, _, _ in
             let path = CGPath(roundedRect: rect, cornerWidth: 5.0, cornerHeight: 5.0, transform: nil)
             ctx.addPath(path)
             ctx.drawPath(using: .fillStroke)
