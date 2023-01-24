@@ -22,6 +22,7 @@ struct CorrectionSidebarView: View {
     @ObservedObject var umlVM: UMLViewModel
     let loading: Bool
     
+
     var participationId: Int?
     var templateParticipationId: Int?
 
@@ -60,7 +61,8 @@ struct CorrectionSidebarView: View {
                         assessmentResult: assessmentResult,
                         cvm: cvm,
                         participationId: participationId,
-                        templateParticipationId: templateParticipationId
+                        templateParticipationId: templateParticipationId,
+                        gradingCriteria: exercise?.gradingCriteria ?? []
                     )
                 }
             }
