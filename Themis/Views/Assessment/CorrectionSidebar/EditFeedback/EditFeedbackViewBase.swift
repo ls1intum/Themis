@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct EditFeedbackViewBase: View {
-    @Binding var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var detailText = ""
@@ -24,6 +24,8 @@ struct EditFeedbackViewBase: View {
     let edit: Bool
     let type: FeedbackType
     var file: Node?
+    
+    let gradingCriteria: [GradingCriterion]
 
     var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
@@ -76,6 +78,7 @@ struct EditFeedbackViewBase: View {
                     .disabled(detailText.isEmpty)
             }
             HStack {
+                
                 TextField("Enter your feedback here", text: $detailText, axis: .vertical)
                     .submitLabel(.return)
                     .lineLimit(10...40)
@@ -98,8 +101,17 @@ struct EditFeedbackViewBase: View {
                 }
                 .pickerStyle(.wheel)
                 .frame(maxWidth: 150)
+                .animation(.default, value: score)
             }
             Spacer()
+            
+            ScrollView(.vertical) {
+                VStack {
+                    ForEach(gradingCriteria) { gradingCriterion in
+                        GradingCriteriaCellView(gradingCriterion: gradingCriterion, detailText: $detailText, score: $score)
+                    }
+                }
+            }
         }
         .padding()
         .onAppear {

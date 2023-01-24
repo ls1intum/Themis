@@ -8,22 +8,25 @@
 import SwiftUI
 
 struct EditFeedbackView: View {
-    @Binding var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     let type: FeedbackType
 
     @Binding var showSheet: Bool
     var idForUpdate: UUID
+    
+    let gradingCriteria: [GradingCriterion]
 
     var body: some View {
         EditFeedbackViewBase(
-            assessmentResult: $assessmentResult,
+            assessmentResult: assessmentResult,
             cvm: cvm,
             showSheet: $showSheet,
             idForUpdate: idForUpdate,
             title: "Edit feedback",
             edit: true,
-            type: type
+            type: type,
+            gradingCriteria: gradingCriteria
         )
     }
 }

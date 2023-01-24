@@ -144,7 +144,7 @@ import Highlightr
  * [SVG Shaper for SwiftUI](https://zeezide.de/en/products/svgshaper/),
  * for its SVG and Swift editor parts.
  */
-public struct CodeEditor: View {
+public struct CodeEditor {
 
     /// Returns the available themes in the associated Highlightr package.
     public static var availableThemes =
@@ -238,15 +238,7 @@ public struct CodeEditor: View {
                 indentStyle: IndentStyle = .system,
                 autoPairs: [ String: String ]? = nil,
                 inset: CGSize? = nil,
-                autoscroll: Bool = true,
-                highlightedRanges: [HighlightedRange] = [],
-                dragSelection: Binding<Range<Int>?>? = nil,
-                showAddFeedback: Binding<Bool>,
-                showEditFeedback: Binding<Bool>,
-                selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>,
-                pencilOnly: Binding<Bool>,
-                scrollUtils: ScrollUtils) {
+                autoscroll: Bool = true) {
         self.source      = source
         self.selection   = selection
         self.fontSize    = fontSize
@@ -259,14 +251,6 @@ public struct CodeEditor: View {
         ?? language.flatMap({ CodeEditor.defaultAutoPairs[$0] })
         ?? [:]
         self.autoscroll = autoscroll
-        self.highlightedRanges = highlightedRanges
-        self.dragSelection = dragSelection
-        self.showAddFeedback = showAddFeedback
-        self.showEditFeedback = showEditFeedback
-        self.selectedSection = selectedSection
-        self.feedbackForSelectionId = feedbackForSelectionId
-        self.pencilOnly = pencilOnly
-        self.scrollUtils = scrollUtils
     }
 
     /**
@@ -302,15 +286,7 @@ public struct CodeEditor: View {
                 flags: Flags                = .defaultViewerFlags,
                 indentStyle: IndentStyle = .system,
                 autoPairs: [ String: String ]? = nil,
-                inset: CGSize? = nil,
-                highlightedRanges: [HighlightedRange] = [],
-                dragSelection: Binding<Range<Int>?>? = nil,
-                showAddFeedback: Binding<Bool>,
-                showEditFeedback: Binding<Bool>,
-                selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>,
-                pencilOnly: Binding<Bool>,
-                scrollUtils: ScrollUtils) {
+                inset: CGSize? = nil) {
         assert(!flags.contains(.editable), "Editing requires a Binding")
         self.init(source: .constant(source),
                   selection: selection,
@@ -320,15 +296,7 @@ public struct CodeEditor: View {
                   flags: flags.subtracting(.editable),
                   indentStyle: indentStyle,
                   autoPairs: autoPairs,
-                  inset: inset,
-                  highlightedRanges: highlightedRanges,
-                  dragSelection: dragSelection,
-                  showAddFeedback: showAddFeedback,
-                  showEditFeedback: showEditFeedback,
-                  selectedSection: selectedSection,
-                  feedbackForSelectionId: feedbackForSelectionId,
-                  pencilOnly: pencilOnly,
-                  scrollUtils: scrollUtils)
+                  inset: inset)
     }
 
     private var source: Binding<String>
@@ -341,33 +309,4 @@ public struct CodeEditor: View {
     private let autoPairs: [ String: String ]
     private let inset: CGSize
     private let autoscroll: Bool
-    private var highlightedRanges: [HighlightedRange]
-    private var dragSelection: Binding<Range<Int>?>?
-    private var showAddFeedback: Binding<Bool>
-    private var showEditFeedback: Binding<Bool>
-    private var selectedSection: Binding<NSRange?>
-    private var feedbackForSelectionId: Binding<String>
-    private var pencilOnly: Binding<Bool>
-    private var scrollUtils: ScrollUtils
-
-    public var body: some View {
-            UXCodeTextViewRepresentable(source: source,
-                                        selection: selection,
-                                        language: language,
-                                        theme: themeName,
-                                        fontSize: fontSize,
-                                        flags: flags,
-                                        indentStyle: indentStyle,
-                                        autoPairs: autoPairs,
-                                        inset: inset,
-                                        autoscroll: autoscroll,
-                                        highlightedRanges: highlightedRanges,
-                                        dragSelection: dragSelection,
-                                    showAddFeedback: showAddFeedback,
-                                    showEditFeedback: showEditFeedback,
-                                    selectedSection: selectedSection,
-                                    feedbackForSelectionId: feedbackForSelectionId,
-                                    pencilOnly: pencilOnly,
-                                    scrollUtils: scrollUtils)
-    }
 }

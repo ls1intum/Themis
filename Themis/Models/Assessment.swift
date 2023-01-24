@@ -14,17 +14,31 @@ enum FeedbackType {
     case general
 }
 
-struct AssessmentResult: Encodable {
+/// class to share UndoManager between CodeEditorViewModel and AssessmentResult
+class UndoManagerSingleton {
+    static let shared = UndoManagerSingleton()
+    let undoManager = UndoManager()
+}
+
+class AssessmentResult: Encodable, ObservableObject {
+    let undoManager = UndoManagerSingleton.shared.undoManager
+    
     var score: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
     }
 
-    private var _feedbacks: [AssessmentFeedback] = []
+    @Published var feedbacks: [AssessmentFeedback] = [] {
+        didSet {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.feedbacks = oldValue
+            }
+        }
+    }
 
-    var feedbacks: [AssessmentFeedback] {
+    var computedFeedbacks: [AssessmentFeedback] {
         get {
-            _feedbacks
+            feedbacks
         }
         set(new) {
             _feedbacks = new.sorted(by: >).sorted {
@@ -62,20 +76,44 @@ struct AssessmentResult: Encodable {
         feedbacks.filter { $0.assessmentType.isAutomatic }
     }
 
-    mutating func addFeedback(feedback: AssessmentFeedback) {
-        feedbacks.append(feedback)
+    func addFeedback(feedback: AssessmentFeedback) {
+        if feedback.type == .inline {
+            undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+        }
+        computedFeedbacks.append(feedback)
+        print(computedFeedbacks.count)
     }
 
-    mutating func deleteFeedback(id: UUID) {
-        feedbacks.removeAll { $0.id == id }
+    func deleteFeedback(id: UUID) {
+        if computedFeedbacks.contains(where: { $0.id == id && $0.type == .inline }) {
+             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+         }
+        computedFeedbacks.removeAll { $0.id == id }
+        print(computedFeedbacks.count)
     }
 
-    mutating func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    func updateFeedback(id: UUID, detailText: String, credits: Double) {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        feedbacks[index].detailText = detailText
-        feedbacks[index].credits = credits
+        computedFeedbacks[index].detailText = detailText
+        computedFeedbacks[index].credits = credits
+    }
+    
+    func undo() {
+        undoManager.undo()
+    }
+    
+    func redo() {
+        undoManager.redo()
+    }
+    
+    func canUndo() -> Bool {
+        undoManager.canUndo
+    }
+    
+    func canRedo() -> Bool {
+        undoManager.canRedo
     }
 }
 
