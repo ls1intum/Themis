@@ -7,6 +7,7 @@ struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var vm: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var ar: AssessmentResult
     @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
@@ -58,6 +59,9 @@ struct AssessmentView: View {
             }
             .padding(.top, 4)
             .padding(.leading, 13)
+        }
+        .onDisappear {
+            vm.assessmentResult.undoManager.removeAllActions()
         }
         .overlay {
             if umlVM.showUMLFullScreen {
@@ -130,6 +134,7 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
+            
             if vm.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
@@ -137,6 +142,7 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
+            
             if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -149,16 +155,24 @@ struct AssessmentView: View {
                     }
                 }
             }
+
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditorFontSizeStepperView(fontSize: $cvm.editorFontSize, showStepper: $showStepper)
+                Button {
+                    showStepper.toggle()
+                } label: {
+                    let iconColor: Color = showStepper ? .yellow : .gray
+                    Image(systemName: "textformat.size")
+                        .foregroundColor(iconColor)
+                }
+                .popover(isPresented: $showStepper) {
+                    EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
+                }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: vm.assessmentResult.score,
                     max: vm.submission?.participation.exercise.maxPoints ?? 0
                 )
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
                 scoreDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -215,7 +229,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
             AddFeedbackView(
-                assessmentResult: $vm.assessmentResult,
+                assessmentResult: vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
@@ -224,7 +238,7 @@ struct AssessmentView: View {
         }
         .sheet(isPresented: $cvm.showEditFeedback) {
             if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
-                EditFeedbackView(assessmentResult: $vm.assessmentResult,
+                EditFeedbackView(assessmentResult: vm.assessmentResult,
                                  cvm: cvm,
                                  type: .inline,
                                  showSheet: $cvm.showEditFeedback,
@@ -354,8 +368,8 @@ struct AssessmentView: View {
                     cvm: cvm,
                     umlVM: umlVM,
                     loading: vm.loading,
-                    pId: vm.submission?.participation.id,
-                    templatePId: vm.submission?.participation.exercise.templateParticipation?.id
+                    participationId: vm.submission?.participation.id,
+                    templateParticipationId: vm.submission?.participation.exercise.templateParticipation?.id
                 )
             }
         }
@@ -393,6 +407,7 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
+        .background(Color.primary)
     }
 }
 
@@ -414,6 +429,7 @@ extension Color {
         AssessmentView(
             vm: avm,
             cvm: cvm,
+            ar: avm.assessmentResult,
             exerciseId: 5284,
             exerciseTitle: "Example Exercise"
         )
