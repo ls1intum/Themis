@@ -20,7 +20,7 @@ typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
 #endif
 
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 /**
  * Subclass of NSTextView/UITextView which adds some code editing features to
  * the respective Cocoa views.
@@ -34,7 +34,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     private var hlTextStorage: CodeAttributedString? {
         textStorage as? CodeAttributedString
     }
-    private var customLayoutManager: RoundedCornerLayoutManager!
+    var customLayoutManager: RoundedCornerLayoutManager!
 
     /// If the user starts a newline, the editor automagically adds the same
     /// whitespace as on the previous line.
@@ -80,6 +80,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    var diffLines = [Int]()
+    var isNewFile = false
     
     init() {
         let textStorage = highlightr.flatMap {
@@ -87,6 +89,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         ?? NSTextStorage()
         let layoutManager = RoundedCornerLayoutManager()
+        layoutManager.diffLines = diffLines
+        layoutManager.isNewFile = isNewFile
         customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer()
@@ -334,7 +338,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         UIGraphicsPopContext()
     }
-    
 
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {

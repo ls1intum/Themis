@@ -67,6 +67,7 @@ struct FeedbackListView: View {
                         Spacer()
                     }.padding()
                 }.headerProminence(.increased)
+                
                 Section {
                     ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                         FeedbackCellView(

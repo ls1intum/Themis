@@ -39,7 +39,7 @@ struct SubmissionSearchView: View {
                 ar: avm.assessmentResult,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? "",
-                maxScore: exercise.maxPoints ?? 100
+                maxPoints: exercise.maxPoints ?? 100
             )
         }
     }

@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     @StateObject var authenticationVM = AuthenticationViewModel()
+    
     var body: some View {
         VStack {
             if authenticationVM.authenticated {

@@ -5,8 +5,6 @@
 //  Created by Andreas Cselovszky on 14.11.22.
 //
 
-// swiftlint:disable line_length
-
 import Foundation
 
 enum FeedbackType {
@@ -23,15 +21,15 @@ class UndoManagerSingleton {
 class AssessmentResult: Encodable, ObservableObject {
     let undoManager = UndoManagerSingleton.shared.undoManager
     
-    var maxScore = 100.0
+    var maxPoints = 100.0
     
-    var score: Double {
+    var points: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
     }
     
-    var relativeScore: Double {
-        score / maxScore * 100
+    var score: Double {
+        points / maxPoints * 100
     }
 
     @Published var feedbacks: [AssessmentFeedback] = [] {
@@ -47,7 +45,9 @@ class AssessmentResult: Encodable, ObservableObject {
             feedbacks
         }
         set(new) {
-            feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+            feedbacks = new.sorted(by: >).sorted {
+                $0.assessmentType.isManual && $1.assessmentType.isAutomatic
+            }
         }
     }
 
@@ -60,24 +60,24 @@ class AssessmentResult: Encodable, ObservableObject {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(relativeScore, forKey: .score)
+        try container.encode(score, forKey: .score)
         try container.encode(feedbacks, forKey: .feedbacks)
         try container.encode(automaticFeedback.count, forKey: .testCaseCount)
         try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
     }
 
     var generalFeedback: [AssessmentFeedback] {
-        computedFeedbacks
-            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
+        feedbacks
+            .filter { $0.type == .general && $0.assessmentType.isManual }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
-        computedFeedbacks
-            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
+        feedbacks
+            .filter { $0.type == .inline && $0.assessmentType.isManual }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        computedFeedbacks.filter { $0.assessmentType == .AUTOMATIC }
+        feedbacks.filter { $0.assessmentType.isAutomatic }
     }
 
     func addFeedback(feedback: AssessmentFeedback) {
@@ -219,7 +219,8 @@ extension AssessmentFeedback: Decodable {
         detailText = try? values.decode(String?.self, forKey: .detailText)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        positive = try values.decode(Bool.self, forKey: .positive)
+        // assessment type `MANUAL_UNREFERENCED` does not have positive
+        positive = (try? values.decode(Bool?.self, forKey: .positive)) ?? false
         type = text?.contains("at line") ?? false ? .inline : .general
     }
 }
@@ -230,9 +231,20 @@ extension AssessmentFeedback: Comparable {
     }
 }
 
+// https://github.com/ls1intum/Artemis/blob/develop/src/main/java/de/tum/in/www1/artemis/domain/enumeration/FeedbackType.java
 enum AssessmentType: String, Codable {
     case AUTOMATIC
+    case AUTOMATIC_ADAPTED
     case MANUAL
+    case MANUAL_UNREFERENCED
+    
+    var isManual: Bool {
+        self == .MANUAL || self == .MANUAL_UNREFERENCED
+    }
+    
+    var isAutomatic: Bool {
+        self == .AUTOMATIC || self == .AUTOMATIC_ADAPTED
+    }
 }
 
 extension ArtemisAPI {

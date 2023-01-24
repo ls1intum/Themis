@@ -9,11 +9,10 @@ import SwiftUI
 
 struct SubmissionListView: View {
 
-    @StateObject var submissionListVM = SubmissionListViewModel()
-
+    var submissionListVM = SubmissionListViewModel()
     var exerciseId: Int
     let exerciseTitle: String
-    let maxScore: Double
+    let maxPoints: Double
 
     var body: some View {
         List {
@@ -26,16 +25,13 @@ struct SubmissionListView: View {
                             exerciseID: exerciseId,
                             submissionID: submission.id,
                             exerciseTitle: exerciseTitle,
-                            maxScore: maxScore
+                            maxPoints: maxPoints
                         )
                     } label: {
-                        Text("Submission \(submission.id) by \(submission.participation.student.name)")
+                        Text("Submission \(submission.id)")
                     }
                 }
             }
-        }
-        .task {
-            await submissionListVM.fetchTutorSubmissions(exerciseId: exerciseId)
         }
     }
 }
@@ -43,7 +39,7 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise", maxScore: 100)
+            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise", maxPoints: 100)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

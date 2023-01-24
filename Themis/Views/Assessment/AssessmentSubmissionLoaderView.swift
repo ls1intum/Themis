@@ -14,7 +14,7 @@ struct AssessmentSubmissionLoaderView: View {
     var exerciseID: Int
     var submissionID: Int
     let exerciseTitle: String
-    let maxScore: Double
+    let maxPoints: Double
 
     var body: some View {
         AssessmentView(
@@ -23,7 +23,7 @@ struct AssessmentSubmissionLoaderView: View {
             ar: avm.assessmentResult,
             exerciseId: exerciseID,
             exerciseTitle: exerciseTitle,
-            maxScore: maxScore
+            maxPoints: maxPoints
         )
         .task {
             await avm.getSubmission(id: submissionID)
@@ -36,6 +36,6 @@ struct AssessmentSubmissionLoaderView: View {
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise", maxScore: 100)
+        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise", maxPoints: 100)
     }
 }
