@@ -24,6 +24,7 @@ struct AssessmentView: View {
     
     let exerciseId: Int
     let exerciseTitle: String
+    let maxScore: Double
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -59,6 +60,9 @@ struct AssessmentView: View {
             }
             .padding(.top, 4)
             .padding(.leading, 13)
+        }
+        .onAppear {
+            ar.maxScore = maxScore
         }
         .onDisappear {
             vm.assessmentResult.undoManager.removeAllActions()
@@ -431,7 +435,8 @@ extension Color {
             cvm: cvm,
             ar: avm.assessmentResult,
             exerciseId: 5284,
-            exerciseTitle: "Example Exercise"
+            exerciseTitle: "Example Exercise",
+            maxScore: 100
         )
             .previewInterfaceOrientation(.landscapeLeft)
     }

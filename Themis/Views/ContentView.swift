@@ -10,12 +10,9 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var authenticationVM = AuthenticationViewModel()
     var body: some View {
-        // SubmissionListView(exerciseId: 5284)
         VStack {
             if authenticationVM.authenticated {
-                // AssessmentView()
                 CourseView(authenticationVM: authenticationVM)
-                // SubmissionListView(exerciseId: 5284, exerciseTitle: "123123", templateParticipationId: 123)
             } else {
                 AuthenticationView(authenticationVM: authenticationVM)
             }

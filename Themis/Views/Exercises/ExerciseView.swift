@@ -26,7 +26,6 @@ struct ExerciseView: View {
                     Button {
                         Task {
                             await avm.initRandomSubmission(exerciseId: exercise.id)
-//                            avm.assessmentResult.sort()
                             UndoManagerSingleton.shared.undoManager.removeAllActions()
                         }
                     } label: {
@@ -36,7 +35,8 @@ struct ExerciseView: View {
                     Section("Submission") {
                         SubmissionListView(
                             exerciseId: exercise.id,
-                            exerciseTitle: exercise.title ?? ""
+                            exerciseTitle: exercise.title ?? "",
+                            maxScore: exercise.maxPoints ?? 100
                         )
                     }
                 }
@@ -50,7 +50,8 @@ struct ExerciseView: View {
                 cvm: cvm,
                 ar: avm.assessmentResult,
                 exerciseId: exercise.id,
-                exerciseTitle: exercise.title ?? ""
+                exerciseTitle: exercise.title ?? "",
+                maxScore: exercise.maxPoints ?? 100
             )
         }
         .navigationTitle(exercise.title ?? "")

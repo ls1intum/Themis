@@ -13,6 +13,7 @@ struct SubmissionListView: View {
 
     var exerciseId: Int
     let exerciseTitle: String
+    let maxScore: Double
 
     var body: some View {
         List {
@@ -24,7 +25,8 @@ struct SubmissionListView: View {
                         AssessmentSubmissionLoaderView(
                             exerciseID: exerciseId,
                             submissionID: submission.id,
-                            exerciseTitle: exerciseTitle
+                            exerciseTitle: exerciseTitle,
+                            maxScore: maxScore
                         )
                     } label: {
                         Text("Submission \(submission.id) by \(submission.participation.student.name)")
@@ -41,7 +43,7 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise")
+            SubmissionListView(exerciseId: 5284, exerciseTitle: "Example Exercise", maxScore: 100)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

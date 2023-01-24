@@ -23,9 +23,15 @@ class UndoManagerSingleton {
 class AssessmentResult: Encodable, ObservableObject {
     let undoManager = UndoManagerSingleton.shared.undoManager
     
+    var maxScore = 100.0
+    
     var score: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
+    }
+    
+    var relativeScore: Double {
+        score / maxScore * 100
     }
 
     @Published var feedbacks: [AssessmentFeedback] = [] {
@@ -54,7 +60,7 @@ class AssessmentResult: Encodable, ObservableObject {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(score, forKey: .score)
+        try container.encode(relativeScore, forKey: .score)
         try container.encode(feedbacks, forKey: .feedbacks)
         try container.encode(automaticFeedback.count, forKey: .testCaseCount)
         try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
