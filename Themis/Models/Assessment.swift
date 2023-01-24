@@ -27,7 +27,9 @@ struct AssessmentResult: Encodable {
             _feedbacks
         }
         set(new) {
-            _feedbacks = new.sorted(by: >).sorted { $0.assessmentType == .MANUAL && $1.assessmentType == .AUTOMATIC }
+            _feedbacks = new.sorted(by: >).sorted {
+                $0.assessmentType.isManual && $1.assessmentType.isAutomatic
+            }
         }
     }
 
@@ -48,16 +50,16 @@ struct AssessmentResult: Encodable {
 
     var generalFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .general && $0.assessmentType == .MANUAL }
+            .filter { $0.type == .general && $0.assessmentType.isManual }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .inline && $0.assessmentType == .MANUAL }
+            .filter { $0.type == .inline && $0.assessmentType.isManual }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.assessmentType == .AUTOMATIC }
+        feedbacks.filter { $0.assessmentType.isAutomatic }
     }
 
     mutating func addFeedback(feedback: AssessmentFeedback) {
@@ -186,9 +188,20 @@ extension AssessmentFeedback: Comparable {
     }
 }
 
+// https://github.com/ls1intum/Artemis/blob/develop/src/main/java/de/tum/in/www1/artemis/domain/enumeration/FeedbackType.java
 enum AssessmentType: String, Codable {
     case AUTOMATIC
+    case AUTOMATIC_ADAPTED
     case MANUAL
+    case MANUAL_UNREFERENCED
+    
+    var isManual: Bool {
+        self == .MANUAL || self == .MANUAL_UNREFERENCED
+    }
+    
+    var isAutomatic: Bool {
+        self == .AUTOMATIC || self == .AUTOMATIC_ADAPTED
+    }
 }
 
 extension ArtemisAPI {
