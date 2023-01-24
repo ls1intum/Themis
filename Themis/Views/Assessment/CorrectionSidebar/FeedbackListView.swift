@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FeedbackListView: View {
     var readOnly: Bool
-    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     
     @State var showAddFeedback = false
@@ -33,7 +33,7 @@ struct FeedbackListView: View {
                     ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
-                            assessmentResult: $assessmentResult,
+                            assessmentResult: assessmentResult,
                             cvm: cvm,
                             feedback: feedback
                         )
@@ -47,7 +47,7 @@ struct FeedbackListView: View {
                     ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
-                            assessmentResult: $assessmentResult,
+                            assessmentResult: assessmentResult,
                             cvm: cvm,
                             feedback: feedback
                         )
@@ -75,7 +75,7 @@ struct FeedbackListView: View {
                     ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                         FeedbackCellView(
                             readOnly: readOnly,
-                            assessmentResult: $assessmentResult,
+                            assessmentResult: assessmentResult,
                             cvm: cvm,
                             feedback: feedback)
                         .listRowSeparator(.hidden)
@@ -93,7 +93,7 @@ struct FeedbackListView: View {
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(
-                assessmentResult: $assessmentResult,
+                assessmentResult: assessmentResult,
                 cvm: cvm,
                 type: .general,
                 showSheet: $showAddFeedback
@@ -106,12 +106,14 @@ struct FeedbackListView: View {
             .map { assessmentResult.feedbacks[$0] }
             .forEach {
                 assessmentResult.deleteFeedback(id: $0.id)
-                cvm.deleteInlineHighlight(feedback: $0)
+                if $0.type == .inline {
+                    cvm.deleteInlineHighlight(feedback: $0)
+                }
             }
     }
 }
 
-struct FeedbackListView_Previews: PreviewProvider {
+ struct FeedbackListView_Previews: PreviewProvider {
     static let assessment = AssessmentViewModel(readOnly: false)
     static let codeEditor = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
@@ -119,9 +121,9 @@ struct FeedbackListView_Previews: PreviewProvider {
     static var previews: some View {
         FeedbackListView(
             readOnly: false,
-            assessmentResult: $assessmentResult,
+            assessmentResult: assessmentResult,
             cvm: codeEditor
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }
-}
+ }
