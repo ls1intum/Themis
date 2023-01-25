@@ -27,11 +27,11 @@ struct ExerciseView: View {
                             SubmissionListView(
                                 submissionListVM: submissionListVM,
                                 exerciseId: exercise.id,
-                                exerciseTitle: exercise.title ?? ""
+                                exerciseTitle: exercise.title ?? "",
+                                maxPoints: exercise.maxPoints ?? 100
                             )
                         }
                     }
-                    
                     Section("Statistics") {
                         ScrollView(.horizontal) {
                             HStack(alignment: .center) {
@@ -61,7 +61,8 @@ struct ExerciseView: View {
                 cvm: codeEditorVM,
                 ar: assessmentVM.assessmentResult,
                 exerciseId: exercise.id,
-                exerciseTitle: exercise.title ?? ""
+                exerciseTitle: exercise.title ?? "",
+                maxPoints: exercise.maxPoints ?? 100
             )
         }
         .navigationTitle(exercise.title ?? "")
@@ -88,7 +89,8 @@ struct ExerciseView: View {
                                     cvm: codeEditorVM,
                                     ar: assessmentVM.assessmentResult,
                                     exerciseId: exercise.id,
-                                    exerciseTitle: exercise.title ?? ""
+                                    exerciseTitle: exercise.title ?? "",
+                                    maxPoints: exercise.maxPoints ?? 100
                                 )
                 ) {
                     startNewAssessmentButton
