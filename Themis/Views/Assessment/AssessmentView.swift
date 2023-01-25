@@ -144,6 +144,30 @@ struct AssessmentView: View {
             }
             
             if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            vm.assessmentResult.undo()
+                        }
+                    } label: {
+                        let undoIconColor: Color = !vm.assessmentResult.canUndo() ? .gray : .white
+                        Image(systemName: "arrow.uturn.backward")
+                            .foregroundStyle(undoIconColor)
+                    }
+                    .disabled(!vm.assessmentResult.canUndo())
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            vm.assessmentResult.redo()
+                        }
+                    } label: {
+                        let redoIconColor: Color = !vm.assessmentResult.canRedo() ? .gray : .white
+                        Image(systemName: "arrow.uturn.forward")
+                            .foregroundStyle(redoIconColor)
+                    }
+                    .disabled(!vm.assessmentResult.canRedo())
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.pencilMode.toggle()
