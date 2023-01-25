@@ -80,17 +80,12 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
-    var diffLines = [Int]()
-    var isNewFile = false
-    
     init() {
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
         }
         ?? NSTextStorage()
         let layoutManager = RoundedCornerLayoutManager()
-        layoutManager.diffLines = diffLines
-        layoutManager.isNewFile = isNewFile
         customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer()
@@ -315,6 +310,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
 
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
@@ -337,6 +333,26 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
         UIGraphicsPopContext()
+        
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, glyphRange, _ in
+            let charRange = self.customLayoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+            let paraNumber = self.customLayoutManager.getParaNumber(for: charRange)
+            if self.customLayoutManager.feedbackSuggestions.contains(where: { $0.fromLine == paraNumber + 1 }) {
+                let button = UIButton()
+                let image = UIImage(systemName: "lightbulb.fill")
+                button.setImage(image, for: .normal)
+                button.imageView?.contentMode = .scaleAspectFit
+                button.imageView?.tintColor = .yellow
+                button.frame = CGRect(
+                    x: 5,
+                    y: rect.origin.y,
+                    width: 25,
+                    height: 25
+                )
+                .offsetBy(dx: 0, dy: 8)
+                self.addSubview(button)
+            }
+        }
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {

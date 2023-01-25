@@ -25,7 +25,6 @@
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
 		838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 838E4AA5297DADF00057E6E6 /* MarkdownUI */; };
 		A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */; };
-		A90D8C8129818F470066DBFD /* FeedbackSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D8C8029818F470066DBFD /* FeedbackSuggestion.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
 		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
@@ -121,7 +120,6 @@
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisAPI.swift; sourceTree = "<group>"; };
-		A90D8C8029818F470066DBFD /* FeedbackSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackSuggestion.swift; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
 		DA1DC19B2952320E0005219D /* UMLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
@@ -225,7 +223,6 @@
 				E119ED9E2922F48A00626DEA /* Repository.swift */,
 				E119ED982922D89900626DEA /* Submission.swift */,
 				E200F786297F10B300DE269D /* Language.swift */,
-				A90D8C8029818F470066DBFD /* FeedbackSuggestion.swift */,
 			);
 			name = Models;
 			path = Themis/Models;
@@ -759,7 +756,6 @@
 				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
 				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
-				A90D8C8129818F470066DBFD /* FeedbackSuggestion.swift in Sources */,
 				E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */,
 				E168C727296DDB3D00A1D1D4 /* CustomProgressView.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
