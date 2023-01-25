@@ -24,6 +24,7 @@ struct AssessmentView: View {
     
     let exerciseId: Int
     let exerciseTitle: String
+    let maxPoints: Double
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -59,6 +60,9 @@ struct AssessmentView: View {
             }
             .padding(.top, 4)
             .padding(.leading, 13)
+        }
+        .onAppear {
+            ar.maxPoints = maxPoints
         }
         .onDisappear {
             vm.assessmentResult.undoManager.removeAllActions()
@@ -197,7 +201,7 @@ struct AssessmentView: View {
                     progress: vm.assessmentResult.score,
                     max: vm.submission?.participation.exercise.maxPoints ?? 0
                 )
-                scoreDisplay
+                pointsDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -403,21 +407,7 @@ struct AssessmentView: View {
         }
     }
     
-    var scoreColor: Color {
-        guard let max = vm.submission?.participation.exercise.maxPoints else {
-            return Color(.systemRed)
-        }
-        let score = vm.assessmentResult.score
-        if score < max / 3 {
-            return Color(.systemRed)
-        } else if score < max / 3 * 2 {
-            return Color(.systemYellow)
-        } else {
-            return Color(.systemGreen)
-        }
-    }
-    
-    var scoreDisplay: some View {
+    var pointsDisplay: some View {
         Group {
             if let submission = vm.submission {
                 if submission.buildFailed {
@@ -425,7 +415,7 @@ struct AssessmentView: View {
                         .foregroundColor(.red)
                 } else {
                     Text("""
-                         \(Double(round(10 * vm.assessmentResult.score) / 10)
+                         \(Double(round(10 * vm.assessmentResult.points) / 10)
                          .formatted(FloatingPointFormatStyle()))/\
                          \(submission.participation.exercise.maxPoints
                          .formatted(FloatingPointFormatStyle()))
@@ -459,7 +449,8 @@ extension Color {
             cvm: cvm,
             ar: avm.assessmentResult,
             exerciseId: 5284,
-            exerciseTitle: "Example Exercise"
+            exerciseTitle: "Example Exercise",
+            maxPoints: 100
         )
             .previewInterfaceOrientation(.landscapeLeft)
     }

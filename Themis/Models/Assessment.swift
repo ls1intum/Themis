@@ -21,9 +21,15 @@ class UndoManagerSingleton {
 class AssessmentResult: Encodable, ObservableObject {
     let undoManager = UndoManagerSingleton.shared.undoManager
     
-    var score: Double {
+    var maxPoints = 100.0
+    
+    var points: Double {
         let score = feedbacks.reduce(0) { $0 + $1.credits }
         return score < 0 ? 0 : score
+    }
+    
+    var score: Double {
+        points / maxPoints * 100
     }
 
     @Published var feedbacks: [AssessmentFeedback] = [] {

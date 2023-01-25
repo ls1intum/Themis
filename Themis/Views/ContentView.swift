@@ -14,7 +14,6 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if authenticationVM.authenticated {
-                // AssessmentView()
                 CourseView(authenticationVM: authenticationVM)
             } else {
                 AuthenticationView(authenticationVM: authenticationVM)

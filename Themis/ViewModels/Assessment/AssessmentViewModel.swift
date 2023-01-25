@@ -6,7 +6,7 @@ class AssessmentViewModel: ObservableObject {
     @Published var submission: SubmissionForAssessment?
     @Published var assessmentResult = AssessmentResult()
     @Published var showSubmission = false
-    @Published var readOnly = true
+    @Published var readOnly: Bool
     @Published var loading = false
 
     init(readOnly: Bool) {
