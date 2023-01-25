@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var avm = AssessmentViewModel(readOnly: false)
-    @StateObject var cvm = CodeEditorViewModel()
 
     var exerciseID: Int
     var submissionID: Int
@@ -19,18 +18,12 @@ struct AssessmentSubmissionLoaderView: View {
     var body: some View {
         AssessmentView(
             vm: avm,
-            cvm: cvm,
             ar: avm.assessmentResult,
             exerciseId: exerciseID,
             exerciseTitle: exerciseTitle,
-            maxPoints: maxPoints
+            maxPoints: maxPoints,
+            submissionId: submissionID
         )
-        .task {
-            await avm.getSubmission(id: submissionID)
-            if let pId = avm.submission?.participation.id {
-                await cvm.initFileTree(participationId: pId)
-            }
-        }
     }
 }
 

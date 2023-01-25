@@ -6,7 +6,7 @@ import SwiftUI
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var vm: AssessmentViewModel
-    @ObservedObject var cvm: CodeEditorViewModel
+    @StateObject var cvm = CodeEditorViewModel()
     @ObservedObject var ar: AssessmentResult
     @StateObject var umlVM = UMLViewModel()
     
@@ -25,6 +25,8 @@ struct AssessmentView: View {
     let exerciseId: Int
     let exerciseTitle: String
     let maxPoints: Double
+    
+    var submissionId: Int?
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -258,6 +260,9 @@ struct AssessmentView: View {
             }
         }
         .task(priority: .high) {
+            if let submissionId, vm.submission == nil {
+                await vm.getSubmission(id: submissionId)
+            }
             if let pId = vm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exerciseId)
@@ -422,12 +427,10 @@ extension Color {
 
  struct AssessmentView_Previews: PreviewProvider {
     static let avm = AssessmentViewModel(readOnly: false)
-    static let cvm = CodeEditorViewModel()
 
     static var previews: some View {
         AssessmentView(
             vm: avm,
-            cvm: cvm,
             ar: avm.assessmentResult,
             exerciseId: 5284,
             exerciseTitle: "Example Exercise",

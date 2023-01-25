@@ -10,7 +10,6 @@ import SwiftUI
 struct SubmissionSearchView: View {
     @StateObject var vm = SubmissionSearchViewModel()
     @StateObject var avm = AssessmentViewModel(readOnly: true)
-    @StateObject var cvm = CodeEditorViewModel()
     @State var search: String = ""
 
     let exercise: Exercise
@@ -35,7 +34,6 @@ struct SubmissionSearchView: View {
         .navigationDestination(isPresented: $avm.showSubmission) {
             AssessmentView(
                 vm: avm,
-                cvm: cvm,
                 ar: avm.assessmentResult,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? "",

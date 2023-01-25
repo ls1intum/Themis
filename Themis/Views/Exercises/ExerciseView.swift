@@ -10,7 +10,6 @@ import SwiftUI
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
-    @StateObject var codeEditorVM = CodeEditorViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
     
     let exercise: Exercise
@@ -47,7 +46,6 @@ struct ExerciseView: View {
         .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
                 vm: assessmentVM,
-                cvm: codeEditorVM,
                 ar: assessmentVM.assessmentResult,
                 exerciseId: exercise.id,
                 exerciseTitle: exercise.title ?? "",
@@ -74,7 +72,6 @@ struct ExerciseView: View {
                 NavigationLink(destination:
                                 AssessmentView(
                                     vm: assessmentVM,
-                                    cvm: codeEditorVM,
                                     ar: assessmentVM.assessmentResult,
                                     exerciseId: exercise.id,
                                     exerciseTitle: exercise.title ?? "",
