@@ -18,6 +18,7 @@ struct Exercise: Codable {
     let releaseDate: String?
     let dueDate: String?
     let assessmentDueDate: String?
+    let templateParticipation: TemplateParticipation?
 
     init() {
         self.id = -1
@@ -30,6 +31,7 @@ struct Exercise: Codable {
         self.releaseDate = nil
         self.dueDate = nil
         self.assessmentDueDate = nil
+        self.templateParticipation = nil
     }
     
     private func dateNow() -> String {

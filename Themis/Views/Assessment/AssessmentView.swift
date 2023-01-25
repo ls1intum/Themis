@@ -22,9 +22,7 @@ struct AssessmentView: View {
     
     private let minRightSnapWidth: CGFloat = 185
     
-    let exerciseId: Int
-    let exerciseTitle: String
-    let maxPoints: Double
+    let exercise: Exercise
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -34,7 +32,7 @@ struct AssessmentView: View {
                         participationID: vm.submission?.participation.id,
                         cvm: cvm,
                         loading: vm.loading,
-                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation?.id ?? -1
+                        templateParticipationId: exercise.templateParticipation?.id
                     )
                     .padding(.top, 35)
                     .frame(width: dragWidthLeft)
@@ -62,7 +60,7 @@ struct AssessmentView: View {
             .padding(.leading, 13)
         }
         .onAppear {
-            ar.maxPoints = maxPoints
+            ar.maxPoints = exercise.maxPoints ?? 100
         }
         .onDisappear {
             vm.assessmentResult.undoManager.removeAllActions()
@@ -130,7 +128,7 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack(alignment: .center) {
-                    Text(exerciseTitle)
+                    Text(exercise.title ?? "")
                         .bold()
                         .font(.title)
                     Image(systemName: vm.readOnly ? "eyeglasses" : "pencil.and.outline")
@@ -221,7 +219,7 @@ struct AssessmentView: View {
         .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
             Button("Next Submission") {
                 Task {
-                    await vm.initRandomSubmission(exerciseId: exerciseId)
+                    await vm.initRandomSubmission(exerciseId: exercise.id)
                     if vm.submission == nil {
                         showNoSubmissionsAlert = true
                     }
@@ -424,9 +422,7 @@ extension Color {
             vm: avm,
             cvm: cvm,
             ar: avm.assessmentResult,
-            exerciseId: 5284,
-            exerciseTitle: "Example Exercise",
-            maxPoints: 100
+            exercise: Exercise()
         )
             .previewInterfaceOrientation(.landscapeLeft)
     }
