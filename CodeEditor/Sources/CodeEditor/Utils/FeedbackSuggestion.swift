@@ -8,14 +8,15 @@
 import Foundation
 
 public struct FeedbackSuggestion: Decodable {
-    let exerciseId: Int
-    let participationId: Int
-    let code: String
+    public let id: String = UUID().uuidString
+    public let exerciseId: Int
+    public let participationId: Int
+    public let code: String
     public let srcFile: String
-    let fromLine: Int
-    let toLine: Int
-    let text: String
-    let credits: Double
+    public let fromLine: Int
+    public let toLine: Int
+    public let text: String
+    public let credits: Double
     
     enum DecodingKeys: String, CodingKey {
         case exercise_id
@@ -35,8 +36,8 @@ public struct FeedbackSuggestion: Decodable {
         self.srcFile = srcFile
         self.fromLine = fromLine
         self.toLine = toLine
-        self.text = ""
-        self.credits = 0
+        self.text = "Good Job man"
+        self.credits = 3
     }
 
     public init(from decoder: Decoder) throws {

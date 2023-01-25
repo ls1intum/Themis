@@ -21,6 +21,7 @@ public struct EditorBindings {
     public var diffLines: [Int]
     public var isNewFile: Bool
     public var feedbackSuggestions: [FeedbackSuggestion]
+    public var selectedFeedbackSuggestionId: Binding<String>
     
     public init(source: Binding<String>,
                 selection: Binding<Range<String.Index>>? = nil,
@@ -39,7 +40,8 @@ public struct EditorBindings {
                 scrollUtils: ScrollUtils,
                 diffLines: [Int],
                 isNewFile: Bool,
-                feedbackSuggestions: [FeedbackSuggestion]
+                feedbackSuggestions: [FeedbackSuggestion],
+                selectedFeedbackSuggestionId: Binding<String>
     ) {
         self.source = source
         self.selection = selection
@@ -59,5 +61,6 @@ public struct EditorBindings {
         self.diffLines = diffLines
         self.isNewFile = isNewFile
         self.feedbackSuggestions = feedbackSuggestions
+        self.selectedFeedbackSuggestionId = selectedFeedbackSuggestionId
     }
 }

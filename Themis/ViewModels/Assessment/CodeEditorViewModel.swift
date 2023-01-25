@@ -32,6 +32,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var feedbackSuggestions = [FeedbackSuggestion(srcFile: "/src/de/tum/themis/BubbleSort.java", fromLine: 1, toLine: 5),
                                           FeedbackSuggestion(srcFile: "/src/de/tum/themis/Client.java", fromLine: 30, toLine: 45),
                                         FeedbackSuggestion(srcFile: "/src/de/tum/themis/MergeSort.java", fromLine: 0, toLine: 15)]
+    @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     

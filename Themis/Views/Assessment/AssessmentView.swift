@@ -138,7 +138,7 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            
+
             if vm.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
@@ -146,7 +146,7 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
-            
+
             if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -233,13 +233,16 @@ struct AssessmentView: View {
             }
         }
         .sheet(isPresented: $cvm.showAddFeedback) {
+            cvm.selectedFeedbackSuggestionId = ""
+        } content: {
             AddFeedbackView(
                 assessmentResult: vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
-                gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? []
+                gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? [],
+                feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id == cvm.selectedFeedbackSuggestionId }
             )
         }
         .sheet(isPresented: $cvm.showEditFeedback) {

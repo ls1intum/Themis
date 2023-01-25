@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CodeEditor
 
 struct EditFeedbackViewBase: View {
     var assessmentResult: AssessmentResult
@@ -26,6 +27,8 @@ struct EditFeedbackViewBase: View {
     var file: Node?
     
     let gradingCriteria: [GradingCriterion]
+    
+    var feedbackSuggestion: FeedbackSuggestion?
 
     var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
@@ -56,6 +59,10 @@ struct EditFeedbackViewBase: View {
                 self.detailText = feedback.detailText ?? ""
                 self.score = feedback.credits
             }
+        }
+        if let feedbackSuggestion = feedbackSuggestion {
+            self.detailText = feedbackSuggestion.text
+            self.score = feedbackSuggestion.credits
         }
     }
 

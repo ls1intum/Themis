@@ -311,7 +311,10 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else // iOS etc
 
     public func makeUIView(context: Context) -> UITextView {
-        let textView = UXCodeTextView()
+        let textView = UXCodeTextView(
+            showAddFeedback: editorBindings.showAddFeedback,
+            selectedFeedbackSuggestionId: editorBindings.selectedFeedbackSuggestionId
+        )
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.highlightedRanges = editorBindings.highlightedRanges
