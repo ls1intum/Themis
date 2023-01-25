@@ -18,7 +18,6 @@ struct ExerciseView: View {
     var body: some View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
-                
                 Form {
                     if !submissionListVM.submissions.isEmpty {
                         Section("Open submissions") {

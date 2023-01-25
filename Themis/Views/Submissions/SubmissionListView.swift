@@ -28,7 +28,12 @@ struct SubmissionListView: View {
                             maxPoints: maxPoints
                         )
                     } label: {
-                        Text("Submission \(submission.id)")
+                        HStack {
+                            Text(verbatim: "Submission \(submission.id)")
+                            Spacer()
+                            let date = ArtemisDateHelpers.getReadableDateStringDetailed(submission.submissionDate) ?? "Unavailable"
+                            Text("Submission date: \(date)")
+                        }.padding(.trailing)
                     }
                 }
             }

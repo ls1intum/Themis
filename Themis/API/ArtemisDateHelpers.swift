@@ -36,4 +36,20 @@ enum ArtemisDateHelpers {
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
         return dateFormatter.string(from: date)
     }
+    
+    static func getReadableDateStringDetailed(_ dateString: String?) -> String? {
+        guard let dateString else {
+            return nil
+        }
+        
+        let customDateFormatter = DateFormatter()
+        customDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        
+        guard let date = customDateFormatter.date(from: dateString) else {
+            return nil
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
+        return dateFormatter.string(from: date)
+    }
 }
