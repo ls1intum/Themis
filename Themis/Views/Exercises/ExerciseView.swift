@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var codeEditorVM = CodeEditorViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
+    @State private var orientation = UIDevice.current.orientation
     
     let exercise: Exercise
     
@@ -31,13 +33,22 @@ struct ExerciseView: View {
                     }
                     
                     Section("Statistics") {
-                        HStack {
-                            Spacer()
-                            CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
-                            CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
-                            CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
-                            Spacer()
-                        }
+                        ScrollView(.horizontal) {
+                            HStack(alignment: .center) {
+                                if orientation.isLandscape {
+                                    Spacer(minLength: 100)
+                                }
+                                Group {
+                                    CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
+                                    CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
+                                    CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
+                                }
+                                Spacer()
+                            }
+                            .onRotate { newOrientation in
+                                orientation = newOrientation
+                            }
+                        }.frame(alignment: .center)
                     }
                 }
             } else {
@@ -62,6 +73,7 @@ struct ExerciseView: View {
                 await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
                 await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
             }
+            print(orientation.isLandscape)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
