@@ -29,6 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
+    @Published var feedbackSuggestions = [FeedbackSuggestion]()
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
@@ -112,6 +113,15 @@ class CodeEditorViewModel: ObservableObject {
         
         if feedback.type == .inline {
             undoManager.endUndoGrouping() /// undo group with deleteFeedback in AssessmentResult
+        }
+    }
+    
+    @MainActor
+    func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
+        do {
+            self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
+        } catch {
+            print(error)
         }
     }
 }

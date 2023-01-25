@@ -211,6 +211,7 @@ struct AssessmentView: View {
             Button("Yes") {
                 Task {
                     if let pId = vm.submission?.participation.id {
+                        await vm.notifyThemisML(participationId: pId, exerciseId: exerciseId)
                         await vm.sendAssessment(participationId: pId, submit: true)
                     }
                     showNavigationOptions.toggle()
@@ -256,6 +257,7 @@ struct AssessmentView: View {
         .task(priority: .high) {
             if let pId = vm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
+                await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exerciseId)
             }
         }
     }
