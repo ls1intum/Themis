@@ -60,7 +60,6 @@ class CourseViewModel: ObservableObject {
             }
         } catch let error {
             print(error)
-            print(error.localizedDescription)
         }
     }
 
