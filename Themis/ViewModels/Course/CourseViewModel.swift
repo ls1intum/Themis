@@ -8,6 +8,7 @@
 import SwiftUI
 
 class CourseViewModel: ObservableObject {
+    @Published var firstLoad = true
     @Published var loading = false
     @Published var courses: [Course] = []
     
@@ -45,7 +46,10 @@ class CourseViewModel: ObservableObject {
 
     @MainActor
     func fetchAllCourses() async {
-        loading = true
+        if firstLoad {
+            loading = true
+            firstLoad = false
+        }
         defer {
             loading = false
         }
@@ -56,6 +60,7 @@ class CourseViewModel: ObservableObject {
             }
         } catch let error {
             print(error)
+            print(error.localizedDescription)
         }
     }
 

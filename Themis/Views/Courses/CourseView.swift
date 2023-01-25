@@ -20,6 +20,9 @@ struct CourseView: View {
                     ExercisesListView(
                         exercises: courseVM.shownCourse?.exercises ?? []
                     )
+                    .refreshable {
+                        await courseVM.fetchAllCourses()
+                    }
                 }
             }
             .navigationTitle(navTitle)
