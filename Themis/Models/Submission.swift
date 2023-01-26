@@ -24,6 +24,7 @@ struct SubmissionResult: Codable {
     let testCaseCount: Int
     let passedTestCaseCount: Int
     let codeIssueCount: Int
+    let completionDate: String?
 }
 
 struct SubmissionParticipation: Codable {
