@@ -27,8 +27,14 @@ struct SubmissionListView: View {
                         HStack {
                             Text(verbatim: "Submission \(submission.id)")
                             Spacer()
-                            let date = ArtemisDateHelpers.getReadableDateStringDetailed(submission.submissionDate) ?? "Unavailable"
-                            Text("Submission date: \(date)")
+                            VStack {
+                                let submissionDate = ArtemisDateHelpers.getReadableDateStringDetailed(submission.submissionDate) ?? "Unavailable"
+                                let completionDate = ArtemisDateHelpers.getReadableDateStringDetailed(
+                                    submission.results.last?.completionDate) ?? "A few seconds ago"
+                                
+                                Text("Submission date: \(submissionDate)")
+                                Text("Last assessed: \(completionDate)")
+                            }
                         }.padding(.trailing)
                     }
                 }
