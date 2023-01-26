@@ -181,10 +181,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             parent.editorBindings.flags.contains(.selectable)
             || parent.editorBindings.flags.contains(.editable)
         }
-        
-        public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            scrollView.setNeedsDisplay()
-        }
     }
 
     public func makeCoordinator() -> Coordinator {
