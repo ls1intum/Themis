@@ -54,7 +54,7 @@ class CourseViewModel: ObservableObject {
             if shownCourseID == nil {
                 shownCourseID = self.courses.first?.id
             }
-            for i in 0...courses.count - 1 {
+            for i in 0..<courses.count {
                 try await courses[i].fetchProgrammingExercises(courseId: courses[i].id)
             }
         } catch let error {
