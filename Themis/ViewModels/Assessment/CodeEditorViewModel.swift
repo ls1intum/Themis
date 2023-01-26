@@ -29,9 +29,9 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
-    @Published var feedbackSuggestions = [FeedbackSuggestion(srcFile: "/src/de/tum/themis/BubbleSort.java", fromLine: 1, toLine: 5),
+    @Published var feedbackSuggestions = [FeedbackSuggestion(srcFile: "/src/de/tum/themis/BubbleSort.java", fromLine: 1, toLine: 1),
                                           FeedbackSuggestion(srcFile: "/src/de/tum/themis/Client.java", fromLine: 30, toLine: 45),
-                                        FeedbackSuggestion(srcFile: "/src/de/tum/themis/MergeSort.java", fromLine: 0, toLine: 15)]
+                                        FeedbackSuggestion(srcFile: "/src/de/tum/themis/MergeSort.java", fromLine: 1, toLine: 15)]
     @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
@@ -82,6 +82,63 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
     
+    @MainActor
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+        if let file = selectedFile, let code = file.code {
+            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+                return
+            }
+            if inlineHighlights.contains(where: { $0.key == file.path }) {
+                inlineHighlights[file.path]?.append(
+                    HighlightedRange(
+                        id: feedbackId.uuidString,
+                        range: range,
+                        color: UIColor.systemYellow,
+                        cornerRadius: 8
+                    )
+                )
+            } else {
+                inlineHighlights[file.path] = [
+                    HighlightedRange(
+                        id: feedbackId.uuidString,
+                        range: range,
+                        color: UIColor.systemYellow,
+                        cornerRadius: 8
+                    )
+                ]
+            }
+        }
+    }
+    
+    private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
+        var count = 1
+        var fromIndex: String.Index?
+        var toDistance: Int = 0
+        var offset = 0
+        text.enumerateLines { line, stop in
+            if count < fromLine {
+                offset += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == fromLine {
+                fromIndex = line.startIndex
+            }
+            if count >= fromLine && count < toLine {
+                toDistance += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == toLine {
+                stop = true
+            }
+            count += 1
+        }
+        guard var fromIndex else {
+            return nil
+        }
+        fromIndex = text.index(fromIndex, offsetBy: offset)
+        let toIndex = text.index(fromIndex, offsetBy: toDistance)
+        
+        return NSRange(text.lineRange(for: fromIndex...toIndex), in: text)
+    }
+
     func addInlineHighlight(feedbackId: UUID) {
         if let file = selectedFile, let selectedSection = selectedSection {
             if (inlineHighlights.contains { $0.key == file.path }) {

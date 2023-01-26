@@ -35,7 +35,8 @@ struct CodeView: View {
                 diffLines: file.diffLines,
                 isNewFile: file.isNewFile,
                 feedbackSuggestions: cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
-                selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
+                selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId,
+                filePath: file.path
             )
         )
         .onChange(of: dragSelection) { newValue in

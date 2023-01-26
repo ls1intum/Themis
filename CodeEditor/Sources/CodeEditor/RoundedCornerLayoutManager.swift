@@ -19,7 +19,6 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     var isNewFile = false
     var feedbackSuggestions = [FeedbackSuggestion]()
     
-    
     override init() {
         super.init()
         self.gutterWidth = numViewWidth()

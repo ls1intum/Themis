@@ -42,7 +42,18 @@ struct EditFeedbackViewBase: View {
     }
 
     private func createFeedback() {
-        if type == .inline {
+        if let feedbackSuggestion {
+            let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
+            let feedback = AssessmentFeedback(
+                detailText: feedbackSuggestion.text,
+                credits: feedbackSuggestion.credits,
+                type: .inline,
+                file: file,
+                lines: lines
+            )
+            assessmentResult.addFeedback(feedback: feedback)
+            cvm.addFeedbackSuggestionInlineHighlight(feedbackSuggestion: feedbackSuggestion, feedbackId: feedback.id)
+        } else if type == .inline {
             let lines: NSRange? = cvm.selectedSectionParsed?.0
             let columns: NSRange? = cvm.selectedSectionParsed?.1
             let feedback = AssessmentFeedback(detailText: detailText, credits: score, type: type, file: file, lines: lines, columns: columns)

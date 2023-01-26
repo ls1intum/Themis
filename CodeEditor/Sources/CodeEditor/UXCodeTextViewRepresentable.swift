@@ -245,6 +245,14 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
         textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
         
+        if textView.filePath != editorBindings.filePath {
+            textView.filePath = editorBindings.filePath
+            for lightBulb in textView.lightBulbs {
+                lightBulb.removeFromSuperview()
+            }
+            textView.lightBulbs = []
+        }
+        
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {
             editorBindings.highlightedRanges.forEach { range in

@@ -169,8 +169,13 @@ struct AssessmentFeedback: Identifiable, Hashable {
             return
         }
         self.reference = "file:" + file.path + "_line:\(lines.location)"
+        
         guard let columns else {
-            self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+            if lines.length == 0 {
+                self.text = "File " + file.path + " at line \(lines.location)"
+            } else {
+                self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+            }
             return
         }
         if columns.length == 0 {

@@ -84,6 +84,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     var showAddFeedback: Binding<Bool>
     var selectedFeedbackSuggestionId: Binding<String>
     private var currFeedbackId: String = ""
+    var filePath: String = ""
+    var lightBulbs = [UIButton]()
     
     init(showAddFeedback: Binding<Bool>, selectedFeedbackSuggestionId: Binding<String>) {
         let textStorage = highlightr.flatMap {
@@ -358,6 +360,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 )
                 .offsetBy(dx: 0, dy: 8)
                 button.addTarget(self, action: #selector(self.onLightBuldTap), for: .touchUpInside)
+                self.lightBulbs.append(button)
                 self.addSubview(button)
             }
         }
