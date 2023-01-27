@@ -11,19 +11,15 @@ struct AssessmentSubmissionLoaderView: View {
     @StateObject var avm = AssessmentViewModel(readOnly: false)
     @StateObject var cvm = CodeEditorViewModel()
 
-    var exerciseID: Int
     var submissionID: Int
-    let exerciseTitle: String
-    let maxPoints: Double
+    let exercise: Exercise
 
     var body: some View {
         AssessmentView(
             vm: avm,
             cvm: cvm,
             ar: avm.assessmentResult,
-            exerciseId: exerciseID,
-            exerciseTitle: exerciseTitle,
-            maxPoints: maxPoints
+            exercise: exercise
         )
         .task {
             await avm.getSubmission(id: submissionID)
@@ -36,6 +32,6 @@ struct AssessmentSubmissionLoaderView: View {
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise", maxPoints: 100)
+        AssessmentSubmissionLoaderView(submissionID: 5, exercise: Exercise())
     }
 }
