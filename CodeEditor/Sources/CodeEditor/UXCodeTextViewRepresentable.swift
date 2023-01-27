@@ -251,6 +251,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.highlightedRanges = editorBindings.highlightedRanges
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
+        textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {

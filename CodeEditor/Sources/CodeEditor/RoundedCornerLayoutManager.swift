@@ -17,6 +17,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     let paraStyle = NSMutableParagraphStyle()
     var diffLines = [Int]()
     var isNewFile = false
+    var feedbackSuggestions = [FeedbackSuggestion]()
     
     override init() {
         super.init()
