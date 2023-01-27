@@ -49,6 +49,7 @@ struct ExerciseView: View {
                         }.frame(alignment: .center)
                     }
                 }
+                .refreshable { await fetchExerciseData() }
             } else {
                 ProgressView()
             }
@@ -62,16 +63,7 @@ struct ExerciseView: View {
             )
         }
         .navigationTitle(exercise.title ?? "")
-        .onAppear {
-            exerciseVM.exercise = exercise
-            Task {
-                await exerciseVM.fetchExercise(exerciseId: exercise.id)
-                await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
-                await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
-                await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
-            }
-            print(orientation.isLandscape)
-        }
+        .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: SubmissionSearchView(exercise: exercise)) {
@@ -115,6 +107,14 @@ struct ExerciseView: View {
             Text("Start Assessment")
         }
         .buttonStyle(NavigationBarButton())
+    }
+    
+    private func fetchExerciseData() async {
+        exerciseVM.exercise = exercise
+        await exerciseVM.fetchExercise(exerciseId: exercise.id)
+        await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
+        await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
+        await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
     }
 }
 
