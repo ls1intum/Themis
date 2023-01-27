@@ -81,13 +81,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
-    var showAddFeedback: Binding<Bool>
-    var selectedFeedbackSuggestionId: Binding<String>
-    private var currFeedbackId: String = ""
-    var filePath: String = ""
-    var lightBulbs = [UIButton]()
-    
-    init(showAddFeedback: Binding<Bool>, selectedFeedbackSuggestionId: Binding<String>) {
+    init() {
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
         }
@@ -98,8 +92,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         let textContainer = NSTextContainer()
         textContainer.widthTracksTextView = true // those are key!
         layoutManager.addTextContainer(textContainer)
-        self.showAddFeedback = showAddFeedback
-        self.selectedFeedbackSuggestionId = selectedFeedbackSuggestionId
         super.init(frame: .zero, textContainer: textContainer)
         if let hlTextStorage {
             hlTextStorage.highlightDelegate = self
@@ -341,12 +333,14 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
         UIGraphicsPopContext()
-        
-        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: self.textContainer)) { rect, _, _, glyphRange, _ in
-            let charRange = self.customLayoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
-            let paraNumber = self.customLayoutManager.getParaNumber(for: charRange)
-            if let feedback = self.customLayoutManager.feedbackSuggestions.first(where: { $0.fromLine == paraNumber + 1 }) {
-                self.currFeedbackId = feedback.id
+    }
+    
+    func addLightbulbs() {
+        var currLine = 1
+        let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
+            if let feedback = coordinator?.parent.editorBindings.feedbackSuggestions.first(where: { $0.fromLine == currLine }) {
+                self.currFeedbackId = feedback.id.uuidString
                 let button = UIButton()
                 let image = UIImage(systemName: "lightbulb.fill")
                 button.setImage(image, for: .normal)
@@ -363,12 +357,19 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 self.lightBulbs.append(button)
                 self.addSubview(button)
             }
+            currLine += 1
         }
     }
     
+    private var currFeedbackId: String = ""
+    var lightBulbs = [UIButton]()
+    
     @objc private func onLightBuldTap() {
-        self.selectedFeedbackSuggestionId.wrappedValue = self.currFeedbackId
-        self.showAddFeedback.wrappedValue.toggle()
+        let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator
+        coordinator?.parent.editorBindings.selectedFeedbackSuggestionId.wrappedValue = self.currFeedbackId
+        coordinator?.parent.editorBindings.showAddFeedback.wrappedValue.toggle()
+//        editorBindings.selectedFeedbackSuggestionId.wrappedValue = self.currFeedbackId
+//        editorBindings.showAddFeedback.wrappedValue.toggle()
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {

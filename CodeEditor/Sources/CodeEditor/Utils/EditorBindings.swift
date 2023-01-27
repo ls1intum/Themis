@@ -22,7 +22,6 @@ public struct EditorBindings {
     public var isNewFile: Bool
     public var feedbackSuggestions: [FeedbackSuggestion]
     public var selectedFeedbackSuggestionId: Binding<String>
-    public var filePath: String
     
     public init(source: Binding<String>,
                 selection: Binding<Range<String.Index>>? = nil,
@@ -42,8 +41,7 @@ public struct EditorBindings {
                 diffLines: [Int],
                 isNewFile: Bool,
                 feedbackSuggestions: [FeedbackSuggestion],
-                selectedFeedbackSuggestionId: Binding<String>,
-                filePath: String
+                selectedFeedbackSuggestionId: Binding<String>
     ) {
         self.source = source
         self.selection = selection
@@ -64,6 +62,5 @@ public struct EditorBindings {
         self.isNewFile = isNewFile
         self.feedbackSuggestions = feedbackSuggestions
         self.selectedFeedbackSuggestionId = selectedFeedbackSuggestionId
-        self.filePath = filePath
     }
 }

@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct FeedbackSuggestion: Decodable {
-    public let id: String = UUID().uuidString
+public struct FeedbackSuggestion: Decodable, Equatable {
+    public let id = UUID()
     public let exerciseId: Int
     public let participationId: Int
     public let code: String
@@ -50,5 +50,9 @@ public struct FeedbackSuggestion: Decodable {
         toLine = try values.decode(Int.self, forKey: .to_line)
         text = try values.decode(String.self, forKey: .text)
         credits = try values.decode(Double.self, forKey: .credits)
+    }
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
     }
 }

@@ -53,7 +53,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.editorBindings = editorBindings
     }
     
-    private var editorBindings: EditorBindings
+    var editorBindings: EditorBindings
 
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -217,6 +217,14 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = editorBindings.source.wrappedValue
             }
+            print("deleting \(textView.lightBulbs)")
+            // delete and add new lightbulbs when code changes
+            for lightBulb in textView.lightBulbs {
+                lightBulb.removeFromSuperview()
+            }
+            textView.lightBulbs = []
+            textView.addLightbulbs()
+            print("added \(textView.lightBulbs)")
         }
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
@@ -243,15 +251,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.highlightedRanges = editorBindings.highlightedRanges
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
-        textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
-        
-        if textView.filePath != editorBindings.filePath {
-            textView.filePath = editorBindings.filePath
-            for lightBulb in textView.lightBulbs {
-                lightBulb.removeFromSuperview()
-            }
-            textView.lightBulbs = []
-        }
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {
@@ -319,10 +318,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else // iOS etc
 
     public func makeUIView(context: Context) -> UITextView {
-        let textView = UXCodeTextView(
-            showAddFeedback: editorBindings.showAddFeedback,
-            selectedFeedbackSuggestionId: editorBindings.selectedFeedbackSuggestionId
-        )
+        let textView = UXCodeTextView()
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.highlightedRanges = editorBindings.highlightedRanges

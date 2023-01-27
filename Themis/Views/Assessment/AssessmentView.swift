@@ -244,7 +244,7 @@ struct AssessmentView: View {
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
                 gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? [],
-                feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id == cvm.selectedFeedbackSuggestionId }
+                feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id.uuidString == cvm.selectedFeedbackSuggestionId }
             )
         }
         .sheet(isPresented: $cvm.showEditFeedback) {
