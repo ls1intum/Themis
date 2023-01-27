@@ -217,14 +217,12 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = editorBindings.source.wrappedValue
             }
-            print("deleting \(textView.lightBulbs)")
             // delete and add new lightbulbs when code changes
             for lightBulb in textView.lightBulbs {
                 lightBulb.removeFromSuperview()
             }
             textView.lightBulbs = []
-            textView.addLightbulbs()
-            print("added \(textView.lightBulbs)")
+            textView.addLightbulbs(feedbackSuggestions: editorBindings.feedbackSuggestions)
         }
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue

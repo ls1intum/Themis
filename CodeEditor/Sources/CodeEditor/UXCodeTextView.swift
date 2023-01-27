@@ -335,11 +335,33 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         UIGraphicsPopContext()
     }
     
-    func addLightbulbs() {
-        var currLine = 1
-        let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator
+    private func getTotalLineNumbers() -> Int {
+        var count = 0
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { _, _, _, _, _ in count += 1 }
+        return count
+    }
+    
+    private func getActualLineNumber(lineNumber: Int) -> Int {
+        let total = getTotalLineNumbers()
+        let top = lineNumber <= total ? lineNumber : total
+        var actual = lineNumber
+        for lineIndex in 1..<top {
+            let lineRect = layoutManager.lineFragmentRect(forGlyphAt: lineIndex, effectiveRange: nil)
+            let lineUsedRect = layoutManager.lineFragmentUsedRect(forGlyphAt: lineIndex, effectiveRange: nil)
+            if lineRect.size.width != lineUsedRect.size.width {
+                actual += 1
+            }
+        }
+        return actual
+    }
+    
+    func addLightbulbs(feedbackSuggestions: [FeedbackSuggestion]) {
+        var lineNumber = 1
         layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
-            if let feedback = coordinator?.parent.editorBindings.feedbackSuggestions.first(where: { $0.fromLine == currLine }) {
+            let actualLineNumber = self.getActualLineNumber(lineNumber: lineNumber)
+            print("is: \(lineNumber)")
+            print("actual: \(actualLineNumber)")
+            if let feedback = feedbackSuggestions.first(where: { $0.fromLine == actualLineNumber }) {
                 self.currFeedbackId = feedback.id.uuidString
                 let button = UIButton()
                 let image = UIImage(systemName: "lightbulb.fill")
@@ -357,7 +379,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 self.lightBulbs.append(button)
                 self.addSubview(button)
             }
-            currLine += 1
+            lineNumber += 1
         }
     }
     

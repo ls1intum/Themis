@@ -75,7 +75,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         return maxNum * width + 4.0 * 2
     }
     
-    func getParaNumber(for charRange: NSRange) -> Int {
+    private func getParaNumber(for charRange: NSRange) -> Int {
         if charRange.location == lastParaLocation {
             return lastParaNumber
         } else if charRange.location < lastParaLocation {
@@ -129,7 +129,6 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                                                    .paragraphStyle: paraStyle]
         var gutterRect = CGRect.zero
         var paraNumber = 0
-        var currLine = 0
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
