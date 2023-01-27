@@ -12,10 +12,14 @@ struct Course: Codable, Hashable {
     let title: String
     let description: String?
     let shortName: String?
-    let exercises: [Exercise]?
+    var exercises: [Exercise]?
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+    
+    mutating func fetchProgrammingExercises(courseId: Int) async throws {
+        exercises = try await ArtemisAPI.getAllProgrammingExercises(courseId: courseId)
     }
     
     static func == (lhs: Course, rhs: Course) -> Bool {
