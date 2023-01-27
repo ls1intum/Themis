@@ -23,9 +23,7 @@ struct ExerciseView: View {
                         Section("Open submissions") {
                             SubmissionListView(
                                 submissionListVM: submissionListVM,
-                                exerciseId: exercise.id,
-                                exerciseTitle: exercise.title ?? "",
-                                maxPoints: exercise.maxPoints ?? 100
+                                exercise: exercise
                             )
                         }
                     }
@@ -48,9 +46,7 @@ struct ExerciseView: View {
                 vm: assessmentVM,
                 cvm: codeEditorVM,
                 ar: assessmentVM.assessmentResult,
-                exerciseId: exercise.id,
-                exerciseTitle: exercise.title ?? "",
-                maxPoints: exercise.maxPoints ?? 100
+                exercise: exercise
             )
         }
         .navigationTitle(exercise.title ?? "")
@@ -75,9 +71,7 @@ struct ExerciseView: View {
                                     vm: assessmentVM,
                                     cvm: codeEditorVM,
                                     ar: assessmentVM.assessmentResult,
-                                    exerciseId: exercise.id,
-                                    exerciseTitle: exercise.title ?? "",
-                                    maxPoints: exercise.maxPoints ?? 100
+                                    exercise: exercise
                                 )
                 ) {
                     startNewAssessmentButton
