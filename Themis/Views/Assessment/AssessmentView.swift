@@ -43,7 +43,8 @@ struct AssessmentView: View {
                 }
                 CodeEditorView(
                     cvm: cvm,
-                    showFileTree: $showFileTree
+                    showFileTree: $showFileTree,
+                    readOnly: vm.readOnly
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
