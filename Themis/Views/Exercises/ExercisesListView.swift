@@ -25,6 +25,7 @@ struct ExercisesListView: View {
                 exerciseSection(
                     title: "Former Exercises",
                     dateProperties: [
+                        releaseDate,
                         dueDate,
                         assessmentDueDate
                     ],
@@ -34,6 +35,7 @@ struct ExercisesListView: View {
                 exerciseSection(
                     title: "Current Exercises",
                     dateProperties: [
+                        releaseDate,
                         dueDate,
                         assessmentDueDate
                     ],
@@ -43,7 +45,9 @@ struct ExercisesListView: View {
                 exerciseSection(
                     title: "Future Exercises",
                     dateProperties: [
-                        releaseDate
+                        releaseDate,
+                        dueDate,
+                        assessmentDueDate
                     ],
                     predicate: { $0.isFuture() }
                 )
