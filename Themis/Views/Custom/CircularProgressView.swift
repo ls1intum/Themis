@@ -102,6 +102,7 @@ struct CircularProgressView: View {
                 .bold()
                 .padding(5)
         }
+        .scaledToFit()
         .frame(width: 300, height: 300)
         .background(colorScheme == .dark ? Color.black.opacity(0.3) : Color.white)
         .cornerRadius(20)

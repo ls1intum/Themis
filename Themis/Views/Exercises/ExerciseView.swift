@@ -13,14 +13,12 @@ struct ExerciseView: View {
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var codeEditorVM = CodeEditorViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
-    @State private var orientation = UIDevice.current.orientation
     
     let exercise: Exercise
     
     var body: some View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
-                
                 Form {
                     if !submissionListVM.submissions.isEmpty {
                         Section("Open submissions") {
@@ -31,22 +29,13 @@ struct ExerciseView: View {
                         }
                     }
                     Section("Statistics") {
-                        ScrollView(.horizontal) {
-                            HStack(alignment: .center) {
-                                if orientation.isLandscape {
-                                    Spacer(minLength: 100)
-                                }
-                                Group {
-                                    CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
-                                    CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
-                                    CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
-                                }
-                                Spacer()
-                            }
-                            .onRotate { newOrientation in
-                                orientation = newOrientation
-                            }
-                        }.frame(alignment: .center)
+                        HStack(alignment: .center) {
+                            Spacer()
+                            CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
+                            CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
+                            CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
+                            Spacer()
+                        }
                     }
                 }
                 .refreshable { await fetchExerciseData() }
