@@ -8,6 +8,7 @@
 import SwiftUI
 
 class CourseViewModel: ObservableObject {
+    @Published var firstLoad = true
     @Published var loading = false
     @Published var courses: [Course] = []
     
@@ -45,7 +46,10 @@ class CourseViewModel: ObservableObject {
 
     @MainActor
     func fetchAllCourses() async {
-        loading = true
+        if firstLoad {
+            loading = true
+            firstLoad = false
+        }
         defer {
             loading = false
         }
@@ -53,6 +57,9 @@ class CourseViewModel: ObservableObject {
             self.courses = try await ArtemisAPI.getAllCourses()
             if shownCourseID == nil {
                 shownCourseID = self.courses.first?.id
+            }
+            for i in 0..<courses.count {
+                try await courses[i].fetchProgrammingExercises(courseId: courses[i].id)
             }
         } catch let error {
             print(error)

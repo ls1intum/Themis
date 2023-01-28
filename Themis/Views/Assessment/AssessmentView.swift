@@ -22,9 +22,7 @@ struct AssessmentView: View {
     
     private let minRightSnapWidth: CGFloat = 185
     
-    let exerciseId: Int
-    let exerciseTitle: String
-    let maxPoints: Double
+    let exercise: Exercise
     
     var submissionId: Int?
     
@@ -36,7 +34,7 @@ struct AssessmentView: View {
                         participationID: vm.submission?.participation.id,
                         cvm: cvm,
                         loading: vm.loading,
-                        templateParticipationId: vm.submission?.participation.exercise.templateParticipation?.id ?? -1
+                        templateParticipationId: exercise.templateParticipation?.id
                     )
                     .padding(.top, 35)
                     .frame(width: dragWidthLeft)
@@ -64,7 +62,7 @@ struct AssessmentView: View {
             .padding(.leading, 13)
         }
         .onAppear {
-            ar.maxPoints = maxPoints
+            ar.maxPoints = exercise.maxPoints ?? 100
         }
         .onDisappear {
             vm.assessmentResult.undoManager.removeAllActions()
@@ -132,7 +130,7 @@ struct AssessmentView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack(alignment: .center) {
-                    Text(exerciseTitle)
+                    Text(exercise.title ?? "")
                         .bold()
                         .font(.title)
                     Image(systemName: vm.readOnly ? "eyeglasses" : "pencil.and.outline")
@@ -150,6 +148,30 @@ struct AssessmentView: View {
             }
 
             if !vm.readOnly {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            vm.assessmentResult.undo()
+                        }
+                    } label: {
+                        let undoIconColor: Color = !vm.assessmentResult.canUndo() ? .gray : .white
+                        Image(systemName: "arrow.uturn.backward")
+                            .foregroundStyle(undoIconColor)
+                    }
+                    .disabled(!vm.assessmentResult.canUndo())
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            vm.assessmentResult.redo()
+                        }
+                    } label: {
+                        let redoIconColor: Color = !vm.assessmentResult.canRedo() ? .gray : .white
+                        Image(systemName: "arrow.uturn.forward")
+                            .foregroundStyle(redoIconColor)
+                    }
+                    .disabled(!vm.assessmentResult.canRedo())
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         cvm.pencilMode.toggle()
@@ -213,7 +235,7 @@ struct AssessmentView: View {
             Button("Yes") {
                 Task {
                     if let pId = vm.submission?.participation.id {
-                        await vm.notifyThemisML(participationId: pId, exerciseId: exerciseId)
+                        await vm.notifyThemisML(participationId: pId, exerciseId: exercise.id)
                         await vm.sendAssessment(participationId: pId, submit: true)
                     }
                     showNavigationOptions.toggle()
@@ -224,7 +246,7 @@ struct AssessmentView: View {
         .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
             Button("Next Submission") {
                 Task {
-                    await vm.initRandomSubmission(exerciseId: exerciseId)
+                    await vm.initRandomSubmission(exerciseId: exercise.id)
                     if vm.submission == nil {
                         showNoSubmissionsAlert = true
                     }
@@ -265,7 +287,7 @@ struct AssessmentView: View {
             }
             if let pId = vm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
-                await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exerciseId)
+                await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
     }
@@ -432,9 +454,7 @@ extension Color {
         AssessmentView(
             vm: avm,
             ar: avm.assessmentResult,
-            exerciseId: 5284,
-            exerciseTitle: "Example Exercise",
-            maxPoints: 100
+            exercise: Exercise()
         )
             .previewInterfaceOrientation(.landscapeLeft)
     }

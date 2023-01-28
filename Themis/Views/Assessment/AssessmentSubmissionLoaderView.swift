@@ -10,18 +10,14 @@ import SwiftUI
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var avm = AssessmentViewModel(readOnly: false)
 
-    var exerciseID: Int
     var submissionID: Int
-    let exerciseTitle: String
-    let maxPoints: Double
+    let exercise: Exercise
 
     var body: some View {
         AssessmentView(
             vm: avm,
             ar: avm.assessmentResult,
-            exerciseId: exerciseID,
-            exerciseTitle: exerciseTitle,
-            maxPoints: maxPoints,
+            exercise: exercise,
             submissionId: submissionID
         )
     }
@@ -29,6 +25,6 @@ struct AssessmentSubmissionLoaderView: View {
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentSubmissionLoaderView(exerciseID: 5, submissionID: 5, exerciseTitle: "Example Exercise", maxPoints: 100)
+        AssessmentSubmissionLoaderView(submissionID: 5, exercise: Exercise())
     }
 }

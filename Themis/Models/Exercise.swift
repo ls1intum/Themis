@@ -18,6 +18,7 @@ struct Exercise: Codable {
     let releaseDate: String?
     let dueDate: String?
     let assessmentDueDate: String?
+    let templateParticipation: TemplateParticipation?
 
     init() {
         self.id = -1
@@ -30,6 +31,7 @@ struct Exercise: Codable {
         self.releaseDate = nil
         self.dueDate = nil
         self.assessmentDueDate = nil
+        self.templateParticipation = nil
     }
     
     private func dateNow() -> String {
@@ -37,33 +39,28 @@ struct Exercise: Codable {
     }
     
     func isFormer() -> Bool {
-        guard let assessmentDueDate else {
-            return false
+        if let assessmentDueDate {
+            return assessmentDueDate < dateNow()
         }
-        return assessmentDueDate < dateNow()
+        return false
     }
     
     func isCurrent() -> Bool {
-        // exercises without release date are future exercises
-        guard let releaseDate else {
-            return false
+        if let releaseDate {
+            return releaseDate <= dateNow()
         }
-        if releaseDate >= dateNow() {
-            return false
+        if let assessmentDueDate {
+            return dateNow() <= assessmentDueDate
         }
-        // exercises without assessment due date are current exercises
-        guard let assessmentDueDate else {
-            return true
-        }
-        return dateNow() < assessmentDueDate
+        return true
     }
     
     func isFuture() -> Bool {
-        // exercises without a release date are future exercises
-        guard let releaseDate else {
-            return true
+        // exercises without a release date are automatically published
+        if let releaseDate {
+            return dateNow() < releaseDate
         }
-        return dateNow() < releaseDate
+        return false
     }
 }
 
