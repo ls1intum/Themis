@@ -57,9 +57,7 @@ struct AuthenticationView: View {
                 focusedField = nil
             }
         }
-        .alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert) {
-            Button("Ok") {}
-        }
+        .errorAlert(error: $authenticationVM.error)
     }
 
     var authenticateButton: some View {

@@ -72,6 +72,7 @@ struct ExerciseView: View {
                 }
             }
         }
+        .errorAlert(error: $assessmentVM.error)
     }
     
     private var searchButton: some View {
@@ -90,7 +91,6 @@ struct ExerciseView: View {
         Button {
             Task {
                 await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
-                UndoManagerSingleton.shared.undoManager.removeAllActions()
             }
         } label: {
             Text("Start Assessment")

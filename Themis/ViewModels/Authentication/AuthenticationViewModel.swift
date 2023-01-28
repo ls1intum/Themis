@@ -45,8 +45,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var rememberMe = true
     /// If this variable is true the User is authenticated
     @Published var authenticated = false
-    /// If an 401 Error was catched, this alert will inform the User
-    @Published var invalidCredentialsAlert = false
+    @Published var error: Error?
     /// While Authenticating this variable will be true for the ProgressView
     @Published var authenticationInProgress = false
 
@@ -120,9 +119,8 @@ class AuthenticationViewModel: ObservableObject {
                     Authentication.shared.storeTokenInKeychain(token: token)
                 }
             }
-        } catch RESTError.unauthorized {
-            self.invalidCredentialsAlert.toggle()
-        } catch let error {
+        } catch {
+            self.error = error
             // converting to string gives nicer errors,
             // see https://stackoverflow.com/a/68044439/4306257
             print(String(describing: error))
@@ -143,6 +141,7 @@ class AuthenticationViewModel: ObservableObject {
             do {
                 try await Authentication.shared.logOut()
             } catch let error {
+                self.error = error
                 print(error)
             }
         }
