@@ -128,6 +128,7 @@ class CodeEditorViewModel: ObservableObject {
                 }
             }
         }
+        undoManager.removeAllActions()
     }
     
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
