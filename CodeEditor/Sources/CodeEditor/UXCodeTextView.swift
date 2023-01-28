@@ -297,14 +297,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         if self.bounds.width != oldWidth {
             setNeedsDisplay()
             oldWidth = self.bounds.width
+            updateLightBulbs()
         }
-        
-        // delete and add new lightbulbs when code changes
-        for lightBulb in lightBulbs {
-            lightBulb.removeFromSuperview()
-        }
-        lightBulbs = []
-        addLightbulbs()
     }
 
     private func numViewWidth() -> CGFloat {
@@ -343,11 +337,27 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         UIGraphicsPopContext()
     }
     
-    private func calculateOffsetOf(_ lineNumber: Int) -> Int {
-        var offset = 0, curr = 1
+    func updateLightBulbs() {
+        // delete and add new lightbulbs when code changes
+        for lightBulb in lightBulbs {
+            lightBulb.removeFromSuperview()
+        }
+        lightBulbs = []
+        addLightbulbs()
+    }
+    
+    // calculates the offset of the given line if line wrapping occurs
+    private func calculateWrapOffsetOf(_ lineNumber: Int) -> Int {
+        var offset = 0, curr = 1, subParaCount = 0
         var subParaRange = NSRange(location: 0, length: 0)
         layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { _, _, _, glyphRange, stop in
             if curr == lineNumber {
+                let charRange = self.layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+                let paraRange = NSString(string: self.textStorage.string).paragraphRange(for: charRange)
+                if subParaRange != paraRange {
+                    // if done during subPara jump back to actual line
+                    offset -= subParaCount
+                }
                 stop.pointee = true
             } else {
                 let charRange = self.layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
@@ -357,11 +367,12 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                     subParaRange = charRange
                 }
                 let paraRange = NSString(string: self.textStorage.string).paragraphRange(for: charRange)
-                
                 if subParaRange != paraRange {
                     offset += 1
+                    subParaCount += 1
                 } else {
                     subParaRange = NSRange(location: 0, length: 0)
+                    subParaCount = 0
                 }
                 curr += 1
             }
@@ -372,7 +383,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     func addLightbulbs() {
         var lineNumber = 1
         layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
-            let offset = self.calculateOffsetOf(lineNumber)
+            let offset = self.calculateWrapOffsetOf(lineNumber)
             if let feedback = self.feedbackSuggestions.first(where: { $0.fromLine == lineNumber - offset }) {
                 self.currFeedbackId = feedback.id.uuidString
                 let button = UIButton()

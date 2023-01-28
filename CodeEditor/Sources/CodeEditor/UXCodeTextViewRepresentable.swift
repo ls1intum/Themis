@@ -97,6 +97,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
+        var textViewWidth: CGFloat = 0
         
         private func textViewDidChange(textView: UXTextView) {
             // This function may be called as a consequence of updating the text string
@@ -217,6 +218,8 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = editorBindings.source.wrappedValue
             }
+            textView.feedbackSuggestions = editorBindings.feedbackSuggestions
+            textView.updateLightBulbs()
         }
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
@@ -241,7 +244,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = editorBindings.flags.contains(.selectable)
         textView.backgroundColor = editorBindings.flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = editorBindings.highlightedRanges
-        textView.feedbackSuggestions = editorBindings.feedbackSuggestions
         
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
