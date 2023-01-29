@@ -94,6 +94,7 @@ struct ExerciseView: View {
             }
         } label: {
             Text("Start Assessment")
+                .foregroundColor(.white)
         }
         .buttonStyle(NavigationBarButton())
     }

@@ -210,6 +210,7 @@ struct AssessmentView: View {
                     }
                 } label: {
                     Text("Save")
+                        .foregroundColor(.white)
                 }
                 .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly || vm.loading)
@@ -219,6 +220,7 @@ struct AssessmentView: View {
                     showSubmitConfirmation.toggle()
                 } label: {
                     Text("Submit")
+                        .foregroundColor(.white)
                 }
                 .buttonStyle(NavigationBarButton())
                 .disabled(vm.readOnly || vm.loading)
