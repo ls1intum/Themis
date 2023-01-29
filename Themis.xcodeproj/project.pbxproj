@@ -78,7 +78,6 @@
 		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */ = {isa = PBXBuildFile; productRef = F911B9BF29392668003CF4C8 /* TouchVisualizer */; };
 		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
-		F981CA0829815F2300C2B91C /* DeviceRotationViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981CA0729815F2300C2B91C /* DeviceRotationViewModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,7 +168,6 @@
 		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
 		F9224439297BFD1A008E4374 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
-		F981CA0729815F2300C2B91C /* DeviceRotationViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationViewModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,7 +425,6 @@
 				E168C722296DCCE100A1D1D4 /* NavigationBarButtonStyle.swift */,
 				E168C726296DDB3D00A1D1D4 /* CustomProgressView.swift */,
 				F9224439297BFD1A008E4374 /* CircularProgressView.swift */,
-				F981CA0729815F2300C2B91C /* DeviceRotationViewModifier.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -778,7 +775,6 @@
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
 				0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */,
 				E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */,
-				F981CA0829815F2300C2B91C /* DeviceRotationViewModifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
