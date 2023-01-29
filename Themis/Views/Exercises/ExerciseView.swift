@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
@@ -33,7 +34,7 @@ struct ExerciseView: View {
                         }
                     }
                     Section("Statistics") {
-                        HStack {
+                        HStack(alignment: .center) {
                             Spacer()
                             CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
                             CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
