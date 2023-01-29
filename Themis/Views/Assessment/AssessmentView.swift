@@ -429,16 +429,6 @@ struct AssessmentView: View {
     }
 }
 
-extension Color {
-    public static var primary: Color {
-        Color("primary")
-    }
-    
-    public static var secondary: Color {
-        Color("secondary")
-    }
-}
-
  struct AssessmentView_Previews: PreviewProvider {
     static let avm = AssessmentViewModel(readOnly: false)
     static let cvm = CodeEditorViewModel()
