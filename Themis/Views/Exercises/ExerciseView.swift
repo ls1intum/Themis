@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
@@ -18,7 +19,6 @@ struct ExerciseView: View {
     var body: some View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
-                
                 Form {
                     if !submissionListVM.submissions.isEmpty {
                         Section("Open submissions") {
@@ -29,7 +29,7 @@ struct ExerciseView: View {
                         }
                     }
                     Section("Statistics") {
-                        HStack {
+                        HStack(alignment: .center) {
                             Spacer()
                             CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
                             CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
