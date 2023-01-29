@@ -103,9 +103,7 @@ class CodeEditorViewModel: ObservableObject {
     
     @MainActor
     func loadInlineHighlight(assessmentResult: AssessmentResult, participationId: Int) async {
-        for i in 0..<assessmentResult.inlineFeedback.count {
-            // extract file path
-            let feedback = assessmentResult.inlineFeedback[i]
+        for feedback in assessmentResult.inlineFeedback {
             // the reference is extracted from the text since it is more detailed (includes columns and multilines)
             if let text = feedback.text {
                 let components = text.components(separatedBy: .whitespaces)
