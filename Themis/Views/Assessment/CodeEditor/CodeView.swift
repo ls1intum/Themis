@@ -63,9 +63,9 @@ struct CodeView: View {
     
     var theme: CodeEditor.ThemeName {
         if colorScheme == .dark {
-            return .ocean
+            return CodeEditor.ThemeName(rawValue: "github")
         } else {
-            return .xcode
+            return CodeEditor.ThemeName(rawValue: "github")
         }
     }
 }

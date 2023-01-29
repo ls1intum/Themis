@@ -296,6 +296,10 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         return true
     }
     
+    func changeFontSize(size: CGFloat) {
+        font = font?.withSize(size)
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         if self.bounds.width != oldWidth {
@@ -307,11 +311,14 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     private func numViewWidth() -> CGFloat {
         let maxNum = 4.0
         if let font {
-            let fontAttributes = [NSAttributedString.Key.font: font]
+            let standarized = font.withSize(14)
+            let fontAttributes = [NSAttributedString.Key.font: standarized]
             let width = ("8" as NSString).size(withAttributes: fontAttributes).width
+            print(fontAttributes)
             return maxNum * width + 4.0 * 2
         }
         return 30
+//        return 41.60546875
     }
 
     override func draw(_ rect: CGRect) {
@@ -319,6 +326,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
         let numViewW = numViewWidth()
+        print(numViewWidth())
         ctx.setFillColor(CGColor(gray: 0.0, alpha: 0.12))
         let numBgArea = CGRect(x: 0, y: self.contentOffset.y, width: numViewW, height: self.bounds.height)
         ctx.fill(numBgArea)

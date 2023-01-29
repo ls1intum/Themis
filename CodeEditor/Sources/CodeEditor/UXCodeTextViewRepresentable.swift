@@ -194,7 +194,11 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         }
 
         if let binding = editorBindings.fontSize {
-            textView.applyNewTheme(editorBindings.themeName, andFontSize: binding.wrappedValue)
+            if binding.wrappedValue != 14 {
+                textView.changeFontSize(size: binding.wrappedValue)
+            } else {
+                textView.applyNewTheme(editorBindings.themeName, andFontSize: binding.wrappedValue)
+            }
         } else {
             textView.applyNewTheme(editorBindings.themeName)
         }
@@ -223,13 +227,13 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 
             if range != textView.swiftSelectedRange {
                 let nsrange = NSRange(range, in: textView.string)
-#if os(macOS)
+ #if os(macOS)
                 textView.setSelectedRange(nsrange)
-#elseif os(iOS)
+ #elseif os(iOS)
                 textView.selectedRange = nsrange
-#else
-#error("Unsupported OS")
-#endif
+ #else
+ #error("Unsupported OS")
+ #endif
             }
         }
 
