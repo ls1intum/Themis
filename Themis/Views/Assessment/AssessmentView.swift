@@ -72,7 +72,7 @@ struct AssessmentView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(Color.primary, for: .navigationBar)
+        .toolbarBackground(Color("customPrimary"), for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -285,7 +285,7 @@ struct AssessmentView: View {
     }
     var leftGrip: some View {
         ZStack {
-            Color.primary
+            Color("customPrimary")
                 .frame(maxWidth: 7, maxHeight: .infinity)
             
             Rectangle()
@@ -318,7 +318,7 @@ struct AssessmentView: View {
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(.primary)
+                .foregroundColor(Color("customPrimary"))
                 .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
@@ -371,7 +371,7 @@ struct AssessmentView: View {
                 .zIndex(1)
             
             if dragWidthRight > 0 {
-                Color.primary
+                Color("customPrimary")
                     .frame(maxWidth: 7, maxHeight: .infinity)
                 Image(systemName: "minus")
                     .resizable()
@@ -425,7 +425,7 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
-        .background(Color.primary)
+        .background(Color("customPrimary"))
     }
 }
 
