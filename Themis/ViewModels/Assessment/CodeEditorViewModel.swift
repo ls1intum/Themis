@@ -52,13 +52,11 @@ class CodeEditorViewModel: ObservableObject {
     private var allFiles: [Node] {
         var files: [Node] = []
         var nodesToCheck = fileTree
+        nodesToCheck.forEach { nodesToCheck.append(contentsOf: $0.recursiveChildren ?? []) }
         while !nodesToCheck.isEmpty {
             let currentNode = nodesToCheck.removeFirst()
             if currentNode.type == .file {
                 files.append(currentNode)
-            }
-            if let children = currentNode.children {
-                nodesToCheck.append(contentsOf: children)
             }
         }
         return files
