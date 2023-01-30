@@ -27,12 +27,12 @@ struct GradingCriteriaCellView: View {
             
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
                 Button {
-                    self.detailText?.wrappedValue = instruction.feedback
+                    self.detailText?.wrappedValue = instruction.feedback ?? ""
                     self.score?.wrappedValue = instruction.credits
                 } label: {
                     VStack(alignment: .leading) {
                         HStack {
-                            Text(instruction.gradingScale)
+                            Text(instruction.gradingScale ?? "")
                                 .font(.title3)
                             Spacer()
                             Text(String(format: "%.1f", instruction.credits) + "P")
@@ -41,7 +41,7 @@ struct GradingCriteriaCellView: View {
 
                         Divider()
 
-                        Text(instruction.instructionDescription)
+                        Text(instruction.instructionDescription ?? "")
                     }
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
