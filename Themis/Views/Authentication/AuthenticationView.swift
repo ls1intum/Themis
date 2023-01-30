@@ -68,7 +68,6 @@ struct AuthenticationView: View {
                 if authenticationVM.error != nil {
                     withAnimation(.linear) {
                         self.invalidAttempts += 1
-                        print(invalidAttempts)
                     }
                 }
             }
@@ -129,7 +128,7 @@ struct LoginTextFieldStyle: TextFieldStyle {
     @Environment(\.colorScheme) var colorScheme
     @Binding var error: Error?
     var validInput = true
-    var type: TextFieldType
+    var type: AuthTextFieldType
 
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
@@ -148,7 +147,7 @@ struct LoginTextFieldStyle: TextFieldStyle {
     }
 }
 
-enum TextFieldType {
+enum AuthTextFieldType {
     case serverURL, username
 }
 
@@ -162,21 +161,5 @@ struct LoginButtonStyle: ButtonStyle {
             .cornerRadius(10)
             .scaleEffect(configuration.isPressed ? 1.1 : 1)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
-    }
-}
-
-struct ShakeEffect: GeometryEffect {
-    var position: CGFloat = 10
-    var animatableData: CGFloat {
-        get { position }
-        set { position = newValue }
-    }
-    
-    init(animatableData: CGFloat) {
-       position = animatableData
-   }
-    
-    func effectValue(size: CGSize) -> ProjectionTransform {
-        ProjectionTransform(CGAffineTransform(translationX: -5 * sin(position * 2 * .pi), y: 0))
     }
 }

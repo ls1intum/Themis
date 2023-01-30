@@ -142,7 +142,6 @@ class AuthenticationViewModel: ObservableObject {
                 try await Authentication.shared.logOut()
             } catch let error {
                 self.error = error
-                print(error)
             }
         }
     }
