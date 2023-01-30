@@ -192,18 +192,10 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         defer {
             isCurrentlyUpdatingView.value = false
         }
-
-        if let binding = editorBindings.fontSize {
-            if binding.wrappedValue != 14 {
-                textView.changeFontSize(size: binding.wrappedValue)
-            } else {
-                textView.applyNewTheme(editorBindings.themeName, andFontSize: binding.wrappedValue)
-            }
-        } else {
-            textView.applyNewTheme(editorBindings.themeName)
+        if editorBindings.themeName.rawValue != textView.themeName.rawValue {
+            textView.applyNewTheme(editorBindings.themeName, andFontSize: editorBindings.fontSize?.wrappedValue ?? 14)
         }
         textView.language = editorBindings.language
-
         textView.indentStyle          = editorBindings.indentStyle
         textView.isSmartIndentEnabled = editorBindings.flags.contains(.smartIndent)
 
@@ -218,9 +210,12 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 textView.string = editorBindings.source.wrappedValue
             }
         }
-        textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
+        
+        if let binding = editorBindings.fontSize {
+                textView.changeFontSize(size: binding.wrappedValue)
+        }
        
         if let selection = editorBindings.selection {
             let range = selection.wrappedValue
@@ -259,6 +254,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 }
                 self.editorBindings.scrollUtils.range = nil
             }
+        textView.drawHiglights()
     }
     
     private func scrollToRange(textView: UXCodeTextView, range: NSRange) {

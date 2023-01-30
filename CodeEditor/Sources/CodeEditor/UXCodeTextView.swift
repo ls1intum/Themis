@@ -276,6 +276,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
               highlightr.setTheme(to: newTheme.rawValue),
               let theme      = highlightr.theme else { return false }
         if let font = theme.codeFont, font !== self.font { self.font = font }
+        themeName = newTheme
         return true
     }
 
@@ -290,13 +291,21 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         if let font = theme.codeFont, font !== self.font { self.font = font }
         guard theme.codeFont?.pointSize != newSize else { return true }
 
-        theme.codeFont       = theme.codeFont?      .withSize(newSize)
+        theme.codeFont = theme.codeFont?      .withSize(newSize)
         theme.boldCodeFont   = theme.boldCodeFont?  .withSize(newSize)
         theme.italicCodeFont = theme.italicCodeFont?.withSize(newSize)
+        if let newTheme {
+            themeName = newTheme
+        }
         return true
     }
     
     func changeFontSize(size: CGFloat) {
+        if let theme = highlightr?.theme {
+            theme.codeFont = theme.codeFont?      .withSize(size)
+            theme.boldCodeFont   = theme.boldCodeFont?  .withSize(size)
+            theme.italicCodeFont = theme.italicCodeFont?.withSize(size)
+        }
         font = font?.withSize(size)
     }
     
@@ -314,11 +323,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             let standarized = font.withSize(14)
             let fontAttributes = [NSAttributedString.Key.font: standarized]
             let width = ("8" as NSString).size(withAttributes: fontAttributes).width
-            print(fontAttributes)
             return maxNum * width + 4.0 * 2
         }
         return 30
-//        return 41.60546875
     }
 
     override func draw(_ rect: CGRect) {
@@ -326,7 +333,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
         let numViewW = numViewWidth()
-        print(numViewWidth())
         ctx.setFillColor(CGColor(gray: 0.0, alpha: 0.12))
         let numBgArea = CGRect(x: 0, y: self.contentOffset.y, width: numViewW, height: self.bounds.height)
         ctx.fill(numBgArea)
@@ -345,6 +351,21 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
         UIGraphicsPopContext()
+    }
+    
+    func drawHiglights() {
+        if !text.isEmpty {
+            for hRange in highlightedRanges {
+                self.textStorage.addAttributes(
+                    [
+                        .foregroundColor: UIColor.blue,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue,
+                        .underlineColor: hRange.color,
+                        .link: hRange.id // equals feedback id
+                    ]
+                    , range: hRange.range)
+            }
+        }
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {

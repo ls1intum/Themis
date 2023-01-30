@@ -21,7 +21,7 @@ struct CodeView: View {
             editorBindings: EditorBindings(
                 source: $file.code ?? "loading...",
                 fontSize: $fontSize,
-                language: .swift,
+                language: language,
                 themeName: theme,
                 flags: editorFlags,
                 highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
@@ -63,9 +63,20 @@ struct CodeView: View {
     
     var theme: CodeEditor.ThemeName {
         if colorScheme == .dark {
-            return CodeEditor.ThemeName(rawValue: "github")
+            return .ocean
         } else {
-            return CodeEditor.ThemeName(rawValue: "github")
+            return .xcode
+        }
+    }
+    
+    var language: CodeEditor.Language {
+        switch file.fileExtension {
+        case .java:
+            return .java
+        case .swift:
+            return .swift
+        case .other:
+            return .basic
         }
     }
 }
