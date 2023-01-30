@@ -38,6 +38,20 @@ class Node: Hashable, ObservableObject {
     @Published var diffLines: [Int] = []
     @Published var isNewFile = false
     private var diffCalculated = false
+    var recursiveChildren: [Node]? {
+        var allChildren: [Node] = []
+        if var nodesToCheck = children {
+            while !nodesToCheck.isEmpty {
+                let currentNode = nodesToCheck.removeFirst()
+                    allChildren.append(currentNode)
+                if let children = currentNode.children {
+                    nodesToCheck.append(contentsOf: children)
+                }
+            }
+            return allChildren
+        }
+        return nil
+    }
     /// property that calculates a lines character range to get line number of selectedTextRange
     var lines: [NSRange]? {
         if let code = code {
