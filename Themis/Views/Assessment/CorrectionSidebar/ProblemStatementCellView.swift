@@ -47,6 +47,44 @@ struct ProblemStatementCellView: View {
                     }
                 }
             }
+            
+            // Markdown("![This is an image](https://user-images.githubusercontent.com/373190/209442987-2aa9d73d-3bf2-46cb-b03a-5d9c0ab8475f.gif)")
+            
+            Markdown("2.\n\n![This is](TestFailedSymbol)\n\n**Context Class (2 of 2 tests passing)** ").markdownImageProvider(.asset)
+            Markdown("2.\n ![This is](TestFailedSymbol) \n\n**Context Class (2 of 2 tests passing)** ").markdownImageProvider(.asset)
+            Markdown("2.\n\n ![This is](TestFailedSymbol) \n**Context Class (2 of 2 tests passing)** ").markdownImageProvider(.asset)
+            Markdown("2.  ![This is](TestFailedSymbol)  **Context Class (2 of 2 tests passing)** ").markdownImageProvider(.asset)
+            Markdown("2.  ![This is](TestFailedSymbol) **Context Class (2 of 2 tests passing)** ").markdownImageProvider(.asset)
+            Markdown("2. ![This is](TestFailedSymbol) **Context Class (2 of 2 tests passing)** ").markdownImageProvider(.asset)
+            
+            /*Markdown("2.\n\n ![This is](https://user-images.githubusercontent.com/373190/209442987-2aa9d73d-3bf2-46cb-b03a-5d9c0ab8475f.gif) \n\n**Context Class (2 of 2 tests passing)** ")
+            Markdown("2.\n ![This is](https://user-images.githubusercontent.com/373190/209442987-2aa9d73d-3bf2-46cb-b03a-5d9c0ab8475f.gif) \n**Context Class (2 of 2 tests passing)** ")
+                // .markdownImageProvider(.asset)
+            /*Markdown("![This is an image](dog)")
+                .markdownTextStyle(\.code) {
+                    FontFamilyVariant(.monospaced)
+                    ForegroundColor(.red)
+                }
+                .markdownImageProvider(.asset)
+            Markdown("![This is an image](dog)")
+                .markdownImageProvider(.asset)
+            Markdown("![This is an image](dog)")
+                .markdownImageProvider(.asset)
+                .markdownTextStyle(\.code) {
+                    FontFamilyVariant(.monospaced)
+                    ForegroundColor(.red)
+                }*/
+            
+            Markdown("2. ![This is](TestFailedSymbol) **Context Class (2 of 2 tests passing)** ")
+                .markdownImageProvider(.asset)
+                .markdownTextStyle(\.code) {
+                    FontFamilyVariant(.monospaced)
+                    ForegroundColor(.red)
+                }
+            
+            Markdown("2. ![This is](TestFailedSymbol) **Context Class (2 of 2 tests passing)** ")
+                .markdownImageProvider(.asset)*/
+            
             ForEach(vm.problemStatementParts, id: \.text) { part in
                 if let uml = part as? ProblemStatementPlantUML {
                     Button(action: {
@@ -68,7 +106,7 @@ struct ProblemStatementCellView: View {
                             FontFamilyVariant(.monospaced)
                             ForegroundColor(.red)
                         }
-                        .markdownImageProvider(.asset)
+                        .markdownImageProvider(.asset)////
                 }
             }
         }

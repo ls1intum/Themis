@@ -45,10 +45,16 @@ class ProblemStatementCellViewModel: ObservableObject {
 
         while index < problemStatement.endIndex {
             var substring: String
+            
+            problemStatementParts.append(ProblemStatementMD(text: "2.  ![This is](dog) **Context Class (2 of 2 tests passing)** "))
+            problemStatementParts.append(ProblemStatementMD(text: " ![This is](TestFailedSymbol) **Context Class (2 of 2 tests passing)** \nCreate a `SortStrategy` interface and adjust the sorting algorithms so that they implement this interface."))
 
             guard let rangeStart = problemStatement.range(of: "@startuml", range: index..<problemStatement.endIndex), let rangeEnd = problemStatement.range(of: "@enduml", range: index..<problemStatement.endIndex) else {
                 substring = String(problemStatement[index...])
                 substring = replaceProblemStatementTestCases(substring, feedbacks)
+                print("-----------------")
+                print(substring)
+                print("-----------------")
                 problemStatementParts.append(ProblemStatementMD(text: substring))
                 return
             }
@@ -56,7 +62,11 @@ class ProblemStatementCellViewModel: ObservableObject {
             // Append markdown
             substring = String(problemStatement[index..<rangeStart.lowerBound])
             substring = replaceProblemStatementTestCases(substring, feedbacks)
+            print("-----------------")
+            print(substring)
+            print("-----------------")
             problemStatementParts.append(ProblemStatementMD(text: substring))
+            
 
             // Append plantuml
             substring = String(problemStatement[rangeStart.lowerBound...rangeEnd.upperBound])
@@ -83,11 +93,11 @@ class ProblemStatementCellViewModel: ObservableObject {
         for var line in lines {
             if line.contains("[task][") && line.contains("0") {
                 line = calculateScoreOfPassingTests(line)
-                line = line.replacingOccurrences(of: "[task][", with: " ![Test failed](asset:///TestFailedSymbol) **")
+                line = line.replacingOccurrences(of: "[task][", with: " ![This is](dog) **")
                 bundledTests.append(BundledTest(testCase: line, passed: false))
             } else if line.contains("[task][") && line.contains("1") {
                 line = calculateScoreOfPassingTests(line)
-                line = line.replacingOccurrences(of: "[task][", with: " ![Test passed](asset:///TestPassedSymbol) **")
+                line = line.replacingOccurrences(of: "[task][", with: " ![This is](dog) **")
                 bundledTests.append(BundledTest(testCase: line, passed: true))
             }
 

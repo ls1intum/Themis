@@ -20,29 +20,32 @@ struct ImagesView: View {
 
     ```swift
     Markdown {
-      "![This is an image](237-200x300)"
+      "![This is an image](dog)"
     }
     .markdownImageProvider(.asset)
     ```
 
     ![This is an image](dog)
+    
+    Hallo!!
+    
+    ![This is an image](AppIcon)
+    
+    allo!!
+    
+    ![This is an image](TestPassedSymbol)
+    
+    loo
+    
+    ![This is an image](TestFailedSymbol)
 
     ― Photo by André Spieker
     """
 
   var body: some View {
-    DemoView {
-      Markdown(self.content)
-
-      Section("Customization Example") {
-        Markdown(self.content)
-      }
-      .markdownBlockStyle(\.image) { label in
-        label
-          .clipShape(RoundedRectangle(cornerRadius: 8))
-          .shadow(radius: 8, y: 8)
-          .markdownMargin(top: .em(1.6), bottom: .em(1.6))
-      }
+    VStack {
+      Markdown(self.assetContent)
+            .markdownImageProvider(.asset)
     }
     .navigationTitle("Images")
   }
