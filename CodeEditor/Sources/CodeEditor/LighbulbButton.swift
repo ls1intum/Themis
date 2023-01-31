@@ -20,6 +20,7 @@ final class LightbulbButton: UIButton {
         setup()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("not implemented")
     }
