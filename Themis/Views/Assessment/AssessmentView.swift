@@ -236,8 +236,8 @@ struct AssessmentView: View {
             Button("Yes") {
                 Task {
                     if let pId = vm.submission?.participation.id {
-                        await vm.notifyThemisML(participationId: pId, exerciseId: exercise.id)
                         await vm.sendAssessment(participationId: pId, submit: true)
+                        await vm.notifyThemisML(participationId: pId, exerciseId: exercise.id)
                     }
                     showNavigationOptions.toggle()
                 }
@@ -257,9 +257,9 @@ struct AssessmentView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
-        .sheet(isPresented: $cvm.showAddFeedback) {
+        .sheet(isPresented: $cvm.showAddFeedback, onDismiss: {
             cvm.selectedFeedbackSuggestionId = ""
-        } content: {
+        }, content: {
             AddFeedbackView(
                 assessmentResult: vm.assessmentResult,
                 cvm: cvm,
@@ -269,7 +269,7 @@ struct AssessmentView: View {
                 gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? [],
                 feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id.uuidString == cvm.selectedFeedbackSuggestionId }
             )
-        }
+        })
         .sheet(isPresented: $cvm.showEditFeedback) {
             if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
                 EditFeedbackView(

@@ -82,6 +82,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    var lightBulbs = [LightbulbButton]()
+    
     init() {
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
@@ -385,34 +387,30 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
             let offset = self.calculateWrapOffsetOf(lineNumber)
             if let feedback = self.feedbackSuggestions.first(where: { $0.fromLine == lineNumber - offset }) {
-                self.currFeedbackId = feedback.id.uuidString
-                let button = UIButton()
-                let image = UIImage(systemName: "lightbulb.fill")
-                button.setImage(image, for: .normal)
-                button.imageView?.contentMode = .scaleAspectFit
-                button.imageView?.tintColor = .yellow
-                button.frame = CGRect(
-                    x: 5,
-                    y: rect.origin.y,
-                    width: 25,
-                    height: 25
-                )
-                .offsetBy(dx: 0, dy: 8)
-                button.addTarget(self, action: #selector(self.onLightBulbTap), for: .touchUpInside)
-                self.lightBulbs.append(button)
-                self.addSubview(button)
+                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: feedback.id.uuidString) {
+                    self.lightBulbs.append(lightbulb)
+                    self.addSubview(lightbulb)
+                }
             }
             lineNumber += 1
         }
     }
     
-    private var currFeedbackId: String = ""
-    var lightBulbs = [UIButton]()
-    
-    @objc private func onLightBulbTap() {
-        let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator
-        coordinator?.parent.editorBindings.selectedFeedbackSuggestionId.wrappedValue = self.currFeedbackId
-        coordinator?.parent.editorBindings.showAddFeedback.wrappedValue.toggle()
+    private func buildLightbulbButton(rect: CGRect, feedbackId: String) -> LightbulbButton? {
+        let frame = CGRect(
+            x: 5,
+            y: rect.origin.y,
+            width: 25,
+            height: 25
+        )
+            .offsetBy(dx: 0, dy: 8)
+        guard let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator else { return nil }
+        let button = LightbulbButton(
+            frame: frame,
+            setSelectedFeedbackSuggestionId: { coordinator.setSelectedFeedbackSuggestionId(feedbackId) },
+            toggleShowAddFeedback: { coordinator.toggleShowAddFeedback() }
+        )
+        return button
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {

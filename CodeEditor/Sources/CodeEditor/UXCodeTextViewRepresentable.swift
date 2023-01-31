@@ -53,7 +53,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         self.editorBindings = editorBindings
     }
     
-    var editorBindings: EditorBindings
+    private var editorBindings: EditorBindings
     
     // The inner `value` is true, exactly when execution is inside
     // the `updateTextView(_:)` method. The `Coordinator` can use this
@@ -82,6 +82,14 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             parent.editorBindings.dragSelection?.wrappedValue = dragSelection
         }
         
+        func setSelectedFeedbackSuggestionId(_ id: String) {
+            parent.editorBindings.selectedFeedbackSuggestionId.wrappedValue = id
+        }
+        
+        func toggleShowAddFeedback() {
+            parent.editorBindings.showAddFeedback.wrappedValue.toggle()
+        }
+        
 #if os(macOS)
         public func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? UXTextView else {
@@ -97,8 +105,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else
 #error("Unsupported OS")
 #endif
-        var textViewWidth: CGFloat = 0
-        
         private func textViewDidChange(textView: UXTextView) {
             // This function may be called as a consequence of updating the text string
             //  in UXCodeTextViewRepresentable/updateTextView(_:)`.

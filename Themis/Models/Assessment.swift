@@ -85,7 +85,6 @@ class AssessmentResult: Encodable, ObservableObject {
             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
         }
         computedFeedbacks.append(feedback)
-        print(computedFeedbacks.count)
     }
 
     func deleteFeedback(id: UUID) {
@@ -93,7 +92,6 @@ class AssessmentResult: Encodable, ObservableObject {
              undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
-        print(computedFeedbacks.count)
     }
 
     func updateFeedback(id: UUID, detailText: String, credits: Double) {

@@ -11,7 +11,6 @@ public struct FeedbackSuggestion: Decodable, Equatable {
     public let id = UUID()
     public let exerciseId: Int
     public let participationId: Int
-    public let code: String
     public let srcFile: String
     public let fromLine: Int
     public let toLine: Int
@@ -21,7 +20,6 @@ public struct FeedbackSuggestion: Decodable, Equatable {
     enum DecodingKeys: String, CodingKey {
         case exercise_id
         case participation_id
-        case code
         case src_file
         case from_line
         case to_line
@@ -32,7 +30,6 @@ public struct FeedbackSuggestion: Decodable, Equatable {
     public init(srcFile: String, fromLine: Int, toLine: Int) {
         self.exerciseId = -1
         self.participationId = -1
-        self.code = ""
         self.srcFile = srcFile
         self.fromLine = fromLine
         self.toLine = toLine
@@ -44,7 +41,6 @@ public struct FeedbackSuggestion: Decodable, Equatable {
         let values = try decoder.container(keyedBy: DecodingKeys.self)
         exerciseId = try values.decode(Int.self, forKey: .exercise_id)
         participationId = try values.decode(Int.self, forKey: .participation_id)
-        code = try values.decode(String.self, forKey: .code)
         srcFile = try values.decode(String.self, forKey: .src_file)
         fromLine = try values.decode(Int.self, forKey: .from_line)
         toLine = try values.decode(Int.self, forKey: .to_line)
