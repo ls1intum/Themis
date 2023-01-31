@@ -29,9 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
-    @Published var feedbackSuggestions = [FeedbackSuggestion(srcFile: "/src/de/tum/themis/BubbleSort.java", fromLine: 1, toLine: 1),
-                                          FeedbackSuggestion(srcFile: "/src/de/tum/themis/Client.java", fromLine: 30, toLine: 40),
-                                        FeedbackSuggestion(srcFile: "/src/de/tum/themis/MergeSort.java", fromLine: 1, toLine: 15)]
+    @Published var feedbackSuggestions = [FeedbackSuggestion]()
     @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])

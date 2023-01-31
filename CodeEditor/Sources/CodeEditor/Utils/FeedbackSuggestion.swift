@@ -26,16 +26,6 @@ public struct FeedbackSuggestion: Decodable, Equatable {
         case text
         case credits
     }
-    
-    public init(srcFile: String, fromLine: Int, toLine: Int) {
-        self.exerciseId = -1
-        self.participationId = -1
-        self.srcFile = srcFile
-        self.fromLine = fromLine
-        self.toLine = toLine
-        self.text = "Good Job man"
-        self.credits = 3
-    }
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: DecodingKeys.self)
