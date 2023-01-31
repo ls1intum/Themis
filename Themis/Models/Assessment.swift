@@ -102,6 +102,13 @@ class AssessmentResult: Encodable, ObservableObject {
         computedFeedbacks[index].credits = credits
     }
     
+    func assignFile(id: UUID, file: Node) {
+        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+            return
+        }
+        computedFeedbacks[index].file = file
+    }
+    
     func undo() {
         undoManager.undo()
     }
@@ -211,6 +218,7 @@ extension AssessmentFeedback: Decodable {
     enum DecodingKeys: String, CodingKey {
         case text
         case detailText
+        case reference
         case credits
         case assessmentType = "type"
         case positive
@@ -220,6 +228,7 @@ extension AssessmentFeedback: Decodable {
         let values = try decoder.container(keyedBy: DecodingKeys.self)
         text = try? values.decode(String?.self, forKey: .text)
         detailText = try? values.decode(String?.self, forKey: .detailText)
+        reference = try? values.decode(String?.self, forKey: .reference)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
         // assessment type `MANUAL_UNREFERENCED` does not have positive

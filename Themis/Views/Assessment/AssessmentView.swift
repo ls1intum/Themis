@@ -288,6 +288,7 @@ struct AssessmentView: View {
             }
             if let pId = vm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
+                await cvm.loadInlineHighlight(assessmentResult: vm.assessmentResult, participationId: pId)
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
