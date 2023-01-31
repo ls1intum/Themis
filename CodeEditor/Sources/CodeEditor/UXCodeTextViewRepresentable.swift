@@ -254,7 +254,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 }
                 self.editorBindings.scrollUtils.range = nil
             }
-        textView.drawHiglights()
+        textView.drawHighlights()
     }
     
     private func scrollToRange(textView: UXCodeTextView, range: NSRange) {
