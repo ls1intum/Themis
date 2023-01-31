@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 
 struct ExerciseView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var codeEditorVM = CodeEditorViewModel()
@@ -73,6 +74,7 @@ struct ExerciseView: View {
             }
         }
         .errorAlert(error: $assessmentVM.error)
+        .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
     private var searchButton: some View {

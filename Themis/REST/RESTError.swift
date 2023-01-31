@@ -65,7 +65,7 @@ struct LocalizedAlertError: LocalizedError {
 
 /// View modifier to show error alert.
 extension View {
-    func errorAlert(error: Binding<Error?>, buttonTitle: String = "OK") -> some View {
+    func errorAlert(error: Binding<Error?>, buttonTitle: String = "OK", onDismiss: (() -> Void)? = nil) -> some View {
         let localizedAlertError = LocalizedAlertError(error: error.wrappedValue)
         return alert(
             isPresented: .constant(
@@ -75,6 +75,7 @@ extension View {
         ) {_ in
             Button(buttonTitle) {
                 error.wrappedValue = nil
+                onDismiss?()
             }
         } message: { error in
             Text(error.recoverySuggestion ?? "")

@@ -280,6 +280,8 @@ struct AssessmentView: View {
                 await cvm.initFileTree(participationId: pId)
             }
         }
+        .errorAlert(error: $cvm.error)
+        .errorAlert(error: $vm.error)
     }
     var leftGrip: some View {
         ZStack {

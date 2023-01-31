@@ -29,6 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
+    @Published var error: Error?
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
@@ -87,7 +88,7 @@ class CodeEditorViewModel: ObservableObject {
                 self.fileTree = node.children ?? []
             }
         } catch {
-            print(error)
+            self.error = error
         }
     }
     
