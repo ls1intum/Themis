@@ -193,7 +193,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             isCurrentlyUpdatingView.value = false
         }
         if editorBindings.themeName.rawValue != textView.themeName.rawValue {
-            textView.applyNewTheme(editorBindings.themeName, andFontSize: editorBindings.fontSize?.wrappedValue ?? 14)
+            textView.applyNewTheme(editorBindings.themeName)
         }
         textView.language = editorBindings.language
         textView.indentStyle          = editorBindings.indentStyle

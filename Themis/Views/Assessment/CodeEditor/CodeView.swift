@@ -65,7 +65,7 @@ struct CodeView: View {
         if colorScheme == .dark {
             return .ocean
         } else {
-            return .xcode
+            return CodeEditor.ThemeName(rawValue: "atelier-seaside-light")
         }
     }
     
