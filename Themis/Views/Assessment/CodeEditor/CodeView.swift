@@ -15,6 +15,7 @@ struct CodeView: View {
     @Binding var fontSize: CGFloat
     @State var dragSelection: Range<Int>?
     var onOpenFeedback: (Range<Int>) -> Void
+    let readOnly: Bool
     
     var editorItself: some View {
         UXCodeTextViewRepresentable(
@@ -33,7 +34,9 @@ struct CodeView: View {
                 pencilOnly: $cvm.pencilMode,
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
-                isNewFile: file.isNewFile
+                isNewFile: file.isNewFile,
+                feedbackSuggestions: readOnly ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
+                selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )
         .onChange(of: dragSelection) { newValue in

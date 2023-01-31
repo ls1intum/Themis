@@ -5,6 +5,7 @@ struct CodeEditorView: View {
     @ObservedObject var cvm: CodeEditorViewModel
 
     @Binding var showFileTree: Bool
+    let readOnly: Bool
 
     private func openFeedbackSheet(forRange dragRange: Range<Int>) {
         cvm.selectedSection = dragRange.toNSRange()
@@ -24,7 +25,8 @@ struct CodeEditorView: View {
                         cvm: cvm,
                         file: file,
                         fontSize: $cvm.editorFontSize,
-                        onOpenFeedback: openFeedbackSheet
+                        onOpenFeedback: openFeedbackSheet,
+                        readOnly: readOnly
                     )
                 }
             } else {
