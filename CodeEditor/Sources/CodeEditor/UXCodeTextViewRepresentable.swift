@@ -199,10 +199,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         defer {
             isCurrentlyUpdatingView.value = false
         }
-        
-        if let binding = editorBindings.fontSize {
-            textView.applyNewTheme(editorBindings.themeName, andFontSize: binding.wrappedValue)
-        } else {
+        if editorBindings.themeName.rawValue != textView.themeName.rawValue {
             textView.applyNewTheme(editorBindings.themeName)
         }
         textView.language = editorBindings.language
@@ -223,22 +220,25 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             textView.feedbackSuggestions = editorBindings.feedbackSuggestions
             textView.updateLightBulbs()
         }
-        textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
         
+        if let binding = editorBindings.fontSize {
+                textView.changeFontSize(size: binding.wrappedValue)
+        }
+       
         if let selection = editorBindings.selection {
             let range = selection.wrappedValue
             
             if range != textView.swiftSelectedRange {
                 let nsrange = NSRange(range, in: textView.string)
-#if os(macOS)
+ #if os(macOS)
                 textView.setSelectedRange(nsrange)
-#elseif os(iOS)
+ #elseif os(iOS)
                 textView.selectedRange = nsrange
-#else
-#error("Unsupported OS")
-#endif
+ #else
+ #error("Unsupported OS")
+ #endif
             }
         }
         
@@ -266,6 +266,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             }
             self.editorBindings.scrollUtils.range = nil
         }
+        textView.drawHighlights()
     }
     
     private func scrollToRange(textView: UXCodeTextView, range: NSRange) {
