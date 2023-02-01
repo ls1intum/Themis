@@ -16,13 +16,13 @@ struct CustomProgressView: View {
         ZStack {
             Circle()
                 .stroke(
-                    Color.secondary.opacity(0.5),
+                    Color("customSecondary").opacity(0.5),
                     lineWidth: 5
                 )
             Circle()
                 .trim(from: 0, to: progress / max)
                 .stroke(
-                    Color.secondary,
+                    Color("customSecondary"),
                     style: StrokeStyle(
                         lineWidth: 5,
                         lineCap: .round
