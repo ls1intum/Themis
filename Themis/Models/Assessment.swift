@@ -85,7 +85,6 @@ class AssessmentResult: Encodable, ObservableObject {
             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
         }
         computedFeedbacks.append(feedback)
-        print(computedFeedbacks.count)
     }
 
     func deleteFeedback(id: UUID) {
@@ -93,7 +92,6 @@ class AssessmentResult: Encodable, ObservableObject {
              undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
-        print(computedFeedbacks.count)
     }
 
     func updateFeedback(id: UUID, detailText: String, credits: Double) {
@@ -176,8 +174,13 @@ struct AssessmentFeedback: Identifiable, Hashable {
             return
         }
         self.reference = "file:" + file.path + "_line:\(lines.location)"
+        
         guard let columns else {
-            self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+            if lines.length == 0 {
+                self.text = "File " + file.path + " at line \(lines.location)"
+            } else {
+                self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+            }
             return
         }
         if columns.length == 0 {

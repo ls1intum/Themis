@@ -15,6 +15,7 @@ typealias UXTextView          = NSTextView
 typealias UXTextViewDelegate  = NSTextViewDelegate
 #else
 import UIKit
+import SwiftUI
 
 typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
@@ -66,6 +67,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
 
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
+    var feedbackSuggestions: [FeedbackSuggestion] = []
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
@@ -80,8 +82,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
-    var diffLines = [Int]()
-    var isNewFile = false
+    var lightBulbs = [LightbulbButton]()
     
     init() {
         let textStorage = highlightr.flatMap {
@@ -89,14 +90,11 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         ?? NSTextStorage()
         let layoutManager = RoundedCornerLayoutManager()
-        layoutManager.diffLines = diffLines
-        layoutManager.isNewFile = isNewFile
         customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer()
         textContainer.widthTracksTextView = true // those are key!
         layoutManager.addTextContainer(textContainer)
-
         super.init(frame: .zero, textContainer: textContainer)
         if let hlTextStorage {
             hlTextStorage.highlightDelegate = self
@@ -301,6 +299,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         if self.bounds.width != oldWidth {
             setNeedsDisplay()
             oldWidth = self.bounds.width
+            updateLightBulbs()
         }
     }
 
@@ -315,6 +314,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
 
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
@@ -337,6 +337,80 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
         UIGraphicsPopContext()
+    }
+    
+    func updateLightBulbs() {
+        // delete and add new lightbulbs when code changes
+        for lightBulb in lightBulbs {
+            lightBulb.removeFromSuperview()
+        }
+        lightBulbs = []
+        addLightbulbs()
+    }
+    
+    // calculates the offset of the given line if line wrapping occurs
+    private func calculateWrapOffsetOf(_ lineNumber: Int) -> Int {
+        var offset = 0, curr = 1, subParaCount = 0
+        var subParaRange = NSRange(location: 0, length: 0)
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { _, _, _, glyphRange, stop in
+            if curr == lineNumber {
+                let charRange = self.layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+                let paraRange = NSString(string: self.textStorage.string).paragraphRange(for: charRange)
+                if subParaRange != paraRange {
+                    // if done during subPara jump back to actual line
+                    offset -= subParaCount
+                }
+                stop.pointee = true
+            } else {
+                let charRange = self.layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+                if subParaRange.length > 0 {
+                    subParaRange.length += charRange.length
+                } else {
+                    subParaRange = charRange
+                }
+                let paraRange = NSString(string: self.textStorage.string).paragraphRange(for: charRange)
+                if subParaRange != paraRange {
+                    offset += 1
+                    subParaCount += 1
+                } else {
+                    subParaRange = NSRange(location: 0, length: 0)
+                    subParaCount = 0
+                }
+                curr += 1
+            }
+        }
+        return offset
+    }
+    
+    func addLightbulbs() {
+        var lineNumber = 1
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
+            let offset = self.calculateWrapOffsetOf(lineNumber)
+            if let feedback = self.feedbackSuggestions.first(where: { $0.fromLine == lineNumber - offset }) {
+                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: feedback.id.uuidString) {
+                    self.lightBulbs.append(lightbulb)
+                    self.addSubview(lightbulb)
+                }
+            }
+            lineNumber += 1
+        }
+    }
+    
+    private func buildLightbulbButton(rect: CGRect, feedbackId: String) -> LightbulbButton? {
+        let frame = CGRect(
+            x: 5,
+            y: rect.origin.y,
+            width: 25,
+            height: 25
+        )
+            .offsetBy(dx: 0, dy: 8)
+        guard let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator else { return nil }
+        let button = LightbulbButton(
+            frame: frame,
+            setSelectedFeedbackSuggestionId: { coordinator.setSelectedFeedbackSuggestionId(feedbackId) },
+            toggleShowAddFeedback: { coordinator.toggleShowAddFeedback() }
+        )
+        return button
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {

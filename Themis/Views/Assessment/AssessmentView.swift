@@ -6,7 +6,7 @@ import SwiftUI
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var vm: AssessmentViewModel
-    @ObservedObject var cvm: CodeEditorViewModel
+    @StateObject var cvm = CodeEditorViewModel()
     @ObservedObject var ar: AssessmentResult
     @StateObject var umlVM = UMLViewModel()
     
@@ -23,6 +23,8 @@ struct AssessmentView: View {
     private let minRightSnapWidth: CGFloat = 185
     
     let exercise: Exercise
+    
+    var submissionId: Int?
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -41,7 +43,8 @@ struct AssessmentView: View {
                 }
                 CodeEditorView(
                     cvm: cvm,
-                    showFileTree: $showFileTree
+                    showFileTree: $showFileTree,
+                    readOnly: vm.readOnly
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 rightGrip
@@ -136,7 +139,7 @@ struct AssessmentView: View {
                 }
                 .foregroundColor(.white)
             }
-            
+
             if vm.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
@@ -144,7 +147,7 @@ struct AssessmentView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                 }
             }
-            
+
             if !vm.readOnly {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -236,6 +239,7 @@ struct AssessmentView: View {
                 Task {
                     if let pId = vm.submission?.participation.id {
                         await vm.sendAssessment(participationId: pId, submit: true)
+                        await vm.notifyThemisML(participationId: pId, exerciseId: exercise.id)
                     }
                     showNavigationOptions.toggle()
                 }
@@ -255,16 +259,19 @@ struct AssessmentView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
-        .sheet(isPresented: $cvm.showAddFeedback) {
+        .sheet(isPresented: $cvm.showAddFeedback, onDismiss: {
+            cvm.selectedFeedbackSuggestionId = ""
+        }, content: {
             AddFeedbackView(
                 assessmentResult: vm.assessmentResult,
                 cvm: cvm,
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
-                gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? []
+                gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? [],
+                feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id.uuidString == cvm.selectedFeedbackSuggestionId }
             )
-        }
+        })
         .sheet(isPresented: $cvm.showEditFeedback) {
             if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
                 EditFeedbackView(
@@ -278,8 +285,13 @@ struct AssessmentView: View {
             }
         }
         .task(priority: .high) {
+            if let submissionId, vm.submission == nil {
+                await vm.getSubmission(id: submissionId)
+            }
             if let pId = vm.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
+                await cvm.loadInlineHighlight(assessmentResult: vm.assessmentResult, participationId: pId)
+                await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
     }
@@ -431,12 +443,10 @@ struct AssessmentView: View {
 
  struct AssessmentView_Previews: PreviewProvider {
     static let avm = AssessmentViewModel(readOnly: false)
-    static let cvm = CodeEditorViewModel()
 
     static var previews: some View {
         AssessmentView(
             vm: avm,
-            cvm: cvm,
             ar: avm.assessmentResult,
             exercise: Exercise()
         )
