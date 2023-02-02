@@ -55,7 +55,15 @@ struct ExerciseView: View {
                 exercise: exercise
             )
         }
-        .navigationTitle((exercise.title ?? "") + " (assessment due: " + (dueTime ?? "Not due") + ")")
+        .navigationTitle(exercise.title ?? "")
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                HStack {
+                    Text("assessment due:")
+                    Text(ArtemisDateHelpers.getRemainingOrOverdueTime(for: exercise.assessmentDueDate) ?? "No Due Date")
+                }
+            }
+        }
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
