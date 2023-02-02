@@ -13,7 +13,7 @@ import SwiftUI
      var body: some View {
          ZStack(alignment: .center) {
              Rectangle()
-                 .frame(width: 650, height: 3)
+                 .frame(width: 650, height: 6)
                  .foregroundColor(Color.blue)
              HStack {
                  ForEach(dates, id: \.name) { date in
