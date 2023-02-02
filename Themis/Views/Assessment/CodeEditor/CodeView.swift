@@ -57,11 +57,11 @@ struct CodeView: View {
     }
     
     var editorFlags: CodeEditor.Flags {
-        if colorScheme == .dark {
-            return [.selectable, .blackBackground]
-        } else {
-            return .selectable
-        }
+        var flags: CodeEditor.Flags = []
+        flags.insert(.selectable)
+        if colorScheme == .dark { flags.insert(.blackBackground) }
+        if !readOnly { flags.insert(.feedbackMode) }
+        return flags
     }
     
     var theme: CodeEditor.ThemeName {
