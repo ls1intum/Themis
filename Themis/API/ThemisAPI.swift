@@ -9,7 +9,7 @@ import Foundation
 import CodeEditor
 
 enum ThemisAPI {
-    static let restController = RESTController(baseURL: URL(string: themisServer ?? "localhost")!)
+    static let restController = RESTController(baseURL: URL(string: themisServer ?? "https://ios2223cit.ase.cit.tum.de")!)
     
     private static func buildAuthenticatedRequest(_ request: Request) throws -> Request {
         var request = request
@@ -17,10 +17,10 @@ enum ThemisAPI {
             guard let token = Authentication.shared.token else {
                 throw Authentication.AuthenticationError.tokenNotFound
             }
-            request.headers["Authorization"] = token
+            request.headers["Authorization"] = "Bearer \(token)"
         } else {
             if let cookie = HTTPCookieStorage.shared.cookies(for: RESTController.shared.baseURL)?.first {
-                request.headers["Authorization"] = cookie.value
+                request.headers["Authorization"] = "Bearer \(cookie.value)"
             }
         }
         return request
@@ -62,27 +62,27 @@ extension ThemisAPI {
     static func notifyAboutNewFeedback(exerciseId: Int, participationId: Int) async throws {
         let request = Request(
             method: .post,
-            path: "/feedback_suggestion/notify",
+            path: "/feedback_suggestions/notify",
             body: NotifyRequest(
                 exercise_id: exerciseId,
                 participation_id: participationId,
                 server: RESTController.shared.baseURL.absoluteString
             )
         )
-        try await restController.sendRequest(request)
+        try await sendRequest(request: request)
     }
     
     /// gets a feedback suggestion for a submission from Themis-ML
     static func getFeedbackSuggestions(exerciseId: Int, participationId: Int) async throws -> [FeedbackSuggestion] {
         let request = Request(
             method: .post,
-            path: "/feedback_suggestion",
+            path: "/feedback_suggestions",
             body: FeedbackSuggestionRequest(
                 server: RESTController.shared.baseURL.absoluteString,
                 exercise_id: exerciseId,
                 participation_id: participationId
             )
         )
-        return try await restController.sendRequest(request)
+        return try await sendRequest([FeedbackSuggestion].self, request: request)
     }
 }
