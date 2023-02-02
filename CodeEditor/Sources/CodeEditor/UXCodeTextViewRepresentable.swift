@@ -224,7 +224,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
         
         if let binding = editorBindings.fontSize {
-                textView.changeFontSize(size: binding.wrappedValue)
+            textView.applyNewTheme(andFontSize: binding.wrappedValue)
         }
        
         if let selection = editorBindings.selection {

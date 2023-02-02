@@ -299,14 +299,14 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         return true
     }
     
-    func changeFontSize(size: CGFloat) {
+    /*func changeFontSize(size: CGFloat) {
         if let theme = highlightr?.theme {
             theme.codeFont = theme.codeFont?.withSize(size)
             theme.boldCodeFont = theme.boldCodeFont? .withSize(size)
             theme.italicCodeFont = theme.italicCodeFont?.withSize(size)
         }
         font = font?.withSize(size)
-    }
+    }*/
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -429,18 +429,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     func drawHighlights() {
-        if !text.isEmpty {
-            for hRange in highlightedRanges {
-                self.textStorage.addAttributes(
-                    [
-                        .foregroundColor: UIColor.blue,
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: hRange.color,
-                        .link: hRange.id // equals feedback id
-                    ]
-                    , range: hRange.range)
-            }
-        }
     }
 
     func didHighlight(_ range: NSRange, success: Bool) {
