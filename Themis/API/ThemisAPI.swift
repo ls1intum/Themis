@@ -62,7 +62,7 @@ extension ThemisAPI {
     static func notifyAboutNewFeedback(exerciseId: Int, participationId: Int) async throws {
         let request = Request(
             method: .post,
-            path: "/feedback_suggestion/notify",
+            path: "/feedback_suggestions/notify",
             body: NotifyRequest(
                 exercise_id: exerciseId,
                 participation_id: participationId,
@@ -76,7 +76,7 @@ extension ThemisAPI {
     static func getFeedbackSuggestions(exerciseId: Int, participationId: Int) async throws -> [FeedbackSuggestion] {
         let request = Request(
             method: .post,
-            path: "/feedback_suggestion",
+            path: "/feedback_suggestions",
             body: FeedbackSuggestionRequest(
                 server: RESTController.shared.baseURL.absoluteString,
                 exercise_id: exerciseId,
