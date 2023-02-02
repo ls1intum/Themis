@@ -15,13 +15,14 @@ struct CodeView: View {
     @Binding var fontSize: CGFloat
     @State var dragSelection: Range<Int>?
     var onOpenFeedback: (Range<Int>) -> Void
+    let readOnly: Bool
     
     var editorItself: some View {
         UXCodeTextViewRepresentable(
             editorBindings: EditorBindings(
                 source: $file.code ?? "loading...",
                 fontSize: $fontSize,
-                language: .swift,
+                language: language,
                 themeName: theme,
                 flags: editorFlags,
                 highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
@@ -33,7 +34,9 @@ struct CodeView: View {
                 pencilOnly: $cvm.pencilMode,
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
-                isNewFile: file.isNewFile
+                isNewFile: file.isNewFile,
+                feedbackSuggestions: readOnly ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
+                selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )
         .onChange(of: dragSelection) { newValue in
@@ -65,7 +68,18 @@ struct CodeView: View {
         if colorScheme == .dark {
             return .ocean
         } else {
-            return .xcode
+            return CodeEditor.ThemeName(rawValue: "atelier-seaside-light")
+        }
+    }
+    
+    var language: CodeEditor.Language {
+        switch file.fileExtension {
+        case .java:
+            return .java
+        case .swift:
+            return .swift
+        case .other:
+            return .basic
         }
     }
 }

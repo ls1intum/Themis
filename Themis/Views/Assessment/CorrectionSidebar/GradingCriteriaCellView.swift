@@ -11,8 +11,6 @@ import SwiftUI
 
 
 struct GradingCriteriaCellView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     let gradingCriterion: GradingCriterion
     
     var detailText: Binding<String>?
@@ -48,7 +46,7 @@ struct GradingCriteriaCellView: View {
                         .stroke(colorize(credits: instruction.credits), lineWidth: 2))
                 }
                 .disabled(detailText == nil || score == nil)
-                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.primary)
             }
         }.padding()
     }
