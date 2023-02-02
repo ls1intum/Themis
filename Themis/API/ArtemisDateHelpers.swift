@@ -27,7 +27,7 @@ enum ArtemisDateHelpers {
         }
         return artemisDateFormatter.string(from: date)
     }
-
+    
     static func getReadableDateString(_ dateString: String?) -> String? {
         guard let date = parseDate(dateString) else {
             return nil
@@ -35,5 +35,34 @@ enum ArtemisDateHelpers {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
         return dateFormatter.string(from: date)
+    }
+    
+    static func getRemainingOrOverdueTime(for dateString: String?) -> String? {
+        guard let date = parseDate(dateString) else {
+            return "not available yet"
+        }
+        let currentDate = Date()
+        let timeDifference = date.timeIntervalSince(currentDate)
+        let timeDifferenceInMinutes = timeDifference / 60
+        let timeDifferenceInHours = timeDifferenceInMinutes / 60
+        let timeDifferenceInDays = timeDifferenceInHours / 24
+
+        if timeDifference > 0 {
+            if timeDifferenceInDays >= 1 {
+                return "in " + String(Int(timeDifferenceInDays)) + " day(s)"
+            } else if timeDifferenceInHours >= 1 {
+                return "in " + String(Int(timeDifferenceInHours)) + " hour(s)"
+            } else {
+                return "in " + String(Int(timeDifferenceInMinutes)) + " minute(s)"
+            }
+        } else {
+            if timeDifferenceInDays <= -1 {
+                return String(Int(-timeDifferenceInDays)) + " day(s) ago"
+            } else if timeDifferenceInHours <= -1 {
+                return String(Int(-timeDifferenceInHours)) + " hour(s) ago"
+            } else {
+                return String(Int(-timeDifferenceInMinutes)) + " minute(s) ago"
+            }
+        }
     }
 }

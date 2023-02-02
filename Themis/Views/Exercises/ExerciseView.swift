@@ -12,8 +12,12 @@ struct ExerciseView: View {
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var codeEditorVM = CodeEditorViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
-    
+
     let exercise: Exercise
+    
+    var dueTime: String? {
+        ArtemisDateHelpers.getRemainingOrOverdueTime(for: exercise.assessmentDueDate)
+    }
     
     var body: some View {
         VStack {
@@ -51,7 +55,7 @@ struct ExerciseView: View {
                 exercise: exercise
             )
         }
-        .navigationTitle(exercise.title ?? "")
+        .navigationTitle((exercise.title ?? "") + " (assessment due: " + (dueTime ?? "Not due") + ")")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

@@ -23,8 +23,11 @@ struct ExerciseListItem: View {
             VStack(alignment: .leading) {
                 ForEach(dateProperties, id: \.self) { prop in
                     let date = exercise[keyPath: prop.dateKeyPath]
-                    let dateString = ArtemisDateHelpers.getReadableDateString(date) ?? "not yet available"
-                    Text(dateString)
+                    if let dateString = ArtemisDateHelpers.getRemainingOrOverdueTime(for: date) {
+                        Text(dateString)
+                    } else {
+                        Text("not available yet")
+                    }
                 }
             }
         }.padding(.trailing)
