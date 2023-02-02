@@ -15,9 +15,9 @@ struct ExerciseDateProperty: Hashable {
 struct ExercisesListView: View {
     var exercises: [Exercise]
     
-    private let dueDate = ExerciseDateProperty(name: "Due Date", dateKeyPath: \.dueDate)
-    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment Due Date", dateKeyPath: \.assessmentDueDate)
-    private let releaseDate = ExerciseDateProperty(name: "Release Date", dateKeyPath: \.releaseDate)
+    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDate)
+    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.assessmentDueDate)
+    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.releaseDate)
     
     var body: some View {
         VStack(alignment: .leading) {
