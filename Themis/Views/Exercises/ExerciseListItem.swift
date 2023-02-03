@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ExerciseListItem: View {
+ struct ExerciseListItem: View {
     let exercise: Exercise
     let dateProperties: [ExerciseDateProperty]
 
@@ -20,4 +20,4 @@ struct ExerciseListItem: View {
             })
         }.padding(.trailing)
     }
-}
+ }

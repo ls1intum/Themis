@@ -19,6 +19,7 @@ struct ExerciseView: View {
         ArtemisDateHelpers.getRemainingOrOverdueTime(for: exercise.assessmentDueDate)
     }
     
+    
     var body: some View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
@@ -58,10 +59,7 @@ struct ExerciseView: View {
         .navigationTitle(exercise.title ?? "")
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                HStack {
-                    Text("assessment due:")
-                    Text(ArtemisDateHelpers.getRemainingOrOverdueTime(for: exercise.assessmentDueDate) ?? "No Due Date")
-                }
+                Text("")
             }
         }
         .task { await fetchExerciseData() }
