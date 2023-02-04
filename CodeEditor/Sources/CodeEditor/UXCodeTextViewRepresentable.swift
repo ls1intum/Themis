@@ -141,7 +141,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         
         public func textView(_ textView: UITextView, editMenuForTextIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
             var additionalActions: [UIMenuElement] = []
-            if range.length > 0 {
+            if range.length > 0 && self.parent.editorBindings.flags.contains(.feedbackMode) {
                 let feedbackAction = UIAction(title: "Feedback") { _ in
                     self.parent.editorBindings.showAddFeedback.wrappedValue.toggle()
                 }
@@ -217,8 +217,10 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = editorBindings.source.wrappedValue
             }
-            textView.feedbackSuggestions = editorBindings.feedbackSuggestions
-            textView.updateLightBulbs()
+            if editorBindings.flags.contains(.feedbackMode) {
+                textView.feedbackSuggestions = editorBindings.feedbackSuggestions
+                textView.updateLightBulbs()
+            }
         }
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue

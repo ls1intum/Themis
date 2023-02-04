@@ -82,6 +82,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    var feedbackMode = true
+    
     var lightBulbs = [LightbulbButton]()
     
     init() {
@@ -476,6 +478,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.firstPoint = touch.location(in: self)
@@ -484,6 +487,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
@@ -494,6 +498,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard feedbackMode else { return }
         let coordinator = delegate as? UXCodeTextViewDelegate
         coordinator?.setDragSelection(dragSelection)
     }

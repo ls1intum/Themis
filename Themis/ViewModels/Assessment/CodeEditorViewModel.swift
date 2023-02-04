@@ -69,12 +69,14 @@ class CodeEditorViewModel: ObservableObject {
     }
     
     @MainActor
-    func openFile(file: Node, participationId: Int, templateParticipationId: Int) {
+    func openFile(file: Node, participationId: Int, templateParticipationId: Int?) {
         if !openFiles.contains(where: { $0.path == file.path }) {
             openFiles.append(file)
             Task {
                 await file.fetchCode(participationId: participationId)
-                await file.calculateDiff(templateParticipationId: templateParticipationId)
+                if let templateParticipationId {
+                    await file.calculateDiff(templateParticipationId: templateParticipationId)
+                }
             }
         }
         selectedFile = file
