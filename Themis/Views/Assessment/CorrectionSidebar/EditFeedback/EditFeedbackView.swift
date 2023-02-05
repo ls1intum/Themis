@@ -23,7 +23,7 @@ struct EditFeedbackView: View {
             cvm: cvm,
             showSheet: $showSheet,
             idForUpdate: idForUpdate,
-            title: "Edit feedback",
+            title: "Edit Feedback",
             edit: true,
             type: type,
             gradingCriteria: gradingCriteria
