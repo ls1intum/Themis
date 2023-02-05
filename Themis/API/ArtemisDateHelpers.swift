@@ -46,7 +46,7 @@ enum ArtemisDateHelpers {
         let timeDifferenceInMinutes = timeDifference / 60
         let timeDifferenceInHours = timeDifferenceInMinutes / 60
         let timeDifferenceInDays = timeDifferenceInHours / 24
-
+        
         if timeDifference > 0 {
             if timeDifferenceInDays >= 1 {
                 return "in " + String(Int(timeDifferenceInDays)) + " day(s)"
@@ -64,6 +64,7 @@ enum ArtemisDateHelpers {
                 return String(Int(-timeDifferenceInMinutes)) + " minute(s) ago"
             }
         }
+    }
     static func getReadableDateStringDetailed(_ dateString: String?) -> String? {
         guard let dateString else {
             return nil

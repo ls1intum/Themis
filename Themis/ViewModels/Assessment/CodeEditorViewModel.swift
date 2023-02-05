@@ -100,6 +100,54 @@ class CodeEditorViewModel: ObservableObject {
     }
     
     @MainActor
+    func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
+        do {
+            self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
+        } catch {
+            print(error)
+        }
+    }
+    
+    @MainActor
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+        if let file = selectedFile, let code = file.code {
+            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+                return
+            }
+            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
+        }
+    }
+    
+    private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
+        var count = 1
+        var fromIndex: String.Index?
+        var toDistance: Int = 0
+        var offset = 0
+        text.enumerateLines { line, stop in
+            if count < fromLine {
+                offset += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == fromLine {
+                fromIndex = line.startIndex
+            }
+            if count >= fromLine && count < toLine {
+                toDistance += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == toLine {
+                stop = true
+            }
+            count += 1
+        }
+        guard var fromIndex else {
+            return nil
+        }
+        fromIndex = text.index(fromIndex, offsetBy: offset)
+        let toIndex = text.index(fromIndex, offsetBy: toDistance)
+        
+        return NSRange(text.lineRange(for: fromIndex...toIndex), in: text)
+    }
+    
+    @MainActor
     func addInlineHighlight(feedbackId: UUID) {
         if let file = selectedFile, let selectedSection = selectedSection {
             appendHighlight(feedbackId: feedbackId, range: selectedSection, path: file.path)
