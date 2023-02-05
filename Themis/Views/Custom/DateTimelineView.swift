@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct DateTimelineView: View {
+ struct DateTimelineView: View {
     let dates: [(name: String, date: String?)]
-    @State private var showingAlert = false
+    @State private var isShowingPopover = false
     @State private var selectedDate: (String, String?) = ("", nil)
 
     var body: some View {
@@ -25,10 +25,6 @@ struct DateTimelineView: View {
                             .background(Color.white)
                             .font(.system(size: 30))
                             .padding(1)
-                            .onLongPressGesture {
-                                selectedDate = (date.name, date.date)
-                                showingAlert = true
-                            }
                         if let dateString = ArtemisDateHelpers.getRemainingOrOverdueTime(for: date.date) {
                             Text(dateString)
                         } else {
@@ -37,13 +33,23 @@ struct DateTimelineView: View {
                     }
                     .frame(maxWidth: 150)
                     .padding()
+                    .onTapGesture {
+                        selectedDate = (date.name, date.date)
+                        print(isShowingPopover)
+                        isShowingPopover = true
+                        print(isShowingPopover)
+                    }
                 }
             }
         }
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Due date for \(selectedDate.0)"),
-                  message: selectedDate.1.map { date in Text(ArtemisDateHelpers.getReadableDateString(date) ?? "Not available yet") },
-                  dismissButton: nil)
+        .popover(isPresented: $isShowingPopover) {
+            VStack {
+                Text("Due date for \(selectedDate.0)")
+                selectedDate.1.map { date in
+                    Text(ArtemisDateHelpers.getReadableDateString(date) ?? "Not available yet")
+                }
+            }
+            .padding()
         }
     }
-}
+ }

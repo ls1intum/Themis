@@ -71,7 +71,7 @@ struct ExercisesListView: View {
                 }) {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
-                            ExerciseView(exercise: exercise)
+                            ExerciseView(dateProperties: dateProperties, exercise: exercise)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }
@@ -81,6 +81,7 @@ struct ExercisesListView: View {
         }
     }
 }
+
 
 struct ExercisesListView_Previews: PreviewProvider {
     static var previews: some View {
