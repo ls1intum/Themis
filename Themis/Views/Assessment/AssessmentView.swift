@@ -11,7 +11,7 @@ struct AssessmentView: View {
     @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
-    @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
+    @State private var dragWidthLeft: CGFloat = 0.2 * UIScreen.main.bounds.size.width
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder = true
     @State private var filetreeAsPlaceholder = false
@@ -22,7 +22,7 @@ struct AssessmentView: View {
     @State var showNavigationOptions = false
     
     private let minRightSnapWidth: CGFloat = 185
-    private let minLeftSnapWidth: CGFloat = 185
+    private let minLeftSnapWidth: CGFloat = 150
     
     let exercise: Exercise
     
@@ -55,6 +55,8 @@ struct AssessmentView: View {
                 filetreeAsPlaceholder = false
                 if dragWidthLeft < minLeftSnapWidth {
                     dragWidthLeft = minLeftSnapWidth
+                } else if dragWidthLeft > 0.4 * UIScreen.main.bounds.size.width {
+                    dragWidthLeft = 0.4 * UIScreen.main.bounds.size.width
                 }
             } label: {
                 Image(systemName: "sidebar.left")
@@ -295,6 +297,11 @@ struct AssessmentView: View {
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
+        .onRotate { newOrientation in
+            if newOrientation == UIDeviceOrientation.portrait || newOrientation == UIDeviceOrientation.portraitUpsideDown {
+                if dragWidthLeft > 
+            }
+        }
     }
     
     var filetreeWithPlaceholder: some View {
@@ -324,22 +331,20 @@ struct AssessmentView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            let screenWidth: CGFloat = UIScreen.main.bounds.size.width
-                            let minWidth: CGFloat = 0
-                            let maxWidth: CGFloat = screenWidth * 0.3 > minLeftSnapWidth ? screenWidth * 0.3 : 1.5 * minLeftSnapWidth
+                            let maxLeftWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
                             let delta = gesture.translation.width
                             dragWidthLeft += delta
-                            if dragWidthLeft > maxWidth {
-                                dragWidthLeft = maxWidth
-                            } else if dragWidthLeft < minWidth {
-                                dragWidthLeft = minWidth
+                            if dragWidthLeft > maxLeftWidth {
+                                dragWidthLeft = maxLeftWidth
+                            } else if dragWidthLeft < 0 {
+                                dragWidthLeft = 0
                             }
                             
                             filetreeAsPlaceholder = dragWidthLeft < minLeftSnapWidth ? true : false
                         }
                         .onEnded {_ in
                             if dragWidthLeft < minLeftSnapWidth {
-                                dragWidthLeft = minLeftSnapWidth
+                                dragWidthLeft = 0.2 * UIScreen.main.bounds.size.width
                                 showFileTree = false
                                 filetreeAsPlaceholder = false
                             }
@@ -378,7 +383,7 @@ struct AssessmentView: View {
                 .onTapGesture {
                     if dragWidthRight <= 0 {
                         withAnimation {
-                            dragWidthRight = minRightSnapWidth
+                            dragWidthRight = 0.2 * UIScreen.main.bounds.size.width
                             correctionAsPlaceholder = false
                         }
                     }
@@ -386,16 +391,13 @@ struct AssessmentView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            let minWidth: CGFloat = 0
-                            let screenWidth: CGFloat = UIScreen.main.bounds.size.width
-                            let maxWidth: CGFloat = screenWidth * 0.3 > minRightSnapWidth ? screenWidth * 0.3 : 1.5 * minRightSnapWidth
-                            
+                            let maxRightWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
                             let delta = gesture.translation.width
                             dragWidthRight -= delta
-                            if dragWidthRight > maxWidth {
-                                dragWidthRight = maxWidth
-                            } else if dragWidthRight < minWidth {
-                                dragWidthRight = minWidth
+                            if dragWidthRight > maxRightWidth {
+                                dragWidthRight = maxRightWidth
+                            } else if dragWidthRight < 0 {
+                                dragWidthRight = 0
                             }
                             
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
@@ -464,6 +466,24 @@ struct AssessmentView: View {
         }
         .fontWeight(.semibold)
         .background(Color("customPrimary"))
+    }
+}
+
+struct DeviceRotationViewModifier: ViewModifier {
+    let action: (UIDeviceOrientation) -> Void
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                action(UIDevice.current.orientation)
+            }
+    }
+}
+
+extension View {
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        self.modifier(DeviceRotationViewModifier(action: action))
     }
 }
 
