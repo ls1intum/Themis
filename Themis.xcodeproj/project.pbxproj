@@ -1147,7 +1147,7 @@
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				minimumVersion = 2.0.1;
 			};
 		};
 		F911B9BE29392668003CF4C8 /* XCRemoteSwiftPackageReference "TouchVisualizer" */ = {
