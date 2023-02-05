@@ -297,11 +297,6 @@ struct AssessmentView: View {
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
-        .onRotate { newOrientation in
-            if newOrientation == UIDeviceOrientation.portrait || newOrientation == UIDeviceOrientation.portraitUpsideDown {
-                if dragWidthLeft > 
-            }
-        }
     }
     
     var filetreeWithPlaceholder: some View {
@@ -468,34 +463,3 @@ struct AssessmentView: View {
         .background(Color("customPrimary"))
     }
 }
-
-struct DeviceRotationViewModifier: ViewModifier {
-    let action: (UIDeviceOrientation) -> Void
-
-    func body(content: Content) -> some View {
-        content
-            .onAppear()
-            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                action(UIDevice.current.orientation)
-            }
-    }
-}
-
-extension View {
-    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
-        self.modifier(DeviceRotationViewModifier(action: action))
-    }
-}
-
- struct AssessmentView_Previews: PreviewProvider {
-    static let avm = AssessmentViewModel(readOnly: false)
-
-    static var previews: some View {
-        AssessmentView(
-            vm: avm,
-            ar: avm.assessmentResult,
-            exercise: Exercise()
-        )
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
- }
