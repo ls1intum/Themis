@@ -14,6 +14,7 @@ struct AssessmentView: View {
     @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder = true
+    @State private var filetreeAsPlaceholder = false
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
     @State var showStepper = false
@@ -21,6 +22,7 @@ struct AssessmentView: View {
     @State var showNavigationOptions = false
     
     private let minRightSnapWidth: CGFloat = 185
+    private let minLeftSnapWidth: CGFloat = 185
     
     let exercise: Exercise
     
@@ -30,14 +32,9 @@ struct AssessmentView: View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView(
-                        participationID: vm.submission?.participation.id,
-                        cvm: cvm,
-                        loading: vm.loading,
-                        templateParticipationId: exercise.templateParticipation?.id
-                    )
-                    .padding(.top, 35)
-                    .frame(width: dragWidthLeft)
+                    filetreeWithPlaceholder
+                        .padding(.top, 35)
+                        .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
@@ -55,6 +52,10 @@ struct AssessmentView: View {
             .animation(.default, value: showFileTree)
             Button {
                 showFileTree.toggle()
+                filetreeAsPlaceholder = false
+                if dragWidthLeft < minLeftSnapWidth {
+                    dragWidthLeft = minLeftSnapWidth
+                }
             } label: {
                 Image(systemName: "sidebar.left")
                     .font(.system(size: 23))
@@ -295,6 +296,22 @@ struct AssessmentView: View {
             }
         }
     }
+    
+    var filetreeWithPlaceholder: some View {
+        VStack {
+            if filetreeAsPlaceholder {
+                EmptyView()
+            } else {
+                FiletreeSidebarView(
+                    participationID: vm.submission?.participation.id,
+                    cvm: cvm,
+                    loading: vm.loading,
+                    templateParticipationId: exercise.templateParticipation?.id
+                )
+            }
+        }
+    }
+    
     var leftGrip: some View {
         ZStack {
             Color("customPrimary")
@@ -308,14 +325,23 @@ struct AssessmentView: View {
                     DragGesture()
                         .onChanged { gesture in
                             let screenWidth: CGFloat = UIScreen.main.bounds.size.width
-                            let minWidth: CGFloat = screenWidth < 130 ? screenWidth : 130
-                            let maxWidth: CGFloat = screenWidth * 0.3 > minWidth ? screenWidth * 0.3 : 1.5 * minWidth
+                            let minWidth: CGFloat = 0
+                            let maxWidth: CGFloat = screenWidth * 0.3 > minLeftSnapWidth ? screenWidth * 0.3 : 1.5 * minLeftSnapWidth
                             let delta = gesture.translation.width
                             dragWidthLeft += delta
                             if dragWidthLeft > maxWidth {
                                 dragWidthLeft = maxWidth
                             } else if dragWidthLeft < minWidth {
                                 dragWidthLeft = minWidth
+                            }
+                            
+                            filetreeAsPlaceholder = dragWidthLeft < minLeftSnapWidth ? true : false
+                        }
+                        .onEnded {_ in
+                            if dragWidthLeft < minLeftSnapWidth {
+                                dragWidthLeft = minLeftSnapWidth
+                                showFileTree = false
+                                filetreeAsPlaceholder = false
                             }
                         }
                 )
