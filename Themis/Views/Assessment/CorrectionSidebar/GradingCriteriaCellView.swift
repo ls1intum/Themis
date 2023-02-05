@@ -40,6 +40,7 @@ struct GradingCriteriaCellView: View {
                         Divider()
 
                         Text(instruction.instructionDescription ?? "")
+                            .multilineTextAlignment(.leading)
                     }
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
