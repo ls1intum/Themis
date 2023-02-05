@@ -15,8 +15,8 @@ protocol ProblemStatementPart {
 }
 
 struct ProblemStatementPlantUML: ProblemStatementPart {
-    let colorScheme: ColorScheme
     let text: String
+    let colorScheme: ColorScheme
     var url: URL? {
         var url = URL(string: "https://artemis-staging.ase.in.tum.de/api/plantuml/png")
         url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text), URLQueryItem(name: "useDarkTheme", value: String(colorScheme != .light))])
@@ -59,11 +59,11 @@ class ProblemStatementCellViewModel: ObservableObject {
             problemStatementParts.append(ProblemStatementMD(text: substring))
 
             // Append plantuml
-            substring = String(problemStatement[rangeStart.lowerBound...rangeEnd.upperBound])
+            substring = String(problemStatement[rangeStart.lowerBound..<rangeEnd.upperBound])
             substring = replaceUMLTestsColor(substring, feedbacks, colorScheme)
-            problemStatementParts.append(ProblemStatementPlantUML(colorScheme: colorScheme, text: substring))
+            problemStatementParts.append(ProblemStatementPlantUML(text: substring, colorScheme: colorScheme))
 
-            index = problemStatement.index(rangeEnd.upperBound, offsetBy: 1)
+            index = problemStatement.index(rangeEnd.upperBound, offsetBy: 1, limitedBy: problemStatement.endIndex) ?? problemStatement.endIndex
         }
     }
 
