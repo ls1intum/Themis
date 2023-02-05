@@ -22,7 +22,7 @@ struct CodeView: View {
             editorBindings: EditorBindings(
                 source: $file.code ?? "loading...",
                 fontSize: $fontSize,
-                language: .swift,
+                language: language,
                 themeName: theme,
                 flags: editorFlags,
                 highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
@@ -57,18 +57,29 @@ struct CodeView: View {
     }
     
     var editorFlags: CodeEditor.Flags {
-        if colorScheme == .dark {
-            return [.selectable, .blackBackground]
-        } else {
-            return .selectable
-        }
+        var flags: CodeEditor.Flags = []
+        flags.insert(.selectable)
+        if colorScheme == .dark { flags.insert(.blackBackground) }
+        if !readOnly { flags.insert(.feedbackMode) }
+        return flags
     }
     
     var theme: CodeEditor.ThemeName {
         if colorScheme == .dark {
             return .ocean
         } else {
-            return .xcode
+            return CodeEditor.ThemeName(rawValue: "atelier-seaside-light")
+        }
+    }
+    
+    var language: CodeEditor.Language {
+        switch file.fileExtension {
+        case .java:
+            return .java
+        case .swift:
+            return .swift
+        case .other:
+            return .basic
         }
     }
 }

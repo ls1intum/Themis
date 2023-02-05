@@ -43,7 +43,7 @@ struct FiletreeSidebarView: View {
     func nodeFileView(file: Node) -> some View {
         Button {
             withAnimation {
-                guard let participationID, let templateParticipationId else { return }
+                guard let participationID else { return }
                 cvm.openFile(file: file,
                          participationId: participationID,
                          templateParticipationId: templateParticipationId
