@@ -84,7 +84,7 @@ struct EditFeedbackViewBase: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(title ?? "Edit feedback")
+                Text(title ?? "Edit Feedback")
                     .font(.largeTitle)
                 Spacer()
                 Button {
