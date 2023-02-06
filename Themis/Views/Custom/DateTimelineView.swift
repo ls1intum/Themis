@@ -15,15 +15,16 @@ struct DateTimelineView: View {
     var body: some View {
         ZStack(alignment: .center) {
             Rectangle()
-                .frame(width: 650, height: 6)
+                .frame(width: 500, height: 5)
                 .foregroundColor(Color.blue)
+                .cornerRadius(5)
             HStack {
                 ForEach(dates, id: \.name) { date in
                     VStack {
-                        Text(date.name)
+                        Text(date.name).bold()
                         Image(systemName: "calendar")
-                            .background(Color.white)
-                            .font(.system(size: 30))
+                            .background(Color(.systemBackground))
+                            .font(.title3)
                             .padding(1)
                             .onLongPressGesture {
                                 selectedDate = (date.name, date.date)
@@ -36,7 +37,7 @@ struct DateTimelineView: View {
                         }
                     }
                     .frame(maxWidth: 150)
-                    .padding()
+                    .padding(2)
                 }
             }
         }
