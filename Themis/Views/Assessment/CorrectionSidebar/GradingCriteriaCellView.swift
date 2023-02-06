@@ -11,8 +11,6 @@ import SwiftUI
 
 
 struct GradingCriteriaCellView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     let gradingCriterion: GradingCriterion
     
     var detailText: Binding<String>?
@@ -27,12 +25,12 @@ struct GradingCriteriaCellView: View {
             
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
                 Button {
-                    self.detailText?.wrappedValue = instruction.feedback
+                    self.detailText?.wrappedValue = instruction.feedback ?? ""
                     self.score?.wrappedValue = instruction.credits
                 } label: {
                     VStack(alignment: .leading) {
                         HStack {
-                            Text(instruction.gradingScale)
+                            Text(instruction.gradingScale ?? "")
                                 .font(.title3)
                             Spacer()
                             Text(String(format: "%.1f", instruction.credits) + "P")
@@ -41,14 +39,15 @@ struct GradingCriteriaCellView: View {
 
                         Divider()
 
-                        Text(instruction.instructionDescription)
+                        Text(instruction.instructionDescription ?? "")
+                            .multilineTextAlignment(.leading)
                     }
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
                         .stroke(colorize(credits: instruction.credits), lineWidth: 2))
                 }
                 .disabled(detailText == nil || score == nil)
-                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.primary)
             }
         }.padding()
     }

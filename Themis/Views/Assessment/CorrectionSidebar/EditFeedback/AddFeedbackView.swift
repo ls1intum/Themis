@@ -6,28 +6,28 @@
 //
 
 import SwiftUI
+import CodeEditor
 
 struct AddFeedbackView: View {
     var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
     let type: FeedbackType
-
     @Binding var showSheet: Bool
-    
     var file: Node?
-    
     let gradingCriteria: [GradingCriterion]
+    var feedbackSuggestion: FeedbackSuggestion?
 
     var body: some View {
         EditFeedbackViewBase(
             assessmentResult: assessmentResult,
             cvm: cvm,
             showSheet: $showSheet,
-            title: "Add feedback",
+            title: "Add Feedback",
             edit: false,
             type: type,
             file: file,
-            gradingCriteria: gradingCriteria
+            gradingCriteria: gradingCriteria,
+            feedbackSuggestion: feedbackSuggestion
         )
     }
 }

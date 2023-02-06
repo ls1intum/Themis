@@ -16,7 +16,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
-    @Published var editorFontSize = CGFloat(14) // Default font size
+    @Published var editorFontSize: CGFloat = 22 // Default font size
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:] {
         didSet {
@@ -30,6 +30,12 @@ class CodeEditorViewModel: ObservableObject {
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
     @Published var error: Error?
+    // swiftlint:disable line_length
+    @Published var feedbackSuggestions = [
+        FeedbackSuggestion(srcFile: "/src/de/tum/space/SpaceObject.java", text: "Use pair instead of list", fromLine: 6, toLine: 6, credits: -1.5),
+        FeedbackSuggestion(srcFile: "/src/de/tum/space/Client.java", text: "I have reviewed the code for the iterative process and I have noticed that it only performs 10 iterations. While 10 iterations may seem sufficient, it may not always be enough to accurately solve a problem.\n\nIn many cases, the number of iterations required to solve a problem depends on the specific problem being solved and the desired level of accuracy. For some problems, 10 iterations may be sufficient, but for others, it may take hundreds or even thousands of iterations to achieve a satisfactory solution.\n\nFurthermore, it is important to consider the possibility of getting stuck in a local minimum. An iterative process can get stuck in a local minimum, which is a suboptimal solution that is not the global minimum. To avoid getting stuck in a local minimum, it is often necessary to increase the number of iterations, or to implement alternative methods, such as random restarts, to ensure that the global minimum is reached.\n\nIn conclusion, 10 iterations are never enough to guarantee that a problem is solved to the desired level of accuracy. It is important to carefully evaluate the specific problem being solved and the desired level of accuracy in order to determine the appropriate number of iterations. By doing so, you can ensure that the iterative process accurately solves the problem and produces satisfactory results. Thank you for considering this feedback.", fromLine: 18, toLine: 18, credits: -5.5)
+    ]
+    @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
@@ -64,12 +70,14 @@ class CodeEditorViewModel: ObservableObject {
     }
     
     @MainActor
-    func openFile(file: Node, participationId: Int, templateParticipationId: Int) {
+    func openFile(file: Node, participationId: Int, templateParticipationId: Int?) {
         if !openFiles.contains(where: { $0.path == file.path }) {
             openFiles.append(file)
             Task {
                 await file.fetchCode(participationId: participationId)
-                await file.calculateDiff(templateParticipationId: templateParticipationId)
+                if let templateParticipationId {
+                    await file.calculateDiff(templateParticipationId: templateParticipationId)
+                }
             }
         }
         selectedFile = file
@@ -90,6 +98,54 @@ class CodeEditorViewModel: ObservableObject {
         } catch {
             self.error = error
         }
+    }
+    
+    @MainActor
+    func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
+        do {
+            self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
+        } catch {
+            print(error)
+        }
+    }
+    
+    @MainActor
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+        if let file = selectedFile, let code = file.code {
+            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+                return
+            }
+            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
+        }
+    }
+    
+    private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
+        var count = 1
+        var fromIndex: String.Index?
+        var toDistance: Int = 0
+        var offset = 0
+        text.enumerateLines { line, stop in
+            if count < fromLine {
+                offset += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == fromLine {
+                fromIndex = line.startIndex
+            }
+            if count >= fromLine && count < toLine {
+                toDistance += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == toLine {
+                stop = true
+            }
+            count += 1
+        }
+        guard var fromIndex else {
+            return nil
+        }
+        fromIndex = text.index(fromIndex, offsetBy: offset)
+        let toIndex = text.index(fromIndex, offsetBy: toDistance)
+        
+        return NSRange(text.lineRange(for: fromIndex...toIndex), in: text)
     }
     
     @MainActor
@@ -128,6 +184,7 @@ class CodeEditorViewModel: ObservableObject {
         undoManager.removeAllActions()
     }
     
+    @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
             let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
@@ -140,6 +197,7 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     private func appendHighlight(feedbackId: UUID, range: NSRange, path: String) {
         let highlightedRange = HighlightedRange(
             id: feedbackId.uuidString,
@@ -177,6 +235,7 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     private func constructHighlight(file: Node, lines: [Int], id: UUID, columns: [Int]? = nil) {
         if let fileLines = file.lines {
             var range = NSRange(location: 0, length: 0)

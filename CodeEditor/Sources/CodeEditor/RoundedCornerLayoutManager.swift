@@ -15,7 +15,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     let paraStyle = NSMutableParagraphStyle()
     var diffLines = [Int]()
     var isNewFile = false
-    
+    var feedbackSuggestions = [FeedbackSuggestion]()
     
     override init() {
         super.init()
@@ -127,7 +127,6 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                                                    .paragraphStyle: paraStyle]
         var gutterRect = CGRect.zero
         var paraNumber = 0
-        var currLine = 0
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
@@ -150,14 +149,8 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                     .offsetBy(dx: 0.0, dy: gutterRect.minY),
                         withAttributes: atts)
             }
-            // draw diff lines
-            ctx.setFillColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
-            ctx.setStrokeColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
-            if self.isNewFile || self.diffLines.contains(where: { Int(String(format: "%ld", paraNumber)) == $0 }) {
-                let path = CGPath(rect: rect.offsetBy(dx: 3, dy: origin.y), transform: nil)
-                ctx.addPath(path)
-                ctx.drawPath(using: .fillStroke)
-            }
+            self.drawDiffLines(paraNumber, rect, origin)
+            self.drawFeedbackSuggestions(paraNumber, rect, origin)
         }
         UIGraphicsPopContext()
 
@@ -172,5 +165,41 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                                              height: size.height)
                 .offsetBy(dx: gutterRect.minX, dy: gutterRect.minY), withAttributes: atts)
         }
+    }
+    
+    private func drawDiffLines(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {
+        let ctx = UIGraphicsGetCurrentContext()
+        guard let ctx else { return }
+        UIGraphicsPushContext(ctx)
+        ctx.setFillColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
+        ctx.setStrokeColor(CGColor(red: 0, green: 0.9, blue: 0.1, alpha: 0.2))
+        if self.isNewFile || self.diffLines.contains(where: { paraNumber == $0 }) {
+            let path = CGPath(rect: rect.offsetBy(dx: 3, dy: origin.y), transform: nil)
+            ctx.addPath(path)
+            ctx.drawPath(using: .fillStroke)
+        }
+        UIGraphicsPopContext()
+    }
+    
+    private func drawFeedbackSuggestions(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {
+        let ctx = UIGraphicsGetCurrentContext()
+        guard let ctx else { return }
+        UIGraphicsPushContext(ctx)
+        ctx.setFillColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
+        ctx.setStrokeColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
+        if self.feedbackSuggestions.contains(where: { paraNumber + 1 >= $0.fromLine && paraNumber + 1 <= $0.toLine }) {
+            let path = CGPath(
+                rect: CGRect(
+                    x: rect.origin.x,
+                    y: rect.origin.y,
+                    width: 5, height: rect.height
+                )
+                .offsetBy(dx: -2, dy: origin.y),
+                transform: nil
+            )
+            ctx.addPath(path)
+            ctx.drawPath(using: .fillStroke)
+        }
+        UIGraphicsPopContext()
     }
 }
