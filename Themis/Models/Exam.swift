@@ -13,6 +13,11 @@ struct Exam: Codable {
     let startDate: String?
     let endDate: String?
     var exerciseGroups: [ExerciseGroup]? //I don't know why this is an Array and wtf?
+    
+    var exercises: [Exercise] {
+        let exercises = exerciseGroups?.reduce([]) { return $0 + ($1.exercises ?? []) } as? [Exercise]
+        return exercises ?? []
+    }
 }
 
 
