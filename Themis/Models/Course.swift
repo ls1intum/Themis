@@ -13,6 +13,7 @@ struct Course: Codable, Hashable {
     let description: String?
     let shortName: String?
     var exercises: [Exercise]?
+    var exams: [Exam]?
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
