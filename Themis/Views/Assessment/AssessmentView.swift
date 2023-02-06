@@ -378,7 +378,7 @@ struct AssessmentView: View {
                 .onTapGesture {
                     if dragWidthRight <= 0 {
                         withAnimation {
-                            dragWidthRight = 0.2 * UIScreen.main.bounds.size.width
+                            dragWidthRight = 250
                             correctionAsPlaceholder = false
                         }
                     }
