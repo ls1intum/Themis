@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct Exam: Codable, Hashable {
+struct Exam: Codable {
     let id: Int
     let title: String
     let startDate: String?
     let endDate: String?
+    var exerciseGroups: [ExerciseGroup]? //I don't know why this is an Array and wtf?
 }
 
 
