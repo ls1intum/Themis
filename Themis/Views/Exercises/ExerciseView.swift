@@ -12,12 +12,8 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-
+    let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
-    
-    var dueTime: String? {
-        ArtemisDateHelpers.getRemainingOrOverdueTime(for: exercise.assessmentDueDate)
-    }
     
     
     var body: some View {
@@ -67,7 +63,10 @@ struct ExerciseView: View {
         .navigationTitle(exercise.title ?? "")
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                Text("")
+                HStack {
+                    Text("assessment due:")
+                    Text(ArtemisDateHelpers.getRemainingOrOverdueTime(for: exercise.assessmentDueDate) ?? "No Due Date")
+                }
             }
         }
         .task { await fetchExerciseData() }
@@ -125,9 +124,9 @@ struct ExerciseView: View {
     }
 }
 
-struct ExerciseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExerciseView(exercise: Exercise())
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
+// struct ExerciseView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ExerciseView(exercise: Exercise())
+//            .previewInterfaceOrientation(.landscapeLeft)
+//    }
+// }

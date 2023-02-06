@@ -18,6 +18,7 @@ import SwiftUI
             DateTimelineView(dates: dateProperties.map { dateProp in
                 (name: dateProp.name, date: exercise[keyPath: dateProp.dateKeyPath])
             })
-        }.padding(.trailing)
+        }
+        .padding(.trailing)
     }
  }
