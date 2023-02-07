@@ -61,6 +61,7 @@ struct ExerciseView: View {
                 exercise: exercise
             )
         }
+        .disabled(submissionDueDateNotOver)
         .navigationTitle(exercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
@@ -78,7 +79,7 @@ struct ExerciseView: View {
                                 )
                 ) {
                     startNewAssessmentButton
-                }
+                }.disabled(submissionDueDateNotOver)
             }
         }
         .errorAlert(error: $assessmentVM.error)
@@ -108,6 +109,12 @@ struct ExerciseView: View {
                 .foregroundColor(.white)
         }
         .buttonStyle(NavigationBarButton())
+    }
+    private var submissionDueDateNotOver: Bool {
+        if let dueDate = exercise.dueDate, dueDate <= ArtemisDateHelpers.stringifyDate(Date.now)! {
+            return false
+        }
+        return true
     }
     
     private func fetchExerciseData() async {
