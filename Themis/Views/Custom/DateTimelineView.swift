@@ -33,23 +33,8 @@ import SwiftUI
                     }
                     .frame(maxWidth: 150)
                     .padding()
-                    .onTapGesture {
-                        selectedDate = (date.name, date.date)
-                        print(isShowingPopover)
-                        isShowingPopover = true
-                        print(isShowingPopover)
-                    }
                 }
             }
-        }
-        .popover(isPresented: $isShowingPopover) {
-            VStack {
-                Text("Due date for \(selectedDate.0)")
-                selectedDate.1.map { date in
-                    Text(ArtemisDateHelpers.getReadableDateString(date) ?? "Not available yet")
-                }
-            }
-            .padding()
         }
     }
  }

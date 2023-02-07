@@ -115,10 +115,3 @@ struct ExerciseView: View {
         await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
     }
 }
-
-// struct ExerciseView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ExerciseView(exercise: Exercise())
-//            .previewInterfaceOrientation(.landscapeLeft)
-//    }
-// }
