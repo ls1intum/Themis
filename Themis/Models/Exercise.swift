@@ -39,26 +39,26 @@ struct Exercise: Codable {
     }
     
     func isFormer() -> Bool {
-        if let assessmentDueDate {
-            return assessmentDueDate < dateNow()
+        if let assessmentDueDate, assessmentDueDate < dateNow() {
+            return true
         }
         return false
     }
     
     func isCurrent() -> Bool {
-        if let releaseDate {
-            return releaseDate <= dateNow()
+        if let releaseDate, dateNow() < releaseDate {
+            return false
         }
-        if let assessmentDueDate {
-            return dateNow() <= assessmentDueDate
+        if let assessmentDueDate, assessmentDueDate < dateNow() {
+            return false
         }
         return true
     }
     
     func isFuture() -> Bool {
         // exercises without a release date are automatically published
-        if let releaseDate {
-            return dateNow() < releaseDate
+        if let releaseDate, dateNow() < releaseDate {
+            return true
         }
         return false
     }

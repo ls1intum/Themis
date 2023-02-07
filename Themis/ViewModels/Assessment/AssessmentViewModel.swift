@@ -82,4 +82,12 @@ class AssessmentViewModel: ObservableObject {
             print(error)
         }
     }
+    
+    func notifyThemisML(participationId: Int, exerciseId: Int) async {
+        do {
+            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exerciseId, participationId: participationId)
+        } catch {
+            print(error)
+        }
+    }
 }

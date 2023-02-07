@@ -15,6 +15,7 @@ typealias UXTextView          = NSTextView
 typealias UXTextViewDelegate  = NSTextViewDelegate
 #else
 import UIKit
+import SwiftUI
 
 typealias UXTextView          = UITextView
 typealias UXTextViewDelegate  = UITextViewDelegate
@@ -28,28 +29,28 @@ typealias UXTextViewDelegate  = UITextViewDelegate
  * Currently pretty tightly coupled to `CodeEditor`.
  */
 final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate {
-
+    
     fileprivate let highlightr = Highlightr()
-
+    
     private var hlTextStorage: CodeAttributedString? {
         textStorage as? CodeAttributedString
     }
     var customLayoutManager: RoundedCornerLayoutManager!
-
+    
     /// If the user starts a newline, the editor automagically adds the same
     /// whitespace as on the previous line.
     var isSmartIndentEnabled = true
-
+    
     var indentStyle          = CodeEditor.IndentStyle.system {
         didSet {
             guard oldValue != indentStyle else { return }
             reindent(oldStyle: oldValue)
         }
     }
-
+    
     var autoPairCompletion = [ String: String ]()
     var oldWidth: CGFloat = 0.0
-
+    
     var language: CodeEditor.Language? {
         set {
             guard hlTextStorage?.language != newValue?.rawValue else { return }
@@ -63,9 +64,10 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             if let font = highlightr?.theme?.codeFont { self.font = font; self.customLayoutManager.lineNumberFont = font }
         }
     }
-
+    
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
+    var feedbackSuggestions: [FeedbackSuggestion] = []
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
@@ -80,8 +82,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
-    var diffLines = [Int]()
-    var isNewFile = false
+    var feedbackMode = true
+    
+    var lightBulbs = [LightbulbButton]()
     
     init() {
         let textStorage = highlightr.flatMap {
@@ -89,14 +92,12 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         ?? NSTextStorage()
         let layoutManager = RoundedCornerLayoutManager()
-        layoutManager.diffLines = diffLines
-        layoutManager.isNewFile = isNewFile
         customLayoutManager = layoutManager
         textStorage.addLayoutManager(layoutManager)
         let textContainer = NSTextContainer()
         textContainer.widthTracksTextView = true // those are key!
         layoutManager.addTextContainer(textContainer)
-
+        
         super.init(frame: .zero, textContainer: textContainer)
         if let hlTextStorage {
             hlTextStorage.highlightDelegate = self
@@ -106,7 +107,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
 #if os(macOS)
         isVerticallyResizable = true
         maxSize               = .init(width: 0, height: 1_000_000)
-
+        
         isRichText                           = false
         allowsImageEditing                   = false
         isGrammarCheckingEnabled             = false
@@ -123,50 +124,50 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Actions
-
+    
 #if os(macOS)
     override func changeColor(_ sender: Any?) {
         // https://github.com/ZeeZide/CodeEditor/issues/12
         // Reject user based color changes.
     }
-
+    
     override func changeFont(_ sender: Any?) {
         let coordinator = delegate as? UXCodeTextViewDelegate
-
+        
         let old = coordinator?.fontSize
         ?? highlightr?.theme?.codeFont?.pointSize
         ?? NSFont.systemFontSize
         let new: CGFloat
-
+        
         let fm = NSFontManager.shared
         switch fm.currentFontAction {
         case .sizeUpFontAction: new = old + 1
         case .sizeDownFontAction: new = old - 1
-
+            
         case .viaPanelFontAction:
             guard let font = fm.selectedFont else {
                 return super.changeFont(sender)
             }
             new = font.pointSize
-
+            
         case .addTraitFontAction, .removeTraitFontAction: // bold/italic
             NSSound.beep()
             return
-
+            
         default:
             guard let font = fm.selectedFont else {
                 return super.changeFont(sender)
             }
             new = font.pointSize
         }
-
+        
         coordinator?.fontSize = new
         applyNewFontSize(new)
     }
 #endif // macOS
-
+    
     override func copy(_ sender: Any?) {
         guard let coordinator = delegate as? UXCodeTextViewDelegate else {
             assertionFailure("Expected coordinator as delegate")
@@ -174,9 +175,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         if coordinator.allowCopy { super.copy(sender) }
     }
-
+    
     private var isAutoPairEnabled: Bool { !autoPairCompletion.isEmpty }
-
+    
 #if os(iOS)
     override func insertText(_ text: String) {
         super.insertText(text)
@@ -189,23 +190,23 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
 #endif
 #if os(macOS)
     // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView
-
+    
     override func insertNewline(_ sender: Any?) {
         guard isSmartIndentEnabled else { return super.insertNewline(sender) }
-
+        
         let currentLine = self.currentLine
         let wsPrefix = currentLine.prefix(while: {
             guard let scalar = $0.unicodeScalars.first else { return false }
             return CharacterSet.whitespaces.contains(scalar) // yes, yes
         })
-
+        
         super.insertNewline(sender)
-
+        
         if !wsPrefix.isEmpty {
             insertText(String(wsPrefix), replacementRange: selectedRange())
         }
     }
-
+    
     override func insertTab(_ sender: Any?) {
         guard case .softTab(let width) = indentStyle else {
             return super.insertTab(sender)
@@ -213,62 +214,62 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         super.insertText(String(repeating: " ", count: width),
                          replacementRange: selectedRange())
     }
-
+    
     override func insertText(_ string: Any, replacementRange: NSRange) {
         super.insertText(string, replacementRange: replacementRange)
         guard isAutoPairEnabled              else { return }
         guard let string = string as? String else {
             return
         } // TBD: NSAttrString
-
+        
         guard let end = autoPairCompletion[string] else {
             return
         }
         super.insertText(end, replacementRange: selectedRange())
         super.moveBackward(self)
     }
-
+    
     override func deleteBackward(_ sender: Any?) {
         guard isAutoPairEnabled, !isStartOrEndOfLine else {
             return super.deleteBackward(sender)
         }
-
+        
         let s             = self.string
         let selectedRange = swiftSelectedRange
         guard selectedRange.lowerBound > s.startIndex,
               selectedRange.lowerBound < s.endIndex else {
             return super.deleteBackward(sender)
         }
-
+        
         let startIdx  = s.index(before: selectedRange.lowerBound)
         let startChar = s[startIdx..<selectedRange.lowerBound]
         guard let expectedEndChar = autoPairCompletion[String(startChar)] else {
             return super.deleteBackward(sender)
         }
-
+        
         let endIdx    = s.index(after: selectedRange.lowerBound)
         let endChar   = s[selectedRange.lowerBound..<endIdx]
         guard expectedEndChar[...] == endChar else {
             return super.deleteBackward(sender)
         }
-
+        
         super.deleteForward(sender)
         super.deleteBackward(sender)
     }
 #endif // macOS
-
+    
     private func reindent(oldStyle: CodeEditor.IndentStyle) {
         // - walk over the lines, strip and count the whitespaces and do something
         //   clever :-)
     }
-
+    
     // MARK: - Themes
-
+    
     @discardableResult
     func applyNewFontSize(_ newSize: CGFloat) -> Bool {
         applyNewTheme(nil, andFontSize: newSize)
     }
-
+    
     @discardableResult
     func applyNewTheme(_ newTheme: CodeEditor.ThemeName) -> Bool {
         guard themeName != newTheme else { return false }
@@ -276,9 +277,10 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
               highlightr.setTheme(to: newTheme.rawValue),
               let theme      = highlightr.theme else { return false }
         if let font = theme.codeFont, font !== self.font { self.font = font }
+        themeName = newTheme
         return true
     }
-
+    
     @discardableResult
     func applyNewTheme(_ newTheme: CodeEditor.ThemeName? = nil,
                        andFontSize newSize: CGFloat) -> Bool {
@@ -286,14 +288,26 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let highlightr = highlightr,
               highlightr.setTheme(to: (newTheme ?? themeName).rawValue),
               let theme      = highlightr.theme else { return false }
-
+        
         if let font = theme.codeFont, font !== self.font { self.font = font }
         guard theme.codeFont?.pointSize != newSize else { return true }
-
-        theme.codeFont       = theme.codeFont?      .withSize(newSize)
-        theme.boldCodeFont   = theme.boldCodeFont?  .withSize(newSize)
+        
+        theme.codeFont = theme.codeFont?.withSize(newSize)
+        theme.boldCodeFont = theme.boldCodeFont?.withSize(newSize)
         theme.italicCodeFont = theme.italicCodeFont?.withSize(newSize)
+        if let newTheme {
+            themeName = newTheme
+        }
         return true
+    }
+    
+    func changeFontSize(size: CGFloat) {
+        if let theme = highlightr?.theme {
+            theme.codeFont = theme.codeFont?.withSize(size)
+            theme.boldCodeFont = theme.boldCodeFont? .withSize(size)
+            theme.italicCodeFont = theme.italicCodeFont?.withSize(size)
+        }
+        font = font?.withSize(size)
     }
     
     override func layoutSubviews() {
@@ -301,20 +315,23 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         if self.bounds.width != oldWidth {
             setNeedsDisplay()
             oldWidth = self.bounds.width
+            updateLightBulbs()
         }
     }
-
+    
     private func numViewWidth() -> CGFloat {
         let maxNum = 4.0
         if let font {
-            let fontAttributes = [NSAttributedString.Key.font: font]
+            let standarized = font.withSize(14)
+            let fontAttributes = [NSAttributedString.Key.font: standarized]
             let width = ("8" as NSString).size(withAttributes: fontAttributes).width
             return maxNum * width + 4.0 * 2
         }
         return 30
     }
-
+    
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
@@ -338,6 +355,95 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         UIGraphicsPopContext()
     }
+    
+    func updateLightBulbs() {
+        // delete and add new lightbulbs when code changes
+        for lightBulb in lightBulbs {
+            lightBulb.removeFromSuperview()
+        }
+        lightBulbs = []
+        addLightbulbs()
+    }
+    
+    // calculates the offset of the given line if line wrapping occurs
+    private func calculateWrapOffsetOf(_ lineNumber: Int) -> Int {
+        var offset = 0, curr = 1, subParaCount = 0
+        var subParaRange = NSRange(location: 0, length: 0)
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { _, _, _, glyphRange, stop in
+            if curr == lineNumber {
+                let charRange = self.layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+                let paraRange = NSString(string: self.textStorage.string).paragraphRange(for: charRange)
+                if subParaRange != paraRange {
+                    // if done during subPara jump back to actual line
+                    offset -= subParaCount
+                }
+                stop.pointee = true
+            } else {
+                let charRange = self.layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+                if subParaRange.length > 0 {
+                    subParaRange.length += charRange.length
+                } else {
+                    subParaRange = charRange
+                }
+                let paraRange = NSString(string: self.textStorage.string).paragraphRange(for: charRange)
+                if subParaRange != paraRange {
+                    offset += 1
+                    subParaCount += 1
+                } else {
+                    subParaRange = NSRange(location: 0, length: 0)
+                    subParaCount = 0
+                }
+                curr += 1
+            }
+        }
+        return offset
+    }
+    
+    func addLightbulbs() {
+        var lineNumber = 1
+        layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
+            let offset = self.calculateWrapOffsetOf(lineNumber)
+            if let feedback = self.feedbackSuggestions.first(where: { $0.fromLine == lineNumber - offset }) {
+                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: feedback.id.uuidString) {
+                    self.lightBulbs.append(lightbulb)
+                    self.addSubview(lightbulb)
+                }
+            }
+            lineNumber += 1
+        }
+    }
+    
+    private func buildLightbulbButton(rect: CGRect, feedbackId: String) -> LightbulbButton? {
+        let frame = CGRect(
+            x: 5,
+            y: rect.origin.y,
+            width: 25,
+            height: 25
+        )
+            .offsetBy(dx: 0, dy: 8)
+        guard let coordinator = delegate as? UXCodeTextViewRepresentable.Coordinator else { return nil }
+        let button = LightbulbButton(
+            frame: frame,
+            setSelectedFeedbackSuggestionId: { coordinator.setSelectedFeedbackSuggestionId(feedbackId) },
+            toggleShowAddFeedback: { coordinator.toggleShowAddFeedback() }
+        )
+        return button
+    }
+    
+    func drawHighlights() {
+        if !text.isEmpty {
+            for hRange in highlightedRanges {
+                self.textStorage.addAttributes(
+                    [
+                        .foregroundColor: UIColor.blue,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue,
+                        .underlineColor: hRange.color,
+                        .link: hRange.id // equals feedback id
+                    ]
+                    , range: hRange.range)
+            }
+        }
+    }
 
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
@@ -353,13 +459,13 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
     }
-        
+    
     
     private func getGlyphIndex(textView: UXCodeTextView, point: CGPoint) -> Int {
         let point = CGPoint(x: point.x, y: point.y - (self.font?.pointSize ?? 0.0) / 2.0)
         return self.layoutManager.glyphIndex(for: point, in: textView.textContainer)
     }
-
+    
     private func getSelectionFromLine() -> Range<Int>? {
         guard let firstPoint, let secondPoint else { return nil }
         let firstGlyphIndex = getGlyphIndex(textView: self, point: firstPoint)
@@ -372,6 +478,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.firstPoint = touch.location(in: self)
@@ -380,6 +487,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
@@ -387,9 +495,10 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             setNeedsDisplay()
         }
     }
-        
+    
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard feedbackMode else { return }
         let coordinator = delegate as? UXCodeTextViewDelegate
         coordinator?.setDragSelection(dragSelection)
     }
@@ -398,14 +507,14 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
 protocol UXCodeTextViewDelegate: UXTextViewDelegate {
     var allowCopy: Bool { get }
     var fontSize: CGFloat? { get set }
-
+    
     func setDragSelection(_: Range<Int>?)
 }
 
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView
 
 extension UXTextView {
-
+    
     var swiftSelectedRange: Range<String.Index> {
         let s = self.string
         guard !s.isEmpty else { return s.startIndex..<s.startIndex }
@@ -422,12 +531,12 @@ extension UXTextView {
 #endif
         return selectedRange
     }
-
+    
     fileprivate var currentLine: String {
         let s = self.string
         return String(s[s.lineRange(for: swiftSelectedRange)])
     }
-
+    
     fileprivate var isEndOfLine: Bool {
         let ( _, isEnd ) = getStartOrEndOfLine()
         return isEnd
@@ -436,7 +545,7 @@ extension UXTextView {
         let ( isStart, isEnd ) = getStartOrEndOfLine()
         return isStart || isEnd
     }
-
+    
     fileprivate func getStartOrEndOfLine() -> ( isStart: Bool, isEnd: Bool ) {
         let s             = self.string
         let selectedRange = self.swiftSelectedRange
@@ -457,12 +566,12 @@ extension NSTextView {
 }
 #else // iOS
 extension UITextView {
-
+    
     var string: String { // NeXTstep was right!
         set { text = newValue}
         get { text }
     }
-
+    
     var codeTextStorage: NSTextStorage? { textStorage }
 }
 #endif // iOS

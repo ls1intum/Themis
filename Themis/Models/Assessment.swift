@@ -85,7 +85,6 @@ class AssessmentResult: Encodable, ObservableObject {
             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
         }
         computedFeedbacks.append(feedback)
-        print(computedFeedbacks.count)
     }
 
     func deleteFeedback(id: UUID) {
@@ -93,7 +92,6 @@ class AssessmentResult: Encodable, ObservableObject {
              undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
-        print(computedFeedbacks.count)
     }
 
     func updateFeedback(id: UUID, detailText: String, credits: Double) {
@@ -102,6 +100,13 @@ class AssessmentResult: Encodable, ObservableObject {
         }
         computedFeedbacks[index].detailText = detailText
         computedFeedbacks[index].credits = credits
+    }
+    
+    func assignFile(id: UUID, file: Node) {
+        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+            return
+        }
+        computedFeedbacks[index].file = file
     }
     
     func undo() {
@@ -169,8 +174,13 @@ struct AssessmentFeedback: Identifiable, Hashable {
             return
         }
         self.reference = "file:" + file.path + "_line:\(lines.location)"
+        
         guard let columns else {
-            self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+            if lines.length == 0 {
+                self.text = "File " + file.path + " at line \(lines.location)"
+            } else {
+                self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+            }
             return
         }
         if columns.length == 0 {
@@ -208,6 +218,7 @@ extension AssessmentFeedback: Decodable {
     enum DecodingKeys: String, CodingKey {
         case text
         case detailText
+        case reference
         case credits
         case assessmentType = "type"
         case positive
@@ -217,6 +228,7 @@ extension AssessmentFeedback: Decodable {
         let values = try decoder.container(keyedBy: DecodingKeys.self)
         text = try? values.decode(String?.self, forKey: .text)
         detailText = try? values.decode(String?.self, forKey: .detailText)
+        reference = try? values.decode(String?.self, forKey: .reference)
         credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
         assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
         // assessment type `MANUAL_UNREFERENCED` does not have positive

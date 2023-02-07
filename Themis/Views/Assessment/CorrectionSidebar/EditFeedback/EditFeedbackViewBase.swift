@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CodeEditor
 
 struct EditFeedbackViewBase: View {
     var assessmentResult: AssessmentResult
@@ -26,6 +27,8 @@ struct EditFeedbackViewBase: View {
     var file: Node?
     
     let gradingCriteria: [GradingCriterion]
+    
+    var feedbackSuggestion: FeedbackSuggestion?
 
     var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
@@ -39,7 +42,9 @@ struct EditFeedbackViewBase: View {
     }
 
     private func createFeedback() {
-        if type == .inline {
+        if let feedbackSuggestion {
+            addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
+        } else if type == .inline {
             let lines: NSRange? = cvm.selectedSectionParsed?.0
             let columns: NSRange? = cvm.selectedSectionParsed?.1
             let feedback = AssessmentFeedback(detailText: detailText, credits: score, type: type, file: file, lines: lines, columns: columns)
@@ -49,6 +54,19 @@ struct EditFeedbackViewBase: View {
             assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: type))
         }
     }
+    
+    private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
+        let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
+        let feedback = AssessmentFeedback(
+            detailText: feedbackSuggestion.text,
+            credits: feedbackSuggestion.credits,
+            type: .inline,
+            file: file,
+            lines: lines
+        )
+        assessmentResult.addFeedback(feedback: feedback)
+        cvm.addFeedbackSuggestionInlineHighlight(feedbackSuggestion: feedbackSuggestion, feedbackId: feedback.id)
+    }
 
     private func setStates() {
         if idForUpdate != nil {
@@ -57,12 +75,16 @@ struct EditFeedbackViewBase: View {
                 self.score = feedback.credits
             }
         }
+        if let feedbackSuggestion = feedbackSuggestion {
+            self.detailText = feedbackSuggestion.text
+            self.score = feedbackSuggestion.credits
+        }
     }
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(title ?? "Edit feedback")
+                Text(title ?? "Edit Feedback")
                     .font(.largeTitle)
                 Spacer()
                 Button {

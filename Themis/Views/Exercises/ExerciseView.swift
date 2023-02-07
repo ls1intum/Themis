@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
-    @StateObject var codeEditorVM = CodeEditorViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
     let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
@@ -19,7 +19,6 @@ struct ExerciseView: View {
     var body: some View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
-                
                 Form {
                     if !submissionListVM.submissions.isEmpty {
                         Section("Open submissions") {
@@ -30,7 +29,7 @@ struct ExerciseView: View {
                         }
                     }
                     Section("Statistics") {
-                        HStack {
+                        HStack(alignment: .center) {
                             Spacer()
                             CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
                             CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
@@ -47,7 +46,6 @@ struct ExerciseView: View {
         .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
                 vm: assessmentVM,
-                cvm: codeEditorVM,
                 ar: assessmentVM.assessmentResult,
                 exercise: exercise
             )
@@ -72,7 +70,6 @@ struct ExerciseView: View {
                 NavigationLink(destination:
                                 AssessmentView(
                                     vm: assessmentVM,
-                                    cvm: codeEditorVM,
                                     ar: assessmentVM.assessmentResult,
                                     exercise: exercise
                                 )
@@ -103,6 +100,7 @@ struct ExerciseView: View {
             }
         } label: {
             Text("Start Assessment")
+                .foregroundColor(.white)
         }
         .buttonStyle(NavigationBarButton())
     }

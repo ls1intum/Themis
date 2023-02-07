@@ -16,7 +16,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
-    @Published var editorFontSize = CGFloat(14) // Default font size
+    @Published var editorFontSize: CGFloat = 22 // Default font size
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:] {
         didSet {
@@ -29,6 +29,12 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
+    // swiftlint:disable line_length
+    @Published var feedbackSuggestions = [
+        FeedbackSuggestion(srcFile: "/src/de/tum/space/SpaceObject.java", text: "Use pair instead of list", fromLine: 6, toLine: 6, credits: -1.5),
+        FeedbackSuggestion(srcFile: "/src/de/tum/space/Client.java", text: "I have reviewed the code for the iterative process and I have noticed that it only performs 10 iterations. While 10 iterations may seem sufficient, it may not always be enough to accurately solve a problem.\n\nIn many cases, the number of iterations required to solve a problem depends on the specific problem being solved and the desired level of accuracy. For some problems, 10 iterations may be sufficient, but for others, it may take hundreds or even thousands of iterations to achieve a satisfactory solution.\n\nFurthermore, it is important to consider the possibility of getting stuck in a local minimum. An iterative process can get stuck in a local minimum, which is a suboptimal solution that is not the global minimum. To avoid getting stuck in a local minimum, it is often necessary to increase the number of iterations, or to implement alternative methods, such as random restarts, to ensure that the global minimum is reached.\n\nIn conclusion, 10 iterations are never enough to guarantee that a problem is solved to the desired level of accuracy. It is important to carefully evaluate the specific problem being solved and the desired level of accuracy in order to determine the appropriate number of iterations. By doing so, you can ensure that the iterative process accurately solves the problem and produces satisfactory results. Thank you for considering this feedback.", fromLine: 18, toLine: 18, credits: -5.5)
+    ]
+    @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
@@ -49,13 +55,28 @@ class CodeEditorViewModel: ObservableObject {
         return nil
     }
     
+    private var allFiles: [Node] {
+        var files: [Node] = []
+        var nodesToCheck = fileTree
+        nodesToCheck.forEach { nodesToCheck.append(contentsOf: $0.recursiveChildren ?? []) }
+        while !nodesToCheck.isEmpty {
+            let currentNode = nodesToCheck.removeFirst()
+            if currentNode.type == .file {
+                files.append(currentNode)
+            }
+        }
+        return files
+    }
+    
     @MainActor
-    func openFile(file: Node, participationId: Int, templateParticipationId: Int) {
+    func openFile(file: Node, participationId: Int, templateParticipationId: Int?) {
         if !openFiles.contains(where: { $0.path == file.path }) {
             openFiles.append(file)
             Task {
                 await file.fetchCode(participationId: participationId)
-                await file.calculateDiff(templateParticipationId: templateParticipationId)
+                if let templateParticipationId {
+                    await file.calculateDiff(templateParticipationId: templateParticipationId)
+                }
             }
         }
         selectedFile = file
@@ -78,31 +99,91 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
     
-    func addInlineHighlight(feedbackId: UUID) {
-        if let file = selectedFile, let selectedSection = selectedSection {
-            if (inlineHighlights.contains { $0.key == file.path }) {
-                inlineHighlights[file.path]?.append(
-                    HighlightedRange(
-                        id: feedbackId.uuidString,
-                        range: selectedSection,
-                        color: UIColor.systemYellow,
-                        cornerRadius: 8
-                    )
-                )
-            } else {
-                inlineHighlights[file.path] = [
-                    HighlightedRange(
-                        id: feedbackId.uuidString,
-                        range: selectedSection,
-                        color: UIColor.systemYellow,
-                        cornerRadius: 8
-                    )
-                ]
-            }
+    @MainActor
+    func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
+        do {
+            self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
+        } catch {
+            print(error)
         }
-        undoManager.endUndoGrouping() /// undo group with addFeedback in AssessmentResult
     }
     
+    @MainActor
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+        if let file = selectedFile, let code = file.code {
+            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+                return
+            }
+            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
+        }
+    }
+    
+    private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
+        var count = 1
+        var fromIndex: String.Index?
+        var toDistance: Int = 0
+        var offset = 0
+        text.enumerateLines { line, stop in
+            if count < fromLine {
+                offset += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == fromLine {
+                fromIndex = line.startIndex
+            }
+            if count >= fromLine && count < toLine {
+                toDistance += text.distance(from: line.startIndex, to: line.endIndex) + 1
+            }
+            if count == toLine {
+                stop = true
+            }
+            count += 1
+        }
+        guard var fromIndex else {
+            return nil
+        }
+        fromIndex = text.index(fromIndex, offsetBy: offset)
+        let toIndex = text.index(fromIndex, offsetBy: toDistance)
+        
+        return NSRange(text.lineRange(for: fromIndex...toIndex), in: text)
+    }
+    
+    @MainActor
+    func addInlineHighlight(feedbackId: UUID) {
+        if let file = selectedFile, let selectedSection = selectedSection {
+            appendHighlight(feedbackId: feedbackId, range: selectedSection, path: file.path)
+        }
+            undoManager.endUndoGrouping() /// undo group with addFeedback in AssessmentResult
+    }
+    
+    @MainActor
+    func loadInlineHighlight(assessmentResult: AssessmentResult, participationId: Int) async {
+        for feedback in assessmentResult.inlineFeedback {
+            // the reference is extracted from the text since it is more detailed (includes columns and multilines)
+            if let text = feedback.text {
+                let components = text.components(separatedBy: .whitespaces)
+                let path = extractFilePath(textComponents: components)
+                let lines = extractLines(textComponents: components)
+                // assign the related file to the feedback (required for deleting)
+                if let referencedFile = allFiles.first(where: { $0.path == path }) {
+                    assessmentResult.assignFile(id: feedback.id, file: referencedFile)
+                    // this is required because the lines of a file are only availabe after the code is fetched
+                    await referencedFile.fetchCode(participationId: participationId)
+                    // indicates a multiline highight
+                    if components.count == 5 {
+                        constructHighlight(file: referencedFile, lines: lines, id: feedback.id)
+                    }
+                    // indicates a single line highlight
+                    if components.count == 7 {
+                        let columns = extractColumns(textComponents: components)
+                        constructHighlight(file: referencedFile, lines: lines, id: feedback.id, columns: columns)
+                    }
+                }
+            }
+        }
+        undoManager.removeAllActions()
+    }
+    
+    @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = feedback.file?.path {
             let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
@@ -112,6 +193,82 @@ class CodeEditorViewModel: ObservableObject {
         
         if feedback.type == .inline {
             undoManager.endUndoGrouping() /// undo group with deleteFeedback in AssessmentResult
+        }
+    }
+    
+    @MainActor
+    private func appendHighlight(feedbackId: UUID, range: NSRange, path: String) {
+        let highlightedRange = HighlightedRange(
+            id: feedbackId.uuidString,
+            range: range,
+            color: UIColor.systemYellow,
+            cornerRadius: 8
+        )
+        
+        if (inlineHighlights.contains { $0.key == path }) {
+            inlineHighlights[path]?.append(
+                highlightedRange
+            )
+        } else {
+            inlineHighlights[path] = [
+                highlightedRange
+            ]
+        }
+    }
+    
+    private func extractFilePath(textComponents: [String]) -> String {
+        textComponents[1]
+    }
+    
+    private func extractLines(textComponents: [String]) -> [Int] {
+        textComponents[4].components(separatedBy: "-").map { Int($0) ?? 0 }
+    }
+    
+    private func extractColumns(textComponents: [String]) -> [Int] {
+        textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
+    }
+    
+    private func assignFileToFeedback(assessmentResult: AssessmentResult, path: String, id: UUID) {
+        if let referencedFile = allFiles.first(where: { $0.path == path }) {
+            assessmentResult.assignFile(id: id, file: referencedFile)
+        }
+    }
+    
+    @MainActor
+    private func constructHighlight(file: Node, lines: [Int], id: UUID, columns: [Int]? = nil) {
+        if let fileLines = file.lines {
+            var range = NSRange(location: 0, length: 0)
+            switch lines.count {
+            // single line feedback with additional column reference
+            case 1:
+                let line = lines[0]
+                if fileLines.count >= line, let columns = columns {
+                    let leftCol = columns[0]
+                    if columns.count == 1 {
+                        // single column
+                        let startIndex = fileLines[line - 1].location + leftCol - 1
+                        range = NSRange(location: startIndex, length: 1)
+                    } else {
+                        // two columns
+                        let rightCol = columns[1]
+                        let startIndex = fileLines[line - 1].location + leftCol - 1
+                        let endIndex = fileLines[line - 1].location + rightCol - 1
+                        range = NSRange(location: startIndex, length: endIndex - startIndex)
+                    }
+                }
+            // multiline feedback without column reference
+            case 2:
+                let startLine = lines[0]
+                let endLine = lines[1]
+                if fileLines.count >= endLine {
+                    let startIndex = fileLines[startLine - 1].location
+                    let endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length
+                    range = NSRange(location: startIndex, length: endIndex - startIndex)
+                }
+            default:
+                return
+            }
+            appendHighlight(feedbackId: id, range: range, path: file.path)
         }
     }
 }

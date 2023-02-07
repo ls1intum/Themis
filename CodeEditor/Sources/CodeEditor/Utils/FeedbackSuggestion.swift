@@ -1,0 +1,54 @@
+//
+//  FeedbackSuggestion.swift
+//  Themis
+//
+//  Created by Andreas Cselovszky on 25.01.23.
+//
+
+import Foundation
+
+public struct FeedbackSuggestion: Decodable, Equatable {
+    public let id = UUID()
+    public let exerciseId: Int
+    public let participationId: Int
+    public let srcFile: String
+    public let fromLine: Int
+    public let toLine: Int
+    public let text: String
+    public let credits: Double
+    
+    public init(srcFile: String, text: String, fromLine: Int, toLine: Int, credits: Double) {
+        self.exerciseId = -1
+        self.participationId = -1
+        self.srcFile = srcFile
+        self.fromLine = fromLine
+        self.toLine = toLine
+        self.text = text
+        self.credits = credits
+    }
+    
+    enum DecodingKeys: String, CodingKey {
+        case exercise_id
+        case participation_id
+        case src_file
+        case from_line
+        case to_line
+        case text
+        case credits
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: DecodingKeys.self)
+        exerciseId = try values.decode(Int.self, forKey: .exercise_id)
+        participationId = try values.decode(Int.self, forKey: .participation_id)
+        srcFile = try values.decode(String.self, forKey: .src_file)
+        fromLine = try values.decode(Int.self, forKey: .from_line)
+        toLine = try values.decode(Int.self, forKey: .to_line)
+        text = try values.decode(String.self, forKey: .text)
+        credits = try values.decode(Double.self, forKey: .credits)
+    }
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
+}
