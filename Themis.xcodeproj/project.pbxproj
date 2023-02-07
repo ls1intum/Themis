@@ -79,6 +79,7 @@
 		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */ = {isa = PBXBuildFile; productRef = F911B9BF29392668003CF4C8 /* TouchVisualizer */; };
 		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
+		F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = F958C4DD29887DE800E70669 /* ShakeEffect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -170,6 +171,7 @@
 		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
 		F9224439297BFD1A008E4374 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		F958C4DD29887DE800E70669 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,6 +429,7 @@
 				E168C722296DCCE100A1D1D4 /* NavigationBarButtonStyle.swift */,
 				E168C726296DDB3D00A1D1D4 /* CustomProgressView.swift */,
 				F9224439297BFD1A008E4374 /* CircularProgressView.swift */,
+				F958C4DD29887DE800E70669 /* ShakeEffect.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -719,6 +722,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */,
+				F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */,
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
 				DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */,
 				DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */,

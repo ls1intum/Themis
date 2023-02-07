@@ -13,6 +13,7 @@ struct AuthenticationView: View {
 
     @ObservedObject var authenticationVM: AuthenticationViewModel
     @State private var isSecured = true
+    @State var invalidAttempts: Int = 0
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var passwordFocus: SecureFieldFocus?
     @FocusState private var focusedField: FocusedField?
@@ -27,16 +28,17 @@ struct AuthenticationView: View {
                 .bold()
                 .padding()
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
-                .textFieldStyle(LoginTextFieldStyle(validInput: authenticationVM.validURL))
+                .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, validInput: authenticationVM.validURL, type: .serverURL))
                 .focused($focusedField, equals: .serverurl)
                 .submitLabel(.next)
-
             TextField("Username", text: $authenticationVM.username)
-                .textFieldStyle(LoginTextFieldStyle())
+                .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, type: .username))
                 .textInputAutocapitalization(.never)
                 .focused($focusedField, equals: .username)
                 .submitLabel(.next)
+                .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
             passwordField
+                .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
             Toggle("Remember me", isOn: $authenticationVM.rememberMe)
                 .frame(width: 500)
                 .padding()
@@ -57,15 +59,22 @@ struct AuthenticationView: View {
                 focusedField = nil
             }
         }
-        .alert("Invalid Credentials", isPresented: $authenticationVM.invalidCredentialsAlert) {
-            Button("Ok") {}
-        }
     }
 
     var authenticateButton: some View {
         Button {
             Task {
                 await authenticationVM.authenticate()
+                if authenticationVM.error != nil {
+                    withAnimation(.linear) {
+                        self.invalidAttempts += 1
+                    }
+                }
+            }
+            // reset error and failed attempts if login successful
+            withAnimation(.easeOut(duration: 0.3)) {
+                authenticationVM.error = nil
+                self.invalidAttempts = 0
             }
         } label: {
             Group {
@@ -106,12 +115,20 @@ struct AuthenticationView: View {
         .frame(width: 500, height: 50)
         .background(colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6))
         .cornerRadius(10)
+        .overlay {
+            if authenticationVM.error != nil {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.red.opacity(0.4), lineWidth: 3)
+            }
+        }
     }
 }
 
 struct LoginTextFieldStyle: TextFieldStyle {
     @Environment(\.colorScheme) var colorScheme
+    @Binding var error: Error?
     var validInput = true
+    var type: AuthTextFieldType
 
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
@@ -121,7 +138,17 @@ struct LoginTextFieldStyle: TextFieldStyle {
             .frame(width: 500, height: 50)
             .background(validInput ? (colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6)) : Color.red)
             .cornerRadius(10)
+            .overlay {
+                if error != nil && type == .username {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(.red.opacity(0.4), lineWidth: 2)
+                }
+            }
     }
+}
+
+enum AuthTextFieldType {
+    case serverURL, username
 }
 
 struct LoginButtonStyle: ButtonStyle {
