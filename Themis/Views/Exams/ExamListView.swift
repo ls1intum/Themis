@@ -18,6 +18,8 @@ struct ExamListView: View {
                     ExamSectionView(examID: exam.id, courseID: courseID)
                 } label: {
                     Text(exam.title)
+                        .font(.title2)
+                        .fontWeight(.medium)
                 }
             }
         }
