@@ -220,7 +220,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                     with: editorBindings.source.wrappedValue)
             } else {
                 assertionFailure("no text storage?")
-                print("test")
                 textView.string = editorBindings.source.wrappedValue
             }
             if editorBindings.flags.contains(.feedbackMode) {
