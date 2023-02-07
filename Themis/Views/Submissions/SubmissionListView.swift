@@ -50,10 +50,7 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(
-                exercise: Exercise(),
-                submissionStatus: .open
-            )
+            SubmissionListView(exercise: Exercise(), submissionStatus: .open)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }
