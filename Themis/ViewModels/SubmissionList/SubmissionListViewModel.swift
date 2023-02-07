@@ -9,6 +9,7 @@ import Foundation
 
 class SubmissionListViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
+    @Published var error: Error?
     
     var submittedSubmissions: [Submission] {
         submissions.filter { $0.results.last?.completionDate != nil }
@@ -23,7 +24,7 @@ class SubmissionListViewModel: ObservableObject {
         do {
             self.submissions = try await ArtemisAPI.getTutorSubmissions(exerciseId: exerciseId)
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
 }

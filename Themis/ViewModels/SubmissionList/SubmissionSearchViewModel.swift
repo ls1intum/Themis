@@ -11,13 +11,14 @@ let maxPercentageDifferenceFromBestResultToStillShow = 0.15 // based on experime
 
 class SubmissionSearchViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
+    @Published var error: Error?
 
     @MainActor
     func fetchSubmissions(exerciseId: Int) async {
         do {
             self.submissions = try await ArtemisAPI.getAllSubmissions(exerciseId: exerciseId)
         } catch {
-            print(error)
+            self.error = error
         }
     }
 

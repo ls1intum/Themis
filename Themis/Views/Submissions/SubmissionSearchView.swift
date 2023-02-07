@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SubmissionSearchView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject var vm = SubmissionSearchViewModel()
     @StateObject var avm = AssessmentViewModel(readOnly: true)
     @State var search: String = ""
@@ -38,6 +39,7 @@ struct SubmissionSearchView: View {
                 exercise: exercise
             )
         }
+        .errorAlert(error: $vm.error)
     }
 }
 
