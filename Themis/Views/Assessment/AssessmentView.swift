@@ -294,6 +294,8 @@ struct AssessmentView: View {
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
+        .errorAlert(error: $cvm.error)
+        .errorAlert(error: $vm.error)
     }
     var leftGrip: some View {
         ZStack {

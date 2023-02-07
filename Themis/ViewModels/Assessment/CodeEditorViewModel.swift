@@ -29,6 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showEditFeedback = false
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
+    @Published var error: Error?
     // swiftlint:disable line_length
     @Published var feedbackSuggestions = [
         FeedbackSuggestion(srcFile: "/src/de/tum/space/SpaceObject.java", text: "Use pair instead of list", fromLine: 6, toLine: 6, credits: -1.5),
@@ -95,7 +96,7 @@ class CodeEditorViewModel: ObservableObject {
                 self.fileTree = node.children ?? []
             }
         } catch {
-            print(error)
+            self.error = error
         }
     }
     

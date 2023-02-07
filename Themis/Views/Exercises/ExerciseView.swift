@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 
 struct ExerciseView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
@@ -70,6 +71,9 @@ struct ExerciseView: View {
                 }
             }
         }
+        .errorAlert(error: $assessmentVM.error)
+        .errorAlert(error: $submissionListVM.error)
+        .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
     private var searchButton: some View {
@@ -88,7 +92,6 @@ struct ExerciseView: View {
         Button {
             Task {
                 await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
-                UndoManagerSingleton.shared.undoManager.removeAllActions()
             }
         } label: {
             Text("Start Assessment")
