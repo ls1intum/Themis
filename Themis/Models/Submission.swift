@@ -151,15 +151,4 @@ extension ArtemisAPI {
             buildFailed: pr.submission.buildFailed
         )
     }
-    
-    /// Gets the last modified date from the latest result from one of a submission's result based on its resultId
-//    static func getLastModifiedDateForSubmission(participationId: Int, resultId: Int) async throws -> SubmissionResult {
-//        let request = Request(
-//            method: .get,
-//            path: "api/participations/\(participationId)/results/\(resultId)"
-//        )
-//        let test = try await sendRequest(SubmissionResult.self, request: request)
-//        print(test)
-//        return test
-//    }
 }
