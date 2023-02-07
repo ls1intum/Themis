@@ -18,7 +18,7 @@ enum RESTError: String, Error, LocalizedError {
     """
     case notFound = "The requested ressource could not be found."
     case server = "The Server experienced an error, therefore not being able to respond."
-    case empty = "The response was empty."
+    case empty = "There aren't any unassessed programming submissions left."
     case different = "Something went wrong while making a request."
     
     var errorDescription: String? {
@@ -36,7 +36,7 @@ enum RESTError: String, Error, LocalizedError {
         case .server:
             return "Server error"
         case .empty:
-            return "Empty response"
+            return "No unassessed submissions"
         case .different:
             return "An error occured"
         }
