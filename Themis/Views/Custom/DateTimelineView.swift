@@ -9,13 +9,12 @@ import SwiftUI
 
 struct DateTimelineView: View {
     let dates: [(name: String, date: String?)]
-    @State private var isShowingPopover = false
     @State private var selectedDate: (String, String?) = ("", nil)
 
     var body: some View {
         ZStack(alignment: .center) {
             Rectangle()
-                .frame(width: 500, height: 5)
+                .frame(width: 450, height: 5)
                 .foregroundColor(Color.blue)
                 .cornerRadius(5)
             HStack {
@@ -23,7 +22,7 @@ struct DateTimelineView: View {
                     VStack {
                         Text(date.name).bold()
                         Image(systemName: "calendar")
-                            .background(Color(.systemBackground))
+                            .background(Color(.secondarySystemGroupedBackground))
                             .font(.title3)
                             .padding(1)
                         if let dateString = ArtemisDateHelpers.getRemainingOrOverdueTime(for: date.date) {
@@ -34,23 +33,8 @@ struct DateTimelineView: View {
                     }
                     .frame(maxWidth: 150)
                     .padding(2)
-                    .onTapGesture {
-                        selectedDate = (date.name, date.date)
-                        print(isShowingPopover)
-                        isShowingPopover = true
-                        print(isShowingPopover)
-                    }
                 }
             }
-        }
-        .popover(isPresented: $isShowingPopover) {
-            VStack {
-                Text("Due date for \(selectedDate.0)")
-                selectedDate.1.map { date in
-                    Text(ArtemisDateHelpers.getReadableDateString(date) ?? "Not available yet")
-                }
-            }
-            .padding()
         }
     }
 }
