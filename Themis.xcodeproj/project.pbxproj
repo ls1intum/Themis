@@ -25,6 +25,8 @@
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
 		838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 838E4AA5297DADF00057E6E6 /* MarkdownUI */; };
 		A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */; };
+		A9752D792992AA8B004441D1 /* ExamListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D782992AA8B004441D1 /* ExamListView.swift */; };
+		A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
 		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
@@ -123,6 +125,8 @@
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisAPI.swift; sourceTree = "<group>"; };
+		A9752D782992AA8B004441D1 /* ExamListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamListView.swift; sourceTree = "<group>"; };
+		A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSectionView.swift; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
 		DA1DC19B2952320E0005219D /* UMLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
@@ -383,6 +387,15 @@
 			path = Supporting;
 			sourceTree = "<group>";
 		};
+		A9752D772992AA66004441D1 /* Exams */ = {
+			isa = PBXGroup;
+			children = (
+				A9752D782992AA8B004441D1 /* ExamListView.swift */,
+				A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */,
+			);
+			path = Exams;
+			sourceTree = "<group>";
+		};
 		DA0687C0292FB4610091B88A /* Submissions */ = {
 			isa = PBXGroup;
 			children = (
@@ -474,6 +487,7 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A9752D772992AA66004441D1 /* Exams */,
 				DAECE6FF296A1BC80025F875 /* Courses */,
 				DA98C6622954ED7B005727FB /* Custom */,
 				4065F856292E87AB005DAEE8 /* AppearanceSettings */,
@@ -764,6 +778,7 @@
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
+				A9752D792992AA8B004441D1 /* ExamListView.swift in Sources */,
 				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
 				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
@@ -777,6 +792,7 @@
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
+				A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */,
 				DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */,
 				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,

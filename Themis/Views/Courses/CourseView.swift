@@ -14,22 +14,22 @@ struct CourseView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if courseVM.loading || courseVM.shownCourse == nil {
+                if courseVM.loading {
                     ProgressView()
                 } else {
                     Form {
                         ExerciseSections(
                             exercises: courseVM.shownCourse?.exercises ?? []
                         )
-                        
-                        Section("Exams") {
-                            ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseVM.shownCourse!.id)
+                        if let courseId = courseVM.shownCourse?.id {
+                            Section("Exams") {
+                                ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseId)
+                            }
                         }
                     }
                     .refreshable {
                         await courseVM.fetchAllCourses()
                     }
-                
                 }
             }
             .navigationTitle(navTitle)
@@ -74,45 +74,3 @@ struct CourseView: View {
         return shownCourse.title
     }
 }
-
-
-struct ExamListView: View {
-    var exams: [Exam]
-    var courseID: Int
-    
-    @State var selectedExam: Exam?
-    @State var showExam = false
-    
-    var body: some View {
-        Group {
-            ForEach(exams, id: \.id) { exam in
-                NavigationLink {
-                    ExamExerciseSectionWrapper(examID: exam.id, courseID: courseID)
-                } label: {
-                    Text(exam.title)
-                }
-            }
-        }
-    }
-}
-
-
-struct ExamExerciseSectionWrapper: View {
-    var examID: Int
-    var courseID: Int
-    
-    @State var exercises: [Exercise] = []
-    
-    var body: some View {
-        Form {
-            ExerciseSections(
-                exercises: exercises
-            )
-        }.task {
-            let exam = try? await ArtemisAPI.getExamForAssessment(courseID: courseID, examID: examID)
-            guard let exam else { return }
-            self.exercises = exam.exercises
-        }
-    }
-}
-

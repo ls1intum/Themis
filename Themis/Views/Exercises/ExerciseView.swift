@@ -70,15 +70,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination:
-                                AssessmentView(
-                                    vm: assessmentVM,
-                                    ar: assessmentVM.assessmentResult,
-                                    exercise: exercise
-                                )
-                ) {
-                    startNewAssessmentButton
-                }
+                startNewAssessmentButton
             }
         }
         .errorAlert(error: $assessmentVM.error)
