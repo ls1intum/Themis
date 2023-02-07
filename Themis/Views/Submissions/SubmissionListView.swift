@@ -24,6 +24,7 @@ struct SubmissionListView: View {
                 } label: {
                         HStack {
                             Text(verbatim: "Submission #\(submission.id)")
+                                .fontWeight(.medium)
                             Spacer()
                             dateTimeline(submission: submission)
                         }
