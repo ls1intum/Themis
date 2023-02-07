@@ -11,9 +11,10 @@ struct AssessmentView: View {
     @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
-    @State private var dragWidthLeft: CGFloat = UIScreen.main.bounds.size.width * 0.2
+    @State private var dragWidthLeft: CGFloat = 0.2 * UIScreen.main.bounds.size.width
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder = true
+    @State private var filetreeAsPlaceholder = false
     @State private var showCancelDialog = false
     @State var showNoSubmissionsAlert = false
     @State var showStepper = false
@@ -21,6 +22,7 @@ struct AssessmentView: View {
     @State var showNavigationOptions = false
     
     private let minRightSnapWidth: CGFloat = 185
+    private let minLeftSnapWidth: CGFloat = 150
     
     let exercise: Exercise
     
@@ -30,14 +32,9 @@ struct AssessmentView: View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
                 if showFileTree {
-                    FiletreeSidebarView(
-                        participationID: vm.submission?.participation.id,
-                        cvm: cvm,
-                        loading: vm.loading,
-                        templateParticipationId: exercise.templateParticipation?.id
-                    )
-                    .padding(.top, 35)
-                    .frame(width: dragWidthLeft)
+                    filetreeWithPlaceholder
+                        .padding(.top, 35)
+                        .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
                 }
@@ -55,6 +52,12 @@ struct AssessmentView: View {
             .animation(.default, value: showFileTree)
             Button {
                 showFileTree.toggle()
+                filetreeAsPlaceholder = false
+                if dragWidthLeft < minLeftSnapWidth {
+                    dragWidthLeft = minLeftSnapWidth
+                } else if dragWidthLeft > 0.4 * UIScreen.main.bounds.size.width {
+                    dragWidthLeft = 0.4 * UIScreen.main.bounds.size.width
+                }
             } label: {
                 Image(systemName: "sidebar.left")
                     .font(.system(size: 23))
@@ -297,6 +300,22 @@ struct AssessmentView: View {
         .errorAlert(error: $cvm.error)
         .errorAlert(error: $vm.error)
     }
+    
+    var filetreeWithPlaceholder: some View {
+        VStack {
+            if filetreeAsPlaceholder {
+                EmptyView()
+            } else {
+                FiletreeSidebarView(
+                    participationID: vm.submission?.participation.id,
+                    cvm: cvm,
+                    loading: vm.loading,
+                    templateParticipationId: exercise.templateParticipation?.id
+                )
+            }
+        }
+    }
+    
     var leftGrip: some View {
         ZStack {
             Color("customPrimary")
@@ -309,15 +328,22 @@ struct AssessmentView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            let screenWidth: CGFloat = UIScreen.main.bounds.size.width
-                            let minWidth: CGFloat = screenWidth < 130 ? screenWidth : 130
-                            let maxWidth: CGFloat = screenWidth * 0.3 > minWidth ? screenWidth * 0.3 : 1.5 * minWidth
+                            let maxLeftWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
                             let delta = gesture.translation.width
                             dragWidthLeft += delta
-                            if dragWidthLeft > maxWidth {
-                                dragWidthLeft = maxWidth
-                            } else if dragWidthLeft < minWidth {
-                                dragWidthLeft = minWidth
+                            if dragWidthLeft > maxLeftWidth {
+                                dragWidthLeft = maxLeftWidth
+                            } else if dragWidthLeft < 0 {
+                                dragWidthLeft = 0
+                            }
+                            
+                            filetreeAsPlaceholder = dragWidthLeft < minLeftSnapWidth ? true : false
+                        }
+                        .onEnded {_ in
+                            if dragWidthLeft < minLeftSnapWidth {
+                                dragWidthLeft = 0.2 * UIScreen.main.bounds.size.width
+                                showFileTree = false
+                                filetreeAsPlaceholder = false
                             }
                         }
                 )
@@ -354,7 +380,7 @@ struct AssessmentView: View {
                 .onTapGesture {
                     if dragWidthRight <= 0 {
                         withAnimation {
-                            dragWidthRight = minRightSnapWidth
+                            dragWidthRight = 250
                             correctionAsPlaceholder = false
                         }
                     }
@@ -362,16 +388,13 @@ struct AssessmentView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            let minWidth: CGFloat = 0
-                            let screenWidth: CGFloat = UIScreen.main.bounds.size.width
-                            let maxWidth: CGFloat = screenWidth * 0.3 > minRightSnapWidth ? screenWidth * 0.3 : 1.5 * minRightSnapWidth
-                            
+                            let maxRightWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
                             let delta = gesture.translation.width
                             dragWidthRight -= delta
-                            if dragWidthRight > maxWidth {
-                                dragWidthRight = maxWidth
-                            } else if dragWidthRight < minWidth {
-                                dragWidthRight = minWidth
+                            if dragWidthRight > maxRightWidth {
+                                dragWidthRight = maxRightWidth
+                            } else if dragWidthRight < 0 {
+                                dragWidthRight = 0
                             }
                             
                             correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
@@ -442,16 +465,3 @@ struct AssessmentView: View {
         .background(Color("customPrimary"))
     }
 }
-
- struct AssessmentView_Previews: PreviewProvider {
-    static let avm = AssessmentViewModel(readOnly: false)
-
-    static var previews: some View {
-        AssessmentView(
-            vm: avm,
-            ar: avm.assessmentResult,
-            exercise: Exercise()
-        )
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
- }
