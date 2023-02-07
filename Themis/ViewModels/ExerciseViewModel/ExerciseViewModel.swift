@@ -11,13 +11,14 @@ class ExerciseViewModel: ObservableObject {
     @Published var exercise: Exercise?
     @Published var exerciseStats: ExerciseForAssessment?
     @Published var exerciseStatsForDashboard: ExerciseStatistics?
+    @Published var error: Error?
 
     @MainActor
     func fetchExercise(exerciseId: Int) async {
         do {
             self.exercise = try await ArtemisAPI.getExercise(exerciseId: exerciseId)
         } catch {
-            print(error)
+            self.error = error
         }
     }
 
@@ -26,7 +27,7 @@ class ExerciseViewModel: ObservableObject {
         do {
             self.exerciseStats = try await ArtemisAPI.getExerciseStats(exerciseId: exerciseId)
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     
@@ -35,10 +36,9 @@ class ExerciseViewModel: ObservableObject {
         do {
             self.exerciseStatsForDashboard = try await ArtemisAPI.getExerciseStatsForDashboard(exerciseId: exerciseId)
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
-
     var reviewStudents: String {
         let totalNumberOfStudents = exerciseStats?.numberOfSubmissions?.inTime ?? -1
         let totalNumberOfAssessments = exerciseStats?.totalNumberOfAssessments?.inTime ?? -1

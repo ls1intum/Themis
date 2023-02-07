@@ -9,11 +9,13 @@ import SwiftUI
 import UIKit
 
 struct ExerciseView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    
+    let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
+    
     
     var body: some View {
         VStack {
@@ -69,6 +71,9 @@ struct ExerciseView: View {
                 }
             }
         }
+        .errorAlert(error: $assessmentVM.error)
+        .errorAlert(error: $submissionListVM.error)
+        .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
     private var searchButton: some View {
@@ -87,7 +92,6 @@ struct ExerciseView: View {
         Button {
             Task {
                 await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
-                UndoManagerSingleton.shared.undoManager.removeAllActions()
             }
         } label: {
             Text("Start Assessment")
@@ -102,12 +106,5 @@ struct ExerciseView: View {
         await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
         await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
         await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
-    }
-}
-
-struct ExerciseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExerciseView(exercise: Exercise())
-            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

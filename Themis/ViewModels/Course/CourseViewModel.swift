@@ -11,6 +11,7 @@ class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
     @Published var loading = false
     @Published var courses: [Course] = []
+    @Published var error: Error?
     
     private static var shownCourseIDKey = "shownCourseID"
     @Published var shownCourseID: Int? {
@@ -62,7 +63,7 @@ class CourseViewModel: ObservableObject {
                 try await courses[i].fetchProgrammingExercises(courseId: courses[i].id)
             }
         } catch let error {
-            print(error)
+            self.error = error
         }
     }
 
