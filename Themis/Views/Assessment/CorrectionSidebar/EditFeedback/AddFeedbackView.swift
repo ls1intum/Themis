@@ -22,7 +22,7 @@ struct AddFeedbackView: View {
             assessmentResult: assessmentResult,
             cvm: cvm,
             showSheet: $showSheet,
-            title: "Add feedback",
+            title: "Add Feedback",
             edit: false,
             type: type,
             file: file,

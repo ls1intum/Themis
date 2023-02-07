@@ -32,6 +32,7 @@ struct GradingCriteriaCellView: View {
                         HStack {
                             Text(instruction.gradingScale ?? "")
                                 .font(.title3)
+                                .multilineTextAlignment(.leading)
                             Spacer()
                             Text(String(format: "%.1f", instruction.credits) + "P")
                                 .font(.title3)
@@ -40,6 +41,7 @@ struct GradingCriteriaCellView: View {
                         Divider()
 
                         Text(instruction.instructionDescription ?? "")
+                            .multilineTextAlignment(.leading)
                     }
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 20)
