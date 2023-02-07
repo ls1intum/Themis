@@ -60,7 +60,12 @@ struct ExercisesListView: View {
         dateProperties: [ExerciseDateProperty],
         predicate: (Exercise) -> Bool
     ) -> some View {
-        let shownExercises = exercises.filter(predicate)
+        let shownExercises = exercises
+            .filter(predicate)
+            .sorted {
+                ArtemisDateHelpers.parseDate($0.dueDate) ?? Date.now <
+                    ArtemisDateHelpers.parseDate($1.dueDate) ?? Date.now
+            }
         return Group {
             if shownExercises.isEmpty {
                 EmptyView()

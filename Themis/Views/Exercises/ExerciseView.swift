@@ -21,11 +21,21 @@ struct ExerciseView: View {
         VStack {
             if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
                 Form {
-                    if !submissionListVM.submissions.isEmpty {
+                    if !submissionListVM.openSubmissions.isEmpty {
                         Section("Open submissions") {
                             SubmissionListView(
                                 submissionListVM: submissionListVM,
-                                exercise: exercise
+                                exercise: exercise,
+                                submissionStatus: .open
+                            )
+                        }
+                    }
+                    if !submissionListVM.submittedSubmissions.isEmpty {
+                        Section("Finished submissions") {
+                            SubmissionListView(
+                                submissionListVM: submissionListVM,
+                                exercise: exercise,
+                                submissionStatus: .submitted
                             )
                         }
                     }
