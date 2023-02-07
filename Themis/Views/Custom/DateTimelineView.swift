@@ -7,7 +7,7 @@
 
 import SwiftUI
 
- struct DateTimelineView: View {
+struct DateTimelineView: View {
     let dates: [(name: String, date: String?)]
     @State private var isShowingPopover = false
     @State private var selectedDate: (String, String?) = ("", nil)
@@ -53,4 +53,4 @@ import SwiftUI
             .padding()
         }
     }
- }
+}
