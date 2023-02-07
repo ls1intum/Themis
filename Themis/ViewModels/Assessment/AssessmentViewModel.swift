@@ -8,6 +8,7 @@ class AssessmentViewModel: ObservableObject {
     @Published var showSubmission = false
     @Published var readOnly: Bool
     @Published var loading = false
+    @Published var error: Error?
 
     init(readOnly: Bool) {
         self.readOnly = readOnly
@@ -26,7 +27,7 @@ class AssessmentViewModel: ObservableObject {
             UndoManagerSingleton.shared.undoManager.removeAllActions()
         } catch {
             self.submission = nil
-            print(error)
+            self.error = error
         }
     }
 
@@ -47,7 +48,7 @@ class AssessmentViewModel: ObservableObject {
             }
             self.showSubmission = true
         } catch {
-            print(error)
+            self.error = error
         }
     }
 
@@ -60,7 +61,7 @@ class AssessmentViewModel: ObservableObject {
         do {
             try await ArtemisAPI.cancelAssessment(submissionId: submissionId)
         } catch {
-            print(error)
+            self.error = error
         }
         self.submission = nil
         self.assessmentResult = AssessmentResult()
@@ -79,7 +80,7 @@ class AssessmentViewModel: ObservableObject {
                 submit: submit
             )
         } catch {
-            print(error)
+            self.error = error
         }
     }
     
