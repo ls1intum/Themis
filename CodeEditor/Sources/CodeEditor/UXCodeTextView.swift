@@ -58,12 +58,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
         get { hlTextStorage?.language.flatMap(CodeEditor.Language.init) }
     }
-    private(set) var themeName = CodeEditor.ThemeName.default {
-        didSet {
-            highlightr?.setTheme(to: themeName.rawValue)
-            if let font = highlightr?.theme?.codeFont { self.font = font; self.customLayoutManager.lineNumberFont = font }
-        }
-    }
+    private(set) var themeName = CodeEditor.ThemeName.default
     
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
@@ -430,12 +425,16 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         return button
     }
     
-    func drawHighlights() {
+    func updateHighlights(rangesToDelete: [NSRange]) {
         if !text.isEmpty {
+            for range in rangesToDelete {
+                self.textStorage.removeAttribute(.underlineStyle, range: range)
+                self.textStorage.removeAttribute(.underlineColor, range: range)
+                self.textStorage.removeAttribute(.link, range: range)
+            }
             for hRange in highlightedRanges {
                 self.textStorage.addAttributes(
                     [
-                        .foregroundColor: UIColor.blue,
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
                         .link: hRange.id // equals feedback id
@@ -450,7 +449,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             for hRange in highlightedRanges {
                 self.textStorage.addAttributes(
                     [
-                        .foregroundColor: UIColor.blue,
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
                         .link: hRange.id // equals feedback id
