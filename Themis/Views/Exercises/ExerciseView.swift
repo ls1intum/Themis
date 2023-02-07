@@ -13,8 +13,9 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    
+    let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
+    
     
     var body: some View {
         VStack {
@@ -105,12 +106,5 @@ struct ExerciseView: View {
         await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
         await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
         await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
-    }
-}
-
-struct ExerciseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExerciseView(exercise: Exercise())
-            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

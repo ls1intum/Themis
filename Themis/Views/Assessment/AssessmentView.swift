@@ -112,7 +112,7 @@ struct AssessmentView: View {
                                 presentationMode.wrappedValue.dismiss()
                             }
                         }
-                        Button("Discard", role: .destructive) {
+                        Button("Delete", role: .destructive) {
                             Task {
                                 if let id = vm.submission?.id {
                                     await vm.cancelAssessment(submissionId: id)

@@ -75,6 +75,7 @@
 		E2E6748829203E350081238B /* ExercisesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExercisesListView.swift */; };
 		E2E6748B2920419B0081238B /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748A2920419B0081238B /* Exercise.swift */; };
 		E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */ = {isa = PBXBuildFile; productRef = E536EAD0297458240078E077 /* SwiftUIReorderableForEach */; };
+		E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536EAD2298C00380078E077 /* DateTimelineView.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
 		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F911B9C029392668003CF4C8 /* TouchVisualizer in Frameworks */ = {isa = PBXBuildFile; productRef = F911B9BF29392668003CF4C8 /* TouchVisualizer */; };
@@ -169,6 +170,7 @@
 		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748729203E350081238B /* ExercisesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExercisesListView.swift; path = Themis/Views/Exercises/ExercisesListView.swift; sourceTree = SOURCE_ROOT; };
 		E2E6748A2920419B0081238B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Exercise.swift; path = Themis/Models/Exercise.swift; sourceTree = SOURCE_ROOT; };
+		E536EAD2298C00380078E077 /* DateTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimelineView.swift; sourceTree = "<group>"; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
 		F9224439297BFD1A008E4374 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		F958C4DD29887DE800E70669 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
@@ -429,6 +431,7 @@
 				E168C722296DCCE100A1D1D4 /* NavigationBarButtonStyle.swift */,
 				E168C726296DDB3D00A1D1D4 /* CustomProgressView.swift */,
 				F9224439297BFD1A008E4374 /* CircularProgressView.swift */,
+				E536EAD2298C00380078E077 /* DateTimelineView.swift */,
 				F958C4DD29887DE800E70669 /* ShakeEffect.swift */,
 			);
 			path = Custom;
@@ -749,6 +752,7 @@
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
 				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
+				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
 				E200F787297F10B300DE269D /* Language.swift in Sources */,
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
 				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
