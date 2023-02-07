@@ -14,6 +14,8 @@ struct ExerciseListItem: View {
     var body: some View {
         HStack {
             Text(exercise.title ?? "")
+                .font(.title2)
+                .fontWeight(.medium)
             Spacer()
             DateTimelineView(dates: dateProperties.map { dateProp in
                 (name: dateProp.name, date: exercise[keyPath: dateProp.dateKeyPath])
