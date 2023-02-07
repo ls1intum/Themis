@@ -15,9 +15,9 @@ struct ExerciseDateProperty: Hashable {
 struct ExerciseSections: View {
     var exercises: [Exercise]
     
-    private let dueDate = ExerciseDateProperty(name: "Due Date", dateKeyPath: \.dueDate)
-    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment Due Date", dateKeyPath: \.assessmentDueDate)
-    private let releaseDate = ExerciseDateProperty(name: "Release Date", dateKeyPath: \.releaseDate)
+    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDate)
+    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.assessmentDueDate)
+    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.releaseDate)
     
     var body: some View {
         Group {
@@ -58,7 +58,12 @@ struct ExerciseSections: View {
         dateProperties: [ExerciseDateProperty],
         predicate: (Exercise) -> Bool
     ) -> some View {
-        let shownExercises = exercises.filter(predicate)
+        let shownExercises = exercises
+            .filter(predicate)
+            .sorted {
+                ArtemisDateHelpers.parseDate($0.dueDate) ?? Date.now <
+                    ArtemisDateHelpers.parseDate($1.dueDate) ?? Date.now
+            }
         return Group {
             if shownExercises.isEmpty {
                 EmptyView()
@@ -69,7 +74,7 @@ struct ExerciseSections: View {
                 }) {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
-                            ExerciseView(exercise: exercise)
+                            ExerciseView(dateProperties: dateProperties, exercise: exercise)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }
@@ -79,6 +84,7 @@ struct ExerciseSections: View {
         }
     }
 }
+
 
 struct ExercisesListView_Previews: PreviewProvider {
     static var previews: some View {

@@ -202,17 +202,22 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         if editorBindings.themeName.rawValue != textView.themeName.rawValue {
             textView.applyNewTheme(editorBindings.themeName)
         }
-        textView.language = editorBindings.language
         
+        textView.language = editorBindings.language
         textView.indentStyle          = editorBindings.indentStyle
         textView.isSmartIndentEnabled = editorBindings.flags.contains(.smartIndent)
         
+        var deletedHighlights = textView.highlightedRanges.filter { !editorBindings.highlightedRanges.contains($0)
+        }
+        
         if editorBindings.source.wrappedValue != textView.string {
             // reset contentoffset when switching files as it is not stored and content heights of files vary
+            deletedHighlights.removeAll()
             textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
             if let textStorage = textView.codeTextStorage {
-                textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length),
-                                              with: editorBindings.source.wrappedValue)
+                textStorage.replaceCharacters(
+                    in: NSRange(location: 0, length: textStorage.length),
+                    with: editorBindings.source.wrappedValue)
             } else {
                 assertionFailure("no text storage?")
                 textView.string = editorBindings.source.wrappedValue
@@ -222,11 +227,12 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 textView.updateLightBulbs()
             }
         }
+        textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
         
         if let binding = editorBindings.fontSize {
-                textView.changeFontSize(size: binding.wrappedValue)
+            textView.changeFontSize(size: binding.wrappedValue)
         }
        
         if let selection = editorBindings.selection {
@@ -248,7 +254,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.isSelectable = editorBindings.flags.contains(.selectable)
         textView.backgroundColor = editorBindings.flags.contains(.blackBackground) ? UIColor.black : UIColor.white
         textView.highlightedRanges = editorBindings.highlightedRanges
-        
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
         textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
@@ -268,7 +273,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             }
             self.editorBindings.scrollUtils.range = nil
         }
-        textView.drawHighlights()
+        textView.updateHighlights(rangesToDelete: deletedHighlights.map({ $0.range }))
     }
     
     private func scrollToRange(textView: UXCodeTextView, range: NSRange) {

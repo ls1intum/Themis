@@ -51,6 +51,7 @@ struct CourseView: View {
         .task {
             await courseVM.fetchAllCourses()
         }
+//        .errorAlert(error: $courseVM.error)
     }
 
     var logoutButton: some View {
