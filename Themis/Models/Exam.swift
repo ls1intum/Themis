@@ -12,11 +12,19 @@ struct Exam: Codable {
     let title: String
     let startDate: String?
     let endDate: String?
+    let publishResultsDate: String?
     var exerciseGroups: [ExerciseGroup]? //I don't know why this is an Array and wtf?
     
     var exercises: [Exercise] {
         let exercises = exerciseGroups?.reduce([]) { return $0 + ($1.exercises ?? []) } as? [Exercise]
-        return exercises ?? []
+        guard let exercises else { return [] }
+        return exercises.map { exercise in
+            var exerciseWithDate = exercise
+            exerciseWithDate.releaseDate = self.startDate
+            exerciseWithDate.dueDate = self.endDate
+            exerciseWithDate.assessmentDueDate = self.publishResultsDate
+            return exerciseWithDate
+        }
     }
 }
 

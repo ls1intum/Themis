@@ -1,5 +1,5 @@
 //
-//  ExercisesListView.swift
+//  ExerciseSections.swift
 //  Themis
 //
 //  Created by Tom Rudnick on 12.11.22.
@@ -12,7 +12,7 @@ struct ExerciseDateProperty: Hashable {
     let dateKeyPath: KeyPath<Exercise, String?>
 }
 
-struct ExercisesListView: View {
+struct ExerciseSections: View {
     var exercises: [Exercise]
     
     private let dueDate = ExerciseDateProperty(name: "Due Date", dateKeyPath: \.dueDate)
@@ -20,38 +20,36 @@ struct ExercisesListView: View {
     private let releaseDate = ExerciseDateProperty(name: "Release Date", dateKeyPath: \.releaseDate)
     
     var body: some View {
-        VStack(alignment: .leading) {
-            List {
-                exerciseSection(
-                    title: "Former Exercises",
-                    dateProperties: [
-                        releaseDate,
-                        dueDate,
-                        assessmentDueDate
-                    ],
-                    predicate: { $0.isFormer() }
-                )
-                
-                exerciseSection(
-                    title: "Current Exercises",
-                    dateProperties: [
-                        releaseDate,
-                        dueDate,
-                        assessmentDueDate
-                    ],
-                    predicate: { $0.isCurrent() }
-                )
-                
-                exerciseSection(
-                    title: "Future Exercises",
-                    dateProperties: [
-                        releaseDate,
-                        dueDate,
-                        assessmentDueDate
-                    ],
-                    predicate: { $0.isFuture() }
-                )
-            }.listStyle(.sidebar)
+        Group {
+            exerciseSection(
+                title: "Former Exercises",
+                dateProperties: [
+                    releaseDate,
+                    dueDate,
+                    assessmentDueDate
+                ],
+                predicate: { $0.isFormer() }
+            )
+            
+            exerciseSection(
+                title: "Current Exercises",
+                dateProperties: [
+                    releaseDate,
+                    dueDate,
+                    assessmentDueDate
+                ],
+                predicate: { $0.isCurrent() }
+            )
+            
+            exerciseSection(
+                title: "Future Exercises",
+                dateProperties: [
+                    releaseDate,
+                    dueDate,
+                    assessmentDueDate
+                ],
+                predicate: { $0.isFuture() }
+            )
         }
     }
     
@@ -84,7 +82,7 @@ struct ExercisesListView: View {
 
 struct ExercisesListView_Previews: PreviewProvider {
     static var previews: some View {
-        ExercisesListView(exercises: [])
+        ExerciseSections(exercises: [])
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }
