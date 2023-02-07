@@ -69,6 +69,7 @@ struct CorrectionSidebarView: View {
             Spacer()
         }
         .frame(maxHeight: .infinity, alignment: .center)
+        .background(Color("sidebarBackground"))
     }
 }
 

@@ -89,6 +89,7 @@ struct FeedbackListView: View {
             }
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
+            .colorMultiply(Color("sidebarBackground"))
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(

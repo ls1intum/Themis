@@ -25,10 +25,13 @@ struct FiletreeSidebarView: View {
                     .listRowSeparator(.hidden)
                 }
                 .listStyle(.inset)
+                .colorMultiply(Color("sidebarBackground"))
             }
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 35)
+        .background(Color("sidebarBackground"))
     }
     
     @ViewBuilder
@@ -56,7 +59,7 @@ struct FiletreeSidebarView: View {
         .padding(.horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .bold(file === cvm.selectedFile)
-        .background(file === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+//        .background(file === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
         .cornerRadius(10)
     }
 }
