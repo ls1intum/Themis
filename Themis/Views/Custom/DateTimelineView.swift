@@ -7,23 +7,23 @@
 
 import SwiftUI
 
- struct DateTimelineView: View {
+struct DateTimelineView: View {
     let dates: [(name: String, date: String?)]
-    @State private var isShowingPopover = false
     @State private var selectedDate: (String, String?) = ("", nil)
 
     var body: some View {
         ZStack(alignment: .center) {
             Rectangle()
-                .frame(width: 650, height: 6)
+                .frame(width: 450, height: 5)
                 .foregroundColor(Color.blue)
+                .cornerRadius(5)
             HStack {
                 ForEach(dates, id: \.name) { date in
                     VStack {
-                        Text(date.name)
+                        Text(date.name).bold()
                         Image(systemName: "calendar")
-                            .background(Color.white)
-                            .font(.system(size: 30))
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .font(.title3)
                             .padding(1)
                         if let dateString = ArtemisDateHelpers.getRemainingOrOverdueTime(for: date.date) {
                             Text(dateString)
@@ -32,9 +32,9 @@ import SwiftUI
                         }
                     }
                     .frame(maxWidth: 150)
-                    .padding()
+                    .padding(2)
                 }
             }
         }
     }
- }
+}
