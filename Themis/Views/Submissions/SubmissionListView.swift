@@ -47,7 +47,7 @@ struct SubmissionListView: View {
         }
     }
 
- struct SubmissionListView_Previews: PreviewProvider {
+struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
             SubmissionListView(
@@ -57,4 +57,4 @@ struct SubmissionListView: View {
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }
- }
+}
