@@ -25,7 +25,7 @@ struct ExerciseView: View {
                         Section("Open submissions") {
                             SubmissionListView(
                                 submissionListVM: submissionListVM,
-                                exercise: exercise,
+                                exercise: exerciseVM.exercise ?? exercise,
                                 submissionStatus: .open
                             )
                         }
@@ -34,7 +34,7 @@ struct ExerciseView: View {
                         Section("Finished submissions") {
                             SubmissionListView(
                                 submissionListVM: submissionListVM,
-                                exercise: exercise,
+                                exercise: exerciseVM.exercise ?? exercise,
                                 submissionStatus: .submitted
                             )
                         }
@@ -58,7 +58,7 @@ struct ExerciseView: View {
             AssessmentView(
                 vm: assessmentVM,
                 ar: assessmentVM.assessmentResult,
-                exercise: exercise
+                exercise: exerciseVM.exercise ?? exercise
             )
         }
         .navigationTitle(exercise.title ?? "")
@@ -74,7 +74,7 @@ struct ExerciseView: View {
                                 AssessmentView(
                                     vm: assessmentVM,
                                     ar: assessmentVM.assessmentResult,
-                                    exercise: exercise
+                                    exercise: exerciseVM.exercise ?? exercise
                                 )
                 ) {
                     startNewAssessmentButton
