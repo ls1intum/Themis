@@ -19,7 +19,8 @@ struct AssessmentSubmissionLoaderView: View {
             vm: avm,
             cvm: cvm,
             ar: avm.assessmentResult,
-            exercise: exercise
+            exercise: exercise,
+            submissionId: submissionID
         )
         .task {
             await avm.getSubmission(id: submissionID)
