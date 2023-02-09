@@ -74,7 +74,7 @@ struct ExerciseSections: View {
                 }) {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
-                            ExerciseView(dateProperties: dateProperties, exercise: exercise)
+                            ExerciseView(exercise: exercise)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }

@@ -18,7 +18,7 @@ struct ExamListView: View {
     
     private let startDate = ExamDateProperty(name: "Exam", dateKeyPath: \.startDate)
     private let assessmentStartDate = ExamDateProperty(name: "Assessment", dateKeyPath: \.startDate)
-    private let assessmentDueDate = ExamDateProperty(name: "Release", dateKeyPath: \.publishResultsDate)
+    private let assessmentDueDate = ExamDateProperty(name: "Review", dateKeyPath: \.publishResultsDate)
     
     var body: some View {
         Group {
@@ -27,7 +27,7 @@ struct ExamListView: View {
             } else {
                 ForEach(exams, id: \.id) { exam in
                     NavigationLink {
-                        ExamSectionView(examID: exam.id, courseID: courseID)
+                        ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title)
                     } label: {
                         ExamListItem(exam: exam, dateProperties: [
                             startDate,

@@ -13,7 +13,6 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
     
     

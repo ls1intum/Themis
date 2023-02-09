@@ -8,20 +8,30 @@
 import SwiftUI
 
 struct ExamSectionView: View {
-    var examID: Int
-    var courseID: Int
+    let examID: Int
+    let courseID: Int
+    let examTitle: String
     
     @State var exercises: [Exercise] = []
     
     var body: some View {
         Form {
-            ExerciseSections(
-                exercises: exercises
-            )
+            Section("Exercise Groups") {
+                ForEach(exercises) { exercise in
+                    NavigationLink {
+                        ExerciseView(exercise: exercise)
+                    } label: {
+                        Text(exercise.title ?? "")
+                            .font(.title2)
+                            .fontWeight(.medium)
+                    }
+                }
+            }
         }.task {
             let exam = try? await ArtemisAPI.getExamForAssessment(courseID: courseID, examID: examID)
             guard let exam else { return }
             self.exercises = exam.exercises
         }
+        .navigationTitle(examTitle)
     }
 }
