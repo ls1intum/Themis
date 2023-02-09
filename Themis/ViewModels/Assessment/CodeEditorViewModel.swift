@@ -104,6 +104,8 @@ class CodeEditorViewModel: ObservableObject {
     func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
         do {
             self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
+            // TODO: remove again, this is just nice for debugging currently
+            print("Got \(self.feedbackSuggestions.count) feedback suggestions")
         } catch {
             print(error)
         }
