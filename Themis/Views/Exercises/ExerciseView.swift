@@ -13,7 +13,6 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
     
     
@@ -70,15 +69,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination:
-                                AssessmentView(
-                                    vm: assessmentVM,
-                                    ar: assessmentVM.assessmentResult,
-                                    exercise: exercise
-                                )
-                ) {
-                    startNewAssessmentButton
-                }
+                startNewAssessmentButton
             }
         }
         .errorAlert(error: $assessmentVM.error)
