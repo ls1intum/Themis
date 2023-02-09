@@ -10,10 +10,13 @@ import Foundation
 struct Exam: Codable {
     let id: Int
     let title: String
+    /// start of working time
     let startDate: String?
+    /// end of working time, start of assessment time
     let endDate: String?
+    /// end of assessment date
     let publishResultsDate: String?
-    var exerciseGroups: [ExerciseGroup]? // I don't know why this is an Array and wtf?
+    var exerciseGroups: [ExerciseGroup]?
     
     var exercises: [Exercise] {
         let exercises = exerciseGroups?.reduce([]) { $0 + ($1.exercises ?? []) } as? [Exercise]

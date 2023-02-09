@@ -7,21 +7,54 @@
 
 import SwiftUI
 
+struct ExamDateProperty: Hashable {
+    let name: String
+    let dateKeyPath: KeyPath<Exam, String?>
+}
+
 struct ExamListView: View {
     var exams: [Exam]
     var courseID: Int
     
+    private let startDate = ExamDateProperty(name: "Exam", dateKeyPath: \.startDate)
+    private let assessmentStartDate = ExamDateProperty(name: "Assessment", dateKeyPath: \.startDate)
+    private let assessmentDueDate = ExamDateProperty(name: "Release", dateKeyPath: \.publishResultsDate)
+    
     var body: some View {
         Group {
-            ForEach(exams, id: \.id) { exam in
-                NavigationLink {
-                    ExamSectionView(examID: exam.id, courseID: courseID)
-                } label: {
-                    Text(exam.title)
-                        .font(.title2)
-                        .fontWeight(.medium)
+            if exams.isEmpty {
+                EmptyView()
+            } else {
+                ForEach(exams, id: \.id) { exam in
+                    NavigationLink {
+                        ExamSectionView(examID: exam.id, courseID: courseID)
+                    } label: {
+                        ExamListItem(exam: exam, dateProperties: [
+                            startDate,
+                            assessmentStartDate,
+                            assessmentDueDate
+                        ])
+                    }
                 }
             }
         }
+    }
+}
+
+private struct ExamListItem: View {
+    let exam: Exam
+    let dateProperties: [ExamDateProperty]
+
+    var body: some View {
+        HStack {
+            Text(exam.title)
+                .font(.title2)
+                .fontWeight(.medium)
+            Spacer()
+            DateTimelineView(dates: dateProperties.map { dateProp in
+                (name: dateProp.name, date: exam[keyPath: dateProp.dateKeyPath])
+            })
+        }
+        .padding(.trailing)
     }
 }

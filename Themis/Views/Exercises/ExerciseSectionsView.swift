@@ -86,7 +86,7 @@ struct ExerciseSections: View {
 }
 
 
-struct ExercisesListView_Previews: PreviewProvider {
+struct ExercisesSectionsView_Previews: PreviewProvider {
     static var previews: some View {
         ExerciseSections(exercises: [])
             .previewInterfaceOrientation(.landscapeLeft)
