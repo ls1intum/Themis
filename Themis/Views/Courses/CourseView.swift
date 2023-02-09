@@ -21,7 +21,7 @@ struct CourseView: View {
                         ExerciseSections(
                             exercises: courseVM.shownCourse?.exercises ?? []
                         )
-                        if let courseId = courseVM.shownCourse?.id {
+                        if let courseId = courseVM.shownCourse?.id, !(courseVM.shownCourse?.exams?.isEmpty ?? false) {
                             Section("Exams") {
                                 ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseId)
                             }
