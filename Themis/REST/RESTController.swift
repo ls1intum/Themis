@@ -21,8 +21,8 @@ class RESTController {
 
     func sendRequest(_ request: Request) async throws {
         let request = try makeURLRequest(request)
-        let (_, response) = try await URLSession.shared.data(for: request)
-        try validate(response: response)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try validate(response: response, data: data)
     }
 
     func sendRequest<T: Decodable>(_ request: Request) async throws -> T {
@@ -34,7 +34,7 @@ class RESTController {
     func sendRequest<T>(_ request: Request, decode: (Data) throws -> T) async throws -> T {
         let request = try makeURLRequest(request)
         let (data, response) = try await URLSession.shared.data(for: request)
-        try validate(response: response)
+        try validate(response: response, data: data)
 
         // check for empty response
         if data.isEmpty {
@@ -44,7 +44,7 @@ class RESTController {
         return try decode(data)
     }
 
-    private func validate(response: URLResponse) throws {
+    private func validate(response: URLResponse, data: Data?) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
             return
         }
@@ -57,7 +57,13 @@ class RESTController {
             Authentication.shared.authenticated = false
             throw RESTError.unauthorized
         case 403:
-            throw RESTError.forbidden
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
+                    let jsonDict = json as? [String: Any], let detail = jsonDict["detail"] as? String else {
+                
+                throw RESTError.forbidden
+            }
+            throw CustomError.error(title: RESTError.forbidden.errorDescription ?? "Test", description: detail)
         case 404:
             throw RESTError.notFound
         case 405:
