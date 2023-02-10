@@ -70,8 +70,8 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                startNewAssessmentButton
-            }.disabled(submissionDueDateNotOver)
+                startNewAssessmentButton.disabled(submissionDueDateNotOver)
+            }
         }
         .errorAlert(error: $assessmentVM.error)
         .errorAlert(error: $submissionListVM.error)
