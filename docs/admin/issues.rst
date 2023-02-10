@@ -1,4 +1,2 @@
-Title here
+Known Issues and Workarounds 
 ===========================================
-
-by <author>

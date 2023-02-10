@@ -1,4 +1,4 @@
-Title here
+Hardware/Software Mapping
 ===========================================
 
-by <author>
+by Evan Christopher

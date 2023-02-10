@@ -1,4 +1,6 @@
-Title here
+Global Software control
 ===========================================
 
-by <author>
+(Themis ML ↔ App)
+
+by Andreas Cselovszky 
