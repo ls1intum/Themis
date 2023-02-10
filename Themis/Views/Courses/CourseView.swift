@@ -17,9 +17,16 @@ struct CourseView: View {
                 if courseVM.loading {
                     ProgressView()
                 } else {
-                    ExercisesListView(
-                        exercises: courseVM.shownCourse?.exercises ?? []
-                    )
+                    Form {
+                        ExerciseSections(
+                            exercises: courseVM.shownCourse?.exercises ?? []
+                        )
+                        if let courseId = courseVM.shownCourse?.id, !(courseVM.shownCourse?.exams?.isEmpty ?? false) {
+                            Section("Exams") {
+                                ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseId)
+                            }
+                        }
+                    }
                     .refreshable {
                         await courseVM.fetchAllCourses()
                     }
