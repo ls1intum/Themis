@@ -7,7 +7,7 @@ Persistent Data Management
 Themis App
 *****
 
-..(Tom)
+.. (Tom)
 
 *****
 ThemisML Server
