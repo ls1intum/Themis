@@ -27,7 +27,7 @@ struct ExerciseView: View {
                                 exercise: exercise,
                                 submissionStatus: .open
                             )
-                        }
+                        }.disabled(submissionDueDateNotOver)
                     }
                     if !submissionListVM.submittedSubmissions.isEmpty {
                         Section("Finished submissions") {
@@ -36,7 +36,7 @@ struct ExerciseView: View {
                                 exercise: exercise,
                                 submissionStatus: .submitted
                             )
-                        }
+                        }.disabled(submissionDueDateNotOver)
                     }
                     Section("Statistics") {
                         HStack(alignment: .center) {
@@ -60,7 +60,6 @@ struct ExerciseView: View {
                 exercise: exercise
             )
         }
-        .disabled(submissionDueDateNotOver)
         .navigationTitle(exercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
