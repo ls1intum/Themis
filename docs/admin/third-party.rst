@@ -20,6 +20,8 @@ For extracting the methods, we use `ANTL4`_ for python.
 
 To compare code, we use `CodeBERTScore`_, which is a wrapper for CodeBERT. Because it is not available on PyPI, we directly link to the GitHub repository in our requirements.
 
+The helper script ``determine-similarity-cutoff`` uses the `dataset`_ library to simplify working with the database.
+
 You can find the full list of third-party requirements including the most up-to-date version numbers in use in the ``requirements.txt`` files in the respective folders of the ThemisML repository. The main one is found in `feedback-suggestion/requirements.txt <https://github.com/ls1intum/Themis-ML/blob/develop/feedback-suggestion/requirements.txt>`_.
 
 .. links
@@ -29,3 +31,4 @@ You can find the full list of third-party requirements including the most up-to-
 .. _Psycopg2: https://www.psycopg.org/
 .. _ANTL4: https://www.antlr.org/
 .. _CodeBERTScore: https://github.com/neulab/code-bert-score
+.. _dataset: https://dataset.readthedocs.io/en/latest/
