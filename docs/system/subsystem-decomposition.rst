@@ -1,4 +1,4 @@
-Title here
+Subsystem Decomposition
 ===========================================
 
-by <author>
+by Katjana Kosic

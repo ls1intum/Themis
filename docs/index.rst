@@ -4,11 +4,6 @@
 Themis: Artemis Tutor Grading App for iPad
 ======================================================
 
-Some Title
--------------
-
-We will write something here later.
-
 .. toctree::
    :caption: Introduction
    :includehidden:
@@ -44,22 +39,13 @@ We will write something here later.
     system/data-management
     system/access-control
     system/global-software-control
-    system/boundary
-
-.. toctree::
-    :caption: Demo Scenario
-    :includehidden:
-    :maxdepth: 3
-    
-    demo/demo-scenario
 
 .. toctree::
     :caption: Product Backlog
     :includehidden:
     :maxdepth: 3
     
-    backlog/implemented
-    backlog/open
+    backlog/backlog
 
 .. toctree::
     :caption: Administrator Manual

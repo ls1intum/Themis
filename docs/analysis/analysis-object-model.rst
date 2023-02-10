@@ -1,4 +1,4 @@
-Title here
+Analysis Object Model
 ===========================================
 
-by <author>
+by Katjana Kosic

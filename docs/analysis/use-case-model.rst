@@ -1,4 +1,4 @@
-Title here
+Use Case Model
 ===========================================
 
-by <author>
+by Katjana Kosic

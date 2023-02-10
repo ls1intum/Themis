@@ -1,4 +1,6 @@
 Visionary Scenarios
 ===========================================
 
-by Katjana
+(use Problem Statement) 
+
+by Katjana Kosic

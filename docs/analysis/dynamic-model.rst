@@ -1,4 +1,6 @@
-Title here
+Dynamic Model
 ===========================================
 
-by <author>
+(Themis App & Themis ML)
+
+by Katjana Kosic
