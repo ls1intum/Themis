@@ -73,7 +73,6 @@ struct ExerciseView: View {
             }
         }
         .errorAlert(error: $assessmentVM.error)
-        .errorAlert(error: $submissionListVM.error)
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
