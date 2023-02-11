@@ -37,7 +37,7 @@ ThemisML is deployed via two subsequent CI/CD-Pipelines.
 
   * Build and Delivery Pipeline:
     This pipeline is automatically triggered by changes in the ThemisML repository. It builds a docker image of the 
-    feedback-suggestion service with the ``docker-compose.production.yml`` and pushes it to Harbor.
+    feedback-suggestion service with the ``docker-compose.production.yml`` and pushes it to Harbor, the used artifactory.
 
   * Deploy Pipeline:
     This pipeline is manually triggered if a new software version shall be deployed to the server. It connects to the server 
@@ -51,7 +51,11 @@ Traefik listens on the domain `https://ios2223cit.ase.cit.tum.de/ <https://ios22
 redirects all incoming traffic from port 80 to port 443 to ensure a secured connection. For the HTTPS connection, it
 uses a SSL/TLS certificate from the TUM Rechnerbetriebsgruppe.
 
-All further steps for restarting the ThemisML server are explained in the `README`_.
+Manual restart of the ThemisML server:
 
-.. links
-.. _README: https://github.com/ls1intum/Themis-ML/blob/develop/README.md
+  * Stopping and removing all running containers: ``docker compose -f docker-compose.production.yml down``
+
+  * Alternatively:
+    Stopping all running containers: ``docker compose -f docker-compose.production.yml stop``
+
+  * Starting all containers: ``docker compose -f docker-compose.production.yml up -d``
