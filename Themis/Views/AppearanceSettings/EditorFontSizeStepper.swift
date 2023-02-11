@@ -47,7 +47,7 @@ struct EditorFontSizeStepperView: View {
 }
 
 struct FontSizeStepperView_Previews: PreviewProvider {
-    @State static var fontSize: CGFloat = 14
+    @State static var fontSize: CGFloat = 16
     
     static var previews: some View {
         EditorFontSizeStepperView(fontSize: $fontSize)
