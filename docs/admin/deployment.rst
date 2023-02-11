@@ -1,7 +1,7 @@
 Deployment and Configuration
 ===========================================
 
-..Describe the steps an system administrator needs to take to install your system on the infrastructure described in the section above. If necessary explain any parameters like domains, IP addresses, ports, etc. within your system that need to be configured. This does not include details about the configuration of your infrastructure, which should already be described in the previous section.
+.. Describe the steps an system administrator needs to take to install your system on the infrastructure described in the section above. If necessary explain any parameters like domains, IP addresses, ports, etc. within your system that need to be configured. This does not include details about the configuration of your infrastructure, which should already be described in the previous section.
 
 *****
 Themis App
