@@ -27,7 +27,7 @@ struct ExerciseView: View {
                                 exercise: exercise,
                                 submissionStatus: .open
                             )
-                        }.disabled(submissionDueDateNotOver)
+                        }.disabled(!submissionDueDateOver)
                     }
                     if !submissionListVM.submittedSubmissions.isEmpty {
                         Section("Finished submissions") {
@@ -36,7 +36,7 @@ struct ExerciseView: View {
                                 exercise: exercise,
                                 submissionStatus: .submitted
                             )
-                        }.disabled(submissionDueDateNotOver)
+                        }.disabled(!submissionDueDateOver)
                     }
                     Section("Statistics") {
                         HStack(alignment: .center) {
@@ -69,7 +69,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                startNewAssessmentButton.disabled(submissionDueDateNotOver)
+                startNewAssessmentButton.disabled(!submissionDueDateOver)
             }
         }
         .errorAlert(error: $assessmentVM.error)
@@ -100,11 +100,11 @@ struct ExerciseView: View {
         }
         .buttonStyle(NavigationBarButton())
     }
-    private var submissionDueDateNotOver: Bool {
+    private var submissionDueDateOver: Bool {
         if let dueDate = exercise.dueDate, dueDate <= ArtemisDateHelpers.stringifyDate(Date.now)! {
-            return false
+            return true
         }
-        return true
+        return false
     }
     
     private func fetchExerciseData() async {
