@@ -317,7 +317,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     private func numViewWidth() -> CGFloat {
         let maxNum = 4.0
         if let font {
-            let standarized = font.withSize(16)
+            let standarized = font.withSize(CodeEditor.defaultFontSize)
             let fontAttributes = [NSAttributedString.Key.font: standarized]
             let width = ("8" as NSString).size(withAttributes: fontAttributes).width
             return maxNum * width + 4.0 * 2

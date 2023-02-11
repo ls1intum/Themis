@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import CodeEditor
 
 // Custom stepper to adjust font size with input field
 struct EditorFontSizeStepperView: View {
@@ -47,7 +48,7 @@ struct EditorFontSizeStepperView: View {
 }
 
 struct FontSizeStepperView_Previews: PreviewProvider {
-    @State static var fontSize: CGFloat = 16
+    @State static var fontSize: CGFloat = CodeEditor.defaultFontSize
     
     static var previews: some View {
         EditorFontSizeStepperView(fontSize: $fontSize)

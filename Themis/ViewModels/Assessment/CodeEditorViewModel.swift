@@ -16,7 +16,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
-    @Published var editorFontSize: CGFloat = 16 // Default font size
+    @Published var editorFontSize: CGFloat = CodeEditor.defaultFontSize
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:] {
         didSet {
