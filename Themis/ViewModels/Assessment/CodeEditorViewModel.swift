@@ -16,7 +16,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
-    @Published var editorFontSize: CGFloat = 22 // Default font size
+    @Published var editorFontSize: CGFloat = 14 // Default font size
     @Published var selectedSection: NSRange?
     @Published var inlineHighlights: [String: [HighlightedRange]] = [:] {
         didSet {
@@ -30,11 +30,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var pencilMode = true
     @Published var feedbackForSelectionId = ""
     @Published var error: Error?
-    // swiftlint:disable line_length
-    @Published var feedbackSuggestions = [
-        FeedbackSuggestion(srcFile: "/src/de/tum/space/SpaceObject.java", text: "Use pair instead of list", fromLine: 6, toLine: 6, credits: -1.5),
-        FeedbackSuggestion(srcFile: "/src/de/tum/space/Client.java", text: "I have reviewed the code for the iterative process and I have noticed that it only performs 10 iterations. While 10 iterations may seem sufficient, it may not always be enough to accurately solve a problem.\n\nIn many cases, the number of iterations required to solve a problem depends on the specific problem being solved and the desired level of accuracy. For some problems, 10 iterations may be sufficient, but for others, it may take hundreds or even thousands of iterations to achieve a satisfactory solution.\n\nFurthermore, it is important to consider the possibility of getting stuck in a local minimum. An iterative process can get stuck in a local minimum, which is a suboptimal solution that is not the global minimum. To avoid getting stuck in a local minimum, it is often necessary to increase the number of iterations, or to implement alternative methods, such as random restarts, to ensure that the global minimum is reached.\n\nIn conclusion, 10 iterations are never enough to guarantee that a problem is solved to the desired level of accuracy. It is important to carefully evaluate the specific problem being solved and the desired level of accuracy in order to determine the appropriate number of iterations. By doing so, you can ensure that the iterative process accurately solves the problem and produces satisfactory results. Thank you for considering this feedback.", fromLine: 18, toLine: 18, credits: -5.5)
-    ]
+    @Published var feedbackSuggestions = [FeedbackSuggestion]()
     @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
