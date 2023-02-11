@@ -47,7 +47,7 @@ ThemisML is deployed via two subsequent CI/CD-Pipelines.
 
 
 Domains and ports:
-Traefik listens on the domain `https://ios2223cit.ase.cit.tum.de/ <https://ios2223cit.ase.cit.tum.de/>`_ on the ports 80 (HTTP) and 443 (HTTPS). However, it
+Traefik listens on the URL `https://ios2223cit.ase.cit.tum.de/ <https://ios2223cit.ase.cit.tum.de/>`_ on the ports 80 (HTTP) and 443 (HTTPS). However, it
 redirects all incoming traffic from port 80 to port 443 to ensure a secured connection. For the HTTPS connection, it
 uses a SSL/TLS certificate from the TUM Rechnerbetriebsgruppe.
 
