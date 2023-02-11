@@ -8,6 +8,24 @@
 import Foundation
 import SwiftUI
 
+enum CustomError: Error, LocalizedError {
+    case error(title: String, description: String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .error(let message, _):
+            return message
+        }
+    }
+    
+    var recoverySuggestion: String? {
+        switch self {
+        case .error(_, let description):
+            return description
+        }
+    }
+}
+
 enum RESTError: String, Error, LocalizedError {
     case unauthorized = "Request failed due to missing authentication."
     case badRequest = "Server didn't process request due to client error (e.g. wrong syntax)."
