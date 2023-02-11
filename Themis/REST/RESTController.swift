@@ -48,6 +48,9 @@ class RESTController {
         guard let httpResponse = response as? HTTPURLResponse else {
             return
         }
+        guard let data = data,
+              let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else { return }
+
         switch httpResponse.statusCode {
         case 200..<300:
             return
@@ -57,19 +60,15 @@ class RESTController {
             Authentication.shared.authenticated = false
             throw RESTError.unauthorized
         case 403:
-            guard let data = data,
-                  let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
-                    let jsonDict = json as? [String: Any], let detail = jsonDict["detail"] as? String else {
-                
-                throw RESTError.forbidden
-            }
-            throw CustomError.error(title: RESTError.forbidden.errorDescription ?? "Test", description: detail)
+            guard let jsonDict = json as? [String: Any], let detail = jsonDict["detail"] as? String else { throw RESTError.forbidden }
+            throw CustomError.error(title: RESTError.forbidden.errorDescription ?? "Forbidden", description: detail)
         case 404:
             throw RESTError.notFound
         case 405:
             throw RESTError.methodNotAllowed
         case 500..<600:
-            throw RESTError.server
+            guard let jsonDict = json as? [String: Any], let detail = jsonDict["message"] as? String else { throw RESTError.server }
+            throw CustomError.error(title: RESTError.server.errorDescription ?? "Server error", description: detail)
         default:
             throw RESTError.different
         }
