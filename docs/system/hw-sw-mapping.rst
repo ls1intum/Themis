@@ -25,4 +25,4 @@ Themis' Assessment Subsystem also requires the Automatic Feedback Subsystem of t
 
 
 .. _Artemis docs: https://docs.artemis.cit.tum.de/dev/system-design/#deployment
-.. _Themis-ML: TODO
+.. _Themis-ML: https://ls1intum.github.io/Themis/admin/deployment/
