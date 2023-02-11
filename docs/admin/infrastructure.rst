@@ -18,7 +18,7 @@ For future maintenance, the existing CI/CD-Pipeline and TestFlight account is ne
 ThemisML
 *****
 
-The ThemisML system is installed on a VM which has Ubuntu 20.04 installed. The only software that has to be installed is
+The `ThemisML`_ system is installed on a VM which has Ubuntu 20.04 installed. The only software that has to be installed is
 `Docker`_, as explained in `this`_ tutorial.
 
 Furthermore, a TLS/SSL certificate is needed to ensure a secure connection with the client over HTTPS. This has to be set to
@@ -28,6 +28,7 @@ Lastly, Harbor a registry for artifacts needs to be configured. It stores the bu
 always pull the latest in case of a deployment.
 
 .. links
+.. _Themis: https://github.com/ls1intum/Themis-ML
 .. _Docker: https://www.docker.com/
 .. _this: https://docs.docker.com/engine/install/ubuntu/
 .. _Harbor: https://harbor.ase.in.tum.de/
