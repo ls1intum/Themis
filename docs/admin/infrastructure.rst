@@ -18,4 +18,4 @@ For future maintenance, the existing CI/CD-Pipeline and TestFlight account is ne
 ThemisML
 *****
 
- Harbor is an artifactory that stores all docker images.
+Harbor is an artifactory that stores all docker images.
