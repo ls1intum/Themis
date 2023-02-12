@@ -55,7 +55,3 @@ The Swift-Markdown-ui library is used to parse and display markdown content in a
 This library is used in the Themis app to display markdown content from Artemis in a clean and formatted manner.
 
 Library repository: https://github.com/gonzalezreal/swift-markdown-ui (2.0.0 - next major)
-
-
-
-by iOS Tom Rudnick, Rearranging Files Katjana Kosic, ML part Andreas Cselovszky Paul Schwind, fastAPI, all imports
