@@ -16,10 +16,9 @@ Themis' Assessment Subsystem also requires the Automatic Feedback Subsystem of t
 
 
 .. figure:: ../images/deployment_diagram.png
-   :scale: 100%
    :alt: Deployment diagram of Themis
    :align: center
-   :width: 100%
+   :width: 600
 
    *Deployment overview*
 
