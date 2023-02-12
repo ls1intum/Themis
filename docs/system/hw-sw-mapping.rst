@@ -1,7 +1,7 @@
 Hardware/Software Mapping
 ===========================================
 
-The diagram above shows the hardware and software mapping of the system.
+The diagram below shows the hardware and software mapping of the system.
 Themis is used by tutors on an iPad. Feedback suggestions are provided by the Assessment subsystem within the app which depends 
 on the Submissions Subsystem of the Artemis Server and the Automatic Feedback Subsystem of the Themis-ML Server.
 Communication between nodes are facilitated by REST API.
