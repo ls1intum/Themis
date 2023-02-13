@@ -13,4 +13,6 @@ This subsystem provides the *Task Processing Service* to the **Submission Subsys
 |
 The **Submission Subsystem** is also provided by Artemsi and contains the Student and Submission components with the Submission component depending on the Student.
 |
-The **Assessment Subsystem** contains the Feedback component that depends on the Guidelines and the Tests. It provides the *Feedback Servcie* to the Submission Subsystem and enables the addition of feedback to a submission.
+The **Assessment Subsystem** contains the Feedback component that depends on the Guidelines and the Tests. It provides the *Feedback Service* to the **Submission Subsystem** and enables the addition of feedback to a submission.
+|
+The **Automatic Feedback Subsystem** represents the machine learning component of the system. Inside, it contains the FeedbackModel and the FeedbackSuggestions components. The FeedbackModel provides the *Similarity Computation Service* to the FeedbackSuggestions. The subsystem in return provides the *Notification Service* to the **Submission Subsystem** and the *Feedback Suggestions Service* to the **Assessment Subsystem**.
