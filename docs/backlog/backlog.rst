@@ -1,52 +1,54 @@
 Product Backlog
 ===========================================
-* Create App Icon/Name
-* Implement REST API for Communication with Artemis
-* Implement Authentication Functionality for Artemis Users
-  
-  - use Bearer Token / Cookie based Authentication based on Artemis Version
-* Implement a Functionality to view and switch between the Tutors Courses
-* Implement a View that shows all Exercises for a Course and allows selecting them
+The following is a highlight of the most significant backlog items that have been successfully integrated into our project.
 
-  - Show a Timeline indicating Release-, Submission- and Assesment (Due) Dates
-* Implement a View that shows Assessment Statistics for a specific Exercise
-* Implement a Functionality to search for a specific Students Submission
-* Implement a Functionality to open a Submission in Read-Only-Mode
-* Implement a Functionality to start the Assessment of a randomly assigned Submission
-* Implement a Functionality to continue the Assessment of a previously saved/submitted Assessment
-* Implement an AssessmentView that is used for the Assessment Workflow
+* Create app icon/name
+* Implement REST API for communication with Artemis
+* Implement authentication functionality for Artemis users
 
-  - Show an expandable FileTree of the Submissions Repository that allows selecting Files
-  - Show all opened Files as dismissable/rearrangable Tabs above the Code Editor
-  - Show the Source Code of the selected File in a Code Editor
-  
-    + Apply dynamic Syntax Highlighting based on the File Extension
-    + Show the Students Changes as a Diff
-    + Highlight all Code-specific inline Feedbacks
-    + Toggle Feedback Edit-Mode when clicking on inline Highlight
-    + Indicate available Feedback Suggestions with a Lightbulb and blue Line next to the related Code Segment
-  - Implement a Functionality to undo/redo Assessment-related Inputs
-  - Implement a Selection Tool that allows to mark Code Segments for Feedback with Finger/Apple Pencil
-  - Implement a Functionality to change the Font Size
-  - Implement a Functionality to accept a Feedback Suggestion
-  - Implement a Sheet that allows to give Feedback consisting of a Text and Credits ranging from -10 to 10
-  
-    + Allow choosing from List of Correction Guidelines as Templates for Feedback
-  - Show the current relative Score of the assessed Submission
-  - Show an expandable Correction Sidebar that includes all Assessment-related Information
-  
-    + Show the problem statement with UML Diagrams and Test Case Information
-    + Show the Instructors Correction Guidelines
-    + Show all current Feedbacks for this Assessment (general, inline, automatic)
-      
-      * Implement a Functionality to give general Feedbacks
-      * Implement a Functionality to edit/delete inline/general Feedbacks
-      * Tapping on inline Feedbacks results in showing the related Code Segment in the Code Editor
-  - Implement a Functionality to save the current Progress of an Assessment
-  - Implement a Functionality to submit the Assessment
-  - Implement a Functionality to dismiss the Assessment
-* Setup Server for ML Functionality
-* Notify ML Server when Submitting Assessments
-* Store Function Blocks with related Feedback in Database
-* Implement Similarity Comparison for Function Blocks of Submissions with stored Blocks in Database
-* Connect App to ML Server
+  - Use bearer token / cookie based authentication based on Artemis version
+* Implement functionality to view and switch between the tutors courses
+* Implement view that shows all exercises for a course and allows selecting them
+
+  - Show a timeline indicating release-, submission- and assessment (due) dates
+* Implement view that shows assessment statistics for a specific exercise
+* Implement functionality to search for a specific student's submission
+* Implement functionality to open a submission in read-only-mode
+* Implement functionality to start the assessment of a randomly assigned submission
+* Implement functionality to continue the assessment of a previously saved/submitted assessment
+* Implement view that is used for the assessment workflow
+
+  - Show an expandable filetree of the submissions repository that allows selecting files
+  - Show all opened files as dismissable/rearrangeable tabs above the code editor
+  - Show the source code of the selected file in a code editor
+
+    + Apply dynamic syntax highlighting based on the file extension
+    + Show the student's changes as a diff
+    + Highlight all code-specific inline feedbacks
+    + Toggle feedback edit-mode when clicking on inline highlight
+    + Indicate available feedback suggestions with a lightbulb and blue line next to the related code segment
+  - Implement functionality to undo/redo assessment-related inputs
+  - Implement selection tool that allows to mark code segments for feedback with finger/Apple Pencil
+  - Implement functionality to change the font size
+  - Implement functionality to accept a feedback suggestion
+  - Implement sheet that allows to give feedback consisting of a text and credits ranging from -10 to 10
+
+    + Allow choosing from list of correction guidelines as templates for feedback
+  - Show the current relative score of the assessed submission
+  - Show an expandable correction sidebar that includes all assessment-related information
+
+    + Show the problem statement with UML diagrams and test case information
+    + Show the instructor's correction guidelines
+    + Show all current feedbacks for this assessment (general, inline, automatic)
+
+      * Implement functionality to give general feedbacks
+      * Implement functionality to edit/delete inline/general feedbacks
+      * Tapping on inline feedbacks results in showing the related code segment in the code editor
+  - Implement functionality to save the current progress of an assessment
+  - Implement functionality to submit the assessment
+  - Implement functionality to dismiss the assessment
+* Setup server for ML functionality
+* Notify ML server when submitting assessments
+* Store function blocks with related feedback in database
+* Implement similarity comparison for function blocks of submissions with stored blocks in database
+* Connect app to ML server
