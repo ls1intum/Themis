@@ -1,13 +1,20 @@
 Persistent Data Management
 ===========================================
 
-.. Persistent data management describes the persistent data stored by the system and the data management infrastructure required for it. This section typically includes the description of data schemes, the selection of a database, and the description of the encapsulation of the database. This section is optional. It should be included if your architecture includes a data centric subsystem. For details refer to section 7.4.2 in Prof. Bruegge's book.
-
 *****
-Themis App
+Themis iPad App
 *****
 
-.. (Tom)
+The app stores the authentication Cookie in the HTTPCookieStorage which is described in the Access Control and Security Chapter.
+
+
+UserDefaults
+------------
+
+The app stores the selected Course ID in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
+course.
+The Artemis-Server URL is also stored in the UserDefaults at **"serverURL"**.
+
 
 *****
 ThemisML Server

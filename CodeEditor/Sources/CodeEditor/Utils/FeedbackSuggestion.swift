@@ -17,16 +17,6 @@ public struct FeedbackSuggestion: Decodable, Equatable {
     public let text: String
     public let credits: Double
     
-    public init(srcFile: String, text: String, fromLine: Int, toLine: Int, credits: Double) {
-        self.exerciseId = -1
-        self.participationId = -1
-        self.srcFile = srcFile
-        self.fromLine = fromLine
-        self.toLine = toLine
-        self.text = text
-        self.credits = credits
-    }
-    
     enum DecodingKeys: String, CodingKey {
         case exercise_id
         case participation_id
