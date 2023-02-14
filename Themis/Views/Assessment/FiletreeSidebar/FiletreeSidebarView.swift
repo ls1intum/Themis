@@ -23,9 +23,11 @@ struct FiletreeSidebarView: View {
                         }
                     }
                     .listRowSeparator(.hidden)
+                    .listRowBackground(Color("sidebarBackground"))
                 }
                 .listStyle(.inset)
-                .colorMultiply(Color("sidebarBackground"))
+                .background(Color("sidebarBackground"))
+                .scrollContentBackground(.hidden)
             }
             Spacer()
         }

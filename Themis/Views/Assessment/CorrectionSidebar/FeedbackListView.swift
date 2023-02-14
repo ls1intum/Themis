@@ -41,7 +41,7 @@ struct FeedbackListView: View {
                             gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
-                        .listRowBackground(Color(UIColor.systemBackground))
+                        .listRowBackground(Color("sidebarBackground"))
                     }
                     .onDelete(perform: delete(at:))
                 }.headerProminence(.increased)
@@ -58,7 +58,7 @@ struct FeedbackListView: View {
                             gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
-                        .listRowBackground(Color(UIColor.systemBackground))
+                        .listRowBackground(Color("sidebarBackground"))
                     }
                     .onDelete(perform: delete(at:))
                 } header: {
@@ -78,7 +78,7 @@ struct FeedbackListView: View {
                             gradingCriteria: gradingCriteria
                         )
                         .listRowSeparator(.hidden)
-                        .listRowBackground(Color(UIColor.systemBackground))
+                        .listRowBackground(Color("sidebarBackground"))
                     }
                 } header: {
                     HStack {
@@ -89,7 +89,6 @@ struct FeedbackListView: View {
             }
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
-            .colorMultiply(Color("sidebarBackground"))
             Spacer()
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(
