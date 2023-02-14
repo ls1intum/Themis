@@ -4,7 +4,7 @@ Analysis Object Model
 The Analysis Object Model describe the static structure of the system by means of classes, attributes and associations.
 | 
 
-.. image:: images/class_diagram.png
+.. image:: ../images/class_diagram.png
 
 |
 
