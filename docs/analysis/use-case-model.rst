@@ -4,7 +4,7 @@ Use Case Model
 This section describes the functional behavior of the system as seen by the user. For this, UML use case diagrams are very suitable and show the interaction between the user and the system. In this setting, there are two systems and two different actors. 
 |
 
-.. image:: images/use_case_diagram.png
+.. image:: ../images/use_case_diagram.png
 |
 
 Themis is the system the tutor interacts with. A tutors main use cases are searching for a student submission, requesting a random submission and providing feedback.
