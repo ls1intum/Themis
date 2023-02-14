@@ -61,7 +61,7 @@ struct FiletreeSidebarView: View {
         .padding(.horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .bold(file === cvm.selectedFile)
-//        .background(file === cvm.selectedFile ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+        .background(file === cvm.selectedFile ? Color("selectedFileBackground") : Color("sidebarBackground"))
         .cornerRadius(10)
     }
 }
