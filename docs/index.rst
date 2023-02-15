@@ -52,5 +52,6 @@ Themis: Artemis Tutor Grading App for iPad
     :includehidden:
     :maxdepth: 3
     
-    admin/index
+    admin/app/index
+    admin/themisml/index
     admin/issues
