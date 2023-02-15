@@ -42,7 +42,7 @@ This activity diagram shows the workflow of assessing student submissions in the
 
 
 ****
-Themis ML Server
+ThemisML Server
 ****
 
 Generating feedback suggestions
