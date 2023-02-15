@@ -5,6 +5,6 @@ ThemisML
     :caption: ThemisML
     :includehidden:
     
-    deployment
     infrastructure
+    deployment
     third-party

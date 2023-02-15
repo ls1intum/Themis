@@ -5,6 +5,6 @@ Themis App
     :caption: Themis App
     :includehidden:
     
-    deployment
     infrastructure
+    deployment
     third-party
