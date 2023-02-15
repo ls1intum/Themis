@@ -286,7 +286,7 @@ struct AssessmentView: View {
                 )
             }
         }
-        .task(priority: .high) {
+        .task {
             if let submissionId, vm.submission == nil {
                 await vm.getSubmission(id: submissionId)
             }

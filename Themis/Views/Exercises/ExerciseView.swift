@@ -13,7 +13,6 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    let dateProperties: [ExerciseDateProperty]
     let exercise: Exercise
     
     
@@ -28,7 +27,7 @@ struct ExerciseView: View {
                                 exercise: exercise,
                                 submissionStatus: .open
                             )
-                        }
+                        }.disabled(!submissionDueDateOver)
                     }
                     if !submissionListVM.submittedSubmissions.isEmpty {
                         Section("Finished submissions") {
@@ -37,7 +36,7 @@ struct ExerciseView: View {
                                 exercise: exercise,
                                 submissionStatus: .submitted
                             )
-                        }
+                        }.disabled(!submissionDueDateOver)
                     }
                     Section("Statistics") {
                         HStack(alignment: .center) {
@@ -70,19 +69,10 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination:
-                                AssessmentView(
-                                    vm: assessmentVM,
-                                    ar: assessmentVM.assessmentResult,
-                                    exercise: exercise
-                                )
-                ) {
-                    startNewAssessmentButton
-                }
+                startNewAssessmentButton.disabled(!submissionDueDateOver)
             }
         }
         .errorAlert(error: $assessmentVM.error)
-        .errorAlert(error: $submissionListVM.error)
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
@@ -108,6 +98,12 @@ struct ExerciseView: View {
                 .foregroundColor(.white)
         }
         .buttonStyle(NavigationBarButton())
+    }
+    private var submissionDueDateOver: Bool {
+        if let dueDate = exercise.dueDate, dueDate <= ArtemisDateHelpers.stringifyDate(Date.now)! {
+            return true
+        }
+        return false
     }
     
     private func fetchExerciseData() async {

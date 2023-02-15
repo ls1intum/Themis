@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Exercise: Codable {
+struct Exercise: Codable, Identifiable {
     let id: Int
     let title: String?
     let shortName: String?
@@ -15,9 +15,9 @@ struct Exercise: Codable {
     let assessmentType: String?
     let problemStatement: String?
     let gradingInstructions: String? // For Programming Assesments this might be nil
-    let releaseDate: String?
-    let dueDate: String?
-    let assessmentDueDate: String?
+    var releaseDate: String?
+    var dueDate: String?
+    var assessmentDueDate: String?
     let templateParticipation: TemplateParticipation?
 
     init() {
