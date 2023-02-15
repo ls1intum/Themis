@@ -34,7 +34,6 @@ struct AssessmentView: View {
             HStack(spacing: 0) {
                 if showFileTree {
                     filetreeWithPlaceholder
-                        .padding(.top, 35)
                         .frame(width: dragWidthLeft)
                     leftGrip
                         .edgesIgnoringSafeArea(.bottom)
