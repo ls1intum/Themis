@@ -23,7 +23,7 @@ SwiftUI-Cached-AsyncImage
 The SwiftUI-Cached-AsyncImage library provides an easy way to load and cache images asynchronously in SwiftUI. 
 This library is used in the Themis app to display UML-Diagrams in a fast and efficient manner.
 
-Library repository: https://github.com/lorenzofiamingo/swiftui-cached-async-image (2.0.0 - Next Major)
+Library repository: https://github.com/lorenzofiamingo/swiftui-cached-async-image (2.1.1 - Next Major)
 
 CodeEditor
 ----------
