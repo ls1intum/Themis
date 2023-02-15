@@ -2,7 +2,6 @@ ThemisML
 ===========================================
 
 .. toctree::
-    :caption: ThemisML
     :includehidden:
     
     infrastructure

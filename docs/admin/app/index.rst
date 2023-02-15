@@ -2,7 +2,6 @@ Themis App
 ===========================================
 
 .. toctree::
-    :caption: Themis App
     :includehidden:
     
     infrastructure
