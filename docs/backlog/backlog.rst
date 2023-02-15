@@ -18,8 +18,8 @@ The following is a highlight of the most significant backlog items that have bee
 * Implement functionality to continue the assessment of a previously saved/submitted assessment
 * Implement view that is used for the assessment workflow
 
-  - Show an expandable filetree of the submissions repository that allows selecting files
-  - Show all opened files as dismissable/rearrangeable tabs above the code editor
+  - Show an expandable file tree of the submissions repository that allows selecting files
+  - Show all opened files as dismissable / rearrangeable tabs above the code editor
   - Show the source code of the selected file in a code editor
 
     + Apply dynamic syntax highlighting based on the file extension
