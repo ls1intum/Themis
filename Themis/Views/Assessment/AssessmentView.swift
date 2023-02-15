@@ -11,6 +11,7 @@ struct AssessmentView: View {
     @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
+    @State var showCorrectionSidebar = false
     @State private var dragWidthLeft: CGFloat = 0.2 * UIScreen.main.bounds.size.width
     @State private var dragWidthRight: CGFloat = 0
     @State private var correctionAsPlaceholder = true
@@ -44,10 +45,13 @@ struct AssessmentView: View {
                     readOnly: vm.readOnly
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                rightGrip
-                    .edgesIgnoringSafeArea(.bottom)
-                correctionWithPlaceholder
-                    .frame(width: dragWidthRight)
+                Group {
+                    rightGrip
+                        .edgesIgnoringSafeArea(.bottom)
+                    correctionWithPlaceholder
+                        .frame(width: dragWidthRight)
+                }
+                .animation(.default, value: showCorrectionSidebar)
             }
             .animation(.default, value: showFileTree)
             Button {
@@ -380,6 +384,7 @@ struct AssessmentView: View {
                 .onTapGesture {
                     if dragWidthRight <= 0 {
                         withAnimation {
+                            showCorrectionSidebar = true
                             dragWidthRight = 250
                             correctionAsPlaceholder = false
                         }
@@ -401,7 +406,10 @@ struct AssessmentView: View {
                         }
                         .onEnded {_ in
                             if dragWidthRight < minRightSnapWidth {
+                                showCorrectionSidebar = false
                                 dragWidthRight = 0
+                            } else {
+                                showCorrectionSidebar = true
                             }
                         }
                 )
