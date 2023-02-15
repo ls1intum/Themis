@@ -5,17 +5,17 @@ This section focuses on the dynamic behavior of the system. UML activity diagram
 
 Since it is crucial to show the dynamic behavior of both *Themis* as well as for the *Themis machine learning component*, this section will be divided into two parts.
 
-****
-Themis app
-****
+**********
+Themis App
+**********
 
-Answering student questions
-------------
+Answering Student Questions
+---------------------------
 
 .. image:: ../images/activity_diagram_1.png
 
 This activity diagram shows how the flow of answering a student question on a certain exercise e.g. during the lecture looks like. Assume that the tutor already opened the app and navigated to the corresponding lecture course.
-|
+
 1. The tutor navigates to the specific exercise.
 2. If there are no questions from any student, the tutor is done. Otherwise, the tutor searches for the student's submission.
 3. Then, the tutor opens the submission in *read-mode*.
@@ -23,13 +23,13 @@ This activity diagram shows how the flow of answering a student question on a ce
 5. If otherwise, the tutor is done.
 
 
-Assessing student submissions
-------------
+Assessing Student Submissions
+-----------------------------
 
 .. image:: ../images/activity_diagram_2.png
 
 This activity diagram shows the workflow of assessing student submissions in the app. Assume that the tutor already opened the app and navigated to the corresponding lecture course.
-|
+
 1. The tutor navigates to the specific exercise.
 2. If there are no open assessments left, the tutor is done.
 3. If otherwise, the tutor starts the assessment of submissions. The tutor receives a random student submission in return.
@@ -41,17 +41,17 @@ This activity diagram shows the workflow of assessing student submissions in the
 9. If there are no more open assessments left, the tutor cancels the assessment mode and is done.
 
 
-****
-Themis ML Server
-****
+********
+ThemisML
+********
 
-Generating feedback suggestions
-------------
+Generating Feedback Suggestions
+-------------------------------
 
 .. image:: ../images/activity_diagram_ml.png
 
 This activity diagram shows the process of generating feedback suggestions.
-|
+
 1. First, the submissions are loaded from the Themis notification request.
 2. Then, the function blocks of each submission are extracted. This results in a list of function blocks.
 3. Afterwards the similarity scores between the extracted function blocks and the function blocks that are stored in the database are computed.

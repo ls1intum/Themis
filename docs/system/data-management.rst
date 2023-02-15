@@ -1,24 +1,24 @@
 Persistent Data Management
 ===========================================
 
-*****
-Themis iPad App
-*****
+**********
+Themis App
+**********
 
-The app stores the authentication Cookie in the HTTPCookieStorage which is described in the Access Control and Security Chapter.
+The app stores the authentication cookie in the HTTPCookieStorage, which is described in the :ref:`Access Control and Security<Access Control and Security>` Chapter.
 
 
 UserDefaults
 ------------
 
-The app stores the selected Course ID in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
+The app stores the selected Course ID (which are the ones provided by Artemis) in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
 course.
-The Artemis-Server URL is also stored in the UserDefaults at **"serverURL"**.
+The Artemis server URL is also stored in the UserDefaults at **"serverURL"**.
 
 
-*****
-ThemisML Server
-*****
+********
+ThemisML
+********
 ThemisML has a Postgres database separate from the Artemis database to store existing feedbacks for given submissions. The choice of the database follows a related project to ThemisML, `Athene`_.
 In principle, ThemisML could use the Artemis database directly, but the development team decided to use a separate database for a faster development cycle and more flexibility. The database might be merged in the future.
 
