@@ -5,15 +5,15 @@ Persistent Data Management
 Themis iPad App
 ***************
 
-The app stores the authentication Cookie in the HTTPCookieStorage which is described in the Access Control and Security Chapter.
+The app stores the authentication cookie in the HTTPCookieStorage, which is described in the :ref:`Access Control and Security<Access Control and Security>` Chapter.
 
 
 UserDefaults
 ------------
 
-The app stores the selected Course ID in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
+The app stores the selected Course ID (which are the ones provided by Artemis) in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
 course.
-The Artemis-Server URL is also stored in the UserDefaults at **"serverURL"**.
+The Artemis server URL is also stored in the UserDefaults at **"serverURL"**.
 
 
 ***************

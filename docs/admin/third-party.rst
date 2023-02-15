@@ -13,7 +13,7 @@ The Themis iPad App utilizes a number of open-source libraries to enhance its fu
 This provides an overview of the libraries used in the Themis app.
 
 KeychainAccess
-------------
+--------------
 
 The KeychainAccess library is used to securely store and retrieve sensitive information, 
 such as authentication tokens. 
@@ -23,7 +23,7 @@ Library repository: https://github.com/kishikawakatsumi/KeychainAccess (master b
 
 
 SwiftUI-Cached-AsyncImage
-------------
+-------------------------
 
 The SwiftUI-Cached-AsyncImage library provides an easy way to load and cache images asynchronously in SwiftUI. 
 This library is used in the Themis iPad App to display UML-Diagrams in a fast and efficient manner.
@@ -40,7 +40,7 @@ It was modified locally in order to select and give feedback in the code editor
 Library repository: https://github.com/ZeeZide/CodeEditor.git (locally modified)
 
 SwiftUIReorderableForEach
-------------
+-------------------------
 
 The SwiftUIReorderableForEach library is used to create reorderable lists in SwiftUI. 
 This library is used in the Themis iPad App to provide the user with the ability to reorder the tabs for open code files.
@@ -49,7 +49,7 @@ Library repository: https://github.com/globulus/swiftui-reorderable-foreach (mai
 
 
 Swift-Markdown-ui
-------------
+-----------------
 
 The Swift-Markdown-ui library is used to parse and display markdown content in a SwiftUI app. 
 This library is used in the Themis iPad App to display markdown content from Artemis in a clean and formatted manner.
@@ -76,7 +76,7 @@ Library repository SQLAlchemy: https://github.com/sqlalchemy/sqlalchemy (1.4.46)
 Library repository Psycopg2: https://github.com/psycopg/psycopg2 (2.9.5)
 
 Feedback generation
-------------
+-------------------
 For extracting the methods, we use `ANTL4`_ for python.
 To compare code, we use `CodeBERTScore`_, which is a wrapper for CodeBERT. Because it is not available on PyPI, we directly link to the GitHub repository in our requirements.
 

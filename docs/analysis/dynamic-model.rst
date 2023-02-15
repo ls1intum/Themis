@@ -9,7 +9,7 @@ Since it is crucial to show the dynamic behavior of both Themis iPad App as well
 Themis iPad App
 ***************
 
-Answering student questions
+Answering Student Questions
 ---------------------------
 
 .. image:: ../images/activity_diagram_1.png
@@ -23,7 +23,7 @@ This activity diagram shows how the flow of answering a student question on a ce
 5. If otherwise, the tutor is done.
 
 
-Assessing student submissions
+Assessing Student Submissions
 -----------------------------
 
 .. image:: ../images/activity_diagram_2.png
@@ -45,7 +45,7 @@ This activity diagram shows the workflow of assessing student submissions in the
 ThemisML Server
 ***************
 
-Generating feedback suggestions
+Generating Feedback Suggestions
 -------------------------------
 
 .. image:: ../images/activity_diagram_ml.png

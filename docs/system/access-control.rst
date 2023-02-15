@@ -1,3 +1,4 @@
+.. _Access Control and Security:
 Access Control and Security
 ===========================================
 
@@ -7,7 +8,7 @@ Access Control and Security
 Themis iPad App
 ***************
 
-In order to make requests to the Artemis server the user has to be authenticated, i.e. has to have a cookie which contains a jwt token. The corresponding cookie is set by the Artemis server when calling the `/authenticate`_ route. In iOS cookies are stored and managed in the `HTTPCookieStorage`_, which means no further management of the token is done by Themis.
+In order to make requests to the Artemis server the user has to be authenticated, i.e. has to have a cookie which contains a jwt token. The corresponding cookie is set by the Artemis server when calling the `/authenticate`_ route. In iOS cookies are stored and managed in the ``HTTPCookieStorage``, which means no further management of the token is done by Themis.
 
 ***************
 ThemisML Server
