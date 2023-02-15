@@ -11,7 +11,7 @@ All changes on the develop branch are automatically deployed to TestFlight.
 
   * **Build and Release Pipeline:**
     
-    This pipeline is automatically triggered by changes in the Themis repository. It checks for swiftlint errors. It uses 
+    This pipeline is automatically triggered by changes in the Themis repository. It checks for `SwiftLint`_ errors. It uses 
     fastlane to build the app. If the change is on the develop branch then it releases to TestFlight.
 
 ~~~~~~~~~~~~~~~~~~~
@@ -31,3 +31,5 @@ via a public TestFlight link.
 
     This group gets the newest release manually via adding a certain build to their group. Furthermore, it is possible to 
     release notes.
+
+.. _SwiftLint: https://github.com/realm/SwiftLint
