@@ -11,9 +11,9 @@ The app stores the authentication cookie in the HTTPCookieStorage, which is desc
 UserDefaults
 ------------
 
-The app stores the selected Course ID in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
+The app stores the selected Course ID (which are the ones provided by Artemis) in the UserDefaults at **"shownCourseIDKey"** in order to always show the last selected
 course.
-The Artemis-Server URL is also stored in the UserDefaults at **"serverURL"**.
+The Artemis server URL is also stored in the UserDefaults at **"serverURL"**.
 
 
 ********
