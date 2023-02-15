@@ -52,7 +52,5 @@ Themis: Artemis Tutor Grading App for iPad
     :includehidden:
     :maxdepth: 3
     
-    admin/infrastructure
-    admin/deployment
+    admin/index
     admin/issues
-    admin/third-party
