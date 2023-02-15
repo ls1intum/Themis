@@ -12,8 +12,8 @@ Database
 ------------
 To connect to the PostgreSQL database, ThemisML uses `SQLAlchemy`_ as the client and `Psycopg2`_ as the database driver.
 
-Library repository SQLAlchemy: https://github.com/sqlalchemy/sqlalchemy (1.4.46)
-Library repository Psycopg2: https://github.com/psycopg/psycopg2 (2.9.5)
+| Library repository SQLAlchemy: https://github.com/sqlalchemy/sqlalchemy (1.4.46)
+| Library repository Psycopg2: https://github.com/psycopg/psycopg2 (2.9.5)
 
 Feedback generation
 -------------------
