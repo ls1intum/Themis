@@ -61,7 +61,9 @@ class AssessmentViewModel: ObservableObject {
         do {
             try await ArtemisAPI.cancelAssessment(submissionId: submissionId)
         } catch {
-            self.error = error
+            if error as? RESTError != RESTError.empty {
+                self.error = error
+            }
         }
         self.submission = nil
         self.assessmentResult = AssessmentResult()
