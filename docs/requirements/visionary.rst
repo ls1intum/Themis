@@ -1,7 +1,7 @@
 Visionary Scenarios
 ===========================================
 
-In the following, the requirements of the Themis app are explained by means of visionary scenarios. The presented three scenarios describe the most important functionality that was developed and contain the following actors: 
+In the following, the requirements of the Themis iPad App are explained by means of visionary scenarios. The presented three scenarios describe the most important functionality that was developed and contain the following actors: 
 
 | Anna: Tutor in the iPraktikum’s intro course
 | Tim: Tutor in the lecture-based course Patterns in Software Engineering

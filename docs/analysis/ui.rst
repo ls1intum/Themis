@@ -2,7 +2,7 @@ User Interface
 ===========================================
 
 Initial Mockups
-********
+***************
 
 The high-fidelity mockups below show the initial design draft for Themis. They focus on the assessment view and display the main
 workflow using the iPad app. The view is mainly divided into three parts horizontally, including a filetree sidebar,
