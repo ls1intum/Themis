@@ -12,7 +12,7 @@ KeychainAccess
 
 The KeychainAccess library is used to securely store and retrieve sensitive information, 
 such as authentication tokens. 
-KeychainAccess provides a simple and secure way to store data in the iOS keychain.
+KeychainAccess provides a simple and secure way to store data in the iOS Keychain.
 
 Library repository: https://github.com/kishikawakatsumi/KeychainAccess (master branch)
 

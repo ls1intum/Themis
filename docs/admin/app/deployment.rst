@@ -20,7 +20,7 @@ TestFlight Release
 
 TestFlight supports multiple user groups. In our case it is divided into Developers, Customer + Management and Tutors.
 It offers two kinds of testers, namely internal (Developers and Customer + Management) and external testers (Tutors). The 
-main difference is that interal testers are registered via their Apple-ID and external testers download the app anonymously 
+main difference is that internal testers are registered via their Apple-ID and external testers download the app anonymously 
 via a public TestFlight link.
 
   * **Developers:**
