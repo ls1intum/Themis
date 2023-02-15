@@ -13,6 +13,9 @@ struct ExerciseListItem: View {
 
     var body: some View {
         HStack {
+            Image(systemName: "keyboard")
+                .font(.system(size: 23))
+            
             Text(exercise.title ?? "")
                 .font(.title2)
                 .fontWeight(.medium)
