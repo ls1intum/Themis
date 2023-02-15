@@ -8,9 +8,9 @@ to be part of at least one group, either via Apple-ID or via public TestFlight l
 
 Apart from that, the iPad app can also be tested via XCode and its integrated Simulator. To prevent entering the Artemis 
 credentials every time rebuilding the app while testing, just add them to your XCode environment variables. For that, click on
-the Themis icon on the top and choose "Edit Scheme...". Under "Environment Variables", add ARTEMIS_STAGING_SERVER, 
-ARTEMIS_STAGING_USER and ARTEMIS_STAGING_PASSWORD with their according values. To use the preview feature in XCode, wrap
-your preview component with an AuthenticatedPreview.
+the Themis icon on the top and choose "Edit Scheme...". Under "Environment Variables", add ``ARTEMIS_STAGING_SERVER``, 
+``ARTEMIS_STAGING_USER`` and ``ARTEMIS_STAGING_PASSWORD`` with their according values. To use the preview feature in XCode, wrap
+your preview component with an ``AuthenticatedPreview``.
 
 For future maintenance, the existing CI/CD-Pipeline and the TestFlight account is needed.
 
