@@ -36,13 +36,12 @@ struct ProblemStatementCellView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: 30, maxHeight: 30)
-                                .background(Color(.systemBackground))
                         } else {
                             Image("TestFailedSymbol")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: 30, maxHeight: 30)
-                                .background(Color(.systemBackground))
+                                .background(Color("sidebarBackground"))
                         }
                     }
                 }
