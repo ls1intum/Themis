@@ -408,6 +408,8 @@ struct AssessmentView: View {
                             if dragWidthRight < minRightSnapWidth {
                                 showCorrectionSidebar = false
                                 dragWidthRight = 0
+                            } else {
+                                showCorrectionSidebar = true
                             }
                         }
                 )
