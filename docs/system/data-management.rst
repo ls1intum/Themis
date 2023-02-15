@@ -5,7 +5,7 @@ Persistent Data Management
 Themis App
 **********
 
-The app stores the authentication cookie in the HTTPCookieStorage, which is described in the Access Control and Security Chapter.
+The app stores the authentication cookie in the HTTPCookieStorage, which is described in the :ref:`Access Control and Security<Access Control and Security>` Chapter.
 
 
 UserDefaults
