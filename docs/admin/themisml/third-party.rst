@@ -16,7 +16,7 @@ Library repository SQLAlchemy: https://github.com/sqlalchemy/sqlalchemy (1.4.46)
 Library repository Psycopg2: https://github.com/psycopg/psycopg2 (2.9.5)
 
 Feedback generation
-------------
+-------------------
 For extracting the methods, we use `ANTL4`_ for python.
 To compare code, we use `CodeBERTScore`_, which is a wrapper for CodeBERT. Because it is not available on PyPI, we directly link to the GitHub repository in our requirements.
 

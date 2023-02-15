@@ -1,9 +1,9 @@
 Persistent Data Management
 ===========================================
 
-*****
+**********
 Themis App
-*****
+**********
 
 The app stores the authentication Cookie in the HTTPCookieStorage which is described in the Access Control and Security Chapter.
 
@@ -16,9 +16,9 @@ course.
 The Artemis-Server URL is also stored in the UserDefaults at **"serverURL"**.
 
 
-*****
+********
 ThemisML
-*****
+********
 ThemisML has a Postgres database separate from the Artemis database to store existing feedbacks for given submissions. The choice of the database follows a related project to ThemisML, `Athene`_.
 In principle, ThemisML could use the Artemis database directly, but the development team decided to use a separate database for a faster development cycle and more flexibility. The database might be merged in the future.
 

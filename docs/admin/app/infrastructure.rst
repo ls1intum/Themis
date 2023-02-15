@@ -13,3 +13,5 @@ ARTEMIS_STAGING_USER and ARTEMIS_STAGING_PASSWORD with their according values. T
 your preview component with an AuthenticatedPreview.
 
 For future maintenance, the existing CI/CD-Pipeline and the TestFlight account is needed.
+
+.. _TestFlight: https://testflight.apple.com/join/NmyhJo2V

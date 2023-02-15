@@ -5,12 +5,12 @@ This section focuses on the dynamic behavior of the system. UML activity diagram
 
 Since it is crucial to show the dynamic behavior of both *Themis* as well as for the *Themis machine learning component*, this section will be divided into two parts.
 
-****
+**********
 Themis App
-****
+**********
 
 Answering Student Questions
-------------
+---------------------------
 
 .. image:: ../images/activity_diagram_1.png
 
@@ -24,7 +24,7 @@ This activity diagram shows how the flow of answering a student question on a ce
 
 
 Assessing Student Submissions
-------------
+-----------------------------
 
 .. image:: ../images/activity_diagram_2.png
 
@@ -41,12 +41,12 @@ This activity diagram shows the workflow of assessing student submissions in the
 9. If there are no more open assessments left, the tutor cancels the assessment mode and is done.
 
 
-****
+********
 ThemisML
-****
+********
 
 Generating Feedback Suggestions
-------------
+-------------------------------
 
 .. image:: ../images/activity_diagram_ml.png
 

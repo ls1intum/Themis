@@ -2,7 +2,7 @@ User Interface
 ===========================================
 
 Initial Mockups
-********
+***************
 
 The high-fidelity mockups below show the initial design draft for Themis. They focus on the assessment view and display the main
 workflow using the iPad app. The view is mainly divided into three parts horizontally, including a filetree sidebar,
@@ -28,7 +28,7 @@ either jump to the next submission or stop assessing.
 
 
 Current Design
-********
+**************
 
 The current design is shown below. Starting with the course view, the tutor sees all exercises a course contains as
 well as the corresponding information. Within each exercise, general statistics about the exercise are provided alongside
@@ -66,4 +66,3 @@ submit the current feedback.
 |                                                           |                                                                |
 |   *Assessment view (save)*                                |       *Assessment view (submit)*                               |
 +-----------------------------------------------------------+----------------------------------------------------------------+
-

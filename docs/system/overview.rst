@@ -2,6 +2,7 @@ Overview
 ===========================================
 
 .. Include and describe the Workflow here in terms of the main components and technologies used.
+
 Themis is a native iPad app using SwiftUI, which mainly communicates with Artemis-Servers via REST calls.
 It also communicates with a ThemisML server written in Python for the feedback suggestions feature.
 
