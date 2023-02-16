@@ -19,7 +19,7 @@
 
 project = 'Themis'
 copyright = '2023, Technical University of Munich, Chair for Applied Software Engineering'
-author = 'Technical University of Munich, Chair for Applied Software Engineering'
+author = 'Chair for Applied Software Engineering, TUM'
 
 
 # -- General configuration ---------------------------------------------------
