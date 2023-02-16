@@ -21,10 +21,17 @@ struct ExamSectionView: View {
                     NavigationLink {
                         ExerciseView(exercise: exercise)
                     } label: {
-                        Text(exercise.title ?? "")
-                            .font(.title2)
-                            .fontWeight(.medium)
+                        HStack {
+                            if let iconName = exercise.exerciseIconName {
+                                Image(systemName: iconName)
+                                    .scaledToFill()
+                            }
+                            Text(exercise.title ?? "")
+                                .font(.title2)
+                                .fontWeight(.medium)
+                        }
                     }
+                    .disabled(exercise.disabled)
                 }
             }
         }.task {

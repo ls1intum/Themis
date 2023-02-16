@@ -7,6 +7,14 @@
 
 import Foundation
 
+enum ExerciseType: String, Codable {
+    case text = "TEXT"
+    case programming = "PROGRAMMING"
+    case modelling = "MODELING"
+    case file_upload = "FILE_UPLOAD"
+    case quiz = "QUIZ"
+}
+
 struct Exercise: Codable, Identifiable {
     let id: Int
     let title: String?
@@ -19,6 +27,29 @@ struct Exercise: Codable, Identifiable {
     var dueDate: String?
     var assessmentDueDate: String?
     let templateParticipation: TemplateParticipation?
+    let exerciseType: ExerciseType?
+    
+    var exerciseIconName: String? {
+        guard let exerciseType else {
+            return nil
+        }
+        switch exerciseType {
+        case .programming:
+            return "keyboard"
+        case .text:
+            return "character"
+        case .modelling:
+            return "flowchart"
+        case .file_upload:
+            return "folder"
+        case .quiz:
+            return "checkmark.bubble"
+        }
+    }
+    
+    var disabled: Bool {
+        exerciseType == nil || exerciseType != .programming
+    }
 
     init() {
         self.id = -1
@@ -32,6 +63,7 @@ struct Exercise: Codable, Identifiable {
         self.dueDate = nil
         self.assessmentDueDate = nil
         self.templateParticipation = nil
+        self.exerciseType = nil
     }
     
     private func dateNow() -> String {
