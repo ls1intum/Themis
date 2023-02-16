@@ -49,6 +49,8 @@ submit the current feedback.
 |                                                           |                                                                |
 |   *Course view*                                           |       *Exercise view*                                          |
 +-----------------------------------------------------------+----------------------------------------------------------------+
+
++-----------------------------------------------------------+----------------------------------------------------------------+
 | .. figure:: ../images/design_assessment.png               |  .. figure:: ../images/design_feedback.png                     |
 |   :alt: Deployment diagram of Themis                      |       :alt: Deployment diagram of Themis                       |
 |   :width: 450                                             |       :width: 450                                              |
@@ -56,12 +58,16 @@ submit the current feedback.
 |                                                           |                                                                |
 |   *Assessment view*                                       |       *Assessment view (feedback)*                             |
 +-----------------------------------------------------------+----------------------------------------------------------------+
+
++-----------------------------------------------------------+----------------------------------------------------------------+
 | .. figure:: ../images/design_guidelines.png               |  .. figure:: ../images/design_feedback-list.png                |
 |   :alt: Deployment diagram of Themis                      |       :alt: Deployment diagram of Themis                       |
 |   :width: 450                                             |       :width: 450                                              |
 |   :align: center                                          |       :align: center                                           |
 |                                                           |                                                                |
 |   *Assessment view (correction guidelines)*               |       *Assessment view (feedback overview)*                    |
++-----------------------------------------------------------+----------------------------------------------------------------+
+
 +-----------------------------------------------------------+----------------------------------------------------------------+
 | .. figure:: ../images/design_save.png                     |  .. figure:: ../images/design_submit.png                       |
 |   :alt: Deployment diagram of Themis                      |       :alt: Deployment diagram of Themis                       |
