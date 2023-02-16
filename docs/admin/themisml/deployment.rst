@@ -1,4 +1,5 @@
 .. _themisml-deployment:
+
 Deployment and Configuration
 ===========================================
 
@@ -31,7 +32,7 @@ redirects all incoming traffic from port 80 to port 443 to ensure a secured conn
 uses a SSL/TLS certificate from the TUM Rechnerbetriebsgruppe.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Manual restart of the ThemisML server:
+Manual Restart of the ThemisML Server:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   * **Stopping and removing all running containers:**

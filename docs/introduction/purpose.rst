@@ -9,12 +9,12 @@ an open-source learning management system used at universities, Themis allows tu
 inspect students' code and provide feedback on submissions.
 
 Designed as a native iPad application, Themis optimizes viewing and assessing programming exercises on a mobile
-device. Its intuitive interface and user-friendly assessment editor enable tutors to give both general as well as
+device. Its' intuitive interface and user-friendly assessment editor enable tutors to give both general as well as
 code-specific inline feedback. Leveraging the iPad's unique features allows a more convenient and streamlined feedback
 process using Themis. By supporting the Apple Pencil, tutors can highlight specific code segments and provide comments
 using the Scribble feature.
 
-Through the connection to the Artemis server, tutors can log in and select the corresponding course as usual, to
+Through the connection to the Artemis server, tutors can log in and select the corresponding course as usual to
 seamlessly continue the assessment on the go. To enhance the feedback process even further, Themis assists tutors while
 providing more suitable and effective feedback. For this, `Themis-ML <https://github.com/ls1intum/Themis-ML>`_ is
 incorporated, a system for automated feedback suggestions of programming exercises. By analyzing the code and

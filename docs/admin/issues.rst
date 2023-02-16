@@ -7,7 +7,7 @@ This should be easy to fix by creating an ANTLR grammar for every additional lan
 Creating a New ANTLR4 Grammar for ThemisML
 ------------------------------------------
 You can get grammars for a lot of programming languages in this repository: https://github.com/antlr/grammars-v4
-You will find a parser and a lexer, which you will need to convert to Python files for ThemisML to use.
+You will find a parser and a lexer, which you will need to convert to Python files for the ThemisML Server to use.
 
 For Java, use the following command:
 ``antlr4 -Dlanguage=Python3 JavaParser.g4 JavaLexer.g4``
