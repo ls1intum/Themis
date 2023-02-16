@@ -48,7 +48,7 @@ struct Exercise: Codable, Identifiable {
     }
     
     var disabled: Bool {
-        !(exerciseType == .programming)
+        exerciseType == nil || exerciseType != .programming
     }
 
     init() {
