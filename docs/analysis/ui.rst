@@ -2,6 +2,7 @@ User Interface
 ===========================================
 
 .. something in general about the ui
+
 The user interface of Themis is designed to be as intuitive as possible. The main goal is to provide a simple and easy to use interface for tutors to assess programming exercises.
 
 Initial Mockups

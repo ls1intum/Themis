@@ -5,7 +5,6 @@ This section describes the functional behavior of the system as seen by the user
 
 .. image:: ../images/use_case_diagram.png
 
-|
 
 Themis is the system the tutor interacts with. A tutors main use cases are searching for a student submission, requesting a random submission and providing feedback.
 The *provide feedback* use case includes the *submit assessment* use case since it is not possible to provide the student with feedback without submitting the exercise previously.
