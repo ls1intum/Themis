@@ -17,7 +17,7 @@ class AuthenticationViewModel: ObservableObject {
                 return
             }
             UserDefaults.standard.set(serverURL, forKey: "serverURL")
-            Authentication.shared.resetBearerTokenAuthCache()
+            
             if restControllerInitialized {
                 RESTController.shared.baseURL = url
             } else {
@@ -57,9 +57,7 @@ class AuthenticationViewModel: ObservableObject {
         if let serverURL = generateURL(serverURL: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
-            Authentication.shared = Authentication()
         }
-        observeAuthenticationToken() // TODO: remove once bearer token auth is no longer supported
         observeAuthenticationStatus()
         Authentication.shared.checkAuth()
     }
@@ -91,18 +89,7 @@ class AuthenticationViewModel: ObservableObject {
             }
             .store(in: &cancellable)
     }
-
-    // TODO: remove after bearer token is gone
-    private func observeAuthenticationToken() {
-        Authentication.shared.publisher(for: \.token, options: [.new])
-            .receive(on: RunLoop.main)
-            .sink { token in
-                self.authenticated = token != nil
-            }
-            .store(in: &cancellable)
-    }
-    // end TODO
-
+    
     @MainActor
     func authenticate() async {
         guard restControllerInitialized else {
@@ -114,11 +101,6 @@ class AuthenticationViewModel: ObservableObject {
         }
         do {
             try await Authentication.shared.auth(username: username, password: password, rememberMe: rememberMe)
-            if Authentication.shared.isBearerTokenAuthNeeded() {
-                if let token = Authentication.shared.token {
-                    Authentication.shared.storeTokenInKeychain(token: token)
-                }
-            }
         } catch {
             self.error = error
             // converting to string gives nicer errors,
@@ -126,23 +108,14 @@ class AuthenticationViewModel: ObservableObject {
             print(String(describing: error))
         }
     }
-
-    // TODO: remove after bearer token is gone
-    func searchForToken() {
-        Authentication.shared.getTokenFromKeychain()
-    }
-    // end TODO
-
+    
     /// Logs the User out by deleting the cookie
     func logout() async {
-        if Authentication.shared.isBearerTokenAuthNeeded() {
-            Authentication.shared.deleteToken()
-        } else {
-            do {
-                try await Authentication.shared.logOut()
-            } catch let error {
-                self.error = error
-            }
+        do {
+            try await Authentication.shared.logOut()
+        } catch let error {
+            self.error = error
+            print(String(describing: error))
         }
     }
 }

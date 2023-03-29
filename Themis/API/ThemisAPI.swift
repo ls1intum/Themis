@@ -11,37 +11,16 @@ import CodeEditor
 enum ThemisAPI {
     static let restController = RESTController(baseURL: URL(string: themisServer ?? "https://ios2223cit.ase.cit.tum.de")!)
     
-    private static func buildAuthenticatedRequest(_ request: Request) throws -> Request {
-        var request = request
-        if Authentication.shared.isBearerTokenAuthNeeded() {
-            guard let token = Authentication.shared.token else {
-                throw Authentication.AuthenticationError.tokenNotFound
-            }
-            request.headers["Authorization"] = "Bearer \(token)"
-        } else {
-            if let cookie = HTTPCookieStorage.shared.cookies(for: RESTController.shared.baseURL)?.first {
-                request.headers["Authorization"] = "Bearer \(cookie.value)"
-            }
-        }
-        return request
-    }
-    
     static func sendRequest<T: Decodable>(_ type: T.Type, request: Request) async throws -> T {
-        try await restController.sendRequest(
-            buildAuthenticatedRequest(request)
-        )
+        try await restController.sendRequest(request)
     }
 
     static func sendRequest<T>(_ type: T.Type, request: Request, decode: (Data) throws -> T) async throws -> T {
-        try await restController.sendRequest(
-            buildAuthenticatedRequest(request),
-            decode: decode)
+        try await restController.sendRequest(request, decode: decode)
     }
 
     static func sendRequest(request: Request) async throws {
-        try await restController.sendRequest(
-            buildAuthenticatedRequest(request)
-        )
+        try await restController.sendRequest(request)
     }
 }
 

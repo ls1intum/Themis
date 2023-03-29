@@ -18,11 +18,6 @@ struct ContentView: View {
                 AuthenticationView(authenticationVM: authenticationVM)
             }
         }
-        .onAppear {
-            if Authentication.shared.isBearerTokenAuthNeeded() {
-                authenticationVM.searchForToken()
-            }
-        }
     }
 }
 
