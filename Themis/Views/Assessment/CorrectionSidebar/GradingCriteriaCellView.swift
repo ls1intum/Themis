@@ -44,22 +44,12 @@ struct GradingCriteriaCellView: View {
                             .multilineTextAlignment(.leading)
                     }
                     .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 20)
-                        .stroke(colorize(credits: instruction.credits), lineWidth: 2))
+                    .background(RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(Color.getBackgroundColor(forCredits: instruction.credits)))
                 }
                 .disabled(detailText == nil || score == nil)
                 .foregroundColor(Color.primary)
             }
         }.padding()
-    }
-
-    private func colorize(credits: Double) -> Color {
-        if credits > 0 {
-            return .green
-        } else if credits == 0.0 {
-            return .yellow
-        } else {
-            return .red
-        }
     }
 }
