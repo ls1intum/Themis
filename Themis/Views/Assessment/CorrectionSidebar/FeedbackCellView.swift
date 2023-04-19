@@ -18,15 +18,6 @@ struct FeedbackCellView: View {
     var editingDisabled: Bool { readOnly || feedback.assessmentType.isAutomatic }
 
     @State var showEditFeedback = false
-    var feedbackColor: Color {
-        if feedback.credits < 0.0 {
-            return Color(.systemRed)
-        } else if feedback.credits > 0.0 {
-            return Color(.systemGreen)
-        } else {
-            return Color(.label)
-        }
-    }
     
     var participationId: Int?
     var templateParticipationId: Int?
@@ -39,36 +30,24 @@ struct FeedbackCellView: View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
                 Text(feedback.text ?? "Feedback")
+                    .foregroundColor(.getTextColor(forCredits: feedback.credits))
+                
                 Spacer()
-                Button {
-                    showEditFeedback = true
-                } label: {
-                    Image(systemName: "pencil")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                }
-                .disabled(editingDisabled)
-                .buttonStyle(.borderless)
-                .font(.caption)
-                Button(role: .destructive) {
-                    assessmentResult.deleteFeedback(id: feedback.id)
-                    cvm.deleteInlineHighlight(feedback: feedback)
-                } label: {
-                    Image(systemName: "trash")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                }
-                .disabled(editingDisabled)
-                .buttonStyle(.borderless)
-                .font(.caption)
+                
+                editButton
+                
+                deleteButton
             }
+            
             Divider()
                 .frame(maxWidth: .infinity)
+            
             HStack {
                 Text(feedback.detailText ?? "")
+                    .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(String(format: "%.1f", feedback.credits))
-                    .foregroundColor(feedbackColor)
+                    .foregroundColor(.getTextColor(forCredits: feedback.credits))
+                pointLabel
             }
         }
         .onTapGesture {
@@ -103,8 +82,46 @@ struct FeedbackCellView: View {
             )
         }
         .padding()
-        .overlay(RoundedRectangle(cornerRadius: 25)
-            .stroke(lineWidth: 2)
+        .overlay(RoundedRectangle(cornerRadius: 5)
+            .stroke(lineWidth: 1)
+            .foregroundColor(.getTextColor(forCredits: feedback.credits))
             .scaleEffect(isTapped ? 1.05 : 1.0))
+        .background(Color.getBackgroundColor(forCredits: feedback.credits))
+    }
+    
+    private var pointLabel: some View {
+        Text(String(format: "%.1f", feedback.credits) + "P")
+            .font(.headline)
+            .foregroundColor(.white)
+            .padding(7)
+            .background(Color.getPointsBackgroundColor(forCredits: feedback.credits))
+            .cornerRadius(3)
+    }
+    
+    private var editButton: some View {
+        Button {
+            showEditFeedback = true
+        } label: {
+            Image(systemName: "pencil")
+                .resizable()
+                .frame(width: 15, height: 15)
+        }
+        .disabled(editingDisabled)
+        .buttonStyle(.borderless)
+        .font(.caption)
+    }
+    
+    private var deleteButton: some View {
+        Button(role: .destructive) {
+            assessmentResult.deleteFeedback(id: feedback.id)
+            cvm.deleteInlineHighlight(feedback: feedback)
+        } label: {
+            Image(systemName: "trash")
+                .resizable()
+                .frame(width: 15, height: 15)
+        }
+        .disabled(editingDisabled)
+        .buttonStyle(.borderless)
+        .font(.caption)
     }
 }
