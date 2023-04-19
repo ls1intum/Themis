@@ -34,8 +34,8 @@ struct SubmissionSearchView: View {
         }
         .navigationDestination(isPresented: $avm.showSubmission) {
             AssessmentView(
-                vm: avm,
-                ar: avm.assessmentResult,
+                assessmentVM: avm,
+                assessmentResult: avm.assessmentResult,
                 exercise: exercise
             )
         }

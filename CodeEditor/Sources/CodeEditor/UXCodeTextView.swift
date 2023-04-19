@@ -438,8 +438,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
                         .link: hRange.id // equals feedback id
-                    ]
-                    , range: hRange.range)
+                    ], range: hRange.range)
             }
         }
     }
@@ -452,8 +451,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
                         .link: hRange.id // equals feedback id
-                    ]
-                    , range: hRange.range)
+                    ], range: hRange.range)
             }
         }
     }
@@ -566,7 +564,7 @@ extension NSTextView {
 extension UITextView {
     
     var string: String { // NeXTstep was right!
-        set { text = newValue}
+        set { text = newValue }
         get { text }
     }
     

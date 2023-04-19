@@ -55,8 +55,8 @@ struct ExerciseView: View {
         }
         .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
-                vm: assessmentVM,
-                ar: assessmentVM.assessmentResult,
+                assessmentVM: assessmentVM,
+                assessmentResult: assessmentVM.assessmentResult,
                 exercise: exercise
             )
         }

@@ -23,25 +23,34 @@ struct AuthenticationView: View {
             Image("AppIconVectorTransparent")
                 .resizable()
                 .frame(width: 300, height: 300)
-            Text("Please sign in with your Artemis Account")
-                .font(.title)
-                .bold()
+            
+            Text("Welcome to Themis!")
+                .font(.title).bold()
                 .padding()
+            
+            Text("Please sign in with your Artemis account")
+                .font(.headline)
+                .padding()
+            
             TextField("Artemis-Server", text: $authenticationVM.serverURL)
                 .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, validInput: authenticationVM.validURL, type: .serverURL))
                 .focused($focusedField, equals: .serverurl)
                 .submitLabel(.next)
+            
             TextField("Username", text: $authenticationVM.username)
                 .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, type: .username))
                 .textInputAutocapitalization(.never)
                 .focused($focusedField, equals: .username)
                 .submitLabel(.next)
                 .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
+            
             passwordField
                 .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
+            
             Toggle("Remember me", isOn: $authenticationVM.rememberMe)
                 .frame(width: 500)
                 .padding()
+            
             authenticateButton
         }
         .onSubmit {
@@ -124,42 +133,15 @@ struct AuthenticationView: View {
     }
 }
 
-struct LoginTextFieldStyle: TextFieldStyle {
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var error: Error?
-    var validInput = true
-    var type: AuthTextFieldType
-
-    func _body(configuration: TextField<Self._Label>) -> some View {
-        configuration
-            .disableAutocorrection(true)
-            .autocapitalization(.none)
-            .padding()
-            .frame(width: 500, height: 50)
-            .background(validInput ? (colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6)) : Color.red)
-            .cornerRadius(10)
-            .overlay {
-                if error != nil && type == .username {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.red.opacity(0.4), lineWidth: 2)
-                }
-            }
-    }
-}
-
 enum AuthTextFieldType {
     case serverURL, username
 }
 
-struct LoginButtonStyle: ButtonStyle {
-    var loginDisabled: Bool
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(.white)
-            .frame(width: 500, height: 50)
-            .background(loginDisabled ? Color.gray : Color.blue)
-            .cornerRadius(10)
-            .scaleEffect(configuration.isPressed ? 1.1 : 1)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+struct AuthenticationView_Previews: PreviewProvider {
+    static var vm = AuthenticationViewModel()
+    
+    static var previews: some View {
+        AuthenticationView(authenticationVM: vm)
+            .previewInterfaceOrientation(.landscapeRight)
     }
 }
