@@ -18,7 +18,7 @@ struct NavigationBarButton: ButtonStyle {
                 Image(iconImageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 12, height: 5)
+                    .frame(width: 14, height: 6)
                     .foregroundColor(.white)
             }
             

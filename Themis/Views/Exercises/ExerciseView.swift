@@ -97,7 +97,7 @@ struct ExerciseView: View {
             Text("Start Assessment")
                 .foregroundColor(.white)
         }
-        .buttonStyle(NavigationBarButton())
+        .buttonStyle(NavigationBarButton(color: .themisGreen, iconImageName: "startAssessmentIcon"))
     }
     private var submissionDueDateOver: Bool {
         if let dueDate = exercise.dueDate, dueDate <= ArtemisDateHelpers.stringifyDate(Date.now)! {
