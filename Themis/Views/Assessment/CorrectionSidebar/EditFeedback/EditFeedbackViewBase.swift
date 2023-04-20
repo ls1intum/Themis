@@ -28,6 +28,10 @@ struct EditFeedbackViewBase: View {
     
     var feedbackSuggestion: FeedbackSuggestion?
     
+    private var isEditing: Bool {
+        idForUpdate != nil
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -36,10 +40,14 @@ struct EditFeedbackViewBase: View {
                 
                 Spacer()
                 
+                if isEditing {
+                    deleteButton
+                }
+                
                 editOrSaveButton
             }
             
-            HStack {
+            HStack(spacing: 15) {
                 TextField("Enter your feedback here", text: $detailText, axis: .vertical)
                     .foregroundColor(Color.getTextColor(forCredits: score))
                     .submitLabel(.return)
@@ -51,6 +59,7 @@ struct EditFeedbackViewBase: View {
                     .background(Color.getBackgroundColor(forCredits: score))
                 
                 ScorePicker(score: $score)
+                    .frame(maxWidth: 130)
             }
             .animation(.easeIn, value: score)
             
@@ -85,10 +94,25 @@ struct EditFeedbackViewBase: View {
         } label: {
             Text("Save")
         }
-        .font(.title)
+        .buttonStyle(ThemisButtonStyle())
+        .font(.title2)
         .disabled(detailText.isEmpty)
     }
-
+    
+    private var deleteButton: some View {
+        Button {
+            deleteFeedback()
+            showSheet = false
+        } label: {
+            Image(systemName: "trash")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 15, height: 27)
+        }
+        .buttonStyle(ThemisButtonStyle(color: .themisRed))
+        .font(.title2)
+    }
+    
     private func updateFeedback() {
         if let id = idForUpdate {
             assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score)
@@ -107,6 +131,14 @@ struct EditFeedbackViewBase: View {
         } else {
             assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: type))
         }
+    }
+    
+    private func deleteFeedback() {
+        guard let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) else {
+            return
+        }
+        assessmentResult.deleteFeedback(id: feedback.id)
+        cvm.deleteInlineHighlight(feedback: feedback)
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {

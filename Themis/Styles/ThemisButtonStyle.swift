@@ -1,5 +1,5 @@
 //
-//  NavigationBarButtonStyle.swift
+//  ThemisButtonStyle.swift
 //  Themis
 //
 //  Created by Andreas Cselovszky on 10.01.23.
@@ -7,10 +7,12 @@
 
 import SwiftUI
 
-struct NavigationBarButton: ButtonStyle {
+struct ThemisButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled: Bool
     var color = Color.themisSecondary
     var iconImageName: String?
+    var horizontalPadding: CGFloat = 15
+    var verticalPadding: CGFloat = 8
     
     func makeBody(configuration: Configuration) -> some View {
         HStack {
@@ -25,8 +27,8 @@ struct NavigationBarButton: ButtonStyle {
             configuration.label
         }
         .foregroundColor(Color(.systemBackground))
-        .padding(.horizontal, 15)
-        .padding(.vertical, 8)
+        .padding(.horizontal, horizontalPadding)
+        .padding(.vertical, verticalPadding)
         .background(isEnabled ? color : Color(.systemGray))
         .cornerRadius(5)
         .fontWeight(.semibold)
@@ -38,6 +40,6 @@ struct NavigationBarButton: ButtonStyle {
 struct NavigationBarButtonStyle_Previews: PreviewProvider {
     static var previews: some View {
         Button("Save", action: {})
-            .buttonStyle(NavigationBarButton(iconImageName: "saveIcon"))
+            .buttonStyle(ThemisButtonStyle(iconImageName: "saveIcon"))
     }
 }

@@ -32,7 +32,7 @@ struct CircularProgressView: View {
     private func gradientColor() -> Gradient {
         switch progress {
         case ...0.33:
-            return Gradient(colors: [.darkRed, Color.red])
+            return Gradient(colors: [.themisDarkRed, Color.red])
             
         case 0.33..<0.79:
             return Gradient(colors: [Color.orange, Color.yellow])

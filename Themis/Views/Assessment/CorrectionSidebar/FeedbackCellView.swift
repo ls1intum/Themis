@@ -35,8 +35,6 @@ struct FeedbackCellView: View {
                 Spacer()
                 
                 editButton
-                
-                deleteButton
             }
             
             Divider()
@@ -95,7 +93,7 @@ struct FeedbackCellView: View {
             .foregroundColor(.white)
             .padding(7)
             .background(Color.getPointsBackgroundColor(forCredits: feedback.credits))
-            .cornerRadius(3)
+            .cornerRadius(5)
     }
     
     private var editButton: some View {
@@ -104,24 +102,10 @@ struct FeedbackCellView: View {
         } label: {
             Image(systemName: "pencil")
                 .resizable()
-                .frame(width: 15, height: 15)
+                .frame(width: 18, height: 18)
         }
         .disabled(editingDisabled)
-        .buttonStyle(.borderless)
-        .font(.caption)
-    }
-    
-    private var deleteButton: some View {
-        Button(role: .destructive) {
-            assessmentResult.deleteFeedback(id: feedback.id)
-            cvm.deleteInlineHighlight(feedback: feedback)
-        } label: {
-            Image(systemName: "trash")
-                .resizable()
-                .frame(width: 15, height: 15)
-        }
-        .disabled(editingDisabled)
-        .buttonStyle(.borderless)
+        .buttonStyle(ThemisButtonStyle(horizontalPadding: 8))
         .font(.caption)
     }
 }

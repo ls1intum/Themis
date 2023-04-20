@@ -36,7 +36,6 @@ struct ScorePicker: View {
                 }
             }
             .pickerStyle(.wheel)
-            .frame(maxWidth: 120)
         }
         .background(RoundedRectangle(cornerRadius: 5).foregroundColor(.primary.opacity(0.02)))
     }

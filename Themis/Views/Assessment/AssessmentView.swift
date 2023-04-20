@@ -221,7 +221,7 @@ struct AssessmentView: View {
                     Text("Save")
                         .foregroundColor(.white)
                 }
-                .buttonStyle(NavigationBarButton(iconImageName: "saveIcon"))
+                .buttonStyle(ThemisButtonStyle(iconImageName: "saveIcon"))
                 .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -231,7 +231,7 @@ struct AssessmentView: View {
                     Text("Submit")
                         .foregroundColor(.white)
                 }
-                .buttonStyle(NavigationBarButton(color: Color.themisGreen))
+                .buttonStyle(ThemisButtonStyle(color: Color.themisGreen))
                 .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
         }
