@@ -4,6 +4,7 @@
 //
 //  Created by Tom Rudnick on 12.11.22.
 //
+// swiftlint:disable discouraged_optional_boolean
 
 import Foundation
 

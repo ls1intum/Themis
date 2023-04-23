@@ -3,6 +3,9 @@
 # Copyright © 2019 Paul Schmiedmayer. All rights reserved.
 # The opt_in_rules also include all rules that are enabled by default to provide a good overview of all rules.
 
+included:
+  - Themis
+
 disabled_rules:
   - discouraged_optional_collection # TODO: Enable as soon as https://github.com/realm/SwiftLint/issues/2298 is closed.
     # Prefer empty collection over optional collection.
@@ -18,6 +21,8 @@ disabled_rules:
     # Trailing closure syntax should not be used when passing more than one closure argument.
   - file_name
     # Validating that file names contain the name of a type or extension declared in the file (if any).
+  - multiline_arguments
+    # Arguments should be either on the same line, or one per line.
 
 opt_in_rules:
   - block_based_kvo
@@ -126,8 +131,6 @@ opt_in_rules:
     # MARK comment should be in valid format. e.g. '// MARK: ...' or '// MARK: - ...'
   - modifier_order
     # Modifier order should be consistent.
-  - multiline_arguments
-    # Arguments should be either on the same line, or one per line.
   - multiline_function_chains
     # Chained function calls should be either on the same line, or one per line.
   - multiline_parameters
@@ -348,3 +351,6 @@ trailing_whitespace:
 
 vertical_whitespace: # Limit vertical whitespace to a single empty line.
   max_empty_lines: 2 # warning - default: 1
+
+cyclomatic_complexity:
+  ignores_case_statements: true # https://stackoverflow.com/a/51221993/7074664

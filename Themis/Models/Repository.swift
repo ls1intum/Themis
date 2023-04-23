@@ -109,14 +109,18 @@ class Node: Hashable, ObservableObject {
     
     
     public func language() -> Language? {
-        guard let language = languageDict[self.fileExtensionString] else { return nil }
+        guard let language = languageDict[self.fileExtensionString] else {
+            return nil
+        }
         return language
     }
     
     
     /// This Method will flatMap children that have only one folder
     func flatMap() {
-        guard let children, type == .folder else { return }
+        guard let children, type == .folder else {
+            return
+        }
         if let childFolder = children.first, childFolder.type == .folder, children.count == 1 {
             self.name += "/" + childFolder.name // WTF Swiftlint enforece to use += lol
             self.children?.removeFirst()
@@ -142,7 +146,9 @@ class Node: Hashable, ObservableObject {
         var desc = ""
         let newSpaces = spaces + "  "
         print("\(spaces)\(name) - \(type.rawValue) - \(self.path)")
-        guard let children else { return desc }
+        guard let children else {
+            return desc
+        }
         for child in children {
             desc += child.prettyPrint(spaces: newSpaces) + "\n"
         }
@@ -151,14 +157,16 @@ class Node: Hashable, ObservableObject {
 
     @MainActor
     public func fetchCode(participationId: Int) async {
-        if code != nil { return } else {
-            do {
-                var relativePath = path
-                relativePath.remove(at: relativePath.startIndex)
-                self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
-            } catch {
-                print(error)
-            }
+        guard code == nil else {
+            return
+        }
+        
+        do {
+            var relativePath = path
+            relativePath.remove(at: relativePath.startIndex)
+            self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
+        } catch {
+            print(error)
         }
     }
 
@@ -208,15 +216,17 @@ class Node: Hashable, ObservableObject {
     
     @MainActor
     private func fetchTemplateCode(templateParticipationId: Int) async {
-        if templateCode != nil { return } else {
-            do {
-                let relativePath = String(path.dropFirst())
-                self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
-            } catch RESTError.notFound {
-                self.isNewFile = true
-            } catch {
-                print(error)
-            }
+        guard templateCode == nil else {
+            return
+        }
+        
+        do {
+            let relativePath = String(path.dropFirst())
+            self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
+        } catch RESTError.notFound {
+            self.isNewFile = true
+        } catch {
+            print(error)
         }
     }
     
@@ -326,7 +336,7 @@ extension ArtemisAPI {
     }
 
     static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)]) {
-        let root = paths.filter { $0.path.size() == 1 }.map { (name: $0.path.pop()!, type: $0.type) }
+        let root = paths.filter { $0.path.size() == 1 }.map { (name: $0.path.pop() ?? "", type: $0.type) }
         var notRoot = paths.filter { $0.path.size() > 0 }
         for elem in root {
             if elem.type == .file {

@@ -12,24 +12,24 @@ struct SubmissionSearchResult {
     let submission: Submission
 
     // https://stackoverflow.com/a/44102415/4306257
-    private static func levDis(_ w1: String, _ w2: String) -> Int {
-        let empty = [Int](repeating: 0, count: w2.count)
-        var last = [Int](0...w2.count)
+    private static func levDis(_ word1: String, _ word2: String) -> Int {
+        let empty = [Int](repeating: 0, count: word2.count)
+        var last = [Int](0...word2.count)
 
-        for (index, char1) in w1.enumerated() {
+        for (index, char1) in word1.enumerated() {
             var cur = [index + 1] + empty
-            for (index2, char2) in w2.enumerated() {
+            for (index2, char2) in word2.enumerated() {
                 cur[index2 + 1] = char1 == char2 ? last[index2] : min(last[index2], last[index2 + 1], cur[index2]) + 1
             }
             last = cur
         }
-        return last.last!
+        return last.last ?? Int.max
     }
 
-    private static func levDisCaseInsensitiveTrimmed(_ w1: String, _ w2: String) -> Int {
+    private static func levDisCaseInsensitiveTrimmed(_ word1: String, _ word2: String) -> Int {
         levDis(
-            w1.lowercased().trimmingCharacters(in: .whitespaces),
-            w2.lowercased().trimmingCharacters(in: .whitespaces)
+            word1.lowercased().trimmingCharacters(in: .whitespaces),
+            word2.lowercased().trimmingCharacters(in: .whitespaces)
         )
     }
 
@@ -40,37 +40,27 @@ struct SubmissionSearchResult {
     }
 
     private var student: Student {
-        get {
-            submission.participation.student
-        }
+        submission.participation.student
     }
 
     private var nameScore: Double {
-        get {
-            Self.scoreCalculation(reference: forText, forText: student.name)
-        }
+        Self.scoreCalculation(reference: forText, forText: student.name)
     }
     private var firstNameScore: Double {
-        get {
-            Self.scoreCalculation(reference: forText, forText: student.firstName)
-        }
+        Self.scoreCalculation(reference: forText, forText: student.firstName)
     }
     private var lastNameScore: Double {
-        get {
-            guard let lastName = student.lastName else { return Double(Int.max) }
-            return Self.scoreCalculation(reference: forText, forText: lastName)
+        guard let lastName = student.lastName else {
+            return Double(Int.max)
         }
+        return Self.scoreCalculation(reference: forText, forText: lastName)
     }
     private var loginScore: Double {
-        get {
-            Self.scoreCalculation(reference: forText, forText: student.login)
-        }
+        Self.scoreCalculation(reference: forText, forText: student.login)
     }
 
     // search result with lower score is better
     var score: Double {
-        get {
-            min(nameScore, firstNameScore, lastNameScore, loginScore)
-        }
+        min(nameScore, firstNameScore, lastNameScore, loginScore)
     }
 }

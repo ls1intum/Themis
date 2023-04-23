@@ -28,16 +28,8 @@ struct CorrectionSidebarView: View {
 
     var body: some View {
         VStack {
-            Picker(selection: $correctionSidebarStatus, label: Text("")) {
-                Text("Problem")
-                    .tag(CorrectionSidebarElements.problemStatement)
-                Text("Guidelines")
-                    .tag(CorrectionSidebarElements.correctionGuidelines)
-                Text("Feedback")
-                    .tag(CorrectionSidebarElements.generalFeedback)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
+            sideBarElementPicker
+            
             if !loading {
                 switch correctionSidebarStatus {
                 case .problemStatement:
@@ -70,6 +62,19 @@ struct CorrectionSidebarView: View {
         }
         .frame(maxHeight: .infinity, alignment: .center)
         .background(Color("sidebarBackground"))
+    }
+    
+    private var sideBarElementPicker: some View {
+        Picker(selection: $correctionSidebarStatus, label: Text("")) {
+            Text("Problem")
+                .tag(CorrectionSidebarElements.problemStatement)
+            Text("Guidelines")
+                .tag(CorrectionSidebarElements.correctionGuidelines)
+            Text("Feedback")
+                .tag(CorrectionSidebarElements.generalFeedback)
+        }
+        .pickerStyle(SegmentedPickerStyle())
+        .padding()
     }
 }
 

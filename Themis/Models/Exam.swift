@@ -20,7 +20,9 @@ struct Exam: Codable {
     
     var exercises: [Exercise] {
         let exercises = exerciseGroups?.reduce([]) { $0 + ($1.exercises ?? []) } as? [Exercise]
-        guard let exercises else { return [] }
+        guard let exercises else {
+            return []
+        }
         return exercises.map { exercise in
             var exerciseWithDate = exercise
             exerciseWithDate.releaseDate = self.startDate

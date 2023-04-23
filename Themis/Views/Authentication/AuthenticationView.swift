@@ -25,24 +25,17 @@ struct AuthenticationView: View {
                 .frame(width: 300, height: 300)
             
             Text("Welcome to Themis!")
-                .font(.title).bold()
+                .font(.title)
+                .bold()
                 .padding()
             
             Text("Please sign in with your Artemis account")
                 .font(.headline)
                 .padding()
             
-            TextField("Artemis-Server", text: $authenticationVM.serverURL)
-                .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, validInput: authenticationVM.validURL, type: .serverURL))
-                .focused($focusedField, equals: .serverurl)
-                .submitLabel(.next)
+            serverURLField
             
-            TextField("Username", text: $authenticationVM.username)
-                .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, type: .username))
-                .textInputAutocapitalization(.never)
-                .focused($focusedField, equals: .username)
-                .submitLabel(.next)
-                .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
+            usernameField
             
             passwordField
                 .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
@@ -97,8 +90,24 @@ struct AuthenticationView: View {
         .disabled(authenticationVM.loginDisabled)
         .buttonStyle(LoginButtonStyle(loginDisabled: authenticationVM.loginDisabled))
     }
+    
+    private var serverURLField: some View {
+        TextField("Artemis-Server", text: $authenticationVM.serverURL)
+            .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, validInput: authenticationVM.validURL, type: .serverURL))
+            .focused($focusedField, equals: .serverurl)
+            .submitLabel(.next)
+    }
+    
+    private var usernameField: some View {
+        TextField("Username", text: $authenticationVM.username)
+            .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, type: .username))
+            .textInputAutocapitalization(.never)
+            .focused($focusedField, equals: .username)
+            .submitLabel(.next)
+            .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
+    }
 
-    var passwordField: some View {
+    private var passwordField: some View {
         ZStack(alignment: .trailing) {
             Group {
                 SecureField("Password", text: $authenticationVM.password)
@@ -138,10 +147,10 @@ enum AuthTextFieldType {
 }
 
 struct AuthenticationView_Previews: PreviewProvider {
-    static var vm = AuthenticationViewModel()
+    static var authVM = AuthenticationViewModel()
     
     static var previews: some View {
-        AuthenticationView(authenticationVM: vm)
+        AuthenticationView(authenticationVM: authVM)
             .previewInterfaceOrientation(.landscapeRight)
     }
 }
