@@ -16,9 +16,9 @@ struct AssessmentSubmissionLoaderView: View {
 
     var body: some View {
         AssessmentView(
-            vm: avm,
+            assessmentVM: avm,
             cvm: cvm,
-            ar: avm.assessmentResult,
+            assessmentResult: avm.assessmentResult,
             exercise: exercise,
             submissionId: submissionID
         )

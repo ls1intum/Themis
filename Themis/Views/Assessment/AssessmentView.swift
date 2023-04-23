@@ -5,9 +5,9 @@ import SwiftUI
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject var vm: AssessmentViewModel
+    @ObservedObject var assessmentVM: AssessmentViewModel
     @StateObject var cvm = CodeEditorViewModel()
-    @ObservedObject var ar: AssessmentResult
+    @ObservedObject var assessmentResult: AssessmentResult
     @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
@@ -41,7 +41,7 @@ struct AssessmentView: View {
                 CodeEditorView(
                     cvm: cvm,
                     showFileTree: $showFileTree,
-                    readOnly: vm.readOnly
+                    readOnly: assessmentVM.readOnly
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Group {
@@ -69,10 +69,10 @@ struct AssessmentView: View {
             .padding(.leading, 13)
         }
         .onAppear {
-            ar.maxPoints = exercise.maxPoints ?? 100
+            assessmentResult.maxPoints = exercise.maxPoints ?? 100
         }
         .onDisappear {
-            vm.assessmentResult.undoManager.removeAllActions()
+            assessmentVM.assessmentResult.undoManager.removeAllActions()
         }
         .overlay {
             if umlVM.showUMLFullScreen {
@@ -85,7 +85,7 @@ struct AssessmentView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                if vm.readOnly {
+                if assessmentVM.readOnly {
                     Button {
                         Task {
                             presentationMode.wrappedValue.dismiss()
@@ -112,16 +112,16 @@ struct AssessmentView: View {
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
                             Task {
-                                if let pId = vm.submission?.participation.id {
-                                    await vm.sendAssessment(participationId: pId, submit: false)
+                                if let pId = assessmentVM.submission?.participation.id {
+                                    await assessmentVM.sendAssessment(participationId: pId, submit: false)
                                 }
                                 presentationMode.wrappedValue.dismiss()
                             }
                         }
                         Button("Delete", role: .destructive) {
                             Task {
-                                if let id = vm.submission?.id {
-                                    await vm.cancelAssessment(submissionId: id)
+                                if let id = assessmentVM.submission?.id {
+                                    await assessmentVM.cancelAssessment(submissionId: id)
                                 }
                                 presentationMode.wrappedValue.dismiss()
                             }
@@ -140,13 +140,13 @@ struct AssessmentView: View {
                     Text(exercise.title ?? "")
                         .bold()
                         .font(.title)
-                    Image(systemName: vm.readOnly ? "eyeglasses" : "pencil.and.outline")
+                    Image(systemName: assessmentVM.readOnly ? "eyeglasses" : "pencil.and.outline")
                         .font(.title3)
                 }
                 .foregroundColor(.white)
             }
 
-            if vm.loading {
+            if assessmentVM.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
                         .frame(width: 20)
@@ -154,30 +154,30 @@ struct AssessmentView: View {
                 }
             }
 
-            if !vm.readOnly {
+            if !assessmentVM.readOnly {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         withAnimation(.easeInOut) {
-                            vm.assessmentResult.undo()
+                            assessmentVM.assessmentResult.undo()
                         }
                     } label: {
-                        let undoIconColor: Color = !vm.assessmentResult.canUndo() ? .gray : .white
+                        let undoIconColor: Color = !assessmentVM.assessmentResult.canUndo() ? .gray : .white
                         Image(systemName: "arrow.uturn.backward")
                             .foregroundStyle(undoIconColor)
                     }
-                    .disabled(!vm.assessmentResult.canUndo())
+                    .disabled(!assessmentVM.assessmentResult.canUndo())
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         withAnimation(.easeInOut) {
-                            vm.assessmentResult.redo()
+                            assessmentVM.assessmentResult.redo()
                         }
                     } label: {
-                        let redoIconColor: Color = !vm.assessmentResult.canRedo() ? .gray : .white
+                        let redoIconColor: Color = !assessmentVM.assessmentResult.canRedo() ? .gray : .white
                         Image(systemName: "arrow.uturn.forward")
                             .foregroundStyle(redoIconColor)
                     }
-                    .disabled(!vm.assessmentResult.canRedo())
+                    .disabled(!assessmentVM.assessmentResult.canRedo())
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -205,16 +205,16 @@ struct AssessmentView: View {
             }
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
-                    progress: vm.assessmentResult.score,
-                    max: vm.submission?.participation.exercise.maxPoints ?? 0
+                    progress: assessmentVM.assessmentResult.score,
+                    max: assessmentVM.submission?.participation.exercise.maxPoints ?? 0
                 )
                 pointsDisplay
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
-                        if let pId = vm.submission?.participation.id {
-                            await vm.sendAssessment(participationId: pId, submit: false)
+                        if let pId = assessmentVM.submission?.participation.id {
+                            await assessmentVM.sendAssessment(participationId: pId, submit: false)
                         }
                     }
                 } label: {
@@ -222,7 +222,7 @@ struct AssessmentView: View {
                         .foregroundColor(.white)
                 }
                 .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly || vm.loading)
+                .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -232,7 +232,7 @@ struct AssessmentView: View {
                         .foregroundColor(.white)
                 }
                 .buttonStyle(NavigationBarButton())
-                .disabled(vm.readOnly || vm.loading)
+                .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
         }
         .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
@@ -243,9 +243,9 @@ struct AssessmentView: View {
         .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
             Button("Yes") {
                 Task {
-                    if let pId = vm.submission?.participation.id {
-                        await vm.sendAssessment(participationId: pId, submit: true)
-                        await vm.notifyThemisML(participationId: pId, exerciseId: exercise.id)
+                    if let pId = assessmentVM.submission?.participation.id {
+                        await assessmentVM.sendAssessment(participationId: pId, submit: true)
+                        await assessmentVM.notifyThemisML(participationId: pId, exerciseId: exercise.id)
                     }
                     showNavigationOptions.toggle()
                 }
@@ -255,8 +255,8 @@ struct AssessmentView: View {
         .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
             Button("Next Submission") {
                 Task {
-                    await vm.initRandomSubmission(exerciseId: exercise.id)
-                    if vm.submission == nil {
+                    await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
+                    if assessmentVM.submission == nil {
                         showNoSubmissionsAlert = true
                     }
                 }
@@ -269,39 +269,39 @@ struct AssessmentView: View {
             cvm.selectedFeedbackSuggestionId = ""
         }, content: {
             AddFeedbackView(
-                assessmentResult: vm.assessmentResult,
+                assessmentResult: assessmentVM.assessmentResult,
                 cvm: cvm,
                 type: .inline,
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
-                gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? [],
+                gradingCriteria: assessmentVM.submission?.participation.exercise.gradingCriteria ?? [],
                 feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id.uuidString == cvm.selectedFeedbackSuggestionId }
             )
         })
         .sheet(isPresented: $cvm.showEditFeedback) {
-            if let feedback = vm.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
+            if let feedback = assessmentVM.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
                 EditFeedbackView(
-                    assessmentResult: vm.assessmentResult,
+                    assessmentResult: assessmentVM.assessmentResult,
                     cvm: cvm,
                     type: .inline,
                     showSheet: $cvm.showEditFeedback,
                     idForUpdate: feedback.id,
-                    gradingCriteria: vm.submission?.participation.exercise.gradingCriteria ?? []
+                    gradingCriteria: assessmentVM.submission?.participation.exercise.gradingCriteria ?? []
                 )
             }
         }
         .task {
-            if let submissionId, vm.submission == nil {
-                await vm.getSubmission(id: submissionId)
+            if let submissionId, assessmentVM.submission == nil {
+                await assessmentVM.getSubmission(id: submissionId)
             }
-            if let pId = vm.submission?.participation.id {
+            if let pId = assessmentVM.submission?.participation.id {
                 await cvm.initFileTree(participationId: pId)
-                await cvm.loadInlineHighlight(assessmentResult: vm.assessmentResult, participationId: pId)
+                await cvm.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
             }
         }
         .errorAlert(error: $cvm.error)
-        .errorAlert(error: $vm.error)
+        .errorAlert(error: $assessmentVM.error)
     }
     
     var filetreeWithPlaceholder: some View {
@@ -310,9 +310,9 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 FiletreeSidebarView(
-                    participationID: vm.submission?.participation.id,
+                    participationID: assessmentVM.submission?.participation.id,
                     cvm: cvm,
-                    loading: vm.loading,
+                    loading: assessmentVM.loading,
                     templateParticipationId: exercise.templateParticipation?.id
                 )
             }
@@ -435,17 +435,17 @@ struct AssessmentView: View {
             } else {
                 CorrectionSidebarView(
                     problemStatement: Binding(
-                        get: { vm.submission?.participation.exercise.problemStatement ?? "" },
-                        set: { vm.submission?.participation.exercise.problemStatement = $0 }
+                        get: { assessmentVM.submission?.participation.exercise.problemStatement ?? "" },
+                        set: { assessmentVM.submission?.participation.exercise.problemStatement = $0 }
                     ),
-                    exercise: vm.submission?.participation.exercise,
-                    readOnly: vm.readOnly,
-                    assessmentResult: $vm.assessmentResult,
+                    exercise: assessmentVM.submission?.participation.exercise,
+                    readOnly: assessmentVM.readOnly,
+                    assessmentResult: $assessmentVM.assessmentResult,
                     cvm: cvm,
                     umlVM: umlVM,
-                    loading: vm.loading,
-                    participationId: vm.submission?.participation.id,
-                    templateParticipationId: vm.submission?.participation.exercise.templateParticipation?.id
+                    loading: assessmentVM.loading,
+                    participationId: assessmentVM.submission?.participation.id,
+                    templateParticipationId: assessmentVM.submission?.participation.exercise.templateParticipation?.id
                 )
             }
         }
@@ -453,13 +453,13 @@ struct AssessmentView: View {
     
     var pointsDisplay: some View {
         Group {
-            if let submission = vm.submission {
+            if let submission = assessmentVM.submission {
                 if submission.buildFailed {
                     Text("Build failed")
                         .foregroundColor(.red)
                 } else {
                     Text("""
-                         \(Double(round(10 * vm.assessmentResult.points) / 10)
+                         \(Double(round(10 * assessmentVM.assessmentResult.points) / 10)
                          .formatted(FloatingPointFormatStyle()))/\
                          \(submission.participation.exercise.maxPoints
                          .formatted(FloatingPointFormatStyle()))
