@@ -29,16 +29,12 @@
 		8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */; };
 		8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */; };
 		8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43029210474008CCB4D /* FeedbackListView.swift */; };
-		8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43229210488008CCB4D /* ProblemStatementCellView.swift */; };
-		8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */; };
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
-		838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 838E4AA5297DADF00057E6E6 /* MarkdownUI */; };
 		A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */; };
 		A9752D792992AA8B004441D1 /* ExamListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D782992AA8B004441D1 /* ExamListView.swift */; };
 		A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
-		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
 		DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */; };
 		DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */; };
@@ -46,7 +42,6 @@
 		DA3978E6296C16D200734E01 /* CourseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3978E5296C16D200734E01 /* CourseViewModel.swift */; };
 		DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0F00294A2DF800A7B807 /* AddFeedbackView.swift */; };
 		DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */; };
-		DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C65E2954DE4F005727FB /* UMLViewModel.swift */; };
 		DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */; };
 		DAECE701296A1BC80025F875 /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECE700296A1BC80025F875 /* CourseView.swift */; };
 		DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */; };
@@ -132,8 +127,6 @@
 		8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionSidebarView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionSidebarView.swift; sourceTree = SOURCE_ROOT; };
 		8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CorrectionGuidelinesCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/CorrectionGuidelinesCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C43029210474008CCB4D /* FeedbackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackListView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackListView.swift; sourceTree = SOURCE_ROOT; };
-		8384C43229210488008CCB4D /* ProblemStatementCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/ProblemStatementCellView.swift; sourceTree = SOURCE_ROOT; };
-		8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProblemStatementCellViewModel.swift; path = Themis/ViewModels/CorrectionSidebar/ProblemStatementCellViewModel.swift; sourceTree = SOURCE_ROOT; };
 		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -141,7 +134,6 @@
 		A9752D782992AA8B004441D1 /* ExamListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamListView.swift; sourceTree = "<group>"; };
 		A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSectionView.swift; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
-		DA1DC19B2952320E0005219D /* UMLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
 		DA249E9729302531008DE1D5 /* PreviewAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAuthenticationViewModel.swift; sourceTree = "<group>"; };
 		DA249E99293029A3008DE1D5 /* AuthenticatedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPreview.swift; sourceTree = "<group>"; };
@@ -149,7 +141,6 @@
 		DA3978E5296C16D200734E01 /* CourseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseViewModel.swift; sourceTree = "<group>"; };
 		DA3F0F00294A2DF800A7B807 /* AddFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFeedbackView.swift; sourceTree = "<group>"; };
 		DA3F0F02294A308E00A7B807 /* EditFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackView.swift; sourceTree = "<group>"; };
-		DA98C65E2954DE4F005727FB /* UMLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLViewModel.swift; sourceTree = "<group>"; };
 		DA98C6602954DED7005727FB /* SubmissionSearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionSearchResult.swift; sourceTree = "<group>"; };
 		DAECE700296A1BC80025F875 /* CourseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
 		DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisDateHelpers.swift; sourceTree = "<group>"; };
@@ -204,7 +195,6 @@
 				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
 				65F6D36529F67BA6005573E7 /* SharedModels in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
-				838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */,
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
 				65F6D36129F67BA6005573E7 /* DesignLibrary in Frameworks */,
 				65F6D35F29F67BA6005573E7 /* Common in Frameworks */,
@@ -265,7 +255,6 @@
 				DA3978E4296C16D200734E01 /* Course */,
 				4065F859292E8A90005DAEE8 /* Assessment */,
 				4065F858292E8A7F005DAEE8 /* Authentication */,
-				83342600292BEA40007B86FA /* CorrectionSidebar */,
 			);
 			name = ViewModels;
 			path = Themis/ViewModels;
@@ -304,7 +293,6 @@
 			children = (
 				E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */,
 				E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */,
-				DA98C65E2954DE4F005727FB /* UMLViewModel.swift */,
 			);
 			name = Assessment;
 			path = Themis/ViewModels/Assessment;
@@ -335,15 +323,6 @@
 			);
 			path = Extensions;
 			sourceTree = "<group>";
-		};
-		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
-			isa = PBXGroup;
-			children = (
-				8384C4342922939A008CCB4D /* ProblemStatementCellViewModel.swift */,
-			);
-			name = CorrectionSidebar;
-			path = Themis/ViewModels/CorrectionSidebar;
-			sourceTree = SOURCE_ROOT;
 		};
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
@@ -417,7 +396,6 @@
 				8384C42A2920F855008CCB4D /* CorrectionSidebarView.swift */,
 				8384C42E29210458008CCB4D /* CorrectionGuidelinesCellView.swift */,
 				8384C43029210474008CCB4D /* FeedbackListView.swift */,
-				8384C43229210488008CCB4D /* ProblemStatementCellView.swift */,
 				8384C438292A8592008CCB4D /* FeedbackCellView.swift */,
 				8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */,
 			);
@@ -449,14 +427,6 @@
 				E1DC9BA2293D241100674F5B /* SubmissionSearchView.swift */,
 			);
 			path = Submissions;
-			sourceTree = "<group>";
-		};
-		DA1DC19A2952320E0005219D /* UML */ = {
-			isa = PBXGroup;
-			children = (
-				DA1DC19B2952320E0005219D /* UMLView.swift */,
-			);
-			path = UML;
 			sourceTree = "<group>";
 		};
 		DA249E9429301E1B008DE1D5 /* SubmissionList */ = {
@@ -566,7 +536,6 @@
 				E21AF045292B9D4C0096ACFC /* CodeEditor */,
 				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
 				0BEC4C33292EA18000F9F802 /* FiletreeSidebar */,
-				DA1DC19A2952320E0005219D /* UML */,
 			);
 			name = Assessment;
 			path = Themis/Views/Assessment;
@@ -641,7 +610,6 @@
 				F9032CA4294A159700B2DED5 /* CachedAsyncImage */,
 				E2E3852929437F9100F5854D /* CodeEditor */,
 				E536EAD0297458240078E077 /* SwiftUIReorderableForEach */,
-				838E4AA5297DADF00057E6E6 /* MarkdownUI */,
 				65F6D35C29F67BA6005573E7 /* APIClient */,
 				65F6D35E29F67BA6005573E7 /* Common */,
 				65F6D36029F67BA6005573E7 /* DesignLibrary */,
@@ -726,7 +694,6 @@
 				F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
-				838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
@@ -814,7 +781,6 @@
 				E21AF05A292B9D4C0096ACFC /* AssessmentView.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
-				DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */,
 				E119ED992922D89900626DEA /* Submission.swift in Sources */,
 				6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
@@ -825,7 +791,6 @@
 				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
 				E200F787297F10B300DE269D /* Language.swift in Sources */,
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
-				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
 				DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
@@ -834,7 +799,6 @@
 				A9752D792992AA8B004441D1 /* ExamListView.swift in Sources */,
 				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
-				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
 				E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */,
 				E168C727296DDB3D00A1D1D4 /* CustomProgressView.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
@@ -854,7 +818,6 @@
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
 				DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */,
 				E25AF6592991819A006BC141 /* Exam.swift in Sources */,
-				DA1DC19C2952320E0005219D /* UMLView.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
 				6589205529EE7BFC005EE6FA /* LoginTextFieldStyle.swift in Sources */,
@@ -1201,14 +1164,6 @@
 				kind = branch;
 			};
 		};
-		838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1273,11 +1228,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
 			productName = UserStore;
-		};
-		838E4AA5297DADF00057E6E6 /* MarkdownUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
-			productName = MarkdownUI;
 		};
 		E2192EE0291E6F780092CE58 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;

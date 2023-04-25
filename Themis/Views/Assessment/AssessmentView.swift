@@ -4,11 +4,11 @@ import SwiftUI
 // swiftlint:disable closure_body_length
 
 struct AssessmentView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var assessmentVM: AssessmentViewModel
     @StateObject var cvm = CodeEditorViewModel()
     @ObservedObject var assessmentResult: AssessmentResult
-    @StateObject var umlVM = UMLViewModel()
     
     @State var showFileTree = true
     @State var showCorrectionSidebar = false
@@ -53,6 +53,7 @@ struct AssessmentView: View {
                 .animation(.default, value: showCorrectionSidebar)
             }
             .animation(.default, value: showFileTree)
+            
             Button {
                 showFileTree.toggle()
                 filetreeAsPlaceholder = false
@@ -73,11 +74,6 @@ struct AssessmentView: View {
         }
         .onDisappear {
             assessmentVM.assessmentResult.undoManager.removeAllActions()
-        }
-        .overlay {
-            if umlVM.showUMLFullScreen {
-                UMLView(umlVM: umlVM)
-            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -428,24 +424,21 @@ struct AssessmentView: View {
         }
         .frame(width: 7)
     }
+    
     var correctionWithPlaceholder: some View {
         VStack {
             if correctionAsPlaceholder {
                 EmptyView()
             } else {
                 CorrectionSidebarView(
-                    problemStatement: Binding(
-                        get: { assessmentVM.submission?.participation.exercise.problemStatement ?? "" },
-                        set: { assessmentVM.submission?.participation.exercise.problemStatement = $0 }
-                    ),
+                    assessmentResult: $assessmentVM.assessmentResult,
                     exercise: assessmentVM.submission?.participation.exercise,
                     readOnly: assessmentVM.readOnly,
-                    assessmentResult: $assessmentVM.assessmentResult,
                     cvm: cvm,
-                    umlVM: umlVM,
                     loading: assessmentVM.loading,
                     participationId: assessmentVM.submission?.participation.id,
-                    templateParticipationId: assessmentVM.submission?.participation.exercise.templateParticipation?.id
+                    templateParticipationId: assessmentVM.submission?.participation.exercise.templateParticipation?.id,
+                    courseId: courseVM.shownCourseID ?? -1
                 )
             }
         }

@@ -10,6 +10,7 @@ import UIKit
 import DesignLibrary
 
 struct ExerciseView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
@@ -52,12 +53,13 @@ struct ExerciseView: View {
                 assessmentResult: assessmentVM.assessmentResult,
                 exercise: exercise
             )
+            .environmentObject(courseVM)
         }
         .navigationTitle(exercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: SubmissionSearchView(exercise: exercise)) {
+                NavigationLink(destination: SubmissionSearchView(exercise: exercise).environmentObject(courseVM)) {
                     searchButton
                 }
             }

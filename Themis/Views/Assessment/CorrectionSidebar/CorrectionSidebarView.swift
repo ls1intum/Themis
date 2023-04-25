@@ -6,26 +6,47 @@
 //
 
 import SwiftUI
+import DesignLibrary
 
 enum CorrectionSidebarElements {
     case problemStatement, correctionGuidelines, generalFeedback
 }
 
 struct CorrectionSidebarView: View {
-
-    @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    @Binding var problemStatement: String
+    @Binding var assessmentResult: AssessmentResult
+    
+    @ObservedObject var cvm: CodeEditorViewModel
+    
+    @State private var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    @State private var problemStatementHeight: CGFloat = 1.0
+    @State private var problemStatementRequest: URLRequest
+    
+    let loading: Bool
     let exercise: ExerciseOfSubmission?
     let readOnly: Bool
-    @Binding var assessmentResult: AssessmentResult
-    @ObservedObject var cvm: CodeEditorViewModel
-    @ObservedObject var umlVM: UMLViewModel
-    let loading: Bool
-    
-
     var participationId: Int?
     var templateParticipationId: Int?
-
+    
+    init(assessmentResult: Binding<AssessmentResult>,
+         exercise: ExerciseOfSubmission?,
+         readOnly: Bool,
+         cvm: CodeEditorViewModel,
+         loading: Bool,
+         participationId: Int? = nil,
+         templateParticipationId: Int? = nil,
+         courseId: Int) {
+        self._assessmentResult = assessmentResult
+        self.cvm = cvm
+        self.loading = loading
+        self.exercise = exercise
+        self.readOnly = readOnly
+        self.participationId = participationId
+        self.templateParticipationId = templateParticipationId
+        
+        
+        self._problemStatementRequest = State(wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise?.id ?? -1)/problem-statement", relativeTo: RESTController.shared.baseURL)!))
+    }
+    
     var body: some View {
         VStack {
             sideBarElementPicker
@@ -34,11 +55,8 @@ struct CorrectionSidebarView: View {
                 switch correctionSidebarStatus {
                 case .problemStatement:
                     ScrollView {
-                        ProblemStatementCellView(
-                            problemStatement: $problemStatement,
-                            feedbacks: assessmentResult.feedbacks,
-                            umlVM: umlVM
-                        )
+                        ArtemisWebView(urlRequest: $problemStatementRequest, contentHeight: $problemStatementHeight)
+                            .frame(height: problemStatementHeight)
                     }
                 case .correctionGuidelines:
                     ScrollView {
@@ -80,19 +98,16 @@ struct CorrectionSidebarView: View {
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
-    static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
     @State static var problemStatement: String = "test"
 
     static var previews: some View {
         CorrectionSidebarView(
-            problemStatement: $problemStatement,
-            exercise: nil,
+            assessmentResult: $assessmentResult, exercise: nil,
             readOnly: false,
-            assessmentResult: $assessmentResult,
             cvm: cvm,
-            umlVM: umlVM,
-            loading: true
+            loading: true,
+            courseId: 1
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

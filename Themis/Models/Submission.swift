@@ -50,6 +50,7 @@ struct Submission: Codable, Identifiable {
 }
 
 struct ExerciseOfSubmission: Codable {
+    let id: Int
     let maxPoints: Double
     var problemStatement: String
     let gradingInstructions: String?
