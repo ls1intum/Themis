@@ -13,6 +13,12 @@
 		6589205529EE7BFC005EE6FA /* LoginTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */; };
 		6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */; };
 		6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205C29EF0840005EE6FA /* ColorExtension.swift */; };
+		65F6D35D29F67BA6005573E7 /* APIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 65F6D35C29F67BA6005573E7 /* APIClient */; };
+		65F6D35F29F67BA6005573E7 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 65F6D35E29F67BA6005573E7 /* Common */; };
+		65F6D36129F67BA6005573E7 /* DesignLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 65F6D36029F67BA6005573E7 /* DesignLibrary */; };
+		65F6D36329F67BA6005573E7 /* Login in Frameworks */ = {isa = PBXBuildFile; productRef = 65F6D36229F67BA6005573E7 /* Login */; };
+		65F6D36529F67BA6005573E7 /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 65F6D36429F67BA6005573E7 /* SharedModels */; };
+		65F6D36729F67BA6005573E7 /* UserStore in Frameworks */ = {isa = PBXBuildFile; productRef = 65F6D36629F67BA6005573E7 /* UserStore */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -194,10 +200,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65F6D36729F67BA6005573E7 /* UserStore in Frameworks */,
 				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
+				65F6D36529F67BA6005573E7 /* SharedModels in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
 				838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */,
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
+				65F6D36129F67BA6005573E7 /* DesignLibrary in Frameworks */,
+				65F6D35F29F67BA6005573E7 /* Common in Frameworks */,
+				65F6D36329F67BA6005573E7 /* Login in Frameworks */,
+				65F6D35D29F67BA6005573E7 /* APIClient in Frameworks */,
 				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -630,6 +642,12 @@
 				E2E3852929437F9100F5854D /* CodeEditor */,
 				E536EAD0297458240078E077 /* SwiftUIReorderableForEach */,
 				838E4AA5297DADF00057E6E6 /* MarkdownUI */,
+				65F6D35C29F67BA6005573E7 /* APIClient */,
+				65F6D35E29F67BA6005573E7 /* Common */,
+				65F6D36029F67BA6005573E7 /* DesignLibrary */,
+				65F6D36229F67BA6005573E7 /* Login */,
+				65F6D36429F67BA6005573E7 /* SharedModels */,
+				65F6D36629F67BA6005573E7 /* UserStore */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -709,6 +727,7 @@
 				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
 				838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -1174,6 +1193,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ls1intum/artemis-ios-core-modules";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -1217,6 +1244,36 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		65F6D35C29F67BA6005573E7 /* APIClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			productName = APIClient;
+		};
+		65F6D35E29F67BA6005573E7 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			productName = Common;
+		};
+		65F6D36029F67BA6005573E7 /* DesignLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			productName = DesignLibrary;
+		};
+		65F6D36229F67BA6005573E7 /* Login */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			productName = Login;
+		};
+		65F6D36429F67BA6005573E7 /* SharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			productName = SharedModels;
+		};
+		65F6D36629F67BA6005573E7 /* UserStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F6D35B29F67BA6005573E7 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			productName = UserStore;
+		};
 		838E4AA5297DADF00057E6E6 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;

@@ -7,14 +7,23 @@
 
 import SwiftUI
 import UIKit
+import DesignLibrary
 
 struct ExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
+    
+    @State private var problemStatementHeight: CGFloat = 1.0
+    @State private var problemStatementRequest: URLRequest
+    
     let exercise: Exercise
     
+    init(exercise: Exercise, courseId: Int) {
+        self.exercise = exercise
+        self._problemStatementRequest = State(wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise.id)/problem-statement", relativeTo: RESTController.shared.baseURL)!))
+    }
     
     var body: some View {
         VStack {
@@ -29,6 +38,8 @@ struct ExerciseView: View {
                     }
                     
                     statisticsSection
+                    
+                    problemStatementSection
                 }
                 .refreshable { await fetchExerciseData() }
             } else {
@@ -90,6 +101,15 @@ struct ExerciseView: View {
         }
     }
     
+    private var problemStatementSection: some View {
+        Section("Problem Statement") {
+            ArtemisWebView(urlRequest: $problemStatementRequest,
+                           contentHeight: $problemStatementHeight)
+            .disabled(true)
+            .frame(height: problemStatementHeight)
+        }
+    }
+    
     private var searchButton: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -125,9 +145,20 @@ struct ExerciseView: View {
     
     private func fetchExerciseData() async {
         exerciseVM.exercise = exercise
-        await exerciseVM.fetchExercise(exerciseId: exercise.id)
-        await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
-        await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
-        await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
+        
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                await exerciseVM.fetchExercise(exerciseId: exercise.id)
+            }
+            group.addTask {
+                await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
+            }
+            group.addTask {
+                await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
+            }
+            group.addTask {
+                await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
+            }
+        }
     }
 }
