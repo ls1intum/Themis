@@ -13,6 +13,7 @@
 		6589205529EE7BFC005EE6FA /* LoginTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */; };
 		6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */; };
 		6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205C29EF0840005EE6FA /* ColorExtension.swift */; };
+		659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -113,6 +114,7 @@
 		6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldStyle.swift; sourceTree = "<group>"; };
 		6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonStyle.swift; sourceTree = "<group>"; };
 		6589205C29EF0840005EE6FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHideExtension.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -320,6 +322,7 @@
 			isa = PBXGroup;
 			children = (
 				6589205C29EF0840005EE6FA /* ColorExtension.swift */,
+				659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -809,6 +812,7 @@
 				8384C43329210488008CCB4D /* ProblemStatementCellView.swift in Sources */,
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
 				DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */,
+				659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,

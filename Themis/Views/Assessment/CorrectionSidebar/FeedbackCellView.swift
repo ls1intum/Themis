@@ -15,7 +15,7 @@ struct FeedbackCellView: View {
     @ObservedObject var cvm: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly || feedback.assessmentType.isAutomatic }
+    var editingDisabled: Bool { readOnly }
 
     @State var showEditFeedback = false
     
@@ -104,8 +104,9 @@ struct FeedbackCellView: View {
                 .resizable()
                 .frame(width: 18, height: 18)
         }
-        .disabled(editingDisabled)
         .buttonStyle(ThemisButtonStyle(horizontalPadding: 8))
         .font(.caption)
+        .disabled(editingDisabled)
+        .isHidden(feedback.assessmentType.isAutomatic)
     }
 }
