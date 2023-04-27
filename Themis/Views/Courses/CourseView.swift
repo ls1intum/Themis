@@ -21,12 +21,14 @@ struct CourseView: View {
                         ExerciseSections(
                             exercises: courseVM.shownCourse?.exercises ?? []
                         )
+                        
                         if let courseId = courseVM.shownCourse?.id, !(courseVM.shownCourse?.exams?.isEmpty ?? false) {
                             Section("Exams") {
                                 ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseId)
                             }
                         }
                     }
+                    .environmentObject(courseVM)
                     .refreshable {
                         await courseVM.fetchAllCourses()
                     }
@@ -38,10 +40,10 @@ struct CourseView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Picker("", selection: $courseVM.shownCourseID) {
                         ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
-                            if courseID == nil {
-                                Text("No course")
+                            if let courseID {
+                                Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
                             } else {
-                                Text(courseVM.courseForID(id: courseID!)?.title ?? "Invalid")
+                                Text("No course")
                             }
                         }
                     }
@@ -51,7 +53,7 @@ struct CourseView: View {
         .task {
             await courseVM.fetchAllCourses()
         }
-//        .errorAlert(error: $courseVM.error)
+        .errorAlert(error: $courseVM.error)
     }
 
     var logoutButton: some View {

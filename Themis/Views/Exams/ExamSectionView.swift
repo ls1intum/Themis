@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ExamSectionView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
     let examID: Int
     let courseID: Int
     let examTitle: String
@@ -19,7 +21,7 @@ struct ExamSectionView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise)
+                        ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1)
                     } label: {
                         HStack {
                             if let iconName = exercise.exerciseIconName {
@@ -36,7 +38,9 @@ struct ExamSectionView: View {
             }
         }.task {
             let exam = try? await ArtemisAPI.getExamForAssessment(courseID: courseID, examID: examID)
-            guard let exam else { return }
+            guard let exam else {
+                return
+            }
             self.exercises = exam.exercises
         }
         .navigationTitle(examTitle)

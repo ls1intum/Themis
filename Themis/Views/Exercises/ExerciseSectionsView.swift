@@ -13,6 +13,8 @@ struct ExerciseDateProperty: Hashable {
 }
 
 struct ExerciseSections: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
     var exercises: [Exercise]
     
     private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDate)
@@ -74,7 +76,7 @@ struct ExerciseSections: View {
                 }) {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
-                            ExerciseView(exercise: exercise)
+                            ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }

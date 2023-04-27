@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Common
 
 class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
@@ -59,10 +60,11 @@ class CourseViewModel: ObservableObject {
             if shownCourseID == nil {
                 shownCourseID = self.courses.first?.id
             }
-            for i in 0..<courses.count {
-                try await courses[i].fetchProgrammingExercises(courseId: courses[i].id)
+            for index in 0 ..< courses.count {
+                try await courses[index].fetchProgrammingExercises(courseId: courses[index].id)
             }
         } catch let error {
+            log.error(error.localizedDescription)
             self.error = error
         }
     }

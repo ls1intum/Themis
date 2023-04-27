@@ -7,46 +7,39 @@
 
 import SwiftUI
 import UIKit
+import DesignLibrary
 
 struct ExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
+    
+    @State private var problemStatementHeight: CGFloat = 1.0
+    @State private var problemStatementRequest: URLRequest
+    
     let exercise: Exercise
     
+    init(exercise: Exercise, courseId: Int) {
+        self.exercise = exercise
+        self._problemStatementRequest = State(wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise.id)/problem-statement", relativeTo: RESTController.shared.baseURL)!))
+    }
     
     var body: some View {
         VStack {
-            if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
+            if exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
                 Form {
                     if !submissionListVM.openSubmissions.isEmpty {
-                        Section("Open submissions") {
-                            SubmissionListView(
-                                submissionListVM: submissionListVM,
-                                exercise: exercise,
-                                submissionStatus: .open
-                            )
-                        }.disabled(!submissionDueDateOver)
+                        openSubmissionsSection
                     }
+                    
                     if !submissionListVM.submittedSubmissions.isEmpty {
-                        Section("Finished submissions") {
-                            SubmissionListView(
-                                submissionListVM: submissionListVM,
-                                exercise: exercise,
-                                submissionStatus: .submitted
-                            )
-                        }.disabled(!submissionDueDateOver)
+                        finishedSubmissionsSection
                     }
-                    Section("Statistics") {
-                        HStack(alignment: .center) {
-                            Spacer()
-                            CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
-                            CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
-                            CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
-                            Spacer()
-                        }
-                    }
+                    
+                    statisticsSection
+                    
+                    problemStatementSection
                 }
                 .refreshable { await fetchExerciseData() }
             } else {
@@ -76,6 +69,47 @@ struct ExerciseView: View {
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
+    private var openSubmissionsSection: some View {
+        Section("Open submissions") {
+            SubmissionListView(
+                submissionListVM: submissionListVM,
+                exercise: exercise,
+                submissionStatus: .open
+            )
+        }.disabled(!submissionDueDateOver)
+    }
+    
+    private var finishedSubmissionsSection: some View {
+        Section("Finished submissions") {
+            SubmissionListView(
+                submissionListVM: submissionListVM,
+                exercise: exercise,
+                submissionStatus: .submitted
+            )
+        }.disabled(!submissionDueDateOver)
+    }
+    
+    private var statisticsSection: some View {
+        Section("Statistics") {
+            HStack(alignment: .center) {
+                Spacer()
+                CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
+                CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
+                CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
+                Spacer()
+            }
+        }
+    }
+    
+    private var problemStatementSection: some View {
+        Section("Problem Statement") {
+            ArtemisWebView(urlRequest: $problemStatementRequest,
+                           contentHeight: $problemStatementHeight)
+            .disabled(true)
+            .frame(height: problemStatementHeight)
+        }
+    }
+    
     private var searchButton: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -88,6 +122,7 @@ struct ExerciseView: View {
         .padding()
         .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
     }
+    
     private var startNewAssessmentButton: some View {
         Button {
             Task {
@@ -100,7 +135,9 @@ struct ExerciseView: View {
         .buttonStyle(NavigationBarButton())
     }
     private var submissionDueDateOver: Bool {
-        if let dueDate = exercise.dueDate, dueDate <= ArtemisDateHelpers.stringifyDate(Date.now)! {
+        if let dueDate = exercise.dueDate,
+           let now = ArtemisDateHelpers.stringifyDate(Date.now),
+           dueDate <= now {
             return true
         }
         return false
@@ -108,9 +145,20 @@ struct ExerciseView: View {
     
     private func fetchExerciseData() async {
         exerciseVM.exercise = exercise
-        await exerciseVM.fetchExercise(exerciseId: exercise.id)
-        await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
-        await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
-        await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
+        
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                await exerciseVM.fetchExercise(exerciseId: exercise.id)
+            }
+            group.addTask {
+                await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
+            }
+            group.addTask {
+                await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
+            }
+            group.addTask {
+                await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
+            }
+        }
     }
 }
