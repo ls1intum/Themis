@@ -4,6 +4,7 @@
 //
 //  Created by Andreas Cselovszky on 14.11.22.
 //
+// swiftlint:disable discouraged_optional_boolean
 
 import Foundation
 
@@ -49,6 +50,7 @@ struct Submission: Codable, Identifiable {
 }
 
 struct ExerciseOfSubmission: Codable {
+    let id: Int
     let maxPoints: Double
     var problemStatement: String
     let gradingInstructions: String?
@@ -142,13 +144,15 @@ extension ArtemisAPI {
             method: .get,
             path: "/api/programming-exercise-participations/\(participationId)/latest-result-with-feedbacks",
             params: [URLQueryItem(name: "withSubmission", value: "true")])
-        let pr = try await sendRequest(ParticipationResult.self, request: request)
+        
+        let participationResult = try await sendRequest(ParticipationResult.self, request: request)
+        
         return SubmissionForAssessment(
-            id: pr.submission.id,
-            participation: pr.participation,
-            feedbacks: pr.feedbacks,
+            id: participationResult.submission.id,
+            participation: participationResult.participation,
+            feedbacks: participationResult.feedbacks,
             results: nil,
-            buildFailed: pr.submission.buildFailed
+            buildFailed: participationResult.submission.buildFailed
         )
     }
 }

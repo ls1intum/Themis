@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct SubmissionSearchView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var vm = SubmissionSearchViewModel()
-    @StateObject var avm = AssessmentViewModel(readOnly: true)
+    @StateObject var submissionSearchVM = SubmissionSearchViewModel()
+    @StateObject var assessmentVM = AssessmentViewModel(readOnly: true)
     @State var search: String = ""
 
     let exercise: Exercise
@@ -18,8 +19,8 @@ struct SubmissionSearchView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(vm.filterSubmissions(search: search)) { submission in
-                    SingleSubmissionCellView(avm: avm, submission: submission)
+                ForEach(submissionSearchVM.filterSubmissions(search: search)) { submission in
+                    SingleSubmissionCellView(avm: assessmentVM, submission: submission)
                 }
             }
         }
@@ -30,16 +31,17 @@ struct SubmissionSearchView: View {
             }
         }
         .task {
-            await vm.fetchSubmissions(exerciseId: exercise.id)
+            await submissionSearchVM.fetchSubmissions(exerciseId: exercise.id)
         }
-        .navigationDestination(isPresented: $avm.showSubmission) {
+        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
-                vm: avm,
-                ar: avm.assessmentResult,
+                assessmentVM: assessmentVM,
+                assessmentResult: assessmentVM.assessmentResult,
                 exercise: exercise
             )
+            .environmentObject(courseVM)
         }
-        .errorAlert(error: $vm.error)
+        .errorAlert(error: $submissionSearchVM.error)
     }
 }
 
@@ -68,7 +70,7 @@ private struct SingleSubmissionCellView: View {
             Group {
                 Text(submission.participation.student.name)
                 Text(submission.participation.student.login)
-                Link("Repository", destination: URL(string: submission.participation.repositoryUrl)!)
+                linkToRepo
                 Spacer()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -88,6 +90,13 @@ private struct SingleSubmissionCellView: View {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemGray6))
         )
+    }
+    
+    @ViewBuilder
+    private var linkToRepo: some View {
+        if let repoUrl = URL(string: submission.participation.repositoryUrl) {
+            Link("Repository", destination: repoUrl)
+        }
     }
 }
 

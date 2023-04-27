@@ -22,6 +22,7 @@ struct ExamSectionView: View {
                 ForEach(exercises) { exercise in
                     NavigationLink {
                         ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1)
+                            .environmentObject(courseVM)
                     } label: {
                         HStack {
                             if let iconName = exercise.exerciseIconName {
