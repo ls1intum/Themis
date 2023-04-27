@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct CourseForDashboardDTO: Codable {
+    let course: Course
+}
+
 struct Course: Codable, Hashable {
     let id: Int
     let title: String
@@ -32,7 +36,7 @@ struct Course: Codable, Hashable {
 extension ArtemisAPI {
     static func getAllCourses() async throws -> [Course] {
         let request = Request(method: .get, path: "/api/courses/for-dashboard")
-        return try await sendRequest([Course].self, request: request)
+        return try await sendRequest([CourseForDashboardDTO].self, request: request).map({ $0.course })
     }
 
     static func getAllProgrammingExercises(courseId: Int) async throws -> [Exercise] {
