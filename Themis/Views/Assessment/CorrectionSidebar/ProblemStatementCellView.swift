@@ -84,7 +84,7 @@ struct ProblemStatementCellView: View {
                         FontFamilyVariant(.monospaced)
                         ForegroundColor(.red)
                     }
-                    .markdownImageProvider(.asset)
+                    .markdownInlineImageProvider(.asset)
             }
         }
     }
