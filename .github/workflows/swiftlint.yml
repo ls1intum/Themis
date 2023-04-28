@@ -11,21 +11,18 @@ jobs:
   SwiftLint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: sinoru/actions-setup-swift@v2
+      - uses: actions/checkout@v1
+      - name: GitHub Action for SwiftLint
+        uses: norio-nomura/action-swiftlint@3.2.1
+      - name: GitHub Action for SwiftLint with --strict
+        uses: norio-nomura/action-swiftlint@3.2.1
         with:
-          swift-version: '5.6.1'
-      - name: GitHub Actions for SwiftLint
-        uses: sinoru/actions-swiftlint@v6
-      - name: GitHub Actions for SwiftLint with --strict
-        uses: sinoru/actions-swiftlint@v6
-        with:
-          swiftlint-args: --strict
-      - name: GitHub Actions for SwiftLint (Only files changed in the PR)
-        uses: sinoru/actions-swiftlint@v6
+          args: --strict
+      - name: GitHub Action for SwiftLint (Only files changed in the PR)
+        uses: norio-nomura/action-swiftlint@3.2.1
         env:
           DIFF_BASE: ${{ github.base_ref }}
-      - name: GitHub Actions for SwiftLint (Different working directory)
-        uses: sinoru/actions-swiftlint@v6
-        with:
-          working-directory: Sources
+      - name: GitHub Action for SwiftLint (Different working directory)
+        uses: norio-nomura/action-swiftlint@3.2.1
+        env:
+          WORKING_DIRECTORY: Source
