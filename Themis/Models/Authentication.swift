@@ -16,7 +16,6 @@ private struct AuthBody: Encodable {
 
 class Authentication: NSObject {
     static var shared = Authentication()
-    var test = ""
     // TODO: remove after bearer token auth is no more
     enum AuthenticationError: Error {
         case tokenNotFound
