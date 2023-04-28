@@ -18,6 +18,6 @@ jobs:
       - name: GitHub Actions for SwiftLint (Only files changed in the PR)
         uses: sinoru/actions-swiftlint@v6
         with:
-          swiftlint-args: --config swiftlint.yml
+          swiftlint-args: --config swiftlint.yml --strict
         env:
           DIFF_BASE: ${{ github.base_ref }}
