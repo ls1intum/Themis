@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftUIReorderableForEach
 
 
-// used to show opened tabs on top of CodeView
+/// Used to show opened tabs on top of CodeView
 struct TabsView: View {
     @ObservedObject var cvm: CodeEditorViewModel
 
@@ -13,26 +13,15 @@ struct TabsView: View {
                     Divider()
                     ReorderableForEach($cvm.openFiles, allowReordering: .constant(true)) { file, _ in
                         ZStack {
-                            Rectangle()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .foregroundColor(file.path == cvm.selectedFile?.path ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+                            backgroundRectangle(for: file)
 
                             HStack(spacing: 0) {
-                                Text(file.name)
-                                    .bold(cvm.selectedFile?.path == file.path)
-                                    .padding(.leading, 10)
-                                    .padding(.trailing, file.path == cvm.selectedFile?.path ? 0 : 10)
-                                if file.path == cvm.selectedFile?.path {
-                                    Button(action: {
-                                        cvm.closeFile(file: file)
-                                    }, label: {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.gray)
-                                            .buttonStyle(.borderless)
-                                    })
-                                    .padding(.leading, 7)
-                                    .padding(.trailing, 10)
+                                nameLabel(for: file)
+                                
+                                if cvm.isOpen(file: file) {
+                                    closeButton(for: file)
                                 }
+                                
                                 Divider()
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -51,6 +40,31 @@ struct TabsView: View {
                 })
             }
         }
+    }
+    
+    private func backgroundRectangle(for file: Node) -> some View {
+        Rectangle()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .foregroundColor(file.path == cvm.selectedFile?.path ? Color(UIColor.systemGray5) : Color(UIColor.systemBackground))
+    }
+    
+    private func closeButton(for file: Node) -> some View {
+        Button(action: {
+            cvm.closeFile(file: file)
+        }, label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundColor(.gray)
+                .buttonStyle(.borderless)
+        })
+        .padding(.leading, 7)
+        .padding(.trailing, 10)
+    }
+    
+    private func nameLabel(for file: Node) -> some View {
+        Text(file.name)
+            .bold(cvm.selectedFile?.path == file.path)
+            .padding(.leading, 10)
+            .padding(.trailing, file.path == cvm.selectedFile?.path ? 0 : 10)
     }
 }
 
