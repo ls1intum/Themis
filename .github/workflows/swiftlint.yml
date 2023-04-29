@@ -1,0 +1,24 @@
+name: SwiftLint
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/swiftlint.yml'
+      - '.swiftlint.yml'
+      - '**/*.swift'
+
+jobs:
+  SwiftLint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Swift environment
+        uses: sinoru/actions-setup-swift@v2
+        with:
+          swift-version: '5.7.1'
+      - name: Run SwiftLint (Only lint files changed in the PR)
+        uses: sinoru/actions-swiftlint@v6
+        with:
+          swiftlint-args: --config swiftlint.yml --strict
+        env:
+           DIFF_BASE: ${{ github.base_ref }}
