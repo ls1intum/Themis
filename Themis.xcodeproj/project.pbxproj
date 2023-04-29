@@ -17,6 +17,8 @@
 		6581E8A329FAEF650012B01A /* PushNotifications in Frameworks */ = {isa = PBXBuildFile; productRef = 6581E8A229FAEF650012B01A /* PushNotifications */; };
 		6581E8A529FAEF650012B01A /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 6581E8A429FAEF650012B01A /* SharedModels */; };
 		6581E8A729FAEF650012B01A /* UserStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6581E8A629FAEF650012B01A /* UserStore */; };
+		658C231529FCEDF600D2B374 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 658C231429FCEDF600D2B374 /* RswiftLibrary */; };
+		658C231729FCEDF600D2B374 /* rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 658C231629FCEDF600D2B374 /* rswift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -191,12 +193,14 @@
 				838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */,
 				6581E8A329FAEF650012B01A /* PushNotifications in Frameworks */,
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
+				658C231729FCEDF600D2B374 /* rswift in Frameworks */,
 				6581E8A129FAEF650012B01A /* ProfileInfo in Frameworks */,
 				6581E89D29FAEF650012B01A /* DesignLibrary in Frameworks */,
 				6581E8A529FAEF650012B01A /* SharedModels in Frameworks */,
 				6581E89B29FAEF650012B01A /* Common in Frameworks */,
 				6581E89F29FAEF650012B01A /* Login in Frameworks */,
 				6581E89929FAEF650012B01A /* APIClient in Frameworks */,
+				658C231529FCEDF600D2B374 /* RswiftLibrary in Frameworks */,
 				6581E8A729FAEF650012B01A /* UserStore in Frameworks */,
 				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
 			);
@@ -589,6 +593,8 @@
 				6581E8A229FAEF650012B01A /* PushNotifications */,
 				6581E8A429FAEF650012B01A /* SharedModels */,
 				6581E8A629FAEF650012B01A /* UserStore */,
+				658C231429FCEDF600D2B374 /* RswiftLibrary */,
+				658C231629FCEDF600D2B374 /* rswift */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -669,6 +675,7 @@
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
 				838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				6581E89729FAEF650012B01A /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
+				658C231329FCEDF600D2B374 /* XCRemoteSwiftPackageReference "R.swift" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -1134,6 +1141,14 @@
 				kind = branch;
 			};
 		};
+		658C231329FCEDF600D2B374 /* XCRemoteSwiftPackageReference "R.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mac-cain13/R.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -1216,6 +1231,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6581E89729FAEF650012B01A /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
 			productName = UserStore;
+		};
+		658C231429FCEDF600D2B374 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 658C231329FCEDF600D2B374 /* XCRemoteSwiftPackageReference "R.swift" */;
+			productName = RswiftLibrary;
+		};
+		658C231629FCEDF600D2B374 /* rswift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 658C231329FCEDF600D2B374 /* XCRemoteSwiftPackageReference "R.swift" */;
+			productName = rswift;
 		};
 		838E4AA5297DADF00057E6E6 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
