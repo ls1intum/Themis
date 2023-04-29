@@ -14,6 +14,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup Swift environment
         uses: sinoru/actions-setup-swift@v2
+        with:
+          swift-version: '5.8'
       - name: Run SwiftLint
         uses: sinoru/actions-swiftlint@v6
         with:
