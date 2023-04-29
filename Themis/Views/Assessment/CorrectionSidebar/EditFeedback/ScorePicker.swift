@@ -20,7 +20,8 @@ struct ScorePicker: View {
     var body: some View {
         VStack(spacing: 0) {
             Text("SCORE")
-                .font(.subheadline).bold()
+                .font(.subheadline)
+                .bold()
                 .foregroundColor(.secondary)
                 .padding(.top)
             

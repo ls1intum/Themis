@@ -28,7 +28,10 @@ class AuthenticationViewModel: ObservableObject {
     }
 
     var validURL: Bool {
-        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return false }
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
+            return false
+        }
+        
         if let match = detector.firstMatch(in: serverURL, options: [], range: NSRange(location: 0, length: serverURL.utf16.count)) {
             return match.range.length == serverURL.utf16.count
         } else {
@@ -57,7 +60,6 @@ class AuthenticationViewModel: ObservableObject {
         if let serverURL = generateURL(serverURL: serverURL) {
             RESTController.shared = RESTController(baseURL: serverURL)
             restControllerInitialized = true
-            Authentication.shared = Authentication()
         }
         observeAuthenticationToken() // TODO: remove once bearer token auth is no longer supported
         observeAuthenticationStatus()
@@ -65,13 +67,17 @@ class AuthenticationViewModel: ObservableObject {
     }
 
     private func generateURL(serverURL: String) -> URL? {
-        guard let url = URL(string: serverURL) else { return nil }
+        guard let url = URL(string: serverURL) else {
+            return nil
+        }
         return cleanURL(url: url)
     }
 
     private func cleanURL(url: URL) -> URL? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        guard let components else { return nil }
+        guard let components else {
+            return nil
+        }
         var newComponents = URLComponents()
         newComponents.scheme = components.scheme
         newComponents.host = components.host

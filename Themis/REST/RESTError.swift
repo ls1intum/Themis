@@ -31,8 +31,8 @@ enum RESTError: String, Error, LocalizedError {
     case badRequest = "Server didn't process request due to client error (e.g. wrong syntax)."
     case methodNotAllowed = "The HTTP Method is not allowed in this context."
     case forbidden = """
-        You are not authorized to access this resource or perform this action.
-        Please make sure you are logged in with the correct credentials and have the necessary permissions.
+    You are not authorized to access this resource or perform this action.
+    Please make sure you are logged in with the correct credentials and have the necessary permissions.
     """
     case notFound = "The requested ressource could not be found."
     case server = "The Server experienced an error, therefore not being able to respond."
@@ -71,7 +71,7 @@ struct LocalizedAlertError: LocalizedError {
     var recoverySuggestion: String? {
         underlyingError.recoverySuggestion
     }
-
+    
     init?(error: Error?) {
         guard let localizedError = error as? LocalizedError
         else {
@@ -85,12 +85,7 @@ struct LocalizedAlertError: LocalizedError {
 extension View {
     func errorAlert(error: Binding<Error?>, buttonTitle: String = "OK", onDismiss: (() -> Void)? = nil) -> some View {
         let localizedAlertError = LocalizedAlertError(error: error.wrappedValue)
-        return alert(
-            isPresented: .constant(
-                localizedAlertError != nil
-            ),
-            error: localizedAlertError
-        ) {_ in
+        return alert(isPresented: .constant( localizedAlertError != nil), error: localizedAlertError) { _ in
             Button(buttonTitle) {
                 error.wrappedValue = nil
                 onDismiss?()

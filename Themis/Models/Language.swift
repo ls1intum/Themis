@@ -4,9 +4,9 @@
 //
 //  Created by Tom Rudnick on 23.01.23.
 //
+// swiftlint:disable identifier_name
 
 import Foundation
-
 
 public enum Language: String {
     case swift
