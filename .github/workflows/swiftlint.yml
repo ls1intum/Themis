@@ -12,12 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: sinoru/actions-setup-swift@v2
-        with:
-          swift-version: '5.7.1'
-      - name: GitHub Actions for SwiftLint (Only files changed in the PR)
+      - name: Setup Swift environment
+        uses: sinoru/actions-setup-swift@v2
+      - name: Run SwiftLint
         uses: sinoru/actions-swiftlint@v6
         with:
           swiftlint-args: --config swiftlint.yml --strict
-        env:
-          DIFF_BASE: ${{ github.base_ref }}
