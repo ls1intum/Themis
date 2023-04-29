@@ -16,7 +16,9 @@ jobs:
         uses: sinoru/actions-setup-swift@v2
         with:
           swift-version: '5.7.1'
-      - name: Run SwiftLint
+      - name: Run SwiftLint (Only lint files changed in the PR)
         uses: sinoru/actions-swiftlint@v6
         with:
           swiftlint-args: --config swiftlint.yml --strict
+        env:
+           DIFF_BASE: ${{ github.base_ref }}
