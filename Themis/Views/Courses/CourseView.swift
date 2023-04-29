@@ -38,10 +38,10 @@ struct CourseView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Picker("", selection: $courseVM.shownCourseID) {
                         ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
-                            if courseID == nil {
-                                Text("No course")
+                            if let courseID {
+                                Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
                             } else {
-                                Text(courseVM.courseForID(id: courseID!)?.title ?? "Invalid")
+                                Text("No course")
                             }
                         }
                     }

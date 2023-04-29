@@ -36,7 +36,9 @@ struct ExamSectionView: View {
             }
         }.task {
             let exam = try? await ArtemisAPI.getExamForAssessment(courseID: courseID, examID: examID)
-            guard let exam else { return }
+            guard let exam else {
+                return
+            }
             self.exercises = exam.exercises
         }
         .navigationTitle(examTitle)

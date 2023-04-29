@@ -88,8 +88,24 @@ struct AuthenticationView: View {
         .disabled(authenticationVM.loginDisabled)
         .buttonStyle(LoginButtonStyle(loginDisabled: authenticationVM.loginDisabled))
     }
+    
+    private var serverURLField: some View {
+        TextField("Artemis-Server", text: $authenticationVM.serverURL)
+            .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, validInput: authenticationVM.validURL, type: .serverURL))
+            .focused($focusedField, equals: .serverurl)
+            .submitLabel(.next)
+    }
+    
+    private var usernameField: some View {
+        TextField("Username", text: $authenticationVM.username)
+            .textFieldStyle(LoginTextFieldStyle(error: $authenticationVM.error, type: .username))
+            .textInputAutocapitalization(.never)
+            .focused($focusedField, equals: .username)
+            .submitLabel(.next)
+            .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
+    }
 
-    var passwordField: some View {
+    private var passwordField: some View {
         ZStack(alignment: .trailing) {
             Group {
                 SecureField("Password", text: $authenticationVM.password)

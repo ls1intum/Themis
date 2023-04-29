@@ -84,6 +84,11 @@ class CodeEditorViewModel: ObservableObject {
         selectedFile = openFiles.first
     }
     
+    /// Returns true if the given file is currently open in the code editor
+    func isOpen(file: Node) -> Bool {
+        file.path == selectedFile?.path
+    }
+    
     func initFileTree(participationId: Int) async {
         do {
             let files = try await ArtemisAPI.getFileNamesOfRepository(participationId: participationId)
@@ -151,7 +156,7 @@ class CodeEditorViewModel: ObservableObject {
         if let file = selectedFile, let selectedSection = selectedSection {
             appendHighlight(feedbackId: feedbackId, range: selectedSection, path: file.path)
         }
-            undoManager.endUndoGrouping() /// undo group with addFeedback in AssessmentResult
+        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     @MainActor
@@ -191,7 +196,7 @@ class CodeEditorViewModel: ObservableObject {
         }
         
         if feedback.type == .inline {
-            undoManager.endUndoGrouping() /// undo group with deleteFeedback in AssessmentResult
+            undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
         }
     }
     

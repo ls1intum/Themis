@@ -18,35 +18,17 @@ struct ExerciseView: View {
     
     var body: some View {
         VStack {
-            if let exercise = exerciseVM.exercise, exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
+            if exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
                 Form {
                     if !submissionListVM.openSubmissions.isEmpty {
-                        Section("Open submissions") {
-                            SubmissionListView(
-                                submissionListVM: submissionListVM,
-                                exercise: exercise,
-                                submissionStatus: .open
-                            )
-                        }.disabled(!submissionDueDateOver)
+                        openSubmissionsSection
                     }
+                    
                     if !submissionListVM.submittedSubmissions.isEmpty {
-                        Section("Finished submissions") {
-                            SubmissionListView(
-                                submissionListVM: submissionListVM,
-                                exercise: exercise,
-                                submissionStatus: .submitted
-                            )
-                        }.disabled(!submissionDueDateOver)
+                        finishedSubmissionsSection
                     }
-                    Section("Statistics") {
-                        HStack(alignment: .center) {
-                            Spacer()
-                            CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
-                            CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
-                            CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
-                            Spacer()
-                        }
-                    }
+                    
+                    statisticsSection
                 }
                 .refreshable { await fetchExerciseData() }
             } else {
@@ -55,8 +37,8 @@ struct ExerciseView: View {
         }
         .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
-                vm: assessmentVM,
-                ar: assessmentVM.assessmentResult,
+                assessmentVM: assessmentVM,
+                assessmentResult: assessmentVM.assessmentResult,
                 exercise: exercise
             )
         }
@@ -76,6 +58,38 @@ struct ExerciseView: View {
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
+    private var openSubmissionsSection: some View {
+        Section("Open submissions") {
+            SubmissionListView(
+                submissionListVM: submissionListVM,
+                exercise: exercise,
+                submissionStatus: .open
+            )
+        }.disabled(!submissionDueDateOver)
+    }
+    
+    private var finishedSubmissionsSection: some View {
+        Section("Finished submissions") {
+            SubmissionListView(
+                submissionListVM: submissionListVM,
+                exercise: exercise,
+                submissionStatus: .submitted
+            )
+        }.disabled(!submissionDueDateOver)
+    }
+    
+    private var statisticsSection: some View {
+        Section("Statistics") {
+            HStack(alignment: .center) {
+                Spacer()
+                CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
+                CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
+                CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
+                Spacer()
+            }
+        }
+    }
+    
     private var searchButton: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -88,6 +102,7 @@ struct ExerciseView: View {
         .padding()
         .background(Material.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
     }
+    
     private var startNewAssessmentButton: some View {
         Button {
             Task {
@@ -100,7 +115,9 @@ struct ExerciseView: View {
         .buttonStyle(NavigationBarButton())
     }
     private var submissionDueDateOver: Bool {
-        if let dueDate = exercise.dueDate, dueDate <= ArtemisDateHelpers.stringifyDate(Date.now)! {
+        if let dueDate = exercise.dueDate,
+           let now = ArtemisDateHelpers.stringifyDate(Date.now),
+           dueDate <= now {
             return true
         }
         return false

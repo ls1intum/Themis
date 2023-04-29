@@ -1,8 +1,6 @@
 import Foundation
 import SwiftUI
 
-// swiftlint:disable closure_body_length
-
 enum StatisticDescription {
     case participationRate, assessed, averageScore
 }
