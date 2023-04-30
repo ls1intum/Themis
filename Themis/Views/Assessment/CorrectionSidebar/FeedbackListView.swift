@@ -22,70 +22,9 @@ struct FeedbackListView: View {
     var body: some View {
         VStack(alignment: .leading) {
             List {
-                Section(header: HStack {
-                    Text("General Feedback")
-                    Spacer()
-                    Button {
-                        showAddFeedback.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .disabled(readOnly)
-                }.padding()) {
-                    ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
-                        FeedbackCellView(
-                            readOnly: readOnly,
-                            assessmentResult: assessmentResult,
-                            cvm: cvm,
-                            feedback: feedback,
-                            gradingCriteria: gradingCriteria
-                        )
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color("sidebarBackground"))
-                    }
-                    .onDelete(perform: delete(at:))
-                }.headerProminence(.increased)
-                
-                Section {
-                    ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
-                        FeedbackCellView(
-                            readOnly: readOnly,
-                            assessmentResult: assessmentResult,
-                            cvm: cvm,
-                            feedback: feedback,
-                            participationId: participationId,
-                            templateParticipationId: templateParticipationId,
-                            gradingCriteria: gradingCriteria
-                        )
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color("sidebarBackground"))
-                    }
-                    .onDelete(perform: delete(at:))
-                } header: {
-                    HStack {
-                        Text("Inline Feedback")
-                        Spacer()
-                    }.padding()
-                }.headerProminence(.increased)
-                
-                Section {
-                    ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
-                        FeedbackCellView(
-                            readOnly: readOnly,
-                            assessmentResult: assessmentResult,
-                            cvm: cvm,
-                            feedback: feedback,
-                            gradingCriteria: gradingCriteria
-                        )
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color("sidebarBackground"))
-                    }
-                } header: {
-                    HStack {
-                        Text("Automatic Feedback")
-                        Spacer()
-                    }.padding()
-                }.headerProminence(.increased)
+                generalFeedbackSection
+                inlineFeedbackSection
+                automaticFeedbackSection
             }
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
@@ -99,6 +38,79 @@ struct FeedbackListView: View {
                 gradingCriteria: gradingCriteria
             )
         }
+    }
+    
+    private var generalFeedbackSection: some View {
+        Section {
+            ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
+                FeedbackCellView(
+                    readOnly: readOnly,
+                    assessmentResult: assessmentResult,
+                    cvm: cvm,
+                    feedback: feedback,
+                    gradingCriteria: gradingCriteria
+                )
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color("sidebarBackground"))
+            }
+            .onDelete(perform: delete(at:))
+        } header: {
+            HStack {
+                Text("General Feedback")
+                Spacer()
+                Button {
+                    showAddFeedback.toggle()
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .disabled(readOnly)
+            }.padding()
+        }.headerProminence(.increased)
+    }
+    
+    private var inlineFeedbackSection: some View {
+        Section {
+            ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
+                FeedbackCellView(
+                    readOnly: readOnly,
+                    assessmentResult: assessmentResult,
+                    cvm: cvm,
+                    feedback: feedback,
+                    participationId: participationId,
+                    templateParticipationId: templateParticipationId,
+                    gradingCriteria: gradingCriteria
+                )
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color("sidebarBackground"))
+            }
+            .onDelete(perform: delete(at:))
+        } header: {
+            HStack {
+                Text("Inline Feedback")
+                Spacer()
+            }.padding()
+        }.headerProminence(.increased)
+    }
+    
+    private var automaticFeedbackSection: some View {
+        Section {
+            ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
+                FeedbackCellView(
+                    readOnly: readOnly,
+                    assessmentResult: assessmentResult,
+                    cvm: cvm,
+                    feedback: feedback,
+                    gradingCriteria: gradingCriteria
+                )
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color("sidebarBackground"))
+            }
+        } header: {
+            HStack {
+                Text("Automatic Feedback")
+                Spacer()
+            }.padding()
+        }.headerProminence(.increased)
     }
     
     private func delete(at indexSet: IndexSet) {

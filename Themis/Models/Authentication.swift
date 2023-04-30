@@ -15,9 +15,7 @@ private struct AuthBody: Encodable {
 }
 
 class Authentication: NSObject {
-
-    static var shared: Authentication!
-
+    static var shared = Authentication()
     // TODO: remove after bearer token auth is no more
     enum AuthenticationError: Error {
         case tokenNotFound
@@ -67,7 +65,7 @@ class Authentication: NSObject {
 
     @objc dynamic var authenticated = false
 
-    override init() {
+    override private init() {
         keychain = Keychain(service: "feedback2go.auth")
         super.init()
     }
