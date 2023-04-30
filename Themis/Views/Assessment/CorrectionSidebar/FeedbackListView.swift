@@ -137,6 +137,10 @@ struct FeedbackListView: View {
             cvm: codeEditor,
             gradingCriteria: []
         )
+        .onAppear(perform: {
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: "Remove this if statement", credits: 10, type: .general))
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: "Remove this if statement", credits: -10, type: .general))
+        })
         .previewInterfaceOrientation(.landscapeLeft)
     }
  }

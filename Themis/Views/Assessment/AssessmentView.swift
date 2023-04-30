@@ -81,7 +81,7 @@ struct AssessmentView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(Color("customPrimary"), for: .navigationBar)
+        .toolbarBackground(Color.themisPrimary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -221,7 +221,7 @@ struct AssessmentView: View {
                     Text("Save")
                         .foregroundColor(.white)
                 }
-                .buttonStyle(NavigationBarButton())
+                .buttonStyle(ThemisButtonStyle(iconImageName: "saveIcon"))
                 .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -231,7 +231,7 @@ struct AssessmentView: View {
                     Text("Submit")
                         .foregroundColor(.white)
                 }
-                .buttonStyle(NavigationBarButton())
+                .buttonStyle(ThemisButtonStyle(color: Color.themisGreen))
                 .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
         }
@@ -321,7 +321,7 @@ struct AssessmentView: View {
     
     var leftGrip: some View {
         ZStack {
-            Color("customPrimary")
+            Color.themisPrimary
                 .frame(maxWidth: 7, maxHeight: .infinity)
             
             Rectangle()
@@ -361,7 +361,7 @@ struct AssessmentView: View {
     var rightLabel: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color("customPrimary"))
+                .foregroundColor(.themisPrimary)
                 .frame(width: 70, height: 120)
             VStack {
                 Image(systemName: "chevron.up")
@@ -415,7 +415,7 @@ struct AssessmentView: View {
                 .zIndex(1)
             
             if dragWidthRight > 0 {
-                Color("customPrimary")
+                Color.themisPrimary
                     .frame(maxWidth: 7, maxHeight: .infinity)
                 Image(systemName: "minus")
                     .resizable()
@@ -469,6 +469,6 @@ struct AssessmentView: View {
             }
         }
         .fontWeight(.semibold)
-        .background(Color("customPrimary"))
+        .background(Color.themisPrimary)
     }
 }
