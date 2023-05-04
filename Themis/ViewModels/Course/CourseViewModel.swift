@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
@@ -58,9 +59,6 @@ class CourseViewModel: ObservableObject {
             self.courses = try await ArtemisAPI.getAllCourses()
             if shownCourseID == nil {
                 shownCourseID = self.courses.first?.id
-            }
-            for index in 0 ..< courses.count {
-                try await courses[index].fetchProgrammingExercises(courseId: courses[index].id)
             }
         } catch let error {
             self.error = error

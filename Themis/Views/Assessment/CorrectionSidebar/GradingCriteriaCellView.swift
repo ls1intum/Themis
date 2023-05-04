@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-
+import SharedModels
 
 struct GradingCriteriaCellView: View {
     let gradingCriterion: GradingCriterion
@@ -26,7 +26,7 @@ struct GradingCriteriaCellView: View {
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
                 Button {
                     self.detailText?.wrappedValue = instruction.feedback ?? ""
-                    self.score?.wrappedValue = instruction.credits
+                    self.score?.wrappedValue = instruction.credits ?? 0.0
                 } label: {
                     VStack(alignment: .leading) {
                         HStack {
@@ -34,7 +34,7 @@ struct GradingCriteriaCellView: View {
                                 .font(.title3)
                                 .multilineTextAlignment(.leading)
                             Spacer()
-                            Text(String(format: "%.1f", instruction.credits) + "P")
+                            Text(String(format: "%.1f", instruction.credits ?? 0.0) + "P")
                                 .font(.title3)
                         }
 
@@ -45,7 +45,7 @@ struct GradingCriteriaCellView: View {
                     }
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color.getBackgroundColor(forCredits: instruction.credits)))
+                        .foregroundColor(Color.getBackgroundColor(forCredits: instruction.credits ?? 0.0)))
                 }
                 .disabled(detailText == nil || score == nil)
                 .foregroundColor(Color.primary)

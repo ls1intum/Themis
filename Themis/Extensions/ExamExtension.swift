@@ -1,43 +1,27 @@
 //
-//  Exam.swift
+//  ExamExtension.swift
 //  Themis
 //
-//  Created by Tom Rudnick on 06.02.23.
+//  Created by Tarlan Ismayilsoy on 03.05.23.
 //
 
 import Foundation
+import SharedModels
 
-struct Exam: Codable {
-    let id: Int
-    let title: String
-    /// start of working time
-    let startDate: String?
-    /// end of working time, start of assessment time
-    let endDate: String?
-    /// end of assessment date
-    let publishResultsDate: String?
-    var exerciseGroups: [ExerciseGroup]?
-    
-    var exercises: [Exercise] {
+extension Exam {
+    public var exercises: [Exercise] {
         let exercises = exerciseGroups?.reduce([]) { $0 + ($1.exercises ?? []) } as? [Exercise]
         guard let exercises else {
             return []
         }
         return exercises.map { exercise in
             var exerciseWithDate = exercise
-            exerciseWithDate.releaseDate = self.startDate
-            exerciseWithDate.dueDate = self.endDate
-            exerciseWithDate.assessmentDueDate = self.publishResultsDate
+//            exerciseWithDate.baseExercise.releaseDate = self.startDate // TODO: find a solution around this
+//            exerciseWithDate.baseExercise.dueDate = self.endDate
+//            exerciseWithDate.baseExercise.assessmentDueDate = self.publishResultsDate
             return exerciseWithDate
         }
     }
-}
-
-
-struct ExerciseGroup: Codable {
-    let id: Int
-    let title: String
-    var exercises: [Exercise]?
 }
 
 extension ArtemisAPI {

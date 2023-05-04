@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct CorrectionGuidelinesCellView: View {
     let gradingCriteria: [GradingCriterion]

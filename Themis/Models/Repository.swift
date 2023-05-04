@@ -108,7 +108,7 @@ class Node: Hashable, ObservableObject {
     }
     
     
-    public func language() -> Language? {
+    public func language() -> SourceCodeLanguage? {
         guard let language = languageDict[self.fileExtensionString] else {
             return nil
         }
@@ -230,7 +230,7 @@ class Node: Hashable, ObservableObject {
         }
     }
     
-    private let languageDict: [String: Language] = [
+    private let languageDict: [String: SourceCodeLanguage] = [
         "c": .c,
         "h": .c,
         "py": .python,

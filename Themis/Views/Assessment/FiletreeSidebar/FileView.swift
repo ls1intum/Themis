@@ -30,7 +30,7 @@ struct FileView: View {
         }
     }
     
-    func image(for language: Language, style: Style) -> Image? {
+    func image(for language: SourceCodeLanguage, style: Style) -> Image? {
         let imageName = "\(language.rawValue)-\(style.rawValue)"
         if let image = UIImage(named: imageName) {
             return Image(uiImage: image)

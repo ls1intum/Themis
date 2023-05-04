@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExamSectionView: View {
     let examID: Int
@@ -22,11 +23,13 @@ struct ExamSectionView: View {
                         ExerciseView(exercise: exercise)
                     } label: {
                         HStack {
-                            if let iconName = exercise.exerciseIconName {
-                                Image(systemName: iconName)
-                                    .scaledToFill()
-                            }
-                            Text(exercise.title ?? "")
+                            exercise.image
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: .smallImage)
+                            
+                            Text(exercise.baseExercise.title ?? "")
                                 .font(.title2)
                                 .fontWeight(.medium)
                         }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct AssessmentSubmissionLoaderView: View {
     @StateObject var avm = AssessmentViewModel(readOnly: false)
@@ -24,7 +25,7 @@ struct AssessmentSubmissionLoaderView: View {
         )
         .task {
             await avm.getSubmission(id: submissionID)
-            if let pId = avm.submission?.participation.id {
+            if let pId = avm.submission?.participation?.id {
                 await cvm.initFileTree(participationId: pId)
                 await cvm.loadInlineHighlight(assessmentResult: avm.assessmentResult, participationId: pId)
             }
@@ -34,6 +35,6 @@ struct AssessmentSubmissionLoaderView: View {
 
 struct AssessmentSubmissionLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentSubmissionLoaderView(submissionID: 5, exercise: Exercise())
+        AssessmentSubmissionLoaderView(submissionID: 5, exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)))
     }
 }

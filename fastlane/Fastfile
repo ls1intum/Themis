@@ -103,7 +103,8 @@ platform :ios do
       cloned_source_packages_path: ".SwiftPackages", # Custom path for cloning source packages to
       derived_data_path: ".DerivedData", # Custom derived data path
       output_directory: "./build", # Directory where the output artifacts are generated
-      scheme: "Themis" # We want to build the "HallOfFame" scheme
+      scheme: "Themis", # We want to build the "Themis" scheme
+      xcargs: "-skipPackagePluginValidation"
     )
   end
 

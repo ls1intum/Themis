@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import SharedModels
 
 class ExerciseViewModel: ObservableObject {
     @Published var exercise: Exercise?
-    @Published var exerciseStats: ExerciseForAssessment?
+    @Published var exerciseStats: ExerciseStatsForAssessmentDashboard?
     @Published var exerciseStatsForDashboard: ExerciseStatistics?
     @Published var error: Error?
 

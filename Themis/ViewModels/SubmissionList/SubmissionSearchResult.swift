@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SharedModels
 
 struct SubmissionSearchResult {
     let forText: String
@@ -39,24 +40,24 @@ struct SubmissionSearchResult {
         return Double(levDisCaseInsensitiveTrimmed(reference, forText)) / Double(forText.count) / Double(reference.count)
     }
 
-    private var student: Student {
-        submission.participation.student
+    private var student: User? {
+        (submission.baseSubmission.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.student
     }
 
     private var nameScore: Double {
-        Self.scoreCalculation(reference: forText, forText: student.name)
+        Self.scoreCalculation(reference: forText, forText: student?.name ?? "")
     }
     private var firstNameScore: Double {
-        Self.scoreCalculation(reference: forText, forText: student.firstName)
+        Self.scoreCalculation(reference: forText, forText: student?.firstName ?? "")
     }
     private var lastNameScore: Double {
-        guard let lastName = student.lastName else {
+        guard let lastName = student?.lastName else {
             return Double(Int.max)
         }
         return Self.scoreCalculation(reference: forText, forText: lastName)
     }
     private var loginScore: Double {
-        Self.scoreCalculation(reference: forText, forText: student.login)
+        Self.scoreCalculation(reference: forText, forText: student?.login ?? "")
     }
 
     // search result with lower score is better

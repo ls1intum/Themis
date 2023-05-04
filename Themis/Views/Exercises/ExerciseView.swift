@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import SharedModels
 
 struct ExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -42,7 +43,7 @@ struct ExerciseView: View {
                 exercise: exercise
             )
         }
-        .navigationTitle(exercise.title ?? "")
+        .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -114,11 +115,10 @@ struct ExerciseView: View {
         }
         .buttonStyle(ThemisButtonStyle(color: .themisGreen, iconImageName: "startAssessmentIcon"))
     }
+    
     private var submissionDueDateOver: Bool {
-        if let dueDate = exercise.dueDate,
-           let now = ArtemisDateHelpers.stringifyDate(Date.now),
-           dueDate <= now {
-            return true
+        if let dueDate = exercise.baseExercise.dueDate {
+            return dueDate <= .now
         }
         return false
     }

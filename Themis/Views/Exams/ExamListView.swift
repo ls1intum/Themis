@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExamDateProperty: Hashable {
     let name: String

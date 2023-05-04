@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExerciseListItem: View {
     let exercise: Exercise
@@ -16,7 +17,7 @@ struct ExerciseListItem: View {
             Image(systemName: "keyboard")
                 .font(.system(size: 23))
             
-            Text(exercise.title ?? "")
+            Text(exercise.baseExercise.title ?? "")
                 .font(.title2)
                 .fontWeight(.medium)
             Spacer()

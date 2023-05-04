@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import CodeEditor
+import SharedModels
 
 struct EditFeedbackViewBase: View {
     var assessmentResult: AssessmentResult
@@ -21,7 +22,7 @@ struct EditFeedbackViewBase: View {
 
     let title: String?
     let edit: Bool
-    let type: FeedbackType
+    let scope: ThemisFeedbackScope
     var file: Node?
     
     let gradingCriteria: [GradingCriterion]
@@ -122,14 +123,21 @@ struct EditFeedbackViewBase: View {
     private func createFeedback() {
         if let feedbackSuggestion {
             addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
-        } else if type == .inline {
+        } else if scope == .inline {
             let lines: NSRange? = cvm.selectedSectionParsed?.0
             let columns: NSRange? = cvm.selectedSectionParsed?.1
-            let feedback = AssessmentFeedback(detailText: detailText, credits: score, type: type, file: file, lines: lines, columns: columns)
+            let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
+                                              scope: scope,
+                                              file: file,
+                                              lines: lines,
+                                              columns: columns)
             assessmentResult.addFeedback(feedback: feedback)
             cvm.addInlineHighlight(feedbackId: feedback.id)
         } else {
-            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: type))
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
+                                                                                             credits: score,
+                                                                                             type: .MANUAL_UNREFERENCED),
+                                                                      scope: scope))
         }
     }
     
@@ -144,9 +152,10 @@ struct EditFeedbackViewBase: View {
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
         let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
         let feedback = AssessmentFeedback(
-            detailText: feedbackSuggestion.text,
-            credits: feedbackSuggestion.credits,
-            type: .inline,
+            baseFeedback: Feedback(detailText: feedbackSuggestion.text,
+                                   credits: feedbackSuggestion.credits,
+                                   type: .MANUAL_UNREFERENCED),
+            scope: .inline,
             file: file,
             lines: lines
         )
@@ -157,8 +166,8 @@ struct EditFeedbackViewBase: View {
     private func setStates() {
         if idForUpdate != nil {
             if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
-                self.detailText = feedback.detailText ?? ""
-                self.score = feedback.credits
+                self.detailText = feedback.baseFeedback.detailText ?? ""
+                self.score = feedback.baseFeedback.credits ?? 0.0
             }
         }
         if let feedbackSuggestion = feedbackSuggestion {
@@ -178,7 +187,7 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
                              showSheet: .constant(true),
                              title: "Title",
                              edit: false,
-                             type: .inline,
+                             scope: .inline,
                              gradingCriteria: [
                                 .init(id: 1, structuredGradingInstructions: [
                                     .init(id: 1,

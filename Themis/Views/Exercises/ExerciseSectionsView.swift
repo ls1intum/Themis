@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExerciseDateProperty: Hashable {
     let name: String
@@ -15,9 +16,9 @@ struct ExerciseDateProperty: Hashable {
 struct ExerciseSections: View {
     var exercises: [Exercise]
     
-    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDate)
-    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.assessmentDueDate)
-    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.releaseDate)
+    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDateString)
+    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.assessmentDueDateString)
+    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.releaseDateString)
     
     var body: some View {
         Group {
@@ -60,10 +61,8 @@ struct ExerciseSections: View {
     ) -> some View {
         let shownExercises = exercises
             .filter(predicate)
-            .sorted {
-                ArtemisDateHelpers.parseDate($0.dueDate) ?? Date.now <
-                    ArtemisDateHelpers.parseDate($1.dueDate) ?? Date.now
-            }
+            .sorted(by: { $0.baseExercise.dueDate ?? .now < $1.baseExercise.dueDate ?? .now })
+            
         return Group {
             if shownExercises.isEmpty {
                 EmptyView()

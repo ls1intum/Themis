@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct EditFeedbackView: View {
     var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
-    let type: FeedbackType
+    let scope: ThemisFeedbackScope
 
     @Binding var showSheet: Bool
     var idForUpdate: UUID
@@ -25,7 +26,7 @@ struct EditFeedbackView: View {
             idForUpdate: idForUpdate,
             title: "Edit Feedback",
             edit: true,
-            type: type,
+            scope: scope,
             gradingCriteria: gradingCriteria
         )
     }

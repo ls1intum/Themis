@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SharedModels
 
 class SubmissionSearchViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
