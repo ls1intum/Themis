@@ -52,7 +52,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                startNewAssessmentButton.disabled(!submissionDueDateOver)
+                startNewAssessmentButton.disabled(!exercise.isSubmissionDueDateOver)
             }
         }
         .errorAlert(error: $assessmentVM.error)
@@ -66,7 +66,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .open
             )
-        }.disabled(!submissionDueDateOver)
+        }.disabled(!exercise.isSubmissionDueDateOver)
     }
     
     private var finishedSubmissionsSection: some View {
@@ -76,7 +76,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .submitted
             )
-        }.disabled(!submissionDueDateOver)
+        }.disabled(!exercise.isSubmissionDueDateOver)
     }
     
     private var statisticsSection: some View {
@@ -114,13 +114,6 @@ struct ExerciseView: View {
                 .foregroundColor(.white)
         }
         .buttonStyle(ThemisButtonStyle(color: .themisGreen, iconImageName: "startAssessmentIcon"))
-    }
-    
-    private var submissionDueDateOver: Bool {
-        if let dueDate = exercise.baseExercise.dueDate {
-            return dueDate <= .now
-        }
-        return false
     }
     
     private func fetchExerciseData() async {

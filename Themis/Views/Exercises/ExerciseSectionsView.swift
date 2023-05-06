@@ -29,7 +29,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isFormer() }
+                predicate: { $0.isFormer }
             )
             
             exerciseSection(
@@ -39,7 +39,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isCurrent() }
+                predicate: { $0.isCurrent }
             )
             
             exerciseSection(
@@ -49,7 +49,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isFuture() }
+                predicate: { $0.isFuture }
             )
         }
     }
@@ -77,6 +77,7 @@ struct ExerciseSections: View {
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }
+                        .disabled(exercise.isDisabled)
                     }
                 }
             }

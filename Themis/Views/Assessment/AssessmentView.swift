@@ -209,7 +209,7 @@ struct AssessmentView: View {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: assessmentVM.assessmentResult.score,
-                    max: assessmentVM.assessmentResult.maxPoints ?? 0
+                    max: assessmentVM.assessmentResult.maxPoints
                 )
                 pointsDisplay
             }
@@ -316,7 +316,7 @@ struct AssessmentView: View {
                     participationID: assessmentVM.participation?.id,
                     cvm: cvm,
                     loading: assessmentVM.loading,
-                    templateParticipationId: (exercise.baseExercise as? ProgrammingExercise)?.templateParticipation?.id
+                    templateParticipationId: assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
                 )
             }
         }

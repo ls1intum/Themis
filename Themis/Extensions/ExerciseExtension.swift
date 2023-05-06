@@ -22,28 +22,35 @@ extension Exercise {
         ArtemisDateHelpers.stringifyDate(self.baseExercise.releaseDate)
     }
     
-    var disabled: Bool {
+    var isDisabled: Bool {
         if case .programming = self {
-            return true
+            return false
+        }
+        return true
+    }
+    
+    var isSubmissionDueDateOver: Bool {
+        if let dueDate = self.baseExercise.dueDate {
+            return dueDate <= .now
         }
         return false
     }
-
-    func isFormer() -> Bool {
+    
+    var isFormer: Bool {
         if let dueDate = self.baseExercise.assessmentDueDate, dueDate < Date.now {
             return true
         }
         return false
     }
     
-    func isCurrent() -> Bool {
+    var isCurrent: Bool {
         if let releaseDate = self.baseExercise.releaseDate {
             return Date.now >= releaseDate
         }
-        return !isFormer()
+        return !isFormer
     }
     
-    func isFuture() -> Bool {
+    var isFuture: Bool {
         // exercises without a release date are automatically published
         if let releaseDate = self.baseExercise.releaseDate {
             return Date.now < releaseDate

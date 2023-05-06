@@ -14,8 +14,11 @@ struct ExerciseListItem: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "keyboard")
-                .font(.system(size: 23))
+            exercise.image
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: .smallImage)
             
             Text(exercise.baseExercise.title ?? "")
                 .font(.title2)

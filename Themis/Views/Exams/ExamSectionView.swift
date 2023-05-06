@@ -34,7 +34,7 @@ struct ExamSectionView: View {
                                 .fontWeight(.medium)
                         }
                     }
-                    .disabled(exercise.disabled)
+                    .disabled(exercise.isDisabled)
                 }
             }
         }.task {
