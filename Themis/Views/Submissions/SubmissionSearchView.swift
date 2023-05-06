@@ -67,7 +67,7 @@ private struct SingleSubmissionCellView: View {
     var body: some View {
         HStack {
             Group {
-                if let student = (submission.baseSubmission.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.student {
+                if let student = submission.getParticipation(as: ProgrammingExerciseStudentParticipation.self)?.student {
                     Text(student.name)
                     Text(student.login)
                 }
@@ -77,7 +77,7 @@ private struct SingleSubmissionCellView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             Button {
                 Task {
-                    if let participationId = submission.baseSubmission.participation?.id {
+                    if let participationId = submission.getParticipation()?.id {
                         await avm.getSubmission(id: participationId)
                     }
                 }
@@ -97,7 +97,7 @@ private struct SingleSubmissionCellView: View {
     
     @ViewBuilder
     private var linkToRepo: some View {
-        if let programmingParticipation = (submission.baseSubmission.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation),
+        if let programmingParticipation = submission.getParticipation(as: ProgrammingExerciseStudentParticipation.self),
            let repoUrl = URL(string: programmingParticipation.repositoryUrl ?? "") {
             Link("Repository", destination: repoUrl)
         }

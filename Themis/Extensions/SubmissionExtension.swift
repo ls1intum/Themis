@@ -4,9 +4,28 @@
 //
 //  Created by Tarlan Ismayilsoy on 02.05.23.
 //
+// swiftlint:disable identifier_name
 
 import Foundation
 import SharedModels
+
+extension BaseSubmission {
+    func getParticipation<T>(as: T.Type = BaseParticipation.self) -> T? {
+        let participation = self.participation?.baseParticipation
+        return participation as? T
+    }
+    
+    func getExercise<T>(as: T.Type = (any BaseExercise).self) -> T? {
+        let exercise = self.getParticipation()?.exercise?.baseExercise
+        return exercise as? T
+    }
+}
+
+extension Submission {
+    func getParticipation<T>(as: T.Type = BaseParticipation.self) -> T? {
+        self.baseSubmission.getParticipation(as: T.self)
+    }
+}
 
 extension ArtemisAPI {
     /// Gets all submissions of that exercise.

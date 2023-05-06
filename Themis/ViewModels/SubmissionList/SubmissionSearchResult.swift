@@ -41,7 +41,7 @@ struct SubmissionSearchResult {
     }
 
     private var student: User? {
-        (submission.baseSubmission.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.student
+        submission.getParticipation(as: ProgrammingExerciseStudentParticipation.self)?.student
     }
 
     private var nameScore: Double {

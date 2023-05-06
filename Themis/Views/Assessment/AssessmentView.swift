@@ -209,7 +209,7 @@ struct AssessmentView: View {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 CustomProgressView(
                     progress: assessmentVM.assessmentResult.score,
-                    max: (assessmentVM.submission?.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise.maxPoints ?? 0
+                    max: assessmentVM.assessmentResult.maxPoints ?? 0
                 )
                 pointsDisplay
             }
@@ -277,7 +277,7 @@ struct AssessmentView: View {
                 scope: .inline,
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
-                gradingCriteria: (assessmentVM.submission?.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise.gradingCriteria ?? [],
+                gradingCriteria: exercise.baseExercise.gradingCriteria ?? [],
                 feedbackSuggestion: cvm.feedbackSuggestions.first { "\($0.id)" == cvm.selectedFeedbackSuggestionId }
             )
         })
@@ -289,7 +289,7 @@ struct AssessmentView: View {
                     scope: .inline,
                     showSheet: $cvm.showEditFeedback,
                     idForUpdate: feedback.id,
-                    gradingCriteria: (assessmentVM.submission?.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise.gradingCriteria ?? []
+                    gradingCriteria: exercise.baseExercise.gradingCriteria ?? []
                 )
             }
         }
@@ -435,16 +435,16 @@ struct AssessmentView: View {
         VStack {
             if correctionAsPlaceholder {
                 EmptyView()
-            } else {
-                CorrectionSidebarView( // TODO: Refactor initializer
-                    exercise: (assessmentVM.submission?.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise,
+            } else if let programmingBaseExercise = assessmentVM.submission?.getExercise(as: ProgrammingExercise.self) {
+                CorrectionSidebarView( // TODO: Refactor (it supports programming exercises only)
+                    exercise: programmingBaseExercise,
                     readOnly: assessmentVM.readOnly,
                     assessmentResult: $assessmentVM.assessmentResult,
                     cvm: cvm,
                     umlVM: umlVM,
                     loading: assessmentVM.loading,
-                    problemStatement: (assessmentVM.submission?.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise.problemStatement ?? "",
-                    participationId: ((assessmentVM.submission?.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise as? ProgrammingExercise)?.templateParticipation?.id
+                    problemStatement: programmingBaseExercise.problemStatement ?? "",
+                    participationId: programmingBaseExercise.templateParticipation?.id
                 )
             }
         }
@@ -460,7 +460,7 @@ struct AssessmentView: View {
                     Text("""
                          \(Double(round(10 * assessmentVM.assessmentResult.points) / 10)
                          .formatted(FloatingPointFormatStyle()))/\
-                         \(((submission.participation?.baseParticipation as? ProgrammingExerciseStudentParticipation)?.exercise?.baseExercise.maxPoints ?? 0.0)
+                         \((submission.getExercise()?.maxPoints ?? 0.0)
                          .formatted(FloatingPointFormatStyle()))
                          """)
                     .foregroundColor(.white)
