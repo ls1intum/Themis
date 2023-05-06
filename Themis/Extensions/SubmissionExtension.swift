@@ -16,8 +16,7 @@ extension BaseSubmission {
     }
     
     func getExercise<T>(as: T.Type = (any BaseExercise).self) -> T? {
-        let exercise = self.getParticipation()?.exercise?.baseExercise
-        return exercise as? T
+        self.getParticipation()?.getExercise(as: T.self)
     }
 }
 
@@ -60,20 +59,13 @@ extension ArtemisAPI {
         return try await sendRequest(ProgrammingSubmission.self, request: request)
     }
 
-    /// Gets a submission associated with submissionId without locking it.
-    static func getSubmissionForReadOnly(participationId: Int) async throws -> ProgrammingSubmission {
+    /// Gets a result associated with participationId without locking.
+    static func getResultFor(participationId: Int) async throws -> Result {
         let request = Request(
             method: .get,
             path: "/api/programming-exercise-participations/\(participationId)/latest-result-with-feedbacks",
             params: [URLQueryItem(name: "withSubmission", value: "true")])
 
-        let participationResult = try await sendRequest(Result.self, request: request)
-        
-        // T: Submission used to have a feedback field, which was populated based on participationResult.feedbacks. This might cause problems now. TODO: investigate
-        if var submission = participationResult.submission?.baseSubmission as? ProgrammingSubmission {
-            submission.participation = participationResult.participation
-            return submission
-        }
-        throw RESTError.empty // TODO: replace with a better error type
+        return try await sendRequest(Result.self, request: request)
     }
 }

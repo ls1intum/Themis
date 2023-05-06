@@ -115,7 +115,7 @@ struct AssessmentView: View {
                     .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
                         Button("Save") {
                             Task {
-                                if let pId = assessmentVM.submission?.participation?.id {
+                                if let pId = assessmentVM.participation?.id {
                                     await assessmentVM.sendAssessment(participationId: pId, submit: false)
                                 }
                                 presentationMode.wrappedValue.dismiss()
@@ -216,7 +216,7 @@ struct AssessmentView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
-                        if let pId = assessmentVM.submission?.participation?.id {
+                        if let pId = assessmentVM.participation?.id {
                             await assessmentVM.sendAssessment(participationId: pId, submit: false)
                         }
                     }
@@ -246,7 +246,7 @@ struct AssessmentView: View {
         .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
             Button("Yes") {
                 Task {
-                    if let pId = assessmentVM.submission?.participation?.id {
+                    if let pId = assessmentVM.participation?.id {
                         await assessmentVM.sendAssessment(participationId: pId, submit: true)
                         await assessmentVM.notifyThemisML(participationId: pId, exerciseId: exercise.baseExercise.id)
                     }
@@ -297,7 +297,7 @@ struct AssessmentView: View {
             if let submissionId, assessmentVM.submission == nil {
                 await assessmentVM.getSubmission(id: submissionId)
             }
-            if let pId = assessmentVM.submission?.participation?.id {
+            if let pId = assessmentVM.participation?.id {
                 await cvm.initFileTree(participationId: pId)
                 await cvm.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
@@ -313,7 +313,7 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 FiletreeSidebarView(
-                    participationID: assessmentVM.submission?.participation?.id,
+                    participationID: assessmentVM.participation?.id,
                     cvm: cvm,
                     loading: assessmentVM.loading,
                     templateParticipationId: (exercise.baseExercise as? ProgrammingExercise)?.templateParticipation?.id
@@ -435,7 +435,7 @@ struct AssessmentView: View {
         VStack {
             if correctionAsPlaceholder {
                 EmptyView()
-            } else if let programmingBaseExercise = assessmentVM.submission?.getExercise(as: ProgrammingExercise.self) {
+            } else if let programmingBaseExercise = assessmentVM.participation?.getExercise(as: ProgrammingExercise.self) {
                 CorrectionSidebarView( // TODO: Refactor (it supports programming exercises only)
                     exercise: programmingBaseExercise,
                     readOnly: assessmentVM.readOnly,

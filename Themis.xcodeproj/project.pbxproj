@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */; };
 		0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */; };
+		653452B62A068E4D008D9598 /* ParticipationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653452B52A068E4D008D9598 /* ParticipationExtension.swift */; };
 		6564DC042A00EFFC00CF2F89 /* APIClient in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC032A00EFFC00CF2F89 /* APIClient */; };
 		6564DC062A00EFFC00CF2F89 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC052A00EFFC00CF2F89 /* Common */; };
 		6564DC082A00EFFC00CF2F89 /* DesignLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC072A00EFFC00CF2F89 /* DesignLibrary */; };
@@ -124,6 +125,7 @@
 /* Begin PBXFileReference section */
 		0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiletreeSidebarView.swift; sourceTree = "<group>"; };
 		0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
+		653452B52A068E4D008D9598 /* ParticipationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipationExtension.swift; sourceTree = "<group>"; };
 		6564DC122A00F02900CF2F89 /* ExerciseStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatistics.swift; sourceTree = "<group>"; };
 		6564DC162A00F15400CF2F89 /* ExerciseStatsForAssessmentDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatsForAssessmentDashboard.swift; sourceTree = "<group>"; };
 		6567A90229EFF85200A5EFDA /* ScorePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorePicker.swift; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 				658057172A02C64B00835AD0 /* ExamExtension.swift */,
 				65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */,
 				65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */,
+				653452B52A068E4D008D9598 /* ParticipationExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -894,6 +897,7 @@
 				A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */,
 				DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */,
 				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
+				653452B62A068E4D008D9598 /* ParticipationExtension.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
 				A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */,
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
