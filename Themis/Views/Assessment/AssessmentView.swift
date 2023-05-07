@@ -277,7 +277,7 @@ struct AssessmentView: View {
                 scope: .inline,
                 showSheet: $cvm.showAddFeedback,
                 file: cvm.selectedFile,
-                gradingCriteria: exercise.baseExercise.gradingCriteria ?? [],
+                gradingCriteria: assessmentVM.participation?.getExercise()?.gradingCriteria ?? [],
                 feedbackSuggestion: cvm.feedbackSuggestions.first { "\($0.id)" == cvm.selectedFeedbackSuggestionId }
             )
         })
@@ -289,7 +289,7 @@ struct AssessmentView: View {
                     scope: .inline,
                     showSheet: $cvm.showEditFeedback,
                     idForUpdate: feedback.id,
-                    gradingCriteria: exercise.baseExercise.gradingCriteria ?? []
+                    gradingCriteria: assessmentVM.participation?.getExercise()?.gradingCriteria ?? []
                 )
             }
         }
