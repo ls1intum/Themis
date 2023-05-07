@@ -28,7 +28,7 @@ struct ExamListView: View {
             } else {
                 ForEach(exams, id: \.id) { exam in
                     NavigationLink {
-                        ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title)
+                        ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title ?? "Untitled Exam")
                     } label: {
                         ExamListItem(exam: exam, dateProperties: [
                             startDate,
@@ -48,7 +48,7 @@ private struct ExamListItem: View {
 
     var body: some View {
         HStack {
-            Text(exam.title)
+            Text(exam.title ?? "Untitled Exam")
                 .font(.title2)
                 .fontWeight(.medium)
             Spacer()
