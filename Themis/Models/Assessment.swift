@@ -9,14 +9,8 @@
 import Foundation
 import SharedModels
 
-/// class to share UndoManager between CodeEditorViewModel and AssessmentResult
-class UndoManagerSingleton {
-    static let shared = UndoManagerSingleton()
-    let undoManager = UndoManager()
-}
-
 class AssessmentResult: Encodable, ObservableObject {
-    let undoManager = UndoManagerSingleton.shared.undoManager
+    let undoManager = UndoManager.shared
     
     var maxPoints = 100.0
     

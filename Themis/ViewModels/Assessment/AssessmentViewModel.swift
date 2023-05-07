@@ -33,7 +33,7 @@ class AssessmentViewModel: ObservableObject {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
             self.showSubmission = true
-            UndoManagerSingleton.shared.undoManager.removeAllActions()
+            UndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
             self.error = error
@@ -55,7 +55,7 @@ class AssessmentViewModel: ObservableObject {
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
                 assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-                UndoManagerSingleton.shared.undoManager.removeAllActions()
+                UndoManager.shared.removeAllActions()
             }
             self.showSubmission = true
         } catch {

@@ -11,7 +11,7 @@ import SwiftUI
 import CodeEditor
 
 class CodeEditorViewModel: ObservableObject {
-    let undoManager = UndoManagerSingleton.shared.undoManager
+    let undoManager = UndoManager.shared
     
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
