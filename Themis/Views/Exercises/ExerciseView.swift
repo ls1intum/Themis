@@ -121,9 +121,12 @@ struct ExerciseView: View {
     private func fetchExerciseData() async {
         exerciseVM.exercise = exercise
         exerciseVM.exam = exam
-        await exerciseVM.fetchExercise(exerciseId: exercise.id)
-        await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
-        await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
-        await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
+        
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await exerciseVM.fetchExercise(exerciseId: exercise.id) }
+            group.addTask { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }
+            group.addTask { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }
+            group.addTask { await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id) }
+        }
     }
 }
