@@ -31,17 +31,14 @@ struct ToolbarCancelButton: View {
         .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
             Button("Save") {
                 Task {
-                    if let pId = assessmentVM.submission?.getParticipation()?.id {
-                        await assessmentVM.sendAssessment(participationId: pId, submit: false)
-                    }
+                    await assessmentVM.sendAssessment(submit: false)
                     presentationMode.dismiss()
                 }
             }
+            
             Button("Delete", role: .destructive) {
                 Task {
-                    if let id = assessmentVM.submission?.id {
-                        await assessmentVM.cancelAssessment(submissionId: id)
-                    }
+                    await assessmentVM.cancelAssessment()
                     presentationMode.dismiss()
                 }
             }
@@ -55,8 +52,10 @@ struct ToolbarCancelButton: View {
     }
 }
 
-// struct CancelButton_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CancelButton(assessmentVM: AssessmentViewModel(readOnly: false), presentationMode: .cons))
-//    }
-// }
+ struct CancelButton_Previews: PreviewProvider {
+     @Environment(\.presentationMode) private static var presentationMode
+     
+     static var previews: some View {
+         ToolbarCancelButton(assessmentVM: AssessmentViewModel(readOnly: false), presentationMode: presentationMode)
+     }
+ }

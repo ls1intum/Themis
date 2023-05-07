@@ -13,9 +13,7 @@ struct ToolbarSaveButton: View {
     var body: some View {
         Button {
             Task {
-                if let pId = assessmentVM.participation?.id {
-                    await assessmentVM.sendAssessment(participationId: pId, submit: false)
-                }
+                await assessmentVM.sendAssessment(submit: false)
             }
         } label: {
             Text("Save")

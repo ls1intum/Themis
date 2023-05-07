@@ -131,10 +131,8 @@ struct AssessmentView: View {
         .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
             Button("Yes") {
                 Task {
-                    if let pId = assessmentVM.participation?.id {
-                        await assessmentVM.sendAssessment(participationId: pId, submit: true)
-                        await assessmentVM.notifyThemisML(participationId: pId, exerciseId: exercise.baseExercise.id)
-                    }
+                    await assessmentVM.sendAssessment(submit: true)
+                    await assessmentVM.notifyThemisML(exerciseId: exercise.baseExercise.id)
                     showNavigationOptions.toggle()
                 }
             }

@@ -64,7 +64,11 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func cancelAssessment(submissionId: Int) async {
+    func cancelAssessment() async {
+        guard let submissionId = submission?.id else {
+            return
+        }
+        
         loading = true
         defer {
             loading = false
@@ -81,11 +85,16 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func sendAssessment(participationId: Int, submit: Bool) async {
+    func sendAssessment(submit: Bool) async {
+        guard let participationId = participation?.id else {
+            return
+        }
+        
         loading = true
         defer {
             loading = false
         }
+        
         do {
             try await ArtemisAPI.saveAssessment(
                 participationId: participationId,
@@ -97,7 +106,11 @@ class AssessmentViewModel: ObservableObject {
         }
     }
     
-    func notifyThemisML(participationId: Int, exerciseId: Int) async {
+    func notifyThemisML(exerciseId: Int) async {
+        guard let participationId = participation?.id else {
+            return
+        }
+        
         do {
             try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exerciseId, participationId: participationId)
         } catch {
