@@ -35,14 +35,12 @@ struct SubmissionListView: View {
     }
     
     func dateTimeline(submission: Submission) -> some View {
-        var dates: [(name: String, date: String?)] = []
+        var dates: [(name: String, date: Date?)] = []
         
-        if let submissionDate = ArtemisDateHelpers
-            .stringifyDate(submission.baseSubmission.submissionDate) {
+        if let submissionDate = (submission.baseSubmission.submissionDate) {
             dates.append(("Submission Date", submissionDate))
         }
-        if let completionDate = ArtemisDateHelpers.stringifyDate(
-            submission.baseSubmission.results?.last?.completionDate), submissionStatus == .submitted {
+        if let completionDate = (submission.baseSubmission.results?.last?.completionDate), submissionStatus == .submitted {
             dates.append(("Last Assessed", completionDate))
         }
         

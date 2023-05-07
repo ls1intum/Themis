@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct DateTimelineView: View {
-    let dates: [(name: String, date: String?)]
-    @State private var selectedDate: (String, String?) = ("", nil)
+    let dates: [(name: String, date: Date?)]
+    @State private var selectedDate: (String, Date?) = ("", nil)
 
     var body: some View {
         ZStack(alignment: .center) {
@@ -18,14 +18,14 @@ struct DateTimelineView: View {
                 .foregroundColor(Color.blue)
                 .cornerRadius(5)
             HStack {
-                ForEach(dates, id: \.name) { date in
+                ForEach(dates, id: \.name) { nameAndDateTuple in
                     VStack {
-                        Text(date.name).bold()
+                        Text(nameAndDateTuple.name).bold()
                         Image(systemName: "calendar")
                             .background(Color(.secondarySystemGroupedBackground))
                             .font(.title3)
                             .padding(1)
-                        if let dateString = ArtemisDateHelpers.getRemainingOrOverdueTime(for: date.date) {
+                        if let dateString = ArtemisDateHelpers.getRemainingOrOverdueTime(for: nameAndDateTuple.date) {
                             Text(dateString)
                         } else {
                             Text("Not available yet")

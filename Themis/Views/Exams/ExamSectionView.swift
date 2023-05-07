@@ -13,6 +13,7 @@ struct ExamSectionView: View {
     let courseID: Int
     let examTitle: String
     
+    @State var exam: Exam?
     @State var exercises: [Exercise] = []
     
     var body: some View {
@@ -20,7 +21,7 @@ struct ExamSectionView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise)
+                        ExerciseView(exercise: exercise, exam: exam)
                     } label: {
                         HStack {
                             exercise.image
@@ -42,6 +43,7 @@ struct ExamSectionView: View {
             guard let exam else {
                 return
             }
+            self.exam = exam
             self.exercises = exam.exercises
         }
         .navigationTitle(examTitle)

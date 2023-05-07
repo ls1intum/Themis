@@ -10,7 +10,7 @@ import SharedModels
 
 struct ExamDateProperty: Hashable {
     let name: String
-    let dateKeyPath: KeyPath<Exam, String?>
+    let dateKeyPath: KeyPath<Exam, Date?>
 }
 
 struct ExamListView: View {

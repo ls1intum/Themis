@@ -14,8 +14,10 @@ struct ExerciseView: View {
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    let exercise: Exercise
     
+    let exercise: Exercise
+    /// Only set if the exercise is a part of an exam
+    var exam: Exam?
     
     var body: some View {
         VStack {
@@ -52,7 +54,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                startNewAssessmentButton.disabled(!exercise.isSubmissionDueDateOver)
+                startNewAssessmentButton.disabled(!exerciseVM.isAssessmentPossible)
             }
         }
         .errorAlert(error: $assessmentVM.error)
@@ -66,7 +68,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .open
             )
-        }.disabled(!exercise.isSubmissionDueDateOver)
+        }.disabled(!exerciseVM.isAssessmentPossible)
     }
     
     private var finishedSubmissionsSection: some View {
@@ -76,7 +78,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .submitted
             )
-        }.disabled(!exercise.isSubmissionDueDateOver)
+        }.disabled(!exerciseVM.isAssessmentPossible)
     }
     
     private var statisticsSection: some View {
@@ -118,6 +120,7 @@ struct ExerciseView: View {
     
     private func fetchExerciseData() async {
         exerciseVM.exercise = exercise
+        exerciseVM.exam = exam
         await exerciseVM.fetchExercise(exerciseId: exercise.id)
         await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
         await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)

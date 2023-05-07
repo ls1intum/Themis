@@ -43,11 +43,12 @@ extension Exercise {
         return false
     }
     
-    var isCurrent: Bool {
-        if let releaseDate = self.baseExercise.releaseDate {
-            return Date.now >= releaseDate
+    var isCurrentlyInAssessment: Bool {
+        if let assessmentDueDate = self.baseExercise.assessmentDueDate {
+            return isSubmissionDueDateOver && assessmentDueDate > .now
         }
-        return !isFormer
+        
+        return isSubmissionDueDateOver
     }
     
     var isFuture: Bool {

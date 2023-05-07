@@ -10,15 +10,15 @@ import SharedModels
 
 struct ExerciseDateProperty: Hashable {
     let name: String
-    let dateKeyPath: KeyPath<Exercise, String?>
+    let dateKeyPath: KeyPath<Exercise, Date?>
 }
 
 struct ExerciseSections: View {
     var exercises: [Exercise]
     
-    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDateString)
-    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.assessmentDueDateString)
-    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.releaseDateString)
+    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.baseExercise.dueDate)
+    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.baseExercise.assessmentDueDate)
+    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.baseExercise.releaseDate)
     
     var body: some View {
         Group {
@@ -39,7 +39,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isCurrent }
+                predicate: { $0.isCurrentlyInAssessment }
             )
             
             exerciseSection(

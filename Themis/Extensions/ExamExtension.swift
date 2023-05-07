@@ -9,18 +9,16 @@ import Foundation
 import SharedModels
 
 extension Exam {
+    var isOver: Bool {
+        if let endDate = self.endDate {
+            return endDate <= .now
+        }
+        return false
+    }
+    
     public var exercises: [Exercise] {
         let exercises = exerciseGroups?.reduce([]) { $0 + ($1.exercises ?? []) } as? [Exercise]
-        guard let exercises else {
-            return []
-        }
-        return exercises.map { exercise in
-            var exerciseWithDate = exercise
-//            exerciseWithDate.baseExercise.releaseDate = self.startDate // TODO: find a solution around this
-//            exerciseWithDate.baseExercise.dueDate = self.endDate
-//            exerciseWithDate.baseExercise.assessmentDueDate = self.publishResultsDate
-            return exerciseWithDate
-        }
+        return exercises ?? []
     }
 }
 
