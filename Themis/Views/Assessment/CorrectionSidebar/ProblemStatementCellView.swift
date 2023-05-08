@@ -11,11 +11,11 @@ import MarkdownUI
 
 struct ProblemStatementCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var problemStatement: String
-    var feedbacks: [AssessmentFeedback]
     @ObservedObject var umlVM: UMLViewModel
-    
     @StateObject var problemStatementCellVM = ProblemStatementCellViewModel()
+    
+    var problemStatement: String
+    var feedbacks: [AssessmentFeedback]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -97,9 +97,9 @@ struct ProblemStatementCellView_Previews: PreviewProvider {
     
     static var previews: some View {
         ProblemStatementCellView(
-            problemStatement: $problemStatement,
-            feedbacks: feedbacks,
-            umlVM: umlVM
+            umlVM: umlVM,
+            problemStatement: problemStatement,
+            feedbacks: feedbacks
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

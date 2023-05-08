@@ -209,16 +209,12 @@ struct AssessmentView: View {
         VStack {
             if paneVM.rightPaneAsPlaceholder {
                 EmptyView()
-            } else if let programmingBaseExercise = assessmentVM.participation?.getExercise(as: ProgrammingExercise.self) {
-                CorrectionSidebarView( // TODO: Refactor (it supports programming exercises only)
-                    exercise: programmingBaseExercise,
-                    readOnly: assessmentVM.readOnly,
+            } else {
+                CorrectionSidebarView(
                     assessmentResult: $assessmentVM.assessmentResult,
+                    assessmentVM: assessmentVM,
                     cvm: codeEditorVM,
-                    umlVM: umlVM,
-                    loading: assessmentVM.loading,
-                    problemStatement: programmingBaseExercise.problemStatement ?? "",
-                    participationId: programmingBaseExercise.templateParticipation?.id
+                    umlVM: umlVM
                 )
             }
         }
