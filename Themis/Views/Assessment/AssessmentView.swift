@@ -56,7 +56,7 @@ struct AssessmentView: View {
             assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
         }
         .onDisappear {
-            assessmentVM.assessmentResult.undoManager.removeAllActions()
+            UndoManager.shared.removeAllActions()
         }
         .overlay {
             if umlVM.showUMLFullScreen {
@@ -156,16 +156,15 @@ struct AssessmentView: View {
         }, content: {
             AddFeedbackView(
                 assessmentResult: assessmentVM.assessmentResult,
-                cvm: codeEditorVM,
+                codeEditorVM: codeEditorVM,
                 scope: .inline,
                 showSheet: $codeEditorVM.showAddFeedback,
-                file: codeEditorVM.selectedFile,
                 gradingCriteria: assessmentVM.participation?.getExercise()?.gradingCriteria ?? [],
                 feedbackSuggestion: codeEditorVM.feedbackSuggestions.first { "\($0.id)" == codeEditorVM.selectedFeedbackSuggestionId }
             )
         })
         .sheet(isPresented: $codeEditorVM.showEditFeedback) {
-            if let feedback = assessmentVM.assessmentResult.feedbacks.first(where: { "\($0.id)" == codeEditorVM.feedbackForSelectionId }) {
+            if let feedback = assessmentVM.assessmentResult.feedbacks.first(where: { "\($0.id)" == codeEditorVM.feedbackForSelectionId }) { // TODO: simplify
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     cvm: codeEditorVM,
@@ -195,12 +194,7 @@ struct AssessmentView: View {
             if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(
-                    participationID: assessmentVM.participation?.id,
-                    cvm: codeEditorVM,
-                    loading: assessmentVM.loading,
-                    templateParticipationId: assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
-                )
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
             }
         }
     }

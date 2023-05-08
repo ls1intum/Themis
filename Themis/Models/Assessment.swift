@@ -81,14 +81,14 @@ class AssessmentResult: Encodable, ObservableObject {
 
     func addFeedback(feedback: AssessmentFeedback) {
         if feedback.scope == .inline {
-            undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+            undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
         }
         computedFeedbacks.append(feedback)
     }
 
     func deleteFeedback(id: UUID) {
         if computedFeedbacks.contains(where: { $0.id == id && $0.scope == .inline }) {
-             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+             undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
     }

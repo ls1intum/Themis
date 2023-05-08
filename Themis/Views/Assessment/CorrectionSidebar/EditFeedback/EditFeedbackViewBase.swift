@@ -23,7 +23,6 @@ struct EditFeedbackViewBase: View {
     let title: String?
     let edit: Bool
     let scope: ThemisFeedbackScope
-    var file: Node?
     
     let gradingCriteria: [GradingCriterion]
     
@@ -128,7 +127,7 @@ struct EditFeedbackViewBase: View {
             let columns: NSRange? = cvm.selectedSectionParsed?.1
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
                                               scope: scope,
-                                              file: file,
+                                              file: cvm.selectedFile,
                                               lines: lines,
                                               columns: columns)
             assessmentResult.addFeedback(feedback: feedback)
@@ -156,7 +155,7 @@ struct EditFeedbackViewBase: View {
                                    credits: feedbackSuggestion.credits,
                                    type: .MANUAL_UNREFERENCED),
             scope: .inline,
-            file: file,
+            file: cvm.selectedFile,
             lines: lines
         )
         assessmentResult.addFeedback(feedback: feedback)

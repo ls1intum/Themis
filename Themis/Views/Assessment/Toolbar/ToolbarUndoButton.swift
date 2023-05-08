@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolbarUndoButton: View {
-    @ObservedObject var assessmentResult: AssessmentResult
+    var assessmentResult: AssessmentResult
     
     var body: some View {
         Button {
