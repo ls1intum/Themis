@@ -19,8 +19,6 @@
 		6564DC102A00EFFC00CF2F89 /* UserStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC0F2A00EFFC00CF2F89 /* UserStore */; };
 		6564DC132A00F02900CF2F89 /* ExerciseStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6564DC122A00F02900CF2F89 /* ExerciseStatistics.swift */; };
 		6564DC172A00F15400CF2F89 /* ExerciseStatsForAssessmentDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6564DC162A00F15400CF2F89 /* ExerciseStatsForAssessmentDashboard.swift */; };
-		6564DC5D2A00FC4000CF2F89 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC5C2A00FC4000CF2F89 /* RswiftLibrary */; };
-		6564DC5F2A00FC4000CF2F89 /* rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC5E2A00FC4000CF2F89 /* rswift */; };
 		6567A90329EFF85200A5EFDA /* ScorePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6567A90229EFF85200A5EFDA /* ScorePicker.swift */; };
 		656EAF602A0256A6003CF2B4 /* AssessmentFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656EAF5F2A0256A6003CF2B4 /* AssessmentFeedback.swift */; };
 		658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658057152A02C4DD00835AD0 /* CourseExtension.swift */; };
@@ -221,7 +219,6 @@
 				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
 				6564DC102A00EFFC00CF2F89 /* UserStore in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
-				6564DC5D2A00FC4000CF2F89 /* RswiftLibrary in Frameworks */,
 				838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */,
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
 				6564DC0C2A00EFFC00CF2F89 /* ProfileInfo in Frameworks */,
@@ -229,7 +226,6 @@
 				6564DC062A00EFFC00CF2F89 /* Common in Frameworks */,
 				6564DC0A2A00EFFC00CF2F89 /* Login in Frameworks */,
 				6564DC042A00EFFC00CF2F89 /* APIClient in Frameworks */,
-				6564DC5F2A00FC4000CF2F89 /* rswift in Frameworks */,
 				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
 				6564DC0E2A00EFFC00CF2F89 /* SharedModels in Frameworks */,
 			);
@@ -686,8 +682,6 @@
 				6564DC0B2A00EFFC00CF2F89 /* ProfileInfo */,
 				6564DC0D2A00EFFC00CF2F89 /* SharedModels */,
 				6564DC0F2A00EFFC00CF2F89 /* UserStore */,
-				6564DC5C2A00FC4000CF2F89 /* RswiftLibrary */,
-				6564DC5E2A00FC4000CF2F89 /* rswift */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -768,7 +762,6 @@
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
 				838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				6564DC022A00EFFC00CF2F89 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
-				6564DC5B2A00FC4000CF2F89 /* XCRemoteSwiftPackageReference "R.swift" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -1249,14 +1242,6 @@
 				kind = branch;
 			};
 		};
-		6564DC5B2A00FC4000CF2F89 /* XCRemoteSwiftPackageReference "R.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mac-cain13/R.swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.0;
-			};
-		};
 		838E4AA4297DADF00057E6E6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -1334,16 +1319,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6564DC022A00EFFC00CF2F89 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
 			productName = UserStore;
-		};
-		6564DC5C2A00FC4000CF2F89 /* RswiftLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6564DC5B2A00FC4000CF2F89 /* XCRemoteSwiftPackageReference "R.swift" */;
-			productName = RswiftLibrary;
-		};
-		6564DC5E2A00FC4000CF2F89 /* rswift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6564DC5B2A00FC4000CF2F89 /* XCRemoteSwiftPackageReference "R.swift" */;
-			productName = rswift;
 		};
 		838E4AA5297DADF00057E6E6 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
