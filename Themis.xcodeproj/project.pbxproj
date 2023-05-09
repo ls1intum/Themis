@@ -299,7 +299,7 @@
 		4065F855292E873A005DAEE8 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				E2CAE63C293521A100FAD327 /* ExerciseViewModel */,
+				E2CAE63C293521A100FAD327 /* Exercise */,
 				DA249E9429301E1B008DE1D5 /* SubmissionList */,
 				DA3978E4296C16D200734E01 /* Course */,
 				4065F859292E8A90005DAEE8 /* Assessment */,
@@ -676,12 +676,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E2CAE63C293521A100FAD327 /* ExerciseViewModel */ = {
+		E2CAE63C293521A100FAD327 /* Exercise */ = {
 			isa = PBXGroup;
 			children = (
 				E2CAE63A2935219E00FAD327 /* ExerciseViewModel.swift */,
 			);
-			path = ExerciseViewModel;
+			path = Exercise;
 			sourceTree = "<group>";
 		};
 		E2DC481B294626A200DAF0CC /* Drawing */ = {

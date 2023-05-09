@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Common
 
 class AuthenticationViewModel: ObservableObject {
     /// This Variable is for the serverURL TextField
@@ -129,7 +130,7 @@ class AuthenticationViewModel: ObservableObject {
             self.error = error
             // converting to string gives nicer errors,
             // see https://stackoverflow.com/a/68044439/4306257
-            print(String(describing: error))
+            log.error(String(describing: error))
         }
     }
 
@@ -148,6 +149,7 @@ class AuthenticationViewModel: ObservableObject {
                 try await Authentication.shared.logOut()
             } catch let error {
                 self.error = error
+                log.error(String(describing: error))
             }
         }
     }

@@ -5,6 +5,7 @@
 //  Created by Tom Rudnick on 28.11.22.
 //
 
+import Common
 import Foundation
 import SharedModels
 
@@ -21,6 +22,7 @@ class ExerciseViewModel: ObservableObject {
             self.exercise = try await ArtemisAPI.getExercise(exerciseId: exerciseId)
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 
@@ -30,6 +32,7 @@ class ExerciseViewModel: ObservableObject {
             self.exerciseStats = try await ArtemisAPI.getExerciseStats(exerciseId: exerciseId)
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     
@@ -39,6 +42,7 @@ class ExerciseViewModel: ObservableObject {
             self.exerciseStatsForDashboard = try await ArtemisAPI.getExerciseStatsForDashboard(exerciseId: exerciseId)
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     var reviewStudents: String {

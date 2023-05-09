@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 import SharedModels
+import Common
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: BaseSubmission?
@@ -41,6 +42,7 @@ class AssessmentViewModel: ObservableObject {
         } catch {
             self.submission = nil
             self.error = error
+            log.error(String(describing: error))
         }
     }
 
@@ -64,6 +66,7 @@ class AssessmentViewModel: ObservableObject {
             self.showSubmission = true
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 
@@ -82,6 +85,7 @@ class AssessmentViewModel: ObservableObject {
         } catch {
             if error as? RESTError != RESTError.empty {
                 self.error = error
+                log.error(String(describing: error))
             }
         }
         self.submission = nil
@@ -107,6 +111,7 @@ class AssessmentViewModel: ObservableObject {
             )
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     
@@ -118,7 +123,7 @@ class AssessmentViewModel: ObservableObject {
         do {
             try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exerciseId, participationId: participationId)
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
     }
     
