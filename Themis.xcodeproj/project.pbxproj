@@ -409,13 +409,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		65B49F412A08045E00C9A45F /* Modifiers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Modifiers;
-			sourceTree = "<group>";
-		};
 		65B49F4A2A08190B00C9A45F /* Pane */ = {
 			isa = PBXGroup;
 			children = (
@@ -460,7 +453,6 @@
 		83396D2C29155935003EF727 /* Themis */ = {
 			isa = PBXGroup;
 			children = (
-				65B49F412A08045E00C9A45F /* Modifiers */,
 				6589205B29EF0829005EE6FA /* Extensions */,
 				6589205329EE7B8E005EE6FA /* Styles */,
 				E2192EDA291E59B50092CE58 /* API */,

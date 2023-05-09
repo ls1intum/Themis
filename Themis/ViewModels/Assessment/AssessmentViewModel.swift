@@ -22,6 +22,10 @@ class AssessmentViewModel: ObservableObject {
             .sink(receiveValue: { self.participation = $0?.participation?.baseParticipation })
             .store(in: &cancellables)
     }
+    
+    var gradingCriteria: [GradingCriterion] {
+        participation?.getExercise()?.gradingCriteria ?? []
+    }
 
     @MainActor
     func initRandomSubmission(exerciseId: Int) async {
@@ -116,5 +120,9 @@ class AssessmentViewModel: ObservableObject {
         } catch {
             print(error)
         }
+    }
+    
+    func getFeedback(byId id: String) -> AssessmentFeedback? {
+        assessmentResult.feedbacks.first(where: { "\($0.id)" == id })
     }
 }

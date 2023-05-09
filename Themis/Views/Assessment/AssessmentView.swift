@@ -159,19 +159,19 @@ struct AssessmentView: View {
                 codeEditorVM: codeEditorVM,
                 scope: .inline,
                 showSheet: $codeEditorVM.showAddFeedback,
-                gradingCriteria: assessmentVM.participation?.getExercise()?.gradingCriteria ?? [],
-                feedbackSuggestion: codeEditorVM.feedbackSuggestions.first { "\($0.id)" == codeEditorVM.selectedFeedbackSuggestionId }
+                gradingCriteria: assessmentVM.gradingCriteria,
+                feedbackSuggestion: codeEditorVM.selectedFeedbackSuggestion
             )
         })
         .sheet(isPresented: $codeEditorVM.showEditFeedback) {
-            if let feedback = assessmentVM.assessmentResult.feedbacks.first(where: { "\($0.id)" == codeEditorVM.feedbackForSelectionId }) { // TODO: simplify
+            if let feedback = assessmentVM.getFeedback(byId: codeEditorVM.feedbackForSelectionId) {
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     cvm: codeEditorVM,
                     scope: .inline,
                     showSheet: $codeEditorVM.showEditFeedback,
                     idForUpdate: feedback.id,
-                    gradingCriteria: assessmentVM.participation?.getExercise()?.gradingCriteria ?? []
+                    gradingCriteria: assessmentVM.gradingCriteria
                 )
             }
         }

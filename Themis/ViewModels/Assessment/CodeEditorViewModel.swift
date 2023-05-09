@@ -52,6 +52,10 @@ class CodeEditorViewModel: ObservableObject {
         return nil
     }
     
+    var selectedFeedbackSuggestion: FeedbackSuggestion? {
+        feedbackSuggestions.first { "\($0.id)" == selectedFeedbackSuggestionId }
+    }
+    
     private var allFiles: [Node] {
         var files: [Node] = []
         var nodesToCheck = fileTree
