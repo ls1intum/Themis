@@ -141,7 +141,6 @@
 		6564DC162A00F15400CF2F89 /* ExerciseStatsForAssessmentDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatsForAssessmentDashboard.swift; sourceTree = "<group>"; };
 		6567A90229EFF85200A5EFDA /* ScorePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorePicker.swift; sourceTree = "<group>"; };
 		656EAF5F2A0256A6003CF2B4 /* AssessmentFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentFeedback.swift; sourceTree = "<group>"; };
-		658057142A02C1CE00835AD0 /* artemis-ios-core-modules */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "artemis-ios-core-modules"; path = "../artemis-ios-core-modules"; sourceTree = "<group>"; };
 		658057152A02C4DD00835AD0 /* CourseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseExtension.swift; sourceTree = "<group>"; };
 		658057172A02C64B00835AD0 /* ExamExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamExtension.swift; sourceTree = "<group>"; };
 		6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldStyle.swift; sourceTree = "<group>"; };
@@ -430,7 +429,6 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
-				658057142A02C1CE00835AD0 /* artemis-ios-core-modules */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
