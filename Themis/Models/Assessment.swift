@@ -7,11 +7,7 @@
 // swiftlint:disable discouraged_optional_boolean
 
 import Foundation
-
-enum FeedbackType {
-    case inline
-    case general
-}
+import SharedModels
 
 /// class to share UndoManager between CodeEditorViewModel and AssessmentResult
 class UndoManagerSingleton {
@@ -25,7 +21,7 @@ class AssessmentResult: Encodable, ObservableObject {
     var maxPoints = 100.0
     
     var points: Double {
-        let score = feedbacks.reduce(0) { $0 + $1.credits }
+        let score = feedbacks.reduce(0) { $0 + ($1.baseFeedback.credits ?? 0.0) }
         return score < 0 ? 0 : score
     }
     
@@ -47,7 +43,7 @@ class AssessmentResult: Encodable, ObservableObject {
         }
         set(new) {
             feedbacks = new.sorted(by: >).sorted {
-                $0.assessmentType.isManual && $1.assessmentType.isAutomatic
+                $0.baseFeedback.type?.isManual == true && $1.baseFeedback.type?.isAutomatic == true
             }
         }
     }
@@ -62,34 +58,42 @@ class AssessmentResult: Encodable, ObservableObject {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(score, forKey: .score)
-        try container.encode(feedbacks, forKey: .feedbacks)
+        try container.encode(feedbacks.map({ $0.baseFeedback }), forKey: .feedbacks)
         try container.encode(automaticFeedback.count, forKey: .testCaseCount)
-        try container.encode(automaticFeedback.filter { $0.positive } .count, forKey: .passedTestCaseCount)
+        try container.encode(automaticFeedback.filter { $0.baseFeedback.positive ?? false } .count, forKey: .passedTestCaseCount)
     }
 
     var generalFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .general && $0.assessmentType.isManual }
+            .filter { $0.scope == .general && $0.baseFeedback.type?.isManual ?? false }
     }
 
     var inlineFeedback: [AssessmentFeedback] {
         feedbacks
-            .filter { $0.type == .inline && $0.assessmentType.isManual }
+            .filter { $0.scope == .inline && $0.baseFeedback.type?.isManual ?? false }
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.assessmentType.isAutomatic }
+        feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false && $0.baseFeedback.credits != 0 }
+    }
+    
+    func setComputedFeedbacks(basedOn feedbacks: [Feedback]) {
+        computedFeedbacks = feedbacks
+            .map { feedback in
+                let scope = (feedback.reference == nil) ? ThemisFeedbackScope.general : ThemisFeedbackScope.inline
+                return AssessmentFeedback(baseFeedback: feedback, scope: scope)
+            }
     }
 
     func addFeedback(feedback: AssessmentFeedback) {
-        if feedback.type == .inline {
+        if feedback.scope == .inline {
             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
         }
         computedFeedbacks.append(feedback)
     }
 
     func deleteFeedback(id: UUID) {
-        if computedFeedbacks.contains(where: { $0.id == id && $0.type == .inline }) {
+        if computedFeedbacks.contains(where: { $0.id == id && $0.scope == .inline }) {
              undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
@@ -99,8 +103,8 @@ class AssessmentResult: Encodable, ObservableObject {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return
         }
-        computedFeedbacks[index].detailText = detailText
-        computedFeedbacks[index].credits = credits
+        computedFeedbacks[index].baseFeedback.detailText = detailText
+        computedFeedbacks[index].baseFeedback.credits = credits
     }
     
     func assignFile(id: UUID, file: Node) {
@@ -124,156 +128,5 @@ class AssessmentResult: Encodable, ObservableObject {
     
     func canRedo() -> Bool {
         undoManager.canRedo
-    }
-}
-
-struct AssessmentFeedback: Identifiable, Hashable {
-    // attributes from artemis
-    let id = UUID()
-    let created = Date()
-    var text: String? /// max length = 500
-    var detailText: String? /// max length = 5000
-    var reference: String?
-    var credits: Double /// score of element
-    var assessmentType: AssessmentType = .MANUAL
-    var positive: Bool
-
-    // custom utility attributes
-    var type: FeedbackType
-    var file: Node?
-
-    init(
-        text: String? = nil,
-        detailText: String? = nil,
-        credits: Double,
-        assessmentType: AssessmentType = .MANUAL,
-        type: FeedbackType,
-        file: Node? = nil,
-        lines: NSRange? = nil,
-        columns: NSRange? = nil
-    ) {
-        self.text = text
-        self.detailText = detailText
-        self.credits = credits
-        self.assessmentType = assessmentType
-        self.type = type
-        self.file = file
-        self.positive = true
-        self.buildLineDescription(lines: lines, columns: columns)
-    }
-
-    mutating func updateFeedback(detailText: String, credits: Double) {
-        self.detailText = detailText
-        self.credits = credits
-    }
-
-    mutating func buildLineDescription(lines: NSRange?, columns: NSRange?) {
-        guard let file = file, let lines = lines else {
-            return
-        }
-        if lines.location == 0 {
-            return
-        }
-        self.reference = "file:" + file.path + "_line:\(lines.location)"
-        
-        guard let columns else {
-            if lines.length == 0 {
-                self.text = "File " + file.path + " at line \(lines.location)"
-            } else {
-                self.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
-            }
-            return
-        }
-        if columns.length == 0 {
-            self.text = "File " + file.path + " at line \(lines.location) column \(columns.location)"
-        } else {
-            self.text = "File " + file.path + " at line \(lines.location) column \(columns.location)-\(columns.location + columns.length)"
-        }
-    }
-}
-
-// send to artemis
-extension AssessmentFeedback: Encodable {
-    enum EncodingKeys: String, CodingKey {
-        case text
-        case detailText
-        case reference
-        case credits
-        case positive
-        case assessmentType = "type"
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: EncodingKeys.self)
-        try container.encode(text, forKey: .text)
-        try container.encode(detailText, forKey: .detailText)
-        try container.encode(reference, forKey: .reference)
-        try container.encode(credits, forKey: .credits)
-        try container.encode(positive, forKey: .positive)
-        try container.encode(assessmentType, forKey: .assessmentType)
-    }
-}
-
-// receive feedbacks from artemis
-extension AssessmentFeedback: Decodable {
-    enum DecodingKeys: String, CodingKey {
-        case text
-        case detailText
-        case reference
-        case credits
-        case assessmentType = "type"
-        case positive
-    }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: DecodingKeys.self)
-        text = try? values.decode(String?.self, forKey: .text)
-        detailText = try? values.decode(String?.self, forKey: .detailText)
-        reference = try? values.decode(String?.self, forKey: .reference)
-        credits = try values.decode(Double?.self, forKey: .credits) ?? 0.0
-        assessmentType = try values.decode(AssessmentType.self, forKey: .assessmentType)
-        // assessment type `MANUAL_UNREFERENCED` does not have positive
-        positive = (try? values.decode(Bool?.self, forKey: .positive)) ?? false
-        type = text?.contains("at line") ?? false ? .inline : .general
-    }
-}
-
-extension AssessmentFeedback: Comparable {
-    static func < (lhs: AssessmentFeedback, rhs: AssessmentFeedback) -> Bool {
-        lhs.created < rhs.created
-    }
-}
-
-// https://github.com/ls1intum/Artemis/blob/develop/src/main/java/de/tum/in/www1/artemis/domain/enumeration/FeedbackType.java
-enum AssessmentType: String, Codable {
-    case AUTOMATIC
-    case AUTOMATIC_ADAPTED
-    case MANUAL
-    case MANUAL_UNREFERENCED
-    
-    var isManual: Bool {
-        self == .MANUAL || self == .MANUAL_UNREFERENCED
-    }
-    
-    var isAutomatic: Bool {
-        self == .AUTOMATIC || self == .AUTOMATIC_ADAPTED
-    }
-}
-
-extension ArtemisAPI {
-
-    /// delete all saved feedback and release the lock of the submission
-    static func cancelAssessment(submissionId: Int) async throws {
-        let request = Request(method: .put, path: "/api/programming-submissions/\(submissionId)/cancel-assessment")
-        _ = try await sendRequest(String.self, request: request)
-    }
-
-    /// save feedback to the submission
-    static func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
-        let request = Request(method: .put,
-                              path: "/api/participations/\(participationId)/manual-results",
-                              params: [URLQueryItem(name: "submit", value: String(submit))],
-                              body: newAssessment)
-        try await sendRequest(request: request)
     }
 }

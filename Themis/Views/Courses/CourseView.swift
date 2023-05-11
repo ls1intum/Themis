@@ -71,6 +71,6 @@ struct CourseView: View {
         guard let shownCourse = courseVM.shownCourse else {
             return "No course"
         }
-        return shownCourse.title
+        return shownCourse.title ?? "Unnamed course"
     }
 }

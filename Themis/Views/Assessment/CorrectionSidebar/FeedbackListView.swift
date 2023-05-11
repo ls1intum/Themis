@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct FeedbackListView: View {
     var readOnly: Bool
@@ -33,7 +34,7 @@ struct FeedbackListView: View {
             AddFeedbackView(
                 assessmentResult: assessmentResult,
                 cvm: cvm,
-                type: .general,
+                scope: .general,
                 showSheet: $showAddFeedback,
                 gradingCriteria: gradingCriteria
             )
@@ -118,7 +119,7 @@ struct FeedbackListView: View {
             .map { assessmentResult.feedbacks[$0] }
             .forEach {
                 assessmentResult.deleteFeedback(id: $0.id)
-                if $0.type == .inline {
+                if $0.scope == .inline {
                     cvm.deleteInlineHighlight(feedback: $0)
                 }
             }
@@ -138,8 +139,17 @@ struct FeedbackListView: View {
             gradingCriteria: []
         )
         .onAppear(perform: {
-            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: "Remove this if statement", credits: 10, type: .general))
-            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: "Remove this if statement", credits: -10, type: .general))
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(
+                baseFeedback: Feedback(detailText: "Remove this if statement",
+                                       credits: 10.0,
+                                       type: .MANUAL_UNREFERENCED),
+                scope: .general))
+            
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(
+                baseFeedback: Feedback(detailText: "Remove this if statement",
+                                       credits: -10.0,
+                                       type: .MANUAL_UNREFERENCED),
+                scope: .general))
         })
         .previewInterfaceOrientation(.landscapeLeft)
     }

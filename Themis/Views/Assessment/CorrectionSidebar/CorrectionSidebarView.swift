@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 enum CorrectionSidebarElements {
     case problemStatement, correctionGuidelines, generalFeedback
@@ -14,8 +15,7 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    @Binding var problemStatement: String
-    let exercise: ExerciseOfSubmission?
+    let exercise: (any BaseExercise)?
     let readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
@@ -23,6 +23,7 @@ struct CorrectionSidebarView: View {
     let loading: Bool
     
 
+    var problemStatement: String
     var participationId: Int?
     var templateParticipationId: Int?
 
@@ -35,7 +36,7 @@ struct CorrectionSidebarView: View {
                 case .problemStatement:
                     ScrollView {
                         ProblemStatementCellView(
-                            problemStatement: $problemStatement,
+                            problemStatement: .constant(problemStatement), // TODO: remove unnecessary binding
                             feedbacks: assessmentResult.feedbacks,
                             umlVM: umlVM
                         )
@@ -82,17 +83,16 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
-    @State static var problemStatement: String = "test"
 
     static var previews: some View {
         CorrectionSidebarView(
-            problemStatement: $problemStatement,
             exercise: nil,
             readOnly: false,
             assessmentResult: $assessmentResult,
             cvm: cvm,
             umlVM: umlVM,
-            loading: true
+            loading: true,
+            problemStatement: "test"
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

@@ -71,9 +71,9 @@ class ProblemStatementCellViewModel: ObservableObject {
         var problemStatementText = problemStatement
 
         for feedback in feedbacks {
-            if let feedbackText = feedback.text {
+            if let feedbackText = feedback.baseFeedback.text {
                 problemStatementText = problemStatementText
-                    .replacingOccurrences(of: "\(feedbackText)", with: feedback.credits == 0.0 ? "0" : "1")
+                    .replacingOccurrences(of: "\(feedbackText)", with: feedback.baseFeedback.credits == 0.0 ? "0" : "1")
             }
         }
 
@@ -117,10 +117,10 @@ class ProblemStatementCellViewModel: ObservableObject {
         var plantUML = problemStatement
 
         for feedback in feedbacks {
-            if let feedbackText = feedback.text {
+            if let feedbackText = feedback.baseFeedback.text {
                 plantUML = plantUML.replacingOccurrences(
                     of: "testsColor(\(feedbackText))",
-                    with: feedback.credits == 0.0 ? "red" : "green")
+                    with: feedback.baseFeedback.credits == 0.0 ? "red" : "green")
             }
         }
 

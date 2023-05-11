@@ -1,32 +1,14 @@
 //
-//  Course.swift
+//  CourseExtension.swift
 //  Themis
 //
-//  Created by Andreas Cselovszky on 11.11.22.
+//  Created by Tarlan Ismayilsoy on 03.05.23.
 //
 
 import Foundation
+import SharedModels
 
-struct CourseForDashboardDTO: Codable {
-    let course: Course
-}
-
-struct Course: Codable, Hashable {
-    let id: Int
-    let title: String
-    let description: String?
-    let shortName: String?
-    var exercises: [Exercise]?
-    var exams: [Exam]?
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-    mutating func fetchProgrammingExercises(courseId: Int) async throws {
-        exercises = try await ArtemisAPI.getAllProgrammingExercises(courseId: courseId)
-    }
-    
+extension Course {
     static func == (lhs: Course, rhs: Course) -> Bool {
         // exercises are not equated
         return lhs.id == rhs.id && lhs.title == rhs.title && lhs.description == rhs.description && lhs.shortName == rhs.shortName
@@ -36,7 +18,7 @@ struct Course: Codable, Hashable {
 extension ArtemisAPI {
     static func getAllCourses() async throws -> [Course] {
         let request = Request(method: .get, path: "/api/courses/for-dashboard")
-        return try await sendRequest([CourseForDashboardDTO].self, request: request).map({ $0.course })
+        return try await sendRequest([CourseForDashboard].self, request: request).map({ $0.course })
     }
 
     static func getAllProgrammingExercises(courseId: Int) async throws -> [Exercise] {

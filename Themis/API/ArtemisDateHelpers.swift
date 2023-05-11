@@ -55,8 +55,8 @@ enum ArtemisDateHelpers {
         return dateFormatter.string(from: date)
     }
     
-    static func getRemainingOrOverdueTime(for dateString: String?) -> String? {
-        guard let date = parseDate(dateString) else {
+    static func getRemainingOrOverdueTime(for date: Date?) -> String? {
+        guard let date else {
             return "not available yet"
         }
         let currentDate = Date()
@@ -82,5 +82,12 @@ enum ArtemisDateHelpers {
                 return String(Int(-timeDifferenceInMinutes)) + " minute(s) ago"
             }
         }
+    }
+    
+    static func getRemainingOrOverdueTime(for dateString: String?) -> String? {
+        guard let date = parseDate(dateString) else {
+            return "not available yet"
+        }
+        return getRemainingOrOverdueTime(for: date)
     }
 }

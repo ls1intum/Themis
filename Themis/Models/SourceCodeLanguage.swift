@@ -1,5 +1,5 @@
 //
-//  Language.swift
+//  SourceCodeLanguage.swift
 //  Themis
 //
 //  Created by Tom Rudnick on 23.01.23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Language: String {
+public enum SourceCodeLanguage: String {
     case swift
     case python
     case c

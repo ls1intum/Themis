@@ -6,18 +6,19 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExerciseDateProperty: Hashable {
     let name: String
-    let dateKeyPath: KeyPath<Exercise, String?>
+    let dateKeyPath: KeyPath<Exercise, Date?>
 }
 
 struct ExerciseSections: View {
     var exercises: [Exercise]
     
-    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.dueDate)
-    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.assessmentDueDate)
-    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.releaseDate)
+    private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.baseExercise.dueDate)
+    private let assessmentDueDate = ExerciseDateProperty(name: "Assessment", dateKeyPath: \.baseExercise.assessmentDueDate)
+    private let releaseDate = ExerciseDateProperty(name: "Release", dateKeyPath: \.baseExercise.releaseDate)
     
     var body: some View {
         Group {
@@ -28,7 +29,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isFormer() }
+                predicate: { $0.isFormer }
             )
             
             exerciseSection(
@@ -38,7 +39,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isCurrent() }
+                predicate: { $0.isCurrentlyInAssessment }
             )
             
             exerciseSection(
@@ -48,7 +49,7 @@ struct ExerciseSections: View {
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isFuture() }
+                predicate: { $0.isFuture }
             )
         }
     }
@@ -60,10 +61,8 @@ struct ExerciseSections: View {
     ) -> some View {
         let shownExercises = exercises
             .filter(predicate)
-            .sorted {
-                ArtemisDateHelpers.parseDate($0.dueDate) ?? Date.now <
-                    ArtemisDateHelpers.parseDate($1.dueDate) ?? Date.now
-            }
+            .sorted(by: { $0.baseExercise.dueDate ?? .now < $1.baseExercise.dueDate ?? .now })
+            
         return Group {
             if shownExercises.isEmpty {
                 EmptyView()
@@ -78,6 +77,7 @@ struct ExerciseSections: View {
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
                         }
+                        .disabled(exercise.isDisabled)
                     }
                 }
             }

@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExamSectionView: View {
     let examID: Int
     let courseID: Int
     let examTitle: String
     
+    @State var exam: Exam?
     @State var exercises: [Exercise] = []
     
     var body: some View {
@@ -19,19 +21,21 @@ struct ExamSectionView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise)
+                        ExerciseView(exercise: exercise, exam: exam)
                     } label: {
                         HStack {
-                            if let iconName = exercise.exerciseIconName {
-                                Image(systemName: iconName)
-                                    .scaledToFill()
-                            }
-                            Text(exercise.title ?? "")
+                            exercise.image
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: .smallImage)
+                            
+                            Text(exercise.baseExercise.title ?? "")
                                 .font(.title2)
                                 .fontWeight(.medium)
                         }
                     }
-                    .disabled(exercise.disabled)
+                    .disabled(exercise.isDisabled)
                 }
             }
         }.task {
@@ -39,6 +43,7 @@ struct ExamSectionView: View {
             guard let exam else {
                 return
             }
+            self.exam = exam
             self.exercises = exam.exercises
         }
         .navigationTitle(examTitle)

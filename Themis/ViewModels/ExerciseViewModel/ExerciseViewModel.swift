@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import SharedModels
 
 class ExerciseViewModel: ObservableObject {
     @Published var exercise: Exercise?
-    @Published var exerciseStats: ExerciseForAssessment?
+    @Published var exam: Exam?
+    @Published var exerciseStats: ExerciseStatsForAssessmentDashboard?
     @Published var exerciseStatsForDashboard: ExerciseStatistics?
     @Published var error: Error?
 
@@ -63,5 +65,10 @@ class ExerciseViewModel: ObservableObject {
         let numOfAssessments = Double(exerciseStats?.totalNumberOfAssessments?.inTime ?? 0)
         let numOfStudents = Double(exerciseStats?.numberOfSubmissions?.inTime ?? 0)
         return Double(CGFloat(numOfAssessments / numOfStudents))
+    }
+    
+    var isAssessmentPossible: Bool {
+        exercise?.isSubmissionDueDateOver ?? false
+        || exam?.isOver ?? false
     }
 }

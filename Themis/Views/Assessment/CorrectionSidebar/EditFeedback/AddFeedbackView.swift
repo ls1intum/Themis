@@ -7,11 +7,12 @@
 
 import SwiftUI
 import CodeEditor
+import SharedModels
 
 struct AddFeedbackView: View {
     var assessmentResult: AssessmentResult
     @ObservedObject var cvm: CodeEditorViewModel
-    let type: FeedbackType
+    let scope: ThemisFeedbackScope
     @Binding var showSheet: Bool
     var file: Node?
     let gradingCriteria: [GradingCriterion]
@@ -24,7 +25,7 @@ struct AddFeedbackView: View {
             showSheet: $showSheet,
             title: "Add Feedback",
             edit: false,
-            type: type,
+            scope: scope,
             file: file,
             gradingCriteria: gradingCriteria,
             feedbackSuggestion: feedbackSuggestion

@@ -163,7 +163,7 @@ class CodeEditorViewModel: ObservableObject {
     func loadInlineHighlight(assessmentResult: AssessmentResult, participationId: Int) async {
         for feedback in assessmentResult.inlineFeedback {
             // the reference is extracted from the text since it is more detailed (includes columns and multilines)
-            if let text = feedback.text {
+            if let text = feedback.baseFeedback.text {
                 let components = text.components(separatedBy: .whitespaces)
                 let path = extractFilePath(textComponents: components)
                 let lines = extractLines(textComponents: components)
@@ -195,7 +195,7 @@ class CodeEditorViewModel: ObservableObject {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
         
-        if feedback.type == .inline {
+        if feedback.scope == .inline {
             undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
         }
     }

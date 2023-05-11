@@ -7,14 +7,17 @@
 
 import SwiftUI
 import UIKit
+import SharedModels
 
 struct ExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
-    let exercise: Exercise
     
+    let exercise: Exercise
+    /// Only set if the exercise is a part of an exam
+    var exam: Exam?
     
     var body: some View {
         VStack {
@@ -42,7 +45,7 @@ struct ExerciseView: View {
                 exercise: exercise
             )
         }
-        .navigationTitle(exercise.title ?? "")
+        .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -51,7 +54,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                startNewAssessmentButton.disabled(!submissionDueDateOver)
+                startNewAssessmentButton.disabled(!exerciseVM.isAssessmentPossible)
             }
         }
         .errorAlert(error: $assessmentVM.error)
@@ -65,7 +68,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .open
             )
-        }.disabled(!submissionDueDateOver)
+        }.disabled(!exerciseVM.isAssessmentPossible)
     }
     
     private var finishedSubmissionsSection: some View {
@@ -75,7 +78,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .submitted
             )
-        }.disabled(!submissionDueDateOver)
+        }.disabled(!exerciseVM.isAssessmentPossible)
     }
     
     private var statisticsSection: some View {
@@ -114,17 +117,10 @@ struct ExerciseView: View {
         }
         .buttonStyle(ThemisButtonStyle(color: .themisGreen, iconImageName: "startAssessmentIcon"))
     }
-    private var submissionDueDateOver: Bool {
-        if let dueDate = exercise.dueDate,
-           let now = ArtemisDateHelpers.stringifyDate(Date.now),
-           dueDate <= now {
-            return true
-        }
-        return false
-    }
     
     private func fetchExerciseData() async {
         exerciseVM.exercise = exercise
+        exerciseVM.exam = exam
         await exerciseVM.fetchExercise(exerciseId: exercise.id)
         await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
         await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)

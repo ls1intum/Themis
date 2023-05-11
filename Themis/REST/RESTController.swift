@@ -27,7 +27,8 @@ class RESTController {
 
     func sendRequest<T: Decodable>(_ request: Request) async throws -> T {
         try await sendRequest(request, decode: { data in
-            try jsonDecoder.decode(T.self, from: data)
+            jsonDecoder.dateDecodingStrategy = .customISO8601
+            return try jsonDecoder.decode(T.self, from: data)
         })
     }
 

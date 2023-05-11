@@ -1,17 +1,26 @@
 import Foundation
 import SwiftUI
 import Combine
+import SharedModels
 
 class AssessmentViewModel: ObservableObject {
-    @Published var submission: SubmissionForAssessment?
+    @Published var submission: BaseSubmission?
+    /// Is set automatically when the submission is set
+    @Published var participation: BaseParticipation?
     @Published var assessmentResult = AssessmentResult()
     @Published var showSubmission = false
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
+    
+    private var cancellables: [AnyCancellable] = []
 
     init(readOnly: Bool) {
         self.readOnly = readOnly
+        
+        $submission
+            .sink(receiveValue: { self.participation = $0?.participation?.baseParticipation })
+            .store(in: &cancellables)
     }
 
     @MainActor
@@ -22,7 +31,7 @@ class AssessmentViewModel: ObservableObject {
         }
         do {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
-            assessmentResult.computedFeedbacks = submission?.results?.last?.feedbacks ?? []
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
             self.showSubmission = true
             UndoManagerSingleton.shared.undoManager.removeAllActions()
         } catch {
@@ -39,11 +48,13 @@ class AssessmentViewModel: ObservableObject {
         }
         do {
             if readOnly {
-                self.submission = try await ArtemisAPI.getSubmissionForReadOnly(participationId: id)
-                assessmentResult.computedFeedbacks = submission?.feedbacks ?? []
+                let result = try await ArtemisAPI.getResultFor(participationId: id)
+                self.submission = result.submission?.baseSubmission
+                self.participation = result.participation?.baseParticipation
+                assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
-                assessmentResult.computedFeedbacks = submission?.results?.last?.feedbacks ?? []
+                assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
                 UndoManagerSingleton.shared.undoManager.removeAllActions()
             }
             self.showSubmission = true

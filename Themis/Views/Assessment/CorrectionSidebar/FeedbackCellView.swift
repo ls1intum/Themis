@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SharedModels
 
 struct FeedbackCellView: View {
 
@@ -29,8 +30,8 @@ struct FeedbackCellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text(feedback.text ?? "Feedback")
-                    .foregroundColor(.getTextColor(forCredits: feedback.credits))
+                Text(feedback.baseFeedback.text ?? "Feedback")
+                    .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
                 
                 Spacer()
                 
@@ -41,15 +42,15 @@ struct FeedbackCellView: View {
                 .frame(maxWidth: .infinity)
             
             HStack {
-                Text(feedback.detailText ?? "")
+                Text(feedback.baseFeedback.detailText ?? "")
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.getTextColor(forCredits: feedback.credits))
+                    .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
                 pointLabel
             }
         }
         .onTapGesture {
-            if feedback.type == .inline {
+            if feedback.scope == .inline {
                 withAnimation(.linear) {
                     isTapped = true
                 }
@@ -58,7 +59,7 @@ struct FeedbackCellView: View {
                         cvm.openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
                     }
                     cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
-                        $0.id == feedback.id.uuidString
+                        $0.id == "\(feedback.id)"
                     }?.range
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -73,7 +74,7 @@ struct FeedbackCellView: View {
             EditFeedbackView(
                 assessmentResult: assessmentResult,
                 cvm: cvm,
-                type: feedback.type,
+                scope: feedback.scope,
                 showSheet: $showEditFeedback,
                 idForUpdate: feedback.id,
                 gradingCriteria: gradingCriteria
@@ -82,17 +83,17 @@ struct FeedbackCellView: View {
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 5)
             .stroke(lineWidth: 1)
-            .foregroundColor(.getTextColor(forCredits: feedback.credits))
+            .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
             .scaleEffect(isTapped ? 1.05 : 1.0))
-        .background(Color.getBackgroundColor(forCredits: feedback.credits))
+        .background(Color.getBackgroundColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
     }
     
     private var pointLabel: some View {
-        Text(String(format: "%.1f", feedback.credits) + "P")
+        Text(String(format: "%.1f", feedback.baseFeedback.credits ?? 0.0) + "P")
             .font(.headline)
             .foregroundColor(.white)
             .padding(7)
-            .background(Color.getPointsBackgroundColor(forCredits: feedback.credits))
+            .background(Color.getPointsBackgroundColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
             .cornerRadius(5)
     }
     
@@ -107,6 +108,6 @@ struct FeedbackCellView: View {
         .buttonStyle(ThemisButtonStyle(horizontalPadding: 8))
         .font(.caption)
         .disabled(editingDisabled)
-        .isHidden(feedback.assessmentType.isAutomatic)
+        .isHidden(feedback.baseFeedback.type?.isAutomatic ?? false)
     }
 }

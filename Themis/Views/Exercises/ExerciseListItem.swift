@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExerciseListItem: View {
     let exercise: Exercise
@@ -13,10 +14,13 @@ struct ExerciseListItem: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "keyboard")
-                .font(.system(size: 23))
+            exercise.image
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: .smallImage)
             
-            Text(exercise.title ?? "")
+            Text(exercise.baseExercise.title ?? "")
                 .font(.title2)
                 .fontWeight(.medium)
             Spacer()

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct SubmissionSearchView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -18,7 +19,7 @@ struct SubmissionSearchView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(submissionSearchVM.filterSubmissions(search: search)) { submission in
+                ForEach(submissionSearchVM.filterSubmissions(search: search), id: \.baseSubmission.id) { submission in
                     SingleSubmissionCellView(avm: assessmentVM, submission: submission)
                 }
             }
@@ -66,15 +67,19 @@ private struct SingleSubmissionCellView: View {
     var body: some View {
         HStack {
             Group {
-                Text(submission.participation.student.name)
-                Text(submission.participation.student.login)
+                if let student = submission.getParticipation(as: ProgrammingExerciseStudentParticipation.self)?.student {
+                    Text(student.name)
+                    Text(student.login)
+                }
                 linkToRepo
                 Spacer()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Button {
                 Task {
-                    await avm.getSubmission(id: submission.participation.id)
+                    if let participationId = submission.getParticipation()?.id {
+                        await avm.getSubmission(id: participationId)
+                    }
                 }
             } label: {
                 HStack {
@@ -92,7 +97,8 @@ private struct SingleSubmissionCellView: View {
     
     @ViewBuilder
     private var linkToRepo: some View {
-        if let repoUrl = URL(string: submission.participation.repositoryUrl) {
+        if let programmingParticipation = submission.getParticipation(as: ProgrammingExerciseStudentParticipation.self),
+           let repoUrl = URL(string: programmingParticipation.repositoryUrl ?? "") {
             Link("Repository", destination: repoUrl)
         }
     }
@@ -100,6 +106,6 @@ private struct SingleSubmissionCellView: View {
 
 struct SubmissionSearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SubmissionSearchView(exercise: Exercise())
+        SubmissionSearchView(exercise: Exercise.programming(exercise: .init(id: 1)))
     }
 }
