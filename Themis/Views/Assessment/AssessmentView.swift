@@ -2,6 +2,8 @@ import SwiftUI
 import SharedModels
 
 // swiftlint:disable closure_body_length
+// swiftlint:disable line_length
+
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
