@@ -7,6 +7,7 @@
 
 import Foundation
 import KeychainAccess
+import Common
 
 private struct AuthBody: Encodable {
     let username: String
@@ -40,7 +41,7 @@ class Authentication: NSObject {
         if let mVersion = try? await getArtemisMajorVersion() {
             bearerTokenAuthNeeded = mVersion < 6
         } else {
-            print("Fetching bearer token auth info did not work! Trying again...")
+            log.info("Fetching bearer token auth info did not work! Trying again...")
             try? await Task.sleep(until: .now + .seconds(5), clock: .continuous)
             await fetchNeedsBearerTokenAuth()
         }
@@ -78,7 +79,7 @@ class Authentication: NSObject {
                     .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: [.biometryAny])
                     .set(token, key: "token")
             } catch let error {
-                print(error.localizedDescription)
+                log.error(String(describing: error))
             }
         }
     }
@@ -90,7 +91,7 @@ class Authentication: NSObject {
                     .authenticationPrompt("Authenticate to login to App")
                     .get("token")
             } catch let error {
-                print(error.localizedDescription)
+                log.error(String(describing: error))
             }
         }
     }
@@ -100,7 +101,7 @@ class Authentication: NSObject {
             try keychain.remove("token")
             self.token = nil
         } catch let error {
-            print(error.localizedDescription)
+            log.error(String(describing: error))
         }
     }
 

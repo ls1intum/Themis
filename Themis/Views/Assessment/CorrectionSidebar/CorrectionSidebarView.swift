@@ -7,51 +7,49 @@
 
 import SwiftUI
 import DesignLibrary
+import SharedModels
 
 enum CorrectionSidebarElements {
     case problemStatement, correctionGuidelines, generalFeedback
 }
 
 struct CorrectionSidebarView: View {
-    @Binding var assessmentResult: AssessmentResult
-    
-    @ObservedObject var cvm: CodeEditorViewModel
-    
+
     @State private var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
     @State private var problemStatementHeight: CGFloat = 1.0
     @State private var problemStatementRequest: URLRequest
     
-    let loading: Bool
-    let exercise: ExerciseOfSubmission?
-    let readOnly: Bool
-    var participationId: Int?
-    var templateParticipationId: Int?
+    @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var assessmentVM: AssessmentViewModel
+    @ObservedObject var cvm: CodeEditorViewModel
+        
+    private var exercise: (any BaseExercise)? {
+        assessmentVM.participation?.getExercise()
+    }
+    
+    private var templateParticipationId: Int? {
+        assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+    }
     
     init(assessmentResult: Binding<AssessmentResult>,
-         exercise: ExerciseOfSubmission?,
-         readOnly: Bool,
+         assessmentVM: AssessmentViewModel,
          cvm: CodeEditorViewModel,
-         loading: Bool,
-         participationId: Int? = nil,
-         templateParticipationId: Int? = nil,
          courseId: Int) {
         self._assessmentResult = assessmentResult
+        self.assessmentVM = assessmentVM
         self.cvm = cvm
-        self.loading = loading
-        self.exercise = exercise
-        self.readOnly = readOnly
-        self.participationId = participationId
-        self.templateParticipationId = templateParticipationId
         
-        
-        self._problemStatementRequest = State(wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise?.id ?? -1)/problem-statement", relativeTo: RESTController.shared.baseURL)!))
+        let exercise = assessmentVM.participation?.getExercise()
+        self._problemStatementRequest = State(
+            wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise?.id ?? -1)/problem-statement", relativeTo: RESTController.shared.baseURL)!)
+        )
     }
     
     var body: some View {
         VStack {
             sideBarElementPicker
             
-            if !loading {
+            if !assessmentVM.loading {
                 switch correctionSidebarStatus {
                 case .problemStatement:
                     ScrollView {
@@ -67,10 +65,10 @@ struct CorrectionSidebarView: View {
                     }
                 case .generalFeedback:
                     FeedbackListView(
-                        readOnly: readOnly,
+                        readOnly: assessmentVM.readOnly,
                         assessmentResult: assessmentResult,
-                        cvm: cvm,
-                        participationId: participationId,
+                        codeEditorVM: cvm,
+                        participationId: assessmentVM.participation?.id,
                         templateParticipationId: templateParticipationId,
                         gradingCriteria: exercise?.gradingCriteria ?? []
                     )
@@ -99,16 +97,15 @@ struct CorrectionSidebarView: View {
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
-    @State static var problemStatement: String = "test"
-
+    @State static var assessmentVM = AssessmentViewModel(readOnly: false)
+    
     static var previews: some View {
         CorrectionSidebarView(
-            assessmentResult: $assessmentResult, exercise: nil,
-            readOnly: false,
+            assessmentResult: $assessmentResult,
+            assessmentVM: assessmentVM,
             cvm: cvm,
-            loading: true,
-            courseId: 1
+            courseId: -1
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }
- }
+}

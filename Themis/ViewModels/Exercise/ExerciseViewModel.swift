@@ -5,11 +5,14 @@
 //  Created by Tom Rudnick on 28.11.22.
 //
 
+import Common
 import Foundation
+import SharedModels
 
 class ExerciseViewModel: ObservableObject {
     @Published var exercise: Exercise?
-    @Published var exerciseStats: ExerciseForAssessment?
+    @Published var exam: Exam?
+    @Published var exerciseStats: ExerciseStatsForAssessmentDashboard?
     @Published var exerciseStatsForDashboard: ExerciseStatistics?
     @Published var error: Error?
 
@@ -19,6 +22,7 @@ class ExerciseViewModel: ObservableObject {
             self.exercise = try await ArtemisAPI.getExercise(exerciseId: exerciseId)
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 
@@ -28,6 +32,7 @@ class ExerciseViewModel: ObservableObject {
             self.exerciseStats = try await ArtemisAPI.getExerciseStats(exerciseId: exerciseId)
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     
@@ -37,6 +42,7 @@ class ExerciseViewModel: ObservableObject {
             self.exerciseStatsForDashboard = try await ArtemisAPI.getExerciseStatsForDashboard(exerciseId: exerciseId)
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     var reviewStudents: String {
@@ -63,5 +69,10 @@ class ExerciseViewModel: ObservableObject {
         let numOfAssessments = Double(exerciseStats?.totalNumberOfAssessments?.inTime ?? 0)
         let numOfStudents = Double(exerciseStats?.numberOfSubmissions?.inTime ?? 0)
         return Double(CGFloat(numOfAssessments / numOfStudents))
+    }
+    
+    var isAssessmentPossible: Bool {
+        exercise?.isSubmissionDueDateOver ?? false
+        || exam?.isOver ?? false
     }
 }

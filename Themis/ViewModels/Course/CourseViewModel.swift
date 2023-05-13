@@ -5,8 +5,10 @@
 //  Created by Tom Rudnick on 12.11.22.
 //
 
+import Common
 import SwiftUI
 import Common
+import SharedModels
 
 class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
@@ -60,12 +62,10 @@ class CourseViewModel: ObservableObject {
             if shownCourseID == nil {
                 shownCourseID = self.courses.first?.id
             }
-            for index in 0 ..< courses.count {
-                try await courses[index].fetchProgrammingExercises(courseId: courses[index].id)
-            }
         } catch let error {
             log.error(error.localizedDescription)
             self.error = error
+            log.error(String(describing: error))
         }
     }
 

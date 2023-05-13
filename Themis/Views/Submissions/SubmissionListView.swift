@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct SubmissionListView: View {
     @EnvironmentObject var courseVM: CourseViewModel
@@ -16,16 +17,16 @@ struct SubmissionListView: View {
     
     var body: some View {
         List {
-            ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions, id: \.id) { submission in
+            ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions, id: \.baseSubmission.id) { submission in
                 NavigationLink {
                     AssessmentSubmissionLoaderView(
-                        submissionID: submission.id,
+                        submissionID: submission.baseSubmission.id ?? -1,
                         exercise: exercise
                     )
                     .environmentObject(courseVM)
                 } label: {
                     HStack {
-                        Text(verbatim: "Submission #\(submission.id)")
+                        Text(verbatim: "Submission #\(submission.baseSubmission.id ?? -1)")
                             .fontWeight(.medium)
                         Spacer()
                         dateTimeline(submission: submission)
@@ -36,14 +37,12 @@ struct SubmissionListView: View {
     }
     
     func dateTimeline(submission: Submission) -> some View {
-        var dates: [(name: String, date: String?)] = []
+        var dates: [(name: String, date: Date?)] = []
         
-        if let submissionDate = ArtemisDateHelpers
-            .parseDetailedDateToNormalDate(submission.submissionDate) {
+        if let submissionDate = (submission.baseSubmission.submissionDate) {
             dates.append(("Submission Date", submissionDate))
         }
-        if let completionDate = ArtemisDateHelpers.parseDetailedDateToNormalDate(
-            submission.results.last?.completionDate), submissionStatus == .submitted {
+        if let completionDate = (submission.baseSubmission.results?.last?.completionDate), submissionStatus == .submitted {
             dates.append(("Last Assessed", completionDate))
         }
         
@@ -54,7 +53,7 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exercise: Exercise(), submissionStatus: .open)
+            SubmissionListView(exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)), submissionStatus: .open)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExamDateProperty: Hashable {
     let name: String
-    let dateKeyPath: KeyPath<Exam, String?>
+    let dateKeyPath: KeyPath<Exam, Date?>
 }
 
 struct ExamListView: View {
@@ -29,7 +30,7 @@ struct ExamListView: View {
             } else {
                 ForEach(exams, id: \.id) { exam in
                     NavigationLink {
-                        ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title)
+                        ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title ?? "Untitled Exam")
                             .environmentObject(courseVM)
                     } label: {
                         ExamListItem(exam: exam, dateProperties: [
@@ -50,7 +51,7 @@ private struct ExamListItem: View {
 
     var body: some View {
         HStack {
-            Text(exam.title)
+            Text(exam.title ?? "Untitled Exam")
                 .font(.title2)
                 .fontWeight(.medium)
             Spacer()

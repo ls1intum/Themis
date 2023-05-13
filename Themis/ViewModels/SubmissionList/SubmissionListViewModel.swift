@@ -5,18 +5,20 @@
 //  Created by Paul Schwind on 24.11.22.
 //
 
+import Common
 import Foundation
+import SharedModels
 
 class SubmissionListViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
     @Published var error: Error?
     
     var submittedSubmissions: [Submission] {
-        submissions.filter { $0.results.last?.completionDate != nil }
+        submissions.filter { $0.baseSubmission.results?.last?.completionDate != nil }
     }
     
     var openSubmissions: [Submission] {
-        submissions.filter { $0.results.last?.completionDate == nil }
+        submissions.filter { $0.baseSubmission.results?.last?.completionDate == nil }
     }
     
     @MainActor
@@ -25,6 +27,7 @@ class SubmissionListViewModel: ObservableObject {
             self.submissions = try await ArtemisAPI.getTutorSubmissions(exerciseId: exerciseId)
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 }

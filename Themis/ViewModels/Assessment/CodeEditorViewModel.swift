@@ -9,9 +9,10 @@ import Foundation
 import UIKit
 import SwiftUI
 import CodeEditor
+import Common
 
 class CodeEditorViewModel: ObservableObject {
-    let undoManager = UndoManagerSingleton.shared.undoManager
+    let undoManager = UndoManager.shared
     
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
@@ -52,6 +53,10 @@ class CodeEditorViewModel: ObservableObject {
         return nil
     }
     
+    var selectedFeedbackSuggestion: FeedbackSuggestion? {
+        feedbackSuggestions.first { "\($0.id)" == selectedFeedbackSuggestionId }
+    }
+    
     private var allFiles: [Node] {
         var files: [Node] = []
         var nodesToCheck = fileTree
@@ -79,6 +84,7 @@ class CodeEditorViewModel: ObservableObject {
         selectedFile = file
     }
     
+    @MainActor
     func closeFile(file: Node) {
         openFiles = openFiles.filter({ $0.path != file.path })
         selectedFile = openFiles.first
@@ -89,15 +95,15 @@ class CodeEditorViewModel: ObservableObject {
         file.path == selectedFile?.path
     }
     
+    @MainActor
     func initFileTree(participationId: Int) async {
         do {
             let files = try await ArtemisAPI.getFileNamesOfRepository(participationId: participationId)
             let node = ArtemisAPI.initFileTreeStructure(files: files)
-            DispatchQueue.main.async {
-                self.fileTree = node.children ?? []
-            }
+            self.fileTree = node.children ?? []
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     
@@ -105,10 +111,9 @@ class CodeEditorViewModel: ObservableObject {
     func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
         do {
             self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
-            // TODO: remove again, this is just nice for debugging currently
-            print("Got \(self.feedbackSuggestions.count) feedback suggestions")
+            log.info("Got \(self.feedbackSuggestions.count) feedback suggestions")
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
     }
     
@@ -163,7 +168,7 @@ class CodeEditorViewModel: ObservableObject {
     func loadInlineHighlight(assessmentResult: AssessmentResult, participationId: Int) async {
         for feedback in assessmentResult.inlineFeedback {
             // the reference is extracted from the text since it is more detailed (includes columns and multilines)
-            if let text = feedback.text {
+            if let text = feedback.baseFeedback.text {
                 let components = text.components(separatedBy: .whitespaces)
                 let path = extractFilePath(textComponents: components)
                 let lines = extractLines(textComponents: components)
@@ -195,7 +200,7 @@ class CodeEditorViewModel: ObservableObject {
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
         }
         
-        if feedback.type == .inline {
+        if feedback.scope == .inline {
             undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
         }
     }

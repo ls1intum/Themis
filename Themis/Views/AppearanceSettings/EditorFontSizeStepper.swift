@@ -52,6 +52,6 @@ struct FontSizeStepperView_Previews: PreviewProvider {
     
     static var previews: some View {
         EditorFontSizeStepperView(fontSize: $fontSize)
-            .background(Color("customPrimary"))
+            .background(.primary)
     }
 }

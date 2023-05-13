@@ -1,19 +1,17 @@
 import SwiftUI
+import SharedModels
 
 struct FiletreeSidebarView: View {
-    let participationID: Int?
     @ObservedObject var cvm: CodeEditorViewModel
-    let loading: Bool
-
-    let templateParticipationId: Int?
-
+    @ObservedObject var assessmentVM: AssessmentViewModel
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Filetree")
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
-            if !loading {
+            if !assessmentVM.loading {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
                         if tree.type == .folder {
@@ -48,13 +46,7 @@ struct FiletreeSidebarView: View {
     func nodeFileView(file: Node) -> some View {
         Button {
             withAnimation {
-                guard let participationID else {
-                    return
-                }
-                cvm.openFile(file: file,
-                             participationId: participationID,
-                             templateParticipationId: templateParticipationId
-                )
+                openFile(file)
             }
         } label: {
             FileView(file: file)
@@ -65,5 +57,18 @@ struct FiletreeSidebarView: View {
         .bold(file === cvm.selectedFile)
         .background(file === cvm.selectedFile ? Color("selectedFileBackground") : Color("sidebarBackground"))
         .cornerRadius(10)
+    }
+    
+    private func openFile(_ file: Node) {
+        guard let participationId = assessmentVM.participation?.id,
+              let templateParticipationId = assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+        else {
+            return
+        }
+        
+        cvm.openFile(file: file,
+                     participationId: participationId,
+                     templateParticipationId: templateParticipationId
+        )
     }
 }

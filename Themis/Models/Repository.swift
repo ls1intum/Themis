@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 
 enum FileType: String, Codable {
     case folder = "FOLDER"
@@ -108,7 +109,7 @@ class Node: Hashable, ObservableObject {
     }
     
     
-    public func language() -> Language? {
+    public func language() -> SourceCodeLanguage? {
         guard let language = languageDict[self.fileExtensionString] else {
             return nil
         }
@@ -166,7 +167,7 @@ class Node: Hashable, ObservableObject {
             relativePath.remove(at: relativePath.startIndex)
             self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
     }
 
@@ -226,11 +227,11 @@ class Node: Hashable, ObservableObject {
         } catch RESTError.notFound {
             self.isNewFile = true
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
     }
     
-    private let languageDict: [String: Language] = [
+    private let languageDict: [String: SourceCodeLanguage] = [
         "c": .c,
         "h": .c,
         "py": .python,

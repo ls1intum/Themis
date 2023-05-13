@@ -5,7 +5,9 @@
 //  Created by Andreas Cselovszky on 04.12.22.
 //
 
+import Common
 import Foundation
+import SharedModels
 
 class SubmissionSearchViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
@@ -19,6 +21,7 @@ class SubmissionSearchViewModel: ObservableObject {
             self.submissions = try await ArtemisAPI.getAllSubmissions(exerciseId: exerciseId)
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 

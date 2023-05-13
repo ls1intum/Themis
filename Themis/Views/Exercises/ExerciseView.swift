@@ -8,6 +8,7 @@
 import SwiftUI
 import UIKit
 import DesignLibrary
+import SharedModels
 
 struct ExerciseView: View {
     @EnvironmentObject var courseVM: CourseViewModel
@@ -20,9 +21,12 @@ struct ExerciseView: View {
     @State private var problemStatementRequest: URLRequest
     
     let exercise: Exercise
+    /// Only set if the exercise is a part of an exam
+    var exam: Exam?
     
-    init(exercise: Exercise, courseId: Int) {
+    init(exercise: Exercise, courseId: Int, exam: Exam? = nil) {
         self.exercise = exercise
+        self.exam = exam
         self._problemStatementRequest = State(wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise.id)/problem-statement", relativeTo: RESTController.shared.baseURL)!))
     }
     
@@ -55,7 +59,7 @@ struct ExerciseView: View {
             )
             .environmentObject(courseVM)
         }
-        .navigationTitle(exercise.title ?? "")
+        .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -64,7 +68,7 @@ struct ExerciseView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                startNewAssessmentButton.disabled(!submissionDueDateOver)
+                startNewAssessmentButton.disabled(!exerciseVM.isAssessmentPossible)
             }
         }
         .errorAlert(error: $assessmentVM.error)
@@ -78,7 +82,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .open
             )
-        }.disabled(!submissionDueDateOver)
+        }.disabled(!exerciseVM.isAssessmentPossible)
     }
     
     private var finishedSubmissionsSection: some View {
@@ -88,7 +92,7 @@ struct ExerciseView: View {
                 exercise: exercise,
                 submissionStatus: .submitted
             )
-        }.disabled(!submissionDueDateOver)
+        }.disabled(!exerciseVM.isAssessmentPossible)
     }
     
     private var statisticsSection: some View {
@@ -134,33 +138,18 @@ struct ExerciseView: View {
             Text("Start Assessment")
                 .foregroundColor(.white)
         }
-        .buttonStyle(NavigationBarButton())
-    }
-    private var submissionDueDateOver: Bool {
-        if let dueDate = exercise.dueDate,
-           let now = ArtemisDateHelpers.stringifyDate(Date.now),
-           dueDate <= now {
-            return true
-        }
-        return false
+        .buttonStyle(ThemisButtonStyle(color: .themisGreen, iconImageName: "startAssessmentIcon"))
     }
     
     private func fetchExerciseData() async {
         exerciseVM.exercise = exercise
+        exerciseVM.exam = exam
         
         await withTaskGroup(of: Void.self) { group in
-            group.addTask {
-                await exerciseVM.fetchExercise(exerciseId: exercise.id)
-            }
-            group.addTask {
-                await exerciseVM.fetchExerciseStats(exerciseId: exercise.id)
-            }
-            group.addTask {
-                await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id)
-            }
-            group.addTask {
-                await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id)
-            }
+            group.addTask { await exerciseVM.fetchExercise(exerciseId: exercise.id) }
+            group.addTask { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }
+            group.addTask { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }
+            group.addTask { await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id) }
         }
     }
 }

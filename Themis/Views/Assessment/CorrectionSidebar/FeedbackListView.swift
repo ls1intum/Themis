@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct FeedbackListView: View {
     var readOnly: Bool
     @ObservedObject var assessmentResult: AssessmentResult
-    @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var codeEditorVM: CodeEditorViewModel
     
     @State var showAddFeedback = false
     
@@ -32,8 +33,8 @@ struct FeedbackListView: View {
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(
                 assessmentResult: assessmentResult,
-                cvm: cvm,
-                type: .general,
+                codeEditorVM: codeEditorVM,
+                scope: .general,
                 showSheet: $showAddFeedback,
                 gradingCriteria: gradingCriteria
             )
@@ -46,7 +47,7 @@ struct FeedbackListView: View {
                 FeedbackCellView(
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
-                    cvm: cvm,
+                    codeEditorVM: codeEditorVM,
                     feedback: feedback,
                     gradingCriteria: gradingCriteria
                 )
@@ -74,7 +75,7 @@ struct FeedbackListView: View {
                 FeedbackCellView(
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
-                    cvm: cvm,
+                    codeEditorVM: codeEditorVM,
                     feedback: feedback,
                     participationId: participationId,
                     templateParticipationId: templateParticipationId,
@@ -98,7 +99,7 @@ struct FeedbackListView: View {
                 FeedbackCellView(
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
-                    cvm: cvm,
+                    codeEditorVM: codeEditorVM,
                     feedback: feedback,
                     gradingCriteria: gradingCriteria
                 )
@@ -118,8 +119,8 @@ struct FeedbackListView: View {
             .map { assessmentResult.feedbacks[$0] }
             .forEach {
                 assessmentResult.deleteFeedback(id: $0.id)
-                if $0.type == .inline {
-                    cvm.deleteInlineHighlight(feedback: $0)
+                if $0.scope == .inline {
+                    codeEditorVM.deleteInlineHighlight(feedback: $0)
                 }
             }
     }
@@ -134,9 +135,22 @@ struct FeedbackListView: View {
         FeedbackListView(
             readOnly: false,
             assessmentResult: assessmentResult,
-            cvm: codeEditor,
+            codeEditorVM: codeEditor,
             gradingCriteria: []
         )
+        .onAppear(perform: {
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(
+                baseFeedback: Feedback(detailText: "Remove this if statement",
+                                       credits: 10.0,
+                                       type: .MANUAL_UNREFERENCED),
+                scope: .general))
+            
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(
+                baseFeedback: Feedback(detailText: "Remove this if statement",
+                                       credits: -10.0,
+                                       type: .MANUAL_UNREFERENCED),
+                scope: .general))
+        })
         .previewInterfaceOrientation(.landscapeLeft)
     }
  }

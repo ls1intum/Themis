@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import CodeEditor
+import SharedModels
 
 struct EditFeedbackViewBase: View {
     var assessmentResult: AssessmentResult
@@ -19,22 +20,99 @@ struct EditFeedbackViewBase: View {
     
     var idForUpdate: UUID?
 
-    let maxScore = Double(10)
-
     let title: String?
     let edit: Bool
-    let type: FeedbackType
-    var file: Node?
+    let scope: ThemisFeedbackScope
     
     let gradingCriteria: [GradingCriterion]
     
     var feedbackSuggestion: FeedbackSuggestion?
-
-    var pickerRange: [Double] {
-        Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
-            .sorted { $0 > $1 }
+    
+    private var isEditing: Bool {
+        idForUpdate != nil
     }
-
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text(title ?? "Edit Feedback")
+                    .font(.largeTitle)
+                
+                Spacer()
+                
+                if isEditing {
+                    deleteButton
+                }
+                
+                editOrSaveButton
+            }
+            
+            HStack(spacing: 15) {
+                TextField("Enter your feedback here", text: $detailText, axis: .vertical)
+                    .foregroundColor(Color.getTextColor(forCredits: score))
+                    .submitLabel(.return)
+                    .lineLimit(10...40)
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 5)
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(.getTextColor(forCredits: score)))
+                    .background(Color.getBackgroundColor(forCredits: score))
+                
+                ScorePicker(score: $score)
+                    .frame(maxWidth: 130)
+            }
+            .animation(.easeIn, value: score)
+            
+            Spacer()
+            
+            gradingCriteriaList
+        }
+        .padding()
+        .onAppear {
+            setStates()
+        }
+    }
+    
+    private var gradingCriteriaList: some View {
+        ScrollView(.vertical) {
+            VStack {
+                ForEach(gradingCriteria) { gradingCriterion in
+                    GradingCriteriaCellView(gradingCriterion: gradingCriterion, detailText: $detailText, score: $score)
+                }
+            }
+        }
+    }
+    
+    private var editOrSaveButton: some View {
+        Button {
+            if edit {
+                updateFeedback()
+            } else {
+                createFeedback()
+            }
+            showSheet = false
+        } label: {
+            Text("Save")
+        }
+        .buttonStyle(ThemisButtonStyle())
+        .font(.title2)
+        .disabled(detailText.isEmpty)
+    }
+    
+    private var deleteButton: some View {
+        Button {
+            deleteFeedback()
+            showSheet = false
+        } label: {
+            Image(systemName: "trash")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 15, height: 27)
+        }
+        .buttonStyle(ThemisButtonStyle(color: .themisRed))
+        .font(.title2)
+    }
+    
     private func updateFeedback() {
         if let id = idForUpdate {
             assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score)
@@ -44,24 +122,40 @@ struct EditFeedbackViewBase: View {
     private func createFeedback() {
         if let feedbackSuggestion {
             addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
-        } else if type == .inline {
+        } else if scope == .inline {
             let lines: NSRange? = cvm.selectedSectionParsed?.0
             let columns: NSRange? = cvm.selectedSectionParsed?.1
-            let feedback = AssessmentFeedback(detailText: detailText, credits: score, type: type, file: file, lines: lines, columns: columns)
+            let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
+                                              scope: scope,
+                                              file: cvm.selectedFile,
+                                              lines: lines,
+                                              columns: columns)
             assessmentResult.addFeedback(feedback: feedback)
             cvm.addInlineHighlight(feedbackId: feedback.id)
         } else {
-            assessmentResult.addFeedback(feedback: AssessmentFeedback(detailText: detailText, credits: score, type: type))
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
+                                                                                             credits: score,
+                                                                                             type: .MANUAL_UNREFERENCED),
+                                                                      scope: scope))
         }
+    }
+    
+    private func deleteFeedback() {
+        guard let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) else {
+            return
+        }
+        assessmentResult.deleteFeedback(id: feedback.id)
+        cvm.deleteInlineHighlight(feedback: feedback)
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
         let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
         let feedback = AssessmentFeedback(
-            detailText: feedbackSuggestion.text,
-            credits: feedbackSuggestion.credits,
-            type: .inline,
-            file: file,
+            baseFeedback: Feedback(detailText: feedbackSuggestion.text,
+                                   credits: feedbackSuggestion.credits,
+                                   type: .MANUAL_UNREFERENCED),
+            scope: .inline,
+            file: cvm.selectedFile,
             lines: lines
         )
         assessmentResult.addFeedback(feedback: feedback)
@@ -71,8 +165,8 @@ struct EditFeedbackViewBase: View {
     private func setStates() {
         if idForUpdate != nil {
             if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
-                self.detailText = feedback.detailText ?? ""
-                self.score = feedback.credits
+                self.detailText = feedback.baseFeedback.detailText ?? ""
+                self.score = feedback.baseFeedback.credits ?? 0.0
             }
         }
         if let feedbackSuggestion = feedbackSuggestion {
@@ -80,64 +174,39 @@ struct EditFeedbackViewBase: View {
             self.score = feedbackSuggestion.credits
         }
     }
+}
 
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text(title ?? "Edit Feedback")
-                    .font(.largeTitle)
-                Spacer()
-                Button {
-                    if edit {
-                        updateFeedback()
-                    } else {
-                        createFeedback()
-                    }
-                    showSheet = false
-                } label: {
-                    Text("Save")
-                }.font(.title)
-                    .disabled(detailText.isEmpty)
-            }
-            HStack {
-                
-                TextField("Enter your feedback here", text: $detailText, axis: .vertical)
-                    .submitLabel(.return)
-                    .lineLimit(10...40)
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 20)
-                        .stroke(lineWidth: 2))
-                Text("Score:")
-                    .font(.title)
-                    .padding(.leading)
-                Picker("Score", selection: $score) {
-                    ForEach(pickerRange, id: \.self) { number in
-                        if number < 0.0 {
-                            Text(String(format: "%.1f", number)).foregroundColor(.red)
-                        } else if number > 0.0 {
-                            Text(String(format: "%.1f", number)).foregroundColor(.green)
-                        } else {
-                            Text(String(format: "%.1f", number))
-                        }
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(maxWidth: 150)
-                .animation(.default, value: score)
-            }
-            Spacer()
-            
-            ScrollView(.vertical) {
-                VStack {
-                    ForEach(gradingCriteria) { gradingCriterion in
-                        GradingCriteriaCellView(gradingCriterion: gradingCriterion, detailText: $detailText, score: $score)
-                    }
-                }
-            }
-        }
-        .padding()
-        .onAppear {
-            setStates()
-        }
+struct EditFeedbackViewBase_Previews: PreviewProvider {
+    static var result = AssessmentResult()
+    static var cvm = CodeEditorViewModel()
+    
+    static var previews: some View {
+        EditFeedbackViewBase(assessmentResult: result,
+                             cvm: cvm,
+                             showSheet: .constant(true),
+                             title: "Title",
+                             edit: false,
+                             scope: .inline,
+                             gradingCriteria: [
+                                .init(id: 1, structuredGradingInstructions: [
+                                    .init(id: 1,
+                                          credits: 10,
+                                          gradingScale: "Title",
+                                          instructionDescription: "Some instruction here",
+                                          feedback: "feedback",
+                                          usageCount: 2),
+                                    .init(id: 2,
+                                          credits: 0,
+                                          gradingScale: "Title",
+                                          instructionDescription: "Some instruction here",
+                                          feedback: "feedback",
+                                          usageCount: 1),
+                                    .init(id: 3,
+                                          credits: -10,
+                                          gradingScale: "Title",
+                                          instructionDescription: "Some instruction here",
+                                          feedback: "feedback")
+                                ])
+                             ])
     }
 }

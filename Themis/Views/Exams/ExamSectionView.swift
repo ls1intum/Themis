@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ExamSectionView: View {
     @EnvironmentObject var courseVM: CourseViewModel
@@ -14,6 +15,7 @@ struct ExamSectionView: View {
     let courseID: Int
     let examTitle: String
     
+    @State var exam: Exam?
     @State var exercises: [Exercise] = []
     
     var body: some View {
@@ -21,20 +23,22 @@ struct ExamSectionView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1)
+                        ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1, exam: exam)
                             .environmentObject(courseVM)
                     } label: {
                         HStack {
-                            if let iconName = exercise.exerciseIconName {
-                                Image(systemName: iconName)
-                                    .scaledToFill()
-                            }
-                            Text(exercise.title ?? "")
+                            exercise.image
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: .smallImage)
+                            
+                            Text(exercise.baseExercise.title ?? "")
                                 .font(.title2)
                                 .fontWeight(.medium)
                         }
                     }
-                    .disabled(exercise.disabled)
+                    .disabled(exercise.isDisabled)
                 }
             }
         }.task {
@@ -42,6 +46,7 @@ struct ExamSectionView: View {
             guard let exam else {
                 return
             }
+            self.exam = exam
             self.exercises = exam.exercises
         }
         .navigationTitle(examTitle)

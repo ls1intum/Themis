@@ -1,29 +1,22 @@
 import SwiftUI
+import SharedModels
 
-// swiftlint:disable type_body_length
 // swiftlint:disable closure_body_length
+
 
 struct AssessmentView: View {
     @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var assessmentVM: AssessmentViewModel
-    @StateObject var cvm = CodeEditorViewModel()
     @ObservedObject var assessmentResult: AssessmentResult
+    @StateObject var codeEditorVM = CodeEditorViewModel()
+    @StateObject var paneVM = PaneViewModel()
     
-    @State var showFileTree = true
-    @State var showCorrectionSidebar = false
-    @State private var dragWidthLeft: CGFloat = 0.2 * UIScreen.main.bounds.size.width
-    @State private var dragWidthRight: CGFloat = 0
-    @State private var correctionAsPlaceholder = true
-    @State private var filetreeAsPlaceholder = false
     @State private var showCancelDialog = false
-    @State var showNoSubmissionsAlert = false
-    @State var showStepper = false
-    @State var showSubmitConfirmation = false
-    @State var showNavigationOptions = false
-    
-    private let minRightSnapWidth: CGFloat = 185
-    private let minLeftSnapWidth: CGFloat = 150
+    @State private var showNoSubmissionsAlert = false
+    @State private var showStepper = false
+    @State private var showSubmitConfirmation = false
+    @State private var showNavigationOptions = false
     
     let exercise: Exercise
     
@@ -32,116 +25,53 @@ struct AssessmentView: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
-                if showFileTree {
+                if paneVM.showLeftPane {
                     filetreeWithPlaceholder
-                        .frame(width: dragWidthLeft)
-                    leftGrip
-                        .edgesIgnoringSafeArea(.bottom)
+                        .frame(width: paneVM.dragWidthLeft)
+                    
+                    LeftGripView(paneVM: paneVM)
                 }
+                
                 CodeEditorView(
-                    cvm: cvm,
-                    showFileTree: $showFileTree,
+                    cvm: codeEditorVM,
+                    showFileTree: $paneVM.showLeftPane,
                     readOnly: assessmentVM.readOnly
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
                 Group {
-                    rightGrip
-                        .edgesIgnoringSafeArea(.bottom)
+                    RightGripView(paneVM: paneVM)
+                    
                     correctionWithPlaceholder
-                        .frame(width: dragWidthRight)
+                        .frame(width: paneVM.dragWidthRight)
                 }
-                .animation(.default, value: showCorrectionSidebar)
+                .animation(.default, value: paneVM.showRightPane)
             }
-            .animation(.default, value: showFileTree)
+            .animation(.default, value: paneVM.showLeftPane)
             
-            Button {
-                showFileTree.toggle()
-                filetreeAsPlaceholder = false
-                if dragWidthLeft < minLeftSnapWidth {
-                    dragWidthLeft = minLeftSnapWidth
-                } else if dragWidthLeft > 0.4 * UIScreen.main.bounds.size.width {
-                    dragWidthLeft = 0.4 * UIScreen.main.bounds.size.width
-                }
-            } label: {
-                Image(systemName: "sidebar.left")
-                    .font(.system(size: 23))
-            }
+            ToolbarFileTreeToggleButton(paneVM: paneVM)
             .padding(.top, 4)
             .padding(.leading, 13)
         }
         .onAppear {
-            assessmentResult.maxPoints = exercise.maxPoints ?? 100
+            assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
         }
         .onDisappear {
-            assessmentVM.assessmentResult.undoManager.removeAllActions()
+            UndoManager.shared.removeAllActions()
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(Color("customPrimary"), for: .navigationBar)
+        .toolbarBackground(Color.themisPrimary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                if assessmentVM.readOnly {
-                    Button {
-                        Task {
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("Cancel")
-                        }
-                    }
-                    .foregroundColor(.white)
-                } else {
-                    Button {
-                        Task {
-                            showCancelDialog.toggle()
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("Cancel")
-                        }
-                        .foregroundColor(.white)
-                    }
-                    .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
-                        Button("Save") {
-                            Task {
-                                if let pId = assessmentVM.submission?.participation.id {
-                                    await assessmentVM.sendAssessment(participationId: pId, submit: false)
-                                }
-                                presentationMode.wrappedValue.dismiss()
-                            }
-                        }
-                        Button("Delete", role: .destructive) {
-                            Task {
-                                if let id = assessmentVM.submission?.id {
-                                    await assessmentVM.cancelAssessment(submissionId: id)
-                                }
-                                presentationMode.wrappedValue.dismiss()
-                            }
-                        }
-                    } message: {
-                        Text("""
-                             Either discard the assessment \
-                             and release the lock (recommended) \
-                             or keep the lock and save the assessment without submitting it.
-                             """)
-                    }
-                }
+                ToolbarCancelButton(assessmentVM: assessmentVM, presentationMode: presentationMode)
             }
+            
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack(alignment: .center) {
-                    Text(exercise.title ?? "")
-                        .bold()
-                        .font(.title)
-                    Image(systemName: assessmentVM.readOnly ? "eyeglasses" : "pencil.and.outline")
-                        .font(.title3)
-                }
-                .foregroundColor(.white)
+                AssessmentModeSymbol(exerciseTitle: exercise.baseExercise.title, readOnly: assessmentVM.readOnly)
             }
-
+            
             if assessmentVM.loading {
                 ToolbarItem(placement: .navigationBarLeading) {
                     ProgressView()
@@ -152,83 +82,41 @@ struct AssessmentView: View {
 
             if !assessmentVM.readOnly {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        withAnimation(.easeInOut) {
-                            assessmentVM.assessmentResult.undo()
-                        }
-                    } label: {
-                        let undoIconColor: Color = !assessmentVM.assessmentResult.canUndo() ? .gray : .white
-                        Image(systemName: "arrow.uturn.backward")
-                            .foregroundStyle(undoIconColor)
-                    }
-                    .disabled(!assessmentVM.assessmentResult.canUndo())
+                    ToolbarUndoButton(assessmentResult: assessmentResult)
                 }
+                
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        withAnimation(.easeInOut) {
-                            assessmentVM.assessmentResult.redo()
-                        }
-                    } label: {
-                        let redoIconColor: Color = !assessmentVM.assessmentResult.canRedo() ? .gray : .white
-                        Image(systemName: "arrow.uturn.forward")
-                            .foregroundStyle(redoIconColor)
-                    }
-                    .disabled(!assessmentVM.assessmentResult.canRedo())
+                    ToolbarRedoButton(assessmentResult: assessmentResult)
                 }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        cvm.pencilMode.toggle()
-                    } label: {
-                        let iconDrawingColor: Color = cvm.pencilMode ? .gray : .yellow
-                        Image(systemName: "hand.draw")
-                            .symbolRenderingMode(.palette)
-                            .foregroundColor(iconDrawingColor)
-                    }
+                    ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilMode, iconImageSystemName: "hand.draw", inverted: true)
                 }
             }
-
+            
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showStepper.toggle()
-                } label: {
-                    let iconColor: Color = showStepper ? .yellow : .gray
-                    Image(systemName: "textformat.size")
-                        .foregroundColor(iconColor)
-                }
-                .popover(isPresented: $showStepper) {
-                    EditorFontSizeStepperView(fontSize: $cvm.editorFontSize)
-                }
+                ToolbarToggleButton(toggleVariable: $showStepper, iconImageSystemName: "textformat.size")
+                    .popover(isPresented: $showStepper) {
+                        EditorFontSizeStepperView(fontSize: $codeEditorVM.editorFontSize)
+                    }
             }
+            
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-                CustomProgressView(
-                    progress: assessmentVM.assessmentResult.score,
-                    max: assessmentVM.submission?.participation.exercise.maxPoints ?? 0
-                )
-                pointsDisplay
+                CustomProgressView(progress: assessmentVM.assessmentResult.score,
+                                   max: assessmentVM.assessmentResult.maxPoints)
+                
+                ToolbarPointsLabel(assessmentResult: assessmentResult, submission: assessmentVM.submission)
             }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    Task {
-                        if let pId = assessmentVM.submission?.participation.id {
-                            await assessmentVM.sendAssessment(participationId: pId, submit: false)
-                        }
-                    }
-                } label: {
-                    Text("Save")
-                        .foregroundColor(.white)
-                }
-                .buttonStyle(NavigationBarButton())
-                .disabled(assessmentVM.readOnly || assessmentVM.loading)
+                ToolbarSaveButton(assessmentVM: assessmentVM)
+                    .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showSubmitConfirmation.toggle()
-                } label: {
-                    Text("Submit")
-                        .foregroundColor(.white)
-                }
-                .buttonStyle(NavigationBarButton())
-                .disabled(assessmentVM.readOnly || assessmentVM.loading)
+                ToolbarToggleButton(toggleVariable: $showSubmitConfirmation, text: "Submit")
+                    .buttonStyle(ThemisButtonStyle(color: Color.themisGreen))
+                    .disabled(assessmentVM.readOnly || assessmentVM.loading)
             }
         }
         .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
@@ -239,10 +127,8 @@ struct AssessmentView: View {
         .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
             Button("Yes") {
                 Task {
-                    if let pId = assessmentVM.submission?.participation.id {
-                        await assessmentVM.sendAssessment(participationId: pId, submit: true)
-                        await assessmentVM.notifyThemisML(participationId: pId, exerciseId: exercise.id)
-                    }
+                    await assessmentVM.sendAssessment(submit: true)
+                    await assessmentVM.notifyThemisML(exerciseId: exercise.baseExercise.id)
                     showNavigationOptions.toggle()
                 }
             }
@@ -251,7 +137,7 @@ struct AssessmentView: View {
         .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
             Button("Next Submission") {
                 Task {
-                    await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
+                    await assessmentVM.initRandomSubmission(exerciseId: exercise.baseExercise.id)
                     if assessmentVM.submission == nil {
                         showNoSubmissionsAlert = true
                     }
@@ -261,28 +147,27 @@ struct AssessmentView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
-        .sheet(isPresented: $cvm.showAddFeedback, onDismiss: {
-            cvm.selectedFeedbackSuggestionId = ""
+        .sheet(isPresented: $codeEditorVM.showAddFeedback, onDismiss: {
+            codeEditorVM.selectedFeedbackSuggestionId = ""
         }, content: {
             AddFeedbackView(
                 assessmentResult: assessmentVM.assessmentResult,
-                cvm: cvm,
-                type: .inline,
-                showSheet: $cvm.showAddFeedback,
-                file: cvm.selectedFile,
-                gradingCriteria: assessmentVM.submission?.participation.exercise.gradingCriteria ?? [],
-                feedbackSuggestion: cvm.feedbackSuggestions.first { $0.id.uuidString == cvm.selectedFeedbackSuggestionId }
+                codeEditorVM: codeEditorVM,
+                scope: .inline,
+                showSheet: $codeEditorVM.showAddFeedback,
+                gradingCriteria: assessmentVM.gradingCriteria,
+                feedbackSuggestion: codeEditorVM.selectedFeedbackSuggestion
             )
         })
-        .sheet(isPresented: $cvm.showEditFeedback) {
-            if let feedback = assessmentVM.assessmentResult.feedbacks.first(where: { $0.id.uuidString == cvm.feedbackForSelectionId }) {
+        .sheet(isPresented: $codeEditorVM.showEditFeedback) {
+            if let feedback = assessmentVM.getFeedback(byId: codeEditorVM.feedbackForSelectionId) {
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
-                    cvm: cvm,
-                    type: .inline,
-                    showSheet: $cvm.showEditFeedback,
+                    cvm: codeEditorVM,
+                    scope: .inline,
+                    showSheet: $codeEditorVM.showEditFeedback,
                     idForUpdate: feedback.id,
-                    gradingCriteria: assessmentVM.submission?.participation.exercise.gradingCriteria ?? []
+                    gradingCriteria: assessmentVM.gradingCriteria
                 )
             }
         }
@@ -290,178 +175,38 @@ struct AssessmentView: View {
             if let submissionId, assessmentVM.submission == nil {
                 await assessmentVM.getSubmission(id: submissionId)
             }
-            if let pId = assessmentVM.submission?.participation.id {
-                await cvm.initFileTree(participationId: pId)
-                await cvm.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
-                await cvm.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.id)
+            if let pId = assessmentVM.participation?.id {
+                await codeEditorVM.initFileTree(participationId: pId)
+                await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
+                await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
             }
         }
-        .errorAlert(error: $cvm.error)
+        .errorAlert(error: $codeEditorVM.error)
         .errorAlert(error: $assessmentVM.error)
     }
     
     var filetreeWithPlaceholder: some View {
         VStack {
-            if filetreeAsPlaceholder {
+            if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(
-                    participationID: assessmentVM.submission?.participation.id,
-                    cvm: cvm,
-                    loading: assessmentVM.loading,
-                    templateParticipationId: exercise.templateParticipation?.id
-                )
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
             }
         }
     }
     
-    var leftGrip: some View {
-        ZStack {
-            Color("customPrimary")
-                .frame(maxWidth: 7, maxHeight: .infinity)
-            
-            Rectangle()
-                .opacity(0)
-                .frame(width: 20, height: 50)
-                .contentShape(Rectangle())
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            let maxLeftWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
-                            let delta = gesture.translation.width
-                            dragWidthLeft += delta
-                            if dragWidthLeft > maxLeftWidth {
-                                dragWidthLeft = maxLeftWidth
-                            } else if dragWidthLeft < 0 {
-                                dragWidthLeft = 0
-                            }
-                            
-                            filetreeAsPlaceholder = dragWidthLeft < minLeftSnapWidth ? true : false
-                        }
-                        .onEnded {_ in
-                            if dragWidthLeft < minLeftSnapWidth {
-                                dragWidthLeft = 0.2 * UIScreen.main.bounds.size.width
-                                showFileTree = false
-                                filetreeAsPlaceholder = false
-                            }
-                        }
-                )
-            Image(systemName: "minus")
-                .resizable()
-                .frame(width: 50, height: 3)
-                .foregroundColor(.gray)
-                .rotationEffect(.degrees(90))
-        }
-        .frame(width: 7)
-    }
-    var rightLabel: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color("customPrimary"))
-                .frame(width: 70, height: 120)
-            VStack {
-                Image(systemName: "chevron.up")
-                Text("Correction")
-                Spacer()
-            }
-            .foregroundColor(.white)
-            .frame(width: 120, height: 70)
-            .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
-            .rotationEffect(.degrees(270))
-        }
-    }
-    var rightGrip: some View {
-        ZStack {
-            Rectangle()
-                .opacity(0)
-                .frame(width: dragWidthRight > 0 ? 20 : 70, height: dragWidthRight > 0 ? 50 : 120)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    if dragWidthRight <= 0 {
-                        withAnimation {
-                            showCorrectionSidebar = true
-                            dragWidthRight = 250
-                            correctionAsPlaceholder = false
-                        }
-                    }
-                }
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            let maxRightWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
-                            let delta = gesture.translation.width
-                            dragWidthRight -= delta
-                            if dragWidthRight > maxRightWidth {
-                                dragWidthRight = maxRightWidth
-                            } else if dragWidthRight < 0 {
-                                dragWidthRight = 0
-                            }
-                            
-                            correctionAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
-                        }
-                        .onEnded {_ in
-                            if dragWidthRight < minRightSnapWidth {
-                                showCorrectionSidebar = false
-                                dragWidthRight = 0
-                            } else {
-                                showCorrectionSidebar = true
-                            }
-                        }
-                )
-                .zIndex(1)
-            
-            if dragWidthRight > 0 {
-                Color("customPrimary")
-                    .frame(maxWidth: 7, maxHeight: .infinity)
-                Image(systemName: "minus")
-                    .resizable()
-                    .frame(width: 50, height: 3)
-                    .foregroundColor(.gray)
-                    .rotationEffect(.degrees(90))
-            } else {
-                rightLabel
-            }
-        }
-        .frame(width: 7)
-    }
-    
-    var correctionWithPlaceholder: some View {
+    private var correctionWithPlaceholder: some View {
         VStack {
-            if correctionAsPlaceholder {
+            if paneVM.rightPaneAsPlaceholder {
                 EmptyView()
             } else {
                 CorrectionSidebarView(
                     assessmentResult: $assessmentVM.assessmentResult,
-                    exercise: assessmentVM.submission?.participation.exercise,
-                    readOnly: assessmentVM.readOnly,
-                    cvm: cvm,
-                    loading: assessmentVM.loading,
-                    participationId: assessmentVM.submission?.participation.id,
-                    templateParticipationId: assessmentVM.submission?.participation.exercise.templateParticipation?.id,
+                    assessmentVM: assessmentVM,
+                    cvm: codeEditorVM,
                     courseId: courseVM.shownCourseID ?? -1
                 )
             }
         }
-    }
-    
-    var pointsDisplay: some View {
-        Group {
-            if let submission = assessmentVM.submission {
-                if submission.buildFailed {
-                    Text("Build failed")
-                        .foregroundColor(.red)
-                } else {
-                    Text("""
-                         \(Double(round(10 * assessmentVM.assessmentResult.points) / 10)
-                         .formatted(FloatingPointFormatStyle()))/\
-                         \(submission.participation.exercise.maxPoints
-                         .formatted(FloatingPointFormatStyle()))
-                         """)
-                    .foregroundColor(.white)
-                }
-            }
-        }
-        .fontWeight(.semibold)
-        .background(Color("customPrimary"))
     }
 }
