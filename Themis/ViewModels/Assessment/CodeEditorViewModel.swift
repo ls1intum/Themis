@@ -94,13 +94,12 @@ class CodeEditorViewModel: ObservableObject {
         file.path == selectedFile?.path
     }
     
+    @MainActor
     func initFileTree(participationId: Int) async {
         do {
             let files = try await ArtemisAPI.getFileNamesOfRepository(participationId: participationId)
             let node = ArtemisAPI.initFileTreeStructure(files: files)
-            DispatchQueue.main.async {
-                self.fileTree = node.children ?? []
-            }
+            self.fileTree = node.children ?? []
         } catch {
             self.error = error
             log.error(String(describing: error))

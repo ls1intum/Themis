@@ -42,7 +42,7 @@ class AssessmentViewModel: ObservableObject {
         } catch {
             self.submission = nil
             self.error = error
-            log.error(String(describing: error))
+            log.info(String(describing: error))
         }
     }
 
