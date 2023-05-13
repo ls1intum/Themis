@@ -84,6 +84,7 @@ class CodeEditorViewModel: ObservableObject {
         selectedFile = file
     }
     
+    @MainActor
     func closeFile(file: Node) {
         openFiles = openFiles.filter({ $0.path != file.path })
         selectedFile = openFiles.first
