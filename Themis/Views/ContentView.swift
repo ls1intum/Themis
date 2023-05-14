@@ -6,29 +6,26 @@
 //
 
 import SwiftUI
+import Login
+import UserStore
 
 struct ContentView: View {
-    @StateObject var authenticationVM = AuthenticationViewModel()
+    @StateObject private var rootVM = RootViewModel()
     
     var body: some View {
         VStack {
-            if authenticationVM.authenticated {
-                CourseView(authenticationVM: authenticationVM)
+            if rootVM.isLoggedIn {
+                CourseView()
             } else {
-                AuthenticationView(authenticationVM: authenticationVM)
-            }
-        }
-        .onAppear {
-            if Authentication.shared.isBearerTokenAuthNeeded() {
-                authenticationVM.searchForToken()
+                AuthenticationView()
             }
         }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(authenticationVM: PreviewAuthenticationViewModel())
+        ContentView()
             .previewInterfaceOrientation(.landscapeLeft)
     }
-}
+ }
