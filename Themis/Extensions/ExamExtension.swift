@@ -24,12 +24,12 @@ extension Exam {
 
 extension ArtemisAPI {
     static func getExams(courseID: Int) async throws -> [Exam] {
-        let request = Request(method: .get, path: "/api/courses/\(courseID)/exams")
+        let request = Request(method: .get, path: "api/courses/\(courseID)/exams")
         return try await sendRequest([Exam].self, request: request)
     }
     
     static func getExamForAssessment(courseID: Int, examID: Int) async throws -> Exam {
-        let request = Request(method: .get, path: "/api/courses/\(courseID)/exams/\(examID)/exam-for-assessment-dashboard")
+        let request = Request(method: .get, path: "api/courses/\(courseID)/exams/\(examID)/exam-for-assessment-dashboard")
         return try await sendRequest(Exam.self, request: request)
     }
 }

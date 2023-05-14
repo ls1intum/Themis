@@ -119,7 +119,7 @@ class Authentication: NSObject {
     /// If the rememberMe flag is set the token will be valid for 30 Days (if not 30 minutes)
     func auth(username: String, password: String, rememberMe: Bool = false) async throws {
         let body = AuthBody(username: username, password: password, rememberMe: rememberMe)
-        let request = Request(method: .post, path: "/api/authenticate", body: body)
+        let request = Request(method: .post, path: "api/authenticate", body: body)
         if self.isBearerTokenAuthNeeded() {
             self.token = try await RESTController.shared.sendRequest(request) { try parseAuth(data: $0) }
         } else {
@@ -129,7 +129,7 @@ class Authentication: NSObject {
     }
 
     func logOut() async throws {
-        let request = Request(method: .post, path: "/api/logout")
+        let request = Request(method: .post, path: "api/logout")
         try await RESTController.shared.sendRequest(request)
         checkAuth()
     }

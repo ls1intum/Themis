@@ -58,7 +58,7 @@ class CourseViewModel: ObservableObject {
         }
         do {
             self.courses = try await ArtemisAPI.getAllCourses()
-            if shownCourseID == nil {
+            if !self.courses.contains(where: { $0.id == shownCourseID }) {
                 shownCourseID = self.courses.first?.id
             }
         } catch let error {
