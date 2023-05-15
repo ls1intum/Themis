@@ -6,26 +6,31 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ToolbarUndoButton: View {
-    var assessmentResult: AssessmentResult
+    private var cancellables: Set<AnyCancellable> = Set()
+
+    init() {
+        UndoManager.shared.publisher(for: \.canUndo).sink { _ in }.store(in: &cancellables)
+    }
     
     var body: some View {
         Button {
             withAnimation(.easeInOut) {
-                assessmentResult.undo()
+                UndoManager.shared.undo()
             }
         } label: {
-            let undoIconColor: Color = assessmentResult.canUndo() ? .white : .gray
+            let undoIconColor: Color = UndoManager.shared.canUndo ? .white : .gray
             Image(systemName: "arrow.uturn.backward")
                 .foregroundStyle(undoIconColor)
         }
-        .disabled(!assessmentResult.canUndo())
+        .disabled(!UndoManager.shared.canUndo)
     }
 }
 
 struct UndoManagerButtons_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarUndoButton(assessmentResult: AssessmentResult())
+        ToolbarUndoButton()
     }
 }
