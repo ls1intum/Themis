@@ -53,6 +53,7 @@ struct AuthenticationView: View {
         Image("AppIconVectorTransparent")
             .resizable()
             .frame(maxWidth: 300, maxHeight: 300)
+            .scaledToFit()
     }
     
     private var welcomeText: some View {
