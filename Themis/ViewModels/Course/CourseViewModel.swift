@@ -8,6 +8,7 @@
 import Common
 import SwiftUI
 import SharedModels
+import SharedServices
 
 class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
@@ -16,19 +17,13 @@ class CourseViewModel: ObservableObject {
     @Published var error: Error?
     
     private static var shownCourseIDKey = "shownCourseID"
+    
     @Published var shownCourseID: Int? {
         didSet {
             guard let shownCourseID else {
                 return
             }
             UserDefaults.standard.set(shownCourseID, forKey: Self.shownCourseIDKey)
-        }
-    }
-    
-    init() {
-        // only way to check for non-existence:
-        if UserDefaults.standard.object(forKey: Self.shownCourseIDKey) != nil {
-            self.shownCourseID = UserDefaults.standard.integer(forKey: Self.shownCourseIDKey)
         }
     }
     
@@ -46,6 +41,13 @@ class CourseViewModel: ObservableObject {
             return courses.map(\.id)
         }
     }
+    
+    init() {
+        // only way to check for non-existence:
+        if UserDefaults.standard.object(forKey: Self.shownCourseIDKey) != nil {
+            self.shownCourseID = UserDefaults.standard.integer(forKey: Self.shownCourseIDKey)
+        }
+    }
 
     @MainActor
     func fetchAllCourses() async {
@@ -56,14 +58,18 @@ class CourseViewModel: ObservableObject {
         defer {
             loading = false
         }
-        do {
-            self.courses = try await ArtemisAPI.getAllCourses()
-            if !self.courses.contains(where: { $0.id == shownCourseID }) {
-                shownCourseID = self.courses.first?.id
-            }
-        } catch let error {
+        
+        let coursesForDashboard = await CourseServiceFactory.shared.getCourses()
+        courses = coursesForDashboard.value?.map({ $0.course }) ?? []
+        
+        if case .failure(let error) = coursesForDashboard {
             self.error = error
             log.error(String(describing: error))
+        }
+        
+        if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
+            // can't use .first here due to double wrapped optional
+            shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
         }
     }
 
