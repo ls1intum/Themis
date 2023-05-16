@@ -15,7 +15,7 @@ class ExamServiceImpl: ExamService {
     let client = APIClient()
     
     // MARK: - Get Exam For Assessment
-    struct GetExamForAssessmentRequest: APIRequest {
+    private struct GetExamForAssessmentRequest: APIRequest {
         typealias Response = Exam
         
         var courseId: Int

@@ -15,7 +15,7 @@ class AssessmentServiceImpl: AssessmentService {
     let client = APIClient()
     
     // MARK: - Cancel Assessment
-    struct CancelAssessmentRequest: APIRequest {
+    private struct CancelAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
         var submissionId: Int
@@ -34,7 +34,7 @@ class AssessmentServiceImpl: AssessmentService {
     }
     
     // MARK: - Save Assessment
-    struct SaveAssessmentRequest: APIRequest {
+    private struct SaveAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
         var participationId: Int
