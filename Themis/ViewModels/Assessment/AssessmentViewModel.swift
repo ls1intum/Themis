@@ -81,7 +81,7 @@ class AssessmentViewModel: ObservableObject {
             loading = false
         }
         do {
-            try await ArtemisAPI.cancelAssessment(submissionId: submissionId)
+            try await AssessmentServiceFactory.shared.cancelAssessment(submissionId: submissionId)
         } catch {
             if error as? RESTError != RESTError.empty {
                 self.error = error
@@ -104,7 +104,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         do {
-            try await ArtemisAPI.saveAssessment(
+            try await AssessmentServiceFactory.shared.saveAssessment(
                 participationId: participationId,
                 newAssessment: assessmentResult,
                 submit: submit

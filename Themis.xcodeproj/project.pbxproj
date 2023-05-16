@@ -45,6 +45,8 @@
 		65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */; };
 		65E6A0F82A13C3EC0058E5D6 /* ExamService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0F72A13C3EC0058E5D6 /* ExamService.swift */; };
 		65E6A0FA2A13C5C90058E5D6 /* ExamServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */; };
+		65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */; };
+		65E6A0FF2A13D1630058E5D6 /* AssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -165,6 +167,8 @@
 		65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionExtension.swift; sourceTree = "<group>"; };
 		65E6A0F72A13C3EC0058E5D6 /* ExamService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamService.swift; sourceTree = "<group>"; };
 		65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamServiceImpl.swift; sourceTree = "<group>"; };
+		65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentService.swift; sourceTree = "<group>"; };
+		65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentServiceImpl.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -428,6 +432,7 @@
 		65E6A0F52A13C3D60058E5D6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				65E6A0FB2A13D1210058E5D6 /* Assessment */,
 				65E6A0F62A13C3E20058E5D6 /* Exam */,
 			);
 			path = Services;
@@ -440,6 +445,15 @@
 				65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */,
 			);
 			path = Exam;
+			sourceTree = "<group>";
+		};
+		65E6A0FB2A13D1210058E5D6 /* Assessment */ = {
+			isa = PBXGroup;
+			children = (
+				65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */,
+				65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */,
+			);
+			path = Assessment;
 			sourceTree = "<group>";
 		};
 		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
@@ -907,6 +921,7 @@
 				F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */,
 				65E6A0F82A13C3EC0058E5D6 /* ExamService.swift in Sources */,
 				E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */,
+				65E6A0FF2A13D1630058E5D6 /* AssessmentServiceImpl.swift in Sources */,
 				DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */,
 				DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */,
 				65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */,
@@ -954,6 +969,7 @@
 				65B49F402A07F29400C9A45F /* PaneViewModel.swift in Sources */,
 				65B49F3E2A07ED6100C9A45F /* ToolbarFileTreeToggleButton.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
+				65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */,
 				659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */,
