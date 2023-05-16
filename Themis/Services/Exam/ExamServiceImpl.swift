@@ -10,7 +10,7 @@ import SharedModels
 import APIClient
 import DesignLibrary
 
-public class ExamServiceImpl: ExamService {
+class ExamServiceImpl: ExamService {
     
     let client = APIClient()
     
@@ -30,7 +30,7 @@ public class ExamServiceImpl: ExamService {
         }
     }
     
-    public func getExamForAssessment(courseId: Int, examId: Int) async throws -> Exam {
+    func getExamForAssessment(courseId: Int, examId: Int) async throws -> Exam {
         try await client.sendRequest(GetExamForAssessmentRequest(courseId: courseId, examId: examId)).get().0
     }
 }

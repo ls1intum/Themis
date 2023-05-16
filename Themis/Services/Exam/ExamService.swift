@@ -9,12 +9,12 @@ import Foundation
 import SharedModels
 import Common
 
-public protocol ExamService {
-    
+protocol ExamService {
+    /// Fetch the exam for assessment
     func getExamForAssessment(courseId: Int, examId: Int) async throws -> Exam
 }
 
-public enum ExamServiceFactory {
+enum ExamServiceFactory {
     
-    public static let shared: ExamService = ExamServiceImpl()
+    static let shared: ExamService = ExamServiceImpl()
 }
