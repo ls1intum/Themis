@@ -60,11 +60,11 @@ struct FiletreeSidebarView: View {
     }
     
     private func openFile(_ file: Node) {
-        guard let participationId = assessmentVM.participation?.id,
-              let templateParticipationId = assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
-        else {
+        guard let participationId = assessmentVM.participation?.id else {
             return
         }
+        
+        let templateParticipationId = assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
         
         cvm.openFile(file: file,
                      participationId: participationId,
