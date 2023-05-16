@@ -119,7 +119,6 @@ struct ExerciseView: View {
     }
     
     private func fetchExerciseData() async {
-        exerciseVM.exercise = exercise
         exerciseVM.exam = exam
         
         await withTaskGroup(of: Void.self) { group in

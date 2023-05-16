@@ -8,9 +8,10 @@
 import Common
 import Foundation
 import SharedModels
+import SharedServices
 
 class ExerciseViewModel: ObservableObject {
-    @Published var exercise: Exercise?
+    @Published var exercise: DataState<Exercise> = .loading
     @Published var exam: Exam?
     @Published var exerciseStats: ExerciseStatsForAssessmentDashboard?
     @Published var exerciseStatsForDashboard: ExerciseStatistics?
@@ -18,9 +19,9 @@ class ExerciseViewModel: ObservableObject {
 
     @MainActor
     func fetchExercise(exerciseId: Int) async {
-        do {
-            self.exercise = try await ArtemisAPI.getExercise(exerciseId: exerciseId)
-        } catch {
+        exercise = await ExerciseServiceFactory.shared.getExerciseForAssessment(exerciseId: exerciseId)
+        
+        if case .failure(let error) = exercise {
             self.error = error
             log.error(String(describing: error))
         }
@@ -72,7 +73,7 @@ class ExerciseViewModel: ObservableObject {
     }
     
     var isAssessmentPossible: Bool {
-        exercise?.isSubmissionDueDateOver ?? false
+        (exercise.value?.isCurrentlyInAssessment ?? false)
         || exam?.isOver ?? false
     }
 }
