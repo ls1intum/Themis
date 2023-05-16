@@ -98,7 +98,7 @@ class CodeEditorViewModel: ObservableObject {
     @MainActor
     func initFileTree(participationId: Int) async {
         do {
-            let files = try await ArtemisAPI.getFileNamesOfRepository(participationId: participationId)
+            let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
             let node = ArtemisAPI.initFileTreeStructure(files: files)
             self.fileTree = node.children ?? []
         } catch {
