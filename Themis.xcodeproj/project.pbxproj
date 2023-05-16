@@ -47,6 +47,8 @@
 		65E6A0FA2A13C5C90058E5D6 /* ExamServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */; };
 		65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */; };
 		65E6A0FF2A13D1630058E5D6 /* AssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */; };
+		65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1012A13E7260058E5D6 /* SubmissionService.swift */; };
+		65E6A1042A13E72E0058E5D6 /* SubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -169,6 +171,8 @@
 		65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamServiceImpl.swift; sourceTree = "<group>"; };
 		65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentService.swift; sourceTree = "<group>"; };
 		65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentServiceImpl.swift; sourceTree = "<group>"; };
+		65E6A1012A13E7260058E5D6 /* SubmissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionService.swift; sourceTree = "<group>"; };
+		65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -432,6 +436,7 @@
 		65E6A0F52A13C3D60058E5D6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				65E6A1002A13E7170058E5D6 /* Submission */,
 				65E6A0FB2A13D1210058E5D6 /* Assessment */,
 				65E6A0F62A13C3E20058E5D6 /* Exam */,
 			);
@@ -454,6 +459,15 @@
 				65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */,
 			);
 			path = Assessment;
+			sourceTree = "<group>";
+		};
+		65E6A1002A13E7170058E5D6 /* Submission */ = {
+			isa = PBXGroup;
+			children = (
+				65E6A1012A13E7260058E5D6 /* SubmissionService.swift */,
+				65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */,
+			);
+			path = Submission;
 			sourceTree = "<group>";
 		};
 		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
@@ -953,6 +967,7 @@
 				65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
+				65E6A1042A13E72E0058E5D6 /* SubmissionServiceImpl.swift in Sources */,
 				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
 				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
 				E200F787297F10B300DE269D /* SourceCodeLanguage.swift in Sources */,
@@ -974,6 +989,7 @@
 				65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */,
 				659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
+				65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
