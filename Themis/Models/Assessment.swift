@@ -107,20 +107,4 @@ class AssessmentResult: Encodable, ObservableObject {
         }
         computedFeedbacks[index].file = file
     }
-    
-    func undo() {
-        undoManager.undo()
-    }
-    
-    func redo() {
-        undoManager.redo()
-    }
-    
-    func canUndo() -> Bool {
-        undoManager.canUndo
-    }
-    
-    func canRedo() -> Bool {
-        undoManager.canRedo
-    }
 }

@@ -6,26 +6,31 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ToolbarRedoButton: View {
-    var assessmentResult: AssessmentResult
+    private var cancellables: Set<AnyCancellable> = Set()
     
+    init() {
+        UndoManager.shared.publisher(for: \.canRedo).sink { _ in }.store(in: &cancellables)
+    }
+
     var body: some View {
         Button {
             withAnimation(.easeInOut) {
-                assessmentResult.redo()
+                UndoManager.shared.redo()
             }
         } label: {
-            let redoIconColor: Color = assessmentResult.canRedo() ? .white : .gray
+            let redoIconColor: Color = UndoManager.shared.canRedo ? .white : .gray
             Image(systemName: "arrow.uturn.forward")
                 .foregroundStyle(redoIconColor)
         }
-        .disabled(!assessmentResult.canRedo())
+        .disabled(!UndoManager.shared.canRedo)
     }
 }
 
 struct ToolbarRedoButton_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarRedoButton(assessmentResult: AssessmentResult())
+        ToolbarRedoButton()
     }
 }

@@ -88,11 +88,11 @@ struct AssessmentView: View {
 
             if !assessmentVM.readOnly {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    ToolbarUndoButton(assessmentResult: assessmentResult)
+                    ToolbarUndoButton()
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    ToolbarRedoButton(assessmentResult: assessmentResult)
+                    ToolbarRedoButton()
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
