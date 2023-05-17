@@ -15,30 +15,31 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    let exercise: (any BaseExercise)?
-    let readOnly: Bool
     @Binding var assessmentResult: AssessmentResult
+    @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
-    let loading: Bool
     
-
-    var problemStatement: String
-    var participationId: Int?
-    var templateParticipationId: Int?
-
+    private var exercise: (any BaseExercise)? {
+        assessmentVM.participation?.getExercise()
+    }
+    
+    private var templateParticipationId: Int? {
+        assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+    }
+    
     var body: some View {
         VStack {
             sideBarElementPicker
             
-            if !loading {
+            if !assessmentVM.loading {
                 switch correctionSidebarStatus {
                 case .problemStatement:
                     ScrollView {
                         ProblemStatementCellView(
-                            problemStatement: .constant(problemStatement), // TODO: remove unnecessary binding
-                            feedbacks: assessmentResult.feedbacks,
-                            umlVM: umlVM
+                            umlVM: umlVM,
+                            problemStatement: exercise?.problemStatement ?? "",
+                            feedbacks: assessmentResult.feedbacks
                         )
                     }
                 case .correctionGuidelines:
@@ -50,10 +51,10 @@ struct CorrectionSidebarView: View {
                     }
                 case .generalFeedback:
                     FeedbackListView(
-                        readOnly: readOnly,
+                        readOnly: assessmentVM.readOnly,
                         assessmentResult: assessmentResult,
-                        cvm: cvm,
-                        participationId: participationId,
+                        codeEditorVM: cvm,
+                        participationId: assessmentVM.participation?.id,
                         templateParticipationId: templateParticipationId,
                         gradingCriteria: exercise?.gradingCriteria ?? []
                     )
@@ -83,17 +84,15 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
-
+    @State static var assessmentVM = AssessmentViewModel(readOnly: false)
+    
     static var previews: some View {
         CorrectionSidebarView(
-            exercise: nil,
-            readOnly: false,
             assessmentResult: $assessmentResult,
+            assessmentVM: assessmentVM,
             cvm: cvm,
-            umlVM: umlVM,
-            loading: true,
-            problemStatement: "test"
+            umlVM: umlVM
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }
- }
+}

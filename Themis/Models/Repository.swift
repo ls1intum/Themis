@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 
 enum FileType: String, Codable {
     case folder = "FOLDER"
@@ -166,7 +167,7 @@ class Node: Hashable, ObservableObject {
             relativePath.remove(at: relativePath.startIndex)
             self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
     }
 
@@ -226,7 +227,7 @@ class Node: Hashable, ObservableObject {
         } catch RESTError.notFound {
             self.isNewFile = true
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
     }
     

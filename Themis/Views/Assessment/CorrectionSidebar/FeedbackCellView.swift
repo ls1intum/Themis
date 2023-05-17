@@ -13,7 +13,7 @@ struct FeedbackCellView: View {
 
     var readOnly: Bool
     var assessmentResult: AssessmentResult
-    @ObservedObject var cvm: CodeEditorViewModel
+    @ObservedObject var codeEditorVM: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
     var editingDisabled: Bool { readOnly }
@@ -56,9 +56,9 @@ struct FeedbackCellView: View {
                 }
                 if let file = feedback.file, let participationId = participationId, let templateParticipationId = templateParticipationId {
                     withAnimation {
-                        cvm.openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
+                        codeEditorVM.openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
                     }
-                    cvm.scrollUtils.range = cvm.inlineHighlights[file.path]?.first {
+                    codeEditorVM.scrollUtils.range = codeEditorVM.inlineHighlights[file.path]?.first {
                         $0.id == "\(feedback.id)"
                     }?.range
                 }
@@ -73,7 +73,7 @@ struct FeedbackCellView: View {
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
                 assessmentResult: assessmentResult,
-                cvm: cvm,
+                cvm: codeEditorVM,
                 scope: feedback.scope,
                 showSheet: $showEditFeedback,
                 idForUpdate: feedback.id,

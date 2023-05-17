@@ -9,14 +9,8 @@
 import Foundation
 import SharedModels
 
-/// class to share UndoManager between CodeEditorViewModel and AssessmentResult
-class UndoManagerSingleton {
-    static let shared = UndoManagerSingleton()
-    let undoManager = UndoManager()
-}
-
 class AssessmentResult: Encodable, ObservableObject {
-    let undoManager = UndoManagerSingleton.shared.undoManager
+    let undoManager = UndoManager.shared
     
     var maxPoints = 100.0
     
@@ -87,14 +81,14 @@ class AssessmentResult: Encodable, ObservableObject {
 
     func addFeedback(feedback: AssessmentFeedback) {
         if feedback.scope == .inline {
-            undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+            undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
         }
         computedFeedbacks.append(feedback)
     }
 
     func deleteFeedback(id: UUID) {
         if computedFeedbacks.contains(where: { $0.id == id && $0.scope == .inline }) {
-             undoManager.beginUndoGrouping() /// undo group with addInlineHighlight in CodeEditorViewModel
+             undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
          }
         computedFeedbacks.removeAll { $0.id == id }
     }
@@ -112,21 +106,5 @@ class AssessmentResult: Encodable, ObservableObject {
             return
         }
         computedFeedbacks[index].file = file
-    }
-    
-    func undo() {
-        undoManager.undo()
-    }
-    
-    func redo() {
-        undoManager.redo()
-    }
-    
-    func canUndo() -> Bool {
-        undoManager.canUndo
-    }
-    
-    func canRedo() -> Bool {
-        undoManager.canRedo
     }
 }

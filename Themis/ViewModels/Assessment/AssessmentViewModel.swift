@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 import SharedModels
+import Common
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: BaseSubmission?
@@ -22,6 +23,10 @@ class AssessmentViewModel: ObservableObject {
             .sink(receiveValue: { self.participation = $0?.participation?.baseParticipation })
             .store(in: &cancellables)
     }
+    
+    var gradingCriteria: [GradingCriterion] {
+        participation?.getExercise()?.gradingCriteria ?? []
+    }
 
     @MainActor
     func initRandomSubmission(exerciseId: Int) async {
@@ -33,10 +38,11 @@ class AssessmentViewModel: ObservableObject {
             self.submission = try await ArtemisAPI.getRandomSubmissionForAssessment(exerciseId: exerciseId)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
             self.showSubmission = true
-            UndoManagerSingleton.shared.undoManager.removeAllActions()
+            UndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
             self.error = error
+            log.info(String(describing: error))
         }
     }
 
@@ -55,16 +61,21 @@ class AssessmentViewModel: ObservableObject {
             } else {
                 self.submission = try await ArtemisAPI.getSubmissionForAssessment(submissionId: id)
                 assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-                UndoManagerSingleton.shared.undoManager.removeAllActions()
+                UndoManager.shared.removeAllActions()
             }
             self.showSubmission = true
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 
     @MainActor
-    func cancelAssessment(submissionId: Int) async {
+    func cancelAssessment() async {
+        guard let submissionId = submission?.id else {
+            return
+        }
+        
         loading = true
         defer {
             loading = false
@@ -74,6 +85,7 @@ class AssessmentViewModel: ObservableObject {
         } catch {
             if error as? RESTError != RESTError.empty {
                 self.error = error
+                log.error(String(describing: error))
             }
         }
         self.submission = nil
@@ -81,11 +93,16 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func sendAssessment(participationId: Int, submit: Bool) async {
+    func sendAssessment(submit: Bool) async {
+        guard let participationId = participation?.id else {
+            return
+        }
+        
         loading = true
         defer {
             loading = false
         }
+        
         do {
             try await ArtemisAPI.saveAssessment(
                 participationId: participationId,
@@ -94,14 +111,23 @@ class AssessmentViewModel: ObservableObject {
             )
         } catch {
             self.error = error
+            log.error(String(describing: error))
         }
     }
     
-    func notifyThemisML(participationId: Int, exerciseId: Int) async {
+    func notifyThemisML(exerciseId: Int) async {
+        guard let participationId = participation?.id else {
+            return
+        }
+        
         do {
             try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exerciseId, participationId: participationId)
         } catch {
-            print(error)
+            log.error(String(describing: error))
         }
+    }
+    
+    func getFeedback(byId id: String) -> AssessmentFeedback? {
+        assessmentResult.feedbacks.first(where: { "\($0.id)" == id })
     }
 }

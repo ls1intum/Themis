@@ -25,7 +25,8 @@ struct AuthenticationView: View {
                 .frame(width: 300, height: 300)
             
             Text("Welcome to Themis!")
-                .font(.title).bold()
+                .font(.title)
+                .bold()
                 .padding()
             
             Text("Please sign in with your Artemis account")

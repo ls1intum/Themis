@@ -5,6 +5,7 @@
 //  Created by Tom Rudnick on 12.11.22.
 //
 
+import Common
 import SwiftUI
 import SharedModels
 
@@ -62,6 +63,7 @@ class CourseViewModel: ObservableObject {
             }
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 

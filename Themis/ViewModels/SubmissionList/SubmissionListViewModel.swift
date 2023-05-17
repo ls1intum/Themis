@@ -5,6 +5,7 @@
 //  Created by Paul Schwind on 24.11.22.
 //
 
+import Common
 import Foundation
 import SharedModels
 
@@ -26,6 +27,7 @@ class SubmissionListViewModel: ObservableObject {
             self.submissions = try await ArtemisAPI.getTutorSubmissions(exerciseId: exerciseId)
         } catch let error {
             self.error = error
+            log.error(String(describing: error))
         }
     }
 }
