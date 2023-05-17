@@ -295,10 +295,9 @@ class Node: Hashable, ObservableObject {
     ]
 }
 
-extension ArtemisAPI {
-    
+// File tree
+extension Node {
     static func initFileTreeStructure(files: [String: FileType]) -> Node {
-
         let convertedStructure = files.sorted { $0.key < $1.key }
             .map {
                 guard let path = URL(string: $0.key) else {
@@ -308,16 +307,15 @@ extension ArtemisAPI {
             }
             .filter { $0.0 != [""] }
             .map { (path: Stack(storage: $0.0.reversed()), type: $0.1) }
-
+        
         let root = Node(type: .folder, name: "")
         parseFileTree(node: root, paths: convertedStructure)
-
         
         root.flatMap()
         return root
     }
-
-    static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)]) {
+    
+    private static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)]) {
         let root = paths.filter { $0.path.size() == 1 }.map { (name: $0.path.pop() ?? "", type: $0.type) }
         var notRoot = paths.filter { $0.path.size() > 0 }
         for elem in root {

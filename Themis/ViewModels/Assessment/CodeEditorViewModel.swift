@@ -99,7 +99,7 @@ class CodeEditorViewModel: ObservableObject {
     func initFileTree(participationId: Int) async {
         do {
             let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
-            let node = ArtemisAPI.initFileTreeStructure(files: files)
+            let node = Node.initFileTreeStructure(files: files)
             self.fileTree = node.children ?? []
         } catch {
             self.error = error
