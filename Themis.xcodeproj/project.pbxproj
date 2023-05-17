@@ -294,7 +294,6 @@
 		4065F854292E8729005DAEE8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				6564DC112A00F00D00CF2F89 /* Exercise */,
 				4065F857292E8A08005DAEE8 /* Appearance */,
 				E119ED9A2922DE4700626DEA /* Assessment.swift */,
 				E2192EDD291E687C0092CE58 /* Authentication.swift */,
@@ -381,13 +380,6 @@
 				65B49F482A0817DC00C9A45F /* ToolbarSaveButton.swift */,
 			);
 			path = Toolbar;
-			sourceTree = "<group>";
-		};
-		6564DC112A00F00D00CF2F89 /* Exercise */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Exercise;
 			sourceTree = "<group>";
 		};
 		6589205329EE7B8E005EE6FA /* Styles */ = {
