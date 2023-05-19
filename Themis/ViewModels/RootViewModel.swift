@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 import UserStore
-import Account
+import SharedServices
 
 @MainActor
 class RootViewModel: ObservableObject {
