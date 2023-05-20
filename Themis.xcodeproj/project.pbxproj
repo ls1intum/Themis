@@ -91,7 +91,6 @@
 		E2192ED7291E57810092CE58 /* RESTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED6291E57810092CE58 /* RESTError.swift */; };
 		E2192ED9291E57A40092CE58 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192ED8291E57A40092CE58 /* Request.swift */; };
 		E2192EDC291E59CC0092CE58 /* ArtemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */; };
-		E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EDD291E687C0092CE58 /* Authentication.swift */; };
 		E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2192EE0291E6F780092CE58 /* KeychainAccess */; };
 		E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */; };
 		E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */; };
@@ -214,7 +213,6 @@
 		E2192ED6291E57810092CE58 /* RESTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
 		E2192ED8291E57A40092CE58 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		E2192EDB291E59CC0092CE58 /* ArtemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ArtemisAPI.swift; path = Themis/API/ArtemisAPI.swift; sourceTree = SOURCE_ROOT; };
-		E2192EDD291E687C0092CE58 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Authentication.swift; path = Themis/Models/Authentication.swift; sourceTree = SOURCE_ROOT; };
 		E2192EE4291EBFFE0092CE58 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthenticationView.swift; path = Themis/Views/Authentication/AuthenticationView.swift; sourceTree = SOURCE_ROOT; };
 		E21AF044292B9D4C0096ACFC /* AssessmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssessmentViewModel.swift; path = Themis/ViewModels/Assessment/AssessmentViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E21AF047292B9D4C0096ACFC /* CodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CodeView.swift; path = Themis/Views/Assessment/CodeEditor/CodeView.swift; sourceTree = SOURCE_ROOT; };
@@ -288,7 +286,6 @@
 				6564DC112A00F00D00CF2F89 /* Exercise */,
 				4065F857292E8A08005DAEE8 /* Appearance */,
 				E119ED9A2922DE4700626DEA /* Assessment.swift */,
-				E2192EDD291E687C0092CE58 /* Authentication.swift */,
 				E119ED9E2922F48A00626DEA /* Repository.swift */,
 				E200F786297F10B300DE269D /* SourceCodeLanguage.swift */,
 				656EAF5F2A0256A6003CF2B4 /* AssessmentFeedback.swift */,
@@ -955,7 +952,6 @@
 				E168C727296DDB3D00A1D1D4 /* CustomProgressView.swift in Sources */,
 				6564DC132A00F02900CF2F89 /* ExerciseStatistics.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
-				E2192EDE291E687C0092CE58 /* Authentication.swift in Sources */,
 				65B49F382A07D5C000C9A45F /* ToolbarPointsLabel.swift in Sources */,
 				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
 				6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */,
