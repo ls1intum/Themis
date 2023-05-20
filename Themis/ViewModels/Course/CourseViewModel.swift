@@ -57,7 +57,7 @@ class CourseViewModel: ObservableObject {
             loading = false
         }
         do {
-            self.courses = try await ArtemisAPI.getAllCourses()
+            self.courses = try await ArtemisAPI.getAllCourses().filter({ $0.isAtLeastTutorInCourse })
             if !self.courses.contains(where: { $0.id == shownCourseID }) {
                 shownCourseID = self.courses.first?.id
             }
