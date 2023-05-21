@@ -13,7 +13,6 @@ import SharedServices
 class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
     @Published var loading = false
-    @Published var courses: [Course] = []
     @Published var viewOnlyExercises: [Exercise] = []
     @Published var assessableExercises: [Exercise] = []
     @Published var viewOnlyExams: [Exam] = []
@@ -45,6 +44,8 @@ class CourseViewModel: ObservableObject {
             return courses.map(\.id)
         }
     }
+    
+    private var courses: [Course] = []
     
     init() {
         // only way to check for non-existence:
