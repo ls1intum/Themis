@@ -53,6 +53,8 @@
 		65E6A1042A13E72E0058E5D6 /* SubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */; };
 		65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1062A1400E20058E5D6 /* RepositoryService.swift */; };
 		65E6A1092A1400EB0058E5D6 /* RepositoryServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */; };
+		65E797282A1A4B9400E17401 /* SectionTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E797272A1A4B9400E17401 /* SectionTitleModifier.swift */; };
+		65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E797292A1A4EF800E17401 /* ExamListItem.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -69,8 +71,8 @@
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
 		838E4AA6297DADF00057E6E6 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 838E4AA5297DADF00057E6E6 /* MarkdownUI */; };
 		A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */; };
-		A9752D792992AA8B004441D1 /* ExamListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D782992AA8B004441D1 /* ExamListView.swift */; };
-		A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */; };
+		A9752D792992AA8B004441D1 /* ExamSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D782992AA8B004441D1 /* ExamSection.swift */; };
+		A9752D7B2992AAEB004441D1 /* ExamSectionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D7A2992AAEB004441D1 /* ExamSectionDetailView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
 		DA1DC19C2952320E0005219D /* UMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC19B2952320E0005219D /* UMLView.swift */; };
 		DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */; };
@@ -113,7 +115,7 @@
 		E2DC4821294626AD00DAF0CC /* DrawingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */; };
 		E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3852929437F9100F5854D /* CodeEditor */; };
 		E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E460DC29292ECF00ECC0A5 /* Stack.swift */; };
-		E2E6748829203E350081238B /* ExerciseSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExerciseSectionsView.swift */; };
+		E2E6748829203E350081238B /* ExerciseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6748729203E350081238B /* ExerciseSection.swift */; };
 		E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */ = {isa = PBXBuildFile; productRef = E536EAD0297458240078E077 /* SwiftUIReorderableForEach */; };
 		E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536EAD2298C00380078E077 /* DateTimelineView.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
@@ -180,6 +182,8 @@
 		65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65E6A1062A1400E20058E5D6 /* RepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryService.swift; sourceTree = "<group>"; };
 		65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryServiceImpl.swift; sourceTree = "<group>"; };
+		65E797272A1A4B9400E17401 /* SectionTitleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTitleModifier.swift; sourceTree = "<group>"; };
+		65E797292A1A4EF800E17401 /* ExamListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamListItem.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -199,8 +203,8 @@
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisAPI.swift; sourceTree = "<group>"; };
-		A9752D782992AA8B004441D1 /* ExamListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamListView.swift; sourceTree = "<group>"; };
-		A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSectionView.swift; sourceTree = "<group>"; };
+		A9752D782992AA8B004441D1 /* ExamSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSection.swift; sourceTree = "<group>"; };
+		A9752D7A2992AAEB004441D1 /* ExamSectionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSectionDetailView.swift; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
 		DA1DC19B2952320E0005219D /* UMLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLView.swift; sourceTree = "<group>"; };
 		DA249E9529301E72008DE1D5 /* SubmissionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListViewModel.swift; sourceTree = "<group>"; };
@@ -242,7 +246,7 @@
 		E2DC481E294626AD00DAF0CC /* DrawingEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingEngine.swift; sourceTree = "<group>"; };
 		E2E3852B2943800100F5854D /* CodeEditor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodeEditor; sourceTree = "<group>"; };
 		E2E460DC29292ECF00ECC0A5 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stack.swift; path = Themis/API/Stack.swift; sourceTree = SOURCE_ROOT; };
-		E2E6748729203E350081238B /* ExerciseSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExerciseSectionsView.swift; path = Themis/Views/Exercises/ExerciseSectionsView.swift; sourceTree = SOURCE_ROOT; };
+		E2E6748729203E350081238B /* ExerciseSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExerciseSection.swift; path = Themis/Views/Exercises/ExerciseSection.swift; sourceTree = SOURCE_ROOT; };
 		E536EAD2298C00380078E077 /* DateTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimelineView.swift; sourceTree = "<group>"; };
 		E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFeedbackViewBase.swift; sourceTree = "<group>"; };
 		F9224439297BFD1A008E4374 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
@@ -389,6 +393,7 @@
 		6589205329EE7B8E005EE6FA /* Styles */ = {
 			isa = PBXGroup;
 			children = (
+				65E797262A1A4B8100E17401 /* Modifiers */,
 				E168C722296DCCE100A1D1D4 /* ThemisButtonStyle.swift */,
 				6589205829EE7C29005EE6FA /* Authentication */,
 			);
@@ -477,6 +482,14 @@
 				65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */,
 			);
 			path = Repository;
+			sourceTree = "<group>";
+		};
+		65E797262A1A4B8100E17401 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				65E797272A1A4B9400E17401 /* SectionTitleModifier.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
@@ -581,8 +594,9 @@
 		A9752D772992AA66004441D1 /* Exams */ = {
 			isa = PBXGroup;
 			children = (
-				A9752D782992AA8B004441D1 /* ExamListView.swift */,
-				A9752D7A2992AAEB004441D1 /* ExamSectionView.swift */,
+				A9752D782992AA8B004441D1 /* ExamSection.swift */,
+				A9752D7A2992AAEB004441D1 /* ExamSectionDetailView.swift */,
+				65E797292A1A4EF800E17401 /* ExamListItem.swift */,
 			);
 			path = Exams;
 			sourceTree = "<group>";
@@ -756,7 +770,7 @@
 		E2E6748629203E280081238B /* Exercises */ = {
 			isa = PBXGroup;
 			children = (
-				E2E6748729203E350081238B /* ExerciseSectionsView.swift */,
+				E2E6748729203E350081238B /* ExerciseSection.swift */,
 				E2CAE6382935214E00FAD327 /* ExerciseView.swift */,
 				DAFFA3FC297F12A800EA72B8 /* ExerciseListItem.swift */,
 				651A44B72A1672DE00DBCD92 /* ExerciseGroups.swift */,
@@ -950,6 +964,7 @@
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
 				65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
+				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				656EAF602A0256A6003CF2B4 /* AssessmentFeedback.swift in Sources */,
@@ -957,7 +972,7 @@
 				E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */,
 				65B49F452A08064400C9A45F /* ToolbarUndoButton.swift in Sources */,
 				E2CAE6392935214E00FAD327 /* ExerciseView.swift in Sources */,
-				E2E6748829203E350081238B /* ExerciseSectionsView.swift in Sources */,
+				E2E6748829203E350081238B /* ExerciseSection.swift in Sources */,
 				E168C723296DCCE100A1D1D4 /* ThemisButtonStyle.swift in Sources */,
 				E2CAE63E29362B2800FAD327 /* AssessmentSubmissionLoaderView.swift in Sources */,
 				F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */,
@@ -978,6 +993,7 @@
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
 				65E6A1042A13E72E0058E5D6 /* SubmissionServiceImpl.swift in Sources */,
+				65E797282A1A4B9400E17401 /* SectionTitleModifier.swift in Sources */,
 				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
 				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
 				E200F787297F10B300DE269D /* SourceCodeLanguage.swift in Sources */,
@@ -1004,7 +1020,7 @@
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
-				A9752D792992AA8B004441D1 /* ExamListView.swift in Sources */,
+				A9752D792992AA8B004441D1 /* ExamSection.swift in Sources */,
 				DA249E9629301E72008DE1D5 /* SubmissionListViewModel.swift in Sources */,
 				8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */,
 				8384C4352922939A008CCB4D /* ProblemStatementCellViewModel.swift in Sources */,
@@ -1019,7 +1035,7 @@
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
-				A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */,
+				A9752D7B2992AAEB004441D1 /* ExamSectionDetailView.swift in Sources */,
 				DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */,
 				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
 				65153FA12A0FAD4A0020B6FE /* RootViewModel.swift in Sources */,

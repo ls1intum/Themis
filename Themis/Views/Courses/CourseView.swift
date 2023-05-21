@@ -20,14 +20,14 @@ struct CourseView: View {
                 } else {
                     ScrollView {
                         Group {
-                            ExerciseGroups(exercises: courseVM.assessableExercises, type: .inAssessment)
+                            ExerciseGroups(courseVM: courseVM, type: .inAssessment)
                                 .padding(.bottom)
-                            
-                            ExerciseGroups(exercises: courseVM.viewOnlyExercises, type: .viewOnly)
+                            ExerciseGroups(courseVM: courseVM, type: .viewOnly)
+                                .disabled(true) // TODO: remove once view-only mode is fully implemented
                         }
                         .padding(.horizontal, 40)
                         .padding(.vertical, 20)
-                    } // TODO: add exams somehow
+                    }
                     .refreshable {
                         await courseVM.fetchAllCourses()
                         await courseVM.fetchShownCourseAndSetExercises()
@@ -41,7 +41,7 @@ struct CourseView: View {
                     Picker("", selection: $courseVM.shownCourseID) {
                         ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
                             if let courseID {
-                                Text(courseVM.shownCourse?.title ?? "Invalid")
+                                Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
                             } else {
                                 Text("No course")
                             }

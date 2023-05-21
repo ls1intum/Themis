@@ -9,11 +9,19 @@ import SwiftUI
 import DesignLibrary
 import SharedModels
 
-/// Generates 2 ExerciseSections: one for exercises, another for exam exercises
+/// Generates 2 sections: one for exercises, another for exam exercises
 struct ExerciseGroups: View {
-    var exercises: [Exercise]
+    @ObservedObject var courseVM: CourseViewModel
     
     var type: ExerciseFormType
+    
+    var relevantExercises: [Exercise] {
+        type == .inAssessment ? courseVM.assessableExercises : courseVM.viewOnlyExercises
+    }
+    
+    var relevantExams: [Exam] {
+        type == .inAssessment ? courseVM.assessableExams : courseVM.viewOnlyExams
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -29,7 +37,8 @@ struct ExerciseGroups: View {
             .padding([.leading, .top])
             
             VStack {
-                ExerciseSections(exercises: exercises)
+                ExerciseSection(exercises: relevantExercises)
+                ExamSection(exams: relevantExams, courseID: courseVM.shownCourseID ?? -1)
             }
             .padding([.bottom, .horizontal], 20)
         }
@@ -51,11 +60,17 @@ enum ExerciseFormType {
 }
 
 struct ExerciseGroups_Previews: PreviewProvider {
+    static var courseVM = CourseViewModel()
+    
     static var previews: some View {
         ScrollView {
-            ExerciseGroups(exercises: Course.mock.exercises ?? [], type: .inAssessment)
+            ExerciseGroups(courseVM: courseVM, type: .inAssessment)
                 .padding(.bottom)
-            ExerciseGroups(exercises: Course.mock.exercises ?? [], type: .viewOnly)
+            ExerciseGroups(courseVM: courseVM, type: .viewOnly)
+        }
+        .onAppear {
+            courseVM.assessableExercises = Course.mock.exercises ?? []
+            courseVM.viewOnlyExercises = Course.mock.exercises ?? []
         }
         .previewInterfaceOrientation(.landscapeRight)
         .padding(40)

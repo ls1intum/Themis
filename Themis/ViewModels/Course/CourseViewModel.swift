@@ -16,6 +16,8 @@ class CourseViewModel: ObservableObject {
     @Published var courses: [Course] = []
     @Published var viewOnlyExercises: [Exercise] = []
     @Published var assessableExercises: [Exercise] = []
+    @Published var viewOnlyExams: [Exam] = []
+    @Published var assessableExams: [Exam] = []
     @Published var error: Error?
     
     private static var shownCourseIDKey = "shownCourseID"
@@ -73,6 +75,9 @@ class CourseViewModel: ObservableObject {
             // can't use .first here due to double wrapped optional
             shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
         }
+        
+        assessableExams = shownCourse?.exams?.filter({ !$0.isAssessmentDue }) ?? []
+        viewOnlyExams = shownCourse?.exams?.filter({ $0.isAssessmentDue }) ?? []
     }
     
     @MainActor
