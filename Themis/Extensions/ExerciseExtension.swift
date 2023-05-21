@@ -29,20 +29,6 @@ extension Exercise {
         return true
     }
     
-    var isSubmissionDueDateOver: Bool {
-        if let dueDate = self.baseExercise.dueDate {
-            return dueDate <= .now
-        }
-        return false
-    }
-    
-    var isFormer: Bool {
-        if let dueDate = self.baseExercise.assessmentDueDate, dueDate < Date.now {
-            return true
-        }
-        return false
-    }
-    
     var supportsAssessment: Bool {
         switch self {
         case .quiz(exercise: _), .unknown(exercise: _):
@@ -52,7 +38,6 @@ extension Exercise {
         }
     }
     
-    // TODO: check if some variables are unnecessary
     var isCurrentlyInAssessment: Bool {
         supportsAssessment && hasSomethingToAssess
     }
@@ -73,13 +58,5 @@ extension Exercise {
         baseExercise.numberOfAssessmentsOfCorrectionRounds?
             .contains(where: { $0.inTime != baseExercise.numberOfSubmissions?.inTime }) ?? false
         || baseExercise.totalNumberOfAssessments?.inTime != baseExercise.numberOfSubmissions?.inTime
-    }
-    
-    var isFuture: Bool {
-        // exercises without a release date are automatically published
-        if let releaseDate = self.baseExercise.releaseDate {
-            return Date.now < releaseDate
-        }
-        return false
     }
 }
