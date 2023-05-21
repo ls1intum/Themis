@@ -24,7 +24,7 @@ struct ExamListItem: View {
                 (name: dateProp.name, date: exam[keyPath: dateProp.dateKeyPath])
             })
         }
-        .padding(.leading, 10)
+        .padding(.horizontal, 10)
         .tint(.primary)
     }
 }

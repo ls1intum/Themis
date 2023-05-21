@@ -29,8 +29,8 @@ struct CourseView: View {
                         .padding(.vertical, 20)
                     }
                     .refreshable {
-                        await courseVM.fetchAllCourses()
-                        await courseVM.fetchShownCourseAndSetExercises()
+                        courseVM.fetchAllCourses()
+                        courseVM.fetchShownCourseAndSetExercises()
                     }
                 }
             }
@@ -47,15 +47,14 @@ struct CourseView: View {
                             }
                         }
                     }
-                    .onChange(of: courseVM.shownCourseID, perform: { _ in Task { await courseVM.fetchShownCourseAndSetExercises() } })
+                    .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
                 }
             }
         }
         .task {
-            await courseVM.fetchAllCourses()
-            await courseVM.fetchShownCourseAndSetExercises()
+            courseVM.fetchAllCourses()
+            courseVM.fetchShownCourseAndSetExercises()
         }
-//        .errorAlert(error: $courseVM.error)
     }
 
     var logoutButton: some View {

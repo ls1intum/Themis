@@ -44,6 +44,7 @@ struct ExerciseGroups: View {
         }
         .background(Color(UIColor.tertiarySystemGroupedBackground))
         .cornerRadius(12)
+        .isHidden(relevantExams.isEmpty && relevantExercises.isEmpty)
     }
 }
 
