@@ -59,13 +59,14 @@ class CourseViewModel: ObservableObject {
             loading = false
         }
         
-        let coursesForDashboard = await CourseServiceFactory.shared.getCourses()
-        courses = coursesForDashboard.value?.map({ $0.course }) ?? []
+        let coursesForDashboard = await CourseServiceFactory.shared.getCourses().filter({ $0.isAtLeastTutorInCourse })
         
         if case .failure(let error) = coursesForDashboard {
             self.error = error
             log.error(String(describing: error))
         }
+        
+        courses = coursesForDashboard.value?.map({ $0.course }) ?? []
         
         if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
             // can't use .first here due to double wrapped optional
