@@ -55,7 +55,7 @@ enum ArtemisDateHelpers {
         return dateFormatter.string(from: date)
     }
     
-    static func getRemainingOrOverdueTime(for date: Date?) -> String? {
+    static func getRemainingOrOverdueTime(for date: Date?) -> String {
         guard let date else {
             return "not available yet"
         }
