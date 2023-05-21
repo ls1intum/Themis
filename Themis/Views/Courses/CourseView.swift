@@ -18,18 +18,19 @@ struct CourseView: View {
                 if courseVM.loading {
                     ProgressView()
                 } else {
-                    Form {
-                        ExerciseSections(
-                            exercises: courseVM.shownCourse?.exercises ?? []
-                        )
-                        if let courseId = courseVM.shownCourse?.id, !(courseVM.shownCourse?.exams?.isEmpty ?? false) {
-                            Section("Exams") {
-                                ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseId)
-                            }
+                    ScrollView {
+                        Group {
+                            ExerciseGroups(exercises: courseVM.assessableExercises, type: .inAssessment)
+                                .padding(.bottom)
+                            
+                            ExerciseGroups(exercises: courseVM.viewOnlyExercises, type: .viewOnly)
                         }
-                    }
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 20)
+                    } // TODO: add exams somehow
                     .refreshable {
                         await courseVM.fetchAllCourses()
+                        await courseVM.fetchShownCourseAndSetExercises()
                     }
                 }
             }
@@ -40,17 +41,19 @@ struct CourseView: View {
                     Picker("", selection: $courseVM.shownCourseID) {
                         ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
                             if let courseID {
-                                Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
+                                Text(courseVM.shownCourse?.title ?? "Invalid")
                             } else {
                                 Text("No course")
                             }
                         }
                     }
+                    .onChange(of: courseVM.shownCourseID, perform: { _ in Task { await courseVM.fetchShownCourseAndSetExercises() } })
                 }
             }
         }
         .task {
             await courseVM.fetchAllCourses()
+            await courseVM.fetchShownCourseAndSetExercises()
         }
 //        .errorAlert(error: $courseVM.error)
     }

@@ -28,6 +28,7 @@ struct ExerciseListItem: View {
                 (name: dateProp.name, date: exercise[keyPath: dateProp.dateKeyPath])
             })
         }
-        .padding(.trailing)
+        .padding(.leading, 10)
+        .tint(.primary)
     }
 }

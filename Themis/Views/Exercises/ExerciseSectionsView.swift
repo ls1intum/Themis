@@ -23,35 +23,32 @@ struct ExerciseSections: View {
     var body: some View {
         Group {
             exerciseSection(
-                title: "Former Exercises",
+                title: "Exercises",
                 dateProperties: [
                     releaseDate,
                     dueDate,
                     assessmentDueDate
                 ],
-                predicate: { $0.isFormer }
+                predicate: { $0 == $0 }
             )
             
-            exerciseSection(
-                title: "Current Exercises",
-                dateProperties: [
-                    releaseDate,
-                    dueDate,
-                    assessmentDueDate
-                ],
-                predicate: { $0.isCurrentlyInAssessment }
-            )
-            
-            exerciseSection(
-                title: "Future Exercises",
-                dateProperties: [
-                    releaseDate,
-                    dueDate,
-                    assessmentDueDate
-                ],
-                predicate: { $0.isFuture }
-            )
+//            exerciseSection(
+//                title: "Exam Exercises",
+//                dateProperties: [
+//                    releaseDate,
+//                    dueDate,
+//                    assessmentDueDate
+//                ],
+//                predicate: { !$0.isCurrentlyInAssessment } // TODO:
+//            )
         }
+    }
+    
+    private var separator: some View {
+        Rectangle()
+            .foregroundColor(Color(UIColor.tertiarySystemGroupedBackground))
+            .frame(maxHeight: 1)
+            .padding(.leading, .xl)
     }
     
     private func exerciseSection(
@@ -67,19 +64,29 @@ struct ExerciseSections: View {
             if shownExercises.isEmpty {
                 EmptyView()
             } else {
-                Section(header: HStack {
-                    Text(title)
-                    Spacer()
-                }) {
+                Text(title)
+                    .textCase(.uppercase)
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(.secondary)
+                    .padding(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top)
+                
+                VStack {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
                             ExerciseView(exercise: exercise)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: dateProperties)
+                                .padding(.horizontal)
+                                .padding(.vertical, 12)
                         }
                         .disabled(exercise.isDisabled)
+                        
+                        separator
                     }
                 }
+                .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))
             }
         }
     }

@@ -14,6 +14,8 @@ class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
     @Published var loading = false
     @Published var courses: [Course] = []
+    @Published var viewOnlyExercises: [Exercise] = []
+    @Published var assessableExercises: [Exercise] = []
     @Published var error: Error?
     
     private static var shownCourseIDKey = "shownCourseID"
@@ -72,7 +74,28 @@ class CourseViewModel: ObservableObject {
             shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
         }
     }
-
+    
+    @MainActor
+    func fetchShownCourseAndSetExercises() async {
+        guard let shownCourseID else {
+            return
+        }
+        
+        loading = true
+        defer {
+            loading = false
+        }
+        
+        let courseForAssessment = await CourseServiceFactory.shared.getCourseForAssessment(courseId: shownCourseID)
+        
+        if case .failure(let error) = courseForAssessment {
+            log.error(String(describing: error))
+        }
+        
+        assessableExercises = (courseForAssessment.value?.exercises ?? []).filter({ $0.supportsAssessment })
+        viewOnlyExercises = Array(Set(shownCourse?.exercises ?? []).subtracting(Set(assessableExercises))).filter({ $0.supportsAssessment })
+    }
+    
     func courseForID(id: Int) -> Course? {
         courses.first { $0.id == id }
     }
