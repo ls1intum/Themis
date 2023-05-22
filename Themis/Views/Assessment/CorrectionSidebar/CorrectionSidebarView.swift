@@ -16,13 +16,12 @@ enum CorrectionSidebarElements {
 struct CorrectionSidebarView: View {
 
     @State private var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
-    @State private var problemStatementHeight: CGFloat = 1.0
-    @State private var problemStatementRequest: URLRequest
     
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
-        
+    private let courseId: Int
+    
     private var exercise: (any BaseExercise)? {
         assessmentVM.participation?.getExercise()
     }
@@ -38,11 +37,7 @@ struct CorrectionSidebarView: View {
         self._assessmentResult = assessmentResult
         self.assessmentVM = assessmentVM
         self.cvm = cvm
-        
-        let exercise = assessmentVM.participation?.getExercise()
-        self._problemStatementRequest = State(
-            wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise?.id ?? -1)/problem-statement", relativeTo: RESTController.shared.baseURL)!)
-        )
+        self.courseId = courseId
     }
     
     var body: some View {
@@ -53,8 +48,8 @@ struct CorrectionSidebarView: View {
                 switch correctionSidebarStatus {
                 case .problemStatement:
                     ScrollView {
-                        ArtemisWebView(urlRequest: $problemStatementRequest, contentHeight: $problemStatementHeight)
-                            .frame(height: problemStatementHeight)
+                        ProblemStatementView(courseId: courseId, exerciseId: exercise?.id ?? -1)
+                            .frame(maxHeight: .infinity)
                     }
                 case .correctionGuidelines:
                     ScrollView {

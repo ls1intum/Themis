@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import UIKit
 import DesignLibrary
 import SharedModels
-import DesignLibrary
+import UserStore
 
 struct ExerciseView: View {
     @EnvironmentObject var courseVM: CourseViewModel
@@ -18,17 +17,15 @@ struct ExerciseView: View {
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
     
-    @State private var problemStatementHeight: CGFloat = 1.0
-    @State private var problemStatementRequest: URLRequest
-    
-    let exercise: Exercise
+    private let exercise: Exercise
+    private let courseId: Int
     /// Only set if the exercise is a part of an exam
-    var exam: Exam?
+    private var exam: Exam?
     
     init(exercise: Exercise, courseId: Int, exam: Exam? = nil) {
         self.exercise = exercise
+        self.courseId = courseId
         self.exam = exam
-        self._problemStatementRequest = State(wrappedValue: URLRequest(url: URL(string: "/courses/\(courseId)/exercises/\(exercise.id)/problem-statement", relativeTo: RESTController.shared.baseURL)!))
     }
     
     var body: some View {
@@ -47,6 +44,8 @@ struct ExerciseView: View {
                         }
                         
                         statisticsSection
+                        
+                        problemStatementSection
                     }
                     .refreshable { await fetchExerciseData() }
                 }
@@ -110,10 +109,8 @@ struct ExerciseView: View {
     
     private var problemStatementSection: some View {
         Section("Problem Statement") {
-            ArtemisWebView(urlRequest: $problemStatementRequest,
-                           contentHeight: $problemStatementHeight)
-            .disabled(true)
-            .frame(height: problemStatementHeight)
+            ProblemStatementView(courseId: courseId, exerciseId: exercise.id)
+                .frame(maxHeight: .infinity)
         }
     }
     

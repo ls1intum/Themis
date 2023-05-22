@@ -22,20 +22,24 @@ import UserStore
 class PreviewAuthenticationViewModel: LoginViewModel {
     override init() {
         super.init()
+        UserSession.shared.wipeKeychain()
         
         guard let serverURL = stagingServer else {
             fatalError("Set the staging server in the environment to use PreviewAuthenticationViewModel.")
         }
         UserSession.shared.saveInstitution(identifier: .custom(URL(string: serverURL)))
+        self.instituiton = .custom(URL(string: serverURL))
         
         guard let username = stagingUser else {
             fatalError("Set the staging user in the environment to use PreviewAuthenticationViewModel.")
         }
+        UserSession.shared.saveUsername(username: username)
         self.username = username
         
         guard let password = stagingPassword else {
             fatalError("Set the staging password in the environment to use PreviewAuthenticationViewModel.")
         }
+        UserSession.shared.savePassword(password: password)
         self.password = password
         
         Task {
