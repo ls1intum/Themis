@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
+import Common
 
 struct LoginTextFieldStyle: TextFieldStyle {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var error: Error?
+    @Binding var error: UserFacingError?
     var validInput = true
-    var type: AuthTextFieldType
-
+    
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .disableAutocorrection(true)
@@ -22,7 +22,7 @@ struct LoginTextFieldStyle: TextFieldStyle {
             .background(validInput ? (colorScheme == .light ? Color.black.opacity(0.1) : Color(uiColor: UIColor.systemGray6)) : Color.red)
             .cornerRadius(10)
             .overlay {
-                if error != nil && type == .username {
+                if error != nil {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(.red.opacity(0.4), lineWidth: 2)
                 }

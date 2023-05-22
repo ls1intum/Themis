@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import UserStore
 
 class RESTController {
-    static var shared: RESTController!
+    static var shared = RESTController(baseURL: (UserSession.shared.institution?.baseURL ?? URL(string: "https://artemis-staging.ase.in.tum.de/")!))
 
     var baseURL: URL
 
@@ -58,7 +59,6 @@ class RESTController {
         case 400:
             throw RESTError.badRequest
         case 401:
-            Authentication.shared.authenticated = false
             throw RESTError.unauthorized
         case 403:
             guard let jsonDict = json as? [String: Any], let detail = jsonDict["detail"] as? String else { throw RESTError.forbidden }

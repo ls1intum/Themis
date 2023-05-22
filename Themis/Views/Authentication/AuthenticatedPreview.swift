@@ -5,8 +5,8 @@
 //  Created by Paul Schwind on 24.11.22.
 //
 
-
 import SwiftUI
+import UserStore
 
 /// Wrap your preview with this component if you need authentication.
 struct AuthenticatedPreview<Content: View>: View {
@@ -15,7 +15,7 @@ struct AuthenticatedPreview<Content: View>: View {
 
     @ViewBuilder
     var body: some View {
-        if authenticationVM.authenticated {
+        if UserSession.shared.isLoggedIn {
             contentBuilder()
         } else {
             Text("Authenticating...")

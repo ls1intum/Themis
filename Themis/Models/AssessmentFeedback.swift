@@ -69,22 +69,3 @@ extension AssessmentFeedback: Comparable {
         lhs.created < rhs.created
     }
 }
-
-
-extension ArtemisAPI {
-
-    /// delete all saved feedback and release the lock of the submission
-    static func cancelAssessment(submissionId: Int) async throws {
-        let request = Request(method: .put, path: "/api/programming-submissions/\(submissionId)/cancel-assessment")
-        _ = try await sendRequest(String.self, request: request)
-    }
-
-    /// save feedback to the submission
-    static func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
-        let request = Request(method: .put,
-                              path: "/api/participations/\(participationId)/manual-results",
-                              params: [URLQueryItem(name: "submit", value: String(submit))],
-                              body: newAssessment)
-        try await sendRequest(request: request)
-    }
-}

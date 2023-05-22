@@ -4,7 +4,6 @@
 //
 //  Created by Andreas Cselovszky on 14.11.22.
 //
-// swiftlint:disable discouraged_optional_boolean
 
 import Foundation
 import SharedModels
@@ -106,21 +105,5 @@ class AssessmentResult: Encodable, ObservableObject {
             return
         }
         computedFeedbacks[index].file = file
-    }
-    
-    func undo() {
-        undoManager.undo()
-    }
-    
-    func redo() {
-        undoManager.redo()
-    }
-    
-    func canUndo() -> Bool {
-        undoManager.canUndo
-    }
-    
-    func canRedo() -> Bool {
-        undoManager.canRedo
     }
 }

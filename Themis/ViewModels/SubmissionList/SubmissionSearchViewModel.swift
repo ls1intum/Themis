@@ -18,7 +18,7 @@ class SubmissionSearchViewModel: ObservableObject {
     @MainActor
     func fetchSubmissions(exerciseId: Int) async {
         do {
-            self.submissions = try await ArtemisAPI.getAllSubmissions(exerciseId: exerciseId)
+            self.submissions = try await SubmissionServiceFactory.shared.getAllSubmissions(exerciseId: exerciseId)
         } catch {
             self.error = error
             log.error(String(describing: error))

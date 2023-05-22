@@ -165,7 +165,7 @@ class Node: Hashable, ObservableObject {
         do {
             var relativePath = path
             relativePath.remove(at: relativePath.startIndex)
-            self.code = try await ArtemisAPI.getFileOfRepository(participationId: participationId, filePath: relativePath)
+            self.code = try await RepositoryServiceFactory.shared.getFileOfRepository(participationId: participationId, filePath: relativePath)
         } catch {
             log.error(String(describing: error))
         }
@@ -223,7 +223,8 @@ class Node: Hashable, ObservableObject {
         
         do {
             let relativePath = String(path.dropFirst())
-            self.templateCode = try await ArtemisAPI.getFileOfRepository(participationId: templateParticipationId, filePath: relativePath)
+            self.templateCode = try await RepositoryServiceFactory.shared.getFileOfRepository(participationId: templateParticipationId,
+                                                                                              filePath: relativePath)
         } catch RESTError.notFound {
             self.isNewFile = true
         } catch {
@@ -294,30 +295,9 @@ class Node: Hashable, ObservableObject {
     ]
 }
 
-extension ArtemisAPI {
-
-    /// Gets all file names from repository of submission with participationId.
-    static func getFileNamesOfRepository(participationId: Int) async throws -> [String: FileType] {
-        let request = Request(method: .get, path: "/api/repository/\(participationId)/files")
-        return try await sendRequest([String: FileType].self, request: request)
-    }
-
-    /// Gets file of filePath from repository of submission with participationId. Response type: String.
-    static func getFileOfRepository(participationId: Int, filePath: String) async throws -> String {
-        let request = Request(method: .get, path: "/api/repository/\(participationId)/file", params: [URLQueryItem(name: "file", value: filePath)])
-        return try await sendRequest(String.self, request: request) {
-            String(decoding: $0, as: UTF8.self)
-        }
-    }
-
-    /// Gets alls files with content from repository of submission with participationId. Response type: [String: String]
-    static func getAllFilesOfRepository(participationId: Int) async throws -> [String: String] {
-        let request = Request(method: .get, path: "/api/repository/\(participationId)/files-content")
-        return try await sendRequest([String: String].self, request: request)
-    }
-
+// File tree
+extension Node {
     static func initFileTreeStructure(files: [String: FileType]) -> Node {
-
         let convertedStructure = files.sorted { $0.key < $1.key }
             .map {
                 guard let path = URL(string: $0.key) else {
@@ -327,16 +307,15 @@ extension ArtemisAPI {
             }
             .filter { $0.0 != [""] }
             .map { (path: Stack(storage: $0.0.reversed()), type: $0.1) }
-
+        
         let root = Node(type: .folder, name: "")
         parseFileTree(node: root, paths: convertedStructure)
-
         
         root.flatMap()
         return root
     }
-
-    static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)]) {
+    
+    private static func parseFileTree(node: Node, paths: [(path: Stack<String>, type: FileType)]) {
         let root = paths.filter { $0.path.size() == 1 }.map { (name: $0.path.pop() ?? "", type: $0.type) }
         var notRoot = paths.filter { $0.path.size() > 0 }
         for elem in root {
