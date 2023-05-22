@@ -62,7 +62,7 @@ extension Exercise {
 
 extension ArtemisAPI {
     static func getExercise(exerciseId: Int) async throws -> Exercise {
-        let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/for-assessment-dashboard")
+        let request = Request(method: .get, path: "api/exercises/\(exerciseId)/for-assessment-dashboard")
         return try await sendRequest(Exercise.self, request: request)
     }
 }

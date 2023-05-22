@@ -24,7 +24,7 @@ struct DueDateStat: Codable {
 
 extension ArtemisAPI {
     static func getExerciseStats(exerciseId: Int) async throws -> ExerciseStatsForAssessmentDashboard {
-        let request = Request(method: .get, path: "/api/exercises/\(exerciseId)/stats-for-assessment-dashboard")
+        let request = Request(method: .get, path: "api/exercises/\(exerciseId)/stats-for-assessment-dashboard")
         return try await sendRequest(ExerciseStatsForAssessmentDashboard.self, request: request)
     }
 }

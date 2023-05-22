@@ -8,38 +8,34 @@
 import Foundation
 import CodeEditor
 
+/// Handles communication with a Themis ML server
 enum ThemisAPI {
-    static let restController = RESTController(baseURL: URL(string: themisServer ?? "https://ios2223cit.ase.cit.tum.de")!)
+    static let themisMLRestController = RESTController(baseURL: URL(string: themisServer ?? "https://ios2223cit.ase.cit.tum.de")!)
     
     private static func buildAuthenticatedRequest(_ request: Request) throws -> Request {
         var request = request
-        if Authentication.shared.isBearerTokenAuthNeeded() {
-            guard let token = Authentication.shared.token else {
-                throw Authentication.AuthenticationError.tokenNotFound
-            }
-            request.headers["Authorization"] = "Bearer \(token)"
-        } else {
-            if let cookie = HTTPCookieStorage.shared.cookies(for: RESTController.shared.baseURL)?.first {
-                request.headers["Authorization"] = "Bearer \(cookie.value)"
-            }
+        
+        if let tokenFromCookie = HTTPCookieStorage.shared.cookies(for: RESTController.shared.baseURL)?.first {
+            request.setBeaererToken(token: tokenFromCookie.value)
         }
+        
         return request
     }
     
     static func sendRequest<T: Decodable>(_ type: T.Type, request: Request) async throws -> T {
-        try await restController.sendRequest(
+        try await themisMLRestController.sendRequest(
             buildAuthenticatedRequest(request)
         )
     }
 
     static func sendRequest<T>(_ type: T.Type, request: Request, decode: (Data) throws -> T) async throws -> T {
-        try await restController.sendRequest(
+        try await themisMLRestController.sendRequest(
             buildAuthenticatedRequest(request),
             decode: decode)
     }
 
     static func sendRequest(request: Request) async throws {
-        try await restController.sendRequest(
+        try await themisMLRestController.sendRequest(
             buildAuthenticatedRequest(request)
         )
     }
@@ -66,7 +62,7 @@ extension ThemisAPI {
             body: NotifyRequest(
                 exercise_id: exerciseId,
                 participation_id: participationId,
-                server: RESTController.shared.baseURL.absoluteString
+                server: removeTrailingSlash(from: RESTController.shared.baseURL.absoluteString)
             )
         )
         try await sendRequest(request: request)
@@ -78,11 +74,19 @@ extension ThemisAPI {
             method: .post,
             path: "/feedback_suggestions",
             body: FeedbackSuggestionRequest(
-                server: RESTController.shared.baseURL.absoluteString,
+                server: removeTrailingSlash(from: RESTController.shared.baseURL.absoluteString),
                 exercise_id: exerciseId,
                 participation_id: participationId
             )
         )
         return try await sendRequest([FeedbackSuggestion].self, request: request)
+    }
+    
+    private static func removeTrailingSlash(from string: String) -> String {
+        if string.last == "/" {
+            return String(string.dropLast())
+        }
+        
+        return string
     }
 }

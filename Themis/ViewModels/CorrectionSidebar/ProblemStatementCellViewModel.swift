@@ -18,7 +18,7 @@ struct ProblemStatementPlantUML: ProblemStatementPart {
     let text: String
     let colorScheme: ColorScheme
     var url: URL? {
-        var url = URL(string: "\(RESTController.shared.baseURL)/api/plantuml/png")
+        var url = URL(string: "\(RESTController.shared.baseURL)api/plantuml/png")
         url?.append(queryItems: [URLQueryItem(name: "plantuml", value: text), URLQueryItem(name: "useDarkTheme", value: String(colorScheme != .light))])
         return url
     }

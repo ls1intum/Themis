@@ -7,6 +7,8 @@
 
 
 import Foundation
+import Login
+import UserStore
 
 /// This is an AuthenticationViewModel you can use for the XCode preview feature.
 /// Usually, you would have to somehow log in, but would be quite annoying and would also duplicate a lot of code.
@@ -17,22 +19,27 @@ import Foundation
 /// - ARTEMIS_STAGING_PASSWORD
 /// Consult https://confluence.ase.in.tum.de/display/IOS2223CIT/Authentication+Preview+Setup for an explanation on how to configure them.
 /// (alternative for people without access: https://m25lazi.medium.com/environment-variables-in-xcode-a78e07d223ed)
-class PreviewAuthenticationViewModel: AuthenticationViewModel {
-    init() {
+class PreviewAuthenticationViewModel: LoginViewModel {
+    override init() {
+        super.init()
+        
         guard let serverURL = stagingServer else {
             fatalError("Set the staging server in the environment to use PreviewAuthenticationViewModel.")
         }
-        super.init(serverURL: serverURL)
+        UserSession.shared.saveInstitution(identifier: .custom(URL(string: serverURL)))
+        
         guard let username = stagingUser else {
             fatalError("Set the staging user in the environment to use PreviewAuthenticationViewModel.")
         }
         self.username = username
+        
         guard let password = stagingPassword else {
             fatalError("Set the staging password in the environment to use PreviewAuthenticationViewModel.")
         }
         self.password = password
+        
         Task {
-            await self.authenticate()
+            await self.login()
         }
     }
 }

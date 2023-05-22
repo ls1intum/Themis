@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import Login
+import APIClient
 
 struct CourseView: View {
-    var authenticationVM: AuthenticationViewModel
     @StateObject var courseVM = CourseViewModel()
 
     var body: some View {
@@ -56,9 +57,7 @@ struct CourseView: View {
 
     var logoutButton: some View {
         Button {
-            Task {
-                await authenticationVM.logout()
-            }
+            APIClient().perfomLogout()
         } label: {
             Text("Logout")
         }
