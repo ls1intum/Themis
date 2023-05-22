@@ -39,12 +39,12 @@ struct ExamSectionView: View {
                 }
             }
         }.task {
-            let exam = try? await ArtemisAPI.getExamForAssessment(courseID: courseID, examID: examID)
-            guard let exam else {
-                return
+            let exam = try? await ExamServiceFactory.shared.getExamForAssessment(courseId: courseID, examId: examID)
+            
+            if let exam {
+                self.exam = exam
+                self.exercises = exam.exercises
             }
-            self.exam = exam
-            self.exercises = exam.exercises
         }
         .navigationTitle(examTitle)
     }

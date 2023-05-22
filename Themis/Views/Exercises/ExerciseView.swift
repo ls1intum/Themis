@@ -8,6 +8,7 @@
 import SwiftUI
 import UIKit
 import SharedModels
+import DesignLibrary
 
 struct ExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -21,21 +22,23 @@ struct ExerciseView: View {
     
     var body: some View {
         VStack {
-            if exerciseVM.exerciseStats != nil, exerciseVM.exerciseStatsForDashboard != nil {
-                Form {
-                    if !submissionListVM.openSubmissions.isEmpty {
-                        openSubmissionsSection
+            DataStateView(data: $exerciseVM.exerciseStats,
+                          retryHandler: { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }) { _ in
+                DataStateView(data: $exerciseVM.exerciseStatsForAssessment,
+                              retryHandler: { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }) { _ in
+                    Form {
+                        if !submissionListVM.openSubmissions.isEmpty {
+                            openSubmissionsSection
+                        }
+                        
+                        if !submissionListVM.submittedSubmissions.isEmpty {
+                            finishedSubmissionsSection
+                        }
+                        
+                        statisticsSection
                     }
-                    
-                    if !submissionListVM.submittedSubmissions.isEmpty {
-                        finishedSubmissionsSection
-                    }
-                    
-                    statisticsSection
+                    .refreshable { await fetchExerciseData() }
                 }
-                .refreshable { await fetchExerciseData() }
-            } else {
-                ProgressView()
             }
         }
         .navigationDestination(isPresented: $assessmentVM.showSubmission) {
@@ -119,7 +122,6 @@ struct ExerciseView: View {
     }
     
     private func fetchExerciseData() async {
-        exerciseVM.exercise = exercise
         exerciseVM.exam = exam
         
         await withTaskGroup(of: Void.self) { group in

@@ -4,7 +4,6 @@
 //
 //  Created by Andreas Cselovszky on 14.11.22.
 //
-// swiftlint:disable discouraged_optional_boolean
 
 import Foundation
 import SharedModels

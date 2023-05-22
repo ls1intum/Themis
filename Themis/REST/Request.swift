@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import APIClient
 
 struct Request {
     var method: HTTPMethod
