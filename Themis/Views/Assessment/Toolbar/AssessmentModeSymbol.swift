@@ -16,6 +16,10 @@ struct AssessmentModeSymbol: View {
             Text(exerciseTitle ?? "")
                 .bold()
                 .font(.title)
+                .frame(maxWidth: 180)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                
             Image(systemName: readOnly ? "eyeglasses" : "pencil.and.outline")
                 .font(.title3)
         }
@@ -25,6 +29,8 @@ struct AssessmentModeSymbol: View {
 
 struct AssessmentModeSymbol_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentModeSymbol(readOnly: false)
+        AssessmentModeSymbol(exerciseTitle: "Essay About Your Dream Spaceship", readOnly: false)
+            .padding()
+            .background(.black)
     }
 }

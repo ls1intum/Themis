@@ -13,6 +13,8 @@ class AssessmentViewModel: ObservableObject {
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
+    @Published var pencilMode = true
+    @Published var fontSize: CGFloat = 16.0
     
     private var cancellables: [AnyCancellable] = []
 

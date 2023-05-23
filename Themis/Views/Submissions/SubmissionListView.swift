@@ -9,7 +9,7 @@ import SwiftUI
 import SharedModels
 
 struct SubmissionListView: View {
-    
+    @ObservedObject var assessmentVM: AssessmentViewModel
     var submissionListVM = SubmissionListViewModel()
     let exercise: Exercise
     let submissionStatus: SubmissionStatus
@@ -18,9 +18,11 @@ struct SubmissionListView: View {
         List {
             ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions, id: \.baseSubmission.id) { submission in
                 NavigationLink {
-                    AssessmentSubmissionLoaderView(
-                        submissionID: submission.baseSubmission.id ?? -1,
-                        exercise: exercise
+                    AssessmentView(
+                        assessmentVM: assessmentVM,
+                        assessmentResult: assessmentVM.assessmentResult,
+                        exercise: exercise,
+                        submissionId: submission.baseSubmission.id ?? -1
                     )
                 } label: {
                     HStack {
@@ -51,7 +53,9 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)), submissionStatus: .open)
+            SubmissionListView(assessmentVM: AssessmentViewModel(readOnly: false),
+                               exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)),
+                               submissionStatus: .open)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

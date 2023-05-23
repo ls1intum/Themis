@@ -67,6 +67,7 @@ struct ExerciseView: View {
     private var openSubmissionsSection: some View {
         Section("Open submissions") {
             SubmissionListView(
+                assessmentVM: assessmentVM,
                 submissionListVM: submissionListVM,
                 exercise: exercise,
                 submissionStatus: .open
@@ -77,6 +78,7 @@ struct ExerciseView: View {
     private var finishedSubmissionsSection: some View {
         Section("Finished submissions") {
             SubmissionListView(
+                assessmentVM: assessmentVM,
                 submissionListVM: submissionListVM,
                 exercise: exercise,
                 submissionStatus: .submitted
