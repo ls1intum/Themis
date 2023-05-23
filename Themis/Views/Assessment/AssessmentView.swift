@@ -143,7 +143,7 @@ struct AssessmentView: View {
         .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
             Button("Next Submission") {
                 Task {
-                    await assessmentVM.initRandomSubmission(exerciseId: exercise.baseExercise.id)
+                    await assessmentVM.initRandomSubmission(for: exercise)
                     if assessmentVM.submission == nil {
                         showNoSubmissionsAlert = true
                     }
@@ -179,7 +179,7 @@ struct AssessmentView: View {
         }
         .task {
             if let submissionId, assessmentVM.submission == nil {
-                await assessmentVM.getSubmission(id: submissionId)
+                await assessmentVM.getSubmission(for: exercise, participationOrSubmissionId: submissionId)
             }
             if let pId = assessmentVM.participation?.id {
                 await codeEditorVM.initFileTree(participationId: pId)

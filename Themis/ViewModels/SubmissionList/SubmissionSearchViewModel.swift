@@ -16,9 +16,10 @@ class SubmissionSearchViewModel: ObservableObject {
     private let maxPercentDiffFromBestResultToStillShow = 0.15 // based on experimentation
 
     @MainActor
-    func fetchSubmissions(exerciseId: Int) async {
+    func fetchSubmissions(exercise: Exercise) async {
         do {
-            self.submissions = try await SubmissionServiceFactory.shared.getAllSubmissions(exerciseId: exerciseId)
+            let submissionService = SubmissionServiceFactory.service(for: exercise)
+            self.submissions = try await submissionService.getAllSubmissions(exerciseId: exercise.id)
         } catch {
             self.error = error
             log.error(String(describing: error))

@@ -20,7 +20,7 @@ struct SubmissionSearchView: View {
         ScrollView {
             LazyVStack {
                 ForEach(submissionSearchVM.filterSubmissions(search: search), id: \.baseSubmission.id) { submission in
-                    SingleSubmissionCellView(avm: assessmentVM, submission: submission)
+                    SingleSubmissionCellView(avm: assessmentVM, exercise: exercise, submission: submission)
                 }
             }
         }
@@ -31,7 +31,7 @@ struct SubmissionSearchView: View {
             }
         }
         .task {
-            await submissionSearchVM.fetchSubmissions(exerciseId: exercise.id)
+            await submissionSearchVM.fetchSubmissions(exercise: exercise)
         }
         .navigationDestination(isPresented: $assessmentVM.showSubmission) {
             AssessmentView(
@@ -62,6 +62,7 @@ extension SubmissionSearchView {
 private struct SingleSubmissionCellView: View {
     @ObservedObject var avm: AssessmentViewModel
 
+    let exercise: Exercise
     let submission: Submission
 
     var body: some View {
@@ -78,7 +79,7 @@ private struct SingleSubmissionCellView: View {
             Button {
                 Task {
                     if let participationId = submission.getParticipation()?.id {
-                        await avm.getSubmission(id: participationId)
+                        await avm.getSubmission(for: exercise, participationOrSubmissionId: participationId)
                     }
                 }
             } label: {

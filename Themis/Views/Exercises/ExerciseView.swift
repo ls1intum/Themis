@@ -112,7 +112,7 @@ struct ExerciseView: View {
     private var startNewAssessmentButton: some View {
         Button {
             Task {
-                await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
+                await assessmentVM.initRandomSubmission(for: exercise)
             }
         } label: {
             Text("Start Assessment")
@@ -128,7 +128,7 @@ struct ExerciseView: View {
             group.addTask { await exerciseVM.fetchExercise(exerciseId: exercise.id) }
             group.addTask { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }
             group.addTask { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }
-            group.addTask { await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id) }
+            group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
         }
     }
 }

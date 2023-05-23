@@ -48,9 +48,11 @@
 		65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */; };
 		65E6A0FF2A13D1630058E5D6 /* AssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */; };
 		65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1012A13E7260058E5D6 /* SubmissionService.swift */; };
-		65E6A1042A13E72E0058E5D6 /* SubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */; };
+		65E6A1042A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1032A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift */; };
 		65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1062A1400E20058E5D6 /* RepositoryService.swift */; };
 		65E6A1092A1400EB0058E5D6 /* RepositoryServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */; };
+		65F018FF2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */; };
+		65F019012A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -171,9 +173,11 @@
 		65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentService.swift; sourceTree = "<group>"; };
 		65E6A0FE2A13D1630058E5D6 /* AssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentServiceImpl.swift; sourceTree = "<group>"; };
 		65E6A1012A13E7260058E5D6 /* SubmissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionService.swift; sourceTree = "<group>"; };
-		65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionServiceImpl.swift; sourceTree = "<group>"; };
+		65E6A1032A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65E6A1062A1400E20058E5D6 /* RepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryService.swift; sourceTree = "<group>"; };
 		65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryServiceImpl.swift; sourceTree = "<group>"; };
+		65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSubmissionServiceImpl.swift; sourceTree = "<group>"; };
+		65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -456,7 +460,9 @@
 			isa = PBXGroup;
 			children = (
 				65E6A1012A13E7260058E5D6 /* SubmissionService.swift */,
-				65E6A1032A13E72E0058E5D6 /* SubmissionServiceImpl.swift */,
+				65E6A1032A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift */,
+				65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */,
+				65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */,
 			);
 			path = Submission;
 			sourceTree = "<group>";
@@ -965,7 +971,7 @@
 				65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
-				65E6A1042A13E72E0058E5D6 /* SubmissionServiceImpl.swift in Sources */,
+				65E6A1042A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift in Sources */,
 				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
 				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
 				E200F787297F10B300DE269D /* SourceCodeLanguage.swift in Sources */,
@@ -1007,10 +1013,12 @@
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
 				A9752D7B2992AAEB004441D1 /* ExamSectionView.swift in Sources */,
 				DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */,
+				65F018FF2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift in Sources */,
 				E119ED9F2922F48A00626DEA /* Repository.swift in Sources */,
 				65153FA12A0FAD4A0020B6FE /* RootViewModel.swift in Sources */,
 				653452B62A068E4D008D9598 /* ParticipationExtension.swift in Sources */,
 				65B49F472A080A9900C9A45F /* ToolbarRedoButton.swift in Sources */,
+				65F019012A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
 				A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */,
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,

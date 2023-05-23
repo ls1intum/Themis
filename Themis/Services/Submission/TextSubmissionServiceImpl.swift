@@ -1,8 +1,8 @@
 //
-//  SubmissionServiceImpl.swift
+//  TextSubmissionServiceImpl.swift
 //  Themis
 //
-//  Created by Tarlan Ismayilsoy on 16.05.23.
+//  Created by Tarlan Ismayilsoy on 23.05.23.
 //
 
 import Foundation
@@ -10,7 +10,9 @@ import SharedModels
 import APIClient
 import DesignLibrary
 
-class SubmissionServiceImpl: SubmissionService {
+class TextSubmissionServiceImpl: SubmissionService {
+    
+    typealias SubmissionType = TextSubmission
     
     let client = APIClient()
     
@@ -25,7 +27,7 @@ class SubmissionServiceImpl: SubmissionService {
         }
         
         var resourceName: String {
-            "api/exercises/\(exerciseId)/programming-submissions"
+            "api/exercises/\(exerciseId)/text-submissions"
         }
     }
     
@@ -48,7 +50,7 @@ class SubmissionServiceImpl: SubmissionService {
         }
         
         var resourceName: String {
-            "api/exercises/\(exerciseId)/programming-submissions"
+            "api/exercises/\(exerciseId)/text-submissions"
         }
     }
     
@@ -56,9 +58,9 @@ class SubmissionServiceImpl: SubmissionService {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId)).get().0
     }
     
-    // MARK: - Get Random Programming Submission For Assessment
-    private struct GetRandomProgrammingSubmissionRequest: APIRequest {
-        typealias Response = ProgrammingSubmission
+    // MARK: - Get Random Text Submission For Assessment
+    private struct GetRandomTextSubmissionRequest: APIRequest {
+        typealias Response = TextSubmission
         
         var exerciseId: Int
         
@@ -71,17 +73,17 @@ class SubmissionServiceImpl: SubmissionService {
         }
         
         var resourceName: String {
-            "api/exercises/\(exerciseId)/programming-submission-without-assessment"
+            "api/exercises/\(exerciseId)/text-submission-without-assessment"
         }
     }
     
-    func getRandomProgrammingSubmissionForAssessment(exerciseId: Int) async throws -> ProgrammingSubmission {
-        try await client.sendRequest(GetRandomProgrammingSubmissionRequest(exerciseId: exerciseId)).get().0
+    func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> TextSubmission {
+        try await client.sendRequest(GetRandomTextSubmissionRequest(exerciseId: exerciseId)).get().0
     }
     
-    // MARK: - Get Programming Submission For Assessment
-    private struct GetProgrammingSubmissionRequest: APIRequest {
-        typealias Response = ProgrammingSubmission
+    // MARK: - Get Text Submission For Assessment
+    private struct GetTextSubmissionRequest: APIRequest {
+        typealias Response = TextSubmission
         
         var submissionId: Int
         
@@ -90,12 +92,12 @@ class SubmissionServiceImpl: SubmissionService {
         }
         
         var resourceName: String {
-            "api/programming-submissions/\(submissionId)/lock"
+            "api/text-submissions/\(submissionId)"
         }
     }
     
-    func getProgrammingSubmissionForAssessment(submissionId: Int) async throws -> ProgrammingSubmission {
-        try await client.sendRequest(GetProgrammingSubmissionRequest(submissionId: submissionId)).get().0
+    func getSubmissionForAssessment(submissionId: Int) async throws -> TextSubmission {
+        try await client.sendRequest(GetTextSubmissionRequest(submissionId: submissionId)).get().0
     }
     
     // MARK: - Get Result
@@ -113,7 +115,7 @@ class SubmissionServiceImpl: SubmissionService {
         }
         
         var resourceName: String {
-            "api/programming-exercise-participations/\(participationId)/latest-result-with-feedbacks"
+            "api/text-exercise-participations/\(participationId)/latest-result-with-feedbacks"
         }
     }
     

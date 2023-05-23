@@ -29,13 +29,14 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func initRandomSubmission(exerciseId: Int) async {
+    func initRandomSubmission(for exercise: Exercise) async {
         loading = true
         defer {
             loading = false
         }
         do {
-            self.submission = try await SubmissionServiceFactory.shared.getRandomProgrammingSubmissionForAssessment(exerciseId: exerciseId)
+            let submissionService = SubmissionServiceFactory.service(for: exercise)
+            self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
             self.showSubmission = true
             UndoManager.shared.removeAllActions()
@@ -47,19 +48,22 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func getSubmission(id: Int) async {
+    func getSubmission(for exercise: Exercise, participationOrSubmissionId: Int) async {
         loading = true
         defer {
             loading = false
         }
+        
+        let submissionService = SubmissionServiceFactory.service(for: exercise)
+        
         do {
             if readOnly {
-                let result = try await SubmissionServiceFactory.shared.getResultFor(participationId: id)
+                let result = try await submissionService.getResultFor(participationId: participationOrSubmissionId)
                 self.submission = result.submission?.baseSubmission
                 self.participation = result.participation?.baseParticipation
                 assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
             } else {
-                self.submission = try await SubmissionServiceFactory.shared.getProgrammingSubmissionForAssessment(submissionId: id)
+                self.submission = try await submissionService.getSubmissionForAssessment(submissionId: participationOrSubmissionId)
                 assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
                 UndoManager.shared.removeAllActions()
             }
