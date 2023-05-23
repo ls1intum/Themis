@@ -23,10 +23,12 @@ extension Exercise {
     }
     
     var isDisabled: Bool {
-        if case .programming = self {
+        switch self {
+        case .programming(exercise: _), .text(exercise: _):
             return false
+        default:
+            return true
         }
-        return true
     }
     
     var isSubmissionDueDateOver: Bool {
