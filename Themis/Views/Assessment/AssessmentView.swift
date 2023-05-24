@@ -34,6 +34,7 @@ struct AssessmentView: View {
             }
             .onDisappear {
                 ThemisUndoManager.shared.removeAllActions()
+                assessmentVM.resetToolbarProperties()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

@@ -26,6 +26,12 @@ class AssessmentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Resets some properties of this viewmodel that affect the toolbar
+    func resetToolbarProperties() {
+        pencilMode = true
+        fontSize = 16.0
+    }
+    
     var gradingCriteria: [GradingCriterion] {
         participation?.getExercise()?.gradingCriteria ?? []
     }
