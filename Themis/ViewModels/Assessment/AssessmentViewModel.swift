@@ -41,7 +41,7 @@ class AssessmentViewModel: ObservableObject {
             self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
             self.showSubmission = true
-            UndoManager.shared.removeAllActions()
+            ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
             self.error = error
@@ -67,7 +67,7 @@ class AssessmentViewModel: ObservableObject {
             } else {
                 self.submission = try await submissionService.getSubmissionForAssessment(submissionId: participationOrSubmissionId)
                 assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-                UndoManager.shared.removeAllActions()
+                ThemisUndoManager.shared.removeAllActions()
             }
             self.showSubmission = true
         } catch {

@@ -13,7 +13,7 @@ struct ToolbarCancelButton: View {
     @State private var showCancelDialog = false
     
     private var nothingToSave: Bool {
-        assessmentVM.readOnly || !UndoManager.shared.canUndo
+        assessmentVM.readOnly || !ThemisUndoManager.shared.canUndo
     }
     
     var body: some View {

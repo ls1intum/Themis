@@ -82,7 +82,7 @@ struct ProgrammingAssessmentView: View {
                 await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
             }
-            UndoManager.shared.removeAllActions()
+            ThemisUndoManager.shared.removeAllActions()
         }
         .onChange(of: assessmentVM.pencilMode, perform: { codeEditorVM.pencilMode = $0 })
         .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })

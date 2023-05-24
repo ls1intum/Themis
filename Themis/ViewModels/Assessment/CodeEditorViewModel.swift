@@ -12,7 +12,7 @@ import CodeEditor
 import Common
 
 class CodeEditorViewModel: ObservableObject {
-    let undoManager = UndoManager.shared
+    let undoManager = ThemisUndoManager.shared
     
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []

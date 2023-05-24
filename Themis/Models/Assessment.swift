@@ -9,7 +9,7 @@ import Foundation
 import SharedModels
 
 class AssessmentResult: Encodable, ObservableObject {
-    let undoManager = UndoManager.shared
+    let undoManager = ThemisUndoManager.shared
     
     var maxPoints = 100.0
     

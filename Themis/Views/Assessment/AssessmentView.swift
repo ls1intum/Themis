@@ -33,7 +33,7 @@ struct AssessmentView: View {
                 assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
             }
             .onDisappear {
-                UndoManager.shared.removeAllActions()
+                ThemisUndoManager.shared.removeAllActions()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
