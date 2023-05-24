@@ -15,8 +15,29 @@ class PaneViewModel: ObservableObject {
     @Published var showRightPane = false
     @Published var rightPaneAsPlaceholder = true
     
-    let minRightSnapWidth: CGFloat = 185
+    let maxRightWidth: CGFloat
+    let minRightWidth: CGFloat
+    let minRightSnapWidth: CGFloat
     let minLeftSnapWidth: CGFloat = 150
+    
+    init(mode: PaneMode = .threePanes) {
+        maxRightWidth = (0.4 * UIScreen.main.bounds.size.width).rounded()
+        
+        switch mode {
+        case .threePanes:
+            // default values mostly cover this case
+            minRightWidth = 0
+            minRightSnapWidth = 185
+        case .rightOnly:
+            showLeftPane = false
+            leftPaneAsPlaceholder = true
+            rightPaneAsPlaceholder = false
+            showRightPane = true
+            minRightWidth = (0.2 * UIScreen.main.bounds.size.width).rounded()
+            dragWidthRight = minRightWidth
+            minRightSnapWidth = 0
+        }
+    }
     
     func handleLeftGripDrag(_ gesture: DragGesture.Value) {
         let maxLeftWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
@@ -42,15 +63,15 @@ class PaneViewModel: ObservableObject {
     }
     
     func handleRightGripDrag(_ gesture: DragGesture.Value) {
-        let maxRightWidth: CGFloat = 0.4 * UIScreen.main.bounds.size.width
         let delta = gesture.translation.width
         
         dragWidthRight -= delta
+        dragWidthRight.round()
         
         if dragWidthRight > maxRightWidth {
             dragWidthRight = maxRightWidth
-        } else if dragWidthRight < 0 {
-            dragWidthRight = 0
+        } else if dragWidthRight < minRightWidth {
+            dragWidthRight = minRightWidth
         }
         
         rightPaneAsPlaceholder = dragWidthRight < minRightSnapWidth ? true : false
@@ -74,4 +95,8 @@ class PaneViewModel: ObservableObject {
             }
         }
     }
+}
+
+enum PaneMode {
+    case threePanes, rightOnly
 }

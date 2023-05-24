@@ -131,7 +131,10 @@ struct AssessmentView: View {
                                       exercise: exercise,
                                       submissionId: submissionId)
         case .text(exercise: _):
-            TextAssessmentView()
+            TextAssessmentView(assessmentVM: assessmentVM,
+                               assessmentResult: assessmentResult,
+                               exercise: exercise,
+                               submissionId: submissionId)
         default:
             Text("Exercise not supported")
         }
