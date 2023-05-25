@@ -9,16 +9,21 @@ class AssessmentViewModel: ObservableObject {
     /// Is set automatically when the submission is set
     @Published var participation: BaseParticipation?
     @Published var assessmentResult = AssessmentResult()
-    @Published var showSubmission = false
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
     @Published var pencilMode = true
     @Published var fontSize: CGFloat = 16.0
     
+    var submissionId: Int?
+    var participationId: Int?
+    
     private var cancellables: [AnyCancellable] = []
 
-    init(readOnly: Bool) {
+    
+    init(submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool) {
+        self.submissionId = submissionId
+        self.participationId = participationId
         self.readOnly = readOnly
         
         $submission
@@ -35,6 +40,23 @@ class AssessmentViewModel: ObservableObject {
     var gradingCriteria: [GradingCriterion] {
         participation?.getExercise()?.gradingCriteria ?? []
     }
+    
+    @MainActor
+    func initSubmission(for exercise: Exercise) async {
+        guard submission == nil else {
+            return
+        }
+        
+        if let submissionId {
+            await getSubmission(for: exercise, submissionId: submissionId)
+        } else if readOnly, let participationId {
+            await getReadOnlySubmission(for: exercise, participationId: participationId)
+        } else if !readOnly {
+            await initRandomSubmission(for: exercise)
+        }
+        
+        ThemisUndoManager.shared.removeAllActions()
+    }
 
     @MainActor
     func initRandomSubmission(for exercise: Exercise) async {
@@ -46,7 +68,6 @@ class AssessmentViewModel: ObservableObject {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-            self.showSubmission = true
             ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
@@ -56,7 +77,11 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func getSubmission(for exercise: Exercise, participationOrSubmissionId: Int) async {
+    func getSubmission(for exercise: Exercise, submissionId: Int) async {
+        guard !readOnly else {
+            return
+        }
+        
         loading = true
         defer {
             loading = false
@@ -65,17 +90,33 @@ class AssessmentViewModel: ObservableObject {
         let submissionService = SubmissionServiceFactory.service(for: exercise)
         
         do {
-            if readOnly {
-                let result = try await submissionService.getResultFor(participationId: participationOrSubmissionId)
-                self.submission = result.submission?.baseSubmission
-                self.participation = result.participation?.baseParticipation
-                assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
-            } else {
-                self.submission = try await submissionService.getSubmissionForAssessment(submissionId: participationOrSubmissionId)
-                assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-                ThemisUndoManager.shared.removeAllActions()
-            }
-            self.showSubmission = true
+            self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            ThemisUndoManager.shared.removeAllActions()
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    func getReadOnlySubmission(for exercise: Exercise, participationId: Int) async {
+        guard readOnly else {
+            return
+        }
+        
+        loading = true
+        defer {
+            loading = false
+        }
+        
+        let submissionService = SubmissionServiceFactory.service(for: exercise)
+        
+        do {
+            let result = try await submissionService.getResultFor(participationId: participationId)
+            self.submission = result.submission?.baseSubmission
+            self.participation = result.participation?.baseParticipation
+            assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
         } catch {
             self.error = error
             log.error(String(describing: error))

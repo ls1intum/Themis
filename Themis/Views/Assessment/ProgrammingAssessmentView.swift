@@ -74,9 +74,8 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
-            if let submissionId, assessmentVM.submission == nil {
-                await assessmentVM.getSubmission(for: exercise, participationOrSubmissionId: submissionId)
-            }
+            await assessmentVM.initSubmission(for: exercise)
+            
             if let pId = assessmentVM.participation?.id {
                 await codeEditorVM.initFileTree(participationId: pId)
                 await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)

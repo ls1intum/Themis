@@ -11,8 +11,8 @@ import SharedModels
 
 struct AssessmentView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject var assessmentVM: AssessmentViewModel
-    @ObservedObject var assessmentResult: AssessmentResult
+    @StateObject var assessmentVM: AssessmentViewModel
+    @StateObject var assessmentResult: AssessmentResult
     
     let exercise: Exercise
     
@@ -22,7 +22,16 @@ struct AssessmentView: View {
     @State private var showSubmitConfirmation = false
     @State private var showNoSubmissionsAlert = false
     @State private var showNavigationOptions = false
+    
+    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool = false) {
+        self.exercise = exercise
+        self.submissionId = submissionId
         
+        let newAssessmentVM = AssessmentViewModel(submissionId: submissionId, participationId: participationId, readOnly: readOnly)
+        self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
+        self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
+    }
+    
     var body: some View {
         viewForExerciseType
             .navigationBarTitleDisplayMode(.inline)
@@ -120,6 +129,7 @@ struct AssessmentView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
+            .errorAlert(error: $assessmentVM.error)
     }
     
     @ViewBuilder

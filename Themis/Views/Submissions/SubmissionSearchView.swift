@@ -11,7 +11,6 @@ import SharedModels
 struct SubmissionSearchView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var submissionSearchVM = SubmissionSearchViewModel()
-    @StateObject var assessmentVM = AssessmentViewModel(readOnly: true)
     @State var search: String = ""
 
     let exercise: Exercise
@@ -20,7 +19,7 @@ struct SubmissionSearchView: View {
         ScrollView {
             LazyVStack {
                 ForEach(submissionSearchVM.filterSubmissions(search: search), id: \.baseSubmission.id) { submission in
-                    SingleSubmissionCellView(avm: assessmentVM, exercise: exercise, submission: submission)
+                    SingleSubmissionCellView(exercise: exercise, submission: submission)
                 }
             }
         }
@@ -32,13 +31,6 @@ struct SubmissionSearchView: View {
         }
         .task {
             await submissionSearchVM.fetchSubmissions(exercise: exercise)
-        }
-        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
-            AssessmentView(
-                assessmentVM: assessmentVM,
-                assessmentResult: assessmentVM.assessmentResult,
-                exercise: exercise
-            )
         }
         .errorAlert(error: $submissionSearchVM.error)
     }
@@ -60,7 +52,7 @@ extension SubmissionSearchView {
 }
 
 private struct SingleSubmissionCellView: View {
-    @ObservedObject var avm: AssessmentViewModel
+    @State var showAssessmentView = false
 
     let exercise: Exercise
     let submission: Submission
@@ -77,11 +69,7 @@ private struct SingleSubmissionCellView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Button {
-                Task {
-                    if let participationId = submission.getParticipation()?.id {
-                        await avm.getSubmission(for: exercise, participationOrSubmissionId: participationId)
-                    }
-                }
+                showAssessmentView = true
             } label: {
                 HStack {
                     Text("View")
@@ -94,6 +82,13 @@ private struct SingleSubmissionCellView: View {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemGray6))
         )
+        .navigationDestination(isPresented: $showAssessmentView) {
+            AssessmentView(
+                exercise: exercise,
+                participationId: submission.getParticipation()?.id,
+                readOnly: true
+            )
+        }
     }
     
     @ViewBuilder

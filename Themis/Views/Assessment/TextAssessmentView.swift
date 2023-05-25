@@ -32,10 +32,7 @@ struct TextAssessmentView: View {
             }
         }
         .task {
-            if let submissionId, assessmentVM.submission == nil {
-                await assessmentVM.getSubmission(for: exercise, participationOrSubmissionId: submissionId)
-            }
-            ThemisUndoManager.shared.removeAllActions()
+            await assessmentVM.initSubmission(for: exercise)
         }
     }
     

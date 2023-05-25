@@ -10,7 +10,7 @@ import SharedModels
 
 class MockAssessmentViewModel: AssessmentViewModel {
     
-    override init(readOnly: Bool) {
+    override init(submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool) {
         super.init(readOnly: readOnly)
         self.submission = Submission.mockText.baseSubmission
     }
@@ -18,21 +18,17 @@ class MockAssessmentViewModel: AssessmentViewModel {
     override func initRandomSubmission(for exercise: Exercise) async {
         self.submission = Submission.mockText.baseSubmission
         assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-        self.showSubmission = true
         ThemisUndoManager.shared.removeAllActions()
     }
     
-    override func getSubmission(for exercise: Exercise, participationOrSubmissionId: Int) async {
-        if readOnly {
-            self.submission = Submission.mockText.baseSubmission
-            //                self.participation =
-            //                assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
-        } else {
-            self.submission = Submission.mockText.baseSubmission
-            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-            ThemisUndoManager.shared.removeAllActions()
-        }
-        self.showSubmission = true
+    override func getSubmission(for exercise: Exercise, submissionId: Int) async {
+        self.submission = Submission.mockText.baseSubmission
+        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+        ThemisUndoManager.shared.removeAllActions()
+    }
+    
+    override func getReadOnlySubmission(for exercise: Exercise, participationId: Int) async {
+        self.submission = Submission.mockText.baseSubmission
     }
     
     override func cancelAssessment() async {

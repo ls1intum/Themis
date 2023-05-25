@@ -13,8 +13,9 @@ import DesignLibrary
 struct ExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
-    @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
+    
+    @State var showAssessmentView = false
     
     let exercise: Exercise
     /// Only set if the exercise is a part of an exam
@@ -41,12 +42,8 @@ struct ExerciseView: View {
                 }
             }
         }
-        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
-            AssessmentView(
-                assessmentVM: assessmentVM,
-                assessmentResult: assessmentVM.assessmentResult,
-                exercise: exercise
-            )
+        .navigationDestination(isPresented: $showAssessmentView) {
+            AssessmentView(exercise: exercise)
         }
         .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
@@ -60,14 +57,12 @@ struct ExerciseView: View {
                 startNewAssessmentButton.disabled(!exerciseVM.isAssessmentPossible)
             }
         }
-        .errorAlert(error: $assessmentVM.error)
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
     private var openSubmissionsSection: some View {
         Section("Open submissions") {
             SubmissionListView(
-                assessmentVM: assessmentVM,
                 submissionListVM: submissionListVM,
                 exercise: exercise,
                 submissionStatus: .open
@@ -78,7 +73,6 @@ struct ExerciseView: View {
     private var finishedSubmissionsSection: some View {
         Section("Finished submissions") {
             SubmissionListView(
-                assessmentVM: assessmentVM,
                 submissionListVM: submissionListVM,
                 exercise: exercise,
                 submissionStatus: .submitted
@@ -113,9 +107,7 @@ struct ExerciseView: View {
     
     private var startNewAssessmentButton: some View {
         Button {
-            Task {
-                await assessmentVM.initRandomSubmission(for: exercise)
-            }
+            showAssessmentView = true
         } label: {
             Text("Start Assessment")
                 .foregroundColor(.white)
