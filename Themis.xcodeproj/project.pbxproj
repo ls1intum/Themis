@@ -311,7 +311,6 @@
 				DA3978E4296C16D200734E01 /* Course */,
 				4065F859292E8A90005DAEE8 /* Assessment */,
 				4065F858292E8A7F005DAEE8 /* Authentication */,
-				83342600292BEA40007B86FA /* CorrectionSidebar */,
 				65153FA02A0FAD4A0020B6FE /* RootViewModel.swift */,
 			);
 			name = ViewModels;
@@ -470,14 +469,6 @@
 			);
 			path = Repository;
 			sourceTree = "<group>";
-		};
-		83342600292BEA40007B86FA /* CorrectionSidebar */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = CorrectionSidebar;
-			path = Themis/ViewModels/CorrectionSidebar;
-			sourceTree = SOURCE_ROOT;
 		};
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
