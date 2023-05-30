@@ -54,7 +54,11 @@ struct ProgrammingAssessmentView: View {
         }, content: {
             AddFeedbackView(
                 assessmentResult: assessmentVM.assessmentResult,
-                codeEditorVM: codeEditorVM,
+                incompleteFeedback: AssessmentFeedback(scope: .inline,
+                                                       file: codeEditorVM.selectedFile,
+                                                       lines: codeEditorVM.selectedSectionParsed?.0,
+                                                       columns: codeEditorVM.selectedSectionParsed?.1),
+                feedbackDelegate: codeEditorVM,
                 scope: .inline,
                 showSheet: $codeEditorVM.showAddFeedback,
                 gradingCriteria: assessmentVM.gradingCriteria,
@@ -65,7 +69,7 @@ struct ProgrammingAssessmentView: View {
             if let feedback = assessmentVM.getFeedback(byId: codeEditorVM.feedbackForSelectionId) {
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
-                    cvm: codeEditorVM,
+                    feedbackDelegate: codeEditorVM,
                     scope: .inline,
                     showSheet: $codeEditorVM.showEditFeedback,
                     idForUpdate: feedback.id,
@@ -107,8 +111,8 @@ struct ProgrammingAssessmentView: View {
                 CorrectionSidebarView(
                     assessmentResult: $assessmentVM.assessmentResult,
                     assessmentVM: assessmentVM,
-                    cvm: codeEditorVM,
-                    umlVM: umlVM
+                    umlVM: umlVM,
+                    feedbackDelegate: codeEditorVM
                 )
             }
         }

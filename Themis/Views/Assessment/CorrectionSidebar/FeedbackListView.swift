@@ -11,7 +11,7 @@ import SharedModels
 struct FeedbackListView: View {
     var readOnly: Bool
     @ObservedObject var assessmentResult: AssessmentResult
-    @ObservedObject var codeEditorVM: CodeEditorViewModel
+    weak var feedbackDelegate: (any FeedbackDelegate)?
     
     @State var showAddFeedback = false
     
@@ -33,7 +33,7 @@ struct FeedbackListView: View {
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(
                 assessmentResult: assessmentResult,
-                codeEditorVM: codeEditorVM,
+                feedbackDelegate: feedbackDelegate,
                 scope: .general,
                 showSheet: $showAddFeedback,
                 gradingCriteria: gradingCriteria
@@ -47,7 +47,7 @@ struct FeedbackListView: View {
                 FeedbackCellView(
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
-                    codeEditorVM: codeEditorVM,
+                    feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
                     gradingCriteria: gradingCriteria
                 )
@@ -75,7 +75,7 @@ struct FeedbackListView: View {
                 FeedbackCellView(
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
-                    codeEditorVM: codeEditorVM,
+                    feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
                     participationId: participationId,
                     templateParticipationId: templateParticipationId,
@@ -99,7 +99,7 @@ struct FeedbackListView: View {
                 FeedbackCellView(
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
-                    codeEditorVM: codeEditorVM,
+                    feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
                     gradingCriteria: gradingCriteria
                 )
@@ -120,7 +120,7 @@ struct FeedbackListView: View {
             .forEach {
                 assessmentResult.deleteFeedback(id: $0.id)
                 if $0.scope == .inline {
-                    codeEditorVM.deleteInlineHighlight(feedback: $0)
+                    feedbackDelegate?.onFeedbackDeletion($0)
                 }
             }
     }
@@ -135,7 +135,7 @@ struct FeedbackListView: View {
         FeedbackListView(
             readOnly: false,
             assessmentResult: assessmentResult,
-            codeEditorVM: codeEditor,
+            feedbackDelegate: codeEditor,
             gradingCriteria: []
         )
         .onAppear(perform: {

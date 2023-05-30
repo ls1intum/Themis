@@ -12,6 +12,7 @@ struct TextAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
     @StateObject var paneVM = PaneViewModel(mode: .rightOnly)
+    @StateObject var umlVM = UMLViewModel()
     
     let exercise: Exercise
     var submissionId: Int?
@@ -38,11 +39,11 @@ struct TextAssessmentView: View {
     
     private var correctionWithPlaceholder: some View {
         VStack {
-                Text("Correction Sidebar")
-//                CorrectionSidebarView(
-//                    assessmentResult: $assessmentVM.assessmentResult,
-//                    assessmentVM: assessmentVM
-//                )
+            CorrectionSidebarView(
+                assessmentResult: $assessmentVM.assessmentResult,
+                assessmentVM: assessmentVM,
+                umlVM: umlVM
+            )
         }
     }
 }

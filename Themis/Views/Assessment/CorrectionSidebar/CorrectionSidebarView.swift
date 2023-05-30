@@ -17,8 +17,9 @@ struct CorrectionSidebarView: View {
     @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var assessmentVM: AssessmentViewModel
-    @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var umlVM: UMLViewModel
+    
+    weak var feedbackDelegate: (any FeedbackDelegate)?
     
     private var exercise: (any BaseExercise)? {
         assessmentVM.participation?.getExercise()
@@ -53,7 +54,7 @@ struct CorrectionSidebarView: View {
                     FeedbackListView(
                         readOnly: assessmentVM.readOnly,
                         assessmentResult: assessmentResult,
-                        codeEditorVM: cvm,
+                        feedbackDelegate: feedbackDelegate,
                         participationId: assessmentVM.participation?.id,
                         templateParticipationId: templateParticipationId,
                         gradingCriteria: exercise?.gradingCriteria ?? []
@@ -84,14 +85,14 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
-    @State static var assessmentVM = AssessmentViewModel(readOnly: false)
+    @State static var assessmentVM = MockAssessmentViewModel(readOnly: false)
     
     static var previews: some View {
         CorrectionSidebarView(
             assessmentResult: $assessmentResult,
             assessmentVM: assessmentVM,
-            cvm: cvm,
-            umlVM: umlVM
+            umlVM: umlVM,
+            feedbackDelegate: cvm
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

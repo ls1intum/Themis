@@ -46,6 +46,7 @@
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
 		65D2C6892A011815001D5CD1 /* ExerciseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */; };
 		65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */; };
+		65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E4C1972A25345100CA173B /* FeedbackDelegate.swift */; };
 		65E6A0F82A13C3EC0058E5D6 /* ExamService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0F72A13C3EC0058E5D6 /* ExamService.swift */; };
 		65E6A0FA2A13C5C90058E5D6 /* ExamServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */; };
 		65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */; };
@@ -176,6 +177,7 @@
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
 		65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseExtension.swift; sourceTree = "<group>"; };
 		65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionExtension.swift; sourceTree = "<group>"; };
+		65E4C1972A25345100CA173B /* FeedbackDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackDelegate.swift; sourceTree = "<group>"; };
 		65E6A0F72A13C3EC0058E5D6 /* ExamService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamService.swift; sourceTree = "<group>"; };
 		65E6A0F92A13C5C90058E5D6 /* ExamServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamServiceImpl.swift; sourceTree = "<group>"; };
 		65E6A0FC2A13D1540058E5D6 /* AssessmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentService.swift; sourceTree = "<group>"; };
@@ -738,6 +740,7 @@
 				E21AF052292B9D4C0096ACFC /* ProgrammingAssessmentView.swift */,
 				65F019042A1CDCE400BB1C98 /* AssessmentView.swift */,
 				65F019062A1CDE1200BB1C98 /* TextAssessmentView.swift */,
+				65E4C1972A25345100CA173B /* FeedbackDelegate.swift */,
 			);
 			name = Assessment;
 			path = Themis/Views/Assessment;
@@ -976,6 +979,7 @@
 				65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
+				65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				656EAF602A0256A6003CF2B4 /* AssessmentFeedback.swift in Sources */,
 				E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */,

@@ -20,9 +20,11 @@ public struct AssessmentFeedback: Identifiable, Hashable {
     var baseFeedback: Feedback
     var scope: ThemisFeedbackScope
     var file: Node?
+    let lines: NSRange?
+    let columns: NSRange?
 
     init(
-        baseFeedback: Feedback,
+        baseFeedback: Feedback = Feedback(),
         scope: ThemisFeedbackScope,
         file: Node? = nil,
         lines: NSRange? = nil,
@@ -31,9 +33,15 @@ public struct AssessmentFeedback: Identifiable, Hashable {
         self.baseFeedback = baseFeedback
         self.scope = scope
         self.file = file
+        self.lines = lines
+        self.columns = columns
         self.buildLineDescription(lines: lines, columns: columns)
     }
 
+    mutating func setBaseFeedback(to feedback: Feedback) {
+        self.baseFeedback = feedback
+    }
+    
     mutating func updateFeedback(detailText: String, credits: Double) {
         self.baseFeedback.detailText = detailText
         self.baseFeedback.credits = credits

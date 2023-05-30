@@ -10,16 +10,16 @@ import SwiftUI
 import CodeEditor
 import SharedModels
 
-struct EditFeedbackViewBase: View {
+struct EditFeedbackViewBase: View { // TODO: refactor after changes
     var assessmentResult: AssessmentResult
-    @ObservedObject var cvm: CodeEditorViewModel
+    weak var feedbackDelegate: (any FeedbackDelegate)?
 
     @State var detailText = ""
     @State var score = 0.0
     @Binding var showSheet: Bool
     
     var idForUpdate: UUID?
-
+    var incompleteFeedback: AssessmentFeedback?
     let title: String?
     let edit: Bool
     let scope: ThemisFeedbackScope
@@ -123,15 +123,13 @@ struct EditFeedbackViewBase: View {
         if let feedbackSuggestion {
             addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
         } else if scope == .inline {
-            let lines: NSRange? = cvm.selectedSectionParsed?.0
-            let columns: NSRange? = cvm.selectedSectionParsed?.1
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
                                               scope: scope,
-                                              file: cvm.selectedFile,
-                                              lines: lines,
-                                              columns: columns)
+                                              file: incompleteFeedback?.file,
+                                              lines: incompleteFeedback?.lines,
+                                              columns: incompleteFeedback?.columns)
             assessmentResult.addFeedback(feedback: feedback)
-            cvm.addInlineHighlight(feedbackId: feedback.id)
+            feedbackDelegate?.onFeedbackCreation(feedback)
         } else {
             assessmentResult.addFeedback(feedback: AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
                                                                                              credits: score,
@@ -145,7 +143,7 @@ struct EditFeedbackViewBase: View {
             return
         }
         assessmentResult.deleteFeedback(id: feedback.id)
-        cvm.deleteInlineHighlight(feedback: feedback)
+        feedbackDelegate?.onFeedbackDeletion(feedback)
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
@@ -155,11 +153,11 @@ struct EditFeedbackViewBase: View {
                                    credits: feedbackSuggestion.credits,
                                    type: .MANUAL_UNREFERENCED),
             scope: .inline,
-            file: cvm.selectedFile,
+            file: incompleteFeedback?.file,
             lines: lines
         )
         assessmentResult.addFeedback(feedback: feedback)
-        cvm.addFeedbackSuggestionInlineHighlight(feedbackSuggestion: feedbackSuggestion, feedbackId: feedback.id)
+        feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
     }
 
     private func setStates() {
@@ -182,7 +180,7 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
     
     static var previews: some View {
         EditFeedbackViewBase(assessmentResult: result,
-                             cvm: cvm,
+                             feedbackDelegate: cvm,
                              showSheet: .constant(true),
                              title: "Title",
                              edit: false,

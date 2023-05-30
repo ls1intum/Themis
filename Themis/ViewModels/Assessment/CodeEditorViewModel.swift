@@ -281,3 +281,33 @@ class CodeEditorViewModel: ObservableObject {
         }
     }
 }
+
+extension CodeEditorViewModel: FeedbackDelegate {
+    @MainActor
+    func onFeedbackCreation(_ feedback: AssessmentFeedback) {
+        addInlineHighlight(feedbackId: feedback.id)
+    }
+    
+    @MainActor
+    func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
+        deleteInlineHighlight(feedback: feedback)
+    }
+    
+    @MainActor
+    func onFeedbackSuggestionSelection(_ suggestion: FeedbackSuggestion, _ feedback: AssessmentFeedback) {
+        addFeedbackSuggestionInlineHighlight(feedbackSuggestion: suggestion, feedbackId: feedback.id)
+    }
+    
+    @MainActor
+    func onFeedbackCellTap(_ feedback: AssessmentFeedback, participationId: Int?, templateParticipationId: Int?) {
+        guard let file = feedback.file, let participationId = participationId, let templateParticipationId = templateParticipationId else {
+            return
+        }
+        
+        withAnimation {
+            openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
+        }
+        
+        scrollUtils.range = inlineHighlights[file.path]?.first { $0.id == "\(feedback.id)" }?.range
+    }
+}
