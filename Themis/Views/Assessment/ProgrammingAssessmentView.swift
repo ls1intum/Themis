@@ -54,15 +54,15 @@ struct ProgrammingAssessmentView: View {
         }, content: {
             AddFeedbackView(
                 assessmentResult: assessmentVM.assessmentResult,
+                feedbackDelegate: codeEditorVM,
                 incompleteFeedback: AssessmentFeedback(scope: .inline,
                                                        file: codeEditorVM.selectedFile,
                                                        lines: codeEditorVM.selectedSectionParsed?.0,
                                                        columns: codeEditorVM.selectedSectionParsed?.1),
-                feedbackDelegate: codeEditorVM,
+                feedbackSuggestion: codeEditorVM.selectedFeedbackSuggestion,
                 scope: .inline,
-                showSheet: $codeEditorVM.showAddFeedback,
                 gradingCriteria: assessmentVM.gradingCriteria,
-                feedbackSuggestion: codeEditorVM.selectedFeedbackSuggestion
+                showSheet: $codeEditorVM.showAddFeedback
             )
         })
         .sheet(isPresented: $codeEditorVM.showEditFeedback) {
@@ -71,9 +71,9 @@ struct ProgrammingAssessmentView: View {
                     assessmentResult: assessmentVM.assessmentResult,
                     feedbackDelegate: codeEditorVM,
                     scope: .inline,
-                    showSheet: $codeEditorVM.showEditFeedback,
                     idForUpdate: feedback.id,
-                    gradingCriteria: assessmentVM.gradingCriteria
+                    gradingCriteria: assessmentVM.gradingCriteria,
+                    showSheet: $codeEditorVM.showEditFeedback
                 )
             }
         }

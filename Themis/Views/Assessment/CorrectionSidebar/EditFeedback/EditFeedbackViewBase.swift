@@ -10,27 +10,21 @@ import SwiftUI
 import CodeEditor
 import SharedModels
 
-struct EditFeedbackViewBase: View { // TODO: refactor after changes
+struct EditFeedbackViewBase: View {
     var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
-
-    @State var detailText = ""
-    @State var score = 0.0
-    @Binding var showSheet: Bool
-    
     var idForUpdate: UUID?
     var incompleteFeedback: AssessmentFeedback?
-    let title: String?
-    let edit: Bool
-    let scope: ThemisFeedbackScope
-    
-    let gradingCriteria: [GradingCriterion]
-    
     var feedbackSuggestion: FeedbackSuggestion?
     
-    private var isEditing: Bool {
-        idForUpdate != nil
-    }
+    let title: String?
+    let isEditing: Bool
+    let scope: ThemisFeedbackScope
+    let gradingCriteria: [GradingCriterion]
+    
+    @Binding var showSheet: Bool
+    @State private var detailText = ""
+    @State private var score = 0.0
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -85,7 +79,7 @@ struct EditFeedbackViewBase: View { // TODO: refactor after changes
     
     private var editOrSaveButton: some View {
         Button {
-            if edit {
+            if isEditing {
                 updateFeedback()
             } else {
                 createFeedback()
@@ -181,9 +175,8 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
     static var previews: some View {
         EditFeedbackViewBase(assessmentResult: result,
                              feedbackDelegate: cvm,
-                             showSheet: .constant(true),
                              title: "Title",
-                             edit: false,
+                             isEditing: false,
                              scope: .inline,
                              gradingCriteria: [
                                 .init(id: 1, structuredGradingInstructions: [
@@ -205,6 +198,8 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
                                           instructionDescription: "Some instruction here",
                                           feedback: "feedback")
                                 ])
-                             ])
+                             ],
+                             showSheet: .constant(true)
+        )
     }
 }

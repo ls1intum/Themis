@@ -67,9 +67,9 @@ struct FeedbackCellView: View {
                 assessmentResult: assessmentResult,
                 feedbackDelegate: feedbackDelegate,
                 scope: feedback.scope,
-                showSheet: $showEditFeedback,
                 idForUpdate: feedback.id,
-                gradingCriteria: gradingCriteria
+                gradingCriteria: gradingCriteria,
+                showSheet: $showEditFeedback
             )
         }
         .padding()

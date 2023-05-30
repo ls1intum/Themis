@@ -35,8 +35,8 @@ struct FeedbackListView: View {
                 assessmentResult: assessmentResult,
                 feedbackDelegate: feedbackDelegate,
                 scope: .general,
-                showSheet: $showAddFeedback,
-                gradingCriteria: gradingCriteria
+                gradingCriteria: gradingCriteria,
+                showSheet: $showAddFeedback
             )
         }
     }
