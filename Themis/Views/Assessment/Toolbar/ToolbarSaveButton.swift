@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ToolbarSaveButton: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
@@ -25,6 +26,6 @@ struct ToolbarSaveButton: View {
 
 struct ToolbarSaveButton_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarSaveButton(assessmentVM: AssessmentViewModel(readOnly: false))
+        ToolbarSaveButton(assessmentVM: AssessmentViewModel(exercise: Exercise.mockText, readOnly: false))
     }
 }

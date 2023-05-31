@@ -85,7 +85,7 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
-    @State static var assessmentVM = MockAssessmentViewModel(readOnly: false)
+    @State static var assessmentVM = MockAssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     
     static var previews: some View {
         CorrectionSidebarView(

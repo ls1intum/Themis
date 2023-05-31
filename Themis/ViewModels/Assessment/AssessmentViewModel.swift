@@ -17,11 +17,12 @@ class AssessmentViewModel: ObservableObject {
     
     var submissionId: Int?
     var participationId: Int?
+    var exercise: Exercise
     
     private var cancellables: [AnyCancellable] = []
-
     
-    init(submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool) {
+    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool) {
+        self.exercise = exercise
         self.submissionId = submissionId
         self.participationId = participationId
         self.readOnly = readOnly
@@ -42,24 +43,68 @@ class AssessmentViewModel: ObservableObject {
     }
     
     @MainActor
-    func initSubmission(for exercise: Exercise) async {
+    func initSubmission() async {
         guard submission == nil else {
             return
         }
         
-        if let submissionId {
-            await getSubmission(for: exercise, submissionId: submissionId)
-        } else if readOnly, let participationId {
-            await getReadOnlySubmission(for: exercise, participationId: participationId)
-        } else if !readOnly {
-            await initRandomSubmission(for: exercise)
+        switch exercise {
+        case .programming(exercise: _):
+            if readOnly {
+                if let participationId {
+                    await getReadOnlySubmission(participationId: participationId)
+                }
+            } else {
+                if let submissionId {
+                    await getSubmission(submissionId: submissionId)
+                } else {
+                    await initRandomSubmission()
+                }
+            }
+        case .text(exercise: _):
+            if readOnly {
+                // TODO: figure out which endpoint could be used instead
+            } else {
+                if let participationId, let submissionId {
+                    await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
+                } else {
+                    await initRandomSubmission()
+                }
+            }
+        default:
+            log.warning("Attempt to assess an unknown exercise")
         }
         
         ThemisUndoManager.shared.removeAllActions()
     }
+    
+    @MainActor
+    private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
+        guard let participationId, let submissionId else {
+            return
+        }
+        
+        loading = true
+        defer {
+            loading = false
+        }
+        do {
+            let assessmentService = AssessmentServiceFactory.service(for: exercise)
+            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(participationId: participationId,
+                                                                                                   submissionId: submissionId).baseParticipation
+            self.submission = fetchedParticipation.submissions?.last?.baseSubmission
+            self.participation = fetchedParticipation
+            assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
+            ThemisUndoManager.shared.removeAllActions()
+        } catch {
+            self.submission = nil
+            self.error = error
+            log.info(String(describing: error))
+        }
+    }
 
     @MainActor
-    func initRandomSubmission(for exercise: Exercise) async {
+    func initRandomSubmission() async {
         loading = true
         defer {
             loading = false
@@ -77,7 +122,7 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func getSubmission(for exercise: Exercise, submissionId: Int) async {
+    func getSubmission(submissionId: Int) async {
         guard !readOnly else {
             return
         }
@@ -100,7 +145,7 @@ class AssessmentViewModel: ObservableObject {
     }
     
     @MainActor
-    func getReadOnlySubmission(for exercise: Exercise, participationId: Int) async {
+    func getReadOnlySubmission(participationId: Int) async {
         guard readOnly else {
             return
         }
@@ -133,8 +178,11 @@ class AssessmentViewModel: ObservableObject {
         defer {
             loading = false
         }
+        
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
+        
         do {
-            try await AssessmentServiceFactory.shared.cancelAssessment(submissionId: submissionId)
+            try await assessmentService.cancelAssessment(submissionId: submissionId)
         } catch {
             if error as? RESTError != RESTError.empty {
                 self.error = error
@@ -156,8 +204,10 @@ class AssessmentViewModel: ObservableObject {
             loading = false
         }
         
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
+        
         do {
-            try await AssessmentServiceFactory.shared.saveAssessment(
+            try await assessmentService.saveAssessment(
                 participationId: participationId,
                 newAssessment: assessmentResult,
                 submit: submit
@@ -168,13 +218,13 @@ class AssessmentViewModel: ObservableObject {
         }
     }
     
-    func notifyThemisML(exerciseId: Int) async {
+    func notifyThemisML() async {
         guard let participationId = participation?.id else {
             return
         }
         
         do {
-            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exerciseId, participationId: participationId)
+            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exercise.id, participationId: participationId)
         } catch {
             log.error(String(describing: error))
         }

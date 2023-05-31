@@ -17,6 +17,7 @@ struct AssessmentView: View {
     let exercise: Exercise
     
     var submissionId: Int?
+    var participationId: Int?
     
     @State private var showStepper = false
     @State private var showSubmitConfirmation = false
@@ -26,8 +27,12 @@ struct AssessmentView: View {
     init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool = false) {
         self.exercise = exercise
         self.submissionId = submissionId
+        self.participationId = participationId
         
-        let newAssessmentVM = AssessmentViewModel(submissionId: submissionId, participationId: participationId, readOnly: readOnly)
+        let newAssessmentVM = AssessmentViewModel(exercise: exercise,
+                                                  submissionId: submissionId,
+                                                  participationId: participationId,
+                                                  readOnly: readOnly)
         self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
         self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
     }
@@ -110,7 +115,7 @@ struct AssessmentView: View {
                 Button("Yes") {
                     Task {
                         await assessmentVM.sendAssessment(submit: true)
-                        await assessmentVM.notifyThemisML(exerciseId: exercise.baseExercise.id)
+                        await assessmentVM.notifyThemisML()
                         showNavigationOptions.toggle()
                     }
                 }
@@ -119,7 +124,7 @@ struct AssessmentView: View {
             .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
                 Button("Next Submission") {
                     Task {
-                        await assessmentVM.initRandomSubmission(for: exercise)
+                        await assessmentVM.initRandomSubmission()
                         if assessmentVM.submission == nil {
                             showNoSubmissionsAlert = true
                         }
@@ -144,7 +149,8 @@ struct AssessmentView: View {
             TextAssessmentView(assessmentVM: assessmentVM,
                                assessmentResult: assessmentResult,
                                exercise: exercise,
-                               submissionId: submissionId)
+                               submissionId: submissionId,
+                               participationId: participationId)
         default:
             Text("Exercise not supported")
         }

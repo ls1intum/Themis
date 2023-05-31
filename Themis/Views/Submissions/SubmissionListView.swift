@@ -19,7 +19,8 @@ struct SubmissionListView: View {
                 NavigationLink {
                     AssessmentView(
                         exercise: exercise,
-                        submissionId: submission.baseSubmission.id ?? -1
+                        submissionId: submission.baseSubmission.id,
+                        participationId: submission.baseSubmission.participation?.id
                     )
                 } label: {
                     HStack {

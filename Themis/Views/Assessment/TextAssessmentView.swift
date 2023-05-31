@@ -17,6 +17,7 @@ struct TextAssessmentView: View {
     
     let exercise: Exercise
     var submissionId: Int?
+    var participationId: Int?
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -33,7 +34,8 @@ struct TextAssessmentView: View {
             }
         }
         .task {
-            await assessmentVM.initSubmission(for: exercise)
+            assessmentVM.participationId = participationId
+            await assessmentVM.initSubmission()
             textExerciseRendererVM.setContent(basedOn: assessmentVM.submission)
         }
         .onAppear {
@@ -55,7 +57,7 @@ struct TextAssessmentView: View {
 }
 
 struct TextAssessmentView_Previews: PreviewProvider {
-    @StateObject private static var assessmentVM = MockAssessmentViewModel(readOnly: false)
+    @StateObject private static var assessmentVM = MockAssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     
     static var previews: some View {
         TextAssessmentView(assessmentVM: assessmentVM,

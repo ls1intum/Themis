@@ -15,9 +15,20 @@ protocol AssessmentService {
     
     /// Save feedback to the submission
     func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws
+    
+    /// Fetches the participation with all data needed for assessment
+    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation
 }
 
 enum AssessmentServiceFactory {
-    
-    static let shared: AssessmentService = AssessmentServiceImpl()
+    static func service(for exercise: Exercise) -> any AssessmentService {
+        switch exercise {
+        case .programming(exercise: _):
+            return ProgrammingAssessmentServiceImpl()
+        case .text(exercise: _):
+            return TextAssessmentServiceImpl()
+        default:
+            return UnknownAssessmentServiceImpl()
+        }
+    }
 }

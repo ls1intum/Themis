@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ToolbarCancelButton: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
@@ -56,6 +57,6 @@ struct ToolbarCancelButton: View {
      @Environment(\.presentationMode) private static var presentationMode
      
      static var previews: some View {
-         ToolbarCancelButton(assessmentVM: AssessmentViewModel(readOnly: false), presentationMode: presentationMode)
+         ToolbarCancelButton(assessmentVM: AssessmentViewModel(exercise: Exercise.mockText, readOnly: false), presentationMode: presentationMode)
      }
  }

@@ -9,8 +9,9 @@ import Foundation
 import SharedModels
 import APIClient
 import DesignLibrary
+import Common
 
-class AssessmentServiceImpl: AssessmentService {
+class ProgrammingAssessmentServiceImpl: AssessmentService {
     
     let client = APIClient()
     
@@ -64,5 +65,10 @@ class AssessmentServiceImpl: AssessmentService {
                                                newAssessment: newAssessment,
                                                submit: submit))
             .get()
+    }
+    
+    // MARK: - Fetch Participation For Submission
+    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
+        throw UserFacingError(title: "Exercise type not supported")
     }
 }

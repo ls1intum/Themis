@@ -78,7 +78,7 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
-            await assessmentVM.initSubmission(for: exercise)
+            await assessmentVM.initSubmission()
             
             if let pId = assessmentVM.participation?.id {
                 await codeEditorVM.initFileTree(participationId: pId)

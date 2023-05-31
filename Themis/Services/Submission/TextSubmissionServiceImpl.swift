@@ -9,6 +9,7 @@ import Foundation
 import SharedModels
 import APIClient
 import DesignLibrary
+import Common
 
 class TextSubmissionServiceImpl: SubmissionService {
     
@@ -101,25 +102,7 @@ class TextSubmissionServiceImpl: SubmissionService {
     }
     
     // MARK: - Get Result
-    private struct GetResultRequest: APIRequest {
-        typealias Response = Result
-        
-        var participationId: Int
-        
-        var method: HTTPMethod {
-            .get
-        }
-        
-        var params: [URLQueryItem] {
-            [URLQueryItem(name: "withSubmission", value: "true")]
-        }
-        
-        var resourceName: String {
-            "api/text-exercise-participations/\(participationId)/latest-result-with-feedbacks"
-        }
-    }
-    
     func getResultFor(participationId: Int) async throws -> Result {
-        try await client.sendRequest(GetResultRequest(participationId: participationId)).get().0
+        throw UserFacingError(title: "Exercise type not supported")
     }
 }
