@@ -55,7 +55,7 @@ struct TextExerciseRenderer: View {
                 showEditFeedback: .constant(false),
                 selectedSection: .constant(nil),
                 feedbackForSelectionId: .constant(""),
-                pencilOnly: .constant(true),
+                pencilOnly: $textExerciseRendererVM.pencilMode,
                 scrollUtils: scrollUtils,
                 diffLines: [],
                 isNewFile: false,

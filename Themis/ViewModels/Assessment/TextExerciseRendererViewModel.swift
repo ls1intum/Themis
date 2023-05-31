@@ -11,6 +11,7 @@ import SharedModels
 class TextExerciseRendererViewModel: ObservableObject {
     @Published var content: String? = "Loading..."
     @Published var fontSize: CGFloat = 18.0
+    @Published var pencilMode = true
     
     var wordCount: Int {
         let wordRegex = /[\w\u00C0-\u00ff]+/
