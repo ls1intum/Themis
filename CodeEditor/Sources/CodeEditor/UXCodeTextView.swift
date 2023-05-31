@@ -63,6 +63,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
     var feedbackSuggestions: [FeedbackSuggestion] = []
+    var showsLineNumbers: Bool
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
@@ -81,7 +82,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     var lightBulbs = [LightbulbButton]()
     
-    init() {
+    init(showsLineNumbers: Bool) {
+        self.showsLineNumbers = showsLineNumbers
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
         }
@@ -315,6 +317,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     private func numViewWidth() -> CGFloat {
+        if !showsLineNumbers { return 0.0 }
+        
         let maxNum = 4.0
         if let font {
             let standarized = font.withSize(CodeEditor.defaultFontSize)

@@ -34,7 +34,7 @@ class PaneViewModel: ObservableObject {
             rightPaneAsPlaceholder = false
             showRightPane = true
             minRightWidth = (0.2 * UIScreen.main.bounds.size.width).rounded()
-            dragWidthRight = minRightWidth
+            dragWidthRight = (0.25 * UIScreen.main.bounds.size.width).rounded()
             minRightSnapWidth = 0
         }
     }

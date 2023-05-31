@@ -11,8 +11,9 @@ import SharedModels
 struct TextAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
-    @StateObject var paneVM = PaneViewModel(mode: .rightOnly)
-    @StateObject var umlVM = UMLViewModel()
+    @StateObject private var textExerciseRendererVM = TextExerciseRendererViewModel()
+    @StateObject private var paneVM = PaneViewModel(mode: .rightOnly)
+    @StateObject private var umlVM = UMLViewModel()
     
     let exercise: Exercise
     var submissionId: Int?
@@ -20,9 +21,8 @@ struct TextAssessmentView: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
-                Text(assessmentVM.submission?.get(as: TextSubmission.self)?.text ?? "no")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                
+                TextExerciseRenderer(textExerciseRendererVM: textExerciseRendererVM)
+                
                 Group {
                     RightGripView(paneVM: paneVM)
                     
@@ -34,7 +34,12 @@ struct TextAssessmentView: View {
         }
         .task {
             await assessmentVM.initSubmission(for: exercise)
+            textExerciseRendererVM.setContent(basedOn: assessmentVM.submission)
         }
+        .onAppear {
+            assessmentVM.fontSize = 19.0
+        }
+        .onChange(of: assessmentVM.fontSize, perform: { textExerciseRendererVM.fontSize = $0 })
     }
     
     private var correctionWithPlaceholder: some View {

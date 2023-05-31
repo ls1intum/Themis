@@ -230,6 +230,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
+        textView.font = editorBindings.font ?? textView.font
         
         if let binding = editorBindings.fontSize {
             textView.changeFontSize(size: binding.wrappedValue)
@@ -256,6 +257,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.highlightedRanges = editorBindings.highlightedRanges
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
+        textView.customLayoutManager.showsLineNumbers = editorBindings.showsLineNumbers
         textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
         
         // check if textView's layout is completed and store offsets of all inline highlights
@@ -325,10 +327,11 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else // iOS etc
     
     public func makeUIView(context: Context) -> UITextView {
-        let textView = UXCodeTextView()
+        let textView = UXCodeTextView(showsLineNumbers: editorBindings.showsLineNumbers)
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.highlightedRanges = editorBindings.highlightedRanges
+        textView.font = editorBindings.font ?? textView.font
 #if os(iOS)
         textView.autocapitalizationType = .none
         textView.smartDashesType = .no

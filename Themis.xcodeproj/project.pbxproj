@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */; };
 		0BEC4C37292EA32A00F9F802 /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */; };
+		6500B9382A260436003C8445 /* TextExerciseRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6500B9372A260436003C8445 /* TextExerciseRenderer.swift */; };
+		6500B93A2A2605A0003C8445 /* TextExerciseRendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6500B9392A2605A0003C8445 /* TextExerciseRendererViewModel.swift */; };
 		650538B92A1E1EF200C45E18 /* ExerciseMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */; };
 		650538BC2A1E226A00C45E18 /* MockAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538BB2A1E226A00C45E18 /* MockAssessmentViewModel.swift */; };
 		650538BE2A1E6E3D00C45E18 /* SubmissionMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */; };
@@ -146,6 +148,8 @@
 /* Begin PBXFileReference section */
 		0BEC4C34292EA1A400F9F802 /* FiletreeSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiletreeSidebarView.swift; sourceTree = "<group>"; };
 		0BEC4C36292EA32A00F9F802 /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
+		6500B9372A260436003C8445 /* TextExerciseRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExerciseRenderer.swift; sourceTree = "<group>"; };
+		6500B9392A2605A0003C8445 /* TextExerciseRendererViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExerciseRendererViewModel.swift; sourceTree = "<group>"; };
 		650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMockExtension.swift; sourceTree = "<group>"; };
 		650538BB2A1E226A00C45E18 /* MockAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAssessmentViewModel.swift; sourceTree = "<group>"; };
 		650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionMockExtension.swift; sourceTree = "<group>"; };
@@ -366,10 +370,19 @@
 				E171F00D2933B5DD00236BC4 /* CodeEditorViewModel.swift */,
 				DA98C65E2954DE4F005727FB /* UMLViewModel.swift */,
 				65B49F3F2A07F29400C9A45F /* PaneViewModel.swift */,
+				6500B9392A2605A0003C8445 /* TextExerciseRendererViewModel.swift */,
 			);
 			name = Assessment;
 			path = Themis/ViewModels/Assessment;
 			sourceTree = SOURCE_ROOT;
+		};
+		6500B9362A2603CD003C8445 /* Text Exercise */ = {
+			isa = PBXGroup;
+			children = (
+				6500B9372A260436003C8445 /* TextExerciseRenderer.swift */,
+			);
+			path = "Text Exercise";
+			sourceTree = "<group>";
 		};
 		650538B72A1E1EE500C45E18 /* Mock */ = {
 			isa = PBXGroup;
@@ -731,6 +744,7 @@
 		E21AF042292B9D4C0096ACFC /* Assessment */ = {
 			isa = PBXGroup;
 			children = (
+				6500B9362A2603CD003C8445 /* Text Exercise */,
 				652A98002A07D50B00EB1F32 /* Toolbar */,
 				E21AF045292B9D4C0096ACFC /* CodeEditor */,
 				8384C4292920F7D7008CCB4D /* CorrectionSidebar */,
@@ -1008,6 +1022,7 @@
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
 				65E6A1042A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift in Sources */,
+				6500B9382A260436003C8445 /* TextExerciseRenderer.swift in Sources */,
 				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
 				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
 				E200F787297F10B300DE269D /* SourceCodeLanguage.swift in Sources */,
@@ -1064,6 +1079,7 @@
 				DA1DC19C2952320E0005219D /* UMLView.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,
 				8384C42B2920F855008CCB4D /* CorrectionSidebarView.swift in Sources */,
+				6500B93A2A2605A0003C8445 /* TextExerciseRendererViewModel.swift in Sources */,
 				6589205529EE7BFC005EE6FA /* LoginTextFieldStyle.swift in Sources */,
 				DA3978E6296C16D200734E01 /* CourseViewModel.swift in Sources */,
 				DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */,
