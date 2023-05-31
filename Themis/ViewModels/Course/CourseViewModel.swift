@@ -16,6 +16,7 @@ class CourseViewModel: ObservableObject {
     @Published var loading = false
     @Published var courses: [Course] = []
     @Published var error: Error?
+    @Published var showEmptyMessage = true
     
     private static var shownCourseIDKey = "shownCourseID"
     
@@ -43,6 +44,10 @@ class CourseViewModel: ObservableObject {
         }
     }
     
+    var hasExams: Bool {
+        !(shownCourse?.exams?.isEmpty ?? true)
+    }
+    
     init() {
         // only way to check for non-existence:
         if UserDefaults.standard.object(forKey: Self.shownCourseIDKey) != nil {
@@ -68,6 +73,7 @@ class CourseViewModel: ObservableObject {
         }
         
         courses = coursesForDashboard.value?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
+        showEmptyMessage = courses.isEmpty
         
         if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
             // can't use .first here due to double wrapped optional
