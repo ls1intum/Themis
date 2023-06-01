@@ -36,7 +36,7 @@ struct TextAssessmentView: View {
         .task {
             assessmentVM.participationId = participationId
             await assessmentVM.initSubmission()
-            textExerciseRendererVM.setContent(basedOn: assessmentVM.submission)
+            textExerciseRendererVM.setup(basedOn: assessmentVM.participation)
         }
         .onAppear {
             assessmentVM.fontSize = 19.0

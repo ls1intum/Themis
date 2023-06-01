@@ -34,5 +34,6 @@ struct CodeEditorView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .background(Color.themisBackground)
     }
 }

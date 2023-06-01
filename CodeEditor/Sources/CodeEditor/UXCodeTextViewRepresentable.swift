@@ -253,12 +253,16 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         
         textView.isEditable   = editorBindings.flags.contains(.editable)
         textView.isSelectable = editorBindings.flags.contains(.selectable)
-        textView.backgroundColor = editorBindings.flags.contains(.blackBackground) ? UIColor.black : UIColor.white
+        textView.backgroundColor = UIColor(named: "themisBackground")
         textView.highlightedRanges = editorBindings.highlightedRanges
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
         textView.customLayoutManager.showsLineNumbers = editorBindings.showsLineNumbers
         textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
+        
+        if editorBindings.language == nil { // plaintext
+            textView.textColor = UIColor.label
+        }
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {

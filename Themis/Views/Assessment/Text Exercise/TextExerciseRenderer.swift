@@ -17,13 +17,12 @@ struct TextExerciseRenderer: View {
     
     private var editorFlags: CodeEditor.Flags {
         var flags: CodeEditor.Flags = [.selectable]
-        if colorScheme == .dark { flags.insert(.blackBackground) }
 //        if !readOnly { flags.insert(.feedbackMode) }
         return flags
     }
     
     private var theme: CodeEditor.ThemeName {
-        colorScheme == .dark ? .ocean : CodeEditor.ThemeName(rawValue: "atelier-seaside-light")
+        colorScheme == .dark ? CodeEditor.ThemeName(rawValue: "a11y-dark") : CodeEditor.ThemeName(rawValue: "color-brewer")
     }
     
     private var font: UIFont {
@@ -39,6 +38,7 @@ struct TextExerciseRenderer: View {
                 countLabel(title: "Characters", textExerciseRendererVM.charCount)
             }
         }
+        .background(Color.themisBackground)
     }
     
     private var textArea: some View {
@@ -49,7 +49,7 @@ struct TextExerciseRenderer: View {
                 fontSize: $textExerciseRendererVM.fontSize,
                 themeName: theme,
                 flags: editorFlags,
-                highlightedRanges: [],
+                highlightedRanges: textExerciseRendererVM.inlineHighlights,
                 dragSelection: .constant(nil),
                 showAddFeedback: .constant(false),
                 showEditFeedback: .constant(false),
@@ -97,7 +97,7 @@ struct TextExerciseRenderer_Previews: PreviewProvider {
         TextExerciseRenderer(textExerciseRendererVM: textVM)
             .previewInterfaceOrientation(.landscapeRight)
             .onAppear {
-                textVM.setContent(basedOn: Submission.mockText.baseSubmission)
+//                textVM.setup(basedOn: Submission.mockText.baseSubmission.participation)
             }
     }
 }

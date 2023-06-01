@@ -59,7 +59,6 @@ struct CodeView: View {
     var editorFlags: CodeEditor.Flags {
         var flags: CodeEditor.Flags = []
         flags.insert(.selectable)
-        if colorScheme == .dark { flags.insert(.blackBackground) }
         if !readOnly { flags.insert(.feedbackMode) }
         return flags
     }

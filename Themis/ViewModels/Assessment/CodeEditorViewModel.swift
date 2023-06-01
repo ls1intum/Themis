@@ -210,8 +210,7 @@ class CodeEditorViewModel: ObservableObject {
         let highlightedRange = HighlightedRange(
             id: feedbackId.uuidString,
             range: range,
-            color: UIColor.systemYellow,
-            cornerRadius: 8
+            color: UIColor(Color.neutralTextHighlight)
         )
         
         if (inlineHighlights.contains { $0.key == path }) {

@@ -15,8 +15,6 @@ public final class HighlightedRange {
     public let range: NSRange
     /// Color to highlight the text with.
     public let color: UIColor
-    /// Corner radius of the highlight.
-    public let cornerRadius: CGFloat
     /// enables distinction between normal and suggested feedbacks
     public let isSuggested: Bool
 
@@ -25,12 +23,10 @@ public final class HighlightedRange {
     ///   - id: ID of the range. Defaults to a UUID.
     ///   - range: Range in the text to highlight.
     ///   - color: Color to highlight the text with.
-    ///   - cornerRadius: Corner radius of the highlight. A value of zero or less means no corner radius. Defaults to 0.
-    public init(id: String = UUID().uuidString, range: NSRange, color: UIColor, cornerRadius: CGFloat = 0, isSuggested: Bool = false) {
+    public init(id: String = UUID().uuidString, range: NSRange, color: UIColor, isSuggested: Bool = false) {
         self.id = id
         self.range = range
         self.color = color
-        self.cornerRadius = cornerRadius
         self.isSuggested = isSuggested
     }
 }

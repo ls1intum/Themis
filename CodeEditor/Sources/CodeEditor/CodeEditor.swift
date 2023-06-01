@@ -174,8 +174,7 @@ public struct CodeEditor {
         /// If the user starts a newline, the editor automagically adds the same
         /// whitespace as on the previous line.
         public static let smartIndent = Flags(rawValue: 1 << 2)
-        public static let blackBackground = Flags(rawValue: 1 << 3)
-        public static let feedbackMode = Flags(rawValue: 1 << 4)
+        public static let feedbackMode = Flags(rawValue: 1 << 3)
 
         public static let defaultViewerFlags: Flags = [ .selectable ]
         public static let defaultEditorFlags: Flags =

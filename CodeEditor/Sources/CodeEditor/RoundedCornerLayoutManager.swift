@@ -62,7 +62,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
 
         lineRect = lineRect.integral.insetBy(dx: 0.4, dy: 0.4)
         /// The roundedReect is responsible for the round Corners
-        let path = UIBezierPath(roundedRect: lineRect, cornerRadius: 5)
+        let path = UIBezierPath(roundedRect: lineRect, cornerRadius: height * 0.2)
         path.fill()
     }
     
