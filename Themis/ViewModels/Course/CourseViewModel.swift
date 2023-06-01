@@ -18,6 +18,7 @@ class CourseViewModel: ObservableObject {
     @Published var viewOnlyExams: [Exam] = []
     @Published var assessableExams: [Exam] = []
     @Published var error: Error?
+    @Published var showEmptyMessage = true
     
     private static var shownCourseIDKey = "shownCourseID"
     
@@ -72,6 +73,7 @@ class CourseViewModel: ObservableObject {
             }
             
             courses = coursesForDashboard.value?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
+            showEmptyMessage = courses.isEmpty
             
             if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
                 // can't use .first here due to double wrapped optional
