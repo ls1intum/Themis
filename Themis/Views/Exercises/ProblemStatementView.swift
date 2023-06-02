@@ -8,34 +8,47 @@
 import SwiftUI
 import DesignLibrary
 import UserStore
+import Common
 
 /// A view that loads a standalone problem statement page in a WebView
 struct ProblemStatementView: View {
-    @State private var request: URLRequest
+    @State private var request: URLRequest?
     @State private var height: CGFloat = .l
     @State private var isLoading = true
     
     init(courseId: Int, exerciseId: Int) {
         if let url = URL(string: "/courses/\(courseId)/exercises/\(exerciseId)/problem-statement", relativeTo: UserSession.shared.institution?.baseURL) {
             self._request = State(wrappedValue: URLRequest(url: url))
-        } else {
-            // swiftlint:disable:next force_unwrapping
-            self._request = State(wrappedValue: URLRequest(url: URL(string: "https://google.com")!))
         }
     }
     
     var body: some View {
-        ZStack {
-            ArtemisWebView(urlRequest: $request,
-                           contentHeight: $height,
-                           isLoading: $isLoading)
-            .disabled(true)
-            .frame(height: isLoading ? 0 : height)
-            
-            ProgressView()
-                .isHidden(!isLoading, remove: true)
+        if let request {
+            ZStack {
+                ArtemisWebView(urlRequest: .constant(request),
+                               contentHeight: $height,
+                               isLoading: $isLoading)
+                .disabled(true)
+                .frame(height: isLoading ? 0 : height)
+                
+                ProgressView()
+                    .isHidden(!isLoading, remove: true)
+            }
+            .frame(height: height)
+        } else {
+            errorMessage
         }
-        .frame(height: height)
+    }
+    
+    private var errorMessage: some View {
+        Text("Could not load content")
+            .textCase(.uppercase)
+            .font(.system(size: 14, weight: .medium))
+            .foregroundColor(.red)
+            .frame(maxWidth: .infinity)
+            .onAppear {
+                log.error("Problem statement could not be loaded")
+            }
     }
 }
 
