@@ -52,7 +52,7 @@ struct EditFeedbackViewBase: View {
                         .foregroundColor(.getTextColor(forCredits: score)))
                     .background(Color.getBackgroundColor(forCredits: score))
                 
-                ScorePicker(score: $score)
+                ScorePicker(score: $score, maxScore: assessmentResult.maxPoints)
                     .frame(maxWidth: 130)
             }
             .animation(.easeIn, value: score)
