@@ -45,28 +45,33 @@ struct CorrectionSidebarView: View {
             sideBarElementPicker
             
             if !assessmentVM.loading {
-                switch correctionSidebarStatus {
-                case .problemStatement:
+                ZStack {
                     ScrollView {
                         ProblemStatementView(courseId: courseId, exerciseId: exercise?.id ?? -1)
                             .frame(maxHeight: .infinity)
                     }
-                case .correctionGuidelines:
-                    ScrollView {
-                        CorrectionGuidelinesCellView(
-                            gradingCriteria: exercise?.gradingCriteria ?? [],
-                            gradingInstructions: exercise?.gradingInstructions
+                    .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
+                    
+                    switch correctionSidebarStatus {
+                    case .problemStatement:
+                        EmptyView() // handled above
+                    case .correctionGuidelines:
+                        ScrollView {
+                            CorrectionGuidelinesCellView(
+                                gradingCriteria: exercise?.gradingCriteria ?? [],
+                                gradingInstructions: exercise?.gradingInstructions
+                            )
+                        }
+                    case .generalFeedback:
+                        FeedbackListView(
+                            readOnly: assessmentVM.readOnly,
+                            assessmentResult: assessmentResult,
+                            codeEditorVM: cvm,
+                            participationId: assessmentVM.participation?.id,
+                            templateParticipationId: templateParticipationId,
+                            gradingCriteria: exercise?.gradingCriteria ?? []
                         )
                     }
-                case .generalFeedback:
-                    FeedbackListView(
-                        readOnly: assessmentVM.readOnly,
-                        assessmentResult: assessmentResult,
-                        codeEditorVM: cvm,
-                        participationId: assessmentVM.participation?.id,
-                        templateParticipationId: templateParticipationId,
-                        gradingCriteria: exercise?.gradingCriteria ?? []
-                    )
                 }
             }
             Spacer()
