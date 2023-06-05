@@ -30,7 +30,7 @@ struct CodeView: View {
                 showAddFeedback: $cvm.showAddFeedback,
                 showEditFeedback: $cvm.showEditFeedback,
                 selectedSection: $cvm.selectedSection,
-                feedbackForSelectionId: $cvm.feedbackForSelectionId,
+                selectedFeedbackForEditingId: $cvm.selectedFeedbackForEditingId,
                 pencilOnly: $cvm.pencilMode,
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,

@@ -153,7 +153,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         public func textView(_ textView: UITextView, shouldInteractWith URL: URL,
                              in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
             if interaction == .invokeDefaultAction {
-                self.parent.editorBindings.feedbackForSelectionId.wrappedValue = URL.absoluteString
+                self.parent.editorBindings.selectedFeedbackForEditingId.wrappedValue = URL.absoluteString
                 self.parent.editorBindings.showEditFeedback.wrappedValue = true
             }
             return false

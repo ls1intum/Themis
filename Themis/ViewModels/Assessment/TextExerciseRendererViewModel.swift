@@ -14,6 +14,11 @@ import Common
 class TextExerciseRendererViewModel: ObservableObject {
     @Published var content: String? = "Loading..."
     @Published var fontSize: CGFloat = 18.0
+    @Published var showAddFeedback = false
+    @Published var showEditFeedback = false
+    @Published var selectedFeedbackForEditingId = ""
+    @Published var selectedFeedbackSuggestionId = ""
+    @Published var selectedSection: NSRange?
     @Published var pencilMode = true
     @Published var isLoading = false
     @Published var inlineHighlights: [HighlightedRange] = [] {
@@ -35,6 +40,8 @@ class TextExerciseRendererViewModel: ObservableObject {
         content?.count ?? 0
     }
     
+    private var feedbackIdToBlockId: [Int: String] = [:]
+    
     @MainActor
     func setup(basedOn participation: BaseParticipation?) {
         guard let textSubmission = participation?.submissions?.last?.baseSubmission.get(as: TextSubmission.self) else {
@@ -50,7 +57,8 @@ class TextExerciseRendererViewModel: ObservableObject {
     
     private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [Feedback]) {
         blocks.forEach { block in
-            guard let startIndex = block.startIndex,
+            guard let blockId = block.id,
+                  let startIndex = block.startIndex,
                   let endIndex = block.endIndex,
                   let feedback = feedbacks.first(where: { $0.reference == block.id }),
                   startIndex < endIndex else {
@@ -60,8 +68,28 @@ class TextExerciseRendererViewModel: ObservableObject {
             let range = NSRange(startIndex..<endIndex)
             let color = UIColor(.getHighlightColor(forCredits: feedback.credits ?? 0.0))
             
-            inlineHighlights.append(.init(range: range, color: color))
+            inlineHighlights.append(HighlightedRange(id: blockId, range: range, color: color))
+            feedbackIdToBlockId[feedback.id ?? -1] = blockId
         }
         undoManager.removeAllActions()
+    }
+        
+    private func updateHighlightColor(for feedback: Feedback) {
+        guard let feedbackId = feedback.id,
+              let blockId = feedbackIdToBlockId[feedbackId],
+              let oldHighlightIndex = inlineHighlights.firstIndex(where: { $0.id == blockId }) else {
+            return
+        }
+        
+        let oldHighlight = inlineHighlights[oldHighlightIndex]
+        let newColor = UIColor(Color.getHighlightColor(forCredits: feedback.credits ?? 0.0))
+        
+        inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id, range: oldHighlight.range, color: newColor)
+    }
+}
+
+extension TextExerciseRendererViewModel: FeedbackDelegate {
+    func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
+        updateHighlightColor(for: feedback.baseFeedback)
     }
 }

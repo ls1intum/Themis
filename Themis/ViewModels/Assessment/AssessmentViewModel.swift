@@ -233,4 +233,8 @@ class AssessmentViewModel: ObservableObject {
     func getFeedback(byId id: String) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { "\($0.id)" == id })
     }
+    
+    func getFeedback(byReference reference: String) -> AssessmentFeedback? {
+        assessmentResult.feedbacks.first(where: { $0.baseFeedback.reference == reference })
+    }
 }

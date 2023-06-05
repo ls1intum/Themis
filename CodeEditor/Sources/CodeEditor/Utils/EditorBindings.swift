@@ -16,7 +16,7 @@ public struct EditorBindings {
     public var showAddFeedback: Binding<Bool>
     public var showEditFeedback: Binding<Bool>
     public var selectedSection: Binding<NSRange?>
-    public var feedbackForSelectionId: Binding<String>
+    public var selectedFeedbackForEditingId: Binding<String>
     public var pencilOnly: Binding<Bool>
     public var scrollUtils: ScrollUtils
     public var diffLines: [Int]
@@ -38,11 +38,11 @@ public struct EditorBindings {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                feedbackForSelectionId: Binding<String>,
+                selectedFeedbackForEditingId: Binding<String>,
                 pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils,
-                diffLines: [Int],
-                isNewFile: Bool,
+                diffLines: [Int] = [],
+                isNewFile: Bool = false,
                 showsLineNumbers: Bool = true,
                 feedbackSuggestions: [FeedbackSuggestion],
                 selectedFeedbackSuggestionId: Binding<String>
@@ -60,7 +60,7 @@ public struct EditorBindings {
         self.showAddFeedback = showAddFeedback
         self.showEditFeedback = showEditFeedback
         self.selectedSection = selectedSection
-        self.feedbackForSelectionId = feedbackForSelectionId
+        self.selectedFeedbackForEditingId = selectedFeedbackForEditingId
         self.pencilOnly = pencilOnly
         self.scrollUtils = scrollUtils
         self.diffLines = diffLines

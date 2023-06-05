@@ -92,12 +92,14 @@ class AssessmentResult: Encodable, ObservableObject {
         computedFeedbacks.removeAll { $0.id == id }
     }
 
-    func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    @discardableResult
+    func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
-            return
+            return nil
         }
         computedFeedbacks[index].baseFeedback.detailText = detailText
         computedFeedbacks[index].baseFeedback.credits = credits
+        return computedFeedbacks[index]
     }
     
     func assignFile(id: UUID, file: Node) {

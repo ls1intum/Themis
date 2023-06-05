@@ -41,6 +41,18 @@ struct TextAssessmentView: View {
         .onAppear {
             assessmentVM.fontSize = 19.0
         }
+        .sheet(isPresented: $textExerciseRendererVM.showEditFeedback) {
+            if let feedback = assessmentVM.getFeedback(byReference: textExerciseRendererVM.selectedFeedbackForEditingId) {
+                EditFeedbackView(
+                    assessmentResult: assessmentVM.assessmentResult,
+                    feedbackDelegate: textExerciseRendererVM,
+                    scope: .inline,
+                    idForUpdate: feedback.id,
+                    gradingCriteria: assessmentVM.gradingCriteria,
+                    showSheet: $textExerciseRendererVM.showEditFeedback
+                )
+            }
+        }
         .onChange(of: assessmentVM.fontSize, perform: { textExerciseRendererVM.fontSize = $0 })
         .onChange(of: assessmentVM.pencilMode, perform: { textExerciseRendererVM.pencilMode = $0 })
     }
@@ -50,7 +62,8 @@ struct TextAssessmentView: View {
             CorrectionSidebarView(
                 assessmentResult: $assessmentVM.assessmentResult,
                 assessmentVM: assessmentVM,
-                umlVM: umlVM
+                umlVM: umlVM,
+                feedbackDelegate: textExerciseRendererVM
             )
         }
     }

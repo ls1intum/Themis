@@ -13,6 +13,8 @@ struct TextExerciseRenderer: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var textExerciseRendererVM: TextExerciseRendererViewModel
     
+    @State private var dragSelection: Range<Int>?
+    
     private let scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
     private var editorFlags: CodeEditor.Flags {
@@ -50,31 +52,30 @@ struct TextExerciseRenderer: View {
                 themeName: theme,
                 flags: editorFlags,
                 highlightedRanges: textExerciseRendererVM.inlineHighlights,
-                dragSelection: .constant(nil),
-                showAddFeedback: .constant(false),
-                showEditFeedback: .constant(false),
+                dragSelection: $dragSelection,
+                showAddFeedback: $textExerciseRendererVM.showAddFeedback,
+                showEditFeedback: $textExerciseRendererVM.showEditFeedback,
                 selectedSection: .constant(nil),
-                feedbackForSelectionId: .constant(""),
+                selectedFeedbackForEditingId: $textExerciseRendererVM.selectedFeedbackForEditingId,
                 pencilOnly: $textExerciseRendererVM.pencilMode,
                 scrollUtils: scrollUtils,
-                diffLines: [],
-                isNewFile: false,
                 showsLineNumbers: false,
                 feedbackSuggestions: [],
-                selectedFeedbackSuggestionId: .constant("")
+                selectedFeedbackSuggestionId: $textExerciseRendererVM.selectedFeedbackSuggestionId
             )
         )
         .padding()
-//        .onChange(of: dragSelection) { newValue in
-//            if let newValue {
-//                onOpenFeedback(newValue)
-//            }
-//        }
-//        .onChange(of: cvm.showAddFeedback) { newValue in
-//            if !newValue {
-//                dragSelection = nil
-//            }
-//        }
+        .onChange(of: dragSelection) { newValue in
+            if let newValue {
+                textExerciseRendererVM.selectedSection = newValue.toNSRange()
+                textExerciseRendererVM.showAddFeedback = true
+            }
+        }
+        .onChange(of: textExerciseRendererVM.showAddFeedback) { newValue in
+            if !newValue {
+                dragSelection = nil
+            }
+        }
     }
     
     private func countLabel(title: String, _ count: Int) -> some View {

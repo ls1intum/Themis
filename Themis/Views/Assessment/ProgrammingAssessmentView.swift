@@ -66,7 +66,7 @@ struct ProgrammingAssessmentView: View {
             )
         })
         .sheet(isPresented: $codeEditorVM.showEditFeedback) {
-            if let feedback = assessmentVM.getFeedback(byId: codeEditorVM.feedbackForSelectionId) {
+            if let feedback = assessmentVM.getFeedback(byId: codeEditorVM.selectedFeedbackForEditingId) {
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     feedbackDelegate: codeEditorVM,

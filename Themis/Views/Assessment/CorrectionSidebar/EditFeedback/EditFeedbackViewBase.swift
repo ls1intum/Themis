@@ -108,8 +108,9 @@ struct EditFeedbackViewBase: View {
     }
     
     private func updateFeedback() {
-        if let id = idForUpdate {
-            assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score)
+        if let id = idForUpdate,
+           let updatedFeedback = assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score) {
+            feedbackDelegate?.onFeedbackUpdate(updatedFeedback)
         }
     }
 

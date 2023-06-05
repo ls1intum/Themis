@@ -29,7 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
     @Published var pencilMode = true
-    @Published var feedbackForSelectionId = ""
+    @Published var selectedFeedbackForEditingId = ""
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
     @Published var selectedFeedbackSuggestionId = ""
