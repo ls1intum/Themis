@@ -16,6 +16,9 @@ struct ProblemStatementView: View {
     @State private var height: CGFloat = .l
     @State private var isLoading = true
     
+    /// Used for setting the height after the page is loaded. Without this, the problem statement webpage cannot resize properly.
+    private let heightQuery = "document.body.getElementsByClassName('instructions__content')[0].scrollHeight"
+
     init(courseId: Int, exerciseId: Int) {
         if let url = URL(string: "/courses/\(courseId)/exercises/\(exerciseId)/problem-statement", relativeTo: UserSession.shared.institution?.baseURL) {
             self._request = State(wrappedValue: URLRequest(url: url))
@@ -27,7 +30,8 @@ struct ProblemStatementView: View {
             ZStack {
                 ArtemisWebView(urlRequest: .constant(request),
                                contentHeight: $height,
-                               isLoading: $isLoading)
+                               isLoading: $isLoading,
+                               customJSHeightQuery: heightQuery)
                 .disabled(true)
                 .frame(height: isLoading ? 0 : height)
                 
