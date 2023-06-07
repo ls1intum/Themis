@@ -54,7 +54,7 @@ struct FeedbackListView: View {
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color("sidebarBackground"))
             }
-            .onDelete(perform: delete(at:))
+            .onDelete { delete(at: $0, in: assessmentResult.generalFeedback) }
         } header: {
             HStack {
                 Text("General Feedback")
@@ -84,7 +84,7 @@ struct FeedbackListView: View {
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color("sidebarBackground"))
             }
-            .onDelete(perform: delete(at:))
+            .onDelete { delete(at: $0, in: assessmentResult.inlineFeedback) }
         } header: {
             HStack {
                 Text("Inline Feedback")
@@ -114,9 +114,9 @@ struct FeedbackListView: View {
         }.headerProminence(.increased)
     }
     
-    private func delete(at indexSet: IndexSet) {
+    private func delete(at indexSet: IndexSet, in feedbackArray: [AssessmentFeedback]) {
         indexSet
-            .map { assessmentResult.feedbacks[$0] }
+            .map { feedbackArray[$0] }
             .forEach {
                 assessmentResult.deleteFeedback(id: $0.id)
                 if $0.scope == .inline {

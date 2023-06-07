@@ -94,6 +94,13 @@ class TextExerciseRendererViewModel: ObservableObject {
         setupHighlights(basedOn: [block], and: [feedback.baseFeedback])
     }
     
+    private func deleteHighlight(for feedback: Feedback) {
+        guard let blockId = feedback.reference else {
+            return
+        }
+        inlineHighlights.removeAll(where: { $0.id == blockId })
+    }
+    
     /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
     func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
         let block = TextBlock(submissionId: submissionId, startIndex: selectedSection?.lowerBound, endIndex: selectedSection?.upperBound)
@@ -108,5 +115,9 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
     
     func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
         updateHighlightColor(for: feedback.baseFeedback)
+    }
+    
+    func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
+        deleteHighlight(for: feedback.baseFeedback)
     }
 }
