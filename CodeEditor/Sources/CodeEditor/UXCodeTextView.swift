@@ -78,6 +78,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    var selectionGranularity = UITextGranularity.character
+    
     var feedbackMode = true
     
     var lightBulbs = [LightbulbButton]()
@@ -467,7 +469,18 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         return self.layoutManager.glyphIndex(for: point, in: textView.textContainer)
     }
     
-    private func getSelectionFromLine() -> Range<Int>? {
+    private func getSelectionFromTouch() -> Range<Int>? {
+        switch selectionGranularity {
+        case .character:
+            return getCharSelectionFromTouch()
+        case .word:
+            return getWordSelectionFromTouch()
+        default:
+            return getCharSelectionFromTouch()
+        }
+    }
+    
+    private func getCharSelectionFromTouch() -> Range<Int>? {
         guard let firstPoint, let secondPoint else { return nil }
         let firstGlyphIndex = getGlyphIndex(textView: self, point: firstPoint)
         let secondGlyphIndex = getGlyphIndex(textView: self, point: secondPoint)
@@ -478,6 +491,28 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    private func getWordSelectionFromTouch() -> Range<Int>? {
+        guard let firstPoint, let secondPoint,
+              let firstPosition = closestPosition(to: firstPoint),
+              let secondPosition = closestPosition(to: secondPoint),
+              let firstWordRange = rangeEnclosingApproximatePosition(firstPosition, with: .word, inDirection: .storage(.forward)),
+              let secondWordRange = rangeEnclosingApproximatePosition(secondPosition, with: .word, inDirection: .storage(.forward))
+        else { return nil }
+        
+        let firstPositionInt = offset(from: beginningOfDocument, to: firstPosition)
+        let secondPositionInt = offset(from: beginningOfDocument, to: secondPosition)
+        
+        var selectedRange: UITextRange?
+        if secondPositionInt < firstPositionInt { // check if range should be inverse
+            selectedRange = textRange(from: secondWordRange.start, to: firstWordRange.end)
+        } else {
+            selectedRange = textRange(from: firstWordRange.start, to: secondWordRange.end)
+        }
+        
+        guard let selectedRange else { return nil }
+        return textRangeToIntRange(selectedRange)
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard feedbackMode else { return }
         guard let touch = touches.first else { return }
@@ -492,7 +527,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
-            self.dragSelection = getSelectionFromLine()
+            self.dragSelection = getSelectionFromTouch()
             setNeedsDisplay()
         }
     }
@@ -510,6 +545,31 @@ protocol UXCodeTextViewDelegate: UXTextViewDelegate {
     var fontSize: CGFloat? { get set }
     
     func setDragSelection(_: Range<Int>?)
+}
+
+// MARK: - Range functions
+
+extension UXTextView {
+    /// Tries to find a range enclosing either the given position, it's left neighbor, or it's right neighbor
+    func rangeEnclosingApproximatePosition(_ position: UITextPosition, with granularity: UITextGranularity, inDirection direction: UITextDirection) -> UITextRange? {
+        let leftPosition = self.position(from: position, offset: -1)
+        let rightPosition = self.position(from: position, offset: 1)
+        let positionsToCheck = [position, leftPosition, rightPosition].compactMap({ $0 })
+        
+        for position in positionsToCheck {
+            if let range = tokenizer.rangeEnclosingPosition(position, with: granularity, inDirection: direction) {
+                return range
+            }
+        }
+        
+        return nil
+    }
+    
+    func textRangeToIntRange(_ textRange: UITextRange) -> Range<Int> {
+        let start = offset(from: beginningOfDocument, to: textRange.start)
+        let end = offset(from: beginningOfDocument, to: textRange.end)
+        return start..<end
+    }
 }
 
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView

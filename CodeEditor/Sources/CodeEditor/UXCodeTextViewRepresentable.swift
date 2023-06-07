@@ -230,6 +230,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
+        textView.selectionGranularity = editorBindings.selectionGranularity
         textView.font = editorBindings.font ?? textView.font
         
         if let binding = editorBindings.fontSize {

@@ -52,6 +52,7 @@ struct TextExerciseRenderer: View {
                 themeName: theme,
                 flags: editorFlags,
                 highlightedRanges: textExerciseRendererVM.inlineHighlights,
+                selectionGranularity: .word,
                 dragSelection: $dragSelection,
                 showAddFeedback: $textExerciseRendererVM.showAddFeedback,
                 showEditFeedback: $textExerciseRendererVM.showEditFeedback,
