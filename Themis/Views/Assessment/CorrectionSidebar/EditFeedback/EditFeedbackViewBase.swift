@@ -120,9 +120,7 @@ struct EditFeedbackViewBase: View {
         } else if scope == .inline {
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
                                               scope: scope,
-                                              file: incompleteFeedback?.file,
-                                              lines: incompleteFeedback?.lines,
-                                              columns: incompleteFeedback?.columns)
+                                              detail: incompleteFeedback?.detail)
             assessmentResult.addFeedback(feedback: feedback)
             feedbackDelegate?.onFeedbackCreation(feedback)
         } else {
@@ -142,15 +140,20 @@ struct EditFeedbackViewBase: View {
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
+        guard var incompleteFeedbackDetail = incompleteFeedback?.detail as? ProgrammingFeedbackDetail else {
+            return
+        }
+        
         let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
+        incompleteFeedbackDetail.lines = lines
+        
         let feedback = AssessmentFeedback(
             baseFeedback: Feedback(detailText: feedbackSuggestion.text,
                                    credits: feedbackSuggestion.credits,
                                    type: .MANUAL_UNREFERENCED),
             scope: .inline,
-            file: incompleteFeedback?.file,
-            lines: lines
-        )
+            detail: incompleteFeedbackDetail)
+        
         assessmentResult.addFeedback(feedback: feedback)
         feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
     }

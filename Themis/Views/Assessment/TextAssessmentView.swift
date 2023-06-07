@@ -41,6 +41,19 @@ struct TextAssessmentView: View {
         .onAppear {
             assessmentVM.fontSize = 19.0
         }
+        .sheet(isPresented: $textExerciseRendererVM.showAddFeedback, onDismiss: {
+            textExerciseRendererVM.selectedFeedbackSuggestionId = ""
+        }, content: {
+            AddFeedbackView(
+                assessmentResult: assessmentVM.assessmentResult,
+                feedbackDelegate: textExerciseRendererVM,
+                incompleteFeedback: AssessmentFeedback(scope: .inline,
+                                                       detail: textExerciseRendererVM.generateIncompleteFeedbackDetail()),
+                scope: .inline,
+                gradingCriteria: assessmentVM.gradingCriteria,
+                showSheet: $textExerciseRendererVM.showAddFeedback
+            )
+        })
         .sheet(isPresented: $textExerciseRendererVM.showEditFeedback) {
             if let feedback = assessmentVM.getFeedback(byReference: textExerciseRendererVM.selectedFeedbackForEditingId) {
                 EditFeedbackView(

@@ -174,7 +174,7 @@ class CodeEditorViewModel: ObservableObject {
                 let lines = extractLines(textComponents: components)
                 // assign the related file to the feedback (required for deleting)
                 if let referencedFile = allFiles.first(where: { $0.path == path }) {
-                    assessmentResult.assignFile(id: feedback.id, file: referencedFile)
+                    assign(file: referencedFile, tofeedbackWithId: feedback.id, on: assessmentResult)
                     // this is required because the lines of a file are only availabe after the code is fetched
                     await referencedFile.fetchCode(participationId: participationId)
                     // indicates a multiline highight
@@ -192,9 +192,25 @@ class CodeEditorViewModel: ObservableObject {
         undoManager.removeAllActions()
     }
     
+    private func assign(file: Node, tofeedbackWithId feedbackId: UUID, on assessmentResult: AssessmentResult) {
+        guard var feedback = assessmentResult.getFeedback(byId: feedbackId) else {
+            return
+        }
+        
+        var detail = ProgrammingFeedbackDetail()
+        
+        if var existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
+            detail = existingDetail // use existing detail to prevent overwriting
+        }
+        
+        detail.file = file
+        feedback.detail = detail
+        assessmentResult.updateFeedback(feedback: feedback)
+    }
+    
     @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
-        if let filePath = feedback.file?.path {
+        if let filePath = (feedback.detail as? ProgrammingFeedbackDetail)?.file?.path {
             let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
             scrollUtils.offsets = scrollUtils.offsets.filter({ $0.key != highlight?.range })
             inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
@@ -234,12 +250,6 @@ class CodeEditorViewModel: ObservableObject {
     
     private func extractColumns(textComponents: [String]) -> [Int] {
         textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
-    }
-    
-    private func assignFileToFeedback(assessmentResult: AssessmentResult, path: String, id: UUID) {
-        if let referencedFile = allFiles.first(where: { $0.path == path }) {
-            assessmentResult.assignFile(id: id, file: referencedFile)
-        }
     }
     
     @MainActor
@@ -299,7 +309,9 @@ extension CodeEditorViewModel: FeedbackDelegate {
     
     @MainActor
     func onFeedbackCellTap(_ feedback: AssessmentFeedback, participationId: Int?, templateParticipationId: Int?) {
-        guard let file = feedback.file, let participationId = participationId, let templateParticipationId = templateParticipationId else {
+        guard let file = (feedback.detail as? ProgrammingFeedbackDetail)?.file,
+              let participationId,
+              let templateParticipationId else {
             return
         }
         

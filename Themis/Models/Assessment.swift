@@ -77,6 +77,10 @@ class AssessmentResult: Encodable, ObservableObject {
                 return AssessmentFeedback(baseFeedback: feedback, scope: scope)
             }
     }
+    
+    func getFeedback(byId id: UUID) -> AssessmentFeedback? {
+        computedFeedbacks.first(where: { $0.id == id })
+    }
 
     func addFeedback(feedback: AssessmentFeedback) {
         if feedback.scope == .inline {
@@ -102,10 +106,10 @@ class AssessmentResult: Encodable, ObservableObject {
         return computedFeedbacks[index]
     }
     
-    func assignFile(id: UUID, file: Node) {
-        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+    func updateFeedback(feedback: AssessmentFeedback) {
+        guard let index = (feedbacks.firstIndex { $0.id == feedback.id }) else {
             return
         }
-        computedFeedbacks[index].file = file
+        computedFeedbacks[index] = feedback
     }
 }

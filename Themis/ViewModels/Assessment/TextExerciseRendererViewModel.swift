@@ -40,7 +40,8 @@ class TextExerciseRendererViewModel: ObservableObject {
         content?.count ?? 0
     }
     
-    private var feedbackIdToBlockId: [Int: String] = [:]
+    /// Needed for creating new text blocks
+    private var submissionId: Int?
     
     @MainActor
     func setup(basedOn participation: BaseParticipation?) {
@@ -51,6 +52,7 @@ class TextExerciseRendererViewModel: ObservableObject {
         let feedbacks = participation?.results?.last?.feedbacks ?? []
         let blocks = textSubmission.blocks ?? []
         
+        submissionId = textSubmission.id
         content = textSubmission.text ?? content
         setupHighlights(basedOn: blocks, and: feedbacks)
     }
@@ -69,14 +71,12 @@ class TextExerciseRendererViewModel: ObservableObject {
             let color = UIColor(.getHighlightColor(forCredits: feedback.credits ?? 0.0))
             
             inlineHighlights.append(HighlightedRange(id: blockId, range: range, color: color))
-            feedbackIdToBlockId[feedback.id ?? -1] = blockId
         }
         undoManager.removeAllActions()
     }
         
     private func updateHighlightColor(for feedback: Feedback) {
-        guard let feedbackId = feedback.id,
-              let blockId = feedbackIdToBlockId[feedbackId],
+        guard let blockId = feedback.reference,
               let oldHighlightIndex = inlineHighlights.firstIndex(where: { $0.id == blockId }) else {
             return
         }
@@ -86,9 +86,26 @@ class TextExerciseRendererViewModel: ObservableObject {
         
         inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id, range: oldHighlight.range, color: newColor)
     }
+    
+    private func createHighlight(for feedback: AssessmentFeedback) {
+        guard let block = (feedback.detail as? TextFeedbackDetail)?.block else {
+            return
+        }
+        setupHighlights(basedOn: [block], and: [feedback.baseFeedback])
+    }
+    
+    /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
+    func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
+        let block = TextBlock(submissionId: submissionId, startIndex: selectedSection?.lowerBound, endIndex: selectedSection?.upperBound)
+        return TextFeedbackDetail(block: block)
+    }
 }
 
 extension TextExerciseRendererViewModel: FeedbackDelegate {
+    func onFeedbackCreation(_ feedback: AssessmentFeedback) {
+        createHighlight(for: feedback)
+    }
+    
     func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
         updateHighlightColor(for: feedback.baseFeedback)
     }
