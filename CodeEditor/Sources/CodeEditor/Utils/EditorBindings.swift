@@ -13,6 +13,7 @@ public struct EditorBindings {
     public let indentStyle: CodeEditor.IndentStyle
     public var highlightedRanges: [HighlightedRange]
     public let selectionGranularity: UITextGranularity
+    public let canSelectionIncludeHighlightedRanges: Bool
     public var dragSelection: Binding<Range<Int>?>?
     public var showAddFeedback: Binding<Bool>
     public var showEditFeedback: Binding<Bool>
@@ -36,6 +37,7 @@ public struct EditorBindings {
                 indentStyle: CodeEditor.IndentStyle = .system,
                 highlightedRanges: [HighlightedRange],
                 selectionGranularity: UITextGranularity = .character,
+                canSelectionIncludeHighlightedRanges: Bool = true,
                 dragSelection: Binding<Range<Int>?>? = nil,
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
@@ -59,6 +61,7 @@ public struct EditorBindings {
         self.indentStyle = indentStyle
         self.highlightedRanges = highlightedRanges
         self.selectionGranularity = selectionGranularity
+        self.canSelectionIncludeHighlightedRanges = canSelectionIncludeHighlightedRanges
         self.dragSelection = dragSelection
         self.showAddFeedback = showAddFeedback
         self.showEditFeedback = showEditFeedback

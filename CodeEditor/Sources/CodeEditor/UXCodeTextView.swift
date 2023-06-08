@@ -79,6 +79,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     var selectionGranularity = UITextGranularity.character
+    var canSelectionIncludeHighlightedRanges = true
     
     var feedbackMode = true
     
@@ -496,7 +497,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
               let firstPosition = closestPosition(to: firstPoint),
               let secondPosition = closestPosition(to: secondPoint),
               let firstWordRange = rangeEnclosingApproximatePosition(firstPosition, with: .word, inDirection: .storage(.forward)),
-              let secondWordRange = rangeEnclosingApproximatePosition(secondPosition, with: .word, inDirection: .storage(.forward))
+              let secondWordRange = rangeEnclosingApproximatePosition(secondPosition, with: .word, inDirection: .storage(.forward)),
+              firstWordRange != secondWordRange // prevents selecting just 1 word
         else { return nil }
         
         let firstPositionInt = offset(from: beginningOfDocument, to: firstPosition)
@@ -511,6 +513,20 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         
         guard let selectedRange else { return nil }
         return textRangeToIntRange(selectedRange)
+    }
+    
+    /// Validates the `dragSelection` value
+    private func isSelectionValid() -> Bool {
+        guard !canSelectionIncludeHighlightedRanges else { return true }
+        
+        let highlightedIntRanges = highlightedRanges.compactMap({ Range($0.range) })
+        for range in highlightedIntRanges {
+            if self.dragSelection?.overlaps(range) == true {
+                return false
+            }
+        }
+        
+        return true
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -532,10 +548,15 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard feedbackMode else { return }
         let coordinator = delegate as? UXCodeTextViewDelegate
+        
+        guard feedbackMode, isSelectionValid() else {
+            dragSelection = nil
+            setNeedsDisplay()
+            return
+        }
+        
         coordinator?.setDragSelection(dragSelection)
     }
 }

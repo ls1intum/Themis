@@ -53,6 +53,7 @@ struct TextExerciseRenderer: View {
                 flags: editorFlags,
                 highlightedRanges: textExerciseRendererVM.inlineHighlights,
                 selectionGranularity: .word,
+                canSelectionIncludeHighlightedRanges: false,
                 dragSelection: $dragSelection,
                 showAddFeedback: $textExerciseRendererVM.showAddFeedback,
                 showEditFeedback: $textExerciseRendererVM.showEditFeedback,
