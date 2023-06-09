@@ -2,15 +2,14 @@ import SwiftUI
 import SharedModels
 
 // swiftlint:disable closure_body_length
-// swiftlint:disable line_length
 
 
 struct AssessmentView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
     @StateObject var codeEditorVM = CodeEditorViewModel()
-    @StateObject var umlVM = UMLViewModel()
     @StateObject var paneVM = PaneViewModel()
     
     @State private var showCancelDialog = false
@@ -59,11 +58,6 @@ struct AssessmentView: View {
         }
         .onDisappear {
             UndoManager.shared.removeAllActions()
-        }
-        .overlay {
-            if umlVM.showUMLFullScreen {
-                UMLView(umlVM: umlVM)
-            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -210,7 +204,7 @@ struct AssessmentView: View {
                     assessmentResult: $assessmentVM.assessmentResult,
                     assessmentVM: assessmentVM,
                     cvm: codeEditorVM,
-                    umlVM: umlVM
+                    courseId: courseVM.shownCourseID ?? -1
                 )
             }
         }

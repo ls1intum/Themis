@@ -38,6 +38,7 @@ struct CourseView: View {
                             }
                         }
                     }
+                    .environmentObject(courseVM)
                     .refreshable {
                         await courseVM.fetchAllCourses()
                     }
@@ -63,6 +64,7 @@ struct CourseView: View {
         .task {
             await courseVM.fetchAllCourses()
         }
+        .errorAlert(error: $courseVM.error)
     }
 
     private var logoutButton: some View {

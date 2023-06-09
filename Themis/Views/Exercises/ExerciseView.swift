@@ -6,19 +6,27 @@
 //
 
 import SwiftUI
-import UIKit
-import SharedModels
 import DesignLibrary
+import SharedModels
+import UserStore
 
 struct ExerciseView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
     
-    let exercise: Exercise
+    private let exercise: Exercise
+    private let courseId: Int
     /// Only set if the exercise is a part of an exam
-    var exam: Exam?
+    private var exam: Exam?
+    
+    init(exercise: Exercise, courseId: Int, exam: Exam? = nil) {
+        self.exercise = exercise
+        self.courseId = courseId
+        self.exam = exam
+    }
     
     var body: some View {
         VStack {
@@ -36,6 +44,8 @@ struct ExerciseView: View {
                         }
                         
                         statisticsSection
+                        
+                        problemStatementSection
                     }
                     .refreshable { await fetchExerciseData() }
                 }
@@ -47,12 +57,13 @@ struct ExerciseView: View {
                 assessmentResult: assessmentVM.assessmentResult,
                 exercise: exercise
             )
+            .environmentObject(courseVM)
         }
         .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: SubmissionSearchView(exercise: exercise)) {
+                NavigationLink(destination: SubmissionSearchView(exercise: exercise).environmentObject(courseVM)) {
                     searchButton
                 }
             }
@@ -93,6 +104,13 @@ struct ExerciseView: View {
                 CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
                 Spacer()
             }
+        }
+    }
+    
+    private var problemStatementSection: some View {
+        Section("Problem Statement") {
+            ProblemStatementView(courseId: courseId, exerciseId: exercise.id)
+                .frame(maxHeight: .infinity)
         }
     }
     

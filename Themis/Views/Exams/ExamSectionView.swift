@@ -9,6 +9,8 @@ import SwiftUI
 import SharedModels
 
 struct ExamSectionView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
     let examID: Int
     let courseID: Int
     let examTitle: String
@@ -21,7 +23,8 @@ struct ExamSectionView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise, exam: exam)
+                        ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1, exam: exam)
+                            .environmentObject(courseVM)
                     } label: {
                         HStack {
                             exercise.image

@@ -9,6 +9,7 @@ import SwiftUI
 import SharedModels
 
 struct SubmissionSearchView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
     @StateObject var submissionSearchVM = SubmissionSearchViewModel()
     @StateObject var assessmentVM = AssessmentViewModel(readOnly: true)
@@ -39,6 +40,7 @@ struct SubmissionSearchView: View {
                 assessmentResult: assessmentVM.assessmentResult,
                 exercise: exercise
             )
+            .environmentObject(courseVM)
         }
         .errorAlert(error: $submissionSearchVM.error)
     }

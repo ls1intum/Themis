@@ -14,6 +14,8 @@ struct ExamDateProperty: Hashable {
 }
 
 struct ExamListView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
     var exams: [Exam]
     var courseID: Int
     
@@ -29,6 +31,7 @@ struct ExamListView: View {
                 ForEach(exams, id: \.id) { exam in
                     NavigationLink {
                         ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title ?? "Untitled Exam")
+                            .environmentObject(courseVM)
                     } label: {
                         ExamListItem(exam: exam, dateProperties: [
                             startDate,
