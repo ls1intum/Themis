@@ -52,12 +52,24 @@ class TextExerciseRendererViewModel: ObservableObject {
     /// Needed for creating new text blocks
     private var submissionId: Int?
     
+    
+    /// Sets this VM up based on the given participation and optional submission
+    /// - Parameters:
+    ///   - participation:
+    ///   - submission: Optional. Only used if the participation parameter does not contain a submission (this occurs when starting a new random assessment, for example)
     @MainActor
-    func setup(basedOn participation: BaseParticipation?) {
-        guard let textSubmission = participation?.submissions?.last?.baseSubmission.get(as: TextSubmission.self) else {
-            log.error("Expected a TextSubmission but got \(type(of: participation?.submissions?.last?.baseSubmission)) instead")
+    func setup(basedOn participation: BaseParticipation?, and submission: BaseSubmission? = nil) {
+        var textSubmission = participation?.submissions?.last?.baseSubmission.get(as: TextSubmission.self)
+            
+        if textSubmission == nil { // no submission found in participation
+            textSubmission = submission?.get(as: TextSubmission.self)
+        }
+        
+        guard let textSubmission else {
+            log.error("Expected a TextSubmission but got \(type(of: participation?.submissions?.last?.baseSubmission)) and \(type(of: submission)) instead")
             return
         }
+        
         let feedbacks = participation?.results?.last?.feedbacks ?? []
         let blocks = textSubmission.blocks ?? []
         

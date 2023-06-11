@@ -178,7 +178,8 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func cancelAssessment() async {
-        guard let submissionId = submission?.id else {
+        guard let submissionId = submission?.id,
+              let participationId = participation?.id else {
             return
         }
         

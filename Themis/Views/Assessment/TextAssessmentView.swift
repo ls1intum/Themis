@@ -35,7 +35,8 @@ struct TextAssessmentView: View {
         .task {
             assessmentVM.participationId = participationId
             await assessmentVM.initSubmission()
-            textExerciseRendererVM.setup(basedOn: assessmentVM.participation)
+            textExerciseRendererVM.setup(basedOn: assessmentVM.participation, and: assessmentVM.submission)
+            ensureResultId()
         }
         .onAppear {
             assessmentVM.fontSize = 19.0
@@ -77,6 +78,13 @@ struct TextAssessmentView: View {
                 umlVM: umlVM,
                 feedbackDelegate: textExerciseRendererVM
             )
+        }
+    }
+    
+    /// Ensures that the assessmentResult has a non-nil resultId value since it's needed for some operations, such as saving the assessment
+    private func ensureResultId() {
+        if (assessmentResult as? TextAssessmentResult)?.resultId == nil {
+           (assessmentResult as? TextAssessmentResult)?.resultId = assessmentVM.submission?.results?.last?.id
         }
     }
 }
