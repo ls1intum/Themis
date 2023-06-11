@@ -16,8 +16,26 @@ class TextAssessmentServiceImpl: AssessmentService {
     let client = APIClient()
     
     // MARK: - Cancel Assessment
-    func cancelAssessment(submissionId: Int) async throws {
-        throw UserFacingError.operationNotSupportedForExercise
+    private struct CancelAssessmentRequest: APIRequest {
+        typealias Response = RawResponse
+        
+        var participationId: Int
+        var submissionId: Int
+        
+        var method: HTTPMethod {
+            .post
+        }
+        
+        var resourceName: String {
+            "api/participations/\(participationId)/submissions/\(submissionId)/cancel-assessment"
+        }
+    }
+    
+    func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
+        guard let participationId else {
+            throw UserFacingError.operationNotSupportedForExercise
+        }
+        _ = try await client.sendRequest(CancelAssessmentRequest(participationId: participationId, submissionId: submissionId)).get()
     }
     
     // MARK: - Save Assessment

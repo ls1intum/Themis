@@ -11,7 +11,7 @@ import Common
 
 protocol AssessmentService {
     /// Delete all saved feedback and release the lock of the submission
-    func cancelAssessment(submissionId: Int) async throws
+    func cancelAssessment(participationId: Int?, submissionId: Int) async throws
     
     /// Save feedback to the submission
     func saveAssessment(participationId: Int, newAssessment: AssessmentResult) async throws

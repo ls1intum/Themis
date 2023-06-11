@@ -190,7 +190,7 @@ class AssessmentViewModel: ObservableObject {
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
         do {
-            try await assessmentService.cancelAssessment(submissionId: submissionId)
+            try await assessmentService.cancelAssessment(participationId: participationId, submissionId: submissionId)
         } catch {
             if error as? RESTError != RESTError.empty {
                 self.error = error

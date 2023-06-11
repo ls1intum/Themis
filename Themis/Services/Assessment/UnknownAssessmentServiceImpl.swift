@@ -11,7 +11,7 @@ import Common
 
 class UnknownAssessmentServiceImpl: AssessmentService {
     
-    func cancelAssessment(submissionId: Int) async throws {
+    func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
         throw UserFacingError.operationNotSupportedForExercise
     }
     

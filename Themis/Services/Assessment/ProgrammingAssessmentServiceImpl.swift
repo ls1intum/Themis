@@ -30,7 +30,7 @@ class ProgrammingAssessmentServiceImpl: AssessmentService {
         }
     }
     
-    func cancelAssessment(submissionId: Int) async throws {
+    func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
         _ = try await client.sendRequest(CancelAssessmentRequest(submissionId: submissionId)).get()
     }
     
