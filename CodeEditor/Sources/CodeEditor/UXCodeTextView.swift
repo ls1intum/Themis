@@ -497,8 +497,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
               let firstPosition = closestPosition(to: firstPoint),
               let secondPosition = closestPosition(to: secondPoint),
               let firstWordRange = rangeEnclosingApproximatePosition(firstPosition, with: .word, inDirection: .storage(.forward)),
-              let secondWordRange = rangeEnclosingApproximatePosition(secondPosition, with: .word, inDirection: .storage(.forward)),
-              firstWordRange != secondWordRange // prevents selecting just 1 word
+              let secondWordRange = rangeEnclosingApproximatePosition(secondPosition, with: .word, inDirection: .storage(.forward))
         else { return nil }
         
         let firstPositionInt = offset(from: beginningOfDocument, to: firstPosition)
