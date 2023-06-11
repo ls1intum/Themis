@@ -199,7 +199,7 @@ class CodeEditorViewModel: ObservableObject {
         
         var detail = ProgrammingFeedbackDetail()
         
-        if var existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
+        if let existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
             detail = existingDetail // use existing detail to prevent overwriting
         }
         
