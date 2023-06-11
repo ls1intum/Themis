@@ -41,21 +41,6 @@ class AssessmentResult: Encodable, ObservableObject {
         }
     }
 
-    enum CodingKeys: CodingKey {
-        case score
-        case feedbacks
-        case testCaseCount
-        case passedTestCaseCount
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(score, forKey: .score)
-        try container.encode(feedbacks.map({ $0.baseFeedback }), forKey: .feedbacks)
-        try container.encode(automaticFeedback.count, forKey: .testCaseCount)
-        try container.encode(automaticFeedback.filter { $0.baseFeedback.positive ?? false } .count, forKey: .passedTestCaseCount)
-    }
-
     var generalFeedback: [AssessmentFeedback] {
         feedbacks
             .filter { $0.scope == .general && $0.baseFeedback.type?.isManual ?? false }
@@ -78,6 +63,9 @@ class AssessmentResult: Encodable, ObservableObject {
             }
     }
     
+    /// Sets reference-related data for this assessment result. Intended to be overridden by subclasses.
+    func setReferenceData(basedOn submission: BaseSubmission?) {}
+    
     func getFeedback(byId id: UUID) -> AssessmentFeedback? {
         computedFeedbacks.first(where: { $0.id == id })
     }
@@ -89,11 +77,18 @@ class AssessmentResult: Encodable, ObservableObject {
         computedFeedbacks.append(feedback)
     }
 
-    func deleteFeedback(id: UUID) {
-        if computedFeedbacks.contains(where: { $0.id == id && $0.scope == .inline }) {
-             undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
-         }
+    @discardableResult
+    func deleteFeedback(id: UUID) -> AssessmentFeedback? {
+        guard let feedbackToDelete = computedFeedbacks.first(where: { $0.id == id }) else {
+            return nil
+        }
+        
+        if feedbackToDelete.scope == .inline {
+            undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
+        }
+        
         computedFeedbacks.removeAll { $0.id == id }
+        return feedbackToDelete
     }
 
     @discardableResult
@@ -106,10 +101,27 @@ class AssessmentResult: Encodable, ObservableObject {
         return computedFeedbacks[index]
     }
     
-    func updateFeedback(feedback: AssessmentFeedback) {
+    @discardableResult
+    func updateFeedback(feedback: AssessmentFeedback) -> AssessmentFeedback? {
         guard let index = (feedbacks.firstIndex { $0.id == feedback.id }) else {
-            return
+            return nil
         }
         computedFeedbacks[index] = feedback
+        return feedback
+    }
+    
+    func encode(to encoder: Encoder) throws {} // to be overridden by subclasses
+}
+
+enum AssessmentResultFactory {
+    static func assessmentResult(for exercise: Exercise, resultIdFromServer: Int? = nil) -> AssessmentResult {
+        switch exercise {
+        case .programming(exercise: _):
+            return ProgrammingAssessmentResult()
+        case .text(exercise: _):
+            return TextAssessmentResult(resultId: resultIdFromServer)
+        default:
+            return UnknownAssessmentResult()
+        }
     }
 }

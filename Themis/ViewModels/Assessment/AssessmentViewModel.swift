@@ -8,7 +8,7 @@ class AssessmentViewModel: ObservableObject {
     @Published var submission: BaseSubmission?
     /// Is set automatically when the submission is set
     @Published var participation: BaseParticipation?
-    @Published var assessmentResult = AssessmentResult()
+    @Published var assessmentResult: AssessmentResult
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
@@ -17,18 +17,25 @@ class AssessmentViewModel: ObservableObject {
     
     var submissionId: Int?
     var participationId: Int?
+    var resultId: Int?
     var exercise: Exercise
     
     private var cancellables: [AnyCancellable] = []
     
-    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool) {
+    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
         self.exercise = exercise
         self.submissionId = submissionId
         self.participationId = participationId
+        self.resultId = resultId
+        self.assessmentResult = AssessmentResultFactory.assessmentResult(for: exercise, resultIdFromServer: resultId)
         self.readOnly = readOnly
         
         $submission
             .sink(receiveValue: { self.participation = $0?.participation?.baseParticipation })
+            .store(in: &cancellables)
+        
+        $participation
+            .sink(receiveValue: { self.resultId = $0?.results?.last?.id })
             .store(in: &cancellables)
     }
     
@@ -95,6 +102,7 @@ class AssessmentViewModel: ObservableObject {
             self.submission = fetchedParticipation.submissions?.last?.baseSubmission
             self.participation = fetchedParticipation
             assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
+            assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
@@ -194,7 +202,7 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func sendAssessment(submit: Bool) async {
+    func saveAssessment() async {
         guard let participationId = participation?.id else {
             return
         }
@@ -207,11 +215,30 @@ class AssessmentViewModel: ObservableObject {
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
         do {
-            try await assessmentService.saveAssessment(
-                participationId: participationId,
-                newAssessment: assessmentResult,
-                submit: submit
-            )
+            try await assessmentService.saveAssessment(participationId: participationId,
+                                                       newAssessment: assessmentResult)
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    func submitAssessment() async {
+        guard let participationId = participation?.id else {
+            return
+        }
+        
+        loading = true
+        defer {
+            loading = false
+        }
+        
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
+        
+        do {
+            try await assessmentService.submitAssessment(participationId: participationId,
+                                                         newAssessment: assessmentResult)
         } catch {
             self.error = error
             log.error(String(describing: error))

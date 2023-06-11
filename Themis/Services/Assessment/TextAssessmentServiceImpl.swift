@@ -17,12 +17,49 @@ class TextAssessmentServiceImpl: AssessmentService {
     
     // MARK: - Cancel Assessment
     func cancelAssessment(submissionId: Int) async throws {
-        throw UserFacingError(title: "Exercise type not supported")
+        throw UserFacingError.operationNotSupportedForExercise
     }
     
     // MARK: - Save Assessment
-    func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
-        throw UserFacingError(title: "Exercise type not supported")
+    private struct SaveAssessmentRequest: APIRequest {
+        typealias Response = RawResponse
+        
+        var participationId: Int
+        var resultId: Int
+        var assessmentDTO: TextAssessmentResult
+        
+        var method: HTTPMethod {
+            .put
+        }
+        
+        var body: Encodable? {
+            assessmentDTO
+        }
+        
+        var resourceName: String {
+            "api/participations/\(participationId)/results/\(resultId)/text-assessment"
+        }
+    }
+    
+    func saveAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        guard let newAssessment = newAssessment as? TextAssessmentResult,
+              let resultId = newAssessment.resultId
+        else {
+            throw UserFacingError.operationNotSupportedForExercise
+        }
+        
+        newAssessment.computeBlockIds()
+        
+        _ = try await client
+            .sendRequest(SaveAssessmentRequest(participationId: participationId,
+                                               resultId: resultId,
+                                               assessmentDTO: newAssessment))
+            .get()
+    }
+    
+    // MARK: - Submit Assessment
+    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        throw UserFacingError.operationNotSupportedForExercise
     }
     
     // MARK: - Fetch Participation For Submission

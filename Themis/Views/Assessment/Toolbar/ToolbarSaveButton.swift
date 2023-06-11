@@ -14,7 +14,7 @@ struct ToolbarSaveButton: View {
     var body: some View {
         Button {
             Task {
-                await assessmentVM.sendAssessment(submit: false)
+                await assessmentVM.saveAssessment()
             }
         } label: {
             Text("Save")

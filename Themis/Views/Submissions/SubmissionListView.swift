@@ -20,7 +20,8 @@ struct SubmissionListView: View {
                     AssessmentView(
                         exercise: exercise,
                         submissionId: submission.baseSubmission.id,
-                        participationId: submission.baseSubmission.participation?.id
+                        participationId: submission.baseSubmission.participation?.id,
+                        resultId: submission.baseSubmission.results?.last?.id
                     )
                 } label: {
                     HStack {

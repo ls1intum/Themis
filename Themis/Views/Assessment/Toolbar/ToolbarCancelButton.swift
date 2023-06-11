@@ -32,7 +32,7 @@ struct ToolbarCancelButton: View {
         .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
             Button("Save") {
                 Task {
-                    await assessmentVM.sendAssessment(submit: false)
+                    await assessmentVM.saveAssessment()
                     presentationMode.dismiss()
                 }
             }

@@ -13,7 +13,6 @@ public struct TextFeedbackDetail: FeedbackDetail {
 
     public mutating func buildArtemisFeedback(feedback baseFeedback: inout SharedModels.Feedback) {
         block.computeId()
-        block.text = baseFeedback.detailText
         
         baseFeedback.reference = block.id
     }

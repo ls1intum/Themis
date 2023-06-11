@@ -59,16 +59,25 @@ class ProgrammingAssessmentServiceImpl: AssessmentService {
         }
     }
     
-    func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
+    func saveAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
         _ = try await client
             .sendRequest(SaveAssessmentRequest(participationId: participationId,
                                                newAssessment: newAssessment,
-                                               submit: submit))
+                                               submit: false))
+            .get()
+    }
+    
+    // MARK: - Submit Assessment
+    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        _ = try await client
+            .sendRequest(SaveAssessmentRequest(participationId: participationId,
+                                               newAssessment: newAssessment,
+                                               submit: true))
             .get()
     }
     
     // MARK: - Fetch Participation For Submission
     func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
-        throw UserFacingError(title: "Exercise type not supported")
+        throw UserFacingError.operationNotSupportedForExercise
     }
 }

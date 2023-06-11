@@ -10,8 +10,12 @@ import SharedModels
 
 class MockAssessmentViewModel: AssessmentViewModel {
     
-    override init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool) {
-        super.init(exercise: exercise, readOnly: readOnly)
+    override init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
+        super.init(exercise: exercise,
+                   submissionId: submissionId,
+                   participationId: participationId,
+                   resultId: resultId,
+                   readOnly: readOnly)
         self.submission = Submission.mockText.baseSubmission
     }
     
@@ -31,12 +35,11 @@ class MockAssessmentViewModel: AssessmentViewModel {
         self.submission = Submission.mockText.baseSubmission
     }
     
-    override func cancelAssessment() async {
-    }
+    override func cancelAssessment() async {}
     
-    override func sendAssessment(submit: Bool) async {
-    }
+    override func saveAssessment() async {}
     
-    override func notifyThemisML() async {
-    }
+    override func submitAssessment() async {}
+    
+    override func notifyThemisML() async {}
 }

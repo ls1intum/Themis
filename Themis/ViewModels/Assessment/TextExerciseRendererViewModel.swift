@@ -40,6 +40,15 @@ class TextExerciseRendererViewModel: ObservableObject {
         content?.count ?? 0
     }
     
+    private var textAtSelectedSection: String? {
+        guard let content,
+              let selectedSection,
+              let indexRange = Range(selectedSection, in: content) else {
+            return nil
+        }
+        return String(content[indexRange])
+    }
+    
     /// Needed for creating new text blocks
     private var submissionId: Int?
     
@@ -103,7 +112,10 @@ class TextExerciseRendererViewModel: ObservableObject {
     
     /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
     func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
-        let block = TextBlock(submissionId: submissionId, startIndex: selectedSection?.lowerBound, endIndex: selectedSection?.upperBound)
+        let block = TextBlock(submissionId: submissionId,
+                              text: textAtSelectedSection,
+                              startIndex: selectedSection?.lowerBound,
+                              endIndex: selectedSection?.upperBound)
         return TextFeedbackDetail(block: block)
     }
 }

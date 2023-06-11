@@ -18,20 +18,23 @@ struct AssessmentView: View {
     
     var submissionId: Int?
     var participationId: Int?
+    var resultId: Int?
     
     @State private var showStepper = false
     @State private var showSubmitConfirmation = false
     @State private var showNoSubmissionsAlert = false
     @State private var showNavigationOptions = false
     
-    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, readOnly: Bool = false) {
+    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool = false) {
         self.exercise = exercise
         self.submissionId = submissionId
         self.participationId = participationId
+        self.resultId = resultId
         
         let newAssessmentVM = AssessmentViewModel(exercise: exercise,
                                                   submissionId: submissionId,
                                                   participationId: participationId,
+                                                  resultId: resultId,
                                                   readOnly: readOnly)
         self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
         self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
@@ -114,7 +117,7 @@ struct AssessmentView: View {
             .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
                 Button("Yes") {
                     Task {
-                        await assessmentVM.sendAssessment(submit: true)
+                        await assessmentVM.submitAssessment()
                         await assessmentVM.notifyThemisML()
                         showNavigationOptions.toggle()
                     }
@@ -150,7 +153,8 @@ struct AssessmentView: View {
                                assessmentResult: assessmentResult,
                                exercise: exercise,
                                submissionId: submissionId,
-                               participationId: participationId)
+                               participationId: participationId,
+                               resultId: resultId)
         default:
             Text("Exercise not supported")
         }

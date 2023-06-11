@@ -14,6 +14,9 @@
 		650538B92A1E1EF200C45E18 /* ExerciseMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */; };
 		650538BC2A1E226A00C45E18 /* MockAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538BB2A1E226A00C45E18 /* MockAssessmentViewModel.swift */; };
 		650538BE2A1E6E3D00C45E18 /* SubmissionMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */; };
+		65101DD32A33362F007B598A /* ProgrammingAssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */; };
+		65101DD52A33363A007B598A /* TextAsessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD42A33363A007B598A /* TextAsessmentResult.swift */; };
+		65101DD72A35FB98007B598A /* UnknownAssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */; };
 		65153F9F2A0F9B260020B6FE /* LoginVMExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65153F9E2A0F9B260020B6FE /* LoginVMExtension.swift */; };
 		65153FA12A0FAD4A0020B6FE /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65153FA02A0FAD4A0020B6FE /* RootViewModel.swift */; };
 		652A98022A07D51C00EB1F32 /* ToolbarCancelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652A98012A07D51C00EB1F32 /* ToolbarCancelButton.swift */; };
@@ -62,6 +65,7 @@
 		65E6A1042A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1032A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift */; };
 		65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1062A1400E20058E5D6 /* RepositoryService.swift */; };
 		65E6A1092A1400EB0058E5D6 /* RepositoryServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */; };
+		65EDED372A33103A003BF14B /* UserFacingErrorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EDED362A33103A003BF14B /* UserFacingErrorExtension.swift */; };
 		65F018FF2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */; };
 		65F019012A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */; };
 		65F019052A1CDCE400BB1C98 /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019042A1CDCE400BB1C98 /* AssessmentView.swift */; };
@@ -98,7 +102,7 @@
 		DAECE701296A1BC80025F875 /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAECE700296A1BC80025F875 /* CourseView.swift */; };
 		DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */; };
 		DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFA3FC297F12A800EA72B8 /* ExerciseListItem.swift */; };
-		E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* Assessment.swift */; };
+		E119ED9B2922DE4700626DEA /* AssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9A2922DE4700626DEA /* AssessmentResult.swift */; };
 		E119ED9F2922F48A00626DEA /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E119ED9E2922F48A00626DEA /* Repository.swift */; };
 		E168C723296DCCE100A1D1D4 /* ThemisButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E168C722296DCCE100A1D1D4 /* ThemisButtonStyle.swift */; };
 		E168C727296DDB3D00A1D1D4 /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E168C726296DDB3D00A1D1D4 /* CustomProgressView.swift */; };
@@ -158,6 +162,9 @@
 		650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMockExtension.swift; sourceTree = "<group>"; };
 		650538BB2A1E226A00C45E18 /* MockAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAssessmentViewModel.swift; sourceTree = "<group>"; };
 		650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionMockExtension.swift; sourceTree = "<group>"; };
+		65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingAssessmentResult.swift; sourceTree = "<group>"; };
+		65101DD42A33363A007B598A /* TextAsessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAsessmentResult.swift; sourceTree = "<group>"; };
+		65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownAssessmentResult.swift; sourceTree = "<group>"; };
 		65153F9E2A0F9B260020B6FE /* LoginVMExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVMExtension.swift; sourceTree = "<group>"; };
 		65153FA02A0FAD4A0020B6FE /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		652A98012A07D51C00EB1F32 /* ToolbarCancelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarCancelButton.swift; sourceTree = "<group>"; };
@@ -200,6 +207,7 @@
 		65E6A1032A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65E6A1062A1400E20058E5D6 /* RepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryService.swift; sourceTree = "<group>"; };
 		65E6A1082A1400EB0058E5D6 /* RepositoryServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryServiceImpl.swift; sourceTree = "<group>"; };
+		65EDED362A33103A003BF14B /* UserFacingErrorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFacingErrorExtension.swift; sourceTree = "<group>"; };
 		65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65F019042A1CDCE400BB1C98 /* AssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentView.swift; sourceTree = "<group>"; };
@@ -239,7 +247,7 @@
 		DAECE700296A1BC80025F875 /* CourseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
 		DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisDateHelpers.swift; sourceTree = "<group>"; };
 		DAFFA3FC297F12A800EA72B8 /* ExerciseListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListItem.swift; sourceTree = "<group>"; };
-		E119ED9A2922DE4700626DEA /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Assessment.swift; path = Themis/Models/Assessment.swift; sourceTree = SOURCE_ROOT; };
+		E119ED9A2922DE4700626DEA /* AssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssessmentResult.swift; path = Themis/Models/Result/AssessmentResult.swift; sourceTree = SOURCE_ROOT; };
 		E119ED9E2922F48A00626DEA /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = Themis/Models/Repository.swift; sourceTree = SOURCE_ROOT; };
 		E168C722296DCCE100A1D1D4 /* ThemisButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisButtonStyle.swift; sourceTree = "<group>"; };
 		E168C726296DDB3D00A1D1D4 /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
@@ -320,9 +328,9 @@
 		4065F854292E8729005DAEE8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				65101DD12A33360A007B598A /* Result */,
 				6581C67B2A305F1D00E49E24 /* Feedback */,
 				4065F857292E8A08005DAEE8 /* Appearance */,
-				E119ED9A2922DE4700626DEA /* Assessment.swift */,
 				E119ED9E2922F48A00626DEA /* Repository.swift */,
 				E200F786297F10B300DE269D /* SourceCodeLanguage.swift */,
 			);
@@ -411,10 +419,22 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		65101DD12A33360A007B598A /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				E119ED9A2922DE4700626DEA /* AssessmentResult.swift */,
+				65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */,
+				65101DD42A33363A007B598A /* TextAsessmentResult.swift */,
+				65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
 		65153F9D2A0F9B090020B6FE /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				65153F9E2A0F9B260020B6FE /* LoginVMExtension.swift */,
+				65EDED362A33103A003BF14B /* UserFacingErrorExtension.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1028,14 +1048,17 @@
 				652A98022A07D51C00EB1F32 /* ToolbarCancelButton.swift in Sources */,
 				6567A90329EFF85200A5EFDA /* ScorePicker.swift in Sources */,
 				65E6A0FA2A13C5C90058E5D6 /* ExamServiceImpl.swift in Sources */,
+				65EDED372A33103A003BF14B /* UserFacingErrorExtension.swift in Sources */,
 				650538BC2A1E226A00C45E18 /* MockAssessmentViewModel.swift in Sources */,
 				65B49F4C2A08192100C9A45F /* LeftGripView.swift in Sources */,
+				65101DD72A35FB98007B598A /* UnknownAssessmentResult.swift in Sources */,
 				65153F9F2A0F9B260020B6FE /* LoginVMExtension.swift in Sources */,
+				65101DD32A33362F007B598A /* ProgrammingAssessmentResult.swift in Sources */,
 				654F61222A1DEADE0044C747 /* ThemisUndoManager.swift in Sources */,
 				E21AF05A292B9D4C0096ACFC /* ProgrammingAssessmentView.swift in Sources */,
 				65B49F3A2A07D5F200C9A45F /* ToolbarToggleButton.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
-				E119ED9B2922DE4700626DEA /* Assessment.swift in Sources */,
+				E119ED9B2922DE4700626DEA /* AssessmentResult.swift in Sources */,
 				DA98C65F2954DE4F005727FB /* UMLViewModel.swift in Sources */,
 				65F019052A1CDCE400BB1C98 /* AssessmentView.swift in Sources */,
 				6595D2292A2744410033C1B5 /* TextAssessmentServiceImpl.swift in Sources */,
@@ -1046,6 +1069,7 @@
 				65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
+				65101DD52A33363A007B598A /* TextAsessmentResult.swift in Sources */,
 				65E6A1042A13E72E0058E5D6 /* ProgrammingSubmissionServiceImpl.swift in Sources */,
 				6500B9382A260436003C8445 /* TextExerciseRenderer.swift in Sources */,
 				6595D22B2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift in Sources */,

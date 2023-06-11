@@ -18,20 +18,19 @@ struct TextAssessmentView: View {
     let exercise: Exercise
     var submissionId: Int?
     var participationId: Int?
+    var resultId: Int?
     
     var body: some View {
-        ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-            HStack(spacing: 0) {
-                TextExerciseRenderer(textExerciseRendererVM: textExerciseRendererVM)
+        HStack(spacing: 0) {
+            TextExerciseRenderer(textExerciseRendererVM: textExerciseRendererVM)
+            
+            Group {
+                RightGripView(paneVM: paneVM)
                 
-                Group {
-                    RightGripView(paneVM: paneVM)
-                    
-                    correctionWithPlaceholder
-                        .frame(width: paneVM.dragWidthRight)
-                }
-                .animation(.default, value: paneVM.showRightPane)
+                correctionWithPlaceholder
+                    .frame(width: paneVM.dragWidthRight)
             }
+            .animation(.default, value: paneVM.showRightPane)
         }
         .task {
             assessmentVM.participationId = participationId
@@ -86,8 +85,9 @@ struct TextAssessmentView_Previews: PreviewProvider {
     @StateObject private static var assessmentVM = MockAssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     
     static var previews: some View {
+        // swiftlint: disable force_cast
         TextAssessmentView(assessmentVM: assessmentVM,
-                           assessmentResult: assessmentVM.assessmentResult,
+                           assessmentResult: assessmentVM.assessmentResult as! TextAssessmentResult,
                            exercise: Exercise.mockText)
         .previewInterfaceOrientation(.landscapeRight)
     }

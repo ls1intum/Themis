@@ -11,18 +11,19 @@ import Common
 
 class UnknownAssessmentServiceImpl: AssessmentService {
     
-    // MARK: - Cancel Assessment
     func cancelAssessment(submissionId: Int) async throws {
-        throw UserFacingError(title: "Exercise type not supported")
+        throw UserFacingError.operationNotSupportedForExercise
     }
     
-    // MARK: - Save Assessment
-    func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
-        throw UserFacingError(title: "Exercise type not supported")
+    func saveAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        throw UserFacingError.operationNotSupportedForExercise
     }
     
-    // MARK: - Fetch Participation For Submission
+    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        throw UserFacingError.operationNotSupportedForExercise
+    }
+    
     func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
-        throw UserFacingError(title: "Exercise type not supported")
+        throw UserFacingError.operationNotSupportedForExercise
     }
 }
