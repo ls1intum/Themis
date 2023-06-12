@@ -13,7 +13,13 @@ struct ExamDateProperty: Hashable {
     let dateKeyPath: KeyPath<Exam, Date?>
 }
 
+<<<<<<< HEAD:Themis/Views/Exams/ExamSection.swift
 struct ExamSection: View {
+=======
+struct ExamListView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
+>>>>>>> develop:Themis/Views/Exams/ExamListView.swift
     var exams: [Exam]
     var courseID: Int
     
@@ -26,6 +32,7 @@ struct ExamSection: View {
             if exams.isEmpty {
                 EmptyView()
             } else {
+<<<<<<< HEAD:Themis/Views/Exams/ExamSection.swift
                 Text("Exams")
                     .customSectionTitle()
                 
@@ -45,6 +52,18 @@ struct ExamSection: View {
                         
                         Divider()
                             .padding(.leading, .xl)
+=======
+                ForEach(exams, id: \.id) { exam in
+                    NavigationLink {
+                        ExamSectionView(examID: exam.id, courseID: courseID, examTitle: exam.title ?? "Untitled Exam")
+                            .environmentObject(courseVM)
+                    } label: {
+                        ExamListItem(exam: exam, dateProperties: [
+                            startDate,
+                            assessmentStartDate,
+                            assessmentDueDate
+                        ])
+>>>>>>> develop:Themis/Views/Exams/ExamListView.swift
                     }
                 }
                 .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))

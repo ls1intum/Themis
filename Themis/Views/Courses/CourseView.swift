@@ -38,6 +38,7 @@ struct CourseView: View {
                         .padding(.horizontal, 40)
                         .padding(.vertical, 20)
                     }
+                    .environmentObject(courseVM)
                     .refreshable {
                         courseVM.fetchAllCourses()
                         courseVM.fetchShownCourseAndSetExercises()
@@ -67,6 +68,7 @@ struct CourseView: View {
             courseVM.fetchAllCourses()
             courseVM.fetchShownCourseAndSetExercises()
         }
+        .errorAlert(error: $courseVM.error)
     }
 
     private var logoutButton: some View {

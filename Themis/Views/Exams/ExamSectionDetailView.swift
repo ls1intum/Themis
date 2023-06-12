@@ -8,7 +8,13 @@
 import SwiftUI
 import SharedModels
 
+<<<<<<< HEAD:Themis/Views/Exams/ExamSectionDetailView.swift
 struct ExamSectionDetailView: View {
+=======
+struct ExamSectionView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
+>>>>>>> develop:Themis/Views/Exams/ExamSectionView.swift
     let examID: Int
     let courseID: Int
     let examTitle: String
@@ -21,7 +27,8 @@ struct ExamSectionDetailView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise, exam: exam)
+                        ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1, exam: exam)
+                            .environmentObject(courseVM)
                     } label: {
                         HStack {
                             exercise.image

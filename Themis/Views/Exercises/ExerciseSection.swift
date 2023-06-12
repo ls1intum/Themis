@@ -13,7 +13,13 @@ struct ExerciseDateProperty: Hashable {
     let dateKeyPath: KeyPath<Exercise, Date?>
 }
 
+<<<<<<< HEAD:Themis/Views/Exercises/ExerciseSection.swift
 struct ExerciseSection: View {
+=======
+struct ExerciseSections: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
+>>>>>>> develop:Themis/Views/Exercises/ExerciseSectionsView.swift
     var exercises: [Exercise]
     
     private let dueDate = ExerciseDateProperty(name: "Submission", dateKeyPath: \.baseExercise.dueDate)
@@ -35,7 +41,8 @@ struct ExerciseSection: View {
                 VStack {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
-                            ExerciseView(exercise: exercise)
+                            ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1)
+                                .environmentObject(courseVM)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: [releaseDate, dueDate, assessmentDueDate])
                                 .padding(.horizontal)

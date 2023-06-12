@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DesignLibrary
 import SharedModels
 
 enum CorrectionSidebarElements {
@@ -14,11 +15,12 @@ enum CorrectionSidebarElements {
 
 struct CorrectionSidebarView: View {
 
-    @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    @State private var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var cvm: CodeEditorViewModel
-    @ObservedObject var umlVM: UMLViewModel
+    private let courseId: Int
     
     private var exercise: (any BaseExercise)? {
         assessmentVM.participation?.getExercise()
@@ -28,36 +30,48 @@ struct CorrectionSidebarView: View {
         assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
     }
     
+    init(assessmentResult: Binding<AssessmentResult>,
+         assessmentVM: AssessmentViewModel,
+         cvm: CodeEditorViewModel,
+         courseId: Int) {
+        self._assessmentResult = assessmentResult
+        self.assessmentVM = assessmentVM
+        self.cvm = cvm
+        self.courseId = courseId
+    }
+    
     var body: some View {
         VStack {
             sideBarElementPicker
             
             if !assessmentVM.loading {
-                switch correctionSidebarStatus {
-                case .problemStatement:
+                ZStack {
                     ScrollView {
-                        ProblemStatementCellView(
-                            umlVM: umlVM,
-                            problemStatement: exercise?.problemStatement ?? "",
-                            feedbacks: assessmentResult.feedbacks
+                        ProblemStatementView(courseId: courseId, exerciseId: exercise?.id ?? -1)
+                            .frame(maxHeight: .infinity)
+                    }
+                    .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
+                    
+                    switch correctionSidebarStatus {
+                    case .problemStatement:
+                        EmptyView() // handled above
+                    case .correctionGuidelines:
+                        ScrollView {
+                            CorrectionGuidelinesCellView(
+                                gradingCriteria: exercise?.gradingCriteria ?? [],
+                                gradingInstructions: exercise?.gradingInstructions
+                            )
+                        }
+                    case .generalFeedback:
+                        FeedbackListView(
+                            readOnly: assessmentVM.readOnly,
+                            assessmentResult: assessmentResult,
+                            codeEditorVM: cvm,
+                            participationId: assessmentVM.participation?.id,
+                            templateParticipationId: templateParticipationId,
+                            gradingCriteria: exercise?.gradingCriteria ?? []
                         )
                     }
-                case .correctionGuidelines:
-                    ScrollView {
-                        CorrectionGuidelinesCellView(
-                            gradingCriteria: exercise?.gradingCriteria ?? [],
-                            gradingInstructions: exercise?.gradingInstructions
-                        )
-                    }
-                case .generalFeedback:
-                    FeedbackListView(
-                        readOnly: assessmentVM.readOnly,
-                        assessmentResult: assessmentResult,
-                        codeEditorVM: cvm,
-                        participationId: assessmentVM.participation?.id,
-                        templateParticipationId: templateParticipationId,
-                        gradingCriteria: exercise?.gradingCriteria ?? []
-                    )
                 }
             }
             Spacer()
@@ -82,7 +96,6 @@ struct CorrectionSidebarView: View {
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
-    static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
     @State static var assessmentVM = AssessmentViewModel(readOnly: false)
     
@@ -91,7 +104,7 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
             assessmentResult: $assessmentResult,
             assessmentVM: assessmentVM,
             cvm: cvm,
-            umlVM: umlVM
+            courseId: -1
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }
