@@ -39,6 +39,17 @@ class AssessmentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    // Resets some properties of this viewmodel to prepare it for reuse between assessments
+    func resetForNewAssessment() {
+        self.submission = nil
+        self.participation = nil
+        self.loading = false
+        self.error = nil
+        self.submissionId = nil
+        self.participationId = nil
+        self.resultId = nil
+    }
+    
     /// Resets some properties of this viewmodel that affect the toolbar
     func resetToolbarProperties() {
         pencilMode = true
@@ -121,6 +132,7 @@ class AssessmentViewModel: ObservableObject {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
@@ -246,8 +258,10 @@ class AssessmentViewModel: ObservableObject {
         }
     }
     
-    func notifyThemisML() async {
-        guard let participationId = participation?.id else {
+    func notifyThemisML() async { // TODO: Make this function more general once Athene is integrated
+        guard let participationId = participation?.id,
+              case .programming(exercise: _) = exercise
+        else {
             return
         }
         

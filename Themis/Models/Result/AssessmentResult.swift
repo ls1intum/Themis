@@ -55,6 +55,10 @@ class AssessmentResult: Encodable, ObservableObject {
         feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false && $0.baseFeedback.credits != 0 }
     }
     
+    func reset() {
+        self.computedFeedbacks.removeAll()
+    }
+    
     func setComputedFeedbacks(basedOn feedbacks: [Feedback]) {
         computedFeedbacks = feedbacks
             .map { feedback in

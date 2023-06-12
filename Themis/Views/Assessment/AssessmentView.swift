@@ -127,7 +127,10 @@ struct AssessmentView: View {
             .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
                 Button("Next Submission") {
                     Task {
+                        assessmentVM.resetForNewAssessment()
                         await assessmentVM.initRandomSubmission()
+                        NotificationCenter.default.post(name: Notification.Name.nextAssessmentStarted, object: nil)
+                        
                         if assessmentVM.submission == nil {
                             showNoSubmissionsAlert = true
                         }

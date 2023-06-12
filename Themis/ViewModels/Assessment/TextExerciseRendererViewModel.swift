@@ -72,6 +72,7 @@ class TextExerciseRendererViewModel: ObservableObject {
         
         let feedbacks = participation?.results?.last?.feedbacks ?? []
         let blocks = textSubmission.blocks ?? []
+        inlineHighlights.removeAll()
         
         submissionId = textSubmission.id
         content = textSubmission.text ?? content

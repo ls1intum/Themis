@@ -76,8 +76,40 @@ class TextAssessmentServiceImpl: AssessmentService {
     }
     
     // MARK: - Submit Assessment
+    private struct SubmitAssessmentRequest: APIRequest {
+        typealias Response = RawResponse
+        
+        var participationId: Int
+        var resultId: Int
+        var assessmentDTO: TextAssessmentResult
+        
+        var method: HTTPMethod {
+            .post
+        }
+        
+        var body: Encodable? {
+            assessmentDTO
+        }
+        
+        var resourceName: String {
+            "api/participations/\(participationId)/results/\(resultId)/submit-text-assessment"
+        }
+    }
+    
     func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
-        throw UserFacingError.operationNotSupportedForExercise
+        guard let newAssessment = newAssessment as? TextAssessmentResult,
+              let resultId = newAssessment.resultId
+        else {
+            throw UserFacingError.operationNotSupportedForExercise
+        }
+        
+        newAssessment.computeBlockIds()
+        
+        _ = try await client
+            .sendRequest(SubmitAssessmentRequest(participationId: participationId,
+                                                 resultId: resultId,
+                                                 assessmentDTO: newAssessment))
+            .get()
     }
     
     // MARK: - Fetch Participation For Submission

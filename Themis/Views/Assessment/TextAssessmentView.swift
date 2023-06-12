@@ -20,6 +20,8 @@ struct TextAssessmentView: View {
     var participationId: Int?
     var resultId: Int?
     
+    private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
+    
     var body: some View {
         HStack(spacing: 0) {
             TextExerciseRenderer(textExerciseRendererVM: textExerciseRendererVM)
@@ -38,6 +40,13 @@ struct TextAssessmentView: View {
             textExerciseRendererVM.setup(basedOn: assessmentVM.participation, and: assessmentVM.submission)
             ensureResultId()
         }
+        .onReceive(didStartNextAssessment, perform: { _ in
+            guard assessmentVM.submission != nil && assessmentVM.participation != nil else {
+                return
+            }
+            textExerciseRendererVM.setup(basedOn: assessmentVM.participation, and: assessmentVM.submission)
+            ensureResultId(force: true)
+        })
         .onAppear {
             assessmentVM.fontSize = 19.0
         }
@@ -82,8 +91,9 @@ struct TextAssessmentView: View {
     }
     
     /// Ensures that the assessmentResult has a non-nil resultId value since it's needed for some operations, such as saving the assessment
-    private func ensureResultId() {
-        if (assessmentResult as? TextAssessmentResult)?.resultId == nil {
+    /// - Parameter force: if true, updates the resultId regardless of whether the current value is nil
+    private func ensureResultId(force: Bool = false) {
+        if force || (assessmentResult as? TextAssessmentResult)?.resultId == nil {
            (assessmentResult as? TextAssessmentResult)?.resultId = assessmentVM.submission?.results?.last?.id
         }
     }

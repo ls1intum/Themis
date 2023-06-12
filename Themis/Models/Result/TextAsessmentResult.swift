@@ -18,6 +18,11 @@ class TextAssessmentResult: AssessmentResult {
         self.resultId = resultId
     }
     
+    override func reset() {
+        self.resultId = nil
+        self.blocks = []
+    }
+    
     override func setReferenceData(basedOn submission: BaseSubmission?) {
         guard let textSubmission = submission as? TextSubmission else {
             log.warning("Could not set reference data for TextAssessmentResult")
