@@ -8,13 +8,9 @@
 import SwiftUI
 import SharedModels
 
-<<<<<<< HEAD:Themis/Views/Exams/ExamSectionDetailView.swift
 struct ExamSectionDetailView: View {
-=======
-struct ExamSectionView: View {
     @EnvironmentObject var courseVM: CourseViewModel
     
->>>>>>> develop:Themis/Views/Exams/ExamSectionView.swift
     let examID: Int
     let courseID: Int
     let examTitle: String
