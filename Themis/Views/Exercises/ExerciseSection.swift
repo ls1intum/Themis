@@ -48,6 +48,7 @@ struct ExerciseSection: View {
                         
                         Divider()
                             .padding(.leading, .xl)
+                            .isHidden(exercise == shownExercises.last, fake: true)
                     }
                 }
                 .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))

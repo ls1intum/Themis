@@ -48,6 +48,7 @@ struct ExamSection: View {
                         
                         Divider()
                             .padding(.leading, .xl)
+                            .isHidden(exam.id == exams.last?.id, fake: true)
                     }
                 }
                 .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))
