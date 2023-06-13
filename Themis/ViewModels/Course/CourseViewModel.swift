@@ -80,8 +80,8 @@ class CourseViewModel: ObservableObject {
                 shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
             }
             
-            assessableExams = shownCourse?.exams?.filter({ !$0.isAssessmentDue }) ?? []
-            viewOnlyExams = shownCourse?.exams?.filter({ $0.isAssessmentDue }) ?? []
+            assessableExams = shownCourse?.exams?.filter({ $0.isOver && !$0.isAssessmentDue }) ?? []
+            viewOnlyExams = shownCourse?.exams?.filter({ !$0.isOver || $0.isAssessmentDue }) ?? []
         }
     }
     

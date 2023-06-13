@@ -20,7 +20,7 @@ struct ExamSection: View {
     var courseID: Int
     
     private let startDate = ExamDateProperty(name: "Exam", dateKeyPath: \.startDate)
-    private let assessmentStartDate = ExamDateProperty(name: "Assessment", dateKeyPath: \.startDate)
+    private let assessmentStartDate = ExamDateProperty(name: "Assessment", dateKeyPath: \.endDate)
     private let assessmentDueDate = ExamDateProperty(name: "Review", dateKeyPath: \.publishResultsDate)
     
     var body: some View {
