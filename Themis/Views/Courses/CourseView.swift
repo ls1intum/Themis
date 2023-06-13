@@ -35,7 +35,7 @@ struct CourseView: View {
                             ExerciseGroups(courseVM: courseVM, type: .viewOnly)
                                 .disabled(true) // TODO: remove once view-only mode is fully implemented
                         }
-                        .padding(.horizontal, 40)
+                        .padding(.horizontal, 20)
                         .padding(.vertical, 20)
                     }
                     .environmentObject(courseVM)
@@ -56,11 +56,13 @@ struct CourseView: View {
                         ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
                             if let courseID {
                                 Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
+                                    .padding(.leading, 40)
                             }
                         }
                     }
                     .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
                     .isHidden(courseVM.showEmptyMessage)
+                    .padding(-10) // compensates for Picker's default padding
                 }
             }
         }
