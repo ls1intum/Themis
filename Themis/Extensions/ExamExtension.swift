@@ -16,6 +16,13 @@ extension Exam {
         return false
     }
     
+    var isAssessmentDue: Bool {
+        if let publishResultsDate = self.publishResultsDate {
+            return publishResultsDate <= .now
+        }
+        return false
+    }
+    
     public var exercises: [Exercise] {
         let exercises = exerciseGroups?.reduce([]) { $0 + ($1.exercises ?? []) } as? [Exercise]
         return exercises ?? []

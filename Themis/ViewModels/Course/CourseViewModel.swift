@@ -13,7 +13,10 @@ import SharedServices
 class CourseViewModel: ObservableObject {
     @Published var firstLoad = true
     @Published var loading = false
-    @Published var courses: [Course] = []
+    @Published var viewOnlyExercises: [Exercise] = []
+    @Published var assessableExercises: [Exercise] = []
+    @Published var viewOnlyExams: [Exam] = []
+    @Published var assessableExams: [Exam] = []
     @Published var error: Error?
     @Published var showEmptyMessage = true
     
@@ -43,9 +46,7 @@ class CourseViewModel: ObservableObject {
         }
     }
     
-    var hasExams: Bool {
-        !(shownCourse?.exams?.isEmpty ?? true)
-    }
+    private var courses: [Course] = []
     
     init() {
         // only way to check for non-existence:
@@ -55,31 +56,61 @@ class CourseViewModel: ObservableObject {
     }
 
     @MainActor
-    func fetchAllCourses() async {
-        if firstLoad {
-            loading = true
-            firstLoad = false
-        }
-        defer {
-            loading = false
-        }
-        
-        let coursesForDashboard = await CourseServiceFactory.shared.getCourses()
-        
-        if case .failure(let error) = coursesForDashboard {
-            self.error = error
-            log.error(String(describing: error))
-        }
-        
-        courses = coursesForDashboard.value?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
-        showEmptyMessage = courses.isEmpty
-        
-        if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
-            // can't use .first here due to double wrapped optional
-            shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
+    func fetchAllCourses() {
+        Task {
+            if firstLoad {
+                loading = true
+            }
+            defer {
+                loading = false
+            }
+            
+            let coursesForDashboard = await CourseServiceFactory.shared.getCourses()
+            
+            if case .failure(let error) = coursesForDashboard {
+                self.error = error
+                log.error(String(describing: error))
+            }
+            
+            courses = coursesForDashboard.value?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
+            showEmptyMessage = courses.isEmpty
+            
+            if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
+                // can't use .first here due to double wrapped optional
+                shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
+            }
+            
+            assessableExams = shownCourse?.exams?.filter({ $0.isOver && !$0.isAssessmentDue }) ?? []
+            viewOnlyExams = shownCourse?.exams?.filter({ !$0.isOver || $0.isAssessmentDue }) ?? []
         }
     }
-
+    
+    @MainActor
+    func fetchShownCourseAndSetExercises() {
+        guard let shownCourseID else {
+            return
+        }
+        
+        Task {
+            if firstLoad {
+                loading = true
+                firstLoad = false
+            }
+            defer {
+                loading = false
+            }
+            
+            let courseForAssessment = await CourseServiceFactory.shared.getCourseForAssessment(courseId: shownCourseID)
+            
+            if case .failure(let error) = courseForAssessment {
+                log.error(String(describing: error))
+            }
+            
+            assessableExercises = (courseForAssessment.value?.exercises ?? []).filter({ $0.supportsAssessment })
+            viewOnlyExercises = Array(Set(shownCourse?.exercises ?? []).subtracting(Set(assessableExercises))).filter({ $0.supportsAssessment })
+        }
+    }
+    
     func courseForID(id: Int) -> Course? {
         courses.first { $0.id == id }
     }
