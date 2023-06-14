@@ -19,7 +19,7 @@ struct ToolbarPointsLabel: View {
                     Text("Build failed")
                         .foregroundColor(.red)
                 } else {
-                    Text(generatePointProgressInfo(for: submission))
+                    Text(generatePointProgressInfo())
                         .foregroundColor(.white)
                 }
             }
@@ -28,10 +28,10 @@ struct ToolbarPointsLabel: View {
         .background(Color.themisPrimary)
     }
     
-    private func generatePointProgressInfo(for submission: BaseSubmission) -> String {
+    private func generatePointProgressInfo() -> String {
         """
         \(Double(round(10 * assessmentResult.points) / 10).formatted(FloatingPointFormatStyle()))/\
-        \((submission.getExercise()?.maxPoints ?? 100.0).formatted(FloatingPointFormatStyle()))
+        \((assessmentResult.maxPoints).formatted(FloatingPointFormatStyle()))
         """
     }
 }
