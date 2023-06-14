@@ -37,7 +37,7 @@ struct ExerciseSection: View {
                 VStack {
                     ForEach(shownExercises, id: \.id) { exercise in
                         NavigationLink {
-                            ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1)
+                            ExerciseView(exercise: exercise)
                                 .environmentObject(courseVM)
                         } label: {
                             ExerciseListItem(exercise: exercise, dateProperties: [releaseDate, dueDate, assessmentDueDate])

@@ -56,6 +56,7 @@ struct CorrectionSidebarView: View {
                         FeedbackListView(
                             readOnly: assessmentVM.readOnly,
                             assessmentResult: assessmentResult,
+                            feedbackDelegate: feedbackDelegate,
                             participationId: assessmentVM.participation?.id,
                             templateParticipationId: templateParticipationId,
                             gradingCriteria: exercise?.gradingCriteria ?? []
