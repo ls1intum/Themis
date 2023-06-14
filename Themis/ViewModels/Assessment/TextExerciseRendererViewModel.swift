@@ -79,7 +79,7 @@ class TextExerciseRendererViewModel: ObservableObject {
         setupHighlights(basedOn: blocks, and: feedbacks)
     }
     
-    private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [Feedback]) {
+    private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [Feedback], shouldWipeUndo: Bool = true) {
         blocks.forEach { block in
             guard let blockId = block.id,
                   let startIndex = block.startIndex,
@@ -94,7 +94,10 @@ class TextExerciseRendererViewModel: ObservableObject {
             
             inlineHighlights.append(HighlightedRange(id: blockId, range: range, color: color))
         }
-        undoManager.removeAllActions()
+        
+        if shouldWipeUndo {
+            undoManager.removeAllActions()
+        }
     }
         
     private func updateHighlightColor(for feedback: Feedback) {
@@ -113,14 +116,19 @@ class TextExerciseRendererViewModel: ObservableObject {
         guard let block = (feedback.detail as? TextFeedbackDetail)?.block else {
             return
         }
-        setupHighlights(basedOn: [block], and: [feedback.baseFeedback])
+        setupHighlights(basedOn: [block], and: [feedback.baseFeedback], shouldWipeUndo: false)
+        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
-    private func deleteHighlight(for feedback: Feedback) {
-        guard let blockId = feedback.reference else {
+    private func deleteHighlight(for feedback: AssessmentFeedback) {
+        guard let blockId = feedback.baseFeedback.reference else {
             return
         }
         inlineHighlights.removeAll(where: { $0.id == blockId })
+        
+        if feedback.scope == .inline {
+            undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
+        }
     }
     
     /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
@@ -143,6 +151,6 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
     }
     
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
-        deleteHighlight(for: feedback.baseFeedback)
+        deleteHighlight(for: feedback)
     }
 }
