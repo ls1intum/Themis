@@ -52,6 +52,7 @@ extension SubmissionSearchView {
 }
 
 private struct SingleSubmissionCellView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @State var showAssessmentView = false
 
     let exercise: Exercise
@@ -88,6 +89,7 @@ private struct SingleSubmissionCellView: View {
                 participationId: submission.getParticipation()?.id,
                 readOnly: true
             )
+            .environmentObject(courseVM)
         }
     }
     

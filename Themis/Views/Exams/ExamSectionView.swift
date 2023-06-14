@@ -9,8 +9,9 @@ import SwiftUI
 import SharedModels
 
 struct ExamSectionView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
     let examID: Int
-    let courseID: Int
     let examTitle: String
     
     @State var exam: Exam?
@@ -22,6 +23,7 @@ struct ExamSectionView: View {
                 ForEach(exercises) { exercise in
                     NavigationLink {
                         ExerciseView(exercise: exercise, exam: exam)
+                            .environmentObject(courseVM)
                     } label: {
                         HStack {
                             exercise.image
@@ -39,7 +41,7 @@ struct ExamSectionView: View {
                 }
             }
         }.task {
-            let exam = try? await ExamServiceFactory.shared.getExamForAssessment(courseId: courseID, examId: examID)
+            let exam = try? await ExamServiceFactory.shared.getExamForAssessment(courseId: courseVM.shownCourseID ?? -1, examId: examID)
             
             if let exam {
                 self.exam = exam

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DesignLibrary
 import SharedModels
 
 enum CorrectionSidebarElements {
@@ -13,11 +14,11 @@ enum CorrectionSidebarElements {
 }
 
 struct CorrectionSidebarView: View {
-
-    @State var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    @EnvironmentObject var courseVM: CourseViewModel
+    @State private var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
+    
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var assessmentVM: AssessmentViewModel
-    @ObservedObject var umlVM: UMLViewModel
     
     weak var feedbackDelegate: (any FeedbackDelegate)?
     
@@ -34,31 +35,32 @@ struct CorrectionSidebarView: View {
             sideBarElementPicker
             
             if !assessmentVM.loading {
-                switch correctionSidebarStatus {
-                case .problemStatement:
+                ZStack {
                     ScrollView {
-                        ProblemStatementCellView(
-                            umlVM: umlVM,
-                            problemStatement: exercise?.problemStatement ?? "",
-                            feedbacks: assessmentResult.feedbacks
+                        ProblemStatementView(courseId: courseVM.shownCourseID ?? -1, exerciseId: exercise?.id ?? -1)
+                            .frame(maxHeight: .infinity)
+                    }
+                    .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
+                    
+                    switch correctionSidebarStatus {
+                    case .problemStatement:
+                        EmptyView() // handled above
+                    case .correctionGuidelines:
+                        ScrollView {
+                            CorrectionGuidelinesCellView(
+                                gradingCriteria: exercise?.gradingCriteria ?? [],
+                                gradingInstructions: exercise?.gradingInstructions
+                            )
+                        }
+                    case .generalFeedback:
+                        FeedbackListView(
+                            readOnly: assessmentVM.readOnly,
+                            assessmentResult: assessmentResult,
+                            participationId: assessmentVM.participation?.id,
+                            templateParticipationId: templateParticipationId,
+                            gradingCriteria: exercise?.gradingCriteria ?? []
                         )
                     }
-                case .correctionGuidelines:
-                    ScrollView {
-                        CorrectionGuidelinesCellView(
-                            gradingCriteria: exercise?.gradingCriteria ?? [],
-                            gradingInstructions: exercise?.gradingInstructions
-                        )
-                    }
-                case .generalFeedback:
-                    FeedbackListView(
-                        readOnly: assessmentVM.readOnly,
-                        assessmentResult: assessmentResult,
-                        feedbackDelegate: feedbackDelegate,
-                        participationId: assessmentVM.participation?.id,
-                        templateParticipationId: templateParticipationId,
-                        gradingCriteria: exercise?.gradingCriteria ?? []
-                    )
                 }
             }
             Spacer()
@@ -83,7 +85,6 @@ struct CorrectionSidebarView: View {
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
-    static let umlVM = UMLViewModel()
     @State static var assessmentResult = AssessmentResult()
     @State static var assessmentVM = MockAssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     
@@ -91,7 +92,6 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
         CorrectionSidebarView(
             assessmentResult: $assessmentResult,
             assessmentVM: assessmentVM,
-            umlVM: umlVM,
             feedbackDelegate: cvm
         )
         .previewInterfaceOrientation(.landscapeLeft)

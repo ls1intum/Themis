@@ -9,6 +9,8 @@ import SwiftUI
 import SharedModels
 
 struct SubmissionListView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
+    
     var submissionListVM = SubmissionListViewModel()
     let exercise: Exercise
     let submissionStatus: SubmissionStatus
@@ -23,6 +25,7 @@ struct SubmissionListView: View {
                         participationId: submission.baseSubmission.participation?.id,
                         resultId: submission.baseSubmission.results?.last?.id
                     )
+                    .environmentObject(courseVM)
                 } label: {
                     HStack {
                         Text(verbatim: "Submission #\(submission.baseSubmission.id ?? -1)")

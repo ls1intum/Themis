@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
-import UIKit
-import SharedModels
 import DesignLibrary
+import SharedModels
+import UserStore
 
 struct ExerciseView: View {
+    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
     @StateObject var submissionListVM = SubmissionListViewModel()
-    
     @State var showAssessmentView = false
     
     let exercise: Exercise
@@ -37,6 +37,8 @@ struct ExerciseView: View {
                         }
                         
                         statisticsSection
+                        
+                        problemStatementSection
                     }
                     .refreshable { await fetchExerciseData() }
                 }
@@ -44,12 +46,13 @@ struct ExerciseView: View {
         }
         .navigationDestination(isPresented: $showAssessmentView) {
             AssessmentView(exercise: exercise)
+                .environmentObject(courseVM)
         }
         .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: SubmissionSearchView(exercise: exercise)) {
+                NavigationLink(destination: SubmissionSearchView(exercise: exercise).environmentObject(courseVM)) {
                     searchButton
                 }
             }
@@ -89,6 +92,13 @@ struct ExerciseView: View {
                 CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
                 Spacer()
             }
+        }
+    }
+    
+    private var problemStatementSection: some View {
+        Section("Problem Statement") {
+            ProblemStatementView(courseId: courseVM.shownCourseID ?? -1, exerciseId: exercise.id)
+                .frame(maxHeight: .infinity)
         }
     }
     

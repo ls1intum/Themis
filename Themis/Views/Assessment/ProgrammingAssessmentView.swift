@@ -6,7 +6,6 @@ struct ProgrammingAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
     @StateObject var codeEditorVM = CodeEditorViewModel()
-    @StateObject var umlVM = UMLViewModel()
     @StateObject var paneVM = PaneViewModel()
     
     let exercise: Exercise
@@ -43,11 +42,6 @@ struct ProgrammingAssessmentView: View {
             ToolbarFileTreeToggleButton(paneVM: paneVM)
                 .padding(.top, 4)
                 .padding(.leading, 13)
-        }
-        .overlay {
-            if umlVM.showUMLFullScreen {
-                UMLView(umlVM: umlVM)
-            }
         }
         .sheet(isPresented: $codeEditorVM.showAddFeedback, onDismiss: {
             codeEditorVM.selectedFeedbackSuggestionId = ""
@@ -111,7 +105,6 @@ struct ProgrammingAssessmentView: View {
                 CorrectionSidebarView(
                     assessmentResult: $assessmentVM.assessmentResult,
                     assessmentVM: assessmentVM,
-                    umlVM: umlVM,
                     feedbackDelegate: codeEditorVM
                 )
             }

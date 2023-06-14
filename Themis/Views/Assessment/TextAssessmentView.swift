@@ -13,7 +13,6 @@ struct TextAssessmentView: View {
     @ObservedObject var assessmentResult: AssessmentResult
     @StateObject private var textExerciseRendererVM = TextExerciseRendererViewModel()
     @StateObject private var paneVM = PaneViewModel(mode: .rightOnly)
-    @StateObject private var umlVM = UMLViewModel()
     
     let exercise: Exercise
     var submissionId: Int?
@@ -84,7 +83,6 @@ struct TextAssessmentView: View {
             CorrectionSidebarView(
                 assessmentResult: $assessmentVM.assessmentResult,
                 assessmentVM: assessmentVM,
-                umlVM: umlVM,
                 feedbackDelegate: textExerciseRendererVM
             )
         }
