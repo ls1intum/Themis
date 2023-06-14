@@ -92,7 +92,7 @@ struct AssessmentView: View {
                 }
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    CustomProgressView(progress: assessmentVM.assessmentResult.score,
+                    CustomProgressView(progress: assessmentVM.assessmentResult.points,
                                        max: assessmentVM.assessmentResult.maxPoints)
                     
                     ToolbarPointsLabel(assessmentResult: assessmentResult, submission: assessmentVM.submission)
