@@ -1,5 +1,5 @@
 //
-//  ExamSectionView.swift
+//  ExamSectionDetailView.swift
 //  Themis
 //
 //  Created by Andreas Cselovszky on 07.02.23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SharedModels
 
-struct ExamSectionView: View {
+struct ExamSectionDetailView: View {
     @EnvironmentObject var courseVM: CourseViewModel
     
     let examID: Int

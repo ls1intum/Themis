@@ -18,7 +18,7 @@ struct ExerciseListItem: View {
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
-                .frame(width: .smallImage)
+                .frame(width: .smallImage, height: .smallImage)
             
             Text(exercise.baseExercise.title ?? "")
                 .font(.title2)
@@ -28,6 +28,7 @@ struct ExerciseListItem: View {
                 (name: dateProp.name, date: exercise[keyPath: dateProp.dateKeyPath])
             })
         }
-        .padding(.trailing)
+        .padding(.horizontal, 10)
+        .tint(.primary)
     }
 }

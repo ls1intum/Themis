@@ -29,33 +29,34 @@ extension Exercise {
         return true
     }
     
-    var isSubmissionDueDateOver: Bool {
-        if let dueDate = self.baseExercise.dueDate {
-            return dueDate <= .now
-        }
-        return false
-    }
-    
-    var isFormer: Bool {
-        if let dueDate = self.baseExercise.assessmentDueDate, dueDate < Date.now {
+    var supportsAssessment: Bool {
+        switch self {
+        case .quiz(exercise: _), .unknown(exercise: _):
+            return false
+        default:
             return true
         }
-        return false
     }
     
     var isCurrentlyInAssessment: Bool {
-        if let assessmentDueDate = self.baseExercise.assessmentDueDate {
-            return isSubmissionDueDateOver && assessmentDueDate > .now
-        }
-        
-        return isSubmissionDueDateOver
+        supportsAssessment && hasSomethingToAssess
     }
     
-    var isFuture: Bool {
-        // exercises without a release date are automatically published
-        if let releaseDate = self.baseExercise.releaseDate {
-            return Date.now < releaseDate
-        }
-        return false
+    var isViewOnly: Bool {
+        supportsAssessment && !hasSomethingToAssess
+    }
+    
+    private var hasSomethingToAssess: Bool {
+        (baseExercise.assessmentType != .automatic || (baseExercise.allowComplaintsForAutomaticAssessments ?? false))
+        || (baseExercise.allowComplaintsForAutomaticAssessments == false && hasUnfinishedAssessments)
+        || baseExercise.numberOfOpenComplaints != 0
+        || baseExercise.numberOfOpenMoreFeedbackRequests != 0
+    }
+    
+    private var hasUnfinishedAssessments: Bool {
+        // check if there's at least 1 correction round where inTime != number of in time submissions
+        baseExercise.numberOfAssessmentsOfCorrectionRounds?
+            .contains(where: { $0.inTime != baseExercise.numberOfSubmissions?.inTime }) ?? false
+        || baseExercise.totalNumberOfAssessments?.inTime != baseExercise.numberOfSubmissions?.inTime
     }
 }

@@ -28,19 +28,20 @@ struct CourseView: View {
                 } else if courseVM.showEmptyMessage {
                     emptyInfo
                 } else {
-                    Form {
-                        ExerciseSections(
-                            exercises: courseVM.shownCourse?.exercises ?? []
-                        )
-                        if let courseId = courseVM.shownCourse?.id, courseVM.hasExams {
-                            Section("Exams") {
-                                ExamListView(exams: courseVM.shownCourse?.exams ?? [], courseID: courseId)
-                            }
+                    ScrollView {
+                        Group {
+                            ExerciseGroups(courseVM: courseVM, type: .inAssessment)
+                                .padding(.bottom)
+                            ExerciseGroups(courseVM: courseVM, type: .viewOnly)
+                                .disabled(true) // TODO: remove once view-only mode is fully implemented
                         }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
                     }
                     .environmentObject(courseVM)
                     .refreshable {
-                        await courseVM.fetchAllCourses()
+                        courseVM.fetchAllCourses()
+                        courseVM.fetchShownCourseAndSetExercises()
                     }
                 }
             }
@@ -55,14 +56,19 @@ struct CourseView: View {
                         ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
                             if let courseID {
                                 Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
+                                    .padding(.leading, 40)
                             }
                         }
-                    }.isHidden(courseVM.showEmptyMessage)
+                    }
+                    .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
+                    .isHidden(courseVM.showEmptyMessage)
+                    .padding(-10) // compensates for Picker's default padding
                 }
             }
         }
         .task {
-            await courseVM.fetchAllCourses()
+            courseVM.fetchAllCourses()
+            courseVM.fetchShownCourseAndSetExercises()
         }
         .errorAlert(error: $courseVM.error)
     }
