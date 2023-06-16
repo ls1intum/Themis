@@ -130,4 +130,15 @@ class AssessmentViewModel: ObservableObject {
     func getFeedback(byId id: String) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { "\($0.id)" == id })
     }
+    
+    func participationId(for repoType: RepositoryType) -> Int? { // TODO: move somewhere else (this is programming exercise-only)
+        switch repoType {
+        case .student:
+            return participation?.id
+        case .solution:
+            return participation?.getExercise(as: ProgrammingExercise.self)?.solutionParticipation?.id
+        case .template:
+            return participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+        }
+    }
 }

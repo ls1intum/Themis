@@ -4,9 +4,19 @@ import SharedModels
 struct FiletreeSidebarView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var assessmentVM: AssessmentViewModel
+    @Binding var repositorySelection: RepositoryType
     
     var body: some View {
         VStack(alignment: .leading) {
+            Picker(selection: $repositorySelection) {
+                ForEach(RepositoryType.allCases, id: \.self) { repoType in
+                    Text("\(repoType.rawValue) Repository")
+                }
+            } label: {
+                Text("\(repositorySelection.rawValue) Repository")
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            
             Text("Filetree")
                 .font(.title)
                 .bold()

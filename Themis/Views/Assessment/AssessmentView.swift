@@ -17,6 +17,7 @@ struct AssessmentView: View {
     @State private var showStepper = false
     @State private var showSubmitConfirmation = false
     @State private var showNavigationOptions = false
+    @State private var repositorySelection = RepositoryType.student
     
     let exercise: Exercise
     
@@ -190,7 +191,14 @@ struct AssessmentView: View {
             if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
+                    .onChange(of: repositorySelection) { newValue in
+                        if let participationId = assessmentVM.participationId(for: newValue) {
+                            Task {
+                                await codeEditorVM.initFileTree(participationId: participationId)
+                            }
+                        }
+                    }
             }
         }
     }
