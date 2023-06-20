@@ -92,6 +92,7 @@ struct AssessmentView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilMode, iconImageSystemName: "hand.draw", inverted: true)
+                        .disabled(codeEditorVM.currentRepositoryType != .student)
                 }
             }
             
@@ -177,7 +178,7 @@ struct AssessmentView: View {
                 await assessmentVM.getSubmission(id: submissionId)
             }
             if let pId = assessmentVM.participation?.id {
-                await codeEditorVM.initFileTree(participationId: pId)
+                await codeEditorVM.initFileTree(participationId: pId, repositoryType: .student)
                 await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
             }
@@ -192,10 +193,10 @@ struct AssessmentView: View {
                 EmptyView()
             } else {
                 FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
-                    .onChange(of: repositorySelection) { newValue in
-                        if let participationId = assessmentVM.participationId(for: newValue) {
+                    .onChange(of: repositorySelection) { newRepositoryType in
+                        if let participationId = assessmentVM.participationId(for: newRepositoryType) {
                             Task {
-                                await codeEditorVM.initFileTree(participationId: participationId)
+                                await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
                             }
                         }
                     }

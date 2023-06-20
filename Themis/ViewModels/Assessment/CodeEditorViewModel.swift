@@ -29,6 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
     @Published var pencilMode = true
+    @Published var currentRepositoryType = RepositoryType.student
     @Published var feedbackForSelectionId = ""
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
@@ -96,11 +97,19 @@ class CodeEditorViewModel: ObservableObject {
     }
     
     @MainActor
-    func initFileTree(participationId: Int) async {
+    func initFileTree(participationId: Int, repositoryType: RepositoryType) async {
         do {
             let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
             let node = Node.initFileTreeStructure(files: files)
             self.fileTree = node.children ?? []
+            self.inlineHighlights = [:]
+            self.openFiles = []
+            self.selectedFile = nil
+            self.currentRepositoryType = repositoryType
+            
+            if repositoryType != .student {
+                self.pencilMode = true
+            }
         } catch {
             self.error = error
             log.error(String(describing: error))

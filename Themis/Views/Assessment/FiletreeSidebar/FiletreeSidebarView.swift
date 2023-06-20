@@ -70,7 +70,7 @@ struct FiletreeSidebarView: View {
     }
     
     private func openFile(_ file: Node) {
-        guard let participationId = assessmentVM.participation?.id else {
+        guard let participationId = assessmentVM.participationId(for: repositorySelection) else {
             return
         }
         

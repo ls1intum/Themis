@@ -17,6 +17,10 @@ struct CodeView: View {
     var onOpenFeedback: (Range<Int>) -> Void
     let readOnly: Bool
     
+    var hideSuggestions: Bool {
+        !readOnly && cvm.currentRepositoryType != .student
+    }
+    
     var editorItself: some View {
         UXCodeTextViewRepresentable(
             editorBindings: EditorBindings(
@@ -35,7 +39,7 @@ struct CodeView: View {
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
                 isNewFile: file.isNewFile,
-                feedbackSuggestions: readOnly ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
+                feedbackSuggestions: hideSuggestions ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
                 selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )
