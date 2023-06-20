@@ -16,8 +16,9 @@ struct FeedbackCellView: View {
     @ObservedObject var codeEditorVM: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly }
-
+    var editingDisabled: Bool { readOnly || !codeEditorVM.allowsInlineFeedbackOperations }
+    var tapGestureDisabled: Bool { feedback.scope != .inline || !codeEditorVM.allowsInlineFeedbackOperations }
+    
     @State var showEditFeedback = false
     
     var participationId: Int?
@@ -50,7 +51,7 @@ struct FeedbackCellView: View {
             }
         }
         .onTapGesture {
-            if feedback.scope == .inline {
+            if !tapGestureDisabled {
                 withAnimation(.linear) {
                     isTapped = true
                 }

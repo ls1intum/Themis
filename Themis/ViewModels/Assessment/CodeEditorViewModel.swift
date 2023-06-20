@@ -28,8 +28,9 @@ class CodeEditorViewModel: ObservableObject {
     }
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
-    @Published var pencilMode = true
+    @Published var pencilModeDisabled = true
     @Published var currentRepositoryType = RepositoryType.student
+    @Published var allowsInlineFeedbackOperations = true
     @Published var feedbackForSelectionId = ""
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
@@ -106,9 +107,10 @@ class CodeEditorViewModel: ObservableObject {
             self.openFiles = []
             self.selectedFile = nil
             self.currentRepositoryType = repositoryType
-            
+            self.allowsInlineFeedbackOperations = (repositoryType == .student)
+
             if repositoryType != .student {
-                self.pencilMode = true
+                self.pencilModeDisabled = true
             }
         } catch {
             self.error = error

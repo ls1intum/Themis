@@ -91,8 +91,8 @@ struct AssessmentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilMode, iconImageSystemName: "hand.draw", inverted: true)
-                        .disabled(codeEditorVM.currentRepositoryType != .student)
+                    ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                        .disabled(!codeEditorVM.allowsInlineFeedbackOperations)
                 }
             }
             
@@ -197,6 +197,10 @@ struct AssessmentView: View {
                         if let participationId = assessmentVM.participationId(for: newRepositoryType) {
                             Task {
                                 await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                                if newRepositoryType == .student {
+                                    await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult,
+                                                                           participationId: participationId)
+                                }
                             }
                         }
                     }

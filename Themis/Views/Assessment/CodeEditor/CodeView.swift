@@ -18,7 +18,7 @@ struct CodeView: View {
     let readOnly: Bool
     
     var hideSuggestions: Bool {
-        !readOnly && cvm.currentRepositoryType != .student
+        !readOnly && cvm.allowsInlineFeedbackOperations
     }
     
     var editorItself: some View {
@@ -35,7 +35,7 @@ struct CodeView: View {
                 showEditFeedback: $cvm.showEditFeedback,
                 selectedSection: $cvm.selectedSection,
                 feedbackForSelectionId: $cvm.feedbackForSelectionId,
-                pencilOnly: $cvm.pencilMode,
+                pencilOnly: $cvm.pencilModeDisabled,
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
                 isNewFile: file.isNewFile,
