@@ -1,5 +1,6 @@
 import SwiftUI
 import SharedModels
+import DesignLibrary
 
 struct FiletreeSidebarView: View {
     @ObservedObject var cvm: CodeEditorViewModel
@@ -17,6 +18,8 @@ struct FiletreeSidebarView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 7)
+            
+            showWarningIfNeeded()
             
             Text("Filetree")
                 .font(.title)
@@ -44,6 +47,7 @@ struct FiletreeSidebarView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 35)
         .background(Color("sidebarBackground"))
+        .animation(.easeInOut(duration: 0.2), value: repositorySelection)
     }
     
     @ViewBuilder
@@ -69,6 +73,14 @@ struct FiletreeSidebarView: View {
         .bold(file === cvm.selectedFile)
         .background(file === cvm.selectedFile ? Color("selectedFileBackground") : Color("sidebarBackground"))
         .cornerRadius(10)
+    }
+    
+    @ViewBuilder
+    private func showWarningIfNeeded() -> some View {
+        if repositorySelection != .student {
+            ArtemisWarning(text: "Some functionality may be limited while viewing this repository")
+                .padding(.horizontal)
+        }
     }
     
     private func openFile(_ file: Node) {
