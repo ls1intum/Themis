@@ -513,12 +513,6 @@ protocol UXCodeTextViewDelegate: UXTextViewDelegate {
     func setDragSelection(_: Range<Int>?)
 }
 
-extension String {
-    func hasRange(_ range: NSRange) -> Bool {
-        return Range(range, in: self) != nil
-    }
-}
-
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView
 
 extension UXTextView {

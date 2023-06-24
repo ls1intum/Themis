@@ -36,6 +36,7 @@
 		6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */; };
 		6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205C29EF0840005EE6FA /* ColorExtension.swift */; };
 		659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */; };
+		65ABB1732A46E4A000DA2174 /* StringRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65ABB1722A46E4A000DA2174 /* StringRangeExtension.swift */; };
 		65B49F382A07D5C000C9A45F /* ToolbarPointsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F372A07D5C000C9A45F /* ToolbarPointsLabel.swift */; };
 		65B49F3A2A07D5F200C9A45F /* ToolbarToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F392A07D5F200C9A45F /* ToolbarToggleButton.swift */; };
 		65B49F3C2A07E87F00C9A45F /* UndoManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F3B2A07E87F00C9A45F /* UndoManagerExtension.swift */; };
@@ -160,6 +161,7 @@
 		6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonStyle.swift; sourceTree = "<group>"; };
 		6589205C29EF0840005EE6FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHideExtension.swift; sourceTree = "<group>"; };
+		65ABB1722A46E4A000DA2174 /* StringRangeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRangeExtension.swift; sourceTree = "<group>"; };
 		65B49F372A07D5C000C9A45F /* ToolbarPointsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarPointsLabel.swift; sourceTree = "<group>"; };
 		65B49F392A07D5F200C9A45F /* ToolbarToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarToggleButton.swift; sourceTree = "<group>"; };
 		65B49F3B2A07E87F00C9A45F /* UndoManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoManagerExtension.swift; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 				653452B52A068E4D008D9598 /* ParticipationExtension.swift */,
 				65B49F3B2A07E87F00C9A45F /* UndoManagerExtension.swift */,
 				651A44BA2A167FDF00DBCD92 /* CourseMockExtension.swift */,
+				65ABB1722A46E4A000DA2174 /* StringRangeExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -996,6 +999,7 @@
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
 				65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
+				65ABB1732A46E4A000DA2174 /* StringRangeExtension.swift in Sources */,
 				658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
 				A9752D792992AA8B004441D1 /* ExamSection.swift in Sources */,
