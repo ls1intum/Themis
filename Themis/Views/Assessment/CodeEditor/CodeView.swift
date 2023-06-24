@@ -21,6 +21,14 @@ struct CodeView: View {
         !readOnly && cvm.allowsInlineFeedbackOperations
     }
     
+    private var highlightedRanges: [HighlightedRange] {
+        guard cvm.allowsInlineFeedbackOperations,
+              let highlights = cvm.inlineHighlights[file.path] else {
+            return []
+        }
+        return highlights
+    }
+    
     var editorItself: some View {
         UXCodeTextViewRepresentable(
             editorBindings: EditorBindings(
@@ -29,7 +37,7 @@ struct CodeView: View {
                 language: language,
                 themeName: theme,
                 flags: editorFlags,
-                highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
+                highlightedRanges: highlightedRanges,
                 dragSelection: $dragSelection,
                 showAddFeedback: $cvm.showAddFeedback,
                 showEditFeedback: $cvm.showEditFeedback,

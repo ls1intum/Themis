@@ -103,7 +103,6 @@ class CodeEditorViewModel: ObservableObject {
             let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
             let node = Node.initFileTreeStructure(files: files)
             self.fileTree = node.children ?? []
-            self.inlineHighlights = [:]
             self.openFiles = []
             self.selectedFile = nil
             self.currentRepositoryType = repositoryType
