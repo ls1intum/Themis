@@ -17,7 +17,7 @@ struct CodeView: View {
     var onOpenFeedback: (Range<Int>) -> Void
     let readOnly: Bool
     
-    var hideSuggestions: Bool {
+    private var hideSuggestions: Bool {
         !readOnly && cvm.allowsInlineFeedbackOperations
     }
     

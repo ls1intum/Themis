@@ -433,6 +433,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 self.textStorage.removeAttribute(.link, range: range)
             }
             for hRange in highlightedRanges {
+                guard text.hasRange(hRange.range) else {
+                    continue
+                }
                 self.textStorage.addAttributes(
                     [
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
@@ -446,6 +449,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
             for hRange in highlightedRanges {
+                guard text.hasRange(hRange.range) else {
+                    continue
+                }
                 self.textStorage.addAttributes(
                     [
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
@@ -505,6 +511,12 @@ protocol UXCodeTextViewDelegate: UXTextViewDelegate {
     var fontSize: CGFloat? { get set }
     
     func setDragSelection(_: Range<Int>?)
+}
+
+extension String {
+    func hasRange(_ range: NSRange) -> Bool {
+        return Range(range, in: self) != nil
+    }
 }
 
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView

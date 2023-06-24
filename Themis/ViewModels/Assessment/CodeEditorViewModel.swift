@@ -176,7 +176,11 @@ class CodeEditorViewModel: ObservableObject {
     }
     
     @MainActor
-    func loadInlineHighlight(assessmentResult: AssessmentResult, participationId: Int) async {
+    func loadInlineHighlightsIfEmpty(assessmentResult: AssessmentResult, participationId: Int) async {
+        guard inlineHighlights.isEmpty else {
+            return
+        }
+        
         for feedback in assessmentResult.inlineFeedback {
             // the reference is extracted from the text since it is more detailed (includes columns and multilines)
             if let text = feedback.baseFeedback.text {

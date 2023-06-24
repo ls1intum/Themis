@@ -27,7 +27,7 @@ struct AssessmentSubmissionLoaderView: View {
             await avm.getSubmission(id: submissionID)
             if let pId = avm.submission?.participation?.id {
                 await cvm.initFileTree(participationId: pId, repositoryType: .student)
-                await cvm.loadInlineHighlight(assessmentResult: avm.assessmentResult, participationId: pId)
+                await cvm.loadInlineHighlightsIfEmpty(assessmentResult: avm.assessmentResult, participationId: pId)
             }
         }
     }

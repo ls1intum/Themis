@@ -179,7 +179,7 @@ struct AssessmentView: View {
             }
             if let pId = assessmentVM.participation?.id {
                 await codeEditorVM.initFileTree(participationId: pId, repositoryType: .student)
-                await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
+                await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
             }
         }
@@ -198,8 +198,8 @@ struct AssessmentView: View {
                             Task {
                                 await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
                                 if newRepositoryType == .student {
-                                    await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult,
-                                                                           participationId: participationId)
+                                    await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
+                                                                                   participationId: participationId)
                                 }
                             }
                         }

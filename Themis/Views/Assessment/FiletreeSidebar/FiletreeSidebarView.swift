@@ -15,12 +15,14 @@ struct FiletreeSidebarView: View {
             } label: {
                 Text("\(repositorySelection.rawValue) Repository")
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 7)
             
             Text("Filetree")
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
+            
             if !assessmentVM.loading {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
