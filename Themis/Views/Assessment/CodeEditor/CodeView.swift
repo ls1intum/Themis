@@ -18,7 +18,7 @@ struct CodeView: View {
     let readOnly: Bool
     
     private var hideSuggestions: Bool {
-        !readOnly && cvm.allowsInlineFeedbackOperations
+        readOnly || !cvm.allowsInlineFeedbackOperations
     }
     
     private var highlightedRanges: [HighlightedRange] {
