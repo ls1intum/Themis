@@ -16,8 +16,8 @@ struct FeedbackCellView: View {
     @ObservedObject var codeEditorVM: CodeEditorViewModel
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly || !codeEditorVM.allowsInlineFeedbackOperations }
-    var tapGestureDisabled: Bool { feedback.scope != .inline || !codeEditorVM.allowsInlineFeedbackOperations }
+    private var editingDisabled: Bool { readOnly || !codeEditorVM.allowsInlineFeedbackOperations }
+    private var tapGestureDisabled: Bool { feedback.scope != .inline || !codeEditorVM.allowsInlineFeedbackOperations }
     
     @State var showEditFeedback = false
     
