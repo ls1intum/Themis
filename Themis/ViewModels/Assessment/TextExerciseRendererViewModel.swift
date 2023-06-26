@@ -85,7 +85,8 @@ class TextExerciseRendererViewModel: ObservableObject {
                   let startIndex = block.startIndex,
                   let endIndex = block.endIndex,
                   let feedback = feedbacks.first(where: { $0.reference == block.id }),
-                  startIndex < endIndex else {
+                  startIndex < endIndex
+            else {
                 return
             }
             

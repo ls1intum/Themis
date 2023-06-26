@@ -127,7 +127,7 @@ struct FeedbackListView: View {
 }
 
  struct FeedbackListView_Previews: PreviewProvider {
-     static let assessment = AssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
+    static let assessment = AssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     static let codeEditor = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
     
