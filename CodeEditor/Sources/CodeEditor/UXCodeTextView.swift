@@ -103,7 +103,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             hlTextStorage.highlightDelegate = self
         }
         textContainer.exclusionPaths.append(UIBezierPath(rect: CGRect(x: 0, y: 0, width: Int(numViewWidth()) + 10, height: Int(INT_MAX))))
-        linkTextAttributes = [.foregroundColor: UIColor.black]
+        linkTextAttributes = [.foregroundColor: UIColor.label]
         // self.textContainerInset = UIEdgeInsets(top: 8, left: numViewWidth() + 10, bottom: 8, right: 0)
 #if os(macOS)
         isVerticallyResizable = true
