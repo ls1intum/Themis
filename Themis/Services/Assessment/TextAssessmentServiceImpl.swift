@@ -19,8 +19,8 @@ class TextAssessmentServiceImpl: AssessmentService {
     private struct CancelAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var participationId: Int
-        var submissionId: Int
+        let participationId: Int
+        let submissionId: Int
         
         var method: HTTPMethod {
             .post
@@ -42,9 +42,9 @@ class TextAssessmentServiceImpl: AssessmentService {
     private struct SaveAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var participationId: Int
-        var resultId: Int
-        var assessmentDTO: TextAssessmentResult
+        let participationId: Int
+        let resultId: Int
+        let assessmentDTO: TextAssessmentResult
         
         var method: HTTPMethod {
             .put
@@ -79,9 +79,9 @@ class TextAssessmentServiceImpl: AssessmentService {
     private struct SubmitAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var participationId: Int
-        var resultId: Int
-        var assessmentDTO: TextAssessmentResult
+        let participationId: Int
+        let resultId: Int
+        let assessmentDTO: TextAssessmentResult
         
         var method: HTTPMethod {
             .post
@@ -116,8 +116,8 @@ class TextAssessmentServiceImpl: AssessmentService {
     private struct GetParticipationRequest: APIRequest {
         typealias Response = Participation
         
-        var participationId: Int
-        var submissionId: Int
+        let participationId: Int
+        let submissionId: Int
         
         var method: HTTPMethod {
             .get
