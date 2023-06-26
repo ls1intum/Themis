@@ -78,7 +78,7 @@ struct FiletreeSidebarView: View {
     @ViewBuilder
     private func showWarningIfNeeded() -> some View {
         if repositorySelection != .student {
-            ArtemisAlertView(text: "Some functionality may be limited while viewing this repository")
+            ArtemisHintBox(text: "Some functionality may be limited while viewing this repository")
                 .padding(.horizontal)
         }
     }
