@@ -84,7 +84,6 @@ struct ProgrammingAssessmentView: View {
         .onChange(of: assessmentVM.pencilMode, perform: { codeEditorVM.pencilMode = $0 })
         .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })
         .errorAlert(error: $codeEditorVM.error)
-        .errorAlert(error: $assessmentVM.error)
     }
     
     var filetreeWithPlaceholder: some View {

@@ -13,7 +13,7 @@ class UnknownSubmissionServiceImpl: SubmissionService {
     
     typealias SubmissionType = UnknownSubmission
     
-    private let defaultError = UserFacingError(title: "Exercise type not supported")
+    private let defaultError = UserFacingError.operationNotSupportedForExercise
 
     func getAllSubmissions(exerciseId: Int) async throws -> [Submission] {
         throw defaultError

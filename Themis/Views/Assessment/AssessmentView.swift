@@ -140,7 +140,7 @@ struct AssessmentView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
-            .errorAlert(error: $assessmentVM.error)
+            .errorAlert(error: $assessmentVM.error, onDismiss: { presentationMode.wrappedValue.dismiss() })
     }
     
     @ViewBuilder

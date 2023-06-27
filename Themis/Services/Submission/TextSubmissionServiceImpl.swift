@@ -103,6 +103,6 @@ class TextSubmissionServiceImpl: SubmissionService {
     
     // MARK: - Get Result
     func getResultFor(participationId: Int) async throws -> Result {
-        throw UserFacingError(title: "Exercise type not supported")
+        throw UserFacingError.operationNotSupportedForExercise
     }
 }

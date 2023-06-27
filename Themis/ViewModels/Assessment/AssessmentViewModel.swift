@@ -71,6 +71,9 @@ class AssessmentViewModel: ObservableObject {
             if readOnly {
                 if let participationId {
                     await getReadOnlySubmission(participationId: participationId)
+                } else {
+                    self.error = UserFacingError.participationNotFound
+                    log.error("Could not find participation for exercise: \(exercise.baseExercise.title ?? "")")
                 }
             } else {
                 if let submissionId {
@@ -82,6 +85,7 @@ class AssessmentViewModel: ObservableObject {
         case .text(exercise: _):
             if readOnly {
                 // TODO: figure out which endpoint could be used instead
+                self.error = UserFacingError.operationNotSupportedForExercise
             } else {
                 if let participationId, let submissionId {
                     await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
@@ -137,13 +141,15 @@ class AssessmentViewModel: ObservableObject {
         } catch {
             self.submission = nil
             self.error = error
-            log.info(String(describing: error))
+            log.error(String(describing: error))
         }
     }
 
     @MainActor
     func getSubmission(submissionId: Int) async {
         guard !readOnly else {
+            self.error = UserFacingError.unknown
+            log.error("This function should not be called for read-only mode")
             return
         }
         
@@ -167,6 +173,8 @@ class AssessmentViewModel: ObservableObject {
     @MainActor
     func getReadOnlySubmission(participationId: Int) async {
         guard readOnly else {
+            self.error = UserFacingError.unknown
+            log.error("This function should only be called for read-only mode")
             return
         }
         
