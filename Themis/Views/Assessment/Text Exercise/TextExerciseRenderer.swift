@@ -100,7 +100,8 @@ struct TextExerciseRenderer_Previews: PreviewProvider {
         TextExerciseRenderer(textExerciseRendererVM: textVM)
             .previewInterfaceOrientation(.landscapeRight)
             .onAppear {
-//                textVM.setup(basedOn: Submission.mockText.baseSubmission.participation)
+                textVM.setup(basedOn: Submission.mockText.baseSubmission.participation?.baseParticipation,
+                             and: Submission.mockText.baseSubmission)
             }
     }
 }

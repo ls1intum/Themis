@@ -15,7 +15,7 @@ protocol SubmissionService {
     /// Fetch all submissions of the exercise
     func getAllSubmissions(exerciseId: Int) async throws -> [Submission]
     
-    /// Fetches all submissions of that exercise assessed by the tutor = by the user
+    /// Fetches all submissions of that exercise previously assessed by the tutor (user)
     func getTutorSubmissions(exerciseId: Int) async throws -> [Submission]
     
     /// Fetches a random submission and locks it. This should be used to assess a random submission
