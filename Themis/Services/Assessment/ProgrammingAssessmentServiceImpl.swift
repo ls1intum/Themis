@@ -19,7 +19,7 @@ class ProgrammingAssessmentServiceImpl: AssessmentService {
     private struct CancelAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var submissionId: Int
+        let submissionId: Int
         
         var method: HTTPMethod {
             .put
@@ -38,9 +38,9 @@ class ProgrammingAssessmentServiceImpl: AssessmentService {
     private struct SaveAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var participationId: Int
-        var newAssessment: AssessmentResult
-        var submit: Bool
+        let participationId: Int
+        let newAssessment: AssessmentResult
+        let submit: Bool
         
         var method: HTTPMethod {
             .put
