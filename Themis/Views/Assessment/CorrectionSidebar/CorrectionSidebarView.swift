@@ -37,7 +37,7 @@ struct CorrectionSidebarView: View {
             if !assessmentVM.loading {
                 ZStack {
                     ScrollView {
-                        ProblemStatementView(courseId: courseVM.shownCourseID ?? -1, exerciseId: exercise?.id ?? -1)
+                        ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise?.id)
                             .frame(maxHeight: .infinity)
                     }
                     .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn

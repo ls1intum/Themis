@@ -97,7 +97,7 @@ struct ExerciseView: View {
     
     private var problemStatementSection: some View {
         Section("Problem Statement") {
-            ProblemStatementView(courseId: courseVM.shownCourseID ?? -1, exerciseId: exercise.id)
+            ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise.id)
                 .frame(maxHeight: .infinity)
         }
     }
