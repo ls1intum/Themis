@@ -36,14 +36,14 @@ struct TextAssessmentView: View {
         .task {
             assessmentVM.participationId = participationId
             await assessmentVM.initSubmission()
-            textExerciseRendererVM.setup(basedOn: assessmentVM.participation, and: assessmentVM.submission)
+            textExerciseRendererVM.setup(basedOn: assessmentVM.participation, assessmentVM.submission, assessmentResult)
             ensureResultId()
         }
         .onReceive(didStartNextAssessment, perform: { _ in
             guard assessmentVM.submission != nil && assessmentVM.participation != nil else {
                 return
             }
-            textExerciseRendererVM.setup(basedOn: assessmentVM.participation, and: assessmentVM.submission)
+            textExerciseRendererVM.setup(basedOn: assessmentVM.participation, assessmentVM.submission, assessmentResult)
             ensureResultId(force: true)
         })
         .onAppear {
@@ -63,7 +63,7 @@ struct TextAssessmentView: View {
             )
         })
         .sheet(isPresented: $textExerciseRendererVM.showEditFeedback) {
-            if let feedback = assessmentVM.getFeedback(byReference: textExerciseRendererVM.selectedFeedbackForEditingId) {
+            if let feedback = assessmentVM.getFeedback(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     feedbackDelegate: textExerciseRendererVM,

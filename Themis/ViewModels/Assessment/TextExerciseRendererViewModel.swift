@@ -16,7 +16,7 @@ class TextExerciseRendererViewModel: ObservableObject {
     @Published var fontSize: CGFloat = 18.0
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
-    @Published var selectedFeedbackForEditingId = ""
+    @Published var selectedFeedbackForEditingId = UUID()
     @Published var selectedFeedbackSuggestionId = ""
     @Published var selectedSection: NSRange?
     @Published var pencilMode = true
@@ -58,7 +58,7 @@ class TextExerciseRendererViewModel: ObservableObject {
     ///   - participation:
     ///   - submission: Optional. Only used if the participation parameter does not contain a submission (this occurs when starting a new random assessment, for example)
     @MainActor
-    func setup(basedOn participation: BaseParticipation?, and submission: BaseSubmission? = nil) {
+    func setup(basedOn participation: BaseParticipation?, _ submission: BaseSubmission? = nil, _ assessmentResult: AssessmentResult) {
         var textSubmission = participation?.submissions?.last?.baseSubmission as? TextSubmission
             
         if textSubmission == nil { // no submission found in participation
@@ -70,7 +70,7 @@ class TextExerciseRendererViewModel: ObservableObject {
             return
         }
         
-        let feedbacks = participation?.results?.last?.feedbacks ?? []
+        let feedbacks = assessmentResult.inlineFeedback
         let blocks = textSubmission.blocks ?? []
         inlineHighlights.removeAll()
         
@@ -79,21 +79,20 @@ class TextExerciseRendererViewModel: ObservableObject {
         setupHighlights(basedOn: blocks, and: feedbacks)
     }
     
-    private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [Feedback], shouldWipeUndo: Bool = true) {
+    private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         blocks.forEach { block in
-            guard let blockId = block.id,
-                  let startIndex = block.startIndex,
+            guard let startIndex = block.startIndex,
                   let endIndex = block.endIndex,
-                  let feedback = feedbacks.first(where: { $0.reference == block.id }),
+                  let feedback = feedbacks.first(where: { $0.baseFeedback.reference == block.id }),
                   startIndex < endIndex
             else {
                 return
             }
             
             let range = NSRange(startIndex..<endIndex)
-            let color = UIColor(.getHighlightColor(forCredits: feedback.credits ?? 0.0))
+            let color = UIColor(.getHighlightColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
             
-            inlineHighlights.append(HighlightedRange(id: blockId, range: range, color: color))
+            inlineHighlights.append(HighlightedRange(id: feedback.id, range: range, color: color))
         }
         
         if shouldWipeUndo {
@@ -101,14 +100,13 @@ class TextExerciseRendererViewModel: ObservableObject {
         }
     }
         
-    private func updateHighlightColor(for feedback: Feedback) {
-        guard let blockId = feedback.reference,
-              let oldHighlightIndex = inlineHighlights.firstIndex(where: { $0.id == blockId }) else {
+    private func updateHighlightColor(for feedback: AssessmentFeedback) {
+        guard let oldHighlightIndex = inlineHighlights.firstIndex(where: { $0.id == feedback.id }) else {
             return
         }
         
         let oldHighlight = inlineHighlights[oldHighlightIndex]
-        let newColor = UIColor(Color.getHighlightColor(forCredits: feedback.credits ?? 0.0))
+        let newColor = UIColor(Color.getHighlightColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
         
         inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id, range: oldHighlight.range, color: newColor)
     }
@@ -117,15 +115,12 @@ class TextExerciseRendererViewModel: ObservableObject {
         guard let block = (feedback.detail as? TextFeedbackDetail)?.block else {
             return
         }
-        setupHighlights(basedOn: [block], and: [feedback.baseFeedback], shouldWipeUndo: false)
+        setupHighlights(basedOn: [block], and: [feedback], shouldWipeUndo: false)
         undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     private func deleteHighlight(for feedback: AssessmentFeedback) {
-        guard let blockId = feedback.baseFeedback.reference else {
-            return
-        }
-        inlineHighlights.removeAll(where: { $0.id == blockId })
+        inlineHighlights.removeAll(where: { $0.id == feedback.id })
         
         if feedback.scope == .inline {
             undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
@@ -148,7 +143,7 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
     }
     
     func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
-        updateHighlightColor(for: feedback.baseFeedback)
+        updateHighlightColor(for: feedback)
     }
     
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {

@@ -101,7 +101,8 @@ struct TextExerciseRenderer_Previews: PreviewProvider {
             .previewInterfaceOrientation(.landscapeRight)
             .onAppear {
                 textVM.setup(basedOn: Submission.mockText.baseSubmission.participation?.baseParticipation,
-                             and: Submission.mockText.baseSubmission)
+                             Submission.mockText.baseSubmission,
+                             AssessmentResult())
             }
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 /// Range of text to highlight.
 public final class HighlightedRange {
     /// Unique identifier of the highlighted range.
-    public let id: String
+    public let id: UUID
     /// Range in the text to highlight.
     public let range: NSRange
     /// Color to highlight the text with.
@@ -23,7 +23,7 @@ public final class HighlightedRange {
     ///   - id: ID of the range. Defaults to a UUID.
     ///   - range: Range in the text to highlight.
     ///   - color: Color to highlight the text with.
-    public init(id: String = UUID().uuidString, range: NSRange, color: UIColor, isSuggested: Bool = false) {
+    public init(id: UUID = UUID(), range: NSRange, color: UIColor, isSuggested: Bool = false) {
         self.id = id
         self.range = range
         self.color = color

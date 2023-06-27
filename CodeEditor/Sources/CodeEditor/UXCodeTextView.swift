@@ -445,7 +445,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                     [
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
-                        .link: hRange.id // equals feedback id
+                        .link: hRange.id.uuidString // equals feedback id
                     ], range: hRange.range)
             }
         }
@@ -458,7 +458,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                     [
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
-                        .link: hRange.id // equals feedback id
+                        .link: hRange.id.uuidString // equals feedback id
                     ], range: hRange.range)
             }
         }

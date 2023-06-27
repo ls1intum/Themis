@@ -18,7 +18,7 @@ public struct EditorBindings {
     public var showAddFeedback: Binding<Bool>
     public var showEditFeedback: Binding<Bool>
     public var selectedSection: Binding<NSRange?>
-    public var selectedFeedbackForEditingId: Binding<String>
+    public var selectedFeedbackForEditingId: Binding<UUID>
     public var pencilOnly: Binding<Bool>
     public var scrollUtils: ScrollUtils
     public var diffLines: [Int]
@@ -42,7 +42,7 @@ public struct EditorBindings {
                 showAddFeedback: Binding<Bool>,
                 showEditFeedback: Binding<Bool>,
                 selectedSection: Binding<NSRange?>,
-                selectedFeedbackForEditingId: Binding<String>,
+                selectedFeedbackForEditingId: Binding<UUID>,
                 pencilOnly: Binding<Bool>,
                 scrollUtils: ScrollUtils,
                 diffLines: [Int] = [],

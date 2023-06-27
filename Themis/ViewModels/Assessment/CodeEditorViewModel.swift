@@ -29,7 +29,7 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
     @Published var pencilMode = true
-    @Published var selectedFeedbackForEditingId = ""
+    @Published var selectedFeedbackForEditingId = UUID()
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
     @Published var selectedFeedbackSuggestionId = ""
@@ -211,9 +211,9 @@ class CodeEditorViewModel: ObservableObject {
     @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = (feedback.detail as? ProgrammingFeedbackDetail)?.file?.path {
-            let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
+            let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id })
             scrollUtils.offsets = scrollUtils.offsets.filter({ $0.key != highlight?.range })
-            inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
+            inlineHighlights[filePath]?.removeAll { $0.id == feedback.id }
         }
         
         if feedback.scope == .inline {
@@ -224,7 +224,7 @@ class CodeEditorViewModel: ObservableObject {
     @MainActor
     private func appendHighlight(feedbackId: UUID, range: NSRange, path: String) {
         let highlightedRange = HighlightedRange(
-            id: feedbackId.uuidString,
+            id: feedbackId,
             range: range,
             color: UIColor(Color.neutralTextHighlight)
         )
@@ -319,6 +319,6 @@ extension CodeEditorViewModel: FeedbackDelegate {
             openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
         }
         
-        scrollUtils.range = inlineHighlights[file.path]?.first { $0.id == "\(feedback.id)" }?.range
+        scrollUtils.range = inlineHighlights[file.path]?.first { $0.id == feedback.id }?.range
     }
 }
