@@ -59,10 +59,10 @@ class TextExerciseRendererViewModel: ObservableObject {
     ///   - submission: Optional. Only used if the participation parameter does not contain a submission (this occurs when starting a new random assessment, for example)
     @MainActor
     func setup(basedOn participation: BaseParticipation?, and submission: BaseSubmission? = nil) {
-        var textSubmission = participation?.submissions?.last?.baseSubmission.get(as: TextSubmission.self)
+        var textSubmission = participation?.submissions?.last?.baseSubmission as? TextSubmission
             
         if textSubmission == nil { // no submission found in participation
-            textSubmission = submission?.get(as: TextSubmission.self)
+            textSubmission = submission as? TextSubmission
         }
         
         guard let textSubmission else {

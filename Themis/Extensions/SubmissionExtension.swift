@@ -10,10 +10,6 @@ import Foundation
 import SharedModels
 
 extension BaseSubmission {
-    func get<T>(as: T.Type = BaseParticipation.self) -> T? {
-        self as? T
-    }
-
     func getParticipation<T>(as: T.Type = BaseParticipation.self) -> T? {
         let participation = self.participation?.baseParticipation
         return participation as? T
