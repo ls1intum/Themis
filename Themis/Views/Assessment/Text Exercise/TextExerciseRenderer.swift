@@ -19,7 +19,6 @@ struct TextExerciseRenderer: View {
     
     private var editorFlags: CodeEditor.Flags {
         var flags: CodeEditor.Flags = [.selectable]
-//        if !readOnly { flags.insert(.feedbackMode) }
         return flags
     }
     
