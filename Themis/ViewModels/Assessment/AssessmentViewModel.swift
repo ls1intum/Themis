@@ -3,6 +3,7 @@ import SwiftUI
 import Combine
 import SharedModels
 import Common
+import APIClient
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: BaseSubmission?
@@ -140,7 +141,14 @@ class AssessmentViewModel: ObservableObject {
             ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
-            self.error = error
+            
+            if case .decodingError(_, let statusCode) = (error as? APIClientError),
+               statusCode == 200 { // Status is OK, but the body is not decodable (empty)
+                self.error = UserFacingError.noMoreAssessments
+            } else {
+                self.error = UserFacingError.unknown
+            }
+            
             log.error(String(describing: error))
         }
     }
