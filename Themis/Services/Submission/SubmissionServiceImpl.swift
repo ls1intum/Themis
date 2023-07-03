@@ -109,7 +109,10 @@ class SubmissionServiceImpl: SubmissionService {
         }
         
         var params: [URLQueryItem] {
-            [URLQueryItem(name: "withSubmission", value: "true")]
+            [
+                URLQueryItem(name: "withSubmission", value: "true"),
+                URLQueryItem(name: "withTemplateAndSolutionParticipations", value: "true")
+            ]
         }
         
         var resourceName: String {
