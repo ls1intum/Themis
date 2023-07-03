@@ -14,6 +14,11 @@ extension BaseParticipation {
         let exercise = self.exercise?.baseExercise
         return exercise as? T
     }
+    
+    /// A convenience function that casts this BaseParticipation instance into a ProgrammingExerciseStudentParticipation and sets its exercise property
+    func setProgrammingExercise(_ exercise: Exercise) {
+        (self as? ProgrammingExerciseStudentParticipation)?.exercise = exercise
+    }
 }
 
 extension Participation {
