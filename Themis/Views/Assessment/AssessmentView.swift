@@ -17,6 +17,7 @@ struct AssessmentView: View {
     @State private var showStepper = false
     @State private var showSubmitConfirmation = false
     @State private var showNavigationOptions = false
+    @State private var repositorySelection = RepositoryType.student
     
     let exercise: Exercise
     
@@ -90,7 +91,8 @@ struct AssessmentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilMode, iconImageSystemName: "hand.draw", inverted: true)
+                    ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                        .disabled(!codeEditorVM.allowsInlineFeedbackOperations)
                 }
             }
             
@@ -176,8 +178,8 @@ struct AssessmentView: View {
                 await assessmentVM.getSubmission(id: submissionId)
             }
             if let pId = assessmentVM.participation?.id {
-                await codeEditorVM.initFileTree(participationId: pId)
-                await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
+                await codeEditorVM.initFileTree(participationId: pId, repositoryType: .student)
+                await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
             }
         }
@@ -190,7 +192,18 @@ struct AssessmentView: View {
             if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
+                    .onChange(of: repositorySelection) { newRepositoryType in
+                        if let participationId = assessmentVM.participationId(for: newRepositoryType) {
+                            Task {
+                                await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                                if newRepositoryType == .student {
+                                    await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
+                                                                                   participationId: participationId)
+                                }
+                            }
+                        }
+                    }
             }
         }
     }

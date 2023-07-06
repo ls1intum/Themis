@@ -1,16 +1,31 @@
 import SwiftUI
 import SharedModels
+import DesignLibrary
 
 struct FiletreeSidebarView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var assessmentVM: AssessmentViewModel
+    @Binding var repositorySelection: RepositoryType
     
     var body: some View {
         VStack(alignment: .leading) {
+            Picker(selection: $repositorySelection) {
+                ForEach(RepositoryType.allCases, id: \.self) { repoType in
+                    Text("\(repoType.rawValue) Repository")
+                }
+            } label: {
+                Text("\(repositorySelection.rawValue) Repository")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 7)
+            
+            showWarningIfNeeded()
+            
             Text("Filetree")
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
+            
             if !assessmentVM.loading {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
@@ -32,6 +47,7 @@ struct FiletreeSidebarView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 35)
         .background(Color("sidebarBackground"))
+        .animation(.easeInOut(duration: 0.2), value: repositorySelection)
     }
     
     @ViewBuilder
@@ -59,8 +75,16 @@ struct FiletreeSidebarView: View {
         .cornerRadius(10)
     }
     
+    @ViewBuilder
+    private func showWarningIfNeeded() -> some View {
+        if repositorySelection != .student && !assessmentVM.readOnly {
+            ArtemisHintBox(text: "Some functionality may be limited while viewing this repository")
+                .padding(.horizontal)
+        }
+    }
+    
     private func openFile(_ file: Node) {
-        guard let participationId = assessmentVM.participation?.id else {
+        guard let participationId = assessmentVM.participationId(for: repositorySelection) else {
             return
         }
         
