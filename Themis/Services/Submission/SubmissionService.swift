@@ -35,6 +35,8 @@ enum SubmissionServiceFactory {
             return ProgrammingSubmissionServiceImpl()
         case .text(exercise: _):
             return TextSubmissionServiceImpl()
+        case .modeling(exercise: _):
+            return ModelingSubmissionServiceImpl()
         default:
             return UnknownSubmissionServiceImpl()
         }
