@@ -24,7 +24,7 @@ extension Exercise {
     
     var isDisabled: Bool {
         switch self {
-        case .programming(exercise: _), .text(exercise: _):
+        case .programming, .text:
             return false
         default:
             return true
@@ -33,7 +33,7 @@ extension Exercise {
     
     var supportsAssessment: Bool {
         switch self {
-        case .quiz(exercise: _), .unknown(exercise: _):
+        case .quiz, .unknown:
             return false
         default:
             return true

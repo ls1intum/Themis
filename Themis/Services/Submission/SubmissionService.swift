@@ -31,9 +31,9 @@ protocol SubmissionService {
 enum SubmissionServiceFactory {
     static func service(for exercise: Exercise) -> any SubmissionService {
         switch exercise {
-        case .programming(exercise: _):
+        case .programming:
             return ProgrammingSubmissionServiceImpl()
-        case .text(exercise: _):
+        case .text:
             return TextSubmissionServiceImpl()
         default:
             return UnknownSubmissionServiceImpl()

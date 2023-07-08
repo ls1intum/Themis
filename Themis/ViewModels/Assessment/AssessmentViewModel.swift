@@ -120,9 +120,8 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
+        
         do {
             let assessmentService = AssessmentServiceFactory.service(for: exercise)
             let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(participationId: participationId,
@@ -142,9 +141,8 @@ class AssessmentViewModel: ObservableObject {
     @MainActor
     func initRandomSubmission() async {
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
+        
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
@@ -174,9 +172,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
         
         let submissionService = SubmissionServiceFactory.service(for: exercise)
         
@@ -199,9 +195,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
         
         let submissionService = SubmissionServiceFactory.service(for: exercise)
         
@@ -224,9 +218,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
         
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
@@ -249,9 +241,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
         
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
@@ -271,9 +261,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
         
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         

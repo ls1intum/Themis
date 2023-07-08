@@ -120,9 +120,9 @@ class AssessmentResult: Encodable, ObservableObject {
 enum AssessmentResultFactory {
     static func assessmentResult(for exercise: Exercise, resultIdFromServer: Int? = nil) -> AssessmentResult {
         switch exercise {
-        case .programming(exercise: _):
+        case .programming:
             return ProgrammingAssessmentResult()
-        case .text(exercise: _):
+        case .text:
             return TextAssessmentResult(resultId: resultIdFromServer)
         default:
             return UnknownAssessmentResult()
