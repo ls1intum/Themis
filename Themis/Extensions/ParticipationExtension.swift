@@ -14,6 +14,27 @@ extension BaseParticipation {
         let exercise = self.exercise?.baseExercise
         return exercise as? T
     }
+    
+    /// A convenience function that casts this BaseParticipation instance into a ProgrammingExerciseStudentParticipation and sets its exercise property
+    func setProgrammingExercise(_ exercise: Exercise) {
+        (self as? ProgrammingExerciseStudentParticipation)?.exercise = exercise
+    }
+    
+    /// A convenience function that casts this BaseParticipation instance into a ProgrammingExerciseStudentParticipation and returns the participation id for the given repository type
+    func getId(for repoType: RepositoryType) -> Int? {
+        guard let _ = (self as? ProgrammingExerciseStudentParticipation) else {
+            return nil
+        }
+        
+        switch repoType {
+        case .student:
+            return self.id
+        case .solution:
+            return self.getExercise(as: ProgrammingExercise.self)?.solutionParticipation?.id
+        case .template:
+            return self.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+        }
+    }
 }
 
 extension Participation {

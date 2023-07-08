@@ -14,16 +14,18 @@ struct AssessmentView: View {
     @StateObject var assessmentVM: AssessmentViewModel
     @StateObject var assessmentResult: AssessmentResult
     
+    @State private var showCancelDialog = false
+    @State private var showNoSubmissionsAlert = false
+    @State private var showStepper = false
+    @State private var showSubmitConfirmation = false
+    @State private var showNavigationOptions = false
+    @State private var repositorySelection = RepositoryType.student
+    
     let exercise: Exercise
     
     var submissionId: Int?
     var participationId: Int?
     var resultId: Int?
-    
-    @State private var showStepper = false
-    @State private var showSubmitConfirmation = false
-    @State private var showNoSubmissionsAlert = false
-    @State private var showNavigationOptions = false
     
     init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool = false) {
         self.exercise = exercise
@@ -80,7 +82,8 @@ struct AssessmentView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilMode, iconImageSystemName: "hand.draw", inverted: true)
+                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                            .disabled(!assessmentVM.allowsInlineFeedbackOperations)
                     }
                 }
                 

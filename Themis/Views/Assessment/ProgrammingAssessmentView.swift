@@ -12,6 +12,8 @@ struct ProgrammingAssessmentView: View {
     
     var submissionId: Int?
     
+    @State private var repositorySelection = RepositoryType.student
+    
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
@@ -75,14 +77,15 @@ struct ProgrammingAssessmentView: View {
             await assessmentVM.initSubmission()
             
             if let pId = assessmentVM.participation?.id {
-                await codeEditorVM.initFileTree(participationId: pId)
-                await codeEditorVM.loadInlineHighlight(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
+                await codeEditorVM.initFileTree(participationId: pId, repositoryType: .student)
+                await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
                 await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
             }
             ThemisUndoManager.shared.removeAllActions()
         }
-        .onChange(of: assessmentVM.pencilMode, perform: { codeEditorVM.pencilMode = $0 })
+        .onChange(of: assessmentVM.pencilModeDisabled, perform: { codeEditorVM.pencilModeDisabled = $0 })
         .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })
+        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations, perform: { assessmentVM.allowsInlineFeedbackOperations = $0 })
         .errorAlert(error: $codeEditorVM.error)
     }
     
@@ -91,7 +94,20 @@ struct ProgrammingAssessmentView: View {
             if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
+                    .onChange(of: repositorySelection) { newRepositoryType in
+                        if let participationId = assessmentVM.participation?.getId(for: newRepositoryType) {
+                            Task {
+                                await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                                if newRepositoryType == .student {
+                                    await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
+                                                                                   participationId: participationId)
+                                } else {
+                                    assessmentVM.pencilModeDisabled = true
+                                }
+                            }
+                        }
+                    }
             }
         }
     }

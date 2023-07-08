@@ -9,7 +9,7 @@ import SwiftUI
 import SharedModels
 
 struct FeedbackListView: View {
-    var readOnly: Bool
+    @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
     
@@ -17,8 +17,9 @@ struct FeedbackListView: View {
     
     var participationId: Int?
     var templateParticipationId: Int?
-    
     let gradingCriteria: [GradingCriterion]
+    
+    private var isFeedbackCreationDisabled: Bool { assessmentVM.readOnly || !assessmentVM.allowsInlineFeedbackOperations }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -45,7 +46,7 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
                 FeedbackCellView(
-                    readOnly: readOnly,
+                    assessmentVM: assessmentVM,
                     assessmentResult: assessmentResult,
                     feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
@@ -64,7 +65,7 @@ struct FeedbackListView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(readOnly)
+                .disabled(isFeedbackCreationDisabled)
             }.padding()
         }.headerProminence(.increased)
     }
@@ -73,7 +74,7 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                 FeedbackCellView(
-                    readOnly: readOnly,
+                    assessmentVM: assessmentVM,
                     assessmentResult: assessmentResult,
                     feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
@@ -97,7 +98,7 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                 FeedbackCellView(
-                    readOnly: readOnly,
+                    assessmentVM: assessmentVM,
                     assessmentResult: assessmentResult,
                     feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
@@ -127,13 +128,13 @@ struct FeedbackListView: View {
 }
 
  struct FeedbackListView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
+    static let assessmentVM = AssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     static let codeEditor = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
     
     static var previews: some View {
         FeedbackListView(
-            readOnly: false,
+            assessmentVM: assessmentVM,
             assessmentResult: assessmentResult,
             feedbackDelegate: codeEditor,
             gradingCriteria: []

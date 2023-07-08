@@ -17,6 +17,18 @@ struct CodeView: View {
     var onOpenFeedback: (Range<Int>) -> Void
     let readOnly: Bool
     
+    private var hideSuggestions: Bool {
+        readOnly || !cvm.allowsInlineFeedbackOperations
+    }
+    
+    private var highlightedRanges: [HighlightedRange] {
+        guard cvm.allowsInlineFeedbackOperations,
+              let highlights = cvm.inlineHighlights[file.path] else {
+            return []
+        }
+        return highlights
+    }
+    
     var editorItself: some View {
         UXCodeTextViewRepresentable(
             editorBindings: EditorBindings(
@@ -25,17 +37,17 @@ struct CodeView: View {
                 language: language,
                 themeName: theme,
                 flags: editorFlags,
-                highlightedRanges: cvm.inlineHighlights[file.path] ?? [],
+                highlightedRanges: highlightedRanges,
                 dragSelection: $dragSelection,
                 showAddFeedback: $cvm.showAddFeedback,
                 showEditFeedback: $cvm.showEditFeedback,
                 selectedSection: $cvm.selectedSection,
                 selectedFeedbackForEditingId: $cvm.selectedFeedbackForEditingId,
-                pencilOnly: $cvm.pencilMode,
+                pencilOnly: $cvm.pencilModeDisabled,
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
                 isNewFile: file.isNewFile,
-                feedbackSuggestions: readOnly ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
+                feedbackSuggestions: hideSuggestions ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
                 selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )

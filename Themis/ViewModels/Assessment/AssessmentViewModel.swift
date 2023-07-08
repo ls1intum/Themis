@@ -13,7 +13,8 @@ class AssessmentViewModel: ObservableObject {
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
-    @Published var pencilMode = true
+    @Published var pencilModeDisabled = true
+    @Published var allowsInlineFeedbackOperations = true
     @Published var fontSize: CGFloat = 16.0
     
     var submissionId: Int?
@@ -53,7 +54,7 @@ class AssessmentViewModel: ObservableObject {
     
     /// Resets some properties of this viewmodel that affect the toolbar
     func resetToolbarProperties() {
-        pencilMode = true
+        pencilModeDisabled = true
         fontSize = 16.0
     }
     
@@ -75,6 +76,17 @@ class AssessmentViewModel: ObservableObject {
                 } else {
                     self.error = UserFacingError.participationNotFound
                     log.error("Could not find participation for exercise: \(exercise.baseExercise.title ?? "")")
+                }
+                
+                // for read-only mode, template and solution participations need to be fetched separately
+                if let exerciseId = participation?.exercise?.id {
+                    do {
+                        let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
+                            .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
+                        self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
+                    } catch {
+                        log.error("Could not fetch template and solution repositories: \(error)")
+                    }
                 }
             } else {
                 if let submissionId {

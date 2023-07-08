@@ -11,13 +11,14 @@ import SharedModels
 
 struct FeedbackCellView: View {
 
-    var readOnly: Bool
+    var assessmentVM: AssessmentViewModel
     var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly }
-
+    private var editingDisabled: Bool { assessmentVM.readOnly || !assessmentVM.allowsInlineFeedbackOperations }
+    private var tapGestureDisabled: Bool { feedback.scope != .inline || !assessmentVM.allowsInlineFeedbackOperations }
+    
     @State var showEditFeedback = false
     
     var participationId: Int?
@@ -50,7 +51,7 @@ struct FeedbackCellView: View {
             }
         }
         .onTapGesture {
-            if feedback.scope == .inline {
+            if !tapGestureDisabled {
                 withAnimation(.linear(duration: 0.3)) {
                     isTapped = true
                 }
