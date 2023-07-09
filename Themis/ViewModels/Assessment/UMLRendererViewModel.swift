@@ -13,6 +13,9 @@ import SwiftUI
 class UMLRendererViewModel: ObservableObject {
     @Published var umlModel: UMLModel?
     
+    /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
+    private var orphanElements = [UMLElement]()
+    
     @MainActor
     func setup(modelString: String) {
         guard let modelData = modelString.data(using: .utf8) else {
@@ -21,6 +24,8 @@ class UMLRendererViewModel: ObservableObject {
         
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            determineChildren()
+            orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
         } catch {
             log.error("Could not parse UML string: \(error)")
         }
@@ -47,5 +52,33 @@ class UMLRendererViewModel: ObservableObject {
         }
         
         renderer.render(umlModel: model)
+    }
+    
+    func getElementAt(point: CGPoint) -> UMLElement? {
+        for element in orphanElements {
+            if element.boundsContains(point: point) {
+                return element.getChild(at: point) ?? element
+            }
+        }
+        
+        return nil
+    }
+    
+    /// Iterates over UML elements to determine their children
+    private func determineChildren() {
+        guard let elements = umlModel?.elements else {
+            log.warning("Could not find elements in the model")
+            return
+        }
+        var potentialChildren = elements.filter({ $0.owner != nil })
+        
+        for (elementIndex, element) in elements.enumerated().reversed() {
+            for (index, potentialChild) in potentialChildren.enumerated().reversed() where potentialChild.owner == element.id {
+                elements[elementIndex].addChild(potentialChild)
+                potentialChildren.remove(at: index)
+            }
+        }
+        
+        umlModel?.elements = elements
     }
 }

@@ -16,8 +16,8 @@ struct UMLRenderer: View {
     var body: some View {
         Group {
             Canvas(opaque: true, renderer: umlRendererVM.render(_:size:))
-                .onTapGesture { value in
-                    print(value) // should determine the tapped element here
+                .onTapGesture { tapLocation in
+                    print(umlRendererVM.getElementAt(point: tapLocation)?.name)
                 }
         }
         .onAppear {
