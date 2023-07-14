@@ -35,6 +35,7 @@
 		6589205529EE7BFC005EE6FA /* LoginTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */; };
 		6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */; };
 		6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205C29EF0840005EE6FA /* ColorExtension.swift */; };
+		658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */; };
 		659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */; };
 		65B49F382A07D5C000C9A45F /* ToolbarPointsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F372A07D5C000C9A45F /* ToolbarPointsLabel.swift */; };
 		65B49F3A2A07D5F200C9A45F /* ToolbarToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F392A07D5F200C9A45F /* ToolbarToggleButton.swift */; };
@@ -158,6 +159,7 @@
 		6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldStyle.swift; sourceTree = "<group>"; };
 		6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonStyle.swift; sourceTree = "<group>"; };
 		6589205C29EF0840005EE6FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPointExtension.swift; sourceTree = "<group>"; };
 		659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHideExtension.swift; sourceTree = "<group>"; };
 		65B49F372A07D5C000C9A45F /* ToolbarPointsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarPointsLabel.swift; sourceTree = "<group>"; };
 		65B49F392A07D5F200C9A45F /* ToolbarToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarToggleButton.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				653452B52A068E4D008D9598 /* ParticipationExtension.swift */,
 				65B49F3B2A07E87F00C9A45F /* UndoManagerExtension.swift */,
 				651A44BA2A167FDF00DBCD92 /* CourseMockExtension.swift */,
+				658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -942,6 +945,7 @@
 				65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
 				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
+				658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
 				656EAF602A0256A6003CF2B4 /* AssessmentFeedback.swift in Sources */,
