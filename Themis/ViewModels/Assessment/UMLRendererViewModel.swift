@@ -12,6 +12,7 @@ import SwiftUI
 
 class UMLRendererViewModel: ObservableObject {
     @Published var umlModel: UMLModel?
+    @Published var selectedElement: UMLElement?
     
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
@@ -37,8 +38,6 @@ class UMLRendererViewModel: ObservableObject {
             return
         }
         
-        context.fill(Path(CGRect(origin: .zero, size: size)),
-                     with: .color(Color(UIColor.systemBackground)))
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         var renderer: any UMLDiagramRenderer
@@ -54,7 +53,26 @@ class UMLRendererViewModel: ObservableObject {
         renderer.render(umlModel: model)
     }
     
-    func getElementAt(point: CGPoint) -> UMLElement? {
+    func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
+        guard let selectedElement,
+              let xCoordinate = selectedElement.bounds?.x,
+              let yCoordinate = selectedElement.bounds?.y,
+              let width = selectedElement.bounds?.width,
+              let height = selectedElement.bounds?.height else {
+            log.error("Could not draw highlight")
+            return
+        }
+        
+        let elementRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
+        context.fill(Path(elementRect), with: .color(Color.yellow.opacity(0.5)))
+    }
+    
+    func selectElementAt(point: CGPoint) {
+        selectedElement = getElementAt(point: point)
+        log.verbose("Selected UML element: \(selectedElement?.name ?? "no name")")
+    }
+    
+    private func getElementAt(point: CGPoint) -> UMLElement? {
         for element in orphanElements {
             if element.boundsContains(point: point) {
                 return element.getChild(at: point) ?? element
