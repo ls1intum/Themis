@@ -41,12 +41,20 @@ class ExerciseViewModel: ObservableObject {
         return Double(numberOfParticipations) / Double(numberOfStudentsOrTeamsInCourse)
     }
     
+    var averageScoreOfExercise: Double? {
+        exerciseStats.value?.averageScoreOfExercise
+    }
+    
+    var maxPointsOfExercise: Double? {
+        exerciseStats.value?.maxPointsOfExercise
+    }
+    
     var averageScore: Double {
-        guard let avgScore = exerciseStats.value?.averageScoreOfExercise,
-              let maxPoints = exerciseStats.value?.maxPointsOfExercise else {
+        guard let averageScoreOfExercise,
+              let maxPointsOfExercise else {
             return 0.0
         }
-        return avgScore / maxPoints
+        return averageScoreOfExercise / maxPointsOfExercise
     }
     
     var numberOfAssessmentsInTime: Int? {

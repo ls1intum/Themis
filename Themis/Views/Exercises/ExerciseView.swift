@@ -111,8 +111,8 @@ struct ExerciseView: View {
 
                 CircularProgressView(progress: exerciseVM.averageScore,
                                      description: .averageScore,
-                                     maxValue: exerciseVM.exerciseStats.value?.maxPointsOfExercise,
-                                     currentValue: exerciseVM.exerciseStats.value?.averageScoreOfExercise)
+                                     maxValue: exerciseVM.maxPointsOfExercise,
+                                     currentValue: exerciseVM.averageScoreOfExercise)
                 Spacer()
             }
         }
