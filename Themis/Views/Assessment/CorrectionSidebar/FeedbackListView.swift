@@ -17,8 +17,9 @@ struct FeedbackListView: View {
     
     var participationId: Int?
     var templateParticipationId: Int?
-    
     let gradingCriteria: [GradingCriterion]
+    
+    private var isFeedbackCreationDisabled: Bool { readOnly || !codeEditorVM.allowsInlineFeedbackOperations }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -64,7 +65,7 @@ struct FeedbackListView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(readOnly)
+                .disabled(isFeedbackCreationDisabled)
             }.padding()
         }.headerProminence(.increased)
     }

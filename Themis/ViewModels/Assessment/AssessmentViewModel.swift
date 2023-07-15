@@ -58,6 +58,13 @@ class AssessmentViewModel: ObservableObject {
                 self.submission = result.submission?.baseSubmission
                 self.participation = result.participation?.baseParticipation
                 assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
+                
+                if case .programmingExerciseStudent(participation: ) = result.participation,
+                   let exerciseId = participation?.exercise?.id {
+                    let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
+                        .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
+                    self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
+                }
             } else {
                 self.submission = try await SubmissionServiceFactory.shared.getProgrammingSubmissionForAssessment(submissionId: id)
                 assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
@@ -129,5 +136,16 @@ class AssessmentViewModel: ObservableObject {
     
     func getFeedback(byId id: String) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { "\($0.id)" == id })
+    }
+    
+    func participationId(for repoType: RepositoryType) -> Int? { // TODO: move somewhere else (this is programming exercise-only)
+        switch repoType {
+        case .student:
+            return participation?.id
+        case .solution:
+            return participation?.getExercise(as: ProgrammingExercise.self)?.solutionParticipation?.id
+        case .template:
+            return participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+        }
     }
 }
