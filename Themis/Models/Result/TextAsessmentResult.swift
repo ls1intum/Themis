@@ -24,12 +24,15 @@ class TextAssessmentResult: AssessmentResult {
     }
     
     override func setReferenceData(basedOn submission: BaseSubmission?) {
-        guard let textSubmission = submission as? TextSubmission else {
+        guard let textSubmission = submission as? TextSubmission,
+              let submissionId = textSubmission.id
+        else {
             log.warning("Could not set reference data for TextAssessmentResult")
             return
         }
         
         blocks = textSubmission.blocks ?? []
+        assignSubmissionIdToBlocks(submissionId)
     }
     
     func computeBlockIds() {
@@ -42,6 +45,12 @@ class TextAssessmentResult: AssessmentResult {
         }
         
         self.blocks = newBlocks
+    }
+    
+    private func assignSubmissionIdToBlocks(_ submissionId: Int) {
+        for index in 0..<blocks.count {
+            self.blocks[index].submissionId = submissionId
+        }
     }
     
     private func extractBlock(from feedback: AssessmentFeedback) -> TextBlock? {
