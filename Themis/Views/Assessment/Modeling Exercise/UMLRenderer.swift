@@ -35,5 +35,6 @@ struct UMLRenderer: View {
 struct UMLRenderer_Previews: PreviewProvider {
     static var previews: some View {
         UMLRenderer(modelString: (Submission.mockModeling.baseSubmission as? ModelingSubmission)?.model ?? "nil")
+            .padding()
     }
 }

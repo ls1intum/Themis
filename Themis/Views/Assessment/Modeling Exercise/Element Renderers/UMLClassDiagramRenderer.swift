@@ -41,18 +41,40 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
         
         switch element.type {
         case .Class, .abstractClass, .enumeration:
-            drawClass(element: element, elementRect: elementRect)
+            drawClassLikeElement(element: element, elementRect: elementRect)
+        case .classMethod, .classAttribute:
+            drawClassLikeElement(element: element, elementRect: elementRect)
         case .package:
-            drawClass(element: element, elementRect: elementRect) // TODO: change
+            drawPackage(element: element, elementRect: elementRect)
         default:
-            drawClass(element: element, elementRect: elementRect) // TODO: change
-            log.warning("Drawing logic for elements of type \(element.type?.rawValue ?? "nil") is not implemented")
+            drawUnknownElement(element: element, elementRect: elementRect)
         }
     }
     
-    private func drawClass(element: UMLElement, elementRect: CGRect) {
+    private func drawClassLikeElement(element: UMLElement, elementRect: CGRect) {
         context.stroke(Path(elementRect), with: .color(Color.primary))
         drawTitle(element: element, elementRect: elementRect)
+    }
+    
+    private func drawPackage(element: UMLElement, elementRect: CGRect) {
+        let topCornerRect = CGRect(x: elementRect.minX,
+                                   y: elementRect.minY,
+                                   width: 45,
+                                   height: 10)
+        context.stroke(Path(topCornerRect), with: .color(Color.primary))
+        
+        let newElementRect = CGRect(x: elementRect.minX,
+                                    y: elementRect.minY + topCornerRect.height,
+                                    width: elementRect.width,
+                                    height: elementRect.height - topCornerRect.height)
+        
+        context.stroke(Path(newElementRect), with: .color(Color.primary))
+        drawTitle(element: element, elementRect: newElementRect)
+    }
+    
+    private func drawUnknownElement(element: UMLElement, elementRect: CGRect) {
+        log.warning("Drawing logic for elements of type \(element.type?.rawValue ?? "nil") is not implemented")
+        context.stroke(Path(elementRect), with: .color(Color.secondary))
     }
     
     private func drawTitle(element: UMLElement, elementRect: CGRect) {
