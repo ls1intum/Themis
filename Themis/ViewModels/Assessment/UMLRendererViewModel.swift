@@ -67,12 +67,12 @@ class UMLRendererViewModel: ObservableObject {
         context.fill(Path(elementRect), with: .color(Color.yellow.opacity(0.5)))
     }
     
-    func selectElementAt(point: CGPoint) {
-        selectedElement = getElementAt(point: point)
+    func selectElement(at point: CGPoint) {
+        selectedElement = getElement(at: point)
         log.verbose("Selected UML element: \(selectedElement?.name ?? "no name")")
     }
     
-    private func getElementAt(point: CGPoint) -> UMLElement? {
+    private func getElement(at point: CGPoint) -> UMLElement? {
         for element in orphanElements {
             if element.boundsContains(point: point) {
                 return element.getChild(at: point) ?? element

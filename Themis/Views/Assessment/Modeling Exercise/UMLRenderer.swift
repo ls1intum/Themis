@@ -14,10 +14,16 @@ struct UMLRenderer: View {
     var modelString: String
     
     var body: some View {
-        Group {
-            Canvas(opaque: true, renderer: umlRendererVM.render(_:size:))
+        ZStack {
+            Color(UIColor.systemBackground)
+            
+            Canvas { context, size in
+                umlRendererVM.renderHighlights(&context, size: size)
+            }
+            
+            Canvas(renderer: umlRendererVM.render(_:size:))
                 .onTapGesture { tapLocation in
-                    print(umlRendererVM.getElementAt(point: tapLocation)?.name)
+                    umlRendererVM.selectElement(at: tapLocation)
                 }
         }
         .onAppear {
