@@ -100,8 +100,8 @@ class AssessmentViewModel: ObservableObject {
                 // TODO: figure out which endpoint could be used instead
                 self.error = UserFacingError.operationNotSupportedForExercise
             } else {
-                if let participationId, let submissionId {
-                    await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
+                if let submissionId {
+                    await getParticipationForSubmission(submissionId: submissionId)
                 } else {
                     await initRandomSubmission()
                 }
@@ -114,8 +114,8 @@ class AssessmentViewModel: ObservableObject {
     }
     
     @MainActor
-    private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
-        guard let participationId, let submissionId else {
+    private func getParticipationForSubmission(submissionId: Int?) async {
+        guard let submissionId else {
             return
         }
         
@@ -124,8 +124,7 @@ class AssessmentViewModel: ObservableObject {
         
         do {
             let assessmentService = AssessmentServiceFactory.service(for: exercise)
-            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(participationId: participationId,
-                                                                                                   submissionId: submissionId).baseParticipation
+            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(submissionId: submissionId).baseParticipation
             self.submission = fetchedParticipation.submissions?.last?.baseSubmission
             self.participation = fetchedParticipation
             assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])

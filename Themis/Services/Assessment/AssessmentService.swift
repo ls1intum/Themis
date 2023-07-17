@@ -20,7 +20,7 @@ protocol AssessmentService {
     func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws
     
     /// Fetches the participation with all data needed for assessment
-    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation
+    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation
 }
 
 enum AssessmentServiceFactory {

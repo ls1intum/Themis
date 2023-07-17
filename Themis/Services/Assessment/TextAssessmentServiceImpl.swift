@@ -116,7 +116,6 @@ class TextAssessmentServiceImpl: AssessmentService {
     private struct GetParticipationRequest: APIRequest {
         typealias Response = Participation
         
-        let participationId: Int
         let submissionId: Int
         
         var method: HTTPMethod {
@@ -124,11 +123,11 @@ class TextAssessmentServiceImpl: AssessmentService {
         }
         
         var resourceName: String {
-            "api/participations/\(participationId)/submissions/\(submissionId)/for-text-assessment"
+            "api/text-submissions/\(submissionId)/for-assessment"
         }
     }
     
-    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
-        try await client.sendRequest(GetParticipationRequest(participationId: participationId, submissionId: submissionId)).get().0
+    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
+        try await client.sendRequest(GetParticipationRequest(submissionId: submissionId)).get().0
     }
 }
