@@ -17,6 +17,8 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
     var context: GraphicsContext
     let canvasBounds: CGRect
     
+    private let fontSize: CGFloat = 14
+
     func render(umlModel: UMLModel) {
         guard let elements = umlModel.elements else {
             log.error("The UML model contains no elements")
@@ -53,7 +55,13 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
     
     private func drawClassLikeElement(element: UMLElement, elementRect: CGRect) {
         context.stroke(Path(elementRect), with: .color(Color.primary))
-        drawTitle(element: element, elementRect: elementRect)
+        
+        switch element.type {
+        case .classAttribute, .classMethod:
+            drawAttributeOrMethod(element, in: elementRect)
+        default:
+            drawTitle(of: element, in: elementRect)
+        }
     }
     
     private func drawPackage(element: UMLElement, elementRect: CGRect) {
@@ -69,7 +77,7 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
                                     height: elementRect.height - topCornerRect.height)
         
         context.stroke(Path(newElementRect), with: .color(Color.primary))
-        drawTitle(element: element, elementRect: newElementRect)
+        drawTitle(of: element, in: newElementRect)
     }
     
     private func drawUnknownElement(element: UMLElement, elementRect: CGRect) {
@@ -77,17 +85,31 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
         context.stroke(Path(elementRect), with: .color(Color.secondary))
     }
     
-    private func drawTitle(element: UMLElement, elementRect: CGRect) {
+    private func drawTitle(of element: UMLElement, in elementRect: CGRect) {
         var text = Text(element.name ?? "")
-        
-        if element.type != .classAttribute && element.type != .classMethod {
-            text = text.font(.system(size: 15, weight: .bold))
-        }
+        text = text.font(.system(size: fontSize, weight: .bold))
         
         let elementTitle = context.resolve(text)
+        let titleSize = elementTitle.measure(in: elementRect.size)
+        let titleRect = CGRect(x: elementRect.midX - titleSize.width / 2,
+                               y: elementRect.minY,
+                               width: titleSize.width,
+                               height: titleSize.height)
         
-//        let titleX = elementRect.origin.x + elementRect.width / 2 - elementTitle.
+        context.draw(elementTitle, in: titleRect)
+    }
+    
+    private func drawAttributeOrMethod(_ element: UMLElement, in elementRect: CGRect) {
+        var text = Text(element.name ?? "")
+        text = text.font(.system(size: fontSize))
+
+        let elementTitle = context.resolve(text)
+        let titleSize = elementTitle.measure(in: elementRect.size)
+        let titleRect = CGRect(x: elementRect.minX + 5,
+                               y: elementRect.midY - titleSize.height / 2,
+                               width: titleSize.width,
+                               height: titleSize.height)
         
-        context.draw(elementTitle, in: elementRect)
+        context.draw(elementTitle, in: titleRect)
     }
 }
