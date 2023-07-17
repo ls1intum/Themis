@@ -35,7 +35,9 @@ class ExerciseViewModel: ObservableObject {
     
     var participationRate: Double {
         guard let numberOfParticipations,
-              let numberOfStudentsOrTeamsInCourse else {
+              let numberOfStudentsOrTeamsInCourse,
+              numberOfParticipations * numberOfStudentsOrTeamsInCourse != 0
+        else {
             return 0.0
         }
         return Double(numberOfParticipations) / Double(numberOfStudentsOrTeamsInCourse)
@@ -51,7 +53,9 @@ class ExerciseViewModel: ObservableObject {
     
     var averageScore: Double {
         guard let averageScoreOfExercise,
-              let maxPointsOfExercise else {
+              let maxPointsOfExercise,
+              averageScoreOfExercise * maxPointsOfExercise != 0
+        else {
             return 0.0
         }
         return averageScoreOfExercise / maxPointsOfExercise
@@ -67,7 +71,9 @@ class ExerciseViewModel: ObservableObject {
     
     var assessed: Double {
         guard let numberOfAssessmentsInTime,
-              let numberOfSubmissionsInTime  else {
+              let numberOfSubmissionsInTime,
+              numberOfAssessmentsInTime * numberOfSubmissionsInTime != 0
+        else {
             return 0.0
         }
         return Double(numberOfAssessmentsInTime) / Double(numberOfSubmissionsInTime)
