@@ -13,7 +13,9 @@ struct ModelingAssessmentView: View {
     @StateObject private var umlRendererVM = UMLRendererViewModel()
     
     var body: some View {
-        UMLRenderer(modelString: (Submission.mockModeling.baseSubmission as? ModelingSubmission)?.model ?? "nil")
+        UMLRenderer(modelString:
+                        (Submission.mockModeling.baseSubmission as? ModelingSubmission)?
+            .getExercise(as: ModelingExercise.self)?.exampleSolutionModel ?? "nil")
             .task {
 //                assessmentVM.participationId = participationId
 //                await assessmentVM.initSubmission()

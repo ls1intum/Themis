@@ -20,6 +20,22 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
     private let fontSize: CGFloat = 14
 
     func render(umlModel: UMLModel) {
+        let elementRenderer = UMLClassDiagramElementRenderer(context: context, canvasBounds: canvasBounds)
+        let relationshipRenderer = UMLClassDiagramRelationshipRenderer(context: context, canvasBounds: canvasBounds)
+        
+        elementRenderer.render(umlModel: umlModel)
+        relationshipRenderer.render(umlModel: umlModel)
+    }
+}
+
+// MARK: - Element Renderer
+private struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
+    var context: GraphicsContext
+    let canvasBounds: CGRect
+    
+    private let fontSize: CGFloat = 14
+    
+    func render(umlModel: UMLModel) {
         guard let elements = umlModel.elements else {
             log.error("The UML model contains no elements")
             return
@@ -42,7 +58,7 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
         let elementRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
         
         switch element.type {
-        case .Class, .abstractClass, .enumeration:
+        case .Class, .abstractClass, .enumeration, .interface:
             drawClassLikeElement(element: element, elementRect: elementRect)
         case .classMethod, .classAttribute:
             drawClassLikeElement(element: element, elementRect: elementRect)
@@ -88,6 +104,7 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
     private func drawTitle(of element: UMLElement, in elementRect: CGRect) {
         var text = Text(element.name ?? "")
         text = text.font(.system(size: fontSize, weight: .bold))
+        // TODO: also draw <<interface>>-like text
         
         let elementTitle = context.resolve(text)
         let titleSize = elementTitle.measure(in: elementRect.size)
@@ -112,4 +129,209 @@ struct UMLClassDiagramRenderer: UMLDiagramRenderer {
         
         context.draw(elementTitle, in: titleRect)
     }
+}
+
+// MARK: - Relationship Renderer
+private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
+    var context: GraphicsContext
+    let canvasBounds: CGRect
+    
+    private let fontSize: CGFloat = 14
+    
+    func render(umlModel: UMLModel) {
+        guard let relationships = umlModel.relationships else {
+            log.warning("The UML model contains no relationships")
+            return
+        }
+        
+        for relationship in relationships {
+            draw(relationship: relationship)
+        }
+    }
+    
+    private func draw(relationship: UMLRelationship) {
+        guard let xCoordinate = relationship.bounds?.x,
+              let yCoordinate = relationship.bounds?.y,
+              let width = relationship.bounds?.width,
+              let height = relationship.bounds?.height else {
+            log.warning("Failed to draw a UML relationship: \(relationship)")
+            return
+        }
+        
+        let relationshipRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
+//        drawAggregationOrComposition(relationship, in: relationshipRect)
+
+        switch relationship.type {
+        case .classDependency:
+            drawDependency(relationship, in: relationshipRect)
+        case .classAggregation, .classComposition:
+            drawAggregationOrComposition(relationship, in: relationshipRect)
+        case .classInheritance:
+            drawInheritance(relationship, in: relationshipRect)
+        case .classRealization:
+            drawRealization(relationship, in: relationshipRect)
+        case .classBidirectional:
+            drawAssociation(relationship, in: relationshipRect)
+        case .classUnidirectional:
+            drawAssociation(relationship, in: relationshipRect)
+        default:
+            drawUnknown(relationship, in: relationshipRect)
+        }
+    }
+    
+    private func drawDependency(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+            return
+        }
+        
+        context.stroke(path, with: .color(Color.primary), style: .init(dash: [7, 7]))
+        drawArrowhead(for: relationship, on: path)
+    }
+    
+    private func drawAggregationOrComposition(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+            return
+        }
+        
+        context.stroke(path, with: .color(Color.primary))
+        drawArrowhead(for: relationship, on: path)
+    }
+    
+    private func drawInheritance(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+            return
+        }
+        
+        context.stroke(path, with: .color(Color.primary))
+        drawArrowhead(for: relationship, on: path)
+    }
+    
+    private func drawRealization(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+            return
+        }
+        
+        context.stroke(path, with: .color(Color.primary), style: .init(dash: [7, 7]))
+        drawArrowhead(for: relationship, on: path)
+    }
+    
+    private func drawAssociation(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+            return
+        }
+        
+        context.stroke(path, with: .color(Color.primary))
+        drawArrowhead(for: relationship, on: path)
+    }
+    
+    private func drawUnknown(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        drawAssociation(relationship, in: relationshipRect)
+    }
+    
+    private func getLinePath(for relationship: UMLRelationship, in relationshipRect: CGRect) -> Path? {
+        guard let relationshipPath = relationship.path,
+              relationshipPath.count >= 2 else {
+            return nil
+        }
+        
+        let points = relationshipPath.map { $0.asCGPoint.applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY)) }
+        
+        let startPoint = points[0]
+        
+        var path = Path()
+        path.addLines(Array(points))
+        
+        return path
+    }
+    
+    private func drawArrowhead(for relationship: UMLRelationship, on path: Path) {
+        guard let endPoint = path.currentPoint,
+              let arrowTargetDirection = relationship.target?.direction else {
+            log.warning("Could not draw arrowhead for: \(relationship)")
+            return
+        }
+        
+        var type: ArrowHeadType
+        
+        switch relationship.type {
+        case .classBidirectional:
+            return // bidirectional arrows have no heads
+        case .classDependency, .classUnidirectional:
+            type = .triangleWithoutBase
+        case .classInheritance, .classRealization:
+            type = .triangle
+        case .classComposition:
+            type = .rhombusFilled
+        case .classAggregation:
+            type = .rhombus
+        default:
+            type = .triangle
+        }
+        
+        drawArrowhead(at: endPoint, lookingAt: arrowTargetDirection.inverted, type: type)
+    }
+    
+    private func drawArrowhead(at point: CGPoint, lookingAt direction: Direction, type: ArrowHeadType) {
+        var path = Path()
+        let size: CGFloat = 10
+        
+        switch type {
+        case .triangle:
+            path.move(to: .init(x: point.x, y: point.y))
+            path.addLine(to: .init(x: point.x - size, y: point.y + size * 1.5))
+            path.addLine(to: .init(x: point.x + size, y: point.y + size * 1.5))
+            path.addLine(to: .init(x: point.x, y: point.y))
+        case .triangleWithoutBase:
+            path.move(to: .init(x: point.x - size, y: point.y + size * 1.5))
+            path.addLine(to: .init(x: point.x, y: point.y))
+            path.addLine(to: .init(x: point.x + size, y: point.y + size * 1.5))
+        case .rhombus, .rhombusFilled:
+            path.move(to: .init(x: point.x, y: point.y))
+            path.addLine(to: .init(x: point.x - size, y: point.y + size * 1.5))
+            path.addLine(to: .init(x: point.x, y: point.y + size * 3))
+            path.addLine(to: .init(x: point.x + size, y: point.y + size * 1.5))
+            path.addLine(to: .init(x: point.x, y: point.y))
+        }
+        
+        switch direction {
+        case .up:
+            path = path.offsetBy(dx: 0, dy: size * 0.15)
+        case .down:
+            path = path.rotation(.degrees(180)).path(in: path.boundingRect)
+            if type == .rhombus || type == .rhombusFilled {
+                path = path.offsetBy(dx: 0, dy: size * -3.1)
+            } else {
+                path = path.offsetBy(dx: 0, dy: size * -1.6)
+            }
+        case .right:
+            path = path.rotation(.degrees(90)).path(in: path.boundingRect)
+            if type == .rhombus || type == .rhombusFilled {
+                path = path.offsetBy(dx: size * -1.55, dy: size * -1.5)
+            } else {
+                path = path.offsetBy(dx: size * -0.8, dy: size * -0.75)
+            }
+        case .left:
+            path = path.rotation(.degrees(-90)).path(in: path.boundingRect)
+            if type == .rhombus || type == .rhombusFilled {
+                path = path.offsetBy(dx: size * 1.55, dy: size * -1.5)
+            } else {
+                path = path.offsetBy(dx: size * 0.7, dy: size * 0.3)
+            }
+        }
+        
+        context.stroke(path, with: .color(Color.primary))
+        
+        // Fill
+        if type != .triangleWithoutBase {
+            if type == .rhombusFilled {
+                context.fill(path, with: .color(Color(UIColor.label)))
+            } else {
+                context.fill(path, with: .color(Color(UIColor.systemBackground)))
+            }
+        }
+    }
+}
+
+enum ArrowHeadType {
+    case triangle, triangleWithoutBase, rhombus, rhombusFilled
 }
