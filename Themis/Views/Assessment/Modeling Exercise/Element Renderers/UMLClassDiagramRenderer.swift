@@ -70,6 +70,7 @@ private struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
     }
     
     private func drawClassLikeElement(element: UMLElement, elementRect: CGRect) {
+        context.fill(Path(elementRect), with: .color(Color(UIColor.systemBackground)))
         context.stroke(Path(elementRect), with: .color(Color.primary))
         
         switch element.type {
@@ -81,10 +82,12 @@ private struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
     }
     
     private func drawPackage(element: UMLElement, elementRect: CGRect) {
+        
         let topCornerRect = CGRect(x: elementRect.minX,
                                    y: elementRect.minY,
                                    width: 45,
                                    height: 10)
+        context.fill(Path(topCornerRect), with: .color(Color(UIColor.systemBackground)))
         context.stroke(Path(topCornerRect), with: .color(Color.primary))
         
         let newElementRect = CGRect(x: elementRect.minX,
@@ -92,6 +95,7 @@ private struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
                                     width: elementRect.width,
                                     height: elementRect.height - topCornerRect.height)
         
+        context.fill(Path(newElementRect), with: .color(Color(UIColor.systemBackground)))
         context.stroke(Path(newElementRect), with: .color(Color.primary))
         drawTitle(of: element, in: newElementRect)
     }

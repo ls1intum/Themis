@@ -15,16 +15,20 @@ struct UMLRenderer: View {
     
     var body: some View {
         ZStack {
-            Color(UIColor.systemBackground)
+            Image("umlRendererBackground")
+                .resizable(resizingMode: .tile)
             
-            Canvas { context, size in
-                umlRendererVM.renderHighlights(&context, size: size)
-            }
-            
-            Canvas(renderer: umlRendererVM.render(_:size:))
+            Group {
+                Canvas(renderer: umlRendererVM.render(_:size:))
+                
+                Canvas { context, size in
+                    umlRendererVM.renderHighlights(&context, size: size)
+                }
                 .onTapGesture { tapLocation in
                     umlRendererVM.selectElement(at: tapLocation)
                 }
+            }
+            .padding()
         }
         .onAppear {
             umlRendererVM.setup(modelString: modelString)
