@@ -182,7 +182,6 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         let relationshipRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
-//        drawAggregationOrComposition(relationship, in: relationshipRect)
 
         switch relationship.type {
         case .classDependency:
@@ -258,9 +257,7 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         let points = relationshipPath.map { $0.asCGPoint.applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY)) }
-        
-        let startPoint = points[0]
-        
+                
         var path = Path()
         path.addLines(Array(points))
         
