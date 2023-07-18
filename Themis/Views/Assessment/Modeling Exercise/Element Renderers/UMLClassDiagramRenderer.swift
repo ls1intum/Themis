@@ -106,18 +106,37 @@ private struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
     }
     
     private func drawTitle(of element: UMLElement, in elementRect: CGRect) {
+        var titleY: CGFloat
+        
+        // START: Draw type text
+        let typeTextString = element.type?.annotationTitle ?? ""
+        var typeText = Text(typeTextString)
+        typeText = typeText.font(.system(size: fontSize * 0.7, weight: .bold).monospaced())
+        let typeResolved = context.resolve(typeText)
+        let typeTextSize = typeResolved.measure(in: elementRect.size)
+        
+        let typeRect = CGRect(x: elementRect.midX - typeTextSize.width / 2,
+                              y: elementRect.minY + 5,
+                              width: typeTextSize.width,
+                              height: typeTextSize.height)
+        context.draw(typeResolved, in: typeRect)
+        // END: Draw type text
+        
+        titleY = typeTextString.isEmpty ? elementRect.minY + 5 : typeRect.maxY
+        
+        // START: Draw title text
         var text = Text(element.name ?? "")
         text = text.font(.system(size: fontSize, weight: .bold))
-        // TODO: also draw <<interface>>-like text
         
         let elementTitle = context.resolve(text)
         let titleSize = elementTitle.measure(in: elementRect.size)
         let titleRect = CGRect(x: elementRect.midX - titleSize.width / 2,
-                               y: elementRect.minY,
+                               y: titleY,
                                width: titleSize.width,
                                height: titleSize.height)
         
         context.draw(elementTitle, in: titleRect)
+        // END: Draw title text
     }
     
     private func drawAttributeOrMethod(_ element: UMLElement, in elementRect: CGRect) {

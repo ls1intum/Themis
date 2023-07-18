@@ -48,4 +48,18 @@ enum UMLElementType: String, Decodable {
     case enumeration = "Enumeration"
     case classAttribute = "ClassAttribute"
     case classMethod = "ClassMethod"
+    
+    /// The string that should be shown on the UML elements to indicate the type of the element
+    var annotationTitle: String {
+        switch self {
+        case .interface:
+            return "<<interface>>"
+        case .enumeration:
+            return "<<enumeration>>"
+        case .abstractClass:
+            return "<<abstract>>"
+        default:
+            return ""
+        }
+    }
 }
