@@ -58,9 +58,7 @@ private struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
         let elementRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
         
         switch element.type {
-        case .Class, .abstractClass, .enumeration, .interface:
-            drawClassLikeElement(element: element, elementRect: elementRect)
-        case .classMethod, .classAttribute:
+        case .Class, .abstractClass, .classMethod, .classAttribute, .enumeration, .interface:
             drawClassLikeElement(element: element, elementRect: elementRect)
         case .package:
             drawPackage(element: element, elementRect: elementRect)
