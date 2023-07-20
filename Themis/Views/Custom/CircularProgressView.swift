@@ -11,9 +11,55 @@ struct CircularProgressView: View {
     @State private var defaultValue: Double = 0.0
     var progress: Double = 0.0
     var description: StatisticDescription
+    /// The maximum value that the variable represented by this progress view can reach. Used for displaying text only (does not affect the progress circles)
+    var maxValue: Double?
+    /// The current value of the variable represented by this progress view. Used for displaying text only (does not affect the progress circles)
+    var currentValue: Double?
     
     private let ringRadius = 90.0
     private let lineWidth = 30.0
+    
+    /// Generates a formatted percentage string shown inside the progress view
+    /// Example output: 50%
+    private var formattedProgress: String {
+        guard progress.isFinite && !progress.isNaN else {
+            return "N/A"
+        }
+        
+        let formatResult = (progress * 100.0)
+            .formatted(.number.precision(
+                .integerAndFractionLength(integerLimits: 0...3, fractionLimits: 0...1)
+            ))
+        
+        return "\(formatResult)%"
+    }
+    
+    /// Generates a formatted absolute progress info string shown inside the progress view.
+    /// Example output: 5 / 10
+    private var formattedAbsoluteProgress: String {
+        guard let currentValue, let maxValue else {
+            return ""
+        }
+        
+        let currentFormatted = currentValue.formatted(.number.precision(
+            .integerAndFractionLength(integerLimits: 0...3, fractionLimits: 0...1)
+        ))
+        let maxFormatted = maxValue.formatted(.number.precision(
+            .integerAndFractionLength(integerLimits: 0...3, fractionLimits: 0...1)
+        ))
+        
+        return "\(currentFormatted) / \(maxFormatted)"
+    }
+    
+    init(progress: Double,
+         description: StatisticDescription,
+         maxValue: Double? = nil,
+         currentValue: Double? = nil) {
+        self.progress = progress.clamped(to: 0.0...1.0)
+        self.description = description
+        self.maxValue = maxValue
+        self.currentValue = currentValue
+    }
     
     private func statDesc() -> String {
         switch description {
@@ -87,11 +133,16 @@ struct CircularProgressView: View {
                     .shadow(color: progress > 0.95 ? .black.opacity(0.1) : .clear,
                             radius: 0.05,
                             x: ringTipShadowOffset.x,
-                            y: ringTipShadowOffset.y
-                    )
+                            y: ringTipShadowOffset.y)
                 
-                Text(progress.isFinite && !progress.isNaN ? "\(Int(progress * 100.0))%" : "N/A")
-                    .font(.system(size: 35))
+                VStack(spacing: 4) {
+                    Text(formattedProgress)
+                        .font(.system(size: 35))
+                    
+                    Text(formattedAbsoluteProgress)
+                        .font(.system(size: 20))
+                        .foregroundColor(.gray)
+                }
             }
             .padding(25)
             
@@ -102,7 +153,6 @@ struct CircularProgressView: View {
         }
         .scaledToFit()
         .frame(minWidth: 240, maxWidth: 300, minHeight: 240, maxHeight: 300)
-        .background(colorScheme == .dark ? Color.black.opacity(0.3) : Color.white)
         .cornerRadius(20)
         .shadow(radius: 0.2)
         .onAppear {
@@ -145,9 +195,18 @@ struct CircularProgressView: View {
 struct CircularProgressViewPreview: PreviewProvider {
     static var previews: some View {
         HStack {
-            CircularProgressView(progress: 0.3, description: .participationRate)
-            CircularProgressView(progress: 0.6, description: .assessed)
-            CircularProgressView(progress: 1.2, description: .averageScore)
+            CircularProgressView(progress: 0.3, description: .participationRate,
+                                 maxValue: 40,
+                                 currentValue: 10.23)
+            
+            CircularProgressView(progress: 0.6931, description: .assessed,
+                                 maxValue: 100,
+                                 currentValue: 43.6931)
+            
+            CircularProgressView(progress: 0.436,
+                                 description: .averageScore,
+                                 maxValue: 100,
+                                 currentValue: 43.6931)
         }
     }
 }
