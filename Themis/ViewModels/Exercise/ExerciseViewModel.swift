@@ -25,22 +25,58 @@ class ExerciseViewModel: ObservableObject {
         return "\(totalNumberOfAssessments) / \(totalNumberOfStudents) (\(percentageString))"
     }
     
+    var numberOfParticipations: Int? {
+        exerciseStats.value?.numberOfParticipations
+    }
+    
+    var numberOfStudentsOrTeamsInCourse: Int? {
+        exerciseStats.value?.numberOfStudentsOrTeamsInCourse
+    }
+    
     var participationRate: Double {
-        let numOfParticipations = Double(exerciseStats.value?.numberOfParticipations ?? 0)
-        let numOfStudents = Double(exerciseStats.value?.numberOfStudentsOrTeamsInCourse ?? 0)
-        return Double(numOfParticipations / numOfStudents)
+        guard let numberOfParticipations,
+              let numberOfStudentsOrTeamsInCourse,
+              numberOfParticipations * numberOfStudentsOrTeamsInCourse != 0
+        else {
+            return 0.0
+        }
+        return Double(numberOfParticipations) / Double(numberOfStudentsOrTeamsInCourse)
+    }
+    
+    var averageScoreOfExercise: Double? {
+        exerciseStats.value?.averageScoreOfExercise
+    }
+    
+    var maxPointsOfExercise: Double? {
+        exerciseStats.value?.maxPointsOfExercise
     }
     
     var averageScore: Double {
-        let avgScore = Double(exerciseStats.value?.averageScoreOfExercise ?? 0)
-        let maxPoints = Double(exerciseStats.value?.maxPointsOfExercise ?? 0)
-        return Double(avgScore / maxPoints)
+        guard let averageScoreOfExercise,
+              let maxPointsOfExercise,
+              averageScoreOfExercise * maxPointsOfExercise != 0
+        else {
+            return 0.0
+        }
+        return averageScoreOfExercise / maxPointsOfExercise
+    }
+    
+    var numberOfAssessmentsInTime: Int? {
+        exerciseStatsForAssessment.value?.totalNumberOfAssessments?.inTime
+    }
+    
+    var numberOfSubmissionsInTime: Int? {
+        exerciseStatsForAssessment.value?.numberOfSubmissions?.inTime
     }
     
     var assessed: Double {
-        let numOfAssessments = Double(exerciseStatsForAssessment.value?.totalNumberOfAssessments?.inTime ?? 0)
-        let numOfStudents = Double(exerciseStatsForAssessment.value?.numberOfSubmissions?.inTime ?? 0)
-        return Double(CGFloat(numOfAssessments / numOfStudents))
+        guard let numberOfAssessmentsInTime,
+              let numberOfSubmissionsInTime,
+              numberOfAssessmentsInTime * numberOfSubmissionsInTime != 0
+        else {
+            return 0.0
+        }
+        return Double(numberOfAssessmentsInTime) / Double(numberOfSubmissionsInTime)
     }
     
     var isAssessmentPossible: Bool {
