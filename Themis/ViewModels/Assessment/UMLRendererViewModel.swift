@@ -17,9 +17,11 @@ class UMLRendererViewModel: ObservableObject {
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
     
+    /// Sets this VM up based on the given submission
     @MainActor
-    func setup(modelString: String) {
-        guard let modelData = modelString.data(using: .utf8) else {
+    func setup(basedOn submission: BaseSubmission? = nil) {
+        guard let modelingSubmission = submission as? ModelingSubmission,
+                  let modelData = modelingSubmission.model?.data(using: .utf8) else {
             return
         }
         

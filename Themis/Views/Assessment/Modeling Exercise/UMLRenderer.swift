@@ -10,8 +10,7 @@ import SharedModels
 import Common
 
 struct UMLRenderer: View {
-    @StateObject private var umlRendererVM = UMLRendererViewModel()
-    var modelString: String
+    @ObservedObject var umlRendererVM: UMLRendererViewModel
     
     var body: some View {
         ZStack {
@@ -19,7 +18,9 @@ struct UMLRenderer: View {
                 .resizable(resizingMode: .tile)
             
             Group {
-                Canvas(renderer: umlRendererVM.render(_:size:))
+                Canvas { context, size in
+                    umlRendererVM.render(&context, size: size)
+                }
                 
                 Canvas { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
@@ -30,17 +31,12 @@ struct UMLRenderer: View {
             }
             .padding()
         }
-        .onAppear {
-            umlRendererVM.setup(modelString: modelString)
-        }
     }
 }
 
 struct UMLRenderer_Previews: PreviewProvider {
     static var previews: some View {
-        UMLRenderer(modelString:
-                        (Submission.mockModeling.baseSubmission as? ModelingSubmission)?
-            .getExercise(as: ModelingExercise.self)?.exampleSolutionModel ?? "nil")
+        UMLRenderer(umlRendererVM: UMLRendererViewModel()) // TODO: set a mock submission to enable previews again
             .padding()
     }
 }

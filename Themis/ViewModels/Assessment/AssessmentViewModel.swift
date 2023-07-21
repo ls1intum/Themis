@@ -68,7 +68,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         switch exercise {
-        case .programming(exercise: _):
+        case .programming:
             if readOnly {
                 if let participationId {
                     await getReadOnlySubmission(participationId: participationId)
@@ -83,15 +83,25 @@ class AssessmentViewModel: ObservableObject {
                     await initRandomSubmission()
                 }
             }
-        case .text(exercise: _):
+        case .text:
             if readOnly {
-                // TODO: figure out which endpoint could be used instead
                 self.error = UserFacingError.operationNotSupportedForExercise
             } else {
                 if let participationId, let submissionId {
                     await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
                 } else {
                     await initRandomSubmission()
+                }
+            }
+        case .modeling:
+            if readOnly {
+                // TODO: implement
+            } else {
+                if let submissionId {
+                    await getSubmission(submissionId: submissionId)
+                } else {
+                    // TODO: implement random new submission fetch
+//                    await initRandomSubmission()
                 }
             }
         default:

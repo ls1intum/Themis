@@ -10,15 +10,15 @@ import SwiftUI
 import SharedModels
 
 struct ModelingAssessmentView: View {
+    @ObservedObject var assessmentVM: AssessmentViewModel
+    @ObservedObject var assessmentResult: AssessmentResult
     @StateObject private var umlRendererVM = UMLRendererViewModel()
     
     var body: some View {
-        UMLRenderer(modelString:
-                        (Submission.mockModeling.baseSubmission as? ModelingSubmission)?
-            .getExercise(as: ModelingExercise.self)?.exampleSolutionModel ?? "nil")
+        UMLRenderer(umlRendererVM: umlRendererVM)
             .task {
-//                assessmentVM.participationId = participationId
-//                await assessmentVM.initSubmission()
+                await assessmentVM.initSubmission()
+                umlRendererVM.setup(basedOn: assessmentVM.submission)
             }
 //            .sheet(isPresented: $umlRendererVM.showAddFeedback, onDismiss: {
 //                umlRendererVM.selectedFeedbackSuggestionId = ""
@@ -37,7 +37,10 @@ struct ModelingAssessmentView: View {
 }
 
 struct ModelingAssessmentView_Previews: PreviewProvider {
+    // swiftlint:disable:next line_length
+    @StateObject private static var assessmentVM = MockAssessmentViewModel(exercise: (Submission.mockModeling.baseSubmission.getParticipation()?.exercise)!, readOnly: false)
+
     static var previews: some View {
-        ModelingAssessmentView()
+        ModelingAssessmentView(assessmentVM: assessmentVM, assessmentResult: assessmentVM.assessmentResult)
     }
 }

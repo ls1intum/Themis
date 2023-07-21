@@ -47,8 +47,23 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         throw UserFacingError.operationNotSupportedForExercise
     }
     
-    func getSubmissionForAssessment(submissionId: Int) async throws -> SharedModels.ModelingSubmission {
-        throw UserFacingError.operationNotSupportedForExercise
+    // MARK: - Get Modeling Submission For Assessment
+    private struct GetModelingSubmissionRequest: APIRequest {
+        typealias Response = ModelingSubmission
+        
+        var submissionId: Int
+        
+        var method: HTTPMethod {
+            .get
+        }
+        
+        var resourceName: String {
+            "api/modeling-submissions/\(submissionId)"
+        }
+    }
+    
+    func getSubmissionForAssessment(submissionId: Int) async throws -> ModelingSubmission {
+        try await client.sendRequest(GetModelingSubmissionRequest(submissionId: submissionId)).get().0
     }
     
     func getResultFor(participationId: Int) async throws -> SharedModels.Result {

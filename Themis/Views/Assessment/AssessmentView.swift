@@ -159,7 +159,8 @@ struct AssessmentView: View {
                                participationId: participationId,
                                resultId: resultId)
         case .modeling(exercise: ):
-            ModelingAssessmentView()
+            ModelingAssessmentView(assessmentVM: assessmentVM,
+                                   assessmentResult: assessmentResult)
         default:
             Text("Exercise not supported")
         }

@@ -41,7 +41,7 @@ enum UMLElementType: String, Decodable {
     case objectAttribute = "ObjectAttribute"
     case objectMethod = "ObjectMethod"
     case package = "Package"
-    //swiftlint:disable:next identifier_name
+    // swiftlint:disable:next identifier_name
     case Class = "Class"
     case abstractClass = "AbstractClass"
     case interface = "Interface"
