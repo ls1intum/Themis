@@ -58,7 +58,22 @@ struct ModelingAssessmentServiceImpl: AssessmentService {
         throw UserFacingError.operationNotSupportedForExercise
     }
     
+    // MARK: - Cancel Assessment
+    private struct CancelAssessmentRequest: APIRequest {
+        typealias Response = RawResponse
+        
+        let submissionId: Int
+        
+        var method: HTTPMethod {
+            .put
+        }
+        
+        var resourceName: String {
+            "api/modeling-submissions/\(submissionId)/cancel-assessment"
+        }
+    }
+    
     func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
-        throw UserFacingError.operationNotSupportedForExercise
+        _ = try await client.sendRequest(CancelAssessmentRequest(submissionId: submissionId)).get()
     }
 }
