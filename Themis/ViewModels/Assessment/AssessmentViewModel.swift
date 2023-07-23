@@ -100,8 +100,7 @@ class AssessmentViewModel: ObservableObject {
                 if let submissionId {
                     await getSubmission(submissionId: submissionId)
                 } else {
-                    // TODO: implement random new submission fetch
-//                    await initRandomSubmission()
+                    await initRandomSubmission()
                 }
             }
         default:
