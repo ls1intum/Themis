@@ -26,10 +26,12 @@ protocol AssessmentService {
 enum AssessmentServiceFactory {
     static func service(for exercise: Exercise) -> any AssessmentService {
         switch exercise {
-        case .programming(exercise: _):
+        case .programming:
             return ProgrammingAssessmentServiceImpl()
-        case .text(exercise: _):
+        case .text:
             return TextAssessmentServiceImpl()
+        case .modeling:
+            return ModelingAssessmentServiceImpl()
         default:
             return UnknownAssessmentServiceImpl()
         }

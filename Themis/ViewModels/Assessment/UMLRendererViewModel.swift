@@ -102,3 +102,5 @@ class UMLRendererViewModel: ObservableObject {
         umlModel?.elements = elements
     }
 }
+
+extension UMLRendererViewModel: FeedbackDelegate {}

@@ -181,6 +181,7 @@ class AssessmentViewModel: ObservableObject {
         do {
             self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.error = error
