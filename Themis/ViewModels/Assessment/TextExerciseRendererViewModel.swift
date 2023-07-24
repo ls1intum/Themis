@@ -11,16 +11,9 @@ import SharedModels
 import CodeEditor
 import Common
 
-class TextExerciseRendererViewModel: ObservableObject {
+class TextExerciseRendererViewModel: ExerciseRendererViewModel {
     @Published var content: String? = "Loading..."
-    @Published var fontSize: CGFloat = 18.0
-    @Published var showAddFeedback = false
-    @Published var showEditFeedback = false
-    @Published var selectedFeedbackForEditingId = UUID()
-    @Published var selectedFeedbackSuggestionId = ""
     @Published var selectedSection: NSRange?
-    @Published var pencilMode = true
-    @Published var isLoading = false
     @Published var inlineHighlights: [HighlightedRange] = [] {
         didSet {
             undoManager.registerUndo(withTarget: self) { target in
@@ -28,8 +21,6 @@ class TextExerciseRendererViewModel: ObservableObject {
             }
         }
     }
-    
-    let undoManager = ThemisUndoManager.shared
     
     var wordCount: Int {
         let wordRegex = /[\w\u00C0-\u00ff]+/

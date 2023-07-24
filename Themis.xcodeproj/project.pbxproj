@@ -59,6 +59,7 @@
 		6595D2292A2744410033C1B5 /* TextAssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6595D2282A2744410033C1B5 /* TextAssessmentServiceImpl.swift */; };
 		6595D22B2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6595D22A2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift */; };
 		659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */; };
+		659F879D2A6EF16A005ABAFD /* ExerciseRendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659F879C2A6EF16A005ABAFD /* ExerciseRendererViewModel.swift */; };
 		65A49CE92A55AE4800F8B716 /* ModelingSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A49CE82A55AE4800F8B716 /* ModelingSubmissionServiceImpl.swift */; };
 		65A49CED2A55B39900F8B716 /* ModelingAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A49CEC2A55B39900F8B716 /* ModelingAssessmentView.swift */; };
 		65A49CEF2A55B40A00F8B716 /* UMLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A49CEE2A55B40A00F8B716 /* UMLRenderer.swift */; };
@@ -214,6 +215,7 @@
 		6595D2282A2744410033C1B5 /* TextAssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAssessmentServiceImpl.swift; sourceTree = "<group>"; };
 		6595D22A2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownAssessmentServiceImpl.swift; sourceTree = "<group>"; };
 		659CDC8029FAD79100E5FA50 /* ViewHideExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHideExtension.swift; sourceTree = "<group>"; };
+		659F879C2A6EF16A005ABAFD /* ExerciseRendererViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRendererViewModel.swift; sourceTree = "<group>"; };
 		65A49CE82A55AE4800F8B716 /* ModelingSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelingSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65A49CEC2A55B39900F8B716 /* ModelingAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelingAssessmentView.swift; sourceTree = "<group>"; };
 		65A49CEE2A55B40A00F8B716 /* UMLRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLRenderer.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 				65B49F3F2A07F29400C9A45F /* PaneViewModel.swift */,
 				6500B9392A2605A0003C8445 /* TextExerciseRendererViewModel.swift */,
 				658AFD9A2A55BEDC009FB94E /* UMLRendererViewModel.swift */,
+				659F879C2A6EF16A005ABAFD /* ExerciseRendererViewModel.swift */,
 			);
 			name = Assessment;
 			path = Themis/ViewModels/Assessment;
@@ -1151,6 +1154,7 @@
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
 				655084632A1B4E2300748A6F /* ProblemStatementView.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
+				659F879D2A6EF16A005ABAFD /* ExerciseRendererViewModel.swift in Sources */,
 				65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */,
 				E21AF055292B9D4C0096ACFC /* TabsView.swift in Sources */,
 				8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */,
