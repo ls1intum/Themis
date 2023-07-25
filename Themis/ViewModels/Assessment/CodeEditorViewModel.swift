@@ -24,6 +24,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
             }
         }
     }
+    @Published var allowsInlineFeedbackOperations = true
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
     
@@ -89,11 +90,14 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
     }
     
     @MainActor
-    func initFileTree(participationId: Int) async {
+    func initFileTree(participationId: Int, repositoryType: RepositoryType) async {
         do {
             let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
             let node = Node.initFileTreeStructure(files: files)
             self.fileTree = node.children ?? []
+            self.openFiles = []
+            self.selectedFile = nil
+            self.allowsInlineFeedbackOperations = (repositoryType == .student)
         } catch {
             self.error = error
             log.error(String(describing: error))
@@ -158,7 +162,11 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
     }
     
     @MainActor
-    func loadInlineHighlight(assessmentResult: AssessmentResult, participationId: Int) async {
+    func loadInlineHighlightsIfEmpty(assessmentResult: AssessmentResult, participationId: Int) async {
+        guard inlineHighlights.isEmpty else {
+            return
+        }
+        
         for feedback in assessmentResult.inlineFeedback {
             // the reference is extracted from the text since it is more detailed (includes columns and multilines)
             if let text = feedback.baseFeedback.text {

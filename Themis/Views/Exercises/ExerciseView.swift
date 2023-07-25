@@ -87,9 +87,20 @@ struct ExerciseView: View {
         Section("Statistics") {
             HStack(alignment: .center) {
                 Spacer()
-                CircularProgressView(progress: exerciseVM.participationRate, description: .participationRate)
-                CircularProgressView(progress: exerciseVM.assessed, description: .assessed)
-                CircularProgressView(progress: exerciseVM.averageScore, description: .averageScore)
+                CircularProgressView(progress: exerciseVM.participationRate,
+                                     description: .participationRate,
+                                     maxValue: Double(exerciseVM.numberOfStudentsOrTeamsInCourse ?? 0),
+                                     currentValue: Double(exerciseVM.numberOfParticipations ?? 0))
+
+                CircularProgressView(progress: exerciseVM.assessed,
+                                     description: .assessed,
+                                     maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                     currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+
+                CircularProgressView(progress: exerciseVM.averageScore,
+                                     description: .averageScore,
+                                     maxValue: exerciseVM.maxPointsOfExercise,
+                                     currentValue: exerciseVM.averageScoreOfExercise)
                 Spacer()
             }
         }

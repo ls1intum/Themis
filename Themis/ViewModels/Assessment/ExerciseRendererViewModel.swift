@@ -19,7 +19,7 @@ class ExerciseRendererViewModel: ObservableObject {
     /// The ID of the feedback suggestion that was selected
     @Published var selectedFeedbackSuggestionId = ""
     /// If true, the user is allowed to add referenced feedbacks
-    @Published var pencilMode = true
+    @Published var pencilModeDisabled = true
     @Published var isLoading = false
     
     let undoManager = ThemisUndoManager.shared

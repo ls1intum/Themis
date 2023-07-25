@@ -58,7 +58,7 @@ struct TextExerciseRenderer: View {
                 showEditFeedback: $textExerciseRendererVM.showEditFeedback,
                 selectedSection: .constant(nil),
                 selectedFeedbackForEditingId: $textExerciseRendererVM.selectedFeedbackForEditingId,
-                pencilOnly: $textExerciseRendererVM.pencilMode,
+                pencilOnly: $textExerciseRendererVM.pencilModeDisabled,
                 scrollUtils: scrollUtils,
                 showsLineNumbers: false,
                 feedbackSuggestions: [],

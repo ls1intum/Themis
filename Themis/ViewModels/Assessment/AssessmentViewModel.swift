@@ -13,7 +13,8 @@ class AssessmentViewModel: ObservableObject {
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
-    @Published var pencilMode = true
+    @Published var pencilModeDisabled = true
+    @Published var allowsInlineFeedbackOperations = true
     @Published var fontSize: CGFloat = 16.0
     
     var submissionId: Int?
@@ -53,7 +54,7 @@ class AssessmentViewModel: ObservableObject {
     
     /// Resets some properties of this viewmodel that affect the toolbar
     func resetToolbarProperties() {
-        pencilMode = true
+        pencilModeDisabled = true
         fontSize = 16.0
     }
     
@@ -208,6 +209,13 @@ class AssessmentViewModel: ObservableObject {
             self.submission = result.submission?.baseSubmission
             self.participation = result.participation?.baseParticipation
             assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
+            
+            if case .programmingExerciseStudent(participation: ) = result.participation,
+                let exerciseId = participation?.exercise?.id {
+                let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
+                    .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
+                self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
+            }
         } catch {
             self.error = error
             log.error(String(describing: error))
@@ -300,5 +308,16 @@ class AssessmentViewModel: ObservableObject {
     
     func getFeedback(byId id: UUID) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { $0.id == id })
+    }
+    
+    func participationId(for repoType: RepositoryType) -> Int? { // TODO: move somewhere else (this is programming exercise-only)
+        switch repoType {
+        case .student:
+            return participation?.id
+        case .solution:
+            return participation?.getExercise(as: ProgrammingExercise.self)?.solutionParticipation?.id
+        case .template:
+            return participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+        }
     }
 }

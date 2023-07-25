@@ -10,6 +10,7 @@ import SharedModels
 
 struct FeedbackListView: View {
     var readOnly: Bool
+    var allowsInlineFeedbackOperations: Bool
     @ObservedObject var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
     
@@ -17,8 +18,9 @@ struct FeedbackListView: View {
     
     var participationId: Int?
     var templateParticipationId: Int?
-    
     let gradingCriteria: [GradingCriterion]
+    
+    private var isFeedbackCreationDisabled: Bool { readOnly || !allowsInlineFeedbackOperations }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -45,6 +47,7 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
                 FeedbackCellView(
+                    allowsInlineFeedbackOperations: allowsInlineFeedbackOperations,
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
                     feedbackDelegate: feedbackDelegate,
@@ -64,7 +67,7 @@ struct FeedbackListView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(readOnly)
+                .disabled(isFeedbackCreationDisabled)
             }.padding()
         }.headerProminence(.increased)
     }
@@ -73,6 +76,7 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                 FeedbackCellView(
+                    allowsInlineFeedbackOperations: allowsInlineFeedbackOperations,
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
                     feedbackDelegate: feedbackDelegate,
@@ -97,6 +101,7 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                 FeedbackCellView(
+                    allowsInlineFeedbackOperations: allowsInlineFeedbackOperations,
                     readOnly: readOnly,
                     assessmentResult: assessmentResult,
                     feedbackDelegate: feedbackDelegate,
@@ -134,6 +139,7 @@ struct FeedbackListView: View {
     static var previews: some View {
         FeedbackListView(
             readOnly: false,
+            allowsInlineFeedbackOperations: true,
             assessmentResult: assessmentResult,
             feedbackDelegate: codeEditor,
             gradingCriteria: []

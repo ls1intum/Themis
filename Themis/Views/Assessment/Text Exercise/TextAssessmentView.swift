@@ -75,7 +75,7 @@ struct TextAssessmentView: View {
             }
         }
         .onChange(of: assessmentVM.fontSize, perform: { textExerciseRendererVM.fontSize = $0 })
-        .onChange(of: assessmentVM.pencilMode, perform: { textExerciseRendererVM.pencilMode = $0 })
+        .onChange(of: assessmentVM.pencilModeDisabled, perform: { textExerciseRendererVM.pencilModeDisabled = $0 })
     }
     
     private var correctionWithPlaceholder: some View {

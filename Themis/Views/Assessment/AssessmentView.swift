@@ -80,7 +80,8 @@ struct AssessmentView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilMode, iconImageSystemName: "hand.draw", inverted: true)
+                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                            .disabled(!assessmentVM.allowsInlineFeedbackOperations)
                     }
                 }
                 

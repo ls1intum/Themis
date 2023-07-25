@@ -10,14 +10,15 @@ import SwiftUI
 import SharedModels
 
 struct FeedbackCellView: View {
-
+    var allowsInlineFeedbackOperations: Bool
     var readOnly: Bool
     var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
 
     @State var feedback: AssessmentFeedback
-    var editingDisabled: Bool { readOnly }
-
+    private var editingDisabled: Bool { readOnly || !allowsInlineFeedbackOperations }
+    private var tapGestureDisabled: Bool { feedback.scope != .inline || !allowsInlineFeedbackOperations }
+    
     @State var showEditFeedback = false
     
     var participationId: Int?
@@ -50,8 +51,8 @@ struct FeedbackCellView: View {
             }
         }
         .onTapGesture {
-            if feedback.scope == .inline {
-                withAnimation(.linear(duration: 0.3)) {
+            if !tapGestureDisabled {
+                withAnimation(.linear) {
                     isTapped = true
                 }
                 

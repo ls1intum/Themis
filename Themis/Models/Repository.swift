@@ -8,6 +8,12 @@
 import Foundation
 import Common
 
+enum RepositoryType: String, CaseIterable {
+    case student = "Student"
+    case solution = "Solution"
+    case template = "Template"
+}
+
 enum FileType: String, Codable {
     case folder = "FOLDER"
     case file = "FILE"
