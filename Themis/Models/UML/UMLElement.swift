@@ -21,18 +21,6 @@ class UMLElement: Decodable, SelectableUMLItem {
         type?.rawValue
     }
     
-    /// Return true if the given point lies within the boundary of this element
-    func boundsContains(point: CGPoint) -> Bool {
-        guard let bounds else {
-            return false
-        }
-        
-        let isXWithinBounds = point.x > bounds.x && point.x < (bounds.x + bounds.width)
-        let isYWithinBounds = point.y > bounds.y && point.y < (bounds.y + bounds.height)
-        
-        return isXWithinBounds && isYWithinBounds
-    }
-    
     /// Recursively looks for the child UML element located at the given point
     func getChild(at point: CGPoint) -> UMLElement? {
         guard let children else {

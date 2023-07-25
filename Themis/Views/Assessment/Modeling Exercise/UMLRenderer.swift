@@ -28,7 +28,7 @@ struct UMLRenderer: View {
                     umlRendererVM.generatePossibleSymbols()
                 }
                 .onTapGesture { tapLocation in
-                    umlRendererVM.selectElement(at: tapLocation)
+                    umlRendererVM.selectItem(at: tapLocation)
                 }
             }
             .padding()

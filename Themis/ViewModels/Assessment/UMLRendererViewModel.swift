@@ -12,7 +12,7 @@ import SwiftUI
 
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
-    @Published var selectedElement: UMLElement?
+    @Published var selectedElement: SelectableUMLItem?
     @Published var highlights: [UMLHighlight] = []
 
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
@@ -62,8 +62,12 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         renderer.render(umlModel: model)
     }
     
-    func selectElement(at point: CGPoint) {
-        selectedElement = getElement(at: point)
+    func selectItem(at point: CGPoint) {
+        guard !pencilModeDisabled else {
+            return
+        }
+        
+        selectedElement = getSelectableItem(at: point)
         
         if let selectedElement {
             log.verbose("Selected UML element: \(selectedElement.name ?? "no name")")
@@ -77,13 +81,20 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
-    private func getElement(at point: CGPoint) -> UMLElement? {
+    private func getSelectableItem(at point: CGPoint) -> SelectableUMLItem? {
+        // Look for relationships
+        if let foundRelationship = umlModel?.relationships?.first(where: { $0.boundsContains(point: point) }) {
+            return foundRelationship
+        }
+        
+        // Look for elements
         for element in orphanElements {
             if element.boundsContains(point: point) {
                 return element.getChild(at: point) ?? element
             }
         }
         
+        // No item found at given point :(
         return nil
     }
     

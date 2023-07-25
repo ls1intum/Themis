@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Represents any UML item (element, relationship, etc.) that can be selected by the user to add a referenced feedback
 protocol SelectableUMLItem {
     var id: String? { get }
     var name: String? { get }
@@ -14,10 +15,13 @@ protocol SelectableUMLItem {
     var bounds: Boundary? { get }
     var boundsAsCGRect: CGRect? { get }
     var typeAsString: String? { get }
+    
+    /// Return true if the given point lies within the boundary of this element
+    func boundsContains(point: CGPoint) -> Bool
 }
 
-extension SelectableUMLItem {
-    var boundsAsCGRect: CGRect? { // default implementation for all conforming types
+extension SelectableUMLItem { // default implementations for all conforming types
+    var boundsAsCGRect: CGRect? {
         guard let xCoordinate = bounds?.x,
               let yCoordinate = bounds?.y,
               let width = bounds?.width,
@@ -25,5 +29,16 @@ extension SelectableUMLItem {
             return nil
         }
         return CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
+    }
+    
+    func boundsContains(point: CGPoint) -> Bool {
+        guard let bounds else {
+            return false
+        }
+        
+        let isXWithinBounds = point.x > bounds.x && point.x < (bounds.x + bounds.width)
+        let isYWithinBounds = point.y > bounds.y && point.y < (bounds.y + bounds.height)
+        
+        return isXWithinBounds && isYWithinBounds
     }
 }
