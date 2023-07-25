@@ -9,11 +9,9 @@ import Foundation
 import SharedModels
 
 struct ModelingFeedbackDetail: FeedbackDetail {
-    var element: UMLElement?
+    var umlItem: SelectableUMLItem?
     
     mutating func buildArtemisFeedback(feedback baseFeedback: inout Feedback) {
-        
-        // TODO: implement
-        baseFeedback.reference = "not implemented yet"
+        baseFeedback.reference = "\(umlItem?.typeAsString ?? ""):\(umlItem?.id ?? "")"
     }
 }

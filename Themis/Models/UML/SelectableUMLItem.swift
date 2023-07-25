@@ -13,6 +13,7 @@ protocol SelectableUMLItem {
     var owner: String? { get }
     var bounds: Boundary? { get }
     var boundsAsCGRect: CGRect? { get }
+    var typeAsString: String? { get }
 }
 
 extension SelectableUMLItem {

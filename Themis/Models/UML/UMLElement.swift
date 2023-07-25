@@ -17,6 +17,9 @@ class UMLElement: Decodable, SelectableUMLItem {
     let assessmentNote: String?
     
     var children: [UMLElement]? = [] // not decoded
+    var typeAsString: String? {
+        type?.rawValue
+    }
     
     /// Return true if the given point lies within the boundary of this element
     func boundsContains(point: CGPoint) -> Bool {

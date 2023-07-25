@@ -68,9 +68,11 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         if let selectedElement {
             log.verbose("Selected UML element: \(selectedElement.name ?? "no name")")
             
-            if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) {
+            if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) { // Edit Feedback
                 self.selectedFeedbackForEditingId = matchingHighlight.assessmentFeedbackId
                 self.showEditFeedback = true
+            } else { // Add Fedback
+                self.showAddFeedback = true
             }
         }
     }
@@ -118,13 +120,17 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         return selectableItem
     }
     
+    func generateFeedbackDetail() -> ModelingFeedbackDetail {
+        ModelingFeedbackDetail(umlItem: selectedElement)
+    }
+    
     // MARK: - Highlight-Related Functions
     private func setupHighlights(basedOn feedbacks: [AssessmentFeedback]) {
         guard umlModel?.elements != nil else {
             log.error("Could not find elements in the model when attempting to setup highlights")
             return
         }
-                
+        
         for assessmentFeedback in feedbacks {
             guard let referencedItemId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
                   let referencedItem = findSelectableItem(byId: referencedItemId),
@@ -204,6 +210,14 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
+    private func createHighlight(for feedback: AssessmentFeedback) {
+        guard let umlItem = (feedback.detail as? ModelingFeedbackDetail)?.umlItem else {
+            return
+        }
+        setupHighlights(basedOn: [feedback])
+//        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
+    }
+    
     private func updateHighlight(for feedback: AssessmentFeedback) {
         guard let oldHighlightIndex = highlights.firstIndex(where: { $0.assessmentFeedbackId == feedback.id }) else {
             return
@@ -225,6 +239,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
 }
 
 extension UMLRendererViewModel: FeedbackDelegate {
+    func onFeedbackCreation(_ feedback: AssessmentFeedback) {
+        createHighlight(for: feedback)
+    }
+    
     func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
         updateHighlight(for: feedback)
     }

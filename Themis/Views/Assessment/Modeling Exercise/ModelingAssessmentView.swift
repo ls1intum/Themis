@@ -43,19 +43,24 @@ struct ModelingAssessmentView: View {
                 )
             }
         }
-//        .sheet(isPresented: $umlRendererVM.showAddFeedback, onDismiss: {
-//            umlRendererVM.selectedFeedbackSuggestionId = ""
-//        }, content: {
-//            AddFeedbackView(
-//                assessmentResult: assessmentVM.assessmentResult,
-//                feedbackDelegate: umlRendererVM,
-//                incompleteFeedback: AssessmentFeedback(scope: .inline,
-//                                                       detail: textExerciseRendererVM.generateIncompleteFeedbackDetail()),
-//                scope: .inline,
-//                gradingCriteria: assessmentVM.gradingCriteria,
-//                showSheet: $textExerciseRendererVM.showAddFeedback
-//            )
-//        })
+        .sheet(isPresented: $umlRendererVM.showAddFeedback, onDismiss: {
+            umlRendererVM.selectedFeedbackSuggestionId = ""
+        }, content: {
+            AddFeedbackView(
+                assessmentResult: assessmentVM.assessmentResult,
+                feedbackDelegate: umlRendererVM,
+                incompleteFeedback: AssessmentFeedback(scope: .inline,
+                                                       detail: umlRendererVM.generateFeedbackDetail()),
+                scope: .inline,
+                gradingCriteria: assessmentVM.gradingCriteria,
+                showSheet: $umlRendererVM.showAddFeedback
+            )
+        })
+        .onChange(of: umlRendererVM.showAddFeedback) { newValue in
+            if !newValue {
+                umlRendererVM.selectedElement = nil
+            }
+        }
     }
     
     private var correctionWithPlaceholder: some View {

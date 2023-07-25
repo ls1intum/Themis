@@ -20,6 +20,10 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
     let source: UMLRelationshipEndPoint?
     let target: UMLRelationshipEndPoint?
     let isManuallyLayouted: Bool?
+    
+    var typeAsString: String? {
+        type?.rawValue
+    }
 }
 
 struct PathPoint: Decodable {

@@ -24,16 +24,32 @@ class ModelingAssessmentResult: AssessmentResult {
         self.submissionId = submission?.id
     }
     
+    override func addFeedback(feedback: AssessmentFeedback) {
+        var newFeedback = feedback
+        
+        if newFeedback.scope == .inline {
+            // move detailText value to text because modeling feedbacks don't use detailText
+            newFeedback.baseFeedback.text = newFeedback.baseFeedback.detailText
+            newFeedback.baseFeedback.detailText = nil
+        }
+        
+        super.addFeedback(feedback: newFeedback)
+    }
+    
     override func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
         guard var updatedFeedback = super.updateFeedback(id: id, detailText: detailText, credits: credits) else {
             return nil
         }
         
-        // move detailText value to text because modeling feedbacks don't use detailText
-        updatedFeedback.baseFeedback.text = updatedFeedback.baseFeedback.detailText
-        updatedFeedback.baseFeedback.detailText = nil
+        if updatedFeedback.scope == .inline {
+            // move detailText value to text because modeling feedbacks don't use detailText
+            updatedFeedback.baseFeedback.text = updatedFeedback.baseFeedback.detailText
+            updatedFeedback.baseFeedback.detailText = nil
+            
+            return super.updateFeedback(feedback: updatedFeedback)
+        }
         
-        return super.updateFeedback(feedback: updatedFeedback)
+        return updatedFeedback
     }
     
     override func reset() {
