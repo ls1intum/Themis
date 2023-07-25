@@ -29,21 +29,33 @@ struct ModelingAssessmentView: View {
         }
         .task {
             await assessmentVM.initSubmission()
-            umlRendererVM.setup(basedOn: assessmentVM.submission)
+            umlRendererVM.setup(basedOn: assessmentVM.submission, assessmentResult)
         }
-        //            .sheet(isPresented: $umlRendererVM.showAddFeedback, onDismiss: {
-        //                umlRendererVM.selectedFeedbackSuggestionId = ""
-        //            }, content: {
-        //                AddFeedbackView(
-        //                    assessmentResult: assessmentVM.assessmentResult,
-        //                    feedbackDelegate: textExerciseRendererVM,
-        //                    incompleteFeedback: AssessmentFeedback(scope: .inline,
-        //                                                           detail: textExerciseRendererVM.generateIncompleteFeedbackDetail()),
-        //                    scope: .inline,
-        //                    gradingCriteria: assessmentVM.gradingCriteria,
-        //                    showSheet: $textExerciseRendererVM.showAddFeedback
-        //                )
-        //            })
+        .sheet(isPresented: $umlRendererVM.showEditFeedback) {
+            if let feedback = assessmentVM.getFeedback(byId: umlRendererVM.selectedFeedbackForEditingId) {
+                EditFeedbackView(
+                    assessmentResult: assessmentVM.assessmentResult,
+                    feedbackDelegate: umlRendererVM,
+                    scope: .inline,
+                    idForUpdate: feedback.id,
+                    gradingCriteria: assessmentVM.gradingCriteria,
+                    showSheet: $umlRendererVM.showEditFeedback
+                )
+            }
+        }
+//        .sheet(isPresented: $umlRendererVM.showAddFeedback, onDismiss: {
+//            umlRendererVM.selectedFeedbackSuggestionId = ""
+//        }, content: {
+//            AddFeedbackView(
+//                assessmentResult: assessmentVM.assessmentResult,
+//                feedbackDelegate: umlRendererVM,
+//                incompleteFeedback: AssessmentFeedback(scope: .inline,
+//                                                       detail: textExerciseRendererVM.generateIncompleteFeedbackDetail()),
+//                scope: .inline,
+//                gradingCriteria: assessmentVM.gradingCriteria,
+//                showSheet: $textExerciseRendererVM.showAddFeedback
+//            )
+//        })
     }
     
     private var correctionWithPlaceholder: some View {

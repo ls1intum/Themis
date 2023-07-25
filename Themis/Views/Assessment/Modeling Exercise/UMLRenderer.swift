@@ -24,6 +24,8 @@ struct UMLRenderer: View {
                 
                 Canvas { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
+                } symbols: {
+                    umlRendererVM.generatePossibleSymbols()
                 }
                 .onTapGesture { tapLocation in
                     umlRendererVM.selectElement(at: tapLocation)
