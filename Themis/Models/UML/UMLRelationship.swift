@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct UMLRelationship: Decodable {
+struct UMLRelationship: Decodable, SelectableUMLItem {
     let id: String?
     let name: String?
     let type: UMLRelationshipType?

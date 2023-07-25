@@ -47,24 +47,24 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             log.error("Could not find elements in the model when attempting to setup highlights")
             return
         }
-        
-//        let relationships = umlModel?.relationships
-        
+                
         for assessmentFeedback in feedbacks {
-            guard let referencedElementId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
-                  let referencedElement = elements.first(where: { $0.id == referencedElementId }),
-                  let xCoordinate = referencedElement.bounds?.x,
-                  let yCoordinate = referencedElement.bounds?.y,
-                  let width = referencedElement.bounds?.width,
-                  let height = referencedElement.bounds?.height else {
+            guard let referencedItemId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
+                  let referencedItem = findSelectableItem(byId: referencedItemId),
+                  let xCoordinate = referencedItem.bounds?.x,
+                  let yCoordinate = referencedItem.bounds?.y,
+                  let width = referencedItem.bounds?.width,
+                  let height = referencedItem.bounds?.height else {
                 log.error("Could not create a highlight for the following referenced feedback: \(assessmentFeedback)")
                 continue
             }
             
             let elementRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
+            let highlightPlacement = type(of: referencedItem) == UMLElement.self ? UMLHighlightPlacement.topRight : .center
             let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
-                                            rect: elementRect)
+                                            rect: elementRect,
+                                            placement: highlightPlacement)
             highlights.append(newHighlight)
         }
     }
@@ -127,10 +127,21 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         // Highlight all elements associated with a feedback
         for highlight in highlights {
-            let badgeCircleSideLength = symbolSize
-            let badgeCircleX = highlight.rect.maxX - badgeCircleSideLength / 2
-            let badgeCircleY = highlight.rect.minY - badgeCircleSideLength / 2
             let badgeSymbol = highlight.symbol
+            let badgeCircleSideLength = symbolSize
+            
+            let badgeCircleX: CGFloat
+            let badgeCircleY: CGFloat
+            
+            // Determine badge coordinates
+            switch highlight.placement {
+            case .topRight:
+                badgeCircleX = highlight.rect.maxX - badgeCircleSideLength / 2
+                badgeCircleY = highlight.rect.minY - badgeCircleSideLength / 2
+            case .center:
+                badgeCircleX = highlight.rect.midX - badgeCircleSideLength / 2
+                badgeCircleY = highlight.rect.midY - badgeCircleSideLength / 2
+            }
             
             guard let resolvedBadgeSymbol = context.resolveSymbol(id: badgeSymbol) else {
                 log.warning("Could not resolve the highlight badge for: \(highlight)")
@@ -180,6 +191,21 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         umlModel?.elements = elements
     }
+    
+    /// Looks up for a selectable UML item (UMLElement or UMLRelationship) by the given id
+    private func findSelectableItem(byId id: String) -> SelectableUMLItem? {
+        var selectableItem: SelectableUMLItem?
+        
+        if let elements = umlModel?.elements,
+           let foundElement = elements.first(where: { $0.id == id }) {
+            selectableItem = foundElement
+        } else if let relationships = umlModel?.relationships,
+                  let foundRelationship = relationships.first(where: { $0.id == id }) {
+            selectableItem = foundRelationship
+        }
+        
+        return selectableItem
+    }
 }
 
 extension UMLRendererViewModel: FeedbackDelegate {}
@@ -188,4 +214,9 @@ struct UMLHighlight {
     var assessmentFeedbackId: UUID
     var symbol: UMLBadgeSymbol
     var rect: CGRect
+    var placement: UMLHighlightPlacement
+}
+
+enum UMLHighlightPlacement {
+    case topRight, center
 }
