@@ -24,6 +24,18 @@ class ModelingAssessmentResult: AssessmentResult {
         self.submissionId = submission?.id
     }
     
+    override func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
+        guard var updatedFeedback = super.updateFeedback(id: id, detailText: detailText, credits: credits) else {
+            return nil
+        }
+        
+        // move detailText value to text because modeling feedbacks don't use detailText
+        updatedFeedback.baseFeedback.text = updatedFeedback.baseFeedback.detailText
+        updatedFeedback.baseFeedback.detailText = nil
+        
+        return super.updateFeedback(feedback: updatedFeedback)
+    }
+    
     override func reset() {
         self.resultId = nil
         self.submissionId = nil

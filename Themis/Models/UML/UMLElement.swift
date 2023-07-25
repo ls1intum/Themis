@@ -7,13 +7,6 @@
 
 import Foundation
 
-protocol SelectableUMLItem {
-    var id: String? { get }
-    var name: String? { get }
-    var owner: String? { get }
-    var bounds: Boundary? { get }
-}
-
 // Note: this is not a struct because we need references to handle parent-child relationship between elements
 class UMLElement: Decodable, SelectableUMLItem {
     let id: String?

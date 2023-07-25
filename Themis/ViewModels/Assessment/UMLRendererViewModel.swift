@@ -42,33 +42,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         setupHighlights(basedOn: feedbacks)
     }
     
-    private func setupHighlights(basedOn feedbacks: [AssessmentFeedback]) {
-        guard let elements = umlModel?.elements else {
-            log.error("Could not find elements in the model when attempting to setup highlights")
-            return
-        }
-                
-        for assessmentFeedback in feedbacks {
-            guard let referencedItemId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
-                  let referencedItem = findSelectableItem(byId: referencedItemId),
-                  let xCoordinate = referencedItem.bounds?.x,
-                  let yCoordinate = referencedItem.bounds?.y,
-                  let width = referencedItem.bounds?.width,
-                  let height = referencedItem.bounds?.height else {
-                log.error("Could not create a highlight for the following referenced feedback: \(assessmentFeedback)")
-                continue
-            }
-            
-            let elementRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
-            let highlightPlacement = type(of: referencedItem) == UMLElement.self ? UMLHighlightPlacement.topRight : .center
-            let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
-                                            symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
-                                            rect: elementRect,
-                                            placement: highlightPlacement)
-            highlights.append(newHighlight)
-        }
-    }
-    
     func render(_ context: inout GraphicsContext, size: CGSize) {
         guard let model = umlModel else {
             return
@@ -89,78 +62,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         renderer.render(umlModel: model)
     }
     
-    @ViewBuilder
-    /// Generates all possible symbol views that can be drawn on the canvas used for rendering highlights
-    func generatePossibleSymbols() -> some View {
-        // Positive referenced feedback
-        Image(systemName: UMLBadgeSymbol.checkmark.systemName)
-            .bold()
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(UMLBadgeSymbol.checkmark.color, .secondary.opacity(0.3))
-            .tag(UMLBadgeSymbol.checkmark)
-        
-        // Negative referenced feedback
-        Image(systemName: UMLBadgeSymbol.cross.systemName)
-            .bold()
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(UMLBadgeSymbol.cross.color, .secondary.opacity(0.3))
-            .tag(UMLBadgeSymbol.cross)
-        
-        // Neutral referenced feedback
-        Image(systemName: UMLBadgeSymbol.exclamation.systemName)
-            .bold()
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(UMLBadgeSymbol.exclamation.color, .secondary.opacity(0.3))
-            .tag(UMLBadgeSymbol.exclamation)
-    }
-    
-    func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
-        // Highlight selected element if there is one
-        if let selectedElement,
-           let xCoordinate = selectedElement.bounds?.x,
-           let yCoordinate = selectedElement.bounds?.y,
-           let width = selectedElement.bounds?.width,
-           let height = selectedElement.bounds?.height {
-            let elementRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
-            context.fill(Path(elementRect), with: .color(Color.yellow.opacity(0.5)))
-        }
-        
-        // Highlight all elements associated with a feedback
-        for highlight in highlights {
-            let badgeSymbol = highlight.symbol
-            let badgeCircleSideLength = symbolSize
-            
-            let badgeCircleX: CGFloat
-            let badgeCircleY: CGFloat
-            
-            // Determine badge coordinates
-            switch highlight.placement {
-            case .topRight:
-                badgeCircleX = highlight.rect.maxX - badgeCircleSideLength / 2
-                badgeCircleY = highlight.rect.minY - badgeCircleSideLength / 2
-            case .center:
-                badgeCircleX = highlight.rect.midX - badgeCircleSideLength / 2
-                badgeCircleY = highlight.rect.midY - badgeCircleSideLength / 2
-            }
-            
-            guard let resolvedBadgeSymbol = context.resolveSymbol(id: badgeSymbol) else {
-                log.warning("Could not resolve the highlight badge for: \(highlight)")
-                continue
-            }
-            
-            context.draw(resolvedBadgeSymbol, in: CGRect(x: badgeCircleX,
-                                                         y: badgeCircleY,
-                                                         width: badgeCircleSideLength,
-                                                         height: badgeCircleSideLength))
-        }
-    }
-    
     func selectElement(at point: CGPoint) {
         selectedElement = getElement(at: point)
         
         if let selectedElement {
             log.verbose("Selected UML element: \(selectedElement.name ?? "no name")")
-//            self.selectedFeedbackForEditingId = associatedFeedbackId
+            
+            if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) {
+                self.selectedFeedbackForEditingId = matchingHighlight.assessmentFeedbackId
+                self.showEditFeedback = true
+            }
         }
     }
     
@@ -206,9 +117,122 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         return selectableItem
     }
+    
+    // MARK: - Highlight-Related Functions
+    private func setupHighlights(basedOn feedbacks: [AssessmentFeedback]) {
+        guard umlModel?.elements != nil else {
+            log.error("Could not find elements in the model when attempting to setup highlights")
+            return
+        }
+                
+        for assessmentFeedback in feedbacks {
+            guard let referencedItemId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
+                  let referencedItem = findSelectableItem(byId: referencedItemId),
+                  let elementRect = referencedItem.boundsAsCGRect else {
+                log.error("Could not create a highlight for the following referenced feedback: \(assessmentFeedback)")
+                continue
+            }
+            
+            let highlightPlacement = type(of: referencedItem) == UMLElement.self ? UMLHighlightPlacement.topRight : .center
+            let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
+                                            symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
+                                            rect: elementRect,
+                                            placement: highlightPlacement)
+            highlights.append(newHighlight)
+        }
+    }
+    
+    @ViewBuilder
+    /// Generates all possible symbol views that can be drawn on the canvas used for rendering highlights
+    func generatePossibleSymbols() -> some View {
+        // Positive referenced feedback
+        Image(systemName: UMLBadgeSymbol.checkmark.systemName)
+            .bold()
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(UMLBadgeSymbol.checkmark.color, .secondary.opacity(0.3))
+            .tag(UMLBadgeSymbol.checkmark)
+        
+        // Negative referenced feedback
+        Image(systemName: UMLBadgeSymbol.cross.systemName)
+            .bold()
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(UMLBadgeSymbol.cross.color, .secondary.opacity(0.3))
+            .tag(UMLBadgeSymbol.cross)
+        
+        // Neutral referenced feedback
+        Image(systemName: UMLBadgeSymbol.exclamation.systemName)
+            .bold()
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(UMLBadgeSymbol.exclamation.color, .secondary.opacity(0.3))
+            .tag(UMLBadgeSymbol.exclamation)
+    }
+    
+    func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
+        // Highlight selected element if there is one
+        if let selectedElement,
+           let elementRect = selectedElement.boundsAsCGRect {
+            context.fill(Path(elementRect), with: .color(Color.yellow.opacity(0.5)))
+        }
+        
+        // Highlight all elements associated with a feedback
+        for highlight in highlights {
+            let badgeSymbol = highlight.symbol
+            let badgeCircleSideLength = symbolSize
+            
+            let badgeCircleX: CGFloat
+            let badgeCircleY: CGFloat
+            
+            // Determine badge coordinates
+            switch highlight.placement {
+            case .topRight:
+                badgeCircleX = highlight.rect.maxX - badgeCircleSideLength / 2
+                badgeCircleY = highlight.rect.minY - badgeCircleSideLength / 2
+            case .center:
+                badgeCircleX = highlight.rect.midX - badgeCircleSideLength / 2
+                badgeCircleY = highlight.rect.midY - badgeCircleSideLength / 2
+            }
+            
+            guard let resolvedBadgeSymbol = context.resolveSymbol(id: badgeSymbol) else {
+                log.warning("Could not resolve the highlight badge for: \(highlight)")
+                continue
+            }
+            
+            context.draw(resolvedBadgeSymbol, in: CGRect(x: badgeCircleX,
+                                                         y: badgeCircleY,
+                                                         width: badgeCircleSideLength,
+                                                         height: badgeCircleSideLength))
+        }
+    }
+    
+    private func updateHighlight(for feedback: AssessmentFeedback) {
+        guard let oldHighlightIndex = highlights.firstIndex(where: { $0.assessmentFeedbackId == feedback.id }) else {
+            return
+        }
+        
+        let oldHighlight = highlights[oldHighlightIndex]
+        let newSymbol = UMLBadgeSymbol.symbol(forCredits: feedback.baseFeedback.credits ?? 0.0)
+        
+        highlights[oldHighlightIndex].symbol = newSymbol
+    }
+    
+    private func deleteHighlight(for feedback: AssessmentFeedback) {
+        highlights.removeAll(where: { $0.assessmentFeedbackId == feedback.id })
+        
+//        if feedback.scope == .inline { // TODO: uncomment once undo/redo is implemented
+//            undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
+//        }
+    }
 }
 
-extension UMLRendererViewModel: FeedbackDelegate {}
+extension UMLRendererViewModel: FeedbackDelegate {
+    func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
+        updateHighlight(for: feedback)
+    }
+    
+    func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
+        deleteHighlight(for: feedback)
+    }
+}
 
 struct UMLHighlight {
     var assessmentFeedbackId: UUID

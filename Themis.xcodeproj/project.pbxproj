@@ -33,6 +33,7 @@
 		654BC9972A6FF7630081CF22 /* UMLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654BC9932A6FF7630081CF22 /* UMLRenderer.swift */; };
 		654BC9982A6FF7630081CF22 /* ModelingAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654BC9942A6FF7630081CF22 /* ModelingAssessmentView.swift */; };
 		654BC9992A6FF7630081CF22 /* UMLClassDiagramRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654BC9962A6FF7630081CF22 /* UMLClassDiagramRenderer.swift */; };
+		654BC99B2A7007D00081CF22 /* SelectableUMLItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654BC99A2A7007D00081CF22 /* SelectableUMLItem.swift */; };
 		654F61222A1DEADE0044C747 /* ThemisUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654F61212A1DEADE0044C747 /* ThemisUndoManager.swift */; };
 		655084632A1B4E2300748A6F /* ProblemStatementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655084622A1B4E2300748A6F /* ProblemStatementView.swift */; };
 		6564DC0E2A00EFFC00CF2F89 /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 6564DC0D2A00EFFC00CF2F89 /* SharedModels */; };
@@ -204,6 +205,7 @@
 		654BC9932A6FF7630081CF22 /* UMLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLRenderer.swift; sourceTree = "<group>"; };
 		654BC9942A6FF7630081CF22 /* ModelingAssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelingAssessmentView.swift; sourceTree = "<group>"; };
 		654BC9962A6FF7630081CF22 /* UMLClassDiagramRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UMLClassDiagramRenderer.swift; sourceTree = "<group>"; };
+		654BC99A2A7007D00081CF22 /* SelectableUMLItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableUMLItem.swift; sourceTree = "<group>"; };
 		654F61212A1DEADE0044C747 /* ThemisUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisUndoManager.swift; sourceTree = "<group>"; };
 		655084622A1B4E2300748A6F /* ProblemStatementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemStatementView.swift; sourceTree = "<group>"; };
 		6567A90229EFF85200A5EFDA /* ScorePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorePicker.swift; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 				6519761B2A65A0DF004E33C8 /* UMLElement.swift */,
 				6519761D2A65A14E004E33C8 /* UMLRelationship.swift */,
 				65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */,
+				654BC99A2A7007D00081CF22 /* SelectableUMLItem.swift */,
 			);
 			path = UML;
 			sourceTree = "<group>";
@@ -1169,6 +1172,7 @@
 				6581C67D2A305F3800E49E24 /* FeedbackDetail.swift in Sources */,
 				6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */,
 				83396D3029155935003EF727 /* ContentView.swift in Sources */,
+				654BC99B2A7007D00081CF22 /* SelectableUMLItem.swift in Sources */,
 				655084632A1B4E2300748A6F /* ProblemStatementView.swift in Sources */,
 				65A49CE72A558AC200F8B716 /* ExerciseHelperService.swift in Sources */,
 				0BEC4C35292EA1A400F9F802 /* FiletreeSidebarView.swift in Sources */,
