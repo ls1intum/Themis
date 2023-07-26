@@ -198,7 +198,11 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         // Highlight selected element if there is one
         if let selectedElement,
            let elementRect = selectedElement.boundsAsCGRect {
-            context.fill(Path(elementRect), with: .color(Color.yellow.opacity(0.5)))
+            let highlightRect = elementRect.insetBy(dx: -1, dy: -1) // slightly larger than elementRect
+            context.stroke(Path(highlightRect),
+                           with: .color(Color.themisSecondary.opacity(0.5)),
+                           style: .init(lineWidth: 5)
+            )
         }
         
         // Highlight all elements associated with a feedback
