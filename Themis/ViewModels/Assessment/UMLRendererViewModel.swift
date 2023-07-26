@@ -13,7 +13,13 @@ import SwiftUI
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
-    @Published var highlights: [UMLHighlight] = []
+    @Published var highlights: [UMLHighlight] = [] {
+        didSet {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.highlights = oldValue
+            }
+        }
+    }
 
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
@@ -136,7 +142,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     // MARK: - Highlight-Related Functions
-    private func setupHighlights(basedOn feedbacks: [AssessmentFeedback]) {
+    private func setupHighlights(basedOn feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         guard umlModel?.elements != nil else {
             log.error("Could not find elements in the model when attempting to setup highlights")
             return
@@ -156,6 +162,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                                             rect: elementRect,
                                             placement: highlightPlacement)
             highlights.append(newHighlight)
+        }
+        
+        if shouldWipeUndo {
+            undoManager.removeAllActions()
         }
     }
     
@@ -225,8 +235,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         guard let umlItem = (feedback.detail as? ModelingFeedbackDetail)?.umlItem else {
             return
         }
-        setupHighlights(basedOn: [feedback])
-//        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
+        setupHighlights(basedOn: [feedback], shouldWipeUndo: false)
+        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     private func updateHighlight(for feedback: AssessmentFeedback) {
@@ -243,9 +253,9 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     private func deleteHighlight(for feedback: AssessmentFeedback) {
         highlights.removeAll(where: { $0.assessmentFeedbackId == feedback.id })
         
-//        if feedback.scope == .inline { // TODO: uncomment once undo/redo is implemented
-//            undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
-//        }
+        if feedback.scope == .inline {
+            undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
+        }
     }
 }
 
