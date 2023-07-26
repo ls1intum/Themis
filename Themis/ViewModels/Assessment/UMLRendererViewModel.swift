@@ -20,7 +20,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             }
         }
     }
-
+    
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
     
@@ -32,7 +32,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     @MainActor
     func setup(basedOn submission: BaseSubmission? = nil, _ assessmentResult: AssessmentResult) {
         guard let modelingSubmission = submission as? ModelingSubmission,
-                  let modelData = modelingSubmission.model?.data(using: .utf8) else {
+              let modelData = modelingSubmission.model?.data(using: .utf8) else {
             return
         }
         
@@ -68,11 +68,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         renderer.render(umlModel: model)
     }
     
+    @MainActor
     func selectItem(at point: CGPoint) {
-        guard !pencilModeDisabled else {
-            return
-        }
-        
         selectedElement = getSelectableItem(at: point)
         
         if let selectedElement {
@@ -81,7 +78,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) { // Edit Feedback
                 self.selectedFeedbackForEditingId = matchingHighlight.assessmentFeedbackId
                 self.showEditFeedback = true
-            } else { // Add Fedback
+            } else if !pencilModeDisabled { // Add Fedback
                 self.showAddFeedback = true
             }
         }
@@ -142,6 +139,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     // MARK: - Highlight-Related Functions
+    @MainActor
     private func setupHighlights(basedOn feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         guard umlModel?.elements != nil else {
             log.error("Could not find elements in the model when attempting to setup highlights")
@@ -196,7 +194,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
         // Highlight selected element if there is one
-        if let selectedElement,
+        if !pencilModeDisabled,
+           let selectedElement,
            let elementRect = selectedElement.boundsAsCGRect {
             let highlightRect = elementRect.insetBy(dx: -1, dy: -1) // slightly larger than elementRect
             context.stroke(Path(highlightRect),
@@ -235,6 +234,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
+    @MainActor
     private func createHighlight(for feedback: AssessmentFeedback) {
         guard let umlItem = (feedback.detail as? ModelingFeedbackDetail)?.umlItem else {
             return
@@ -243,6 +243,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
+    @MainActor
     private func updateHighlight(for feedback: AssessmentFeedback) {
         guard let oldHighlightIndex = highlights.firstIndex(where: { $0.assessmentFeedbackId == feedback.id }) else {
             return
@@ -254,6 +255,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         highlights[oldHighlightIndex].symbol = newSymbol
     }
     
+    @MainActor
     private func deleteHighlight(for feedback: AssessmentFeedback) {
         highlights.removeAll(where: { $0.assessmentFeedbackId == feedback.id })
         
@@ -264,14 +266,17 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
 }
 
 extension UMLRendererViewModel: FeedbackDelegate {
+    @MainActor
     func onFeedbackCreation(_ feedback: AssessmentFeedback) {
         createHighlight(for: feedback)
     }
     
+    @MainActor
     func onFeedbackUpdate(_ feedback: AssessmentFeedback) {
         updateHighlight(for: feedback)
     }
     
+    @MainActor
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
         deleteHighlight(for: feedback)
     }

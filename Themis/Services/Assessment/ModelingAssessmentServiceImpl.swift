@@ -50,12 +50,44 @@ struct ModelingAssessmentServiceImpl: AssessmentService {
             .get()
     }
     
-    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
-        throw UserFacingError.operationNotSupportedForExercise
+    // MARK: - Save Assessment
+    private struct SubmitAssessmentRequest: APIRequest {
+        typealias Response = RawResponse
+        
+        let submissionId: Int
+        let resultId: Int
+        let assessmentDTO: ModelingAssessmentResult
+        
+        var method: HTTPMethod {
+            .put
+        }
+        
+        var body: Encodable? {
+            assessmentDTO
+        }
+        
+        var params: [URLQueryItem] {
+            [URLQueryItem(name: "submit", value: "true")]
+        }
+        
+        var resourceName: String {
+            "api/modeling-submissions/\(submissionId)/result/\(resultId)/assessment"
+        }
     }
     
-    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
-        throw UserFacingError.operationNotSupportedForExercise
+    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        guard let newAssessment = newAssessment as? ModelingAssessmentResult,
+              let resultId = newAssessment.resultId,
+              let submissionId = newAssessment.submissionId
+        else {
+            throw UserFacingError.operationNotSupportedForExercise
+        }
+        
+        _ = try await client
+            .sendRequest(SubmitAssessmentRequest(submissionId: submissionId,
+                                                 resultId: resultId,
+                                                 assessmentDTO: newAssessment))
+            .get()
     }
     
     // MARK: - Cancel Assessment
@@ -75,5 +107,10 @@ struct ModelingAssessmentServiceImpl: AssessmentService {
     
     func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
         _ = try await client.sendRequest(CancelAssessmentRequest(submissionId: submissionId)).get()
+    }
+    
+    // MARK: - Fetch Participation For Submission
+    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
+        throw UserFacingError.operationNotSupportedForExercise
     }
 }
