@@ -197,7 +197,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         if !pencilModeDisabled,
            let selectedElement,
            let highlightPath = selectedElement.highlightPath {
-            if let selectedRelationship = selectedElement as? UMLRelationship {
+            if type(of: selectedElement) == UMLRelationship.self {
                 context.fill(highlightPath,
                              with: .color(Color.selectedUMLItemColor))
             } else {

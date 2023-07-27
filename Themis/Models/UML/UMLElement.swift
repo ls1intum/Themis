@@ -5,7 +5,7 @@
 //  Created by Tarlan Ismayilsoy on 17.07.23.
 //
 
-import Foundation
+import SwiftUI
 
 // Note: this is not a struct because we need references to handle parent-child relationship between elements
 class UMLElement: Decodable, SelectableUMLItem {
@@ -17,8 +17,17 @@ class UMLElement: Decodable, SelectableUMLItem {
     let assessmentNote: String?
     
     var children: [UMLElement]? = [] // not decoded
+    
     var typeAsString: String? {
         type?.rawValue
+    }
+    
+    var highlightPath: Path? {
+        guard let boundsAsCGRect else {
+            return nil
+        }
+        
+        return Path(boundsAsCGRect.insetBy(dx: -1, dy: -1))
     }
     
     /// Recursively looks for the child UML element located at the given point
@@ -42,6 +51,17 @@ class UMLElement: Decodable, SelectableUMLItem {
         } else {
             self.children?.append(child)
         }
+    }
+    
+    func boundsContains(point: CGPoint) -> Bool {
+        guard let bounds else {
+            return false
+        }
+        
+        let isXWithinBounds = point.x > bounds.x && point.x < (bounds.x + bounds.width)
+        let isYWithinBounds = point.y > bounds.y && point.y < (bounds.y + bounds.height)
+        
+        return isXWithinBounds && isYWithinBounds
     }
 }
 
