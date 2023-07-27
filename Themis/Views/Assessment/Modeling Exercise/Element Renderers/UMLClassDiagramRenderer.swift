@@ -4,7 +4,8 @@
 //
 //  Created by Tarlan Ismayilsoy on 07.07.23.
 //
-
+// swiftlint:disable file_length
+// TODO: remove the rule above
 import SwiftUI
 import Common
 import SharedModels
@@ -199,6 +200,7 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         drawMultiplicityText(relationship, in: relationshipRect)
+        drawRoleText(relationship, in: relationshipRect)
     }
     
     private func drawDependency(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
@@ -423,6 +425,85 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         case .left, .upLeft, .bottomLeft:
             xPosition = rect.minX + point.x + 7 + offset.y
             yPosition = rect.minY + point.y + 5 + offset.x
+        }
+        
+        let textRect = CGRect(x: xPosition, y: yPosition, width: textSize.width, height: textSize.height)
+        
+        context.draw(resolvedText, in: textRect)
+    }
+    
+    private func drawRoleText(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let sourcePoint = relationship.path?.first?.asCGPoint,
+              let sourceDirection = relationship.source?.direction?.inverted,
+              let targetPoint = relationship.path?.last?.asCGPoint,
+              let targetDirection = relationship.target?.direction?.inverted else {
+            log.warning("Could not draw role text for: \(relationship)")
+            return
+        }
+        
+        var targetOffset: CGPoint
+        let relativeSize = (fontSize * 0.7).rounded()
+        
+        switch relationship.type {
+        case .classDependency, .classUnidirectional:
+            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+        case .classInheritance, .classRealization:
+            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+        case .classComposition, .classAggregation:
+            targetOffset = .init(x: 0, y: relativeSize * 2)
+        default:
+            targetOffset = .zero
+        }
+        
+        if let sourceRole = relationship.source?.role {
+            drawRoleText(sourceRole,
+                         at: sourcePoint,
+                         inParentRect: relationshipRect,
+                         direction: sourceDirection,
+                         offset: .zero)
+        }
+        
+        if let targetRole = relationship.target?.role {
+            drawRoleText(targetRole,
+                         at: targetPoint,
+                         inParentRect: relationshipRect,
+                         direction: targetDirection,
+                         offset: targetOffset)
+        }
+    }
+    
+    /// Draws text representing the role of an element in a UML relationship
+    /// - Parameters:
+    ///   - text: role
+    ///   - point: where to draw
+    ///   - rect: parent rect of the relationship
+    ///   - direction: where the arrowhead is looking at
+    ///   - offset: to move the text in case the arrow head is too large (this is usually needed for aggregation and composition relationships)
+    private func drawRoleText(_ text: String,
+                              at point: CGPoint,
+                              inParentRect rect: CGRect,
+                              direction: Direction,
+                              offset: CGPoint) {
+        let roleText = Text(text).font(.system(size: fontSize))
+        let resolvedText = context.resolve(roleText)
+        let textSize = resolvedText.measure(in: canvasBounds.size)
+        
+        var xPosition: CGFloat
+        var yPosition: CGFloat
+        
+        switch direction {
+        case .up, .topLeft, .topRight:
+            xPosition = rect.minX + point.x - textSize.width - 7 - offset.x
+            yPosition = rect.minY + point.y + 5 + offset.y
+        case .down, .downLeft, .downRight:
+            xPosition = rect.minX + point.x - textSize.width - 7 + offset.x
+            yPosition = rect.minY + point.y - textSize.height - 5 - offset.y
+        case .right, .upRight, .bottomRight:
+            xPosition = rect.minX + point.x - textSize.width - offset.y
+            yPosition = rect.minY + point.y - textSize.height - 5 + offset.x
+        case .left, .upLeft, .bottomLeft:
+            xPosition = rect.minX + point.x + 7 + offset.y
+            yPosition = rect.minY + point.y - textSize.height - 5 + offset.x
         }
         
         let textRect = CGRect(x: xPosition, y: yPosition, width: textSize.width, height: textSize.height)
