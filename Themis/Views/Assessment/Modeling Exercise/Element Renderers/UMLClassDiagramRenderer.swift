@@ -197,6 +197,8 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         default:
             drawUnknown(relationship, in: relationshipRect)
         }
+        
+        drawMultiplicityText(relationship, in: relationshipRect)
     }
     
     private func drawDependency(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
@@ -291,7 +293,7 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawArrowhead(at point: CGPoint, lookingAt direction: Direction, type: ArrowHeadType) {
         var path = Path()
-        let size: CGFloat = 10
+        let size: CGFloat = (fontSize * 0.7).rounded()
         
         switch type {
         case .triangle:
@@ -310,25 +312,25 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
             path.addLine(to: .init(x: point.x + size, y: point.y + size * 1.5))
             path.addLine(to: .init(x: point.x, y: point.y))
         }
-        
+                
         switch direction {
-        case .up, .upLeft, .upRight, .topLeft, .topRight:
+        case .up, .topLeft, .topRight:
             path = path.offsetBy(dx: 0, dy: size * 0.15)
-        case .down, .downLeft, .downRight, .bottomLeft, .bottomRight:
+        case .down, .downLeft, .downRight:
             path = path.rotation(.degrees(180)).path(in: path.boundingRect)
             if type == .rhombus || type == .rhombusFilled {
                 path = path.offsetBy(dx: 0, dy: size * -3.1)
             } else {
                 path = path.offsetBy(dx: 0, dy: size * -1.6)
             }
-        case .right:
+        case .right, .upRight, .bottomLeft:
             path = path.rotation(.degrees(90)).path(in: path.boundingRect)
             if type == .rhombus || type == .rhombusFilled {
                 path = path.offsetBy(dx: size * -1.55, dy: size * -1.5)
             } else {
                 path = path.offsetBy(dx: size * -0.8, dy: size * -0.75)
             }
-        case .left:
+        case .left, .upLeft, .bottomRight:
             path = path.rotation(.degrees(-90)).path(in: path.boundingRect)
             if type == .rhombus || type == .rhombusFilled {
                 path = path.offsetBy(dx: size * 1.55, dy: size * -1.5)
@@ -347,6 +349,85 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
                 context.fill(path, with: .color(Color(UIColor.systemBackground)))
             }
         }
+    }
+    
+    private func drawMultiplicityText(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
+        guard let sourcePoint = relationship.path?.first?.asCGPoint,
+              let sourceDirection = relationship.source?.direction?.inverted,
+              let targetPoint = relationship.path?.last?.asCGPoint,
+              let targetDirection = relationship.target?.direction?.inverted else {
+            log.warning("Could not draw multiplicity text for: \(relationship)")
+            return
+        }
+        
+        var targetOffset: CGPoint
+        let relativeSize = (fontSize * 0.7).rounded()
+        
+        switch relationship.type {
+        case .classDependency, .classUnidirectional:
+            targetOffset = .init(x: 10, y: 10)
+        case .classInheritance, .classRealization:
+            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+        case .classComposition, .classAggregation:
+            targetOffset = .init(x: 0, y: relativeSize * 2)
+        default:
+            targetOffset = .zero
+        }
+        
+        if let sourceMultiplicity = relationship.source?.multiplicity {
+            drawMultiplicityText(sourceMultiplicity,
+                                 at: sourcePoint,
+                                 inParentRect: relationshipRect,
+                                 direction: sourceDirection,
+                                 offset: .zero)
+        }
+        
+        if let targetMultiplicity = relationship.target?.multiplicity {
+            drawMultiplicityText(targetMultiplicity,
+                                 at: targetPoint,
+                                 inParentRect: relationshipRect,
+                                 direction: targetDirection,
+                                 offset: targetOffset)
+        }
+    }
+    
+    /// Draws text representing the multiplicity value of a UML relationship
+    /// - Parameters:
+    ///   - text: multiplicity
+    ///   - point: where to draw
+    ///   - rect: parent rect of the relationship
+    ///   - direction: where the arrowhead is looking at
+    ///   - offset: to move the text in case the arrow head is too large (this is usually needed for aggregation and composition relationships)
+    private func drawMultiplicityText(_ text: String,
+                                      at point: CGPoint,
+                                      inParentRect rect: CGRect,
+                                      direction: Direction,
+                                      offset: CGPoint) {
+        let multiplicityText = Text(text).font(.system(size: fontSize))
+        let resolvedText = context.resolve(multiplicityText)
+        let textSize = resolvedText.measure(in: rect.size)
+        
+        var xPosition: CGFloat
+        var yPosition: CGFloat
+        
+        switch direction {
+        case .up, .topLeft, .topRight:
+            xPosition = rect.minX + point.x + 7 + offset.x
+            yPosition = rect.minY + point.y + 5 + offset.y
+        case .down, .downLeft, .downRight:
+            xPosition = rect.minX + point.x + 7 + offset.x
+            yPosition = rect.minY + point.y - 20 - offset.y
+        case .right, .upRight, .bottomRight:
+            xPosition = rect.minX + point.x - 14 - offset.y
+            yPosition = rect.minY + point.y + 5 + offset.x
+        case .left, .upLeft, .bottomLeft:
+            xPosition = rect.minX + point.x + 7 + offset.y
+            yPosition = rect.minY + point.y + 5 + offset.x
+        }
+        
+        let textRect = CGRect(x: xPosition, y: yPosition, width: textSize.width, height: textSize.height)
+        
+        context.draw(resolvedText, in: textRect)
     }
 }
 

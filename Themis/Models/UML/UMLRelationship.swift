@@ -41,6 +41,8 @@ struct UMLRelationshipEndPoint: Decodable {
     let element: String?
     /// Indicates the side, from which the endpoint is attached to the UML element
     let direction: Direction?
+    let multiplicity: String?
+    let role: String?
 }
 
 enum Direction: String, Decodable {
@@ -68,21 +70,21 @@ enum Direction: String, Decodable {
         case .up:
             return .down
         case .upRight:
-            return .downLeft
-        case .upLeft:
-            return .downRight
-        case .downRight:
             return .upLeft
-        case .downLeft:
+        case .upLeft:
             return .upRight
+        case .downRight:
+            return .downLeft
+        case .downLeft:
+            return .downRight
         case .topRight:
-            return .bottomLeft
-        case .topLeft:
             return .bottomRight
+        case .topLeft:
+            return .bottomLeft
         case .bottomRight:
-            return .topLeft
-        case .bottomLeft:
             return .topRight
+        case .bottomLeft:
+            return .topLeft
         }
     }
 }
