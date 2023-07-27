@@ -234,9 +234,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     @MainActor
     private func createHighlight(for feedback: AssessmentFeedback) {
-        guard let umlItem = (feedback.detail as? ModelingFeedbackDetail)?.umlItem else {
-            return
-        }
         setupHighlights(basedOn: [feedback], shouldWipeUndo: false)
         undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
@@ -247,7 +244,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             return
         }
         
-        let oldHighlight = highlights[oldHighlightIndex]
         let newSymbol = UMLBadgeSymbol.symbol(forCredits: feedback.baseFeedback.credits ?? 0.0)
         
         highlights[oldHighlightIndex].symbol = newSymbol

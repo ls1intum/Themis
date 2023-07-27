@@ -68,7 +68,7 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
         // If the number of points is even, then the number of pathRects between them is going to be odd. This means we can find the mid CGRect and take it's mid point to place the badge.
         
         if !path.count.isMultiple(of: 2) { // odd point count
-            return path[path.count / 2].asCGPoint.applying(.init(translationX: boundsAsCGRect.minX, 
+            return path[path.count / 2].asCGPoint.applying(.init(translationX: boundsAsCGRect.minX,
                                                                  y: boundsAsCGRect.minY)) // mid point
         } else if !pathRects.count.isMultiple(of: 2) { // odd rect count
             let midRect = pathRects[pathRects.count / 2]
