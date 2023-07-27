@@ -196,12 +196,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         // Highlight selected element if there is one
         if !pencilModeDisabled,
            let selectedElement,
-           let elementRect = selectedElement.boundsAsCGRect {
-            let highlightRect = elementRect.insetBy(dx: -1, dy: -1) // slightly larger than elementRect
-            context.stroke(Path(highlightRect),
-                           with: .color(Color.themisSecondary.opacity(0.5)),
-                           style: .init(lineWidth: 5)
-            )
+           let highlightPath = selectedElement.highlightPath {
+            if let selectedRelationship = selectedElement as? UMLRelationship {
+                context.fill(highlightPath,
+                             with: .color(Color.selectedUMLItemColor))
+            } else {
+                context.stroke(highlightPath,
+                               with: .color(Color.selectedUMLItemColor),
+                               style: .init(lineWidth: 5)
+                )
+            }
         }
         
         // Highlight all elements associated with a feedback

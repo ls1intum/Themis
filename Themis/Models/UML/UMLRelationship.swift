@@ -24,6 +24,34 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
     var typeAsString: String? {
         type?.rawValue
     }
+    
+    var highlightPath: Path? {
+        guard let path,
+              let boundsX = bounds?.x,
+              let boundsY = bounds?.y,
+              let boundsAsCGRect else {
+            return nil
+        }
+        
+        var pathRects = [CGRect]()
+        
+        for index in 0..<path.count where index != path.count - 1 {
+            let pointA = path[index].asCGPoint
+            let pointB = path[index + 1].asCGPoint
+            
+            var rectPath = Path()
+            rectPath.addLines([pointA, pointB])
+            
+            let pathRect = rectPath.boundingRect.insetBy(dx: -15, dy: -15)
+            let pathRectWithOffset = pathRect.offsetBy(dx: boundsX, dy: boundsY)
+            
+            pathRects.append(pathRectWithOffset.intersection(boundsAsCGRect))
+        }
+        
+        var result = Path()
+        result.addRects(pathRects)
+        return result
+    }
 }
 
 struct PathPoint: Decodable {

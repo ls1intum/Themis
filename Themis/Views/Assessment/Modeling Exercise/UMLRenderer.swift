@@ -18,11 +18,11 @@ struct UMLRenderer: View {
                 .resizable(resizingMode: .tile)
             
             Group {
-                Canvas { context, size in
+                Canvas(rendersAsynchronously: true) { context, size in
                     umlRendererVM.render(&context, size: size)
                 }
                 
-                Canvas { context, size in
+                Canvas(rendersAsynchronously: true) { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
                 } symbols: {
                     umlRendererVM.generatePossibleSymbols()
