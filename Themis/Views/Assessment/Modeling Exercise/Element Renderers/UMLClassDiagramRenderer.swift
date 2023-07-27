@@ -312,9 +312,9 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         switch direction {
-        case .up:
+        case .up, .upLeft, .upRight, .topLeft, .topRight:
             path = path.offsetBy(dx: 0, dy: size * 0.15)
-        case .down:
+        case .down, .downLeft, .downRight, .bottomLeft, .bottomRight:
             path = path.rotation(.degrees(180)).path(in: path.boundingRect)
             if type == .rhombus || type == .rhombusFilled {
                 path = path.offsetBy(dx: 0, dy: size * -3.1)
@@ -333,7 +333,7 @@ private struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
             if type == .rhombus || type == .rhombusFilled {
                 path = path.offsetBy(dx: size * 1.55, dy: size * -1.5)
             } else {
-                path = path.offsetBy(dx: size * 0.7, dy: size * 0.3)
+                path = path.offsetBy(dx: size * 0.8, dy: size * -0.75)
             }
         }
         

@@ -48,6 +48,14 @@ enum Direction: String, Decodable {
     case right = "Right"
     case up = "Up"
     case down = "Down"
+    case upRight = "Upright"
+    case upLeft = "Upleft"
+    case downRight = "Downright"
+    case downLeft = "Downleft"
+    case topRight = "Topright"
+    case topLeft = "Topleft"
+    case bottomRight = "Bottomright"
+    case bottomLeft = "Bottomleft"
     
     var inverted: Self {
         switch self {
@@ -59,6 +67,22 @@ enum Direction: String, Decodable {
             return .up
         case .up:
             return .down
+        case .upRight:
+            return .downLeft
+        case .upLeft:
+            return .downRight
+        case .downRight:
+            return .upLeft
+        case .downLeft:
+            return .upRight
+        case .topRight:
+            return .bottomLeft
+        case .topLeft:
+            return .bottomRight
+        case .bottomRight:
+            return .topLeft
+        case .bottomLeft:
+            return .topRight
         }
     }
 }

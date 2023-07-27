@@ -37,8 +37,13 @@ struct UMLRenderer: View {
 }
 
 struct UMLRenderer_Previews: PreviewProvider {
+    static var umlRendererVM = UMLRendererViewModel()
+    
     static var previews: some View {
-        UMLRenderer(umlRendererVM: UMLRendererViewModel()) // TODO: set a mock submission to enable previews again
+        UMLRenderer(umlRendererVM: umlRendererVM)
+            .onAppear {
+                umlRendererVM.setup(basedOn: Submission.mockModeling.baseSubmission, AssessmentResult())
+            }
             .padding()
     }
 }
