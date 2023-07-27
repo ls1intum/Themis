@@ -13,6 +13,7 @@ protocol SelectableUMLItem {
     var name: String? { get }
     var owner: String? { get }
     var bounds: Boundary? { get }
+    /// The path that should be highlighted when this element is selected
     var highlightPath: Path? { get }
     var boundsAsCGRect: CGRect? { get }
     var typeAsString: String? { get }
@@ -30,24 +31,5 @@ extension SelectableUMLItem { // default implementations for all conforming type
             return nil
         }
         return CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
-    }
-    
-    var highlightPath: Path? {
-        guard let boundsAsCGRect else {
-            return nil
-        }
-        
-        return Path(boundsAsCGRect.insetBy(dx: -1, dy: -1))
-    }
-    
-    func boundsContains(point: CGPoint) -> Bool {
-        guard let bounds else {
-            return false
-        }
-        
-        let isXWithinBounds = point.x > bounds.x && point.x < (bounds.x + bounds.width)
-        let isYWithinBounds = point.y > bounds.y && point.y < (bounds.y + bounds.height)
-        
-        return isXWithinBounds && isYWithinBounds
     }
 }

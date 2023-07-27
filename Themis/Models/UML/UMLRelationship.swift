@@ -25,16 +25,17 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
         type?.rawValue
     }
     
-    var highlightPath: Path? {
+    private var pathRects: [CGRect] {
         guard let path,
               let boundsX = bounds?.x,
               let boundsY = bounds?.y,
               let boundsAsCGRect else {
-            return nil
+            return []
         }
         
-        var pathRects = [CGRect]()
+        var result = [CGRect]()
         
+        // Iterate through points and create CGRects between them
         for index in 0..<path.count where index != path.count - 1 {
             let pointA = path[index].asCGPoint
             let pointB = path[index + 1].asCGPoint
@@ -45,12 +46,20 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
             let pathRect = rectPath.boundingRect.insetBy(dx: -15, dy: -15)
             let pathRectWithOffset = pathRect.offsetBy(dx: boundsX, dy: boundsY)
             
-            pathRects.append(pathRectWithOffset.intersection(boundsAsCGRect))
+            result.append(pathRectWithOffset.intersection(boundsAsCGRect))
         }
-        
+
+        return result
+    }
+    
+    var highlightPath: Path? {
         var result = Path()
         result.addRects(pathRects)
         return result
+    }
+    
+    func boundsContains(point: CGPoint) -> Bool {
+        pathRects.contains(where: { $0.contains(point) })
     }
 }
 
