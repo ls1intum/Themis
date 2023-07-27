@@ -25,6 +25,7 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
         type?.rawValue
     }
     
+    /// Contains rectangles drawn between PathPoints
     private var pathRects: [CGRect] {
         guard let path,
               let boundsX = bounds?.x,
@@ -56,6 +57,25 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
         var result = Path()
         result.addRects(pathRects)
         return result
+    }
+    
+    var badgeLocation: CGPoint? {
+        guard let path, let boundsAsCGRect else {
+            return nil
+        }
+        
+        // The idea is to find the mid point if the number of points is odd.
+        // If the number of points is even, then the number of pathRects between them is going to be odd. This means we can find the mid CGRect and take it's mid point to place the badge.
+        
+        if !path.count.isMultiple(of: 2) { // odd point count
+            return path[path.count / 2].asCGPoint.applying(.init(translationX: boundsAsCGRect.minX, 
+                                                                 y: boundsAsCGRect.minY)) // mid point
+        } else if !pathRects.count.isMultiple(of: 2) { // odd rect count
+            let midRect = pathRects[pathRects.count / 2]
+            return CGPoint(x: midRect.midX, y: midRect.midY) // mid point
+        }
+        
+        return nil
     }
     
     func boundsContains(point: CGPoint) -> Bool {

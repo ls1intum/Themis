@@ -149,16 +149,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         for assessmentFeedback in feedbacks {
             guard let referencedItemId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
                   let referencedItem = findSelectableItem(byId: referencedItemId),
-                  let elementRect = referencedItem.boundsAsCGRect else {
+                  let elementRect = referencedItem.boundsAsCGRect,
+                  let badgeLocation = referencedItem.badgeLocation else {
                 log.error("Could not create a highlight for the following referenced feedback: \(assessmentFeedback)")
                 continue
             }
             
-            let highlightPlacement = type(of: referencedItem) == UMLElement.self ? UMLHighlightPlacement.topRight : .center
             let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
                                             rect: elementRect,
-                                            placement: highlightPlacement)
+                                            badgeLocation: badgeLocation)
             highlights.append(newHighlight)
         }
         
@@ -217,14 +217,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             let badgeCircleY: CGFloat
             
             // Determine badge coordinates
-            switch highlight.placement {
-            case .topRight:
-                badgeCircleX = highlight.rect.maxX - badgeCircleSideLength / 2
-                badgeCircleY = highlight.rect.minY - badgeCircleSideLength / 2
-            case .center:
-                badgeCircleX = highlight.rect.midX - badgeCircleSideLength / 2
-                badgeCircleY = highlight.rect.midY - badgeCircleSideLength / 2
-            }
+            badgeCircleX = highlight.badgeLocation.x - badgeCircleSideLength / 2
+            badgeCircleY = highlight.badgeLocation.y - badgeCircleSideLength / 2
             
             guard let resolvedBadgeSymbol = context.resolveSymbol(id: badgeSymbol) else {
                 log.warning("Could not resolve the highlight badge for: \(highlight)")
@@ -290,9 +284,5 @@ struct UMLHighlight {
     var assessmentFeedbackId: UUID
     var symbol: UMLBadgeSymbol
     var rect: CGRect
-    var placement: UMLHighlightPlacement
-}
-
-enum UMLHighlightPlacement {
-    case topRight, center
+    var badgeLocation: CGPoint
 }

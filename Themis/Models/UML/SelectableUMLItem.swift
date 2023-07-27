@@ -15,6 +15,8 @@ protocol SelectableUMLItem {
     var bounds: Boundary? { get }
     /// The path that should be highlighted when this element is selected
     var highlightPath: Path? { get }
+    /// The point where this UML item prefers to have it's badge. Badges are used to indicate a feedback referencing this item
+    var badgeLocation: CGPoint? { get }
     var boundsAsCGRect: CGRect? { get }
     var typeAsString: String? { get }
     

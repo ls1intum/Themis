@@ -30,6 +30,14 @@ class UMLElement: Decodable, SelectableUMLItem {
         return Path(boundsAsCGRect.insetBy(dx: -1, dy: -1))
     }
     
+    lazy var badgeLocation: CGPoint? = {
+        guard let boundsAsCGRect else {
+            return nil
+        }
+        
+        return CGPoint(x: boundsAsCGRect.maxX, y: boundsAsCGRect.minY)
+    }()
+    
     /// Recursively looks for the child UML element located at the given point
     func getChild(at point: CGPoint) -> UMLElement? {
         guard let children else {
