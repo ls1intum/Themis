@@ -8,6 +8,7 @@
 import SwiftUI
 import Common
 
+// swiftlint:disable type_body_length
 struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     var context: GraphicsContext
     let canvasBounds: CGRect
@@ -199,11 +200,8 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         
         // Fill
         if type != .triangleWithoutBase {
-            if type == .rhombusFilled {
-                context.fill(path, with: .color(Color(UIColor.label)))
-            } else {
-                context.fill(path, with: .color(Color(UIColor.systemBackground)))
-            }
+            let fillColor = (type == .rhombusFilled) ? Color(UIColor.label) : Color(UIColor.systemBackground)
+            context.fill(path, with: .color(fillColor))
         }
     }
     
