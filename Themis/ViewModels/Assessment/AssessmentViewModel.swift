@@ -3,42 +3,133 @@ import SwiftUI
 import Combine
 import SharedModels
 import Common
+import APIClient
 
 class AssessmentViewModel: ObservableObject {
     @Published var submission: BaseSubmission?
     /// Is set automatically when the submission is set
     @Published var participation: BaseParticipation?
-    @Published var assessmentResult = AssessmentResult()
-    @Published var showSubmission = false
+    @Published var assessmentResult: AssessmentResult
     @Published var readOnly: Bool
     @Published var loading = false
     @Published var error: Error?
+    @Published var pencilModeDisabled = true
+    @Published var allowsInlineFeedbackOperations = true
+    @Published var fontSize: CGFloat = 16.0
+    
+    var submissionId: Int?
+    var participationId: Int?
+    var resultId: Int?
+    var exercise: Exercise
     
     private var cancellables: [AnyCancellable] = []
-
-    init(readOnly: Bool) {
+    
+    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
+        self.exercise = exercise
+        self.submissionId = submissionId
+        self.participationId = participationId
+        self.resultId = resultId
+        self.assessmentResult = AssessmentResultFactory.assessmentResult(for: exercise, resultIdFromServer: resultId)
         self.readOnly = readOnly
         
         $submission
             .sink(receiveValue: { self.participation = $0?.participation?.baseParticipation })
             .store(in: &cancellables)
+        
+        $participation
+            .sink(receiveValue: { self.resultId = $0?.results?.last?.id })
+            .store(in: &cancellables)
+    }
+    
+    // Resets some properties of this viewmodel to prepare it for reuse between assessments
+    func resetForNewAssessment() {
+        self.submission = nil
+        self.participation = nil
+        self.loading = false
+        self.error = nil
+        self.submissionId = nil
+        self.participationId = nil
+        self.resultId = nil
+    }
+    
+    /// Resets some properties of this viewmodel that affect the toolbar
+    func resetToolbarProperties() {
+        pencilModeDisabled = true
+        fontSize = 16.0
     }
     
     var gradingCriteria: [GradingCriterion] {
         participation?.getExercise()?.gradingCriteria ?? []
     }
-
+    
     @MainActor
-    func initRandomSubmission(exerciseId: Int) async {
-        loading = true
-        defer {
-            loading = false
+    func initSubmission() async {
+        guard submission == nil else {
+            return
         }
+        
+        switch exercise {
+        case .programming(exercise: _):
+            if readOnly {
+                if let participationId {
+                    await getReadOnlySubmission(participationId: participationId)
+                } else {
+                    self.error = UserFacingError.participationNotFound
+                    log.error("Could not find participation for exercise: \(exercise.baseExercise.title ?? "")")
+                }
+                
+                // for read-only mode, template and solution participations need to be fetched separately
+                if let exerciseId = participation?.exercise?.id {
+                    do {
+                        let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
+                            .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
+                        self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
+                    } catch {
+                        log.error("Could not fetch template and solution repositories: \(error)")
+                    }
+                }
+            } else {
+                if let submissionId {
+                    await getSubmission(submissionId: submissionId)
+                } else {
+                    await initRandomSubmission()
+                }
+            }
+        case .text(exercise: _):
+            if readOnly {
+                // TODO: figure out which endpoint could be used instead
+                self.error = UserFacingError.operationNotSupportedForExercise
+            } else {
+                if let submissionId {
+                    await getParticipationForSubmission(submissionId: submissionId)
+                } else {
+                    await initRandomSubmission()
+                }
+            }
+        default:
+            log.warning("Attempt to assess an unknown exercise")
+        }
+        
+        ThemisUndoManager.shared.removeAllActions()
+    }
+    
+    @MainActor
+    private func getParticipationForSubmission(submissionId: Int?) async {
+        guard let submissionId else {
+            return
+        }
+        
+        loading = true
+        defer { loading = false }
+        
         do {
-            self.submission = try await SubmissionServiceFactory.shared.getRandomProgrammingSubmissionForAssessment(exerciseId: exerciseId)
-            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-            self.showSubmission = true
-            UndoManager.shared.removeAllActions()
+            let assessmentService = AssessmentServiceFactory.service(for: exercise)
+            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(submissionId: submissionId).baseParticipation
+            self.submission = fetchedParticipation.submissions?.last?.baseSubmission
+            self.participation = fetchedParticipation
+            assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
+            assessmentResult.setReferenceData(basedOn: submission)
+            ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.submission = nil
             self.error = error
@@ -47,30 +138,71 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func getSubmission(id: Int) async {
+    func initRandomSubmission() async {
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
+        
         do {
-            if readOnly {
-                let result = try await SubmissionServiceFactory.shared.getResultFor(participationId: id)
-                self.submission = result.submission?.baseSubmission
-                self.participation = result.participation?.baseParticipation
-                assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
-                
-                if case .programmingExerciseStudent(participation: ) = result.participation,
-                   let exerciseId = participation?.exercise?.id {
-                    let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
-                        .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
-                    self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
-                }
+            let submissionService = SubmissionServiceFactory.service(for: exercise)
+            self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            assessmentResult.setReferenceData(basedOn: submission)
+            ThemisUndoManager.shared.removeAllActions()
+        } catch {
+            self.submission = nil
+            
+            if case .decodingError(_, let statusCode) = (error as? APIClientError),
+               statusCode == 200 { // Status is OK, but the body is not decodable (empty)
+                self.error = UserFacingError.noMoreAssessments
             } else {
-                self.submission = try await SubmissionServiceFactory.shared.getProgrammingSubmissionForAssessment(submissionId: id)
-                assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
-                UndoManager.shared.removeAllActions()
+                self.error = UserFacingError.unknown
             }
-            self.showSubmission = true
+            
+            log.error(String(describing: error))
+        }
+    }
+
+    @MainActor
+    func getSubmission(submissionId: Int) async {
+        guard !readOnly else {
+            self.error = UserFacingError.unknown
+            log.error("This function should not be called for read-only mode")
+            return
+        }
+        
+        loading = true
+        defer { loading = false }
+        
+        let submissionService = SubmissionServiceFactory.service(for: exercise)
+        
+        do {
+            self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            ThemisUndoManager.shared.removeAllActions()
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    func getReadOnlySubmission(participationId: Int) async {
+        guard readOnly else {
+            self.error = UserFacingError.unknown
+            log.error("This function should only be called for read-only mode")
+            return
+        }
+        
+        loading = true
+        defer { loading = false }
+        
+        let submissionService = SubmissionServiceFactory.service(for: exercise)
+        
+        do {
+            let result = try await submissionService.getResultFor(participationId: participationId)
+            self.submission = result.submission?.baseSubmission
+            self.participation = result.participation?.baseParticipation
+            assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
         } catch {
             self.error = error
             log.error(String(describing: error))
@@ -79,16 +211,18 @@ class AssessmentViewModel: ObservableObject {
 
     @MainActor
     func cancelAssessment() async {
-        guard let submissionId = submission?.id else {
+        guard let submissionId = submission?.id,
+              let participationId = participation?.id else {
             return
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
+        
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
+        
         do {
-            try await AssessmentServiceFactory.shared.cancelAssessment(submissionId: submissionId)
+            try await assessmentService.cancelAssessment(participationId: participationId, submissionId: submissionId)
         } catch {
             if error as? RESTError != RESTError.empty {
                 self.error = error
@@ -100,52 +234,60 @@ class AssessmentViewModel: ObservableObject {
     }
 
     @MainActor
-    func sendAssessment(submit: Bool) async {
+    func saveAssessment() async {
         guard let participationId = participation?.id else {
             return
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
+        
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
         do {
-            try await AssessmentServiceFactory.shared.saveAssessment(
-                participationId: participationId,
-                newAssessment: assessmentResult,
-                submit: submit
-            )
+            try await assessmentService.saveAssessment(participationId: participationId,
+                                                       newAssessment: assessmentResult)
         } catch {
             self.error = error
             log.error(String(describing: error))
         }
     }
     
-    func notifyThemisML(exerciseId: Int) async {
+    @MainActor
+    func submitAssessment() async {
         guard let participationId = participation?.id else {
             return
         }
         
+        loading = true
+        defer { loading = false }
+        
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
+        
         do {
-            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exerciseId, participationId: participationId)
+            try await assessmentService.submitAssessment(participationId: participationId,
+                                                         newAssessment: assessmentResult)
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
+    }
+    
+    func notifyThemisML() async { // TODO: Make this function more general once Athene is integrated
+        guard let participationId = participation?.id,
+              case .programming(exercise: _) = exercise
+        else {
+            return
+        }
+        
+        do {
+            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exercise.id, participationId: participationId)
         } catch {
             log.error(String(describing: error))
         }
     }
     
-    func getFeedback(byId id: String) -> AssessmentFeedback? {
-        assessmentResult.feedbacks.first(where: { "\($0.id)" == id })
-    }
-    
-    func participationId(for repoType: RepositoryType) -> Int? { // TODO: move somewhere else (this is programming exercise-only)
-        switch repoType {
-        case .student:
-            return participation?.id
-        case .solution:
-            return participation?.getExercise(as: ProgrammingExercise.self)?.solutionParticipation?.id
-        case .template:
-            return participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
-        }
+    func getFeedback(byId id: UUID) -> AssessmentFeedback? {
+        assessmentResult.feedbacks.first(where: { $0.id == id })
     }
 }

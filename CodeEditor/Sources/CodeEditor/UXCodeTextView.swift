@@ -63,6 +63,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
     var feedbackSuggestions: [FeedbackSuggestion] = []
+    var showsLineNumbers: Bool
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
@@ -77,11 +78,15 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    var selectionGranularity = UITextGranularity.character
+    var canSelectionIncludeHighlightedRanges = true
+    
     var feedbackMode = true
     
     var lightBulbs = [LightbulbButton]()
     
-    init() {
+    init(showsLineNumbers: Bool) {
+        self.showsLineNumbers = showsLineNumbers
         let textStorage = highlightr.flatMap {
             CodeAttributedString(highlightr: $0)
         }
@@ -98,6 +103,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             hlTextStorage.highlightDelegate = self
         }
         textContainer.exclusionPaths.append(UIBezierPath(rect: CGRect(x: 0, y: 0, width: Int(numViewWidth()) + 10, height: Int(INT_MAX))))
+        linkTextAttributes = [.foregroundColor: UIColor.label]
         // self.textContainerInset = UIEdgeInsets(top: 8, left: numViewWidth() + 10, bottom: 8, right: 0)
 #if os(macOS)
         isVerticallyResizable = true
@@ -315,6 +321,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     private func numViewWidth() -> CGFloat {
+        if !showsLineNumbers { return 0.0 }
+        
         let maxNum = 4.0
         if let font {
             let standarized = font.withSize(CodeEditor.defaultFontSize)
@@ -440,7 +448,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                     [
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
-                        .link: hRange.id // equals feedback id
+                        .link: hRange.id.uuidString // equals feedback id
                     ], range: hRange.range)
             }
         }
@@ -456,7 +464,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                     [
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                         .underlineColor: hRange.color,
-                        .link: hRange.id // equals feedback id
+                        .link: hRange.id.uuidString // equals feedback id
                     ], range: hRange.range)
             }
         }
@@ -468,7 +476,18 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         return self.layoutManager.glyphIndex(for: point, in: textView.textContainer)
     }
     
-    private func getSelectionFromLine() -> Range<Int>? {
+    private func getSelectionFromTouch() -> Range<Int>? {
+        switch selectionGranularity {
+        case .character:
+            return getCharSelectionFromTouch()
+        case .word:
+            return getWordSelectionFromTouch()
+        default:
+            return getCharSelectionFromTouch()
+        }
+    }
+    
+    private func getCharSelectionFromTouch() -> Range<Int>? {
         guard let firstPoint, let secondPoint else { return nil }
         let firstGlyphIndex = getGlyphIndex(textView: self, point: firstPoint)
         let secondGlyphIndex = getGlyphIndex(textView: self, point: secondPoint)
@@ -479,6 +498,42 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         }
     }
     
+    private func getWordSelectionFromTouch() -> Range<Int>? {
+        guard let firstPoint, let secondPoint,
+              let firstPosition = closestPosition(to: firstPoint),
+              let secondPosition = closestPosition(to: secondPoint),
+              let firstWordRange = rangeEnclosingApproximatePosition(firstPosition, with: .word, inDirection: .storage(.forward)),
+              let secondWordRange = rangeEnclosingApproximatePosition(secondPosition, with: .word, inDirection: .storage(.forward))
+        else { return nil }
+        
+        let firstPositionInt = offset(from: beginningOfDocument, to: firstPosition)
+        let secondPositionInt = offset(from: beginningOfDocument, to: secondPosition)
+        
+        var selectedRange: UITextRange?
+        if secondPositionInt < firstPositionInt { // check if range should be inverse
+            selectedRange = textRange(from: secondWordRange.start, to: firstWordRange.end)
+        } else {
+            selectedRange = textRange(from: firstWordRange.start, to: secondWordRange.end)
+        }
+        
+        guard let selectedRange else { return nil }
+        return textRangeToIntRange(selectedRange)
+    }
+    
+    /// Validates the `dragSelection` value
+    private func isSelectionValid() -> Bool {
+        guard !canSelectionIncludeHighlightedRanges else { return true }
+        
+        let highlightedIntRanges = highlightedRanges.compactMap({ Range($0.range) })
+        for range in highlightedIntRanges {
+            if self.dragSelection?.overlaps(range) == true {
+                return false
+            }
+        }
+        
+        return true
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard feedbackMode else { return }
         guard let touch = touches.first else { return }
@@ -493,15 +548,20 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
-            self.dragSelection = getSelectionFromLine()
+            self.dragSelection = getSelectionFromTouch()
             setNeedsDisplay()
         }
     }
     
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard feedbackMode else { return }
         let coordinator = delegate as? UXCodeTextViewDelegate
+        
+        guard feedbackMode, isSelectionValid() else {
+            dragSelection = nil
+            setNeedsDisplay()
+            return
+        }
+        
         coordinator?.setDragSelection(dragSelection)
     }
 }
@@ -511,6 +571,31 @@ protocol UXCodeTextViewDelegate: UXTextViewDelegate {
     var fontSize: CGFloat? { get set }
     
     func setDragSelection(_: Range<Int>?)
+}
+
+// MARK: - Range functions
+
+extension UXTextView {
+    /// Tries to find a range enclosing either the given position, it's left neighbor, or it's right neighbor
+    func rangeEnclosingApproximatePosition(_ position: UITextPosition, with granularity: UITextGranularity, inDirection direction: UITextDirection) -> UITextRange? {
+        let leftPosition = self.position(from: position, offset: -1)
+        let rightPosition = self.position(from: position, offset: 1)
+        let positionsToCheck = [position, leftPosition, rightPosition].compactMap({ $0 })
+        
+        for position in positionsToCheck {
+            if let range = tokenizer.rangeEnclosingPosition(position, with: granularity, inDirection: direction) {
+                return range
+            }
+        }
+        
+        return nil
+    }
+    
+    func textRangeToIntRange(_ textRange: UITextRange) -> Range<Int> {
+        let start = offset(from: beginningOfDocument, to: textRange.start)
+        let end = offset(from: beginningOfDocument, to: textRange.end)
+        return start..<end
+    }
 }
 
 // MARK: - Smarts as shown in https://github.com/naoty/NTYSmartTextView

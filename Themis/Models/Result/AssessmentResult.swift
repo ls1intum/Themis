@@ -9,7 +9,7 @@ import Foundation
 import SharedModels
 
 class AssessmentResult: Encodable, ObservableObject {
-    let undoManager = UndoManager.shared
+    let undoManager = ThemisUndoManager.shared
     
     var maxPoints = 100.0
     
@@ -41,21 +41,6 @@ class AssessmentResult: Encodable, ObservableObject {
         }
     }
 
-    enum CodingKeys: CodingKey {
-        case score
-        case feedbacks
-        case testCaseCount
-        case passedTestCaseCount
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(score, forKey: .score)
-        try container.encode(feedbacks.map({ $0.baseFeedback }), forKey: .feedbacks)
-        try container.encode(automaticFeedback.count, forKey: .testCaseCount)
-        try container.encode(automaticFeedback.filter { $0.baseFeedback.positive ?? false } .count, forKey: .passedTestCaseCount)
-    }
-
     var generalFeedback: [AssessmentFeedback] {
         feedbacks
             .filter { $0.scope == .general && $0.baseFeedback.type?.isManual ?? false }
@@ -70,12 +55,23 @@ class AssessmentResult: Encodable, ObservableObject {
         feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false && $0.baseFeedback.credits != 0 }
     }
     
+    func reset() {
+        self.computedFeedbacks.removeAll()
+    }
+    
     func setComputedFeedbacks(basedOn feedbacks: [Feedback]) {
         computedFeedbacks = feedbacks
             .map { feedback in
                 let scope = (feedback.reference == nil) ? ThemisFeedbackScope.general : ThemisFeedbackScope.inline
                 return AssessmentFeedback(baseFeedback: feedback, scope: scope)
             }
+    }
+    
+    /// Sets reference-related data for this assessment result. Intended to be overridden by subclasses.
+    func setReferenceData(basedOn submission: BaseSubmission?) {}
+    
+    func getFeedback(byId id: UUID) -> AssessmentFeedback? {
+        computedFeedbacks.first(where: { $0.id == id })
     }
 
     func addFeedback(feedback: AssessmentFeedback) {
@@ -85,25 +81,51 @@ class AssessmentResult: Encodable, ObservableObject {
         computedFeedbacks.append(feedback)
     }
 
-    func deleteFeedback(id: UUID) {
-        if computedFeedbacks.contains(where: { $0.id == id && $0.scope == .inline }) {
-             undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
-         }
+    @discardableResult
+    func deleteFeedback(id: UUID) -> AssessmentFeedback? {
+        guard let feedbackToDelete = computedFeedbacks.first(where: { $0.id == id }) else {
+            return nil
+        }
+        
+        if feedbackToDelete.scope == .inline {
+            undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
+        }
+        
         computedFeedbacks.removeAll { $0.id == id }
+        return feedbackToDelete
     }
 
-    func updateFeedback(id: UUID, detailText: String, credits: Double) {
+    @discardableResult
+    func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
-            return
+            return nil
         }
         computedFeedbacks[index].baseFeedback.detailText = detailText
         computedFeedbacks[index].baseFeedback.credits = credits
+        return computedFeedbacks[index]
     }
     
-    func assignFile(id: UUID, file: Node) {
-        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
-            return
+    @discardableResult
+    func updateFeedback(feedback: AssessmentFeedback) -> AssessmentFeedback? {
+        guard let index = (feedbacks.firstIndex { $0.id == feedback.id }) else {
+            return nil
         }
-        computedFeedbacks[index].file = file
+        computedFeedbacks[index] = feedback
+        return feedback
+    }
+    
+    func encode(to encoder: Encoder) throws {} // to be overridden by subclasses
+}
+
+enum AssessmentResultFactory {
+    static func assessmentResult(for exercise: Exercise, resultIdFromServer: Int? = nil) -> AssessmentResult {
+        switch exercise {
+        case .programming:
+            return ProgrammingAssessmentResult()
+        case .text:
+            return TextAssessmentResult(resultId: resultIdFromServer)
+        default:
+            return UnknownAssessmentResult()
+        }
     }
 }

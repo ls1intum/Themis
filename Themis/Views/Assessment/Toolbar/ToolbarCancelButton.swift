@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedModels
 
 struct ToolbarCancelButton: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
@@ -13,7 +14,7 @@ struct ToolbarCancelButton: View {
     @State private var showCancelDialog = false
     
     private var nothingToSave: Bool {
-        assessmentVM.readOnly || !UndoManager.shared.canUndo
+        assessmentVM.readOnly || !ThemisUndoManager.shared.canUndo
     }
     
     var body: some View {
@@ -31,7 +32,7 @@ struct ToolbarCancelButton: View {
         .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
             Button("Save") {
                 Task {
-                    await assessmentVM.sendAssessment(submit: false)
+                    await assessmentVM.saveAssessment()
                     presentationMode.dismiss()
                 }
             }
@@ -56,6 +57,6 @@ struct ToolbarCancelButton: View {
      @Environment(\.presentationMode) private static var presentationMode
      
      static var previews: some View {
-         ToolbarCancelButton(assessmentVM: AssessmentViewModel(readOnly: false), presentationMode: presentationMode)
+         ToolbarCancelButton(assessmentVM: AssessmentViewModel(exercise: Exercise.mockText, readOnly: false), presentationMode: presentationMode)
      }
  }

@@ -22,9 +22,10 @@ class SubmissionListViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchTutorSubmissions(exerciseId: Int) async {
+    func fetchTutorSubmissions(for exercise: Exercise) async {
         do {
-            self.submissions = try await SubmissionServiceFactory.shared.getTutorSubmissions(exerciseId: exerciseId)
+            let submissionService = SubmissionServiceFactory.service(for: exercise)
+            self.submissions = try await submissionService.getTutorSubmissions(exerciseId: exercise.id)
         } catch let error {
             self.error = error
             log.error(String(describing: error))

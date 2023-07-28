@@ -9,23 +9,24 @@ import SwiftUI
 import Combine
 
 struct ToolbarUndoButton: View {
-    private var cancellables: Set<AnyCancellable> = Set()
-
-    init() {
-        UndoManager.shared.publisher(for: \.canUndo).sink { _ in }.store(in: &cancellables)
-    }
+    
+    @State private var canUndo = false
+    private let undoManager = ThemisUndoManager.shared
     
     var body: some View {
         Button {
             withAnimation(.easeInOut) {
-                UndoManager.shared.undo()
+                undoManager.undo()
             }
         } label: {
-            let undoIconColor: Color = UndoManager.shared.canUndo ? .white : .gray
+            let undoIconColor: Color = canUndo ? .white : .gray
             Image(systemName: "arrow.uturn.backward")
                 .foregroundStyle(undoIconColor)
         }
-        .disabled(!UndoManager.shared.canUndo)
+        .disabled(!canUndo)
+        .onReceive(NotificationCenter.default.publisher(for: undoManager.stateChangeNotification), perform: { _ in
+            canUndo = undoManager.canUndo
+        })
     }
 }
 

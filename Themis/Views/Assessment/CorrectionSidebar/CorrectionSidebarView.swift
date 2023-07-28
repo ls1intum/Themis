@@ -14,13 +14,13 @@ enum CorrectionSidebarElements {
 }
 
 struct CorrectionSidebarView: View {
-
+    @EnvironmentObject var courseVM: CourseViewModel
     @State private var correctionSidebarStatus = CorrectionSidebarElements.problemStatement
     
     @Binding var assessmentResult: AssessmentResult
     @ObservedObject var assessmentVM: AssessmentViewModel
-    @ObservedObject var cvm: CodeEditorViewModel
-    private let courseId: Int
+    
+    weak var feedbackDelegate: (any FeedbackDelegate)?
     
     private var exercise: (any BaseExercise)? {
         assessmentVM.participation?.getExercise()
@@ -30,16 +30,6 @@ struct CorrectionSidebarView: View {
         assessmentVM.participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
     }
     
-    init(assessmentResult: Binding<AssessmentResult>,
-         assessmentVM: AssessmentViewModel,
-         cvm: CodeEditorViewModel,
-         courseId: Int) {
-        self._assessmentResult = assessmentResult
-        self.assessmentVM = assessmentVM
-        self.cvm = cvm
-        self.courseId = courseId
-    }
-    
     var body: some View {
         VStack {
             sideBarElementPicker
@@ -47,7 +37,7 @@ struct CorrectionSidebarView: View {
             if !assessmentVM.loading {
                 ZStack {
                     ScrollView {
-                        ProblemStatementView(courseId: courseId, exerciseId: exercise?.id ?? -1)
+                        ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise?.id)
                             .frame(maxHeight: .infinity)
                     }
                     .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
@@ -64,9 +54,9 @@ struct CorrectionSidebarView: View {
                         }
                     case .generalFeedback:
                         FeedbackListView(
-                            readOnly: assessmentVM.readOnly,
+                            assessmentVM: assessmentVM,
                             assessmentResult: assessmentResult,
-                            codeEditorVM: cvm,
+                            feedbackDelegate: feedbackDelegate,
                             participationId: assessmentVM.participation?.id,
                             templateParticipationId: templateParticipationId,
                             gradingCriteria: exercise?.gradingCriteria ?? []
@@ -97,14 +87,13 @@ struct CorrectionSidebarView: View {
 struct CorrectionSidebarView_Previews: PreviewProvider {
     static let cvm = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
-    @State static var assessmentVM = AssessmentViewModel(readOnly: false)
+    @State static var assessmentVM = MockAssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     
     static var previews: some View {
         CorrectionSidebarView(
             assessmentResult: $assessmentResult,
             assessmentVM: assessmentVM,
-            cvm: cvm,
-            courseId: -1
+            feedbackDelegate: cvm
         )
         .previewInterfaceOrientation(.landscapeLeft)
     }

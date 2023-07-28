@@ -19,9 +19,11 @@ struct SubmissionListView: View {
         List {
             ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions, id: \.baseSubmission.id) { submission in
                 NavigationLink {
-                    AssessmentSubmissionLoaderView(
-                        submissionID: submission.baseSubmission.id ?? -1,
-                        exercise: exercise
+                    AssessmentView(
+                        exercise: exercise,
+                        submissionId: submission.baseSubmission.id,
+                        participationId: submission.baseSubmission.participation?.id,
+                        resultId: submission.baseSubmission.results?.last?.id
                     )
                     .environmentObject(courseVM)
                 } label: {
@@ -53,7 +55,8 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)), submissionStatus: .open)
+            SubmissionListView(exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)),
+                               submissionStatus: .open)
         }
         .previewInterfaceOrientation(.landscapeLeft)
     }

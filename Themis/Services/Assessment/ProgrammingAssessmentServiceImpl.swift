@@ -9,8 +9,9 @@ import Foundation
 import SharedModels
 import APIClient
 import DesignLibrary
+import Common
 
-class AssessmentServiceImpl: AssessmentService {
+class ProgrammingAssessmentServiceImpl: AssessmentService {
     
     let client = APIClient()
     
@@ -18,7 +19,7 @@ class AssessmentServiceImpl: AssessmentService {
     private struct CancelAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var submissionId: Int
+        let submissionId: Int
         
         var method: HTTPMethod {
             .put
@@ -29,7 +30,7 @@ class AssessmentServiceImpl: AssessmentService {
         }
     }
     
-    func cancelAssessment(submissionId: Int) async throws {
+    func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
         _ = try await client.sendRequest(CancelAssessmentRequest(submissionId: submissionId)).get()
     }
     
@@ -37,9 +38,9 @@ class AssessmentServiceImpl: AssessmentService {
     private struct SaveAssessmentRequest: APIRequest {
         typealias Response = RawResponse
         
-        var participationId: Int
-        var newAssessment: AssessmentResult
-        var submit: Bool
+        let participationId: Int
+        let newAssessment: AssessmentResult
+        let submit: Bool
         
         var method: HTTPMethod {
             .put
@@ -58,11 +59,25 @@ class AssessmentServiceImpl: AssessmentService {
         }
     }
     
-    func saveAssessment(participationId: Int, newAssessment: AssessmentResult, submit: Bool) async throws {
+    func saveAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
         _ = try await client
             .sendRequest(SaveAssessmentRequest(participationId: participationId,
                                                newAssessment: newAssessment,
-                                               submit: submit))
+                                               submit: false))
             .get()
+    }
+    
+    // MARK: - Submit Assessment
+    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
+        _ = try await client
+            .sendRequest(SaveAssessmentRequest(participationId: participationId,
+                                               newAssessment: newAssessment,
+                                               submit: true))
+            .get()
+    }
+    
+    // MARK: - Fetch Participation For Submission
+    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
+        throw UserFacingError.operationNotSupportedForExercise
     }
 }

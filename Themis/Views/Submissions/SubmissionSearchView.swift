@@ -9,10 +9,8 @@ import SwiftUI
 import SharedModels
 
 struct SubmissionSearchView: View {
-    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
     @StateObject var submissionSearchVM = SubmissionSearchViewModel()
-    @StateObject var assessmentVM = AssessmentViewModel(readOnly: true)
     @State var search: String = ""
 
     let exercise: Exercise
@@ -21,7 +19,7 @@ struct SubmissionSearchView: View {
         ScrollView {
             LazyVStack {
                 ForEach(submissionSearchVM.filterSubmissions(search: search), id: \.baseSubmission.id) { submission in
-                    SingleSubmissionCellView(avm: assessmentVM, submission: submission)
+                    SingleSubmissionCellView(exercise: exercise, submission: submission)
                 }
             }
         }
@@ -32,15 +30,7 @@ struct SubmissionSearchView: View {
             }
         }
         .task {
-            await submissionSearchVM.fetchSubmissions(exerciseId: exercise.id)
-        }
-        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
-            AssessmentView(
-                assessmentVM: assessmentVM,
-                assessmentResult: assessmentVM.assessmentResult,
-                exercise: exercise
-            )
-            .environmentObject(courseVM)
+            await submissionSearchVM.fetchSubmissions(exercise: exercise)
         }
         .errorAlert(error: $submissionSearchVM.error)
     }
@@ -62,8 +52,10 @@ extension SubmissionSearchView {
 }
 
 private struct SingleSubmissionCellView: View {
-    @ObservedObject var avm: AssessmentViewModel
+    @EnvironmentObject var courseVM: CourseViewModel
+    @State var showAssessmentView = false
 
+    let exercise: Exercise
     let submission: Submission
 
     var body: some View {
@@ -78,11 +70,7 @@ private struct SingleSubmissionCellView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Button {
-                Task {
-                    if let participationId = submission.getParticipation()?.id {
-                        await avm.getSubmission(id: participationId)
-                    }
-                }
+                showAssessmentView = true
             } label: {
                 HStack {
                     Text("View")
@@ -95,6 +83,14 @@ private struct SingleSubmissionCellView: View {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemGray6))
         )
+        .navigationDestination(isPresented: $showAssessmentView) {
+            AssessmentView(
+                exercise: exercise,
+                participationId: submission.getParticipation()?.id,
+                readOnly: true
+            )
+            .environmentObject(courseVM)
+        }
     }
     
     @ViewBuilder

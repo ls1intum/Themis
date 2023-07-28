@@ -152,8 +152,10 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         
         public func textView(_ textView: UITextView, shouldInteractWith URL: URL,
                              in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-            if interaction == .invokeDefaultAction {
-                self.parent.editorBindings.feedbackForSelectionId.wrappedValue = URL.absoluteString
+            if interaction == .invokeDefaultAction,
+               let feedbackId = UUID(uuidString: URL.absoluteString)
+            {
+                self.parent.editorBindings.selectedFeedbackForEditingId.wrappedValue = feedbackId
                 self.parent.editorBindings.showEditFeedback.wrappedValue = true
             }
             return false
@@ -230,6 +232,9 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
+        textView.selectionGranularity = editorBindings.selectionGranularity
+        textView.canSelectionIncludeHighlightedRanges = editorBindings.canSelectionIncludeHighlightedRanges
+        textView.font = editorBindings.font ?? textView.font
         
         if let binding = editorBindings.fontSize {
             textView.changeFontSize(size: binding.wrappedValue)
@@ -252,11 +257,16 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         
         textView.isEditable   = editorBindings.flags.contains(.editable)
         textView.isSelectable = editorBindings.flags.contains(.selectable)
-        textView.backgroundColor = editorBindings.flags.contains(.blackBackground) ? UIColor.black : UIColor.white
+        textView.backgroundColor = UIColor(named: "themisBackground")
         textView.highlightedRanges = editorBindings.highlightedRanges
         textView.customLayoutManager.diffLines = editorBindings.diffLines
         textView.customLayoutManager.isNewFile = editorBindings.isNewFile
+        textView.customLayoutManager.showsLineNumbers = editorBindings.showsLineNumbers
         textView.customLayoutManager.feedbackSuggestions = editorBindings.feedbackSuggestions
+        
+        if editorBindings.language == nil { // plaintext
+            textView.textColor = UIColor.label
+        }
         
         // check if textView's layout is completed and store offsets of all inline highlights
         if textView.frame.height > 0 {
@@ -325,10 +335,11 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #else // iOS etc
     
     public func makeUIView(context: Context) -> UITextView {
-        let textView = UXCodeTextView()
+        let textView = UXCodeTextView(showsLineNumbers: editorBindings.showsLineNumbers)
         textView.autoresizingMask   = [ .flexibleWidth, .flexibleHeight ]
         textView.delegate           = context.coordinator
         textView.highlightedRanges = editorBindings.highlightedRanges
+        textView.font = editorBindings.font ?? textView.font
 #if os(iOS)
         textView.autocapitalizationType = .none
         textView.smartDashesType = .no

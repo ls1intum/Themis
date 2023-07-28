@@ -9,6 +9,7 @@ import UIKit
 
 class RoundedCornerLayoutManager: NSLayoutManager {
     
+    var showsLineNumbers = true
     var lineNumberFont: UIFont = .systemFont(ofSize: 10)
     var lineNumberTextColor: UIColor = .gray
     var gutterWidth: CGFloat = 0.0
@@ -61,11 +62,12 @@ class RoundedCornerLayoutManager: NSLayoutManager {
 
         lineRect = lineRect.integral.insetBy(dx: 0.4, dy: 0.4)
         /// The roundedReect is responsible for the round Corners
-        let path = UIBezierPath(roundedRect: lineRect, cornerRadius: 5)
+        let path = UIBezierPath(roundedRect: lineRect, cornerRadius: height * 0.2)
         path.fill()
     }
     
     private func numViewWidth() -> CGFloat {
+        if !showsLineNumbers { return 0.0 }
         let maxNum = 4.0
 
         let fontAttributes = [NSAttributedString.Key.font: lineNumberFont]
@@ -140,14 +142,10 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             if charRange.location == paraRange.location {
                 gutterRect = CGRect(x: 0, y: rect.origin.y, width: 40, height: rect.size.height).offsetBy(dx: origin.x, dy: origin.y)
                 paraNumber = self.getParaNumber(for: charRange)
-                let lineNumber = String(format: "%ld", paraNumber + 1) as NSString
-                let size = lineNumber.size(withAttributes: atts)
-                lineNumber.draw(in: CGRect(x: 0.0,
-                                   y: (gutterRect.height - size.height) / 2.0,
-                                   width: self.gutterWidth,
-                                   height: size.height)
-                    .offsetBy(dx: 0.0, dy: gutterRect.minY),
-                        withAttributes: atts)
+                
+                if self.showsLineNumbers {
+                    self.drawLineNumbers(paraNumber, gutterRect, atts)
+                }
             }
             self.drawDiffLines(paraNumber, rect, origin)
             self.drawFeedbackSuggestions(paraNumber, rect, origin)
@@ -165,6 +163,17 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                                              height: size.height)
                 .offsetBy(dx: gutterRect.minX, dy: gutterRect.minY), withAttributes: atts)
         }
+    }
+    
+    private func drawLineNumbers(_ paraNumber: Int, _ gutterRect: CGRect, _ attributes: [NSAttributedString.Key: Any]) {
+        let lineNumber = String(format: "%ld", paraNumber + 1) as NSString
+        let size = lineNumber.size(withAttributes: attributes)
+        lineNumber.draw(in: CGRect(x: 0.0,
+                                   y: (gutterRect.height - size.height) / 2.0,
+                                   width: self.gutterWidth,
+                                   height: size.height)
+            .offsetBy(dx: 0.0, dy: gutterRect.minY),
+                        withAttributes: attributes)
     }
     
     private func drawDiffLines(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {

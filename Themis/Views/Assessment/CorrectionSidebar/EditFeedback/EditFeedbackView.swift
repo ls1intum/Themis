@@ -10,24 +10,24 @@ import SharedModels
 
 struct EditFeedbackView: View {
     var assessmentResult: AssessmentResult
-    @ObservedObject var cvm: CodeEditorViewModel
-    let scope: ThemisFeedbackScope
-
-    @Binding var showSheet: Bool
-    var idForUpdate: UUID
+    weak var feedbackDelegate: (any FeedbackDelegate)?
     
+    let scope: ThemisFeedbackScope
+    let idForUpdate: UUID
     let gradingCriteria: [GradingCriterion]
-
+    
+    @Binding var showSheet: Bool
+    
     var body: some View {
         EditFeedbackViewBase(
             assessmentResult: assessmentResult,
-            cvm: cvm,
-            showSheet: $showSheet,
+            feedbackDelegate: feedbackDelegate,
             idForUpdate: idForUpdate,
             title: "Edit Feedback",
-            edit: true,
+            isEditing: true,
             scope: scope,
-            gradingCriteria: gradingCriteria
+            gradingCriteria: gradingCriteria,
+            showSheet: $showSheet
         )
     }
 }

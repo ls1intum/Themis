@@ -14,19 +14,12 @@ struct ExerciseView: View {
     @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) var presentationMode
     @StateObject var exerciseVM = ExerciseViewModel()
-    @StateObject var assessmentVM = AssessmentViewModel(readOnly: false)
     @StateObject var submissionListVM = SubmissionListViewModel()
+    @State var showAssessmentView = false
     
-    private let exercise: Exercise
-    private let courseId: Int
+    let exercise: Exercise
     /// Only set if the exercise is a part of an exam
-    private var exam: Exam?
-    
-    init(exercise: Exercise, courseId: Int, exam: Exam? = nil) {
-        self.exercise = exercise
-        self.courseId = courseId
-        self.exam = exam
-    }
+    var exam: Exam?
     
     var body: some View {
         VStack {
@@ -51,13 +44,9 @@ struct ExerciseView: View {
                 }
             }
         }
-        .navigationDestination(isPresented: $assessmentVM.showSubmission) {
-            AssessmentView(
-                assessmentVM: assessmentVM,
-                assessmentResult: assessmentVM.assessmentResult,
-                exercise: exercise
-            )
-            .environmentObject(courseVM)
+        .navigationDestination(isPresented: $showAssessmentView) {
+            AssessmentView(exercise: exercise)
+                .environmentObject(courseVM)
         }
         .navigationTitle(exercise.baseExercise.title ?? "")
         .task { await fetchExerciseData() }
@@ -71,7 +60,6 @@ struct ExerciseView: View {
                 startNewAssessmentButton.disabled(!exerciseVM.isAssessmentPossible)
             }
         }
-        .errorAlert(error: $assessmentVM.error)
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
@@ -120,7 +108,7 @@ struct ExerciseView: View {
     
     private var problemStatementSection: some View {
         Section("Problem Statement") {
-            ProblemStatementView(courseId: courseId, exerciseId: exercise.id)
+            ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise.id)
                 .frame(maxHeight: .infinity)
         }
     }
@@ -140,9 +128,7 @@ struct ExerciseView: View {
     
     private var startNewAssessmentButton: some View {
         Button {
-            Task {
-                await assessmentVM.initRandomSubmission(exerciseId: exercise.id)
-            }
+            showAssessmentView = true
         } label: {
             Text("Start Assessment")
                 .foregroundColor(.white)
@@ -157,7 +143,7 @@ struct ExerciseView: View {
             group.addTask { await exerciseVM.fetchExercise(exerciseId: exercise.id) }
             group.addTask { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }
             group.addTask { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }
-            group.addTask { await submissionListVM.fetchTutorSubmissions(exerciseId: exercise.id) }
+            group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
         }
     }
 }

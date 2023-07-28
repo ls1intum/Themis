@@ -9,23 +9,24 @@ import SwiftUI
 import Combine
 
 struct ToolbarRedoButton: View {
-    private var cancellables: Set<AnyCancellable> = Set()
     
-    init() {
-        UndoManager.shared.publisher(for: \.canRedo).sink { _ in }.store(in: &cancellables)
-    }
+    @State private var canRedo = false
+    private let undoManager = ThemisUndoManager.shared
 
     var body: some View {
         Button {
             withAnimation(.easeInOut) {
-                UndoManager.shared.redo()
+                undoManager.redo()
             }
         } label: {
-            let redoIconColor: Color = UndoManager.shared.canRedo ? .white : .gray
+            let redoIconColor: Color = canRedo ? .white : .gray
             Image(systemName: "arrow.uturn.forward")
                 .foregroundStyle(redoIconColor)
         }
-        .disabled(!UndoManager.shared.canRedo)
+        .disabled(!canRedo)
+        .onReceive(NotificationCenter.default.publisher(for: undoManager.stateChangeNotification), perform: { _ in
+            canRedo = undoManager.canRedo
+        })
     }
 }
 

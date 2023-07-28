@@ -23,15 +23,17 @@ extension Exercise {
     }
     
     var isDisabled: Bool {
-        if case .programming = self {
+        switch self {
+        case .programming, .text:
             return false
+        default:
+            return true
         }
-        return true
     }
     
     var supportsAssessment: Bool {
         switch self {
-        case .quiz(exercise: _), .unknown(exercise: _):
+        case .quiz, .unknown:
             return false
         default:
             return true

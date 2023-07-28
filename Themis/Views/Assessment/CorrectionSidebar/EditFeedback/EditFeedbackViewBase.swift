@@ -12,25 +12,19 @@ import SharedModels
 
 struct EditFeedbackViewBase: View {
     var assessmentResult: AssessmentResult
-    @ObservedObject var cvm: CodeEditorViewModel
-
-    @State var detailText = ""
-    @State var score = 0.0
-    @Binding var showSheet: Bool
-    
+    weak var feedbackDelegate: (any FeedbackDelegate)?
     var idForUpdate: UUID?
-
-    let title: String?
-    let edit: Bool
-    let scope: ThemisFeedbackScope
-    
-    let gradingCriteria: [GradingCriterion]
-    
+    var incompleteFeedback: AssessmentFeedback?
     var feedbackSuggestion: FeedbackSuggestion?
     
-    private var isEditing: Bool {
-        idForUpdate != nil
-    }
+    let title: String?
+    let isEditing: Bool
+    let scope: ThemisFeedbackScope
+    let gradingCriteria: [GradingCriterion]
+    
+    @Binding var showSheet: Bool
+    @State private var detailText = ""
+    @State private var score = 0.0
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -58,7 +52,7 @@ struct EditFeedbackViewBase: View {
                         .foregroundColor(.getTextColor(forCredits: score)))
                     .background(Color.getBackgroundColor(forCredits: score))
                 
-                ScorePicker(score: $score)
+                ScorePicker(score: $score, maxScore: assessmentResult.maxPoints)
                     .frame(maxWidth: 130)
             }
             .animation(.easeIn, value: score)
@@ -85,7 +79,7 @@ struct EditFeedbackViewBase: View {
     
     private var editOrSaveButton: some View {
         Button {
-            if edit {
+            if isEditing {
                 updateFeedback()
             } else {
                 createFeedback()
@@ -114,8 +108,9 @@ struct EditFeedbackViewBase: View {
     }
     
     private func updateFeedback() {
-        if let id = idForUpdate {
-            assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score)
+        if let id = idForUpdate,
+           let updatedFeedback = assessmentResult.updateFeedback(id: id, detailText: detailText, credits: score) {
+            feedbackDelegate?.onFeedbackUpdate(updatedFeedback)
         }
     }
 
@@ -123,15 +118,11 @@ struct EditFeedbackViewBase: View {
         if let feedbackSuggestion {
             addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
         } else if scope == .inline {
-            let lines: NSRange? = cvm.selectedSectionParsed?.0
-            let columns: NSRange? = cvm.selectedSectionParsed?.1
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
                                               scope: scope,
-                                              file: cvm.selectedFile,
-                                              lines: lines,
-                                              columns: columns)
+                                              detail: incompleteFeedback?.detail)
             assessmentResult.addFeedback(feedback: feedback)
-            cvm.addInlineHighlight(feedbackId: feedback.id)
+            feedbackDelegate?.onFeedbackCreation(feedback)
         } else {
             assessmentResult.addFeedback(feedback: AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
                                                                                              credits: score,
@@ -145,21 +136,26 @@ struct EditFeedbackViewBase: View {
             return
         }
         assessmentResult.deleteFeedback(id: feedback.id)
-        cvm.deleteInlineHighlight(feedback: feedback)
+        feedbackDelegate?.onFeedbackDeletion(feedback)
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
+        guard var incompleteFeedbackDetail = incompleteFeedback?.detail as? ProgrammingFeedbackDetail else {
+            return
+        }
+        
         let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
+        incompleteFeedbackDetail.lines = lines
+        
         let feedback = AssessmentFeedback(
             baseFeedback: Feedback(detailText: feedbackSuggestion.text,
                                    credits: feedbackSuggestion.credits,
                                    type: .MANUAL_UNREFERENCED),
             scope: .inline,
-            file: cvm.selectedFile,
-            lines: lines
-        )
+            detail: incompleteFeedbackDetail)
+        
         assessmentResult.addFeedback(feedback: feedback)
-        cvm.addFeedbackSuggestionInlineHighlight(feedbackSuggestion: feedbackSuggestion, feedbackId: feedback.id)
+        feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
     }
 
     private func setStates() {
@@ -182,10 +178,9 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
     
     static var previews: some View {
         EditFeedbackViewBase(assessmentResult: result,
-                             cvm: cvm,
-                             showSheet: .constant(true),
+                             feedbackDelegate: cvm,
                              title: "Title",
-                             edit: false,
+                             isEditing: false,
                              scope: .inline,
                              gradingCriteria: [
                                 .init(id: 1, structuredGradingInstructions: [
@@ -207,6 +202,8 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
                                           instructionDescription: "Some instruction here",
                                           feedback: "feedback")
                                 ])
-                             ])
+                             ],
+                             showSheet: .constant(true)
+        )
     }
 }

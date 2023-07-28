@@ -12,7 +12,7 @@ import CodeEditor
 import Common
 
 class CodeEditorViewModel: ObservableObject {
-    let undoManager = UndoManager.shared
+    let undoManager = ThemisUndoManager.shared
     
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
@@ -29,9 +29,8 @@ class CodeEditorViewModel: ObservableObject {
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
     @Published var pencilModeDisabled = true
-    @Published var currentRepositoryType = RepositoryType.student
     @Published var allowsInlineFeedbackOperations = true
-    @Published var feedbackForSelectionId = ""
+    @Published var selectedFeedbackForEditingId = UUID()
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
     @Published var selectedFeedbackSuggestionId = ""
@@ -105,12 +104,7 @@ class CodeEditorViewModel: ObservableObject {
             self.fileTree = node.children ?? []
             self.openFiles = []
             self.selectedFile = nil
-            self.currentRepositoryType = repositoryType
             self.allowsInlineFeedbackOperations = (repositoryType == .student)
-
-            if repositoryType != .student {
-                self.pencilModeDisabled = true
-            }
         } catch {
             self.error = error
             log.error(String(describing: error))
@@ -188,7 +182,7 @@ class CodeEditorViewModel: ObservableObject {
                 let lines = extractLines(textComponents: components)
                 // assign the related file to the feedback (required for deleting)
                 if let referencedFile = allFiles.first(where: { $0.path == path }) {
-                    assessmentResult.assignFile(id: feedback.id, file: referencedFile)
+                    assign(file: referencedFile, tofeedbackWithId: feedback.id, on: assessmentResult)
                     // this is required because the lines of a file are only availabe after the code is fetched
                     await referencedFile.fetchCode(participationId: participationId)
                     // indicates a multiline highight
@@ -206,12 +200,28 @@ class CodeEditorViewModel: ObservableObject {
         undoManager.removeAllActions()
     }
     
+    private func assign(file: Node, tofeedbackWithId feedbackId: UUID, on assessmentResult: AssessmentResult) {
+        guard var feedback = assessmentResult.getFeedback(byId: feedbackId) else {
+            return
+        }
+        
+        var detail = ProgrammingFeedbackDetail()
+        
+        if let existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
+            detail = existingDetail // use existing detail to prevent overwriting
+        }
+        
+        detail.file = file
+        feedback.detail = detail
+        assessmentResult.updateFeedback(feedback: feedback)
+    }
+    
     @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
-        if let filePath = feedback.file?.path {
-            let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id.uuidString })
+        if let filePath = (feedback.detail as? ProgrammingFeedbackDetail)?.file?.path {
+            let highlight = inlineHighlights[filePath]?.first(where: { $0.id == feedback.id })
             scrollUtils.offsets = scrollUtils.offsets.filter({ $0.key != highlight?.range })
-            inlineHighlights[filePath]?.removeAll { $0.id == feedback.id.uuidString }
+            inlineHighlights[filePath]?.removeAll { $0.id == feedback.id }
         }
         
         if feedback.scope == .inline {
@@ -222,10 +232,9 @@ class CodeEditorViewModel: ObservableObject {
     @MainActor
     private func appendHighlight(feedbackId: UUID, range: NSRange, path: String) {
         let highlightedRange = HighlightedRange(
-            id: feedbackId.uuidString,
+            id: feedbackId,
             range: range,
-            color: UIColor.systemYellow,
-            cornerRadius: 8
+            color: UIColor(Color.neutralTextHighlight)
         )
         
         if (inlineHighlights.contains { $0.key == path }) {
@@ -249,12 +258,6 @@ class CodeEditorViewModel: ObservableObject {
     
     private func extractColumns(textComponents: [String]) -> [Int] {
         textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
-    }
-    
-    private func assignFileToFeedback(assessmentResult: AssessmentResult, path: String, id: UUID) {
-        if let referencedFile = allFiles.first(where: { $0.path == path }) {
-            assessmentResult.assignFile(id: id, file: referencedFile)
-        }
     }
     
     @MainActor
@@ -293,5 +296,37 @@ class CodeEditorViewModel: ObservableObject {
             }
             appendHighlight(feedbackId: id, range: range, path: file.path)
         }
+    }
+}
+
+extension CodeEditorViewModel: FeedbackDelegate {
+    @MainActor
+    func onFeedbackCreation(_ feedback: AssessmentFeedback) {
+        addInlineHighlight(feedbackId: feedback.id)
+    }
+    
+    @MainActor
+    func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
+        deleteInlineHighlight(feedback: feedback)
+    }
+    
+    @MainActor
+    func onFeedbackSuggestionSelection(_ suggestion: FeedbackSuggestion, _ feedback: AssessmentFeedback) {
+        addFeedbackSuggestionInlineHighlight(feedbackSuggestion: suggestion, feedbackId: feedback.id)
+    }
+    
+    @MainActor
+    func onFeedbackCellTap(_ feedback: AssessmentFeedback, participationId: Int?, templateParticipationId: Int?) {
+        guard let file = (feedback.detail as? ProgrammingFeedbackDetail)?.file,
+              let participationId,
+              let templateParticipationId else {
+            return
+        }
+        
+        withAnimation {
+            openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
+        }
+        
+        scrollUtils.range = inlineHighlights[file.path]?.first { $0.id == feedback.id }?.range
     }
 }

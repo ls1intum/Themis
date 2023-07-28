@@ -19,8 +19,10 @@ struct ProblemStatementView: View {
     /// Used for setting the height after the page is loaded. Without this, the problem statement webpage cannot resize properly.
     private let heightQuery = "document.body.getElementsByClassName('instructions__content')[0].scrollHeight"
 
-    init(courseId: Int, exerciseId: Int) {
-        if let url = URL(string: "/courses/\(courseId)/exercises/\(exerciseId)/problem-statement", relativeTo: UserSession.shared.institution?.baseURL) {
+    init(courseId: Int?, exerciseId: Int?) {
+        if let courseId,
+           let exerciseId,
+           let url = URL(string: "/courses/\(courseId)/exercises/\(exerciseId)/problem-statement", relativeTo: UserSession.shared.institution?.baseURL) {
             self._request = State(wrappedValue: URLRequest(url: url))
         }
     }
@@ -45,14 +47,21 @@ struct ProblemStatementView: View {
     }
     
     private var errorMessage: some View {
-        Text("Could not load content")
-            .textCase(.uppercase)
-            .font(.system(size: 14, weight: .medium))
-            .foregroundColor(.red)
-            .frame(maxWidth: .infinity)
-            .onAppear {
-                log.error("Problem statement could not be loaded")
-            }
+        VStack {
+            Image(systemName: "text.badge.xmark")
+                .font(.system(size: 40, weight: .medium))
+                .padding(.bottom, 10)
+            
+            Text("Could not load content")
+                .font(.system(size: 14, weight: .medium))
+        }
+        .padding(10)
+        .foregroundColor(.gray.opacity(0.8))
+        .textCase(.uppercase)
+        .frame(maxWidth: .infinity)
+        .onAppear {
+            log.error("Problem statement could not be loaded")
+        }
     }
 }
 

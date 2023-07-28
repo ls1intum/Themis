@@ -42,7 +42,7 @@ struct CodeView: View {
                 showAddFeedback: $cvm.showAddFeedback,
                 showEditFeedback: $cvm.showEditFeedback,
                 selectedSection: $cvm.selectedSection,
-                feedbackForSelectionId: $cvm.feedbackForSelectionId,
+                selectedFeedbackForEditingId: $cvm.selectedFeedbackForEditingId,
                 pencilOnly: $cvm.pencilModeDisabled,
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
@@ -71,7 +71,6 @@ struct CodeView: View {
     var editorFlags: CodeEditor.Flags {
         var flags: CodeEditor.Flags = []
         flags.insert(.selectable)
-        if colorScheme == .dark { flags.insert(.blackBackground) }
         if !readOnly { flags.insert(.feedbackMode) }
         return flags
     }

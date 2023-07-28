@@ -12,7 +12,6 @@ struct ExamSectionDetailView: View {
     @EnvironmentObject var courseVM: CourseViewModel
     
     let examID: Int
-    let courseID: Int
     let examTitle: String
     
     @State var exam: Exam?
@@ -23,7 +22,7 @@ struct ExamSectionDetailView: View {
             Section("Exercise Groups") {
                 ForEach(exercises) { exercise in
                     NavigationLink {
-                        ExerciseView(exercise: exercise, courseId: courseVM.shownCourse?.id ?? -1, exam: exam)
+                        ExerciseView(exercise: exercise, exam: exam)
                             .environmentObject(courseVM)
                     } label: {
                         HStack {
@@ -42,7 +41,7 @@ struct ExamSectionDetailView: View {
                 }
             }
         }.task {
-            let exam = try? await ExamServiceFactory.shared.getExamForAssessment(courseId: courseID, examId: examID)
+            let exam = try? await ExamServiceFactory.shared.getExamForAssessment(courseId: courseVM.shownCourseID ?? -1, examId: examID)
             
             if let exam {
                 self.exam = exam

@@ -11,13 +11,13 @@ import SharedModels
 
 struct FeedbackCellView: View {
 
-    var readOnly: Bool
+    var assessmentVM: AssessmentViewModel
     var assessmentResult: AssessmentResult
-    @ObservedObject var codeEditorVM: CodeEditorViewModel
+    weak var feedbackDelegate: (any FeedbackDelegate)?
 
     @State var feedback: AssessmentFeedback
-    private var editingDisabled: Bool { readOnly || !codeEditorVM.allowsInlineFeedbackOperations }
-    private var tapGestureDisabled: Bool { feedback.scope != .inline || !codeEditorVM.allowsInlineFeedbackOperations }
+    private var editingDisabled: Bool { assessmentVM.readOnly || !assessmentVM.allowsInlineFeedbackOperations }
+    private var tapGestureDisabled: Bool { feedback.scope != .inline || !assessmentVM.allowsInlineFeedbackOperations }
     
     @State var showEditFeedback = false
     
@@ -52,41 +52,34 @@ struct FeedbackCellView: View {
         }
         .onTapGesture {
             if !tapGestureDisabled {
-                withAnimation(.linear) {
+                withAnimation(.linear(duration: 0.3)) {
                     isTapped = true
                 }
-                if let file = feedback.file, let participationId = participationId, let templateParticipationId = templateParticipationId {
-                    withAnimation {
-                        codeEditorVM.openFile(file: file, participationId: participationId, templateParticipationId: templateParticipationId)
-                    }
-                    codeEditorVM.scrollUtils.range = codeEditorVM.inlineHighlights[file.path]?.first {
-                        $0.id == "\(feedback.id)"
-                    }?.range
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    withAnimation(.linear) {
-                        isTapped = false
-                    }
+                
+                feedbackDelegate?.onFeedbackCellTap(feedback, participationId: participationId, templateParticipationId: templateParticipationId)
+                
+                withAnimation(.linear(duration: 0.3)) {
+                    isTapped = false
                 }
             }
         }
-        .scaleEffect(isTapped ? 1.05 : 1.0)
         .sheet(isPresented: $showEditFeedback) {
             EditFeedbackView(
                 assessmentResult: assessmentResult,
-                cvm: codeEditorVM,
+                feedbackDelegate: feedbackDelegate,
                 scope: feedback.scope,
-                showSheet: $showEditFeedback,
                 idForUpdate: feedback.id,
-                gradingCriteria: gradingCriteria
+                gradingCriteria: gradingCriteria,
+                showSheet: $showEditFeedback
             )
         }
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 5)
             .stroke(lineWidth: 1)
             .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
-            .scaleEffect(isTapped ? 1.05 : 1.0))
+        )
         .background(Color.getBackgroundColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
+        .scaleEffect(isTapped ? 1.05 : 1.0)
     }
     
     private var pointLabel: some View {

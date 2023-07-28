@@ -34,7 +34,7 @@ struct ExamSection: View {
                 VStack {
                     ForEach(exams, id: \.id) { exam in
                         NavigationLink {
-                            ExamSectionDetailView(examID: exam.id, courseID: courseID, examTitle: exam.title ?? "Untitled Exam")
+                            ExamSectionDetailView(examID: exam.id, examTitle: exam.title ?? "Untitled Exam")
                                 .environmentObject(courseVM)
                         } label: {
                             ExamListItem(exam: exam, dateProperties: [

@@ -33,6 +33,7 @@ struct RightGripView: View {
             if paneVM.dragWidthRight > 0 {
                 Color.themisPrimary
                     .frame(maxWidth: 7, maxHeight: .infinity)
+                    .ignoresSafeArea()
                 
                 Image(systemName: "minus")
                     .resizable()

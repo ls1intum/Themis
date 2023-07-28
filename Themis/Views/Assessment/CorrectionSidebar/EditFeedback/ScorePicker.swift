@@ -10,9 +10,9 @@ import SwiftUI
 struct ScorePicker: View {
     @Binding var score: Double
     
-    let maxScore = Double(10)
+    var maxScore: Double
     
-    var pickerRange: [Double] {
+    private var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
             .sorted { $0 > $1 }
     }
@@ -44,6 +44,6 @@ struct ScorePicker: View {
 
 struct ScorePicker_Previews: PreviewProvider {
     static var previews: some View {
-        ScorePicker(score: .constant(0.0))
+        ScorePicker(score: .constant(0.0), maxScore: 15.0)
     }
 }

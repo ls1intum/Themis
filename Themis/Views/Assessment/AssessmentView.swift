@@ -1,16 +1,18 @@
+//
+//  AssessmentView.swift
+//  Themis
+//
+//  Created by Tarlan Ismayilsoy on 23.05.23.
+//
+// swiftlint:disable closure_body_length
+
 import SwiftUI
 import SharedModels
 
-// swiftlint:disable closure_body_length
-
-
 struct AssessmentView: View {
-    @EnvironmentObject var courseVM: CourseViewModel
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject var assessmentVM: AssessmentViewModel
-    @ObservedObject var assessmentResult: AssessmentResult
-    @StateObject var codeEditorVM = CodeEditorViewModel()
-    @StateObject var paneVM = PaneViewModel()
+    @StateObject var assessmentVM: AssessmentViewModel
+    @StateObject var assessmentResult: AssessmentResult
     
     @State private var showCancelDialog = false
     @State private var showNoSubmissionsAlert = false
@@ -22,204 +24,145 @@ struct AssessmentView: View {
     let exercise: Exercise
     
     var submissionId: Int?
+    var participationId: Int?
+    var resultId: Int?
+    
+    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool = false) {
+        self.exercise = exercise
+        self.submissionId = submissionId
+        self.participationId = participationId
+        self.resultId = resultId
+        
+        let newAssessmentVM = AssessmentViewModel(exercise: exercise,
+                                                  submissionId: submissionId,
+                                                  participationId: participationId,
+                                                  resultId: resultId,
+                                                  readOnly: readOnly)
+        self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
+        self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
+    }
     
     var body: some View {
-        ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-            HStack(spacing: 0) {
-                if paneVM.showLeftPane {
-                    filetreeWithPlaceholder
-                        .frame(width: paneVM.dragWidthLeft)
+        viewForExerciseType
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbarBackground(Color.themisPrimary, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .onAppear {
+                assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
+            }
+            .onDisappear {
+                ThemisUndoManager.shared.removeAllActions()
+                assessmentVM.resetToolbarProperties()
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    ToolbarCancelButton(assessmentVM: assessmentVM, presentationMode: presentationMode)
+                }
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    AssessmentModeSymbol(exerciseTitle: exercise.baseExercise.title, readOnly: assessmentVM.readOnly)
+                }
+                
+                if assessmentVM.loading {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        ProgressView()
+                            .frame(width: 20)
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    }
+                }
+                
+                if !assessmentVM.readOnly {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        ToolbarUndoButton()
+                    }
                     
-                    LeftGripView(paneVM: paneVM)
-                }
-                
-                CodeEditorView(
-                    cvm: codeEditorVM,
-                    showFileTree: $paneVM.showLeftPane,
-                    readOnly: assessmentVM.readOnly
-                )
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Group {
-                    RightGripView(paneVM: paneVM)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        ToolbarRedoButton()
+                    }
                     
-                    correctionWithPlaceholder
-                        .frame(width: paneVM.dragWidthRight)
-                }
-                .animation(.default, value: paneVM.showRightPane)
-            }
-            .animation(.default, value: paneVM.showLeftPane)
-            
-            ToolbarFileTreeToggleButton(paneVM: paneVM)
-            .padding(.top, 4)
-            .padding(.leading, 13)
-        }
-        .onAppear {
-            assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
-        }
-        .onDisappear {
-            UndoManager.shared.removeAllActions()
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbarBackground(Color.themisPrimary, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                ToolbarCancelButton(assessmentVM: assessmentVM, presentationMode: presentationMode)
-            }
-            
-            ToolbarItem(placement: .navigationBarLeading) {
-                AssessmentModeSymbol(exerciseTitle: exercise.baseExercise.title, readOnly: assessmentVM.readOnly)
-            }
-            
-            if assessmentVM.loading {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    ProgressView()
-                        .frame(width: 20)
-                        .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
-                }
-            }
-
-            if !assessmentVM.readOnly {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    ToolbarUndoButton()
-                }
-                
-                ToolbarItem(placement: .navigationBarLeading) {
-                    ToolbarRedoButton()
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                            .disabled(!assessmentVM.allowsInlineFeedbackOperations)
+                    }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    ToolbarToggleButton(toggleVariable: $codeEditorVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
-                        .disabled(!codeEditorVM.allowsInlineFeedbackOperations)
+                    ToolbarToggleButton(toggleVariable: $showStepper, iconImageSystemName: "textformat.size")
+                        .popover(isPresented: $showStepper) {
+                            EditorFontSizeStepperView(fontSize: $assessmentVM.fontSize)
+                        }
                 }
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                ToolbarToggleButton(toggleVariable: $showStepper, iconImageSystemName: "textformat.size")
-                    .popover(isPresented: $showStepper) {
-                        EditorFontSizeStepperView(fontSize: $codeEditorVM.editorFontSize)
-                    }
-            }
-            
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                CustomProgressView(progress: assessmentVM.assessmentResult.score,
-                                   max: assessmentVM.assessmentResult.maxPoints)
                 
-                ToolbarPointsLabel(assessmentResult: assessmentResult, submission: assessmentVM.submission)
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                ToolbarSaveButton(assessmentVM: assessmentVM)
-                    .disabled(assessmentVM.readOnly || assessmentVM.loading)
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                ToolbarToggleButton(toggleVariable: $showSubmitConfirmation, text: "Submit")
-                    .buttonStyle(ThemisButtonStyle(color: Color.themisGreen))
-                    .disabled(assessmentVM.readOnly || assessmentVM.loading)
-            }
-        }
-        .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
-            Button("OK", role: .cancel) {
-                presentationMode.wrappedValue.dismiss()
-            }
-        }
-        .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
-            Button("Yes") {
-                Task {
-                    await assessmentVM.sendAssessment(submit: true)
-                    await assessmentVM.notifyThemisML(exerciseId: exercise.baseExercise.id)
-                    showNavigationOptions.toggle()
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    CustomProgressView(progress: assessmentVM.assessmentResult.points,
+                                       max: assessmentVM.assessmentResult.maxPoints)
+                    
+                    ToolbarPointsLabel(assessmentResult: assessmentResult, submission: assessmentVM.submission)
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarSaveButton(assessmentVM: assessmentVM)
+                        .disabled(assessmentVM.readOnly || assessmentVM.loading)
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarToggleButton(toggleVariable: $showSubmitConfirmation, text: "Submit")
+                        .buttonStyle(ThemisButtonStyle(color: Color.themisGreen))
+                        .disabled(assessmentVM.readOnly || assessmentVM.loading)
                 }
             }
-            Button("Cancel", role: .cancel) {}
-        }
-        .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
-            Button("Next Submission") {
-                Task {
-                    await assessmentVM.initRandomSubmission(exerciseId: exercise.baseExercise.id)
-                    if assessmentVM.submission == nil {
-                        showNoSubmissionsAlert = true
+            .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
+                Button("OK", role: .cancel) {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+            .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
+                Button("Yes") {
+                    Task {
+                        await assessmentVM.submitAssessment()
+                        await assessmentVM.notifyThemisML()
+                        showNavigationOptions.toggle()
                     }
                 }
+                Button("Cancel", role: .cancel) {}
             }
-            Button("Finish assessing") {
-                presentationMode.wrappedValue.dismiss()
-            }
-        }
-        .sheet(isPresented: $codeEditorVM.showAddFeedback, onDismiss: {
-            codeEditorVM.selectedFeedbackSuggestionId = ""
-        }, content: {
-            AddFeedbackView(
-                assessmentResult: assessmentVM.assessmentResult,
-                codeEditorVM: codeEditorVM,
-                scope: .inline,
-                showSheet: $codeEditorVM.showAddFeedback,
-                gradingCriteria: assessmentVM.gradingCriteria,
-                feedbackSuggestion: codeEditorVM.selectedFeedbackSuggestion
-            )
-        })
-        .sheet(isPresented: $codeEditorVM.showEditFeedback) {
-            if let feedback = assessmentVM.getFeedback(byId: codeEditorVM.feedbackForSelectionId) {
-                EditFeedbackView(
-                    assessmentResult: assessmentVM.assessmentResult,
-                    cvm: codeEditorVM,
-                    scope: .inline,
-                    showSheet: $codeEditorVM.showEditFeedback,
-                    idForUpdate: feedback.id,
-                    gradingCriteria: assessmentVM.gradingCriteria
-                )
-            }
-        }
-        .task {
-            if let submissionId, assessmentVM.submission == nil {
-                await assessmentVM.getSubmission(id: submissionId)
-            }
-            if let pId = assessmentVM.participation?.id {
-                await codeEditorVM.initFileTree(participationId: pId, repositoryType: .student)
-                await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
-                await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
-            }
-        }
-        .errorAlert(error: $codeEditorVM.error)
-        .errorAlert(error: $assessmentVM.error)
-    }
-    
-    var filetreeWithPlaceholder: some View {
-        VStack {
-            if paneVM.leftPaneAsPlaceholder {
-                EmptyView()
-            } else {
-                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
-                    .onChange(of: repositorySelection) { newRepositoryType in
-                        if let participationId = assessmentVM.participationId(for: newRepositoryType) {
-                            Task {
-                                await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
-                                if newRepositoryType == .student {
-                                    await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
-                                                                                   participationId: participationId)
-                                }
-                            }
+            .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
+                Button("Next Submission") {
+                    Task {
+                        assessmentVM.resetForNewAssessment()
+                        await assessmentVM.initRandomSubmission()
+                        NotificationCenter.default.post(name: Notification.Name.nextAssessmentStarted, object: nil)
+                        
+                        if assessmentVM.submission == nil {
+                            showNoSubmissionsAlert = true
                         }
                     }
+                }
+                Button("Finish assessing") {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
-        }
+            .errorAlert(error: $assessmentVM.error, onDismiss: { presentationMode.wrappedValue.dismiss() })
     }
     
-    private var correctionWithPlaceholder: some View {
-        VStack {
-            if paneVM.rightPaneAsPlaceholder {
-                EmptyView()
-            } else {
-                CorrectionSidebarView(
-                    assessmentResult: $assessmentVM.assessmentResult,
-                    assessmentVM: assessmentVM,
-                    cvm: codeEditorVM,
-                    courseId: courseVM.shownCourseID ?? -1
-                )
-            }
+    @ViewBuilder
+    private var viewForExerciseType: some View {
+        switch exercise {
+        case .programming(exercise: _):
+            ProgrammingAssessmentView(assessmentVM: assessmentVM,
+                                      assessmentResult: assessmentResult,
+                                      exercise: exercise,
+                                      submissionId: submissionId)
+        case .text(exercise: _):
+            TextAssessmentView(assessmentVM: assessmentVM,
+                               assessmentResult: assessmentResult,
+                               exercise: exercise,
+                               submissionId: submissionId,
+                               participationId: participationId,
+                               resultId: resultId)
+        default:
+            Text("Exercise not supported")
         }
     }
 }

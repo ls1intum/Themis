@@ -9,9 +9,9 @@ import SwiftUI
 import SharedModels
 
 struct FeedbackListView: View {
-    var readOnly: Bool
+    @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
-    @ObservedObject var codeEditorVM: CodeEditorViewModel
+    weak var feedbackDelegate: (any FeedbackDelegate)?
     
     @State var showAddFeedback = false
     
@@ -19,7 +19,7 @@ struct FeedbackListView: View {
     var templateParticipationId: Int?
     let gradingCriteria: [GradingCriterion]
     
-    private var isFeedbackCreationDisabled: Bool { readOnly || !codeEditorVM.allowsInlineFeedbackOperations }
+    private var isFeedbackCreationDisabled: Bool { assessmentVM.readOnly || !assessmentVM.allowsInlineFeedbackOperations }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -34,10 +34,10 @@ struct FeedbackListView: View {
         }.sheet(isPresented: $showAddFeedback) {
             AddFeedbackView(
                 assessmentResult: assessmentResult,
-                codeEditorVM: codeEditorVM,
+                feedbackDelegate: feedbackDelegate,
                 scope: .general,
-                showSheet: $showAddFeedback,
-                gradingCriteria: gradingCriteria
+                gradingCriteria: gradingCriteria,
+                showSheet: $showAddFeedback
             )
         }
     }
@@ -46,16 +46,16 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.generalFeedback, id: \.self) { feedback in
                 FeedbackCellView(
-                    readOnly: readOnly,
+                    assessmentVM: assessmentVM,
                     assessmentResult: assessmentResult,
-                    codeEditorVM: codeEditorVM,
+                    feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
                     gradingCriteria: gradingCriteria
                 )
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color("sidebarBackground"))
             }
-            .onDelete(perform: delete(at:))
+            .onDelete { delete(at: $0, in: assessmentResult.generalFeedback) }
         } header: {
             HStack {
                 Text("General Feedback")
@@ -74,9 +74,9 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.inlineFeedback, id: \.self) { feedback in
                 FeedbackCellView(
-                    readOnly: readOnly,
+                    assessmentVM: assessmentVM,
                     assessmentResult: assessmentResult,
-                    codeEditorVM: codeEditorVM,
+                    feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
                     participationId: participationId,
                     templateParticipationId: templateParticipationId,
@@ -85,7 +85,7 @@ struct FeedbackListView: View {
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color("sidebarBackground"))
             }
-            .onDelete(perform: delete(at:))
+            .onDelete { delete(at: $0, in: assessmentResult.inlineFeedback) }
         } header: {
             HStack {
                 Text("Inline Feedback")
@@ -98,9 +98,9 @@ struct FeedbackListView: View {
         Section {
             ForEach(assessmentResult.automaticFeedback, id: \.self) { feedback in
                 FeedbackCellView(
-                    readOnly: readOnly,
+                    assessmentVM: assessmentVM,
                     assessmentResult: assessmentResult,
-                    codeEditorVM: codeEditorVM,
+                    feedbackDelegate: feedbackDelegate,
                     feedback: feedback,
                     gradingCriteria: gradingCriteria
                 )
@@ -115,28 +115,28 @@ struct FeedbackListView: View {
         }.headerProminence(.increased)
     }
     
-    private func delete(at indexSet: IndexSet) {
+    private func delete(at indexSet: IndexSet, in feedbackArray: [AssessmentFeedback]) {
         indexSet
-            .map { assessmentResult.feedbacks[$0] }
+            .map { feedbackArray[$0] }
             .forEach {
                 assessmentResult.deleteFeedback(id: $0.id)
                 if $0.scope == .inline {
-                    codeEditorVM.deleteInlineHighlight(feedback: $0)
+                    feedbackDelegate?.onFeedbackDeletion($0)
                 }
             }
     }
 }
 
  struct FeedbackListView_Previews: PreviewProvider {
-    static let assessment = AssessmentViewModel(readOnly: false)
+    static let assessmentVM = AssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     static let codeEditor = CodeEditorViewModel()
     @State static var assessmentResult = AssessmentResult()
     
     static var previews: some View {
         FeedbackListView(
-            readOnly: false,
+            assessmentVM: assessmentVM,
             assessmentResult: assessmentResult,
-            codeEditorVM: codeEditor,
+            feedbackDelegate: codeEditor,
             gradingCriteria: []
         )
         .onAppear(perform: {
