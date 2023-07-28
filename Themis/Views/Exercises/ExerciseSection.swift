@@ -35,7 +35,7 @@ struct ExerciseSection: View {
                     .customSectionTitle()
                 
                 VStack {
-                    ForEach(shownExercises, id: \.id) { exercise in
+                    ForEach(shownExercises, id: \.self) { exercise in
                         NavigationLink {
                             ExerciseView(exercise: exercise)
                                 .environmentObject(courseVM)
