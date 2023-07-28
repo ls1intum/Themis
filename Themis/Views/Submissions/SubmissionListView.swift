@@ -10,8 +10,8 @@ import SharedModels
 
 struct SubmissionListView: View {
     @EnvironmentObject var courseVM: CourseViewModel
+    @ObservedObject var submissionListVM: SubmissionListViewModel
     
-    var submissionListVM = SubmissionListViewModel()
     let exercise: Exercise
     let submissionStatus: SubmissionStatus
     
@@ -55,7 +55,8 @@ struct SubmissionListView: View {
 struct SubmissionListView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedPreview {
-            SubmissionListView(exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)),
+            SubmissionListView(submissionListVM: SubmissionListViewModel(),
+                               exercise: Exercise.programming(exercise: ProgrammingExercise(id: 1)),
                                submissionStatus: .open)
         }
         .previewInterfaceOrientation(.landscapeLeft)
