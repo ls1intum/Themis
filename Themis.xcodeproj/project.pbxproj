@@ -1609,7 +1609,7 @@
 			repositoryURL = "https://github.com/ls1intum/artemis-ios-core-modules";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				minimumVersion = 3.0.0;
 			};
 		};
 		E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
