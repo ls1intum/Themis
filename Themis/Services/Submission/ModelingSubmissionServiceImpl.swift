@@ -16,8 +16,23 @@ class ModelingSubmissionServiceImpl: SubmissionService {
     
     let client = APIClient()
     
-    func getAllSubmissions(exerciseId: Int) async throws -> [SharedModels.Submission] {
-        throw UserFacingError.operationNotSupportedForExercise
+    // MARK: - Get All Submissions
+    private struct GetAllSubmissionsRequest: APIRequest {
+        typealias Response = [Submission]
+        
+        var exerciseId: Int
+        
+        var method: HTTPMethod {
+            .get
+        }
+        
+        var resourceName: String {
+            "api/exercises/\(exerciseId)/modeling-submissions"
+        }
+    }
+    
+    func getAllSubmissions(exerciseId: Int) async throws -> [Submission] {
+        try await client.sendRequest(GetAllSubmissionsRequest(exerciseId: exerciseId)).get().0
     }
     
     // MARK: - Get Tutor Submissions
