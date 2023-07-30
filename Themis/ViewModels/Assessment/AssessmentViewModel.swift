@@ -1,4 +1,3 @@
-// swiftlint:disable type_body_length
 import Foundation
 import SwiftUI
 import Combine
@@ -65,79 +64,10 @@ class AssessmentViewModel: ObservableObject {
     
     @MainActor
     func initSubmission() async {
-        guard submission == nil else {
-            return
-        }
-        
-        switch exercise {
-        case .programming:
-            if readOnly {
-                if let participationId {
-                    await getReadOnlySubmission(participationId: participationId)
-                } else {
-                    self.error = UserFacingError.participationNotFound
-                    log.error("Could not find participation for exercise: \(exercise.baseExercise.title ?? "")")
-                }
-            } else {
-                if let submissionId {
-                    await getSubmission(submissionId: submissionId)
-                } else {
-                    await initRandomSubmission()
-                }
-            }
-        case .text:
-            if readOnly {
-                self.error = UserFacingError.operationNotSupportedForExercise
-            } else {
-                if let participationId, let submissionId {
-                    await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
-                } else {
-                    await initRandomSubmission()
-                }
-            }
-        case .modeling:
-            if readOnly {
-                // TODO: implement
-            } else {
-                if let submissionId {
-                    await getSubmission(submissionId: submissionId)
-                } else {
-                    await initRandomSubmission()
-                }
-            }
-        default:
-            log.warning("Attempt to assess an unknown exercise")
-        }
-        
-        ThemisUndoManager.shared.removeAllActions()
+        log.error("This function should be overridden")
+        self.error = UserFacingError.unknown
     }
     
-    @MainActor
-    private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
-        guard let participationId, let submissionId else {
-            return
-        }
-        
-        loading = true
-        defer {
-            loading = false
-        }
-        do {
-            let assessmentService = AssessmentServiceFactory.service(for: exercise)
-            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(participationId: participationId,
-                                                                                                   submissionId: submissionId).baseParticipation
-            self.submission = fetchedParticipation.submissions?.last?.baseSubmission
-            self.participation = fetchedParticipation
-            assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
-            assessmentResult.setReferenceData(basedOn: submission)
-            ThemisUndoManager.shared.removeAllActions()
-        } catch {
-            self.submission = nil
-            self.error = error
-            log.info(String(describing: error))
-        }
-    }
-
     @MainActor
     func initRandomSubmission() async {
         loading = true
@@ -192,35 +122,8 @@ class AssessmentViewModel: ObservableObject {
     
     @MainActor
     func getReadOnlySubmission(participationId: Int) async {
-        guard readOnly else {
-            self.error = UserFacingError.unknown
-            log.error("This function should only be called for read-only mode")
-            return
-        }
-        
-        loading = true
-        defer {
-            loading = false
-        }
-        
-        let submissionService = SubmissionServiceFactory.service(for: exercise)
-        
-        do {
-            let result = try await submissionService.getResultFor(participationId: participationId)
-            self.submission = result.submission?.baseSubmission
-            self.participation = result.participation?.baseParticipation
-            assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
-            
-            if case .programmingExerciseStudent(participation: ) = result.participation,
-                let exerciseId = participation?.exercise?.id {
-                let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
-                    .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
-                self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
-            }
-        } catch {
-            self.error = error
-            log.error(String(describing: error))
-        }
+        log.error("This function should be overridden")
+        self.error = UserFacingError.unknown
     }
 
     @MainActor
@@ -310,15 +213,40 @@ class AssessmentViewModel: ObservableObject {
     func getFeedback(byId id: UUID) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { $0.id == id })
     }
-    
-    func participationId(for repoType: RepositoryType) -> Int? { // TODO: move somewhere else (this is programming exercise-only)
-        switch repoType {
-        case .student:
-            return participation?.id
-        case .solution:
-            return participation?.getExercise(as: ProgrammingExercise.self)?.solutionParticipation?.id
-        case .template:
-            return participation?.getExercise(as: ProgrammingExercise.self)?.templateParticipation?.id
+}
+
+enum AssessmentViewModelFactory {
+    static func assessmentViewModel(for exercise: Exercise,
+                                    submissionId: Int? = nil,
+                                    participationId: Int? = nil,
+                                    resultId: Int? = nil,
+                                    readOnly: Bool) -> AssessmentViewModel {
+        switch exercise {
+        case .programming:
+            return ProgrammingAssessmentViewModel(exercise: exercise,
+                                                  submissionId: submissionId,
+                                                  participationId: participationId,
+                                                  resultId: resultId,
+                                                  readOnly: readOnly)
+        case .text:
+            return TextAssessmentViewModel(exercise: exercise,
+                                           submissionId: submissionId,
+                                           participationId: participationId,
+                                           resultId: resultId,
+                                           readOnly: readOnly)
+        case .modeling:
+            return ModelingAssessmentViewModel(exercise: exercise,
+                                               submissionId: submissionId,
+                                               participationId: participationId,
+                                               resultId: resultId,
+                                               readOnly: readOnly)
+        default:
+            log.warning("Could not find the corresponding AssessmentViewModel subtype for exercise \(exercise)")
+            return AssessmentViewModel(exercise: exercise,
+                                       submissionId: submissionId,
+                                       participationId: participationId,
+                                       resultId: resultId,
+                                       readOnly: readOnly)
         }
     }
 }

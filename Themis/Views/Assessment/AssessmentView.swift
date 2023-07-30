@@ -31,11 +31,11 @@ struct AssessmentView: View {
         self.participationId = participationId
         self.resultId = resultId
         
-        let newAssessmentVM = AssessmentViewModel(exercise: exercise,
-                                                  submissionId: submissionId,
-                                                  participationId: participationId,
-                                                  resultId: resultId,
-                                                  readOnly: readOnly)
+        let newAssessmentVM = AssessmentViewModelFactory.assessmentViewModel(for: exercise,
+                                                                             submissionId: submissionId,
+                                                                             participationId: participationId,
+                                                                             resultId: resultId,
+                                                                             readOnly: readOnly)
         self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
         self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
     }

@@ -95,7 +95,8 @@ struct ProgrammingAssessmentView: View {
             } else {
                 FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
                     .onChange(of: repositorySelection) { newRepositoryType in
-                        if let participationId = assessmentVM.participationId(for: newRepositoryType) {
+                        if let programmingAssessmentVM = assessmentVM as? ProgrammingAssessmentViewModel,
+                           let participationId = programmingAssessmentVM.participationId(for: newRepositoryType) {
                             Task {
                                 await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
                                 assessmentVM.allowsInlineFeedbackOperations = (newRepositoryType == .student)

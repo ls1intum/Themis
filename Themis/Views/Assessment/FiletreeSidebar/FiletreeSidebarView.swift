@@ -84,7 +84,9 @@ struct FiletreeSidebarView: View {
     }
     
     private func openFile(_ file: Node) {
-        guard let participationId = assessmentVM.participationId(for: repositorySelection) else {
+        guard
+            let programmingAssessmentVM = assessmentVM as? ProgrammingAssessmentViewModel,
+            let participationId = programmingAssessmentVM.participationId(for: repositorySelection) else {
             return
         }
         
