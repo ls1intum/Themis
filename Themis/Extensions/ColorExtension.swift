@@ -35,6 +35,7 @@ extension Color {
     
     // Modeling Assessment
     static let selectedUMLItemColor = themisSecondary.opacity(0.5)
+    static let modelingSuggestedFeedback = UIColor(netHex: 0x17A2B8).suColor.opacity(0.3)
 }
 
 extension Color {

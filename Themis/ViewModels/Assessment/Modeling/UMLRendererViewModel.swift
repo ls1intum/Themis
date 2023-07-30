@@ -48,7 +48,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             log.error("Could not parse UML string: \(error)")
         }
         
-        let feedbacks = assessmentResult.inlineFeedback
+        let feedbacks = assessmentResult.inlineFeedback + assessmentResult.automaticFeedback
         
         setupHighlights(basedOn: feedbacks)
     }
@@ -163,7 +163,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
                                             rect: elementRect,
-                                            badgeLocation: badgeLocation)
+                                            badgeLocation: badgeLocation,
+                                            isSuggested: assessmentFeedback.baseFeedback.type?.isAutomatic ?? false)
             highlights.append(newHighlight)
         }
         
@@ -234,6 +235,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                                                          y: badgeCircleY,
                                                          width: badgeCircleSideLength,
                                                          height: badgeCircleSideLength))
+            
+            if highlight.isSuggested {
+                context.fill(Path(highlight.rect), with: .color(Color.modelingSuggestedFeedback))
+            }
         }
     }
     
@@ -286,4 +291,5 @@ struct UMLHighlight {
     var symbol: UMLBadgeSymbol
     var rect: CGRect
     var badgeLocation: CGPoint
+    var isSuggested: Bool
 }
