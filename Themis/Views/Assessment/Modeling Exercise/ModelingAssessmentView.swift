@@ -15,6 +15,8 @@ struct ModelingAssessmentView: View {
     @StateObject private var umlRendererVM = UMLRendererViewModel()
     @StateObject private var paneVM = PaneViewModel(mode: .rightOnly)
     
+    private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
+    
     var body: some View {
         HStack(spacing: 0) {
             UMLRenderer(umlRendererVM: umlRendererVM)
@@ -55,6 +57,12 @@ struct ModelingAssessmentView: View {
                 gradingCriteria: assessmentVM.gradingCriteria,
                 showSheet: $umlRendererVM.showAddFeedback
             )
+        })
+        .onReceive(didStartNextAssessment, perform: { _ in
+            guard assessmentVM.submission != nil else {
+                return
+            }
+            umlRendererVM.setup(basedOn: assessmentVM.submission, assessmentResult)
         })
         .onChange(of: umlRendererVM.showAddFeedback) { newValue in
             if !newValue {

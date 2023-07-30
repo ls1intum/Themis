@@ -35,6 +35,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
               let modelData = modelingSubmission.model?.data(using: .utf8) else {
             return
         }
+        self.umlModel = nil
+        self.selectedElement = nil
+        self.highlights = []
+        self.orphanElements = []
         
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
@@ -45,6 +49,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
         
         let feedbacks = assessmentResult.inlineFeedback
+        
         setupHighlights(basedOn: feedbacks)
     }
     
