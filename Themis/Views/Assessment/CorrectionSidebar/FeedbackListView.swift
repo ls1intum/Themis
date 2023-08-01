@@ -50,6 +50,8 @@ struct FeedbackListView: View {
             && !assessmentResult.automaticFeedback.isEmpty {
             // swiftlint:disable line_length
             ArtemisHintBox(text: "Congratulations! To save you some time, parts of this model were already assessed automatically. Please review the automatic assessment and assess the rest of the model afterwards. By submitting the assessment you also confirm the automatic assessment. Please be aware that you are responsible for the whole assessment.")
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color("sidebarBackground"))
             // swiftlint:enable line_length
         }
     }
