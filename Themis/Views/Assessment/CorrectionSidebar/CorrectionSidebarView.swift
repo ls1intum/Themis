@@ -54,8 +54,7 @@ struct CorrectionSidebarView: View {
                         }
                     case .generalFeedback:
                         FeedbackListView(
-                            readOnly: assessmentVM.readOnly,
-                            allowsInlineFeedbackOperations: assessmentVM.allowsInlineFeedbackOperations,
+                            assessmentVM: assessmentVM,
                             assessmentResult: assessmentResult,
                             feedbackDelegate: feedbackDelegate,
                             participationId: assessmentVM.participation?.id,

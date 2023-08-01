@@ -147,19 +147,19 @@ struct AssessmentView: View {
     @ViewBuilder
     private var viewForExerciseType: some View {
         switch exercise {
-        case .programming(exercise: _):
+        case .programming:
             ProgrammingAssessmentView(assessmentVM: assessmentVM,
                                       assessmentResult: assessmentResult,
                                       exercise: exercise,
                                       submissionId: submissionId)
-        case .text(exercise: _):
+        case .text:
             TextAssessmentView(assessmentVM: assessmentVM,
                                assessmentResult: assessmentResult,
                                exercise: exercise,
                                submissionId: submissionId,
                                participationId: participationId,
                                resultId: resultId)
-        case .modeling(exercise: ):
+        case .modeling:
             ModelingAssessmentView(assessmentVM: assessmentVM,
                                    assessmentResult: assessmentResult)
         default:

@@ -110,7 +110,7 @@ struct ModelingAssessmentServiceImpl: AssessmentService {
     }
     
     // MARK: - Fetch Participation For Submission
-    func fetchParticipationForSubmission(participationId: Int, submissionId: Int) async throws -> Participation {
+    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
         throw UserFacingError.operationNotSupportedForExercise
     }
 }

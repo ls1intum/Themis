@@ -25,7 +25,7 @@ extension Exercise {
     /// Indicates whether this exercise is assessable in the current version of Themis
     var isDisabled: Bool {
         switch self {
-        case .programming(exercise: _), .text(exercise: _), .modeling(exercise: _):
+        case .programming, .text, .modeling:
             return false
         default:
             return true
@@ -35,7 +35,7 @@ extension Exercise {
     /// Indicates whether this exercise is assessable in general
     var supportsAssessment: Bool {
         switch self {
-        case .quiz(exercise: _), .unknown(exercise: _):
+        case .quiz, .unknown:
             return false
         default:
             return true

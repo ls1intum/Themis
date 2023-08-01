@@ -159,10 +159,8 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
-        
+        defer { loading = false }
+                
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
         do {
@@ -181,9 +179,7 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer {
-            loading = false
-        }
+        defer { loading = false }
         
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         

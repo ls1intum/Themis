@@ -41,8 +41,7 @@ class TextAssessmentViewModel: AssessmentViewModel {
         }
         do {
             let assessmentService = AssessmentServiceFactory.service(for: exercise)
-            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(participationId: participationId,
-                                                                                                   submissionId: submissionId).baseParticipation
+            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(submissionId: submissionId).baseParticipation
             self.submission = fetchedParticipation.submissions?.last?.baseSubmission
             self.participation = fetchedParticipation
             assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
