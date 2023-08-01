@@ -52,7 +52,7 @@ class AssessmentResult: Encodable, ObservableObject {
     }
 
     var automaticFeedback: [AssessmentFeedback] {
-        feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false && $0.baseFeedback.credits != 0 }
+        feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false }
     }
     
     func reset() {
