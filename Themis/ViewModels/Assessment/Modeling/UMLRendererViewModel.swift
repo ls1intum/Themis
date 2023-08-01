@@ -13,6 +13,24 @@ import SwiftUI
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
+    
+    /// Intended to get user's attention to a particular UML item temporarily
+    @Published var temporaryHighlight: UMLHighlight? {
+        willSet {
+            if newValue != nil {
+                temporaryHighlightRemovalTask?.cancel()
+                
+                temporaryHighlightRemovalTask = Task { [weak self] in
+                    try await Task.sleep(nanoseconds: 400_000_000)
+                    try Task.checkCancellation()
+                    await MainActor.run(body: { [weak self] in
+                        self?.temporaryHighlight = nil
+                    })
+                }
+            }
+        }
+    }
+    
     @Published var highlights: [UMLHighlight] = [] {
         didSet {
             undoManager.registerUndo(withTarget: self) { target in
@@ -23,6 +41,9 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
+    
+    /// A Task that sets the value of `temporaryHighlight` to nil after some time
+    private var temporaryHighlightRemovalTask: Task<(), Error>?
     
     private lazy var symbolSize: Double = {
         (fontSize * 2.0).rounded()
@@ -155,6 +176,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             guard let referencedItemId = assessmentFeedback.baseFeedback.reference?.components(separatedBy: ":")[1],
                   let referencedItem = findSelectableItem(byId: referencedItemId),
                   let elementRect = referencedItem.boundsAsCGRect,
+                  let temporaryHighlightPath = referencedItem.temporaryHighlightPath,
                   let badgeLocation = referencedItem.badgeLocation else {
                 log.error("Could not create a highlight for the following referenced feedback: \(assessmentFeedback)")
                 continue
@@ -164,6 +186,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
                                             rect: elementRect,
                                             badgeLocation: badgeLocation,
+                                            temporaryHighlightPath: temporaryHighlightPath,
                                             isSuggested: assessmentFeedback.baseFeedback.type?.isAutomatic ?? false)
             highlights.append(newHighlight)
         }
@@ -198,6 +221,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             .tag(UMLBadgeSymbol.exclamation)
     }
     
+    @MainActor
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
         // Highlight selected element if there is one
         if !pencilModeDisabled,
@@ -240,6 +264,18 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                 context.fill(Path(highlight.rect), with: .color(Color.modelingSuggestedFeedback))
             }
         }
+        
+        renderTemporaryHighlightIfNeeded(&context, size: size)
+    }
+    
+    @MainActor
+    func renderTemporaryHighlightIfNeeded(_ context: inout GraphicsContext, size: CGSize) {
+        guard let temporaryHighlight else {
+            return
+        }
+        
+        let highlightPath = temporaryHighlight.temporaryHighlightPath
+        context.stroke(highlightPath, with: .color(Color.primary), style: .init(lineWidth: 3))
     }
     
     @MainActor
@@ -267,6 +303,17 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             undoManager.endUndoGrouping() // undo group with deleteFeedback in AssessmentResult
         }
     }
+    
+    /// Creates a temporary highlight to get user's attention to a particular UML item
+    @MainActor
+    private func createTemporaryHighlight(for feedback: AssessmentFeedback) {
+        guard let existingHighlight = highlights.first(where: { $0.assessmentFeedbackId == feedback.id }) else {
+            return
+        }
+        
+        temporaryHighlight = existingHighlight
+        temporaryHighlight?.isTemporary = true
+    }
 }
 
 extension UMLRendererViewModel: FeedbackDelegate {
@@ -284,6 +331,11 @@ extension UMLRendererViewModel: FeedbackDelegate {
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
         deleteHighlight(for: feedback)
     }
+    
+    @MainActor
+    func onFeedbackCellTap(_ feedback: AssessmentFeedback, participationId: Int?, templateParticipationId: Int?) {
+        createTemporaryHighlight(for: feedback)
+    }
 }
 
 struct UMLHighlight {
@@ -291,5 +343,7 @@ struct UMLHighlight {
     var symbol: UMLBadgeSymbol
     var rect: CGRect
     var badgeLocation: CGPoint
+    var temporaryHighlightPath: Path
     var isSuggested: Bool
+    var isTemporary = false
 }

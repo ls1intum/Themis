@@ -59,6 +59,15 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
         return result
     }
     
+    var temporaryHighlightPath: Path? {
+        guard let path, let boundsAsCGRect else {
+            return nil
+        }
+        var result = Path()
+        result.addLines(path.map({ $0.asCGPoint.applying(.init(translationX: boundsAsCGRect.minX, y: boundsAsCGRect.minY)) }))
+        return result
+    }
+    
     var badgeLocation: CGPoint? {
         guard let path, let boundsAsCGRect else {
             return nil
