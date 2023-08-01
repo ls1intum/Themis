@@ -31,7 +31,7 @@ class TextAssessmentViewModel: AssessmentViewModel {
 
     @MainActor
     private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
-        guard let participationId, let submissionId else {
+        guard let submissionId else {
             return
         }
         
@@ -53,5 +53,4 @@ class TextAssessmentViewModel: AssessmentViewModel {
             log.info(String(describing: error))
         }
     }
-
 }
