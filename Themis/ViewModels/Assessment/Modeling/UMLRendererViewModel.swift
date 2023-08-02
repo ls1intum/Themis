@@ -13,6 +13,7 @@ import SwiftUI
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
+    @Published var error: Error?
     
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
@@ -45,6 +46,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     /// A Task that sets the value of `temporaryHighlight` to nil after some time
     private var temporaryHighlightRemovalTask: Task<(), Error>?
     
+    private var diagramTypeUnsupported = false
+    
     private lazy var symbolSize: Double = {
         (fontSize * 2.0).rounded()
     }()
@@ -74,8 +77,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         setupHighlights(basedOn: feedbacks)
     }
     
+    @MainActor
     func render(_ context: inout GraphicsContext, size: CGSize) {
-        guard let model = umlModel else {
+        guard let model = umlModel,
+              !diagramTypeUnsupported else {
             return
         }
         
@@ -87,11 +92,21 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         case .classDiagram:
             renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
         default:
-            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
             log.error("Attempted to draw an unknown diagram type")
+            diagramTypeUnsupported = true
+            setError(.diagramNotSupported)
+            return
         }
         
         renderer.render(umlModel: model)
+    }
+    
+    private func setError(_ error: UserFacingError) {
+        if self.error == nil {
+            Task { @MainActor [weak self] in
+                self?.error = error
+            }
+        }
     }
     
     @MainActor

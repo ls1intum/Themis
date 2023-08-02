@@ -14,6 +14,7 @@ struct ModelingAssessmentView: View {
     @ObservedObject var assessmentResult: AssessmentResult
     @StateObject private var umlRendererVM = UMLRendererViewModel()
     @StateObject private var paneVM = PaneViewModel(mode: .rightOnly)
+    @Environment(\.presentationMode) private var presentationMode
     
     private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
     
@@ -33,6 +34,7 @@ struct ModelingAssessmentView: View {
             await assessmentVM.initSubmission()
             umlRendererVM.setup(basedOn: assessmentVM.submission, assessmentResult)
         }
+        .errorAlert(error: $umlRendererVM.error, onDismiss: { presentationMode.wrappedValue.dismiss() })
         .sheet(isPresented: $umlRendererVM.showEditFeedback) {
             if let feedback = assessmentVM.getFeedback(byId: umlRendererVM.selectedFeedbackForEditingId) {
                 EditFeedbackView(
