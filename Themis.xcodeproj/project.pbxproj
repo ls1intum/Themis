@@ -14,6 +14,10 @@
 		650538B92A1E1EF200C45E18 /* ExerciseMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */; };
 		650538BC2A1E226A00C45E18 /* MockAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538BB2A1E226A00C45E18 /* MockAssessmentViewModel.swift */; };
 		650538BE2A1E6E3D00C45E18 /* SubmissionMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */; };
+		650D87FE2A7A5B65004E7533 /* UMLUseCaseDiagramRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650D87FD2A7A5B65004E7533 /* UMLUseCaseDiagramRenderer.swift */; };
+		650D88002A7A5B78004E7533 /* UMLDiagramRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650D87FF2A7A5B78004E7533 /* UMLDiagramRenderer.swift */; };
+		650D88022A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650D88012A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift */; };
+		650D88042A7A5C77004E7533 /* UMLUseCaseDiagramRelationshipRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650D88032A7A5C77004E7533 /* UMLUseCaseDiagramRelationshipRenderer.swift */; };
 		65101DD32A33362F007B598A /* ProgrammingAssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */; };
 		65101DD52A33363A007B598A /* TextAsessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD42A33363A007B598A /* TextAsessmentResult.swift */; };
 		65101DD72A35FB98007B598A /* UnknownAssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */; };
@@ -191,6 +195,10 @@
 		650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMockExtension.swift; sourceTree = "<group>"; };
 		650538BB2A1E226A00C45E18 /* MockAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAssessmentViewModel.swift; sourceTree = "<group>"; };
 		650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionMockExtension.swift; sourceTree = "<group>"; };
+		650D87FD2A7A5B65004E7533 /* UMLUseCaseDiagramRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLUseCaseDiagramRenderer.swift; sourceTree = "<group>"; };
+		650D87FF2A7A5B78004E7533 /* UMLDiagramRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLDiagramRenderer.swift; sourceTree = "<group>"; };
+		650D88012A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLUseCaseDiagramElementRenderer.swift; sourceTree = "<group>"; };
+		650D88032A7A5C77004E7533 /* UMLUseCaseDiagramRelationshipRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLUseCaseDiagramRelationshipRenderer.swift; sourceTree = "<group>"; };
 		65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingAssessmentResult.swift; sourceTree = "<group>"; };
 		65101DD42A33363A007B598A /* TextAsessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAsessmentResult.swift; sourceTree = "<group>"; };
 		65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownAssessmentResult.swift; sourceTree = "<group>"; };
@@ -479,6 +487,26 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		650D87FB2A7A5B3C004E7533 /* Class Diagram */ = {
+			isa = PBXGroup;
+			children = (
+				654BC9962A6FF7630081CF22 /* UMLClassDiagramRenderer.swift */,
+				65593DF62A72B87000B2DEBE /* UMLClassDiagramElementRenderer.swift */,
+				65593DF82A72B8A300B2DEBE /* UMLClassDiagramRelationshipRenderer.swift */,
+			);
+			path = "Class Diagram";
+			sourceTree = "<group>";
+		};
+		650D87FC2A7A5B4C004E7533 /* Use Case Diagram */ = {
+			isa = PBXGroup;
+			children = (
+				650D87FD2A7A5B65004E7533 /* UMLUseCaseDiagramRenderer.swift */,
+				650D88012A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift */,
+				650D88032A7A5C77004E7533 /* UMLUseCaseDiagramRelationshipRenderer.swift */,
+			);
+			path = "Use Case Diagram";
+			sourceTree = "<group>";
+		};
 		65101DD12A33360A007B598A /* Result */ = {
 			isa = PBXGroup;
 			children = (
@@ -534,19 +562,19 @@
 			children = (
 				654BC9932A6FF7630081CF22 /* UMLRenderer.swift */,
 				654BC9942A6FF7630081CF22 /* ModelingAssessmentView.swift */,
-				654BC9952A6FF7630081CF22 /* Element Renderers */,
+				654BC9952A6FF7630081CF22 /* Diagram Renderers */,
 			);
 			path = "Modeling Exercise";
 			sourceTree = "<group>";
 		};
-		654BC9952A6FF7630081CF22 /* Element Renderers */ = {
+		654BC9952A6FF7630081CF22 /* Diagram Renderers */ = {
 			isa = PBXGroup;
 			children = (
-				654BC9962A6FF7630081CF22 /* UMLClassDiagramRenderer.swift */,
-				65593DF62A72B87000B2DEBE /* UMLClassDiagramElementRenderer.swift */,
-				65593DF82A72B8A300B2DEBE /* UMLClassDiagramRelationshipRenderer.swift */,
+				650D87FC2A7A5B4C004E7533 /* Use Case Diagram */,
+				650D87FB2A7A5B3C004E7533 /* Class Diagram */,
+				650D87FF2A7A5B78004E7533 /* UMLDiagramRenderer.swift */,
 			);
-			path = "Element Renderers";
+			path = "Diagram Renderers";
 			sourceTree = "<group>";
 		};
 		6581C67B2A305F1D00E49E24 /* Feedback */ = {
@@ -1168,6 +1196,7 @@
 				65E6A0F82A13C3EC0058E5D6 /* ExamService.swift in Sources */,
 				65E6A0FF2A13D1630058E5D6 /* ProgrammingAssessmentServiceImpl.swift in Sources */,
 				DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */,
+				650D88042A7A5C77004E7533 /* UMLUseCaseDiagramRelationshipRenderer.swift in Sources */,
 				DA98C6612954DED7005727FB /* SubmissionSearchResult.swift in Sources */,
 				6530B0F92A6BF86700CBCA71 /* ModelingFeedbackDetail.swift in Sources */,
 				65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */,
@@ -1176,6 +1205,7 @@
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
 				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
 				658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */,
+				650D88022A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
@@ -1271,10 +1301,12 @@
 				E168C727296DDB3D00A1D1D4 /* CustomProgressView.swift in Sources */,
 				E2192ED7291E57810092CE58 /* RESTError.swift in Sources */,
 				65B49F382A07D5C000C9A45F /* ToolbarPointsLabel.swift in Sources */,
+				650D87FE2A7A5B65004E7533 /* UMLUseCaseDiagramRenderer.swift in Sources */,
 				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
 				6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */,
 				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
+				650D88002A7A5B78004E7533 /* UMLDiagramRenderer.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
 				A9752D7B2992AAEB004441D1 /* ExamSectionDetailView.swift in Sources */,

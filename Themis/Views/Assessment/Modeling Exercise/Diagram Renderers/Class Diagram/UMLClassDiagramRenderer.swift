@@ -9,10 +9,6 @@ import SwiftUI
 import Common
 import SharedModels
 
-protocol UMLDiagramRenderer {
-    func render(umlModel: UMLModel)
-}
-
 struct UMLClassDiagramRenderer: UMLDiagramRenderer {
     var context: GraphicsContext
     let canvasBounds: CGRect
