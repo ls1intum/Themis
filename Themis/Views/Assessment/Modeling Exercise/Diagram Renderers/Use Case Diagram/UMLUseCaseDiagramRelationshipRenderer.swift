@@ -41,8 +41,6 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
         default:
             drawUnknown(relationship, in: relationshipRect)
         }
-        
-        //        drawRoleText(relationship, in: relationshipRect)
     }
     
     private func drawAssociation(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
@@ -51,6 +49,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         context.stroke(path, with: .color(Color.primary))
+        drawTitleText(for: relationship, on: path)
     }
     
     private func drawExtendOrInclude(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
@@ -92,6 +91,43 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
                               height: textSize.height)
         
         context.draw(resolvedText, in: textRect)
+    }
+    
+    private func drawTitleText(for relationship: UMLRelationship, on path: Path) {
+        guard let relationshipRect = relationship.boundsAsCGRect,
+              let relationshipName = relationship.name,
+              let endPointYInverted = path.currentPoint?.invertY(),
+              let pointCount = relationship.path?.count,
+              let previousPoint = relationship.path?[pointCount - 2].asCGPoint else {
+            log.warning("Could not draw type text for: \(relationship)")
+            return
+        }
+        
+        let text = Text(relationshipName).font(.system(size: fontSize))
+        let resolvedText = context.resolve(text)
+        let textSize = resolvedText.measure(in: canvasBounds.size)
+        var textRect = CGRect(x: relationshipRect.midX - textSize.width / 2,
+                              y: relationshipRect.midY - textSize.height / 2,
+                              width: textSize.width,
+                              height: textSize.height)
+        
+        var previousPointYInverted = previousPoint
+            .applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY))
+            .invertY()
+        
+        var rotationDegrees = previousPointYInverted.angle(to: endPointYInverted) + 90
+        
+        if abs(rotationDegrees) > 90 { // prevents upside-down text
+            rotationDegrees += 180
+        }
+        
+        context.drawLayer { layerContext in
+            layerContext.translateBy(x: textSize.width / 2, y: textSize.height)
+            layerContext.rotate(by: Angle(degrees: rotationDegrees))
+            let rotatedTextOrigin = textRect.origin.rotated(around: .init(x: 0, y: textSize.height / 2),
+                                                            angleInDegrees: -rotationDegrees)
+            layerContext.draw(resolvedText, at: rotatedTextOrigin, anchor: .center)
+        }
     }
     
     private func drawArrowhead(for relationship: UMLRelationship, on path: Path) {
@@ -184,5 +220,17 @@ extension CGPoint {
         while bearingDegrees < 0 { bearingDegrees += 360 }
         
         return CGFloat(bearingDegrees * -1)
+    }
+    
+    func rotated(around center: CGPoint, angleInDegrees angle: CGFloat) -> CGPoint {
+        let angleInRadians = angle * CGFloat.pi / 180.0
+        let translatedPoint = CGPoint(x: self.x - center.x, y: self.y - center.y)
+        let rotatedX = translatedPoint.x * cos(angleInRadians) - translatedPoint.y * sin(angleInRadians)
+        let rotatedY = translatedPoint.x * sin(angleInRadians) + translatedPoint.y * cos(angleInRadians)
+        return CGPoint(x: rotatedX + center.x, y: rotatedY + center.y)
+    }
+    
+    func invertY() -> CGPoint {
+        Self(x: self.x, y: -self.y)
     }
 }
