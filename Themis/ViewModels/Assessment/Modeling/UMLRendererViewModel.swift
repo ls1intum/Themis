@@ -40,6 +40,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
+    var diagramSize: CGSize {
+        umlModel?.size?.asCGSize ?? CGSize()
+    }
+    
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
     

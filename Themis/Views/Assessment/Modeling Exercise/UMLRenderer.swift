@@ -12,6 +12,10 @@ import Common
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
     
+    @State private var location = CGPoint(x: 30, y: 30)
+    @State private var startDragLocation = CGPoint.zero
+    @State private var dragStarted = true
+    
     var body: some View {
         ZStack {
             Image("umlRendererBackground")
@@ -32,7 +36,29 @@ struct UMLRenderer: View {
                 }
             }
             .padding()
+            .position(location)
         }
+        .onChange(of: umlRendererVM.diagramSize, perform: { newValue in
+            location = .init(x: newValue.height, y: newValue.width)
+        })
+        .frame(minWidth: umlRendererVM.diagramSize.width * 1.1,
+               minHeight: umlRendererVM.diagramSize.height * 1.1, alignment: .center)
+        .gesture(
+            DragGesture()
+                .onChanged(handleDrag)
+                .onEnded { _ in
+                    dragStarted = true
+                }
+        )
+    }
+    
+    private func handleDrag(_ gesture: DragGesture.Value) {
+        if dragStarted {
+            dragStarted = false
+            startDragLocation = location
+        }
+        location = CGPoint(x: startDragLocation.x + gesture.translation.width,
+                           y: startDragLocation.y + gesture.translation.height)
     }
 }
 
