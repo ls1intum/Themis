@@ -77,7 +77,10 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawTypeText(for relationship: UMLRelationship, on path: Path) {
         guard let relationshipRect = relationship.boundsAsCGRect,
-              let relationshipTypeString = relationship.type?.annotationTitle else {
+              let relationshipTypeString = relationship.type?.annotationTitle,
+              let endPointYInverted = path.currentPoint?.invertY(),
+              let pointCount = relationship.path?.count,
+              let previousPoint = relationship.path?[pointCount - 2].asCGPoint else {
             log.warning("Could not draw type text for: \(relationship)")
             return
         }
@@ -90,7 +93,34 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
                               width: textSize.width,
                               height: textSize.height)
         
-        context.draw(resolvedText, in: textRect)
+        var previousPointYInverted = previousPoint
+            .applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY))
+            .invertY()
+        
+        var rotationDegrees = previousPointYInverted.angle(to: endPointYInverted) + 90
+        
+        if abs(rotationDegrees) > 90 { // prevents upside-down text
+            rotationDegrees += 180
+        }
+        
+        context.drawLayer { layerContext in
+            // Perform rotation
+            layerContext.translateBy(x: textSize.width / 2, y: textSize.height * 0.4)
+            layerContext.rotate(by: Angle(degrees: rotationDegrees))
+            let rotatedTextOrigin = textRect.origin.rotated(around: .zero,
+                                                            angleInDegrees: -rotationDegrees)
+            
+            // Generate a background for the text (to prevent overlap with the arrow line)
+            var backgroundRect = CGRect(x: rotatedTextOrigin.x - textSize.width * 0.35,
+                                        y: rotatedTextOrigin.y - textSize.height * 0.125,
+                                        width: textRect.width * 0.7,
+                                        height: textRect.height * 0.5)
+            layerContext.fill(Path(backgroundRect), with: .color(Color(UIColor.systemBackground)))
+            
+            // Draw text
+            layerContext.draw(resolvedText, at: rotatedTextOrigin, anchor: .center)
+        }
+        
     }
     
     private func drawTitleText(for relationship: UMLRelationship, on path: Path) {
