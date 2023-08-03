@@ -60,7 +60,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
         
         context.stroke(path, with: .color(Color.primary), style: .init(dash: [7, 7]))
         drawArrowhead(for: relationship, on: path)
-        // TODO: add <<extend>> and <<include>> texts
+        drawTypeText(for: relationship, on: path)
     }
     
     private func drawGeneralization(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
@@ -74,6 +74,24 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawUnknown(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
         drawAssociation(relationship, in: relationshipRect)
+    }
+    
+    private func drawTypeText(for relationship: UMLRelationship, on path: Path) {
+        guard let relationshipRect = relationship.boundsAsCGRect,
+              let relationshipTypeString = relationship.type?.annotationTitle else {
+            log.warning("Could not draw type text for: \(relationship)")
+            return
+        }
+        
+        let text = Text(relationshipTypeString).font(.system(size: fontSize))
+        let resolvedText = context.resolve(text)
+        let textSize = resolvedText.measure(in: canvasBounds.size)
+        var textRect = CGRect(x: relationshipRect.midX - textSize.width / 2,
+                              y: relationshipRect.midY - textSize.height / 2,
+                              width: textSize.width,
+                              height: textSize.height)
+        
+        context.draw(resolvedText, in: textRect)
     }
     
     private func drawArrowhead(for relationship: UMLRelationship, on path: Path) {
@@ -96,6 +114,8 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             return
         }
         
+        // The inversion below is necessary for the angle calculation to work correctly.
+        // Unlike a regular coordinate system, `Canvas` has an inverted y axis.
         var previousPointInverted = previousPoint.applying(.init(translationX: relationshipRect.minX,
                                                                  y: relationshipRect.minY))
         previousPointInverted.y *= -1

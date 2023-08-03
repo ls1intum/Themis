@@ -33,4 +33,16 @@ enum UMLRelationshipType: String, Decodable {
     case classDependency = "ClassDependency"
     case classAggregation = "ClassAggregation"
     case classComposition = "ClassComposition"
+    
+    /// The string that should be shown on the UML relationship to indicate the type of the element
+    var annotationTitle: String {
+        switch self {
+        case .useCaseExtend:
+            return "<<extend>>"
+        case .useCaseInclude:
+            return "<<include>>"
+        default:
+            return ""
+        }
+    }
 }
