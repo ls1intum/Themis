@@ -59,7 +59,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawDependency(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -68,7 +68,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawAggregationOrComposition(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -77,7 +77,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawInheritance(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -86,7 +86,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawRealization(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -95,7 +95,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawAssociation(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -105,20 +105,6 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawUnknown(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
         drawAssociation(relationship, in: relationshipRect)
-    }
-    
-    private func getLinePath(for relationship: UMLRelationship, in relationshipRect: CGRect) -> Path? {
-        guard let relationshipPath = relationship.path,
-              relationshipPath.count >= 2 else {
-            return nil
-        }
-        
-        let points = relationshipPath.map { $0.asCGPoint.applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY)) }
-                
-        var path = Path()
-        path.addLines(Array(points))
-        
-        return path
     }
     
     private func drawArrowhead(for relationship: UMLRelationship, on path: Path) {

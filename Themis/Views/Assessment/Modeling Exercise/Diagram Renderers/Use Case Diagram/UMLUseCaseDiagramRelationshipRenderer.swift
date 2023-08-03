@@ -44,7 +44,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawAssociation(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -53,7 +53,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawExtendOrInclude(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -63,7 +63,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func drawGeneralization(_ relationship: UMLRelationship, in relationshipRect: CGRect) {
-        guard let path = getLinePath(for: relationship, in: relationshipRect) else {
+        guard let path = relationship.pathWithCGPoints else {
             return
         }
         
@@ -88,12 +88,12 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
         let text = Text(relationshipTypeString).font(.system(size: fontSize))
         let resolvedText = context.resolve(text)
         let textSize = resolvedText.measure(in: canvasBounds.size)
-        var textRect = CGRect(x: relationshipRect.midX - textSize.width / 2,
+        let textRect = CGRect(x: relationshipRect.midX - textSize.width / 2,
                               y: relationshipRect.midY - textSize.height / 2,
                               width: textSize.width,
                               height: textSize.height)
         
-        var previousPointYInverted = previousPoint
+        let previousPointYInverted = previousPoint
             .applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY))
             .invertY()
         
@@ -111,7 +111,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
                                                             angleInDegrees: -rotationDegrees)
             
             // Generate a background for the text (to prevent overlap with the arrow line)
-            var backgroundRect = CGRect(x: rotatedTextOrigin.x - textSize.width * 0.35,
+            let backgroundRect = CGRect(x: rotatedTextOrigin.x - textSize.width * 0.35,
                                         y: rotatedTextOrigin.y - textSize.height * 0.125,
                                         width: textRect.width * 0.7,
                                         height: textRect.height * 0.5)
@@ -120,7 +120,6 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             // Draw text
             layerContext.draw(resolvedText, at: rotatedTextOrigin, anchor: .center)
         }
-        
     }
     
     private func drawTitleText(for relationship: UMLRelationship, on path: Path) {
@@ -136,12 +135,12 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
         let text = Text(relationshipName).font(.system(size: fontSize))
         let resolvedText = context.resolve(text)
         let textSize = resolvedText.measure(in: canvasBounds.size)
-        var textRect = CGRect(x: relationshipRect.midX - textSize.width / 2,
+        let textRect = CGRect(x: relationshipRect.midX - textSize.width / 2,
                               y: relationshipRect.midY - textSize.height / 2,
                               width: textSize.width,
                               height: textSize.height)
         
-        var previousPointYInverted = previousPoint
+        let previousPointYInverted = previousPoint
             .applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY))
             .invertY()
         
@@ -220,47 +219,5 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             let fillColor = (type == .rhombusFilled) ? Color(UIColor.label) : Color(UIColor.systemBackground)
             context.fill(path, with: .color(fillColor))
         }
-    }
-    
-    private func getLinePath(for relationship: UMLRelationship, in relationshipRect: CGRect) -> Path? {
-        guard let relationshipPath = relationship.path,
-              relationshipPath.count >= 2 else {
-            return nil
-        }
-        
-        let points = relationshipPath.map { $0.asCGPoint.applying(.init(translationX: relationshipRect.minX, y: relationshipRect.minY)) }
-        
-        var path = Path()
-        path.addLines(Array(points))
-        
-        return path
-    }
-}
-
-extension CGPoint {
-    /// Returns the angle relative to the comparison point
-    /// Inspired from: https://stackoverflow.com/a/33158630/7074664
-    func angle(to comparisonPoint: CGPoint) -> CGFloat {
-        let originX = comparisonPoint.x - x
-        let originY = comparisonPoint.y - y
-        let bearingRadians = atan2f(Float(originY), Float(originX))
-        var bearingDegrees = (bearingRadians * 180) / Float.pi - 90
-        
-        while bearingDegrees >= 360 { bearingDegrees -= 360 }
-        while bearingDegrees < 0 { bearingDegrees += 360 }
-        
-        return CGFloat(bearingDegrees * -1)
-    }
-    
-    func rotated(around center: CGPoint, angleInDegrees angle: CGFloat) -> CGPoint {
-        let angleInRadians = angle * CGFloat.pi / 180.0
-        let translatedPoint = CGPoint(x: self.x - center.x, y: self.y - center.y)
-        let rotatedX = translatedPoint.x * cos(angleInRadians) - translatedPoint.y * sin(angleInRadians)
-        let rotatedY = translatedPoint.x * sin(angleInRadians) + translatedPoint.y * cos(angleInRadians)
-        return CGPoint(x: rotatedX + center.x, y: rotatedY + center.y)
-    }
-    
-    func invertY() -> CGPoint {
-        Self(x: self.x, y: -self.y)
     }
 }

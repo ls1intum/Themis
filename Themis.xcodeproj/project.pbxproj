@@ -83,6 +83,7 @@
 		65B49F492A0817DC00C9A45F /* ToolbarSaveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F482A0817DC00C9A45F /* ToolbarSaveButton.swift */; };
 		65B49F4C2A08192100C9A45F /* LeftGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4B2A08192100C9A45F /* LeftGripView.swift */; };
 		65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4D2A08220D00C9A45F /* RightGripView.swift */; };
+		65B981AF2A7BDEF800FFC2F4 /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
@@ -253,6 +254,7 @@
 		65B49F482A0817DC00C9A45F /* ToolbarSaveButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSaveButton.swift; sourceTree = "<group>"; };
 		65B49F4B2A08192100C9A45F /* LeftGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftGripView.swift; sourceTree = "<group>"; };
 		65B49F4D2A08220D00C9A45F /* RightGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightGripView.swift; sourceTree = "<group>"; };
+		65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 				6594C92F2A37027C00B9CF9F /* NotificationExtension.swift */,
 				651A44BA2A167FDF00DBCD92 /* CourseMockExtension.swift */,
 				658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */,
+				65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1288,6 +1291,7 @@
 				65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */,
 				659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */,
 				6530B0F52A6BE00000CBCA71 /* ModelingAssessmentServiceImpl.swift in Sources */,
+				65B981AF2A7BDEF800FFC2F4 /* CGPointExtension.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
 				65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,

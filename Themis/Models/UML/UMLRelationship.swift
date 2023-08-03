@@ -87,6 +87,24 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
         return nil
     }
     
+    var pathWithCGPoints: Path? {
+        guard let boundsAsCGRect,
+              let selfPath = self.path,
+              selfPath.count >= 2 else {
+            return nil
+        }
+        
+        let points = selfPath.map {
+            $0.asCGPoint.applying(.init(translationX: boundsAsCGRect.minX,
+                                        y: boundsAsCGRect.minY))
+        }
+        
+        var path = Path()
+        path.addLines(Array(points))
+        
+        return path
+    }
+    
     func boundsContains(point: CGPoint) -> Bool {
         pathRects.contains(where: { $0.contains(point) })
     }
