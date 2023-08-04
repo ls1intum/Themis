@@ -10,7 +10,7 @@ import Common
 
 // swiftlint:disable type_body_length
 struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
-    var context: GraphicsContext
+    var context: UMLGraphicsContext
     let canvasBounds: CGRect
     
     private let fontSize: CGFloat = 14
@@ -27,16 +27,11 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func draw(relationship: UMLRelationship) {
-        guard let xCoordinate = relationship.bounds?.x,
-              let yCoordinate = relationship.bounds?.y,
-              let width = relationship.bounds?.width,
-              let height = relationship.bounds?.height else {
+        guard let relationshipRect = relationship.boundsAsCGRect else {
             log.warning("Failed to draw a UML relationship: \(relationship)")
             return
         }
         
-        let relationshipRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
-
         switch relationship.type {
         case .classDependency:
             drawDependency(relationship, in: relationshipRect)

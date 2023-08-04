@@ -9,7 +9,7 @@ import SwiftUI
 import Common
 
 struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
-    var context: GraphicsContext
+    var context: UMLGraphicsContext
     let canvasBounds: CGRect
     
     private let fontSize: CGFloat = 14
@@ -103,8 +103,9 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             rotationDegrees += 180
         }
         
-        context.drawLayer { layerContext in
+        context.baseGraphicsContext.drawLayer { layerContext in
             // Perform rotation
+            layerContext.translateBy(x: context.xOffset, y: context.yOffset)
             layerContext.translateBy(x: textSize.width / 2, y: textSize.height * 0.4)
             layerContext.rotate(by: Angle(degrees: rotationDegrees))
             let rotatedTextOrigin = textRect.origin.rotated(around: .zero,
@@ -150,7 +151,8 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             rotationDegrees += 180
         }
         
-        context.drawLayer { layerContext in
+        context.baseGraphicsContext.drawLayer { layerContext in
+            layerContext.translateBy(x: context.xOffset, y: context.yOffset)
             layerContext.translateBy(x: textSize.width / 2, y: textSize.height)
             layerContext.rotate(by: Angle(degrees: rotationDegrees))
             let rotatedTextOrigin = textRect.origin.rotated(around: .init(x: 0, y: textSize.height / 2),

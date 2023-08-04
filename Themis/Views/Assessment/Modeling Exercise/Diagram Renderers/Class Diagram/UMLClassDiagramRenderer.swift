@@ -10,8 +10,13 @@ import Common
 import SharedModels
 
 struct UMLClassDiagramRenderer: UMLDiagramRenderer {
-    var context: GraphicsContext
+    var context: UMLGraphicsContext
     let canvasBounds: CGRect
+    
+    init(context: GraphicsContext, canvasBounds: CGRect) {
+        self.context = UMLGraphicsContext(context)
+        self.canvasBounds = canvasBounds
+    }
     
     private let fontSize: CGFloat = 14
 

@@ -9,7 +9,7 @@ import SwiftUI
 import Common
 
 struct UMLUseCaseDiagramElementRenderer: UMLDiagramRenderer {
-    var context: GraphicsContext
+    var context: UMLGraphicsContext
     let canvasBounds: CGRect
     
     private let fontSize: CGFloat = 14

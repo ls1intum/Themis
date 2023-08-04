@@ -8,5 +8,8 @@
 import Foundation
 
 protocol UMLDiagramRenderer {
+    /// This instance should be used for all actions that one would normally perform with a `GraphicsContext`
+    var context: UMLGraphicsContext { get set }
+
     func render(umlModel: UMLModel)
 }
