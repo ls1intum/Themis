@@ -23,7 +23,7 @@ struct UMLRenderer: View {
     private let minScale = 0.1
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             Image("umlRendererBackground")
                 .resizable(resizingMode: .tile)
             
@@ -44,12 +44,14 @@ struct UMLRenderer: View {
             .padding()
             .scaleEffect(scale * progressingScale)
             .position(location)
+            
+            resetZoomAndLocationButton
         }
         .onChange(of: umlRendererVM.diagramSize, perform: { newValue in
             location = .init(x: newValue.height, y: newValue.width)
         })
         .frame(minWidth: umlRendererVM.diagramSize.width * 1.1,
-               minHeight: umlRendererVM.diagramSize.height * 1.1, alignment: .center)
+               minHeight: umlRendererVM.diagramSize.height * 1.1)
         .gesture(
             DragGesture()
                 .onChanged(handleDrag)
@@ -62,6 +64,26 @@ struct UMLRenderer: View {
                 .onChanged(handleMagnification)
                 .onEnded(handleMagnificationEnd)
         )
+    }
+    
+    @ViewBuilder
+    private var resetZoomAndLocationButton: some View {
+        Button {
+            location = .init(x: umlRendererVM.diagramSize.height,
+                             y: umlRendererVM.diagramSize.width)
+            scale = 1
+            progressingScale = 1
+        } label: {
+            Image(systemName: "scope")
+                .frame(alignment: .topLeading)
+                .foregroundColor(Color(UIColor.systemBackground))
+                .padding(5)
+                .background {
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(.themisSecondary)
+                }
+        }
+        .padding(12)
     }
     
     private func handleDrag(_ gesture: DragGesture.Value) {
