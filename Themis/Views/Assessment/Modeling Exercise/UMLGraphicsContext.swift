@@ -67,7 +67,7 @@ struct UMLGraphicsContext {
         baseGraphicsContext.resolve(text)
     }
     
-    func resolveSymbol<ID>(id: ID) -> GraphicsContext.ResolvedSymbol? where ID : Hashable {
+    func resolveSymbol<ID>(id: ID) -> GraphicsContext.ResolvedSymbol? where ID: Hashable {
         baseGraphicsContext.resolveSymbol(id: id)
     }
 }

@@ -12,9 +12,15 @@ import Common
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
     
+    @State var scale: CGFloat = 1
+    @State var progressingScale: CGFloat = 1
+    
     @State private var location = CGPoint(x: 30, y: 30)
     @State private var startDragLocation = CGPoint.zero
     @State private var dragStarted = true
+    
+    /// The minimum scale value that the UML model can be scaled down to
+    private let minScale = 0.1
     
     var body: some View {
         ZStack {
@@ -36,6 +42,7 @@ struct UMLRenderer: View {
                 }
             }
             .padding()
+            .scaleEffect(scale * progressingScale)
             .position(location)
         }
         .onChange(of: umlRendererVM.diagramSize, perform: { newValue in
@@ -50,6 +57,11 @@ struct UMLRenderer: View {
                     dragStarted = true
                 }
         )
+        .simultaneousGesture(
+            MagnificationGesture()
+                .onChanged(handleMagnification)
+                .onEnded(handleMagnificationEnd)
+        )
     }
     
     private func handleDrag(_ gesture: DragGesture.Value) {
@@ -59,6 +71,25 @@ struct UMLRenderer: View {
         }
         location = CGPoint(x: startDragLocation.x + gesture.translation.width,
                            y: startDragLocation.y + gesture.translation.height)
+    }
+    
+    private func handleMagnification(_ newScale: MagnificationGesture.Value) {
+        progressingScale = newScale
+        
+        // Enforce zoom out limit
+        if progressingScale * scale < minScale {
+            progressingScale = minScale / scale
+        }
+    }
+    
+    private func handleMagnificationEnd(_ finalScale: MagnificationGesture.Value) {
+        scale *= finalScale
+        progressingScale = 1
+        
+        // Enforce zoom out limit
+        if scale < minScale {
+            scale = minScale
+        }
     }
 }
 
