@@ -76,7 +76,7 @@ struct UMLRenderer: View {
             } label: {
                 Image(systemName: "scope")
                     .frame(alignment: .topLeading)
-                    .foregroundColor(Color(UIColor.systemBackground))
+                    .foregroundColor(.white)
                     .padding(5)
                     .background {
                         RoundedRectangle(cornerRadius: 5)
