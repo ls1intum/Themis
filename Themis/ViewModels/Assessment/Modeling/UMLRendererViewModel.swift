@@ -53,9 +53,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     private var diagramTypeUnsupported = false
     
-    private lazy var symbolSize: Double = {
-        (fontSize * 2.0).rounded()
-    }()
+    private var symbolSize = 36.0
     
     /// Sets this VM up based on the given submission
     @MainActor
@@ -95,9 +93,9 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         switch model.type {
         case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)
         case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)
         default:
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true

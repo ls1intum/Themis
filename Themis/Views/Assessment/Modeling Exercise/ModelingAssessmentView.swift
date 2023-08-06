@@ -30,6 +30,9 @@ struct ModelingAssessmentView: View {
             }
             .animation(.default, value: paneVM.showRightPane)
         }
+        .onAppear {
+            assessmentVM.fontSize = 14.0
+        }
         .task {
             await assessmentVM.initSubmission()
             umlRendererVM.setup(basedOn: assessmentVM.submission, assessmentResult)

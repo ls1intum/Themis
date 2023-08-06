@@ -12,8 +12,7 @@ import Common
 struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     var context: UMLGraphicsContext
     let canvasBounds: CGRect
-    
-    private let fontSize: CGFloat = 14
+    var fontSize: CGFloat
     
     func render(umlModel: UMLModel) {
         guard let relationships = umlModel.relationships else {
@@ -131,7 +130,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawArrowhead(at point: CGPoint, lookingAt direction: Direction, type: ArrowHeadType) {
         var path = Path()
-        let size: CGFloat = (fontSize * 0.7).rounded()
+        let size: CGFloat = 10
         
         switch type {
         case .triangle:
@@ -196,15 +195,14 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         var targetOffset: CGPoint
-        let relativeSize = (fontSize * 0.7).rounded()
         
         switch relationship.type {
         case .classDependency, .classUnidirectional:
             targetOffset = .init(x: 10, y: 10)
         case .classInheritance, .classRealization:
-            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+            targetOffset = .init(x: 0, y: fontSize * 1.05)
         case .classComposition, .classAggregation:
-            targetOffset = .init(x: 0, y: relativeSize * 2)
+            targetOffset = .init(x: 0, y: fontSize * 1.4)
         default:
             targetOffset = .zero
         }
@@ -275,15 +273,14 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         var targetOffset: CGPoint
-        let relativeSize = (fontSize * 0.7).rounded()
         
         switch relationship.type {
         case .classDependency, .classUnidirectional:
-            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+            targetOffset = .init(x: 0, y: fontSize * 1.05)
         case .classInheritance, .classRealization:
-            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+            targetOffset = .init(x: 0, y: fontSize * 1.05)
         case .classComposition, .classAggregation:
-            targetOffset = .init(x: 0, y: relativeSize * 2)
+            targetOffset = .init(x: 0, y: fontSize * 1.4)
         default:
             targetOffset = .zero
         }
