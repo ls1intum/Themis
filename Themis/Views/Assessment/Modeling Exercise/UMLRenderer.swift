@@ -12,10 +12,10 @@ import Common
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
     
+    @State var showResetButton = true
     @State var scale: CGFloat = 1
-    @State var progressingScale: CGFloat = 1
     
-    @State private var location = CGPoint(x: 30, y: 30)
+    @State private var progressingScale: CGFloat = 1
     @State private var startDragLocation = CGPoint.zero
     @State private var dragStarted = true
     
@@ -43,15 +43,15 @@ struct UMLRenderer: View {
             }
             .padding()
             .scaleEffect(scale * progressingScale)
-            .position(location)
+            .position(umlRendererVM.currentDragLocation)
             
             resetZoomAndLocationButton
         }
-        .onChange(of: umlRendererVM.diagramSize, perform: { newValue in
-            location = .init(x: newValue.height, y: newValue.width)
+        .onChange(of: umlRendererVM.diagramSize, perform: { _ in
+            umlRendererVM.setDragLocation()
         })
-        .frame(minWidth: umlRendererVM.diagramSize.width * 1.1,
-               minHeight: umlRendererVM.diagramSize.height * 1.1)
+        .frame(minWidth: umlRendererVM.diagramSize.width,
+               minHeight: umlRendererVM.diagramSize.height)
         .gesture(
             DragGesture()
                 .onChanged(handleDrag)
@@ -68,31 +68,32 @@ struct UMLRenderer: View {
     
     @ViewBuilder
     private var resetZoomAndLocationButton: some View {
-        Button {
-            location = .init(x: umlRendererVM.diagramSize.height,
-                             y: umlRendererVM.diagramSize.width)
-            scale = 1
-            progressingScale = 1
-        } label: {
-            Image(systemName: "scope")
-                .frame(alignment: .topLeading)
-                .foregroundColor(Color(UIColor.systemBackground))
-                .padding(5)
-                .background {
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(.themisSecondary)
-                }
+        if showResetButton {
+            Button {
+                umlRendererVM.setDragLocation()
+                scale = 1
+                progressingScale = 1
+            } label: {
+                Image(systemName: "scope")
+                    .frame(alignment: .topLeading)
+                    .foregroundColor(Color(UIColor.systemBackground))
+                    .padding(5)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .foregroundColor(.themisSecondary)
+                    }
+            }
+            .padding(12)
         }
-        .padding(12)
     }
     
     private func handleDrag(_ gesture: DragGesture.Value) {
         if dragStarted {
             dragStarted = false
-            startDragLocation = location
+            startDragLocation = umlRendererVM.currentDragLocation
         }
-        location = CGPoint(x: startDragLocation.x + gesture.translation.width,
-                           y: startDragLocation.y + gesture.translation.height)
+        umlRendererVM.setDragLocation(at: CGPoint(x: startDragLocation.x + gesture.translation.width,
+                                                  y: startDragLocation.y + gesture.translation.height))
     }
     
     private func handleMagnification(_ newScale: MagnificationGesture.Value) {

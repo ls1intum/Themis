@@ -36,31 +36,24 @@ struct CorrectionSidebarView: View {
             
             if !assessmentVM.loading {
                 ZStack {
-                    ScrollView {
-                        ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise?.id)
-                            .frame(maxHeight: .infinity)
+                    VStack {
+                        List {
+                            problemStatementSection
+                            exampleSolutionSection
+                        }
+                        .listStyle(.sidebar)
+                        .scrollContentBackground(.hidden)
                     }
-                    .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
+                    .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001)
+                    // 0.0 causes this view to be redrawn and webview to send a new request
                     
                     switch correctionSidebarStatus {
                     case .problemStatement:
                         EmptyView() // handled above
                     case .correctionGuidelines:
-                        ScrollView {
-                            CorrectionGuidelinesCellView(
-                                gradingCriteria: exercise?.gradingCriteria ?? [],
-                                gradingInstructions: exercise?.gradingInstructions
-                            )
-                        }
+                        correctionGuidelines
                     case .generalFeedback:
-                        FeedbackListView(
-                            assessmentVM: assessmentVM,
-                            assessmentResult: assessmentResult,
-                            feedbackDelegate: feedbackDelegate,
-                            participationId: assessmentVM.participation?.id,
-                            templateParticipationId: templateParticipationId,
-                            gradingCriteria: exercise?.gradingCriteria ?? []
-                        )
+                        generalFeedbackList
                     }
                 }
             }
@@ -82,6 +75,49 @@ struct CorrectionSidebarView: View {
         .pickerStyle(SegmentedPickerStyle())
         .padding()
     }
+    
+    @ViewBuilder
+    private var problemStatementSection: some View {
+        Section {
+            ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise?.id)
+                .frame(maxHeight: .infinity)
+        } header: {
+            Text("Problem Statement")
+        }
+        .headerProminence(.increased)
+    }
+    
+    @ViewBuilder
+    private var exampleSolutionSection: some View {
+        Section {
+            ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
+        } header: {
+            Text("Example Solution")
+        }
+        .headerProminence(.increased)
+    }
+    
+    @ViewBuilder
+    private var correctionGuidelines: some View {
+        ScrollView {
+            CorrectionGuidelinesCellView(
+                gradingCriteria: exercise?.gradingCriteria ?? [],
+                gradingInstructions: exercise?.gradingInstructions
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var generalFeedbackList: some View {
+        FeedbackListView(
+            assessmentVM: assessmentVM,
+            assessmentResult: assessmentResult,
+            feedbackDelegate: feedbackDelegate,
+            participationId: assessmentVM.participation?.id,
+            templateParticipationId: templateParticipationId,
+            gradingCriteria: exercise?.gradingCriteria ?? []
+        )
+    }
 }
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
@@ -95,6 +131,6 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
             assessmentVM: assessmentVM,
             feedbackDelegate: cvm
         )
-        .previewInterfaceOrientation(.landscapeLeft)
+        .environmentObject(cvm)
     }
 }
