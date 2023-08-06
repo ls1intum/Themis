@@ -31,3 +31,10 @@ struct ExampleSolutionView: View {
         }
     }
 }
+
+struct ExampleSolutionView_Previews: PreviewProvider {
+    static var previews: some View {
+        ExampleSolutionView(exercise: Exercise.mockText)
+            .frame(maxWidth: 350)
+    }
+}

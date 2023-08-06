@@ -89,12 +89,15 @@ struct CorrectionSidebarView: View {
     
     @ViewBuilder
     private var exampleSolutionSection: some View {
-        Section {
-            ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
-        } header: {
-            Text("Example Solution")
+        if let exercise = assessmentVM.participation?.exercise,
+           exercise.canShowExampleSolution {
+            Section {
+                ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
+            } header: {
+                Text("Example Solution")
+            }
+            .headerProminence(.increased)
         }
-        .headerProminence(.increased)
     }
     
     @ViewBuilder
