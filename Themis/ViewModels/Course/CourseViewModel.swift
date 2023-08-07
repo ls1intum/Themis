@@ -106,8 +106,10 @@ class CourseViewModel: ObservableObject {
                 log.error(String(describing: error))
             }
             
-            assessableExercises = (courseForAssessment.value?.exercises ?? []).filter({ $0.supportsAssessment })
-            viewOnlyExercises = Array(Set(shownCourse?.exercises ?? []).subtracting(Set(assessableExercises))).filter({ $0.supportsAssessment })
+            let exercisesOfShownCourse = courseForAssessment.value?.exercises ?? []
+            
+            assessableExercises = exercisesOfShownCourse.filter({ $0.isCurrentlyInAssessment })
+            viewOnlyExercises = exercisesOfShownCourse.filter({ !$0.isCurrentlyInAssessment })
         }
     }
     
