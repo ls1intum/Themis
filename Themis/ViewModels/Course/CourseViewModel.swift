@@ -80,8 +80,7 @@ class CourseViewModel: ObservableObject {
                 shownCourseID = pickerCourseIDs.isEmpty ? nil : pickerCourseIDs[0]
             }
             
-            assessableExams = shownCourse?.exams?.filter({ $0.isOver && !$0.isAssessmentDue }) ?? []
-            viewOnlyExams = shownCourse?.exams?.filter({ !$0.isOver || $0.isAssessmentDue }) ?? []
+            setExamsForShownCourse()
         }
     }
     
@@ -104,16 +103,26 @@ class CourseViewModel: ObservableObject {
             
             if case .failure(let error) = courseForAssessment {
                 log.error(String(describing: error))
+            } else if let courseValueForAssessment = courseForAssessment.value {
+                setExercises(for: courseValueForAssessment)
+                setExamsForShownCourse()
             }
-            
-            let exercisesOfShownCourse = courseForAssessment.value?.exercises ?? []
-            
-            assessableExercises = exercisesOfShownCourse.filter({ $0.isCurrentlyInAssessment })
-            viewOnlyExercises = exercisesOfShownCourse.filter({ !$0.isCurrentlyInAssessment })
         }
     }
     
     func courseForID(id: Int) -> Course? {
         courses.first { $0.id == id }
+    }
+    
+    private func setExercises(for shownCourse: Course) {
+        let exercisesOfShownCourse = shownCourse.exercises ?? []
+        
+        assessableExercises = exercisesOfShownCourse.filter({ $0.isCurrentlyInAssessment })
+        viewOnlyExercises = exercisesOfShownCourse.filter({ !$0.isCurrentlyInAssessment })
+    }
+    
+    private func setExamsForShownCourse() {
+        assessableExams = shownCourse?.exams?.filter({ $0.isOver && !$0.isAssessmentDue }) ?? []
+        viewOnlyExams = shownCourse?.exams?.filter({ !$0.isOver || $0.isAssessmentDue }) ?? []
     }
 }
