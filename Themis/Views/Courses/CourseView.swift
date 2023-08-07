@@ -33,10 +33,8 @@ struct CourseView: View {
                             ExerciseGroups(courseVM: courseVM, type: .inAssessment)
                                 .padding(.bottom)
                             ExerciseGroups(courseVM: courseVM, type: .viewOnly)
-                                .disabled(true) // TODO: remove once view-only mode is fully implemented
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 20)
+                        .padding(20)
                     }
                     .environmentObject(courseVM)
                     .refreshable {
