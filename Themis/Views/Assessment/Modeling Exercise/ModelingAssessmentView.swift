@@ -77,7 +77,10 @@ struct ModelingAssessmentView: View {
             }
         }
         .onChange(of: assessmentVM.fontSize, perform: { umlRendererVM.fontSize = $0 })
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: { umlRendererVM.pencilModeDisabled = $0 })
+        .onChange(of: assessmentVM.pencilModeDisabled, perform: {
+            umlRendererVM.pencilModeDisabled = $0
+            umlRendererVM.selectedElement = nil
+        })
     }
     
     private var correctionWithPlaceholder: some View {
