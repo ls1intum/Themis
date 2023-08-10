@@ -41,6 +41,7 @@ struct ProblemStatementView: View {
                     .isHidden(!isLoading, remove: true)
             }
             .frame(height: height)
+            .padding(.horizontal)
         } else {
             errorMessage
         }
