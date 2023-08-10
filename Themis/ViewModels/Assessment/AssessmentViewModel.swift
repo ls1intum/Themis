@@ -160,7 +160,7 @@ class AssessmentViewModel: ObservableObject {
         
         loading = true
         defer { loading = false }
-                
+        
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
         do {
