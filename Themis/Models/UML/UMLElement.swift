@@ -18,6 +18,11 @@ class UMLElement: Decodable, SelectableUMLItem {
     
     var children: [UMLElement]? = [] // not decoded
     
+    /// Childresn of this element sorted by their vertical position (top to bottom)
+    var verticallySortedChildren: [UMLElement]? {
+        children?.sorted(by: { ($0.bounds?.y ?? 0.0) < ($1.bounds?.y ?? 0.0) })
+    }
+    
     var typeAsString: String? {
         type?.rawValue
     }
