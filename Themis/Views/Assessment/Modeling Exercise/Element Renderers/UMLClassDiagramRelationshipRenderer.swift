@@ -8,6 +8,7 @@
 import SwiftUI
 import Common
 
+// swiftlint:disable type_body_length
 struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     var context: GraphicsContext
     let canvasBounds: CGRect
@@ -362,6 +363,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         context.draw(resolvedText, in: textRect)
     }
 }
+// swiftlint:enable type_body_length
 
 enum ArrowHeadType {
     case triangle, triangleWithoutBase, rhombus, rhombusFilled

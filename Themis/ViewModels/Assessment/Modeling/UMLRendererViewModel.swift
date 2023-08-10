@@ -130,10 +130,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
         
         // Look for elements
-        for element in orphanElements {
-            if element.boundsContains(point: point) {
-                return element.getChild(at: point) ?? element
-            }
+        for element in orphanElements where element.boundsContains(point: point) {
+            return element.getChild(at: point) ?? element
         }
         
         // No item found at given point :(

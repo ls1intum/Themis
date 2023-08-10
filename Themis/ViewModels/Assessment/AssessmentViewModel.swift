@@ -194,7 +194,7 @@ class AssessmentViewModel: ObservableObject {
     
     func notifyThemisML() async { // TODO: Make this function more general once Athene is integrated
         guard let participationId = participation?.id,
-              case .programming(exercise: _) = exercise
+              case .programming = exercise
         else {
             return
         }
