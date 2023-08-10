@@ -40,6 +40,7 @@ struct CorrectionSidebarView: View {
                         ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise?.id)
                             .frame(maxHeight: .infinity)
                     }
+                    .padding(.horizontal, problemStatementNeedsPadding ? 15 : 0)
                     .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
                     
                     switch correctionSidebarStatus {
@@ -81,6 +82,13 @@ struct CorrectionSidebarView: View {
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding()
+    }
+    
+    private var problemStatementNeedsPadding: Bool {
+        guard let exercise else {
+            return false
+        }
+        return type(of: exercise) != ProgrammingExercise.self
     }
 }
 
