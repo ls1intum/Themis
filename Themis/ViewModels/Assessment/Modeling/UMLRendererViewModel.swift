@@ -266,8 +266,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             
             let badgeCircle = Path(ellipseIn: badgeRect)
             
-            context.fill(badgeCircle, with: .color(.primary.opacity(0.35)))
-            
+            context.fill(badgeCircle, with: .color(Color(UIColor.systemGray5).opacity(0.85)))
             context.draw(resolvedBadgeSymbol, in: badgeRect.insetBy(dx: 6, dy: 6))
             
             if highlight.isSuggested {
