@@ -349,6 +349,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         context.draw(resolvedText, in: textRect)
     }
 }
+// swiftlint:enable type_body_length
 
 enum ArrowHeadType {
     case triangle, triangleWithoutBase, rhombus, rhombusFilled

@@ -13,25 +13,14 @@ enum UMLBadgeSymbol {
     case cross
     case exclamation
     
-    var systemName: String {
+    var imageName: String {
         switch self {
         case .checkmark:
-            return "checkmark.circle.fill"
+            return "checkmark-badge"
         case .cross:
-            return "xmark.circle.fill"
+            return "xmark-badge"
         case .exclamation:
-            return "exclamationmark.circle.fill"
-        }
-    }
-    
-    var color: Color {
-        switch self {
-        case .checkmark:
-            return .themisGreen
-        case .cross:
-            return .themisRed
-        case .exclamation:
-            return .themisSecondary
+            return "exclamation-badge"
         }
     }
     

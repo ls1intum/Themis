@@ -47,9 +47,6 @@ struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
     }
     
     private func drawClassLikeElement(element: UMLElement, elementRect: CGRect) {
-        context.fill(Path(elementRect), with: .color(Color(UIColor.systemBackground)))
-        context.stroke(Path(elementRect), with: .color(Color.primary))
-        
         switch element.type {
         case .classAttribute, .classMethod:
             drawAttributeOrMethod(element, in: elementRect)
@@ -85,6 +82,9 @@ struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
     private func drawTitle(of element: UMLElement, in elementRect: CGRect) {
         var titleY: CGFloat
         
+        context.fill(Path(elementRect), with: .color(Color(UIColor.systemBackground)))
+        context.stroke(Path(elementRect), with: .color(Color.primary))
+        
         // START: Draw type text
         let typeTextString = element.type?.annotationTitle ?? ""
         var typeText = Text(typeTextString)
@@ -114,6 +114,38 @@ struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
         
         context.draw(elementTitle, in: titleRect)
         // END: Draw title text
+        
+        if [UMLElementType.Class, .abstractClass, .enumeration, .interface].contains(element.type) {
+            drawAttributeAndMethodSeparators(element, in: elementRect)
+        }
+    }
+
+    private func drawAttributeAndMethodSeparators(_ element: UMLElement, in elementRect: CGRect) {
+        // Draw a line above the first attribute of this element
+        if let firstAttribute = element.verticallySortedChildren?.first(where: { $0.type == .classAttribute }),
+           let firstAttributeTopLeft = firstAttribute.boundsAsCGRect?.origin,
+           let firstAttributeSize = firstAttribute.boundsAsCGRect?.size {
+            let firstAttributeTopRight = firstAttributeTopLeft.applying(.init(translationX: firstAttributeSize.width, y: 0))
+            
+            var attributePath = Path()
+            attributePath.move(to: firstAttributeTopLeft)
+            attributePath.addLine(to: firstAttributeTopRight)
+            
+            context.stroke(attributePath, with: .color(.primary))
+        }
+        
+        // Draw a line above the first method of this element
+        if let firstMethod = element.verticallySortedChildren?.first(where: { $0.type == .classMethod }),
+           let firstMethodTopLeft = firstMethod.boundsAsCGRect?.origin,
+           let firstMethodSize = firstMethod.boundsAsCGRect?.size {
+            let firstMethodTopRight = firstMethodTopLeft.applying(.init(translationX: firstMethodSize.width, y: 0))
+            
+            var methodPath = Path()
+            methodPath.move(to: firstMethodTopLeft)
+            methodPath.addLine(to: firstMethodTopRight)
+            
+            context.stroke(methodPath, with: .color(.primary))
+        }
     }
     
     private func drawAttributeOrMethod(_ element: UMLElement, in elementRect: CGRect) {

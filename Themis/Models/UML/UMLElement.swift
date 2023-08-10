@@ -18,6 +18,11 @@ class UMLElement: Decodable, SelectableUMLItem {
     
     var children: [UMLElement]? = [] // not decoded
     
+    /// Childresn of this element sorted by their vertical position (top to bottom)
+    var verticallySortedChildren: [UMLElement]? {
+        children?.sorted(by: { ($0.bounds?.y ?? 0.0) < ($1.bounds?.y ?? 0.0) })
+    }
+    
     var typeAsString: String? {
         type?.rawValue
     }
@@ -44,10 +49,8 @@ class UMLElement: Decodable, SelectableUMLItem {
             return nil
         }
         
-        for child in children {
-            if child.boundsContains(point: point) {
-                return child.getChild(at: point) ?? child
-            }
+        for child in children where child.boundsContains(point: point) {
+            return child.getChild(at: point) ?? child
         }
         
         return nil
@@ -79,4 +82,5 @@ struct Boundary: Decodable {
     let y: Double
     let width: Double
     let height: Double
+    // swiftlint:enable identifier_name
 }
