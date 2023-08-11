@@ -11,9 +11,8 @@ import Common
 struct UMLUseCaseDiagramElementRenderer: UMLDiagramRenderer {
     var context: UMLGraphicsContext
     let canvasBounds: CGRect
-    
-    private let fontSize: CGFloat = 14
-    
+    var fontSize: CGFloat
+        
     func render(umlModel: UMLModel) {
         guard let elements = umlModel.elements else {
             log.error("The UML model contains no elements")

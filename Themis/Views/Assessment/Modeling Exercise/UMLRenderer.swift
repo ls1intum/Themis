@@ -41,6 +41,8 @@ struct UMLRenderer: View {
                     umlRendererVM.selectItem(at: tapLocation)
                 }
             }
+            .frame(minWidth: umlRendererVM.diagramSize.width,
+                   minHeight: umlRendererVM.diagramSize.height)
             .padding()
             .scaleEffect(scale * progressingScale)
             .position(umlRendererVM.currentDragLocation)
@@ -50,8 +52,6 @@ struct UMLRenderer: View {
         .onChange(of: umlRendererVM.diagramSize, perform: { _ in
             umlRendererVM.setDragLocation()
         })
-        .frame(minWidth: umlRendererVM.diagramSize.width,
-               minHeight: umlRendererVM.diagramSize.height)
         .gesture(
             DragGesture()
                 .onChanged(handleDrag)

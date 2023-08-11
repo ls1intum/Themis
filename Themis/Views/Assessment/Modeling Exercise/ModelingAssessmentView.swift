@@ -30,6 +30,9 @@ struct ModelingAssessmentView: View {
             }
             .animation(.default, value: paneVM.showRightPane)
         }
+        .onAppear {
+            assessmentVM.fontSize = 14.0
+        }
         .task {
             await assessmentVM.initSubmission()
             umlRendererVM.setup(basedOn: assessmentVM.submission, assessmentResult)
@@ -77,7 +80,10 @@ struct ModelingAssessmentView: View {
             }
         }
         .onChange(of: assessmentVM.fontSize, perform: { umlRendererVM.fontSize = $0 })
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: { umlRendererVM.pencilModeDisabled = $0 })
+        .onChange(of: assessmentVM.pencilModeDisabled, perform: {
+            umlRendererVM.pencilModeDisabled = $0
+            umlRendererVM.selectedElement = nil
+        })
     }
     
     private var correctionWithPlaceholder: some View {

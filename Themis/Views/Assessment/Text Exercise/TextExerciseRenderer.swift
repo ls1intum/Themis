@@ -18,8 +18,7 @@ struct TextExerciseRenderer: View {
     private let scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
     private var editorFlags: CodeEditor.Flags {
-        var flags: CodeEditor.Flags = [.selectable]
-        return flags
+        CodeEditor.Flags.selectable
     }
     
     private var theme: CodeEditor.ThemeName {

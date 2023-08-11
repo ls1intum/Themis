@@ -25,7 +25,7 @@ struct FeedbackListView: View {
     var body: some View {
         VStack(alignment: .leading) {
             List {
-                athenaHintBox
+                automaticFeedbackHintBox
                 generalFeedbackSection
                 inlineFeedbackSection
                 automaticFeedbackSection
@@ -45,7 +45,7 @@ struct FeedbackListView: View {
     }
     
     @ViewBuilder
-    private var athenaHintBox: some View {
+    private var automaticFeedbackHintBox: some View {
         if type(of: assessmentResult) == ModelingAssessmentResult.self
             && !assessmentResult.automaticFeedback.isEmpty {
             // swiftlint:disable line_length

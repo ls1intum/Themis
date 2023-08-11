@@ -11,8 +11,7 @@ import Common
 struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     var context: UMLGraphicsContext
     let canvasBounds: CGRect
-    
-    private let fontSize: CGFloat = 14
+    var fontSize: CGFloat
     
     func render(umlModel: UMLModel) {
         guard let relationships = umlModel.relationships else {
@@ -196,7 +195,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawArrowhead(at point: CGPoint, rotatedBy angle: Angle, type: ArrowHeadType) {
         var path = Path()
-        let size: CGFloat = (fontSize * 0.7).rounded()
+        let size: CGFloat = 10
                 
         switch type {
         case .triangle:

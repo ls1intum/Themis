@@ -54,9 +54,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     private var diagramTypeUnsupported = false
     
-    private lazy var symbolSize: Double = {
-        (fontSize * 2.0).rounded()
-    }()
+    private var symbolSize = 30.0
     
     /// Sets this VM up based on the given submission
     @MainActor
@@ -119,9 +117,9 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         switch model.type {
         case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)
         case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)
         default:
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
@@ -177,10 +175,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
         
         // Look for elements
-        for element in orphanElements {
-            if element.boundsContains(point: point) {
-                return element.getChild(at: point) ?? element
-            }
+        for element in orphanElements where element.boundsContains(point: point) {
+            return element.getChild(at: point) ?? element
         }
         
         // No item found at given point :(
@@ -260,24 +256,15 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     /// Generates all possible symbol views that can be drawn on the canvas used for rendering highlights
     func generatePossibleSymbols() -> some View {
         // Positive referenced feedback
-        Image(systemName: UMLBadgeSymbol.checkmark.systemName)
-            .bold()
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(UMLBadgeSymbol.checkmark.color, .secondary.opacity(0.3))
+        Image(UMLBadgeSymbol.checkmark.imageName)
             .tag(UMLBadgeSymbol.checkmark)
         
         // Negative referenced feedback
-        Image(systemName: UMLBadgeSymbol.cross.systemName)
-            .bold()
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(UMLBadgeSymbol.cross.color, .secondary.opacity(0.3))
+        Image(UMLBadgeSymbol.cross.imageName)
             .tag(UMLBadgeSymbol.cross)
         
         // Neutral referenced feedback
-        Image(systemName: UMLBadgeSymbol.exclamation.systemName)
-            .bold()
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(UMLBadgeSymbol.exclamation.color, .secondary.opacity(0.3))
+        Image(UMLBadgeSymbol.exclamation.imageName)
             .tag(UMLBadgeSymbol.exclamation)
     }
     
@@ -317,10 +304,15 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                 continue
             }
             
-            context.draw(resolvedBadgeSymbol, in: CGRect(x: badgeCircleX,
-                                                         y: badgeCircleY,
-                                                         width: badgeCircleSideLength,
-                                                         height: badgeCircleSideLength))
+            let badgeRect = CGRect(x: badgeCircleX,
+                                   y: badgeCircleY,
+                                   width: badgeCircleSideLength,
+                                   height: badgeCircleSideLength)
+            
+            let badgeCircle = Path(ellipseIn: badgeRect)
+            
+            context.fill(badgeCircle, with: .color(Color(UIColor.systemGray5).opacity(0.85)))
+            context.draw(resolvedBadgeSymbol, in: badgeRect.insetBy(dx: 6, dy: 6))
             
             if highlight.isSuggested {
                 context.fill(Path(highlight.rect), with: .color(Color.modelingSuggestedFeedback))

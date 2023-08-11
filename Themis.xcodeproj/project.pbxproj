@@ -250,7 +250,6 @@
 		659F879C2A6EF16A005ABAFD /* ExerciseRendererViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRendererViewModel.swift; sourceTree = "<group>"; };
 		65A49CE62A558AC200F8B716 /* ExerciseHelperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseHelperService.swift; sourceTree = "<group>"; };
 		65A49CE82A55AE4800F8B716 /* ModelingSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelingSubmissionServiceImpl.swift; sourceTree = "<group>"; };
-		65A49CF02A55B62E00F8B716 /* artemis-ios-core-modules */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "artemis-ios-core-modules"; path = "../artemis-ios-core-modules"; sourceTree = "<group>"; };
 		65B49F372A07D5C000C9A45F /* ToolbarPointsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarPointsLabel.swift; sourceTree = "<group>"; };
 		65B49F392A07D5F200C9A45F /* ToolbarToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarToggleButton.swift; sourceTree = "<group>"; };
 		65B49F3D2A07ED6100C9A45F /* ToolbarFileTreeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarFileTreeToggleButton.swift; sourceTree = "<group>"; };
@@ -768,7 +767,6 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
-				65A49CF02A55B62E00F8B716 /* artemis-ios-core-modules */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,

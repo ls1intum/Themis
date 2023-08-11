@@ -25,6 +25,7 @@ struct ExampleModelingSolutionView: View {
                 .onAppear {
                     umlRendererVM.setup(basedOn: exercise.exampleSolutionModel ?? "")
                 }
+                .clipped()
             
             // The default reset button of UMLRenderer is replaced by the button below
             // because the default one is not shown properly when put inside a List
