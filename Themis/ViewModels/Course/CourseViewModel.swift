@@ -18,7 +18,7 @@ class CourseViewModel: ObservableObject {
     @Published var viewOnlyExams: [Exam] = []
     @Published var assessableExams: [Exam] = []
     @Published var error: Error?
-    @Published var showEmptyMessage = true
+    @Published var showEmptyMessage = false
     
     private static var shownCourseIDKey = "shownCourseID"
     
@@ -90,13 +90,11 @@ class CourseViewModel: ObservableObject {
             return
         }
         
-        Task {
-            if firstLoad {
-                loading = true
-                firstLoad = false
-            }
+        Task { [weak self] in
+            self?.loading = true
+            
             defer {
-                loading = false
+                self?.loading = false
             }
             
             let courseForAssessment = await CourseServiceFactory.shared.getCourseForAssessment(courseId: shownCourseID)
@@ -104,8 +102,8 @@ class CourseViewModel: ObservableObject {
             if case .failure(let error) = courseForAssessment {
                 log.error(String(describing: error))
             } else if let courseValueForAssessment = courseForAssessment.value {
-                setExercises(for: courseValueForAssessment)
-                setExamsForShownCourse()
+                self?.setExercises(for: courseValueForAssessment)
+                self?.setExamsForShownCourse()
             }
         }
     }

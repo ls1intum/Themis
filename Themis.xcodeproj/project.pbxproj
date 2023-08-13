@@ -39,6 +39,9 @@
 		657534B82A0F7A52004B0C3F /* PushNotifications in Frameworks */ = {isa = PBXBuildFile; productRef = 657534B72A0F7A52004B0C3F /* PushNotifications */; };
 		657534BA2A0F7A52004B0C3F /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 657534B92A0F7A52004B0C3F /* SharedModels */; };
 		657534BC2A0F7A52004B0C3F /* UserStore in Frameworks */ = {isa = PBXBuildFile; productRef = 657534BB2A0F7A52004B0C3F /* UserStore */; };
+		657EBAF92A8907D4005525AA /* ExamMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657EBAF82A8907D4005525AA /* ExamMockExtension.swift */; };
+		657EBAFB2A8927E8005525AA /* SkeletonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657EBAFA2A8927E8005525AA /* SkeletonExtension.swift */; };
+		657EBAFD2A892F2D005525AA /* ArrayMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657EBAFC2A892F2D005525AA /* ArrayMockExtension.swift */; };
 		658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658057152A02C4DD00835AD0 /* CourseExtension.swift */; };
 		658057182A02C64B00835AD0 /* ExamExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658057172A02C64B00835AD0 /* ExamExtension.swift */; };
 		6581C67D2A305F3800E49E24 /* FeedbackDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6581C67C2A305F3800E49E24 /* FeedbackDetail.swift */; };
@@ -79,6 +82,7 @@
 		65E797282A1A4B9400E17401 /* SectionTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E797272A1A4B9400E17401 /* SectionTitleModifier.swift */; };
 		65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E797292A1A4EF800E17401 /* ExamListItem.swift */; };
 		65EDED372A33103A003BF14B /* UserFacingErrorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EDED362A33103A003BF14B /* UserFacingErrorExtension.swift */; };
+		65F007982A86C837000FD641 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 65F007972A86C837000FD641 /* Shimmer */; };
 		65F018FF2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */; };
 		65F019012A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */; };
 		65F019052A1CDCE400BB1C98 /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019042A1CDCE400BB1C98 /* AssessmentView.swift */; };
@@ -183,6 +187,9 @@
 		655084622A1B4E2300748A6F /* ProblemStatementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProblemStatementView.swift; sourceTree = "<group>"; };
 		6567A90229EFF85200A5EFDA /* ScorePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorePicker.swift; sourceTree = "<group>"; };
 		656EAF5F2A0256A6003CF2B4 /* AssessmentFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentFeedback.swift; sourceTree = "<group>"; };
+		657EBAF82A8907D4005525AA /* ExamMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamMockExtension.swift; sourceTree = "<group>"; };
+		657EBAFA2A8927E8005525AA /* SkeletonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonExtension.swift; sourceTree = "<group>"; };
+		657EBAFC2A892F2D005525AA /* ArrayMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayMockExtension.swift; sourceTree = "<group>"; };
 		658057152A02C4DD00835AD0 /* CourseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseExtension.swift; sourceTree = "<group>"; };
 		658057172A02C64B00835AD0 /* ExamExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamExtension.swift; sourceTree = "<group>"; };
 		6581C67C2A305F3800E49E24 /* FeedbackDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackDetail.swift; sourceTree = "<group>"; };
@@ -295,6 +302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65F007982A86C837000FD641 /* Shimmer in Frameworks */,
 				E2E3852A29437F9100F5854D /* CodeEditor in Frameworks */,
 				657534B82A0F7A52004B0C3F /* PushNotifications in Frameworks */,
 				657534BC2A0F7A52004B0C3F /* UserStore in Frameworks */,
@@ -420,6 +428,8 @@
 			children = (
 				650538B82A1E1EF200C45E18 /* ExerciseMockExtension.swift */,
 				650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */,
+				657EBAF82A8907D4005525AA /* ExamMockExtension.swift */,
+				657EBAFC2A892F2D005525AA /* ArrayMockExtension.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -514,6 +524,7 @@
 				6594C92F2A37027C00B9CF9F /* NotificationExtension.swift */,
 				651A44BA2A167FDF00DBCD92 /* CourseMockExtension.swift */,
 				658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */,
+				657EBAFA2A8927E8005525AA /* SkeletonExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -899,6 +910,7 @@
 				657534B72A0F7A52004B0C3F /* PushNotifications */,
 				657534B92A0F7A52004B0C3F /* SharedModels */,
 				657534BB2A0F7A52004B0C3F /* UserStore */,
+				65F007972A86C837000FD641 /* Shimmer */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -978,6 +990,7 @@
 				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
 				657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
+				65F007962A86C837000FD641 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -1044,6 +1057,7 @@
 				E2DC481F294626AD00DAF0CC /* DrawingShape.swift in Sources */,
 				65B49F492A0817DC00C9A45F /* ToolbarSaveButton.swift in Sources */,
 				F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */,
+				657EBAFD2A892F2D005525AA /* ArrayMockExtension.swift in Sources */,
 				65E6A0F82A13C3EC0058E5D6 /* ExamService.swift in Sources */,
 				65E6A0FF2A13D1630058E5D6 /* ProgrammingAssessmentServiceImpl.swift in Sources */,
 				DAFFA3FD297F12A800EA72B8 /* ExerciseListItem.swift in Sources */,
@@ -1069,6 +1083,7 @@
 				6567A90329EFF85200A5EFDA /* ScorePicker.swift in Sources */,
 				65E6A0FA2A13C5C90058E5D6 /* ExamServiceImpl.swift in Sources */,
 				65EDED372A33103A003BF14B /* UserFacingErrorExtension.swift in Sources */,
+				657EBAFB2A8927E8005525AA /* SkeletonExtension.swift in Sources */,
 				650538BC2A1E226A00C45E18 /* MockAssessmentViewModel.swift in Sources */,
 				65B49F4C2A08192100C9A45F /* LeftGripView.swift in Sources */,
 				65101DD72A35FB98007B598A /* UnknownAssessmentResult.swift in Sources */,
@@ -1102,6 +1117,7 @@
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
 				658057182A02C64B00835AD0 /* ExamExtension.swift in Sources */,
 				8384C42F29210458008CCB4D /* CorrectionGuidelinesCellView.swift in Sources */,
+				657EBAF92A8907D4005525AA /* ExamMockExtension.swift in Sources */,
 				DA249E9A293029A3008DE1D5 /* AuthenticatedPreview.swift in Sources */,
 				65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */,
 				65B49F432A08058A00C9A45F /* AssessmentModeSymbol.swift in Sources */,
@@ -1506,6 +1522,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		65F007962A86C837000FD641 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1600,6 +1624,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
 			productName = UserStore;
+		};
+		65F007972A86C837000FD641 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F007962A86C837000FD641 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 		E2192EE0291E6F780092CE58 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;

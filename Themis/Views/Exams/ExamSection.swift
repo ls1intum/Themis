@@ -25,34 +25,31 @@ struct ExamSection: View {
     
     var body: some View {
         Group {
-            if exams.isEmpty {
-                EmptyView()
-            } else {
-                Text("Exams")
-                    .customSectionTitle()
-                
-                VStack {
-                    ForEach(exams, id: \.id) { exam in
-                        NavigationLink {
-                            ExamSectionDetailView(examID: exam.id, examTitle: exam.title ?? "Untitled Exam")
-                                .environmentObject(courseVM)
-                        } label: {
-                            ExamListItem(exam: exam, dateProperties: [
-                                startDate,
-                                assessmentStartDate,
-                                assessmentDueDate
-                            ])
-                            .padding(.horizontal)
-                            .padding(.vertical, 12)
-                        }
-                        
-                        Divider()
-                            .padding(.leading, .xl)
-                            .isHidden(exam.id == exams.last?.id, fake: true)
+            Text("Exams")
+                .customSectionTitle()
+            
+            VStack {
+                ForEach(exams.mock(if: courseVM.loading), id: \.id) { exam in
+                    NavigationLink {
+                        ExamSectionDetailView(examID: exam.id, examTitle: exam.title ?? "Untitled Exam")
+                            .environmentObject(courseVM)
+                    } label: {
+                        ExamListItem(exam: exam, dateProperties: [
+                            startDate,
+                            assessmentStartDate,
+                            assessmentDueDate
+                        ])
+                        .padding(.horizontal)
+                        .padding(.vertical, 12)
+                        .showsSkeleton(if: courseVM.loading)
                     }
+                    
+                    Divider()
+                        .padding(.leading, .xl)
+                        .isHidden(exam.id == exams.last?.id, fake: true)
                 }
-                .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))
             }
+            .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))
         }
     }
 }

@@ -23,16 +23,14 @@ struct CourseView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if courseVM.loading {
-                    ProgressView()
-                } else if courseVM.showEmptyMessage {
+                if courseVM.showEmptyMessage {
                     emptyInfo
                 } else {
-                    ScrollView {
-                        Group {
+                    ScrollView(.vertical) {
+                        VStack(spacing: 25) {
                             ExerciseGroups(courseVM: courseVM, type: .inAssessment)
-                                .padding(.bottom)
                             ExerciseGroups(courseVM: courseVM, type: .viewOnly)
+                            Spacer()
                         }
                         .padding(20)
                     }
@@ -104,8 +102,5 @@ struct CourseView_Previews: PreviewProvider {
     
     static var previews: some View {
         CourseView(courseVM: courseVM)
-            .onAppear {
-                courseVM.showEmptyMessage = true
-            }
     }
 }
