@@ -19,28 +19,31 @@ extension Array {
             return self
         }
         
-        var mockArray = [Element]()
-        var elementToBeCloned: Element?
+        var mockArray = [Any]()
         
-        switch self {
-        case is [Exercise]:
-            elementToBeCloned = Exercise.mockText as? Element
-        case is [Exam]:
-            elementToBeCloned = Exam.mock as? Element
-        default:
-            log.debug("Could not generate mock for type: \(type(of: self))")
-        }
+        let elementCount = mockElementCount ?? Int.random(in: 1...3)
         
-        var elementCount = mockElementCount ?? Int.random(in: 1...3)
-        
-        if let elementToBeCloned {
-            for _ in 0..<elementCount {
-                mockArray.append(elementToBeCloned)
+        for _ in 0..<elementCount {
+            var elementToBeCloned: Any
+            
+            switch Element.self {
+            case is Exercise.Type:
+                elementToBeCloned = Exercise.mockText
+            case is Exam.Type:
+                elementToBeCloned = Exam.mock
+            default:
+                log.debug("Could not determine mock type for: \(type(of: self))")
+                continue
             }
-        } else {
-            log.debug("Could not generate a correct mock value for type: \(type(of: self))")
+            
+            mockArray.append(elementToBeCloned)
         }
         
-        return mockArray
+        if let result = mockArray as? [Element] {
+            return result
+        } else {
+            log.debug("Could not correctly generate mock for type: \(type(of: self))")
+            return []
+        }
     }
 }
