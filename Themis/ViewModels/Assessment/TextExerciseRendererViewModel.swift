@@ -51,7 +51,7 @@ class TextExerciseRendererViewModel: ObservableObject {
     
     /// Needed for creating new text blocks
     private var submissionId: Int?
-    
+    private var suggestedRefs = [TextBlockRef]()
     
     /// Sets this VM up based on the given participation and optional submission
     /// - Parameters:
@@ -77,6 +77,59 @@ class TextExerciseRendererViewModel: ObservableObject {
         submissionId = textSubmission.id
         content = textSubmission.text ?? content
         setupHighlights(basedOn: blocks, and: feedbacks)
+        
+        if let participation {
+            fetchSuggestions(for: textSubmission, participation)
+        }
+    }
+    
+    // TODO: make sure this is not called for read-only and finished submissions
+    private func fetchSuggestions(for textSubmission: TextSubmission, _ participation: BaseParticipation) {
+        guard let exerciseId = participation.exercise?.id,
+              let submissionId = textSubmission.id else {
+            log.error("Could not fetch suggestions for submission: #\(submissionId ?? -1)")
+            return
+        }
+        
+        Task { [weak self] in
+            do {
+                var blockRefs = try await AthenaService().getFeedbackSuggestions(exerciseId: exerciseId, submissionId: submissionId)
+                log.verbose("Fetched \(blockRefs.count) suggestions")
+                
+                blockRefs = self?.removeOverlappingRefs(blockRefs) ?? []
+                await self?.setupHighlights(basedOn: blockRefs)
+                self?.suggestedRefs = blockRefs
+            } catch {
+                log.error(String(describing: error))
+            }
+        }
+    }
+    
+    private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
+        var result = [TextBlockRef]()
+        
+        for blockRef in blockRefs {
+            guard let startIndex = blockRef.block.startIndex,
+                  let endIndex = blockRef.block.endIndex else {
+                continue
+            }
+            let blockRefRange = startIndex..<endIndex
+            
+            if let overlappingRefIndex = result.firstIndex(where: { existingBlockRef in
+                if let existingStartIndex = existingBlockRef.block.startIndex,
+                   let existingEndIndex = existingBlockRef.block.endIndex {
+                    let existingRefRange = existingStartIndex..<existingEndIndex
+                    return blockRefRange.overlaps(existingRefRange)
+                }
+                return false
+            }) { // overlap detected, replace the existing ref
+                result[overlappingRefIndex] = blockRef
+            } else { // no overlap, just add
+                result.append(blockRef)
+            }
+        }
+        log.verbose("After removing overlaps: \(result.count)")
+        return result
     }
     
     private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
@@ -98,6 +151,25 @@ class TextExerciseRendererViewModel: ObservableObject {
         if shouldWipeUndo {
             undoManager.removeAllActions()
         }
+    }
+    
+    @MainActor
+    private func setupHighlights(basedOn blockRefs: [TextBlockRef]) {
+        for ref in blockRefs {
+            let block = ref.block
+            let baseFeedback = ref.feedback
+            
+            guard let startIndex = block.startIndex,
+                  let endIndex = block.endIndex else {
+                continue
+            }
+            // TODO: create an AssessmentFeedback
+            let range = NSRange(startIndex..<endIndex)
+            let color = UIColor(.getHighlightColor(forCredits: baseFeedback.credits ?? 0.0).opacity(0.8))
+            inlineHighlights.append(HighlightedRange(id: UUID(), range: range, color: color, isSuggested: true))
+        }
+        
+        undoManager.removeAllActions()
     }
         
     private func updateHighlightColor(for feedback: AssessmentFeedback) {

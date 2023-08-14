@@ -444,12 +444,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 guard text.hasRange(hRange.range) else {
                     continue
                 }
-                self.textStorage.addAttributes(
-                    [
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: hRange.color,
-                        .link: hRange.id.uuidString // equals feedback id
-                    ], range: hRange.range)
+                addUnderlineAttribute(for: hRange)
             }
         }
     }
@@ -460,14 +455,18 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 guard text.hasRange(hRange.range) else {
                     continue
                 }
-                self.textStorage.addAttributes(
-                    [
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: hRange.color,
-                        .link: hRange.id.uuidString // equals feedback id
-                    ], range: hRange.range)
+                addUnderlineAttribute(for: hRange)
             }
         }
+    }
+    
+    private func addUnderlineAttribute(for highlightedRange: HighlightedRange) {
+        self.textStorage.addAttributes(
+            [
+                .underlineStyle: highlightedRange.isSuggested ?  NSUnderlineStyle.thick.rawValue : NSUnderlineStyle.single.rawValue,
+                .underlineColor: highlightedRange.color,
+                .link: highlightedRange.id.uuidString // equals feedback id
+            ], range: highlightedRange.range)
     }
     
     

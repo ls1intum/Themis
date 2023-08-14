@@ -25,7 +25,7 @@ extension Color {
     static let positiveFeedbackBackground = Color("positiveFeedbackBackground")
     static let positiveFeedbackPointBackground = Color("positiveFeedbackPointBackground")
     static let positiveFeedbackText = Color("positiveFeedbackText")
-    static let positiveTextHighlight = UIColor(.init(netHex: 0xB0FFB4), darkModeColor: .init(netHex: 0x48A34B)).suColor
+    static let positiveTextHighlight = UIColor(.init(netHex: 0x4ED955), darkModeColor: .init(netHex: 0x48A34B)).suColor
 
     // Negative Feedback
     static let negativeFeedbackBackground = Color("negativeFeedbackBackground")
