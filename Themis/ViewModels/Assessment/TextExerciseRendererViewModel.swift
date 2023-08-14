@@ -106,7 +106,7 @@ class TextExerciseRendererViewModel: ObservableObject {
     }
     
     private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
-        var result = [TextBlockRef]()
+        var rangeToBlockRef = [Range<Int>: TextBlockRef]()
         
         for blockRef in blockRefs {
             guard let startIndex = blockRef.block.startIndex,
@@ -114,21 +114,11 @@ class TextExerciseRendererViewModel: ObservableObject {
                 continue
             }
             let blockRefRange = startIndex..<endIndex
-            
-            if let overlappingRefIndex = result.firstIndex(where: { existingBlockRef in
-                if let existingStartIndex = existingBlockRef.block.startIndex,
-                   let existingEndIndex = existingBlockRef.block.endIndex {
-                    let existingRefRange = existingStartIndex..<existingEndIndex
-                    return blockRefRange.overlaps(existingRefRange)
-                }
-                return false
-            }) { // overlap detected, replace the existing ref
-                result[overlappingRefIndex] = blockRef
-            } else { // no overlap, just add
-                result.append(blockRef)
-            }
+            rangeToBlockRef[blockRefRange] = blockRef
         }
-        log.verbose("After removing overlaps: \(result.count)")
+        
+        let result = Array(rangeToBlockRef.values)
+        log.verbose("\(result.count) suggestions are remaining after removing overlaps")
         return result
     }
     
