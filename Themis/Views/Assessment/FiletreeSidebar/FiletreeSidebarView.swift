@@ -26,7 +26,6 @@ struct FiletreeSidebarView: View {
                 .bold()
                 .padding(.leading, 18)
             
-            if !assessmentVM.loading {
                 List {
                     OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
                         if tree.type == .folder {
@@ -41,13 +40,14 @@ struct FiletreeSidebarView: View {
                 .listStyle(.inset)
                 .background(Color("sidebarBackground"))
                 .scrollContentBackground(.hidden)
-            }
+            
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 35)
         .background(Color("sidebarBackground"))
         .animation(.easeInOut(duration: 0.2), value: repositorySelection)
+        .shows(FiletreeSkeleton(), if: assessmentVM.loading || cvm.isLoading)
     }
     
     @ViewBuilder

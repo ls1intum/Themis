@@ -26,6 +26,7 @@ class CodeEditorViewModel: ObservableObject {
             }
         }
     }
+    @Published var isLoading = false
     @Published var showAddFeedback = false
     @Published var showEditFeedback = false
     @Published var pencilModeDisabled = true
@@ -98,6 +99,9 @@ class CodeEditorViewModel: ObservableObject {
     
     @MainActor
     func initFileTree(participationId: Int, repositoryType: RepositoryType) async {
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
             let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
             let node = Node.initFileTreeStructure(files: files)

@@ -17,6 +17,7 @@
 		65101DD32A33362F007B598A /* ProgrammingAssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */; };
 		65101DD52A33363A007B598A /* TextAsessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD42A33363A007B598A /* TextAsessmentResult.swift */; };
 		65101DD72A35FB98007B598A /* UnknownAssessmentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */; };
+		651530072A8C0E1C00893970 /* FiletreeSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651530062A8C0E1C00893970 /* FiletreeSkeleton.swift */; };
 		65153F9F2A0F9B260020B6FE /* LoginVMExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65153F9E2A0F9B260020B6FE /* LoginVMExtension.swift */; };
 		65153FA12A0FAD4A0020B6FE /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65153FA02A0FAD4A0020B6FE /* RootViewModel.swift */; };
 		651A44B82A1672DE00DBCD92 /* ExerciseGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651A44B72A1672DE00DBCD92 /* ExerciseGroups.swift */; };
@@ -177,6 +178,7 @@
 		65101DD22A33362F007B598A /* ProgrammingAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingAssessmentResult.swift; sourceTree = "<group>"; };
 		65101DD42A33363A007B598A /* TextAsessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAsessmentResult.swift; sourceTree = "<group>"; };
 		65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownAssessmentResult.swift; sourceTree = "<group>"; };
+		651530062A8C0E1C00893970 /* FiletreeSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiletreeSkeleton.swift; sourceTree = "<group>"; };
 		65153F9E2A0F9B260020B6FE /* LoginVMExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVMExtension.swift; sourceTree = "<group>"; };
 		65153FA02A0FAD4A0020B6FE /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		651A44B72A1672DE00DBCD92 /* ExerciseGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGroups.swift; sourceTree = "<group>"; };
@@ -451,6 +453,14 @@
 				65101DD62A35FB98007B598A /* UnknownAssessmentResult.swift */,
 			);
 			path = Result;
+			sourceTree = "<group>";
+		};
+		651530052A8C0E0B00893970 /* Skeleton */ = {
+			isa = PBXGroup;
+			children = (
+				651530062A8C0E1C00893970 /* FiletreeSkeleton.swift */,
+			);
+			path = Skeleton;
 			sourceTree = "<group>";
 		};
 		65153F9D2A0F9B090020B6FE /* Core */ = {
@@ -786,6 +796,7 @@
 		E2192EE6291EC2F90092CE58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				651530052A8C0E0B00893970 /* Skeleton */,
 				A9752D772992AA66004441D1 /* Exams */,
 				DAECE6FF296A1BC80025F875 /* Courses */,
 				DA98C6622954ED7B005727FB /* Custom */,
@@ -1112,6 +1123,7 @@
 				65E797282A1A4B9400E17401 /* SectionTitleModifier.swift in Sources */,
 				DAECE701296A1BC80025F875 /* CourseView.swift in Sources */,
 				E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */,
+				651530072A8C0E1C00893970 /* FiletreeSkeleton.swift in Sources */,
 				E200F787297F10B300DE269D /* SourceCodeLanguage.swift in Sources */,
 				65D2C6892A011815001D5CD1 /* ExerciseExtension.swift in Sources */,
 				8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */,
