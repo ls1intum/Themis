@@ -16,6 +16,7 @@ class ExerciseViewModel: ObservableObject {
     @Published var exerciseStatsForAssessment: DataState<ExerciseStatsForAssessmentDashboard> = .loading
     @Published var exerciseStats: DataState<ExerciseStatistics> = .loading
     @Published var error: Error?
+    @Published var isLoading = false
     
     var reviewStudents: String {
         let totalNumberOfStudents = exerciseStatsForAssessment.value?.numberOfSubmissions?.inTime ?? -1
@@ -83,7 +84,24 @@ class ExerciseViewModel: ObservableObject {
         (exercise.value?.isCurrentlyInAssessment ?? false)
         || ((exam?.isOver ?? false) && !(exam?.isAssessmentDue ?? true))
     }
-
+    
+    private var isLoadedOnce = false
+    
+    @MainActor
+    func fetchAllExerciseData(exerciseId: Int) async {
+        isLoading = isLoadedOnce ? isLoading : true
+        defer {
+            isLoading = false
+            isLoadedOnce = true
+        }
+        
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { [weak self] in await self?.fetchExercise(exerciseId: exerciseId) }
+            group.addTask { [weak self] in await self?.fetchExerciseStats(exerciseId: exerciseId) }
+            group.addTask { [weak self] in await self?.fetchExerciseStatsForDashboard(exerciseId: exerciseId) }
+        }
+    }
+    
     @MainActor
     func fetchExercise(exerciseId: Int) async {
         exercise = await ExerciseServiceFactory.shared.getExerciseForAssessment(exerciseId: exerciseId)

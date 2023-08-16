@@ -15,9 +15,15 @@ struct SubmissionListView: View {
     let exercise: Exercise
     let submissionStatus: SubmissionStatus
     
+    private var relevantSubmissions: [Submission] {
+        submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions
+    }
+    
     var body: some View {
         List {
-            ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions, id: \.baseSubmission.id) { submission in
+            ForEach(relevantSubmissions.mock(if: submissionListVM.isLoading,
+                                             mockElementCount: 1),
+                    id: \.baseSubmission.id) { submission in
                 NavigationLink {
                     AssessmentView(
                         exercise: exercise,
@@ -36,6 +42,7 @@ struct SubmissionListView: View {
                 }.padding(.trailing)
             }
         }
+        .showsSkeleton(if: submissionListVM.isLoading)
     }
     
     func dateTimeline(submission: Submission) -> some View {

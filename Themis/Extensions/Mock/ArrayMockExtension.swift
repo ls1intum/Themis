@@ -31,6 +31,8 @@ extension Array {
                 elementToBeCloned = Exercise.mockText
             case is Exam.Type:
                 elementToBeCloned = Exam.mock
+            case is Submission.Type:
+                elementToBeCloned = Submission.mockText
             default:
                 log.debug("Could not determine mock type for: \(type(of: self))")
                 continue

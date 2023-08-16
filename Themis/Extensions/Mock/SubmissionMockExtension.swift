@@ -18,6 +18,7 @@ extension Submission {
             "id": 34463,
             "submitted": true,
             "type": "MANUAL",
+            "submissionDate": "2023-07-30T16:29:00+02:00",
             "participation": {
                 "type": "student",
                 "id": 25776,
@@ -119,6 +120,8 @@ extension Submission {
         }
         """.utf8)
         
-        return try! JSONDecoder().decode(Submission.self, from: submissionData)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try! decoder.decode(Submission.self, from: submissionData)
     }
 }
