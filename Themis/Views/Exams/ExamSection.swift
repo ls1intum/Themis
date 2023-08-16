@@ -43,6 +43,7 @@ struct ExamSection: View {
                         .padding(.vertical, 12)
                         .showsSkeleton(if: courseVM.loading)
                     }
+                    .disabled(courseVM.loading)
                     
                     Divider()
                         .padding(.leading, .xl)

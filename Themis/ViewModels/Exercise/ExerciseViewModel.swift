@@ -121,7 +121,9 @@ class ExerciseViewModel: ObservableObject {
     }
     
     private func showErrorIfFailedFetching<T>(_ data: DataState<T>) {
-        if case .failure(let error) = data {
+        if case .failure(let error) = data,
+           let errorMessage = error.message,
+           !errorMessage.contains("cancel") { // cancellation occurs when the user leaves the view before the response arrives
             self.error = error
             log.error(String(describing: error))
         }

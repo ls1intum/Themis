@@ -42,7 +42,7 @@ struct ExerciseSection: View {
                             .padding(.vertical, 12)
                             .showsSkeleton(if: courseVM.loading)
                     }
-                    .disabled(exercise.isDisabled)
+                    .disabled(exercise.isDisabled || courseVM.loading)
                     
                     Divider()
                         .padding(.leading, .xl)
