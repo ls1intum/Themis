@@ -12,7 +12,7 @@ import Common
 class ExamDetailViewModel: ObservableObject {
     @Published var exam: Exam?
     @Published var exercises: [Exercise] = []
-    @Published var examTitle = ""
+    @Published var examTitle = "Exam"
     @Published var isLoading = false
     @Published var showNoExercisesInfo = false
     
