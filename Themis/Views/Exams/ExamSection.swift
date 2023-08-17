@@ -31,7 +31,8 @@ struct ExamSection: View {
             VStack {
                 ForEach(exams.mock(if: courseVM.loading), id: \.id) { exam in
                     NavigationLink {
-                        ExamSectionDetailView(examID: exam.id, examTitle: exam.title ?? "Untitled Exam")
+                        ExamSectionDetailView(examDetailVM: ExamDetailViewModel(courseId: courseVM.shownCourseID ?? -1,
+                                                                                examId: exam.id))
                             .environmentObject(courseVM)
                     } label: {
                         ExamListItem(exam: exam, dateProperties: [
