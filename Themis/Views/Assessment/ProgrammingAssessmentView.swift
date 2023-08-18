@@ -12,8 +12,6 @@ struct ProgrammingAssessmentView: View {
     
     var submissionId: Int?
     
-    @State private var repositorySelection = RepositoryType.student
-    
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
@@ -94,20 +92,7 @@ struct ProgrammingAssessmentView: View {
             if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
-                    .onChange(of: repositorySelection) { newRepositoryType in
-                        if let participationId = assessmentVM.participation?.getId(for: newRepositoryType) {
-                            Task {
-                                await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
-                                if newRepositoryType == .student {
-                                    await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
-                                                                                   participationId: participationId)
-                                } else {
-                                    assessmentVM.pencilModeDisabled = true
-                                }
-                            }
-                        }
-                    }
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
             }
         }
     }

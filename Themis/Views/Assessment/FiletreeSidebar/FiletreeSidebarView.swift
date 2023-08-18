@@ -5,26 +5,16 @@ import DesignLibrary
 struct FiletreeSidebarView: View {
     @ObservedObject var cvm: CodeEditorViewModel
     @ObservedObject var assessmentVM: AssessmentViewModel
-    @Binding var repositorySelection: RepositoryType
+    @State private var repositorySelection = RepositoryType.student
     
     var body: some View {
         VStack(alignment: .leading) {
-            Picker(selection: $repositorySelection) {
-                ForEach(RepositoryType.allCases, id: \.self) { repoType in
-                    Text("\(repoType.rawValue) Repository")
-                }
-            } label: {
-                Text("\(repositorySelection.rawValue) Repository")
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 7)
-            
-            showWarningIfNeeded()
-            
             Text("Filetree")
                 .font(.title)
                 .bold()
                 .padding(.leading, 18)
+            
+            showWarningIfNeeded()
             
             if !assessmentVM.loading {
                 List {
@@ -42,8 +32,12 @@ struct FiletreeSidebarView: View {
                 .background(Color("sidebarBackground"))
                 .scrollContentBackground(.hidden)
             }
+            
             Spacer()
+            
+            repositoryPicker
         }
+        .onChange(of: repositorySelection, perform: handleRepositoryChange)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 35)
         .background(Color("sidebarBackground"))
@@ -83,6 +77,37 @@ struct FiletreeSidebarView: View {
         }
     }
     
+    @ViewBuilder
+    private var repositoryPicker: some View {
+        Menu {
+            Picker(selection: $repositorySelection,
+                   label: EmptyView(),
+                   content: {
+                ForEach(RepositoryType.allCases, id: \.self) { repoType in
+                    Text("\(repoType.rawValue) Repository")
+                        .tag(repoType)
+                }
+            })
+            .pickerStyle(.automatic)
+            .accentColor(.white)
+        } label: {
+            HStack(spacing: 5) {
+                Text("\(repositorySelection.rawValue) Repository")
+                Image(systemName: "arrowtriangle.down.fill")
+                    .resizable()
+                    .frame(width: 10, height: 7)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(8)
+            .accentColor(.themisSecondary)
+            .overlay {
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Color.themisSecondary, lineWidth: 1)
+            }
+            .padding(.horizontal)
+        }
+    }
+    
     private func openFile(_ file: Node) {
         guard let participationId = assessmentVM.participation?.getId(for: repositorySelection) else {
             return
@@ -94,5 +119,29 @@ struct FiletreeSidebarView: View {
                      participationId: participationId,
                      templateParticipationId: templateParticipationId
         )
+    }
+    
+    private func handleRepositoryChange(_ newRepositoryType: RepositoryType) {
+        if let participationId = assessmentVM.participation?.getId(for: newRepositoryType) {
+            Task {
+                await cvm.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                if newRepositoryType == .student {
+                    await cvm.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
+                                                          participationId: participationId)
+                } else {
+                    assessmentVM.pencilModeDisabled = true
+                }
+            }
+        }
+    }
+}
+
+struct FiletreeSidebarView_Previews: PreviewProvider {
+    private static var codeVM = CodeEditorViewModel()
+    private static var assessmentVM = AssessmentViewModel(exercise: .mockText, readOnly: false)
+    
+    static var previews: some View {
+        FiletreeSidebarView(cvm: codeVM,
+                            assessmentVM: assessmentVM)
     }
 }
