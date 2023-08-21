@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "uml_background_tile_light_cropped.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "uml_background_tile_dark_cropped.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
