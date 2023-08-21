@@ -26,6 +26,19 @@ protocol SubmissionService {
     
     /// Fetches a result associated with participationId without locking.
     func getResultFor(participationId: Int) async throws -> Result
+    
+    /// Fetches a submission associated with participationId without locking.
+    func getSubmission(participationId: Int) async throws -> Submission
+}
+
+extension SubmissionService { // default implementations
+    func getResultFor(participationId: Int) async throws -> Result {
+        throw UserFacingError.operationNotSupportedForExercise
+    }
+    
+    func getSubmission(participationId: Int) async throws -> Submission {
+        throw UserFacingError.operationNotSupportedForExercise
+    }
 }
 
 enum SubmissionServiceFactory {
@@ -35,6 +48,8 @@ enum SubmissionServiceFactory {
             return ProgrammingSubmissionServiceImpl()
         case .text:
             return TextSubmissionServiceImpl()
+        case .modeling:
+            return ModelingSubmissionServiceImpl()
         default:
             return UnknownSubmissionServiceImpl()
         }

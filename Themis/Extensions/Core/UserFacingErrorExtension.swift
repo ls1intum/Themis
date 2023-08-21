@@ -12,4 +12,7 @@ extension UserFacingError {
     static let participationNotFound = UserFacingError(title: "Could not find participation")
     static let noMoreAssessments = UserFacingError(title: "There aren't any unassessed submissions left")
     static let unknown = UserFacingError(title: "An unknown error occurred")
+    
+    // MARK: - Modeling
+    static let diagramNotSupported = UserFacingError(title: "This UML diagram type is not supported")
 }

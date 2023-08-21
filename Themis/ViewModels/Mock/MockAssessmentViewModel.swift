@@ -10,6 +10,20 @@ import SharedModels
 
 class MockAssessmentViewModel: AssessmentViewModel {
     
+    init(exercise: Exercise,
+         submission: Submission,
+         submissionId: Int? = nil,
+         participationId: Int? = nil,
+         resultId: Int? = nil,
+         readOnly: Bool) {
+        super.init(exercise: exercise,
+                   submissionId: submissionId,
+                   participationId: participationId,
+                   resultId: resultId,
+                   readOnly: readOnly)
+        self.submission = submission.baseSubmission
+    }
+    
     override init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
         super.init(exercise: exercise,
                    submissionId: submissionId,
