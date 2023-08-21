@@ -25,8 +25,7 @@ class TextAssessmentResult: AssessmentResult {
     
     override func setReferenceData(basedOn submission: BaseSubmission?) {
         guard let textSubmission = submission as? TextSubmission,
-              let submissionId = textSubmission.id
-        else {
+              let submissionId = textSubmission.id else {
             log.warning("Could not set reference data for TextAssessmentResult")
             return
         }

@@ -64,84 +64,16 @@ class AssessmentViewModel: ObservableObject {
     
     @MainActor
     func initSubmission() async {
-        guard submission == nil else {
-            return
-        }
-        
-        switch exercise {
-        case .programming(exercise: _):
-            if readOnly {
-                if let participationId {
-                    await getReadOnlySubmission(participationId: participationId)
-                } else {
-                    self.error = UserFacingError.participationNotFound
-                    log.error("Could not find participation for exercise: \(exercise.baseExercise.title ?? "")")
-                }
-                
-                // for read-only mode, template and solution participations need to be fetched separately
-                if let exerciseId = participation?.exercise?.id {
-                    do {
-                        let exerciseWithTemplateAndSolution = try await ExerciseHelperService()
-                            .getProgrammingExerciseWithTemplateAndSolutionParticipations(exerciseId: exerciseId)
-                        self.participation?.setProgrammingExercise(exerciseWithTemplateAndSolution)
-                    } catch {
-                        log.error("Could not fetch template and solution repositories: \(error)")
-                    }
-                }
-            } else {
-                if let submissionId {
-                    await getSubmission(submissionId: submissionId)
-                } else {
-                    await initRandomSubmission()
-                }
-            }
-        case .text(exercise: _):
-            if readOnly {
-                // TODO: figure out which endpoint could be used instead
-                self.error = UserFacingError.operationNotSupportedForExercise
-            } else {
-                if let submissionId {
-                    await getParticipationForSubmission(submissionId: submissionId)
-                } else {
-                    await initRandomSubmission()
-                }
-            }
-        default:
-            log.warning("Attempt to assess an unknown exercise")
-        }
-        
-        ThemisUndoManager.shared.removeAllActions()
+        log.error("This function should be overridden")
+        self.error = UserFacingError.unknown
     }
     
     @MainActor
-    private func getParticipationForSubmission(submissionId: Int?) async {
-        guard let submissionId else {
-            return
-        }
-        
-        loading = true
-        defer { loading = false }
-        
-        do {
-            let assessmentService = AssessmentServiceFactory.service(for: exercise)
-            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(submissionId: submissionId).baseParticipation
-            self.submission = fetchedParticipation.submissions?.last?.baseSubmission
-            self.participation = fetchedParticipation
-            assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
-            assessmentResult.setReferenceData(basedOn: submission)
-            ThemisUndoManager.shared.removeAllActions()
-        } catch {
-            self.submission = nil
-            self.error = error
-            log.info(String(describing: error))
-        }
-    }
-
-    @MainActor
     func initRandomSubmission() async {
         loading = true
-        defer { loading = false }
-        
+        defer {
+            loading = false
+        }
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
@@ -171,13 +103,16 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer { loading = false }
+        defer {
+            loading = false
+        }
         
         let submissionService = SubmissionServiceFactory.service(for: exercise)
         
         do {
             self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
         } catch {
             self.error = error
@@ -187,26 +122,8 @@ class AssessmentViewModel: ObservableObject {
     
     @MainActor
     func getReadOnlySubmission(participationId: Int) async {
-        guard readOnly else {
-            self.error = UserFacingError.unknown
-            log.error("This function should only be called for read-only mode")
-            return
-        }
-        
-        loading = true
-        defer { loading = false }
-        
-        let submissionService = SubmissionServiceFactory.service(for: exercise)
-        
-        do {
-            let result = try await submissionService.getResultFor(participationId: participationId)
-            self.submission = result.submission?.baseSubmission
-            self.participation = result.participation?.baseParticipation
-            assessmentResult.setComputedFeedbacks(basedOn: result.feedbacks ?? [])
-        } catch {
-            self.error = error
-            log.error(String(describing: error))
-        }
+        log.error("This function should be overridden")
+        self.error = UserFacingError.unknown
     }
 
     @MainActor
@@ -217,7 +134,9 @@ class AssessmentViewModel: ObservableObject {
         }
         
         loading = true
-        defer { loading = false }
+        defer {
+            loading = false
+        }
         
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         
@@ -275,7 +194,7 @@ class AssessmentViewModel: ObservableObject {
     
     func notifyThemisML() async { // TODO: Make this function more general once Athene is integrated
         guard let participationId = participation?.id,
-              case .programming(exercise: _) = exercise
+              case .programming = exercise
         else {
             return
         }
@@ -289,5 +208,41 @@ class AssessmentViewModel: ObservableObject {
     
     func getFeedback(byId id: UUID) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { $0.id == id })
+    }
+}
+
+enum AssessmentViewModelFactory {
+    static func assessmentViewModel(for exercise: Exercise,
+                                    submissionId: Int? = nil,
+                                    participationId: Int? = nil,
+                                    resultId: Int? = nil,
+                                    readOnly: Bool) -> AssessmentViewModel {
+        switch exercise {
+        case .programming:
+            return ProgrammingAssessmentViewModel(exercise: exercise,
+                                                  submissionId: submissionId,
+                                                  participationId: participationId,
+                                                  resultId: resultId,
+                                                  readOnly: readOnly)
+        case .text:
+            return TextAssessmentViewModel(exercise: exercise,
+                                           submissionId: submissionId,
+                                           participationId: participationId,
+                                           resultId: resultId,
+                                           readOnly: readOnly)
+        case .modeling:
+            return ModelingAssessmentViewModel(exercise: exercise,
+                                               submissionId: submissionId,
+                                               participationId: participationId,
+                                               resultId: resultId,
+                                               readOnly: readOnly)
+        default:
+            log.warning("Could not find the corresponding AssessmentViewModel subtype for exercise \(exercise)")
+            return AssessmentViewModel(exercise: exercise,
+                                       submissionId: submissionId,
+                                       participationId: participationId,
+                                       resultId: resultId,
+                                       readOnly: readOnly)
+        }
     }
 }

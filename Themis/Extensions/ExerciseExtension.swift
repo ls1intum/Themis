@@ -22,15 +22,17 @@ extension Exercise {
         ArtemisDateHelpers.stringifyDate(self.baseExercise.releaseDate)
     }
     
+    /// Indicates whether this exercise is assessable in the current version of Themis
     var isDisabled: Bool {
         switch self {
-        case .programming, .text:
+        case .programming, .text, .modeling:
             return false
         default:
             return true
         }
     }
     
+    /// Indicates whether this exercise is assessable in general
     var supportsAssessment: Bool {
         switch self {
         case .quiz, .unknown:
