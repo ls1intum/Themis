@@ -13,7 +13,6 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-xcversion(version: "14.2")
 default_platform(:ios)
 
 platform :ios do
@@ -39,7 +38,7 @@ platform :ios do
       password: ENV['bamboo_KeyChainPassword'],
     )
 
-    xcode_select "/Applications/Xcode.app"
+    xcode_select "/Applications/Xcode-14.2.app"
 
     # If the build number was specified by the CI environment,
     # use it to specify the build number for this build
