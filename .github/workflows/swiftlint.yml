@@ -16,7 +16,7 @@ jobs:
         run: |
           git fetch --prune --no-tags --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/heads/${{ github.base_ref }}
       - name: GitHub Action for SwiftLint (Only files changed in the PR)
-        uses: ezraberch/action-swiftlint@3.2.1
+        uses: ezraberch/action-swiftlint@3.2.3
         with:
           swiftlint-args: --config swiftlint.yml --strict
         env:
