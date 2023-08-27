@@ -528,14 +528,6 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
-		6523D9BF2A8E1E890050EB9A /* Exam */ = {
-			isa = PBXGroup;
-			children = (
-				6523D9C02A8E1E940050EB9A /* ExamDetailViewModel.swift */,
-			);
-			path = Exam;
-			sourceTree = "<group>";
-		};
 		651976162A65A054004E33C8 /* UML */ = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +540,14 @@
 				654BC99A2A7007D00081CF22 /* SelectableUMLItem.swift */,
 			);
 			path = UML;
+			sourceTree = "<group>";
+		};
+		6523D9BF2A8E1E890050EB9A /* Exam */ = {
+			isa = PBXGroup;
+			children = (
+				6523D9C02A8E1E940050EB9A /* ExamDetailViewModel.swift */,
+			);
+			path = Exam;
 			sourceTree = "<group>";
 		};
 		652A98002A07D50B00EB1F32 /* Toolbar */ = {
