@@ -96,3 +96,4 @@ extension Exercise {
         return try! JSONDecoder().decode(Exercise.self, from: exerciseData)
     }
 }
+// swiftlint:enable all

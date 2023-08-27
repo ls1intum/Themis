@@ -30,6 +30,8 @@ enum AssessmentServiceFactory {
             return ProgrammingAssessmentServiceImpl()
         case .text:
             return TextAssessmentServiceImpl()
+        case .modeling:
+            return ModelingAssessmentServiceImpl()
         default:
             return UnknownAssessmentServiceImpl()
         }

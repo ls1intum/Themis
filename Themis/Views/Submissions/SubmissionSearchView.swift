@@ -61,7 +61,7 @@ private struct SingleSubmissionCellView: View {
     var body: some View {
         HStack {
             Group {
-                if let student = submission.getParticipation(as: ProgrammingExerciseStudentParticipation.self)?.student {
+                if let student = submission.getParticipation(as: StudentParticipation.self)?.student {
                     Text(student.name)
                     Text(student.login)
                 }
