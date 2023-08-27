@@ -18,8 +18,7 @@ struct TextExerciseRenderer: View {
     private let scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
     private var editorFlags: CodeEditor.Flags {
-        var flags: CodeEditor.Flags = [.selectable]
-        return flags
+        CodeEditor.Flags.selectable
     }
     
     private var theme: CodeEditor.ThemeName {
@@ -58,7 +57,7 @@ struct TextExerciseRenderer: View {
                 showEditFeedback: $textExerciseRendererVM.showEditFeedback,
                 selectedSection: .constant(nil),
                 selectedFeedbackForEditingId: $textExerciseRendererVM.selectedFeedbackForEditingId,
-                pencilOnly: $textExerciseRendererVM.pencilMode,
+                pencilOnly: $textExerciseRendererVM.pencilModeDisabled,
                 scrollUtils: scrollUtils,
                 showsLineNumbers: false,
                 feedbackSuggestions: [],

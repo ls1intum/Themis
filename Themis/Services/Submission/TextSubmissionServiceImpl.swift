@@ -8,7 +8,6 @@
 import Foundation
 import SharedModels
 import APIClient
-import DesignLibrary
 import Common
 
 class TextSubmissionServiceImpl: SubmissionService {

@@ -11,7 +11,7 @@ import APIClient
 import DesignLibrary
 import Common
 
-class ProgrammingAssessmentServiceImpl: AssessmentService {
+struct ProgrammingAssessmentServiceImpl: AssessmentService {
     
     let client = APIClient()
     

@@ -14,18 +14,16 @@ struct AssessmentView: View {
     @StateObject var assessmentVM: AssessmentViewModel
     @StateObject var assessmentResult: AssessmentResult
     
-    @State private var showCancelDialog = false
-    @State private var showNoSubmissionsAlert = false
-    @State private var showStepper = false
-    @State private var showSubmitConfirmation = false
-    @State private var showNavigationOptions = false
-    @State private var repositorySelection = RepositoryType.student
-    
     let exercise: Exercise
     
     var submissionId: Int?
     var participationId: Int?
     var resultId: Int?
+    
+    @State private var showStepper = false
+    @State private var showSubmitConfirmation = false
+    @State private var showNoSubmissionsAlert = false
+    @State private var showNavigationOptions = false
     
     init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool = false) {
         self.exercise = exercise
@@ -33,11 +31,11 @@ struct AssessmentView: View {
         self.participationId = participationId
         self.resultId = resultId
         
-        let newAssessmentVM = AssessmentViewModel(exercise: exercise,
-                                                  submissionId: submissionId,
-                                                  participationId: participationId,
-                                                  resultId: resultId,
-                                                  readOnly: readOnly)
+        let newAssessmentVM = AssessmentViewModelFactory.assessmentViewModel(for: exercise,
+                                                                             submissionId: submissionId,
+                                                                             participationId: participationId,
+                                                                             resultId: resultId,
+                                                                             readOnly: readOnly)
         self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
         self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
     }
@@ -149,18 +147,21 @@ struct AssessmentView: View {
     @ViewBuilder
     private var viewForExerciseType: some View {
         switch exercise {
-        case .programming(exercise: _):
+        case .programming:
             ProgrammingAssessmentView(assessmentVM: assessmentVM,
                                       assessmentResult: assessmentResult,
                                       exercise: exercise,
                                       submissionId: submissionId)
-        case .text(exercise: _):
+        case .text:
             TextAssessmentView(assessmentVM: assessmentVM,
                                assessmentResult: assessmentResult,
                                exercise: exercise,
                                submissionId: submissionId,
                                participationId: participationId,
                                resultId: resultId)
+        case .modeling:
+            ModelingAssessmentView(assessmentVM: assessmentVM,
+                                   assessmentResult: assessmentResult)
         default:
             Text("Exercise not supported")
         }

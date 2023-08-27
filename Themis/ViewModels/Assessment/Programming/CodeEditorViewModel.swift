@@ -11,9 +11,7 @@ import SwiftUI
 import CodeEditor
 import Common
 
-class CodeEditorViewModel: ObservableObject {
-    let undoManager = ThemisUndoManager.shared
-    
+class CodeEditorViewModel: ExerciseRendererViewModel {
     @Published var fileTree: [Node] = []
     @Published var openFiles: [Node] = []
     @Published var selectedFile: Node?
@@ -26,15 +24,9 @@ class CodeEditorViewModel: ObservableObject {
             }
         }
     }
-    @Published var isLoading = false
-    @Published var showAddFeedback = false
-    @Published var showEditFeedback = false
-    @Published var pencilModeDisabled = true
     @Published var allowsInlineFeedbackOperations = true
-    @Published var selectedFeedbackForEditingId = UUID()
     @Published var error: Error?
     @Published var feedbackSuggestions = [FeedbackSuggestion]()
-    @Published var selectedFeedbackSuggestionId = ""
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
