@@ -121,7 +121,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         if let selectedElement {
             log.verbose("Selected UML element: \(selectedElement.name ?? "no name")")
             
-            if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) { // Edit Feedback
+            if let matchingHighlight = highlights.first(where: { $0.elementBounds == selectedElement.boundsAsCGRect }) { // Edit Feedback
                 self.selectedFeedbackForEditingId = matchingHighlight.assessmentFeedbackId
                 self.showEditFeedback = true
             } else if !pencilModeDisabled { // Add Fedback
@@ -202,12 +202,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                 continue
             }
             
+            let isSuggested = assessmentFeedback.baseFeedback.type?.isAutomatic ?? false
+            let highlightPath = isSuggested ? referencedItem.suggestedHighlightPath ?? .init() : Path(elementRect)
+            
             let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
-                                            rect: elementRect,
+                                            elementBounds: elementRect,
+                                            path: highlightPath,
                                             badgeLocation: badgeLocation,
                                             temporaryHighlightPath: temporaryHighlightPath,
-                                            isSuggested: assessmentFeedback.baseFeedback.type?.isAutomatic ?? false)
+                                            isSuggested: isSuggested)
             highlights.append(newHighlight)
         }
         
@@ -279,7 +283,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             context.draw(resolvedBadgeSymbol, in: badgeRect.insetBy(dx: 6, dy: 6))
             
             if highlight.isSuggested {
-                context.fill(Path(highlight.rect), with: .color(Color.modelingSuggestedFeedback))
+                context.fill(highlight.path, with: .color(Color.modelingSuggestedFeedback))
             }
         }
         
@@ -359,7 +363,8 @@ extension UMLRendererViewModel: FeedbackDelegate {
 struct UMLHighlight {
     var assessmentFeedbackId: UUID
     var symbol: UMLBadgeSymbol
-    var rect: CGRect
+    var elementBounds: CGRect
+    var path: Path
     var badgeLocation: CGPoint
     var temporaryHighlightPath: Path
     var isSuggested: Bool
