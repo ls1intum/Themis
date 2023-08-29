@@ -29,12 +29,16 @@ struct EditFeedbackViewBase: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
+                if feedbackSuggestion != nil {
+                    robotSymbol
+                }
+                
                 Text(title ?? "Edit Feedback")
                     .font(.largeTitle)
                 
                 Spacer()
                 
-                if isEditing {
+                if isEditing || feedbackSuggestion != nil {
                     deleteButton
                 }
                 
@@ -75,6 +79,15 @@ struct EditFeedbackViewBase: View {
                 }
             }
         }
+    }
+    
+    private var robotSymbol: some View {
+        Image("Robot")
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 35, height: 35)
+            .foregroundColor(.themisSecondary)
     }
     
     private var editOrSaveButton: some View {
@@ -132,11 +145,12 @@ struct EditFeedbackViewBase: View {
     }
     
     private func deleteFeedback() {
-        guard let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) else {
-            return
+        if let feedbackSuggestion {
+            feedbackDelegate?.onFeedbackSuggestionDiscard(feedbackSuggestion)
+        } else if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
+            assessmentResult.deleteFeedback(id: feedback.id)
+            feedbackDelegate?.onFeedbackDeletion(feedback)
         }
-        assessmentResult.deleteFeedback(id: feedback.id)
-        feedbackDelegate?.onFeedbackDeletion(feedback)
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: any FeedbackSuggestion) {

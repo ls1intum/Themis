@@ -21,12 +21,13 @@ struct AddFeedbackView: View {
     @Binding var showSheet: Bool
     
     var body: some View {
+        // TODO: this structure used by AddFeedbackView and EditFeedbackView needs to be changed in the future. We can't just let EditFeedbackViewBase decide what's shown based on the parameters we pass
         EditFeedbackViewBase(
             assessmentResult: assessmentResult,
             feedbackDelegate: feedbackDelegate,
             incompleteFeedback: incompleteFeedback,
             feedbackSuggestion: feedbackSuggestion,
-            title: "Add Feedback",
+            title: feedbackSuggestion != nil ? "Review Suggested Feedback" : "Add Feedback",
             isEditing: false,
             scope: scope,
             gradingCriteria: gradingCriteria,

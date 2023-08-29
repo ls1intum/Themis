@@ -242,4 +242,11 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
         deleteHighlight(for: suggestion)
         createHighlight(for: feedback)
     }
+    
+    func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion) {
+        guard let suggestion = suggestion as? TextFeedbackSuggestion else {
+            return
+        }
+        deleteHighlight(for: suggestion)
+    }
 }
