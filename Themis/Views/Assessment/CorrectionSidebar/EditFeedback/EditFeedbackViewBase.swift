@@ -163,7 +163,7 @@ struct EditFeedbackViewBase: View {
     private func setStates() {
         if idForUpdate != nil {
             if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
-                self.detailText = feedback.baseFeedback.detailText ?? ""
+                self.detailText = feedback.baseFeedback.detailText ?? feedback.baseFeedback.text ?? ""
                 self.score = feedback.baseFeedback.credits ?? 0.0
             }
         }

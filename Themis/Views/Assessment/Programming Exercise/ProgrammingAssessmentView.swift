@@ -9,7 +9,6 @@ struct ProgrammingAssessmentView: View {
     @StateObject var paneVM = PaneViewModel()
     
     let exercise: Exercise
-    
     var submissionId: Int?
     
     @State private var repositorySelection = RepositoryType.student
@@ -84,8 +83,8 @@ struct ProgrammingAssessmentView: View {
             ThemisUndoManager.shared.removeAllActions()
         }
         .onChange(of: assessmentVM.pencilModeDisabled, perform: { codeEditorVM.pencilModeDisabled = $0 })
+        .onChange(of: assessmentVM.allowsInlineFeedbackOperations, perform: { codeEditorVM.allowsInlineFeedbackOperations = $0 })
         .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })
-        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations, perform: { assessmentVM.allowsInlineFeedbackOperations = $0 })
         .errorAlert(error: $codeEditorVM.error)
     }
     
@@ -96,9 +95,12 @@ struct ProgrammingAssessmentView: View {
             } else {
                 FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
                     .onChange(of: repositorySelection) { newRepositoryType in
-                        if let participationId = assessmentVM.participation?.getId(for: newRepositoryType) {
+                        if let programmingAssessmentVM = assessmentVM as? ProgrammingAssessmentViewModel,
+                           let participationId = programmingAssessmentVM.participationId(for: newRepositoryType) {
                             Task {
                                 await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                                assessmentVM.allowsInlineFeedbackOperations = (newRepositoryType == .student)
+                                
                                 if newRepositoryType == .student {
                                     await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
                                                                                    participationId: participationId)

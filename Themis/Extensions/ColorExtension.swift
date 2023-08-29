@@ -32,6 +32,10 @@ extension Color {
     static let negativeFeedbackPointBackground = Color("negativeFeedbackPointBackground")
     static let negativeFeedbackText = Color("negativeFeedbackText")
     static let negativeTextHighlight = UIColor(.init(netHex: 0xFF6F6F), darkModeColor: .init(netHex: 0xF14F4F)).suColor
+    
+    // Modeling Assessment
+    static let selectedUMLItemColor = themisSecondary.opacity(0.5)
+    static let modelingSuggestedFeedback = UIColor(netHex: 0x17A2B8).suColor.opacity(0.3)
 }
 
 extension Color {
