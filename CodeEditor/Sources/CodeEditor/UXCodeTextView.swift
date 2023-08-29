@@ -62,7 +62,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
-    var feedbackSuggestions: [FeedbackSuggestion] = []
+    var feedbackSuggestions: [ProgrammingFeedbackSuggestion] = []
     var showsLineNumbers: Bool
     
     private var firstPoint: CGPoint?

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedModels
+import CodeEditor
 
 struct TextAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
@@ -64,11 +65,24 @@ struct TextAssessmentView: View {
         })
         .sheet(isPresented: $textExerciseRendererVM.showEditFeedback) {
             if let feedback = assessmentVM.getFeedback(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
+                // The user tapped on a manual feedback to edit
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     feedbackDelegate: textExerciseRendererVM,
                     scope: .inline,
                     idForUpdate: feedback.id,
+                    gradingCriteria: assessmentVM.gradingCriteria,
+                    showSheet: $textExerciseRendererVM.showEditFeedback
+                )
+            } else if let suggestion = textExerciseRendererVM.getSuggestion(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
+                // The user tapped on a feedback suggestion. This is not actually an edit action, but is triggered as one
+                AddFeedbackView(
+                    assessmentResult: assessmentVM.assessmentResult,
+                    feedbackDelegate: textExerciseRendererVM,
+                    incompleteFeedback: AssessmentFeedback(scope: .inline,
+                                                           detail: TextFeedbackDetail(block: suggestion.blockRef.block)),
+                    feedbackSuggestion: suggestion,
+                    scope: .inline,
                     gradingCriteria: assessmentVM.gradingCriteria,
                     showSheet: $textExerciseRendererVM.showEditFeedback
                 )

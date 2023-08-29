@@ -69,7 +69,7 @@ extension ThemisAPI {
     }
     
     /// gets a feedback suggestion for a submission from Themis-ML
-    static func getFeedbackSuggestions(exerciseId: Int, participationId: Int) async throws -> [FeedbackSuggestion] {
+    static func getFeedbackSuggestions(exerciseId: Int, participationId: Int) async throws -> [ProgrammingFeedbackSuggestion] {
         let request = Request(
             method: .post,
             path: "/feedback_suggestions",
@@ -79,7 +79,7 @@ extension ThemisAPI {
                 participation_id: participationId
             )
         )
-        return try await sendRequest([FeedbackSuggestion].self, request: request)
+        return try await sendRequest([ProgrammingFeedbackSuggestion].self, request: request)
     }
     
     private static func removeTrailingSlash(from string: String) -> String {

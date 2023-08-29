@@ -16,7 +16,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     let paraStyle = NSMutableParagraphStyle()
     var diffLines = [Int]()
     var isNewFile = false
-    var feedbackSuggestions = [FeedbackSuggestion]()
+    var feedbackSuggestions = [any FeedbackSuggestion]()
     
     override init() {
         super.init()
@@ -156,7 +156,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
                 }
             }
             self.drawDiffLines(paraNumber, rect, origin)
-            self.drawFeedbackSuggestions(paraNumber, rect, origin)
+            self.drawProgrammingFeedbackSuggestions(paraNumber, rect, origin)
         }
         UIGraphicsPopContext()
 
@@ -198,13 +198,15 @@ class RoundedCornerLayoutManager: NSLayoutManager {
         UIGraphicsPopContext()
     }
     
-    private func drawFeedbackSuggestions(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {
+    private func drawProgrammingFeedbackSuggestions(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {
         let ctx = UIGraphicsGetCurrentContext()
         guard let ctx else { return }
         UIGraphicsPushContext(ctx)
         ctx.setFillColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
         ctx.setStrokeColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
-        if self.feedbackSuggestions.contains(where: { paraNumber + 1 >= $0.fromLine && paraNumber + 1 <= $0.toLine }) {
+        
+        let programmingSuggestions = feedbackSuggestions.compactMap({ $0 as? ProgrammingFeedbackSuggestion })
+        if programmingSuggestions.contains(where: { paraNumber + 1 >= $0.fromLine && paraNumber + 1 <= $0.toLine }) {
             let path = CGPath(
                 rect: CGRect(
                     x: rect.origin.x,

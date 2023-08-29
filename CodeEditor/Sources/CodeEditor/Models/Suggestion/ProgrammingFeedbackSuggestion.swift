@@ -1,13 +1,14 @@
 //
-//  FeedbackSuggestion.swift
+//  ProgrammingFeedbackSuggestion.swift
 //  Themis
 //
 //  Created by Andreas Cselovszky on 25.01.23.
 //
 
 import Foundation
+import SharedModels
 
-public struct FeedbackSuggestion: Decodable, Equatable {
+public struct ProgrammingFeedbackSuggestion: FeedbackSuggestion, Decodable {
     public let id = UUID()
     public let exerciseId: Int
     public let participationId: Int

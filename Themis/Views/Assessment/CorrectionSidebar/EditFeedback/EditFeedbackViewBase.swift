@@ -15,7 +15,7 @@ struct EditFeedbackViewBase: View {
     weak var feedbackDelegate: (any FeedbackDelegate)?
     var idForUpdate: UUID?
     var incompleteFeedback: AssessmentFeedback?
-    var feedbackSuggestion: FeedbackSuggestion?
+    var feedbackSuggestion: (any FeedbackSuggestion)?
     
     let title: String?
     let isEditing: Bool
@@ -139,20 +139,8 @@ struct EditFeedbackViewBase: View {
         feedbackDelegate?.onFeedbackDeletion(feedback)
     }
     
-    private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
-        guard var incompleteFeedbackDetail = incompleteFeedback?.detail as? ProgrammingFeedbackDetail else {
-            return
-        }
-        
-        let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
-        incompleteFeedbackDetail.lines = lines
-        
-        let feedback = AssessmentFeedback(
-            baseFeedback: Feedback(detailText: feedbackSuggestion.text,
-                                   credits: feedbackSuggestion.credits,
-                                   type: .MANUAL_UNREFERENCED),
-            scope: .inline,
-            detail: incompleteFeedbackDetail)
+    private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: any FeedbackSuggestion) {
+        let feedback = AssessmentFeedback(basedOn: feedbackSuggestion, incompleteFeedback?.detail)
         
         assessmentResult.addFeedback(feedback: feedback)
         feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)

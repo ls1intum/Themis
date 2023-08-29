@@ -108,6 +108,7 @@ class TextExerciseRendererViewModel: ObservableObject {
     private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
         var rangeToBlockRef = [Range<Int>: TextBlockRef]()
         
+        // Remove block references overlapping among themselves
         for blockRef in blockRefs {
             guard let startIndex = blockRef.block.startIndex,
                   let endIndex = blockRef.block.endIndex else {
@@ -117,11 +118,38 @@ class TextExerciseRendererViewModel: ObservableObject {
             rangeToBlockRef[blockRefRange] = blockRef
         }
         
+        // Remove block references overlapping with existing inline highlights added by the user
+        for highlight in inlineHighlights {
+            for blockRefRange in rangeToBlockRef.keys {
+                if let existingManualHighlightRange = Range(highlight.range),
+                   blockRefRange.overlaps(existingManualHighlightRange) {
+                    rangeToBlockRef.removeValue(forKey: blockRefRange)
+                }
+            }
+        }
+        
         let result = Array(rangeToBlockRef.values)
         log.verbose("\(result.count) suggestions are remaining after removing overlaps")
         return result
     }
     
+    func getSuggestion(byId id: UUID) -> TextFeedbackSuggestion? {
+        guard let blockRef = suggestedRefs.first(where: { $0.id == id }) else {
+            return nil
+        }
+        return TextFeedbackSuggestion(blockRef: blockRef)
+    }
+    
+    /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
+    func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
+        let block = TextBlock(submissionId: submissionId,
+                              text: textAtSelectedSection,
+                              startIndex: selectedSection?.lowerBound,
+                              endIndex: selectedSection?.upperBound)
+        return TextFeedbackDetail(block: block)
+    }
+    
+    // MARK: - Highlight-related code
     private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         blocks.forEach { block in
             guard let startIndex = block.startIndex,
@@ -153,15 +181,15 @@ class TextExerciseRendererViewModel: ObservableObject {
                   let endIndex = block.endIndex else {
                 continue
             }
-            // TODO: create an AssessmentFeedback
+            
             let range = NSRange(startIndex..<endIndex)
             let color = UIColor(.getHighlightColor(forCredits: baseFeedback.credits ?? 0.0).opacity(0.8))
-            inlineHighlights.append(HighlightedRange(id: UUID(), range: range, color: color, isSuggested: true))
+            inlineHighlights.append(HighlightedRange(id: ref.id, range: range, color: color, isSuggested: true))
         }
         
         undoManager.removeAllActions()
     }
-        
+    
     private func updateHighlightColor(for feedback: AssessmentFeedback) {
         guard let oldHighlightIndex = inlineHighlights.firstIndex(where: { $0.id == feedback.id }) else {
             return
@@ -189,13 +217,8 @@ class TextExerciseRendererViewModel: ObservableObject {
         }
     }
     
-    /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
-    func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
-        let block = TextBlock(submissionId: submissionId,
-                              text: textAtSelectedSection,
-                              startIndex: selectedSection?.lowerBound,
-                              endIndex: selectedSection?.upperBound)
-        return TextFeedbackDetail(block: block)
+    private func deleteHighlight(for suggestion: TextFeedbackSuggestion) {
+        inlineHighlights.removeAll(where: { $0.id == suggestion.id })
     }
 }
 
@@ -210,5 +233,13 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
     
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
         deleteHighlight(for: feedback)
+    }
+    
+    func onFeedbackSuggestionSelection(_ suggestion: any FeedbackSuggestion, _ feedback: AssessmentFeedback) {
+        guard let suggestion = suggestion as? TextFeedbackSuggestion else {
+            return
+        }
+        deleteHighlight(for: suggestion)
+        createHighlight(for: feedback)
     }
 }

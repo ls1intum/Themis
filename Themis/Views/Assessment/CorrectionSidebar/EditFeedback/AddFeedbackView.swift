@@ -13,7 +13,7 @@ struct AddFeedbackView: View {
     var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
     var incompleteFeedback: AssessmentFeedback?
-    var feedbackSuggestion: FeedbackSuggestion?
+    var feedbackSuggestion: (any FeedbackSuggestion)?
     
     let scope: ThemisFeedbackScope
     let gradingCriteria: [GradingCriterion]

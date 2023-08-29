@@ -24,7 +24,7 @@ public struct EditorBindings {
     public var diffLines: [Int]
     public var isNewFile: Bool
     public var showsLineNumbers: Bool
-    public var feedbackSuggestions: [FeedbackSuggestion]
+    public var feedbackSuggestions: [ProgrammingFeedbackSuggestion]
     public var selectedFeedbackSuggestionId: Binding<String>
     
     public init(source: Binding<String>,
@@ -48,7 +48,7 @@ public struct EditorBindings {
                 diffLines: [Int] = [],
                 isNewFile: Bool = false,
                 showsLineNumbers: Bool = true,
-                feedbackSuggestions: [FeedbackSuggestion],
+                feedbackSuggestions: [ProgrammingFeedbackSuggestion],
                 selectedFeedbackSuggestionId: Binding<String>
     ) {
         self.source = source

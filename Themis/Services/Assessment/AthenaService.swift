@@ -8,6 +8,7 @@
 import Foundation
 import SharedModels
 import APIClient
+import CodeEditor
 
 /// A service that communicates with the Athena-related endpoints of Artemis to handle automatic feedback suggestions
 /// For more info about Athena: https://github.com/ls1intum/Athena

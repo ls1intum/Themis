@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 
 import PackageDescription
 
@@ -7,7 +7,7 @@ let package = Package(
   name: "CodeEditor",
 
   platforms: [
-    .macOS(.v10_15), .iOS(.v13)
+    .macOS(.v10_15), .iOS(.v16)
   ],
 
   products: [
