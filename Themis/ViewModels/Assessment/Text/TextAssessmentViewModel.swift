@@ -98,7 +98,7 @@ class TextAssessmentViewModel: AssessmentViewModel {
             suggestedBlockRefs[index].associatedAssessmentFeedbackId = assessmentFeedback.id
         }
         
-        assessmentResult.computedFeedbacks = assessmentResult.computedFeedbacks + suggestedFeedbacks
+        assessmentResult.computedFeedbacks += suggestedFeedbacks
     }
     
     private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
