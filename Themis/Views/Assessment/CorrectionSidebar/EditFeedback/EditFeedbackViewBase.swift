@@ -155,7 +155,7 @@ struct EditFeedbackViewBase: View {
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: any FeedbackSuggestion) {
-        var feedback = AssessmentFeedback(basedOn: feedbackSuggestion, incompleteFeedback?.detail, detailText, score)
+        let feedback = AssessmentFeedback(basedOn: feedbackSuggestion, incompleteFeedback?.detail, detailText, score)
         
         // Try to replace the existing automatic feedback
         let newFeedback = assessmentResult.replace(feedbackWithId: feedbackSuggestion.id, with: feedback)
