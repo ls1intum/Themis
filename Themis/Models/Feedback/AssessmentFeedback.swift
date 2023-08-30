@@ -65,7 +65,7 @@ extension AssessmentFeedback: Equatable, Hashable {
 }
 
 extension AssessmentFeedback {
-    init(basedOn suggestion: any FeedbackSuggestion, _ incompleteFeedbackDetail: FeedbackDetail?) {
+    init(basedOn suggestion: any FeedbackSuggestion, _ incompleteFeedbackDetail: FeedbackDetail?, _ detailText: String, _ credits: Double) {
         var newIncompleteFeedbackDetail = incompleteFeedbackDetail
         
         if var incompleteFeedbackDetail = incompleteFeedbackDetail as? ProgrammingFeedbackDetail,
@@ -75,8 +75,8 @@ extension AssessmentFeedback {
             newIncompleteFeedbackDetail = incompleteFeedbackDetail
         }
         
-        self.init(baseFeedback: Feedback(detailText: suggestion.text,
-                                         credits: suggestion.credits,
+        self.init(baseFeedback: Feedback(detailText: detailText,
+                                         credits: credits,
                                          type: .MANUAL_UNREFERENCED),
                   scope: .inline,
                   detail: newIncompleteFeedbackDetail)

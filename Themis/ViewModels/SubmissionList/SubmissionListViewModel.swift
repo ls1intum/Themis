@@ -14,11 +14,11 @@ class SubmissionListViewModel: ObservableObject {
     @Published var error: Error?
     
     var submittedSubmissions: [Submission] {
-        submissions.filter { $0.baseSubmission.results?.last?.completionDate != nil }
+        submissions.filter { $0.baseSubmission.isAssessed }
     }
     
     var openSubmissions: [Submission] {
-        submissions.filter { $0.baseSubmission.results?.last?.completionDate == nil }
+        submissions.filter { !$0.baseSubmission.isAssessed }
     }
     
     @MainActor

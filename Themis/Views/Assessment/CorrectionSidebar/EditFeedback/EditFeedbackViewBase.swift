@@ -146,6 +146,7 @@ struct EditFeedbackViewBase: View {
     
     private func deleteFeedback() {
         if let feedbackSuggestion {
+            assessmentResult.deleteFeedback(id: feedbackSuggestion.id)
             feedbackDelegate?.onFeedbackSuggestionDiscard(feedbackSuggestion)
         } else if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
             assessmentResult.deleteFeedback(id: feedback.id)
@@ -154,9 +155,16 @@ struct EditFeedbackViewBase: View {
     }
     
     private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: any FeedbackSuggestion) {
-        let feedback = AssessmentFeedback(basedOn: feedbackSuggestion, incompleteFeedback?.detail)
+        var feedback = AssessmentFeedback(basedOn: feedbackSuggestion, incompleteFeedback?.detail, detailText, score)
         
-        assessmentResult.addFeedback(feedback: feedback)
+        // Try to replace the existing automatic feedback
+        let newFeedback = assessmentResult.replace(feedbackWithId: feedbackSuggestion.id, with: feedback)
+        
+        // No automatic feedback found -> simply add a new feedback for the given suggestion
+        if newFeedback == nil {
+            assessmentResult.addFeedback(feedback: feedback)
+        }
+        
         feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
     }
 

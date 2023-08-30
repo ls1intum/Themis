@@ -12,9 +12,14 @@ public struct TextBlockRef: Codable {
     public var block: TextBlock
     public var feedback: Feedback
     
+    public init(block: TextBlock, feedback: Feedback) {
+        self.block = block
+        self.feedback = feedback
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case block, feedback
     }
     
-    public let id = UUID() // not decoded
+    public var associatedAssessmentFeedbackId: UUID? // not decoded
 }

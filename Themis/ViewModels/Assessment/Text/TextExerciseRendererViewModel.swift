@@ -42,7 +42,6 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
     
     /// Needed for creating new text blocks
     private var submissionId: Int?
-    private var suggestedRefs = [TextBlockRef]()
     
     /// Sets this VM up based on the given participation and optional submission
     /// - Parameters:
@@ -61,74 +60,13 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
             return
         }
         
-        let feedbacks = assessmentResult.inlineFeedback
+        let feedbacks = assessmentResult.inlineFeedback + assessmentResult.automaticFeedback
         let blocks = textSubmission.blocks ?? []
         inlineHighlights.removeAll()
         
         submissionId = textSubmission.id
         content = textSubmission.text ?? content
         setupHighlights(basedOn: blocks, and: feedbacks)
-        
-        if let participation {
-            fetchSuggestions(for: textSubmission, participation)
-        }
-    }
-    
-    // TODO: make sure this is not called for read-only and finished submissions
-    private func fetchSuggestions(for textSubmission: TextSubmission, _ participation: BaseParticipation) {
-        guard let exerciseId = participation.exercise?.id,
-              let submissionId = textSubmission.id else {
-            log.error("Could not fetch suggestions for submission: #\(submissionId ?? -1)")
-            return
-        }
-        
-        Task { [weak self] in
-            do {
-                var blockRefs = try await AthenaService().getFeedbackSuggestions(exerciseId: exerciseId, submissionId: submissionId)
-                log.verbose("Fetched \(blockRefs.count) suggestions")
-                
-                blockRefs = self?.removeOverlappingRefs(blockRefs) ?? []
-                await self?.setupHighlights(basedOn: blockRefs)
-                self?.suggestedRefs = blockRefs
-            } catch {
-                log.error(String(describing: error))
-            }
-        }
-    }
-    
-    private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
-        var rangeToBlockRef = [Range<Int>: TextBlockRef]()
-        
-        // Remove block references overlapping among themselves
-        for blockRef in blockRefs {
-            guard let startIndex = blockRef.block.startIndex,
-                  let endIndex = blockRef.block.endIndex else {
-                continue
-            }
-            let blockRefRange = startIndex..<endIndex
-            rangeToBlockRef[blockRefRange] = blockRef
-        }
-        
-        // Remove block references overlapping with existing inline highlights added by the user
-        for highlight in inlineHighlights {
-            for blockRefRange in rangeToBlockRef.keys {
-                if let existingManualHighlightRange = Range(highlight.range),
-                   blockRefRange.overlaps(existingManualHighlightRange) {
-                    rangeToBlockRef.removeValue(forKey: blockRefRange)
-                }
-            }
-        }
-        
-        let result = Array(rangeToBlockRef.values)
-        log.verbose("\(result.count) suggestions are remaining after removing overlaps")
-        return result
-    }
-    
-    func getSuggestion(byId id: UUID) -> TextFeedbackSuggestion? {
-        guard let blockRef = suggestedRefs.first(where: { $0.id == id }) else {
-            return nil
-        }
-        return TextFeedbackSuggestion(blockRef: blockRef)
     }
     
     /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
@@ -142,19 +80,20 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
     
     // MARK: - Highlight-related code
     private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
-        blocks.forEach { block in
-            guard let startIndex = block.startIndex,
+        feedbacks.forEach { assessmentFeedback in
+            guard let block = findBlock(for: assessmentFeedback, using: blocks),
+                  let startIndex = block.startIndex,
                   let endIndex = block.endIndex,
-                  let feedback = feedbacks.first(where: { $0.baseFeedback.reference == block.id }),
                   startIndex < endIndex
             else {
                 return
             }
             
             let range = NSRange(startIndex..<endIndex)
-            let color = UIColor(.getHighlightColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
+            let color = UIColor(.getHighlightColor(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0))
+            let isSuggested = assessmentFeedback.baseFeedback.type?.isAutomatic ?? false
             
-            inlineHighlights.append(HighlightedRange(id: feedback.id, range: range, color: color))
+            inlineHighlights.append(HighlightedRange(id: assessmentFeedback.id, range: range, color: color, isSuggested: isSuggested))
         }
         
         if shouldWipeUndo {
@@ -162,23 +101,14 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
-    @MainActor
-    private func setupHighlights(basedOn blockRefs: [TextBlockRef]) {
-        for ref in blockRefs {
-            let block = ref.block
-            let baseFeedback = ref.feedback
-            
-            guard let startIndex = block.startIndex,
-                  let endIndex = block.endIndex else {
-                continue
-            }
-            
-            let range = NSRange(startIndex..<endIndex)
-            let color = UIColor(.getHighlightColor(forCredits: baseFeedback.credits ?? 0.0).opacity(0.8))
-            inlineHighlights.append(HighlightedRange(id: ref.id, range: range, color: color, isSuggested: true))
+    /// Attempts to find the corresponding block for the given AssessmentFeedback among the given blocks.
+    /// If it fails, the `detail` property of AssessmentFeedback is used instead. The latter is useful for automatic feedbacks.
+    private func findBlock(for assessmentFeedback: AssessmentFeedback, using blocks: [TextBlock]) -> TextBlock? {
+        if let block = blocks.first(where: { $0.id == assessmentFeedback.baseFeedback.reference }) {
+            return block
+        } else {
+            return (assessmentFeedback.detail as? TextFeedbackDetail)?.block
         }
-        
-        undoManager.removeAllActions()
     }
     
     private func updateHighlightColor(for feedback: AssessmentFeedback) {
@@ -210,6 +140,12 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
     
     private func deleteHighlight(for suggestion: TextFeedbackSuggestion) {
         inlineHighlights.removeAll(where: { $0.id == suggestion.id })
+        undoManager.endUndoGrouping()
+    }
+    
+    private func replaceHighlight(for suggestion: TextFeedbackSuggestion, withHighlightFor feedback: AssessmentFeedback) {
+        inlineHighlights.removeAll(where: { $0.id == suggestion.id })
+        createHighlight(for: feedback)
     }
 }
 
@@ -230,8 +166,7 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
         guard let suggestion = suggestion as? TextFeedbackSuggestion else {
             return
         }
-        deleteHighlight(for: suggestion)
-        createHighlight(for: feedback)
+        replaceHighlight(for: suggestion, withHighlightFor: feedback)
     }
     
     func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion) {

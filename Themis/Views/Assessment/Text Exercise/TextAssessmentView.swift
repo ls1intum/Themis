@@ -64,7 +64,7 @@ struct TextAssessmentView: View {
             )
         })
         .sheet(isPresented: $textExerciseRendererVM.showEditFeedback) {
-            if let feedback = assessmentVM.getFeedback(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
+            if let feedback = assessmentVM.getManualFeedback(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
                 // The user tapped on a manual feedback to edit
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
@@ -74,7 +74,8 @@ struct TextAssessmentView: View {
                     gradingCriteria: assessmentVM.gradingCriteria,
                     showSheet: $textExerciseRendererVM.showEditFeedback
                 )
-            } else if let suggestion = textExerciseRendererVM.getSuggestion(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
+            } else if let textAssessmentVM = assessmentVM as? TextAssessmentViewModel,
+                      let suggestion = textAssessmentVM.getSuggestion(byAssessmentFeedbackId: textExerciseRendererVM.selectedFeedbackForEditingId) {
                 // The user tapped on a feedback suggestion. This is not actually an edit action, but is triggered as one
                 AddFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,

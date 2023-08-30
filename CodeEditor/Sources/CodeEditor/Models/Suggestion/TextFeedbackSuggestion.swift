@@ -12,7 +12,7 @@ public struct TextFeedbackSuggestion: FeedbackSuggestion {
     public let blockRef: TextBlockRef
     
     public var id: UUID {
-        blockRef.id
+        blockRef.associatedAssessmentFeedbackId ?? UUID()
     }
     
     public var text: String {
@@ -28,6 +28,6 @@ public struct TextFeedbackSuggestion: FeedbackSuggestion {
     }
     
     public static func == (lhs: TextFeedbackSuggestion, rhs: TextFeedbackSuggestion) -> Bool {
-        lhs.id == rhs.id && lhs.blockRef.id == rhs.blockRef.id
+        lhs.id == rhs.id && lhs.text == rhs.text && lhs.credits == rhs.credits
     }
 }

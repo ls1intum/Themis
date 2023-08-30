@@ -106,6 +106,18 @@ class AssessmentResult: Encodable, ObservableObject {
     }
     
     @discardableResult
+    func replace(feedbackWithId id: UUID, with newFeedback: AssessmentFeedback) -> AssessmentFeedback? {
+        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+            return nil
+        }
+        
+        undoManager.beginUndoGrouping()
+        
+        computedFeedbacks[index] = newFeedback
+        return computedFeedbacks[index]
+    }
+    
+    @discardableResult
     func updateFeedback(feedback: AssessmentFeedback) -> AssessmentFeedback? {
         guard let index = (feedbacks.firstIndex { $0.id == feedback.id }) else {
             return nil

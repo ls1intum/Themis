@@ -8,8 +8,15 @@
 import Foundation
 import Common
 import SharedModels
+import CodeEditor
 
 class TextAssessmentViewModel: AssessmentViewModel {
+    private var suggestedBlockRefs = [TextBlockRef]()
+    
+    private var shouldFetchSuggestions: Bool {
+        !readOnly && submission?.isAssessed == false && assessmentResult.automaticFeedback.isEmpty
+    }
+    
     @MainActor
     override func initSubmission() async {
         guard submission == nil else {
@@ -26,9 +33,13 @@ class TextAssessmentViewModel: AssessmentViewModel {
             }
         }
         
+        if shouldFetchSuggestions {
+            await fetchSuggestions()
+        }
+        
         ThemisUndoManager.shared.removeAllActions()
     }
-
+    
     @MainActor
     private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
         guard let submissionId else {
@@ -51,6 +62,82 @@ class TextAssessmentViewModel: AssessmentViewModel {
             self.submission = nil
             self.error = error
             log.info(String(describing: error))
+        }
+    }
+    
+    private func fetchSuggestions() async {
+        guard let exerciseId = participation?.exercise?.id,
+              let submissionId = submission?.id else {
+            log.error("Could not fetch suggestions for submission: #\(submissionId ?? -1)")
+            return
+        }
+        
+        do {
+            var blockRefs = try await AthenaService().getFeedbackSuggestions(exerciseId: exerciseId, submissionId: submissionId)
+            log.verbose("Fetched \(blockRefs.count) suggestions")
+            
+            blockRefs = removeOverlappingRefs(blockRefs)
+            
+            suggestedBlockRefs = blockRefs
+            await saveBlockRefsAsAssessmentFeedbacks()
+        } catch {
+            log.error(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    private func saveBlockRefsAsAssessmentFeedbacks() {
+        var suggestedFeedbacks = [AssessmentFeedback]()
+        
+        for index in 0 ..< suggestedBlockRefs.count {
+            let blockRef = suggestedBlockRefs[index]
+            let assessmentFeedback = AssessmentFeedback(baseFeedback: blockRef.feedback,
+                                                        scope: .inline,
+                                                        detail: TextFeedbackDetail(block: blockRef.block))
+            suggestedFeedbacks.append(assessmentFeedback)
+            suggestedBlockRefs[index].associatedAssessmentFeedbackId = assessmentFeedback.id
+        }
+        
+        assessmentResult.computedFeedbacks = assessmentResult.computedFeedbacks + suggestedFeedbacks
+    }
+    
+    private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
+        var rangeToBlockRef = [Range<Int>: TextBlockRef]()
+        
+        for blockRef in blockRefs {
+            guard let startIndex = blockRef.block.startIndex,
+                  let endIndex = blockRef.block.endIndex else {
+                continue
+            }
+            let blockRefRange = startIndex..<endIndex
+            rangeToBlockRef[blockRefRange] = blockRef
+        }
+        
+        let result = Array(rangeToBlockRef.values)
+        log.verbose("\(result.count) suggestions are remaining after removing overlaps")
+        return result
+    }
+    
+    func getSuggestion(byAssessmentFeedbackId id: UUID) -> TextFeedbackSuggestion? {
+        var suggestionBlockRef: TextBlockRef?
+        
+        if let blockRef = suggestedBlockRefs.first(where: { $0.associatedAssessmentFeedbackId == id }) {
+            suggestionBlockRef = blockRef
+        }
+        // this happens when `fetchSuggestions()` is not called and automatic feedbacks embedded into the submission are used
+        else if let assessmentFeedback = assessmentResult.automaticFeedback.first(where: { $0.id == id }),
+                let textSubmission = submission as? TextSubmission,
+                let blocks = textSubmission.blocks,
+                let block = blocks.first(where: { $0.id == assessmentFeedback.baseFeedback.reference }) {
+            var blockRef = TextBlockRef(block: block, feedback: assessmentFeedback.baseFeedback)
+            blockRef.associatedAssessmentFeedbackId = id
+            suggestionBlockRef = blockRef
+        }
+        
+        if let suggestionBlockRef {
+            return TextFeedbackSuggestion(blockRef: suggestionBlockRef)
+        } else {
+            return nil
         }
     }
 }
