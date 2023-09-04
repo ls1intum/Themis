@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedModels
+import Common
 
 struct SubmissionListView: View {
     @EnvironmentObject var courseVM: CourseViewModel
@@ -14,6 +15,9 @@ struct SubmissionListView: View {
     
     let exercise: Exercise
     let submissionStatus: SubmissionStatus
+    
+    @State private var presentCancelAlert = false
+    @State private var submissionBeingCancelled: Submission?
     
     var body: some View {
         List {
@@ -37,13 +41,22 @@ struct SubmissionListView: View {
                 }.padding(.trailing)
             }
         }
+        .alert("Are you sure?", isPresented: $presentCancelAlert, presenting: submissionBeingCancelled, actions: { submission in
+            Button("No", role: .cancel, action: {})
+            Button("Yes, cancel", role: .destructive, action: {
+                submissionListVM.cancel(submission, belongingTo: exercise)
+            })
+        }, message: { _ in
+            Text("This will discard the assessment and release the lock on submission")
+        })
     }
     
     @ViewBuilder
     private func cancelButton(for submission: Submission) -> some View {
         if submissionStatus == .open {
             Button("Cancel") {
-                submissionListVM.cancel(submission, belongingTo: exercise)
+                submissionBeingCancelled = submission
+                presentCancelAlert = true
             }
             .tint(.red)
         }
