@@ -21,7 +21,8 @@ struct SubmissionListView: View {
     
     var body: some View {
         List {
-            ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions, id: \.baseSubmission.id) { submission in
+            ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions,
+                    id: \.baseSubmission.id) { submission in
                 NavigationLink {
                     AssessmentView(
                         exercise: exercise,
