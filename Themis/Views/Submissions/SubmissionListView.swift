@@ -33,12 +33,23 @@ struct SubmissionListView: View {
                         Spacer()
                         dateTimeline(submission: submission)
                     }
+                    .swipeActions { cancelButton(for: submission) }
                 }.padding(.trailing)
             }
         }
     }
     
-    func dateTimeline(submission: Submission) -> some View {
+    @ViewBuilder
+    private func cancelButton(for submission: Submission) -> some View {
+        if submissionStatus == .open {
+            Button("Cancel") {
+                submissionListVM.cancel(submission, belongingTo: exercise)
+            }
+            .tint(.red)
+        }
+    }
+    
+    private func dateTimeline(submission: Submission) -> some View {
         var dates: [(name: String, date: Date?)] = []
         
         if let submissionDate = (submission.baseSubmission.submissionDate) {
