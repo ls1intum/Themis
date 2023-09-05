@@ -20,7 +20,7 @@ extension Exam {
         if let publishResultsDate = self.publishResultsDate {
             return publishResultsDate <= .now
         }
-        return false
+        return true
     }
     
     public var exercises: [Exercise] {

@@ -12,13 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Swift environment
-        uses: sinoru/actions-setup-swift@v2
+      - name: Fetch base ref
+        run: |
+          git fetch --prune --no-tags --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/heads/${{ github.base_ref }}
+      - name: GitHub Action for SwiftLint (Only files changed in the PR)
+        uses: ezraberch/action-swiftlint@3.2.3
         with:
-          swift-version: '5.7.1'
-      - name: Run SwiftLint (Only lint files changed in the PR)
-        uses: sinoru/actions-swiftlint@v6
-        with:
-          swiftlint-args: --config swiftlint.yml --strict
+          args: --config swiftlint.yml
         env:
            DIFF_BASE: ${{ github.base_ref }}
+           DIFF_HEAD: HEAD
