@@ -33,10 +33,8 @@ struct CourseView: View {
                             ExerciseGroups(courseVM: courseVM, type: .inAssessment)
                                 .padding(.bottom)
                             ExerciseGroups(courseVM: courseVM, type: .viewOnly)
-                                .disabled(true) // TODO: remove once view-only mode is fully implemented
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 20)
+                        .padding(20)
                     }
                     .environmentObject(courseVM)
                     .refreshable {
@@ -46,31 +44,34 @@ struct CourseView: View {
                 }
             }
             .navigationTitle(navTitle)
-            .toolbar {
-                ToolbarItemGroup(placement: .cancellationAction) {
-                    logoutButton
-                    userFirstName
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Picker("", selection: $courseVM.shownCourseID) {
-                        ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
-                            if let courseID {
-                                Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
-                                    .padding(.leading, 40)
-                            }
-                        }
-                    }
-                    .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
-                    .isHidden(courseVM.showEmptyMessage)
-                    .padding(-10) // compensates for Picker's default padding
-                }
-            }
+            .toolbar(content: buildToolbar)
         }
         .task {
             courseVM.fetchAllCourses()
             courseVM.fetchShownCourseAndSetExercises()
         }
         .errorAlert(error: $courseVM.error)
+    }
+    
+    @ToolbarContentBuilder
+    private func buildToolbar() -> some ToolbarContent {
+        ToolbarItemGroup(placement: .cancellationAction) {
+            logoutButton
+            userFirstName
+        }
+        ToolbarItem(placement: .primaryAction) {
+            Picker("", selection: $courseVM.shownCourseID) {
+                ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
+                    if let courseID {
+                        Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
+                            .padding(.leading, 40)
+                    }
+                }
+            }
+            .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
+            .isHidden(courseVM.showEmptyMessage)
+            .padding(-10) // compensates for Picker's default padding
+        }
     }
 
     private var logoutButton: some View {
