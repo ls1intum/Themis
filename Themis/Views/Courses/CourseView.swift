@@ -52,7 +52,7 @@ struct CourseView: View {
         }
         .errorAlert(error: $courseVM.error)
     }
-
+    
     private var logoutButton: some View {
         Button {
             APIClient().perfomLogout()
