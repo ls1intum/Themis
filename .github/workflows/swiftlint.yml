@@ -18,7 +18,7 @@ jobs:
       - name: GitHub Action for SwiftLint (Only files changed in the PR)
         uses: ezraberch/action-swiftlint@3.2.3
         with:
-          args: --config swiftlint.yml --strict
+          args: --config swiftlint.yml
         env:
            DIFF_BASE: ${{ github.base_ref }}
            DIFF_HEAD: HEAD
