@@ -1113,7 +1113,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					83396D2929155934003EF727 = {
 						CreatedOnToolsVersion = 14.1;
@@ -1307,11 +1307,8 @@
 				65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */,
-				659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */,
 				6530B0F52A6BE00000CBCA71 /* ModelingAssessmentServiceImpl.swift in Sources */,
-				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
 				65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */,
-				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */,
 				654BC9992A6FF7630081CF22 /* UMLClassDiagramRenderer.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
