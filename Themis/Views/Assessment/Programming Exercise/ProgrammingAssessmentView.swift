@@ -29,6 +29,7 @@ struct ProgrammingAssessmentView: View {
                     readOnly: assessmentVM.readOnly
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .shows(CodeEditorSkeleton(), if: assessmentVM.loading || codeEditorVM.isLoading)
                 
                 Group {
                     RightGripView(paneVM: paneVM)

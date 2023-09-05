@@ -62,6 +62,7 @@
 		6581C67D2A305F3800E49E24 /* FeedbackDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6581C67C2A305F3800E49E24 /* FeedbackDetail.swift */; };
 		6581C67F2A305F5B00E49E24 /* ProgrammingFeedbackDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6581C67E2A305F5B00E49E24 /* ProgrammingFeedbackDetail.swift */; };
 		6581C6812A305F6E00E49E24 /* TextFeedbackDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6581C6802A305F6E00E49E24 /* TextFeedbackDetail.swift */; };
+		6588D9E12AA77C92000294CF /* ModelingSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6588D9E02AA77C92000294CF /* ModelingSkeleton.swift */; };
 		6589205529EE7BFC005EE6FA /* LoginTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */; };
 		6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */; };
 		6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205C29EF0840005EE6FA /* ColorExtension.swift */; };
@@ -235,6 +236,7 @@
 		6581C67C2A305F3800E49E24 /* FeedbackDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackDetail.swift; sourceTree = "<group>"; };
 		6581C67E2A305F5B00E49E24 /* ProgrammingFeedbackDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingFeedbackDetail.swift; sourceTree = "<group>"; };
 		6581C6802A305F6E00E49E24 /* TextFeedbackDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFeedbackDetail.swift; sourceTree = "<group>"; };
+		6588D9E02AA77C92000294CF /* ModelingSkeleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelingSkeleton.swift; sourceTree = "<group>"; };
 		6589205429EE7BFC005EE6FA /* LoginTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldStyle.swift; sourceTree = "<group>"; };
 		6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonStyle.swift; sourceTree = "<group>"; };
 		6589205C29EF0840005EE6FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				651530062A8C0E1C00893970 /* FiletreeSkeleton.swift */,
 				65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */,
 				659933412A8CBD3A0080134F /* TextSkeleton.swift */,
+				6588D9E02AA77C92000294CF /* ModelingSkeleton.swift */,
 			);
 			path = Skeleton;
 			sourceTree = "<group>";
@@ -1219,6 +1222,7 @@
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
+				6588D9E12AA77C92000294CF /* ModelingSkeleton.swift in Sources */,
 				656EAF602A0256A6003CF2B4 /* AssessmentFeedback.swift in Sources */,
 				651A44BB2A167FDF00DBCD92 /* CourseMockExtension.swift in Sources */,
 				E21AF053292B9D4C0096ACFC /* AssessmentViewModel.swift in Sources */,

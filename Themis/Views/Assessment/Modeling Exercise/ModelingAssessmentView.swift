@@ -21,6 +21,7 @@ struct ModelingAssessmentView: View {
     var body: some View {
         HStack(spacing: 0) {
             UMLRenderer(umlRendererVM: umlRendererVM)
+                .shows(ModelingSkeleton(), if: assessmentVM.loading)
             
             Group {
                 RightGripView(paneVM: paneVM)
