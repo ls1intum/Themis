@@ -130,6 +130,7 @@ class AssessmentViewModel: ObservableObject {
     func cancelAssessment() async {
         guard let submissionId = submission?.id,
               let participationId = participation?.id else {
+            log.error("Could not cancel assessment due to missing participation or submission ID")
             return
         }
         
@@ -138,9 +139,8 @@ class AssessmentViewModel: ObservableObject {
             loading = false
         }
         
-        let assessmentService = AssessmentServiceFactory.service(for: exercise)
-        
         do {
+            let assessmentService = AssessmentServiceFactory.service(for: exercise)
             try await assessmentService.cancelAssessment(participationId: participationId, submissionId: submissionId)
         } catch {
             if error as? RESTError != RESTError.empty {
