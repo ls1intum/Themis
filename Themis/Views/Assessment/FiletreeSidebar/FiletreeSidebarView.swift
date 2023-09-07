@@ -125,7 +125,7 @@ struct FiletreeSidebarView: View {
     private func handleRepositoryChange(_ newRepositoryType: RepositoryType) {
         if let participationId = assessmentVM.participation?.getId(for: newRepositoryType) {
             Task {
-                await cvm.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                await cvm.initFileTree(participationId: participationId, repositoryType: newRepositoryType, shouldSetLoading: false)
                 if newRepositoryType == .student {
                     await cvm.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
                                                           participationId: participationId)
