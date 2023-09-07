@@ -116,11 +116,11 @@ struct TextAssessmentView_Previews: PreviewProvider {
     @StateObject private static var assessmentVM = MockAssessmentViewModel(exercise: Exercise.mockText, readOnly: false)
     
     static var previews: some View {
-        // swiftlint: disable force_cast
+        // swiftlint:disable force_cast
         TextAssessmentView(assessmentVM: assessmentVM,
                            assessmentResult: assessmentVM.assessmentResult as! TextAssessmentResult,
                            exercise: Exercise.mockText)
         .previewInterfaceOrientation(.landscapeRight)
-        // swiftlint: enable force_cast
+        // swiftlint:enable force_cast
     }
 }
