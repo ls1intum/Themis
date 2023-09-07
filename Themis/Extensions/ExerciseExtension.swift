@@ -53,11 +53,15 @@ extension Exercise {
     }
     
     var isCurrentlyInAssessment: Bool {
-        supportsAssessment && hasSomethingToAssess
+        supportsAssessment && isDueDatePastButAssessmentDueDateNot
     }
     
-    var isViewOnly: Bool {
-        supportsAssessment && !hasSomethingToAssess
+    private var isDueDatePastButAssessmentDueDateNot: Bool {
+        guard let dueDate = self.baseExercise.dueDate,
+              let assessmentDueDate = self.baseExercise.assessmentDueDate else {
+            return false
+        }
+        return dueDate < .now && .now < assessmentDueDate
     }
     
     private var hasSomethingToAssess: Bool {
