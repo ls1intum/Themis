@@ -48,7 +48,7 @@ struct SubmissionListView: View {
                 submissionListVM.cancel(submission, belongingTo: exercise)
             })
         }, message: { _ in
-            Text("This will discard the assessment and release the lock on submission")
+            Text("This will discard the assessment and release the lock on the submission.")
         })
     }
     
