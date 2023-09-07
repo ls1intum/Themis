@@ -10,7 +10,6 @@ import SharedModels
 import Common
 import SwiftUI
 
-// swiftlint:disable type_body_length file_length
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
