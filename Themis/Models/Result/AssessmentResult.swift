@@ -88,7 +88,7 @@ class AssessmentResult: Encodable, ObservableObject {
         }
         
         if feedbackToDelete.scope == .inline {
-            undoManager.beginUndoGrouping() // undo group with addInlineHighlight in CodeEditorViewModel
+            undoManager.beginUndoGrouping() // undo group with deleteInlineHighlight in CodeEditorViewModel
         }
         
         computedFeedbacks.removeAll { $0.id == id }

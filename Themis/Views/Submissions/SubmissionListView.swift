@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedModels
+import Common
 
 struct SubmissionListView: View {
     @EnvironmentObject var courseVM: CourseViewModel
@@ -14,6 +15,9 @@ struct SubmissionListView: View {
     
     let exercise: Exercise
     let submissionStatus: SubmissionStatus
+    
+    @State private var presentCancelAlert = false
+    @State private var submissionBeingCancelled: Submission?
     
     private var relevantSubmissions: [Submission] {
         submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions
@@ -39,13 +43,33 @@ struct SubmissionListView: View {
                         Spacer()
                         dateTimeline(submission: submission)
                     }
+                    .swipeActions { cancelButton(for: submission) }
                 }.padding(.trailing)
             }
         }
         .showsSkeleton(if: submissionListVM.isLoading)
+        .alert("Are you sure?", isPresented: $presentCancelAlert, presenting: submissionBeingCancelled, actions: { submission in
+            Button("No", role: .cancel, action: {})
+            Button("Yes, cancel", role: .destructive, action: {
+                submissionListVM.cancel(submission, belongingTo: exercise)
+            })
+        }, message: { _ in
+            Text("This will discard the assessment and release the lock on the submission.")
+        })
     }
     
-    func dateTimeline(submission: Submission) -> some View {
+    @ViewBuilder
+    private func cancelButton(for submission: Submission) -> some View {
+        if submissionStatus == .open {
+            Button("Cancel") {
+                submissionBeingCancelled = submission
+                presentCancelAlert = true
+            }
+            .tint(.red)
+        }
+    }
+    
+    private func dateTimeline(submission: Submission) -> some View {
         var dates: [(name: String, date: Date?)] = []
         
         if let submissionDate = (submission.baseSubmission.submissionDate) {

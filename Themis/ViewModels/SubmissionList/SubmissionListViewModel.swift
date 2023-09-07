@@ -6,7 +6,7 @@
 //
 
 import Common
-import Foundation
+import SwiftUI
 import SharedModels
 
 class SubmissionListViewModel: ObservableObject {
@@ -38,6 +38,27 @@ class SubmissionListViewModel: ObservableObject {
         } catch let error {
             self.error = error
             log.error(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    func cancel(_ submission: Submission, belongingTo exercise: Exercise) {
+        guard let participationId = submission.getParticipation()?.id,
+              let submissionId = submission.baseSubmission.id else {
+            log.error("Could not cancel assessment due to missing participation or submission ID")
+            return
+        }
+        
+        Task {
+            do {
+                let assessmentService = AssessmentServiceFactory.service(for: exercise)
+                try await assessmentService.cancelAssessment(participationId: participationId, submissionId: submissionId)
+                withAnimation {
+                    self.submissions.removeAll(where: { $0.baseSubmission.id == submissionId })
+                }
+            } catch let error {
+                log.error(String(describing: error))
+            }
         }
     }
 }

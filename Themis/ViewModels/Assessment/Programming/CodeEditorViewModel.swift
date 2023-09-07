@@ -130,6 +130,8 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
             }
             appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
         }
+        
+        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
