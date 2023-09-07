@@ -38,9 +38,9 @@ enum UMLRelationshipType: String, Decodable {
     var annotationTitle: String {
         switch self {
         case .useCaseExtend:
-            return "<<extend>>"
+            return "≪extend≫"
         case .useCaseInclude:
-            return "<<include>>"
+            return "≪include≫"
         default:
             return ""
         }
