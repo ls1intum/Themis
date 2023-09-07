@@ -9,9 +9,8 @@ struct ProgrammingAssessmentView: View {
     @StateObject var paneVM = PaneViewModel()
     
     let exercise: Exercise
-    var submissionId: Int?
     
-    @State private var repositorySelection = RepositoryType.student
+    var submissionId: Int?
     
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
@@ -83,8 +82,8 @@ struct ProgrammingAssessmentView: View {
             ThemisUndoManager.shared.removeAllActions()
         }
         .onChange(of: assessmentVM.pencilModeDisabled, perform: { codeEditorVM.pencilModeDisabled = $0 })
-        .onChange(of: assessmentVM.allowsInlineFeedbackOperations, perform: { codeEditorVM.allowsInlineFeedbackOperations = $0 })
         .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })
+        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations, perform: { assessmentVM.allowsInlineFeedbackOperations = $0 })
         .errorAlert(error: $codeEditorVM.error)
     }
     
@@ -93,23 +92,7 @@ struct ProgrammingAssessmentView: View {
             if paneVM.leftPaneAsPlaceholder {
                 EmptyView()
             } else {
-                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM, repositorySelection: $repositorySelection)
-                    .onChange(of: repositorySelection) { newRepositoryType in
-                        if let programmingAssessmentVM = assessmentVM as? ProgrammingAssessmentViewModel,
-                           let participationId = programmingAssessmentVM.participationId(for: newRepositoryType) {
-                            Task {
-                                await codeEditorVM.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
-                                assessmentVM.allowsInlineFeedbackOperations = (newRepositoryType == .student)
-                                
-                                if newRepositoryType == .student {
-                                    await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
-                                                                                   participationId: participationId)
-                                } else {
-                                    assessmentVM.pencilModeDisabled = true
-                                }
-                            }
-                        }
-                    }
+                FiletreeSidebarView(cvm: codeEditorVM, assessmentVM: assessmentVM)
             }
         }
     }

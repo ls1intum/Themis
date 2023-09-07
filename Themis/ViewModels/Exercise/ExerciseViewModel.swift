@@ -81,7 +81,7 @@ class ExerciseViewModel: ObservableObject {
     
     var isAssessmentPossible: Bool {
         (exercise.value?.isCurrentlyInAssessment ?? false)
-        || exam?.isOver ?? false
+        || ((exam?.isOver ?? false) && !(exam?.isAssessmentDue ?? true))
     }
 
     @MainActor
