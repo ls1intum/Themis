@@ -121,5 +121,6 @@ struct TextAssessmentView_Previews: PreviewProvider {
                            assessmentResult: assessmentVM.assessmentResult as! TextAssessmentResult,
                            exercise: Exercise.mockText)
         .previewInterfaceOrientation(.landscapeRight)
+        // swiftlint: enable force_cast
     }
 }
