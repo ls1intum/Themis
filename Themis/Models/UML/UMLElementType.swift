@@ -53,11 +53,11 @@ enum UMLElementType: String, Decodable {
     var annotationTitle: String {
         switch self {
         case .interface:
-            return "<<interface>>"
+            return "≪interface≫"
         case .enumeration:
-            return "<<enumeration>>"
+            return "≪enumeration≫"
         case .abstractClass:
-            return "<<abstract>>"
+            return "≪abstract≫"
         default:
             return ""
         }
