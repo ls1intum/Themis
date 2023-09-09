@@ -85,16 +85,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
               !diagramTypeUnsupported else {
             return
         }
-        
+        let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         var renderer: any UMLDiagramRenderer
         
         switch model.type {
         case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)
+            renderer = UMLClassDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
         case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)
+            renderer = UMLUseCaseDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
         default:
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
