@@ -26,7 +26,7 @@ struct SubmissionListView: View {
     var body: some View {
         List {
             ForEach(relevantSubmissions.mock(if: submissionListVM.isLoading,
-                                             mockElementCount: 1),
+                                             mockElementCountRange: 1...1),
                     id: \.baseSubmission.id) { submission in
                 NavigationLink {
                     AssessmentView(

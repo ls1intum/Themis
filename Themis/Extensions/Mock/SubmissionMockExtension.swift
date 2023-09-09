@@ -156,10 +156,11 @@ extension Submission {
     
     /// A mock text exercise submission
     static var mockText: Submission {
+        let randomId = Int.random(in: 1...9999)
         let submissionData = Data("""
         {
             "submissionExerciseType": "text",
-            "id": 34463,
+            "id": \(randomId),
             "submitted": true,
             "type": "MANUAL",
             "submissionDate": "2023-07-30T16:29:00+02:00",
