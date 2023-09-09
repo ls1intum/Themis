@@ -10,13 +10,7 @@ import SwiftUI
 struct UMLUseCaseDiagramRenderer: UMLDiagramRenderer {
     var context: UMLGraphicsContext
     let canvasBounds: CGRect
-    var fontSize: CGFloat
-    
-    init(context: GraphicsContext, canvasBounds: CGRect, fontSize: CGFloat = 14) {
-        self.context = UMLGraphicsContext(context)
-        self.canvasBounds = canvasBounds
-        self.fontSize = fontSize
-    }
+    var fontSize: CGFloat = 14
     
     func render(umlModel: UMLModel) {
         let elementRenderer = UMLUseCaseDiagramElementRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)

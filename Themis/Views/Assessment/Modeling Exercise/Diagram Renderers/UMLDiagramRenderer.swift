@@ -11,12 +11,14 @@ import SharedModels
 protocol UMLDiagramRenderer {
     /// This instance should be used for all actions that one would normally perform with a `GraphicsContext`
     var context: UMLGraphicsContext { get set }
-
+    var canvasBounds: CGRect { get }
+    var fontSize: CGFloat { get set }
+    
     func render(umlModel: UMLModel)
 }
 
 enum UMLDiagramRendererFactory {
-    static func renderer(for type: UMLDiagramType, context: GraphicsContext, canvasBounds: CGRect, fontSize: CGFloat) -> UMLDiagramRenderer? {
+    static func renderer(for type: UMLDiagramType, context: UMLGraphicsContext, canvasBounds: CGRect, fontSize: CGFloat) -> UMLDiagramRenderer? {
         switch type {
         case .classDiagram:
             return UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds, fontSize: fontSize)

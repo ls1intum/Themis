@@ -19,10 +19,12 @@ struct ModelingAssessmentView: View {
     private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
     
     var body: some View {
-        HStack(spacing: 0) {
+        ZStack {
             UMLRenderer(umlRendererVM: umlRendererVM)
-            
-            Group {
+                            
+            HStack(spacing: 0) {
+                Spacer()
+                
                 RightGripView(paneVM: paneVM)
                 
                 correctionWithPlaceholder

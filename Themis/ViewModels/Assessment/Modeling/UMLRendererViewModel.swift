@@ -86,11 +86,11 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
               !diagramTypeUnsupported else {
             return
         }
-        
+        let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         var renderer = UMLDiagramRendererFactory.renderer(for: modelType,
-                                                          context: context,
+                                                          context: umlContext,
                                                           canvasBounds: canvasBounds,
                                                           fontSize: fontSize)
         
