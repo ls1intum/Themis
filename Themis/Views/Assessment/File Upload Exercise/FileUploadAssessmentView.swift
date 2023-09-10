@@ -28,6 +28,10 @@ struct FileUploadAssessmentView: View {
             }
             .animation(.default, value: paneVM.showRightPane)
         }
+        .task {
+            await assessmentVM.initSubmission()
+        }
+//        .errorAlert(error: $umlRendererVM.error, onDismiss: { presentationMode.wrappedValue.dismiss() })
     }
     
     private var correctionWithPlaceholder: some View {

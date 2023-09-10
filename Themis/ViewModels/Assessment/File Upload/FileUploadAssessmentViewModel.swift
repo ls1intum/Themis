@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 
 class FileUploadAssessmentViewModel: AssessmentViewModel {
     @MainActor
@@ -14,15 +15,20 @@ class FileUploadAssessmentViewModel: AssessmentViewModel {
             return
         }
         
-//        if readOnly {
-//            self.error = UserFacingError.operationNotSupportedForExercise
-//        } else {
-//            if let participationId, let submissionId {
-//                await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
+        if readOnly {
+//            if let participationId {
+//                await getReadOnlySubmission(participationId: participationId)
 //            } else {
-//                await initRandomSubmission()
+//                self.error = UserFacingError.participationNotFound
+//                log.error("Could not find participation for modeling exercise: \(exercise.baseExercise.title ?? "")")
 //            }
-//        }
+        } else {
+            if let submissionId {
+//                await getSubmission(submissionId: submissionId)
+            } else {
+                await initRandomSubmission()
+            }
+        }
         
         ThemisUndoManager.shared.removeAllActions()
     }

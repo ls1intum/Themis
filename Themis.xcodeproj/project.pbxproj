@@ -88,6 +88,8 @@
 		65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */; };
 		65B9BD062AAE17310086F9EC /* PDFRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD052AAE17310086F9EC /* PDFRenderer.swift */; };
 		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
+		65B9BD0E2AAE36E50086F9EC /* proposal.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 65B9BD0D2AAE36DC0086F9EC /* proposal.pdf */; };
+		65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
@@ -261,7 +263,8 @@
 		65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentView.swift; sourceTree = "<group>"; };
 		65B9BD052AAE17310086F9EC /* PDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFRenderer.swift; sourceTree = "<group>"; };
 		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
-		65B9BD0A2AAE1FE60086F9EC /* proposal.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = proposal.pdf; sourceTree = "<group>"; };
+		65B9BD0D2AAE36DC0086F9EC /* proposal.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = proposal.pdf; sourceTree = "<group>"; };
+		65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
@@ -751,6 +754,7 @@
 				65F018FE2A1CBD8D00BB1C98 /* TextSubmissionServiceImpl.swift */,
 				65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */,
 				65A49CE82A55AE4800F8B716 /* ModelingSubmissionServiceImpl.swift */,
+				65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */,
 			);
 			path = Submission;
 			sourceTree = "<group>";
@@ -775,7 +779,7 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
-				65B9BD0A2AAE1FE60086F9EC /* proposal.pdf */,
+				65B9BD0D2AAE36DC0086F9EC /* proposal.pdf */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
@@ -1176,7 +1180,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65B9BD0B2AAE1FE60086F9EC /* proposal.pdf in Resources */,
+				65B9BD0E2AAE36E50086F9EC /* proposal.pdf in Resources */,
 				83396D3529155935003EF727 /* Preview Assets.xcassets in Resources */,
 				83396D3229155935003EF727 /* Assets.xcassets in Resources */,
 			);
@@ -1235,6 +1239,7 @@
 				65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */,
 				E21AF057292B9D4C0096ACFC /* EditorFontSizeStepper.swift in Sources */,
 				65E6A1072A1400E20058E5D6 /* RepositoryService.swift in Sources */,
+				65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
 				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
 				658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */,
