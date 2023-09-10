@@ -13,14 +13,10 @@ struct ToolbarCancelButton: View {
     @Binding var presentationMode: PresentationMode
     @State private var showCancelDialog = false
     
-    private var nothingToSave: Bool {
-        assessmentVM.readOnly || !ThemisUndoManager.shared.canUndo
-    }
-    
     var body: some View {
         Button {
             Task {
-                nothingToSave ? presentationMode.dismiss() : showCancelDialog.toggle()
+                assessmentVM.readOnly ? presentationMode.dismiss() : showCancelDialog.toggle()
             }
         } label: {
             HStack {

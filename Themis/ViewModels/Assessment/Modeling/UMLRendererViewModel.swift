@@ -89,6 +89,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         switch model.type {
         case .classDiagram:
             renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
+        case .useCaseDiagram:
+            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds)
         default:
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
