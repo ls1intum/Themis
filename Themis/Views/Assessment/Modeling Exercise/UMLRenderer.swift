@@ -49,9 +49,9 @@ struct UMLRenderer: View {
             
             resetZoomAndLocationButton
         }
-        .onChange(of: umlRendererVM.diagramSize, perform: { _ in
+        .onChange(of: umlRendererVM.diagramSize) { _ in
             umlRendererVM.setDragLocation()
-        })
+        }
         .gesture(
             DragGesture()
                 .onChanged(handleDrag)

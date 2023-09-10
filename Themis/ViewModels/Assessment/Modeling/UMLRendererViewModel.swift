@@ -218,8 +218,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func generateFeedbackDetail() -> ModelingFeedbackDetail {
         ModelingFeedbackDetail(umlItem: selectedElement)
     }
-    
-    // MARK: - Highlight-Related Functions
+}
+
+// MARK: - Highlight-Related Functions
+extension UMLRendererViewModel {
     @MainActor
     private func setupHighlights(basedOn feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         guard umlModel?.elements != nil else {
