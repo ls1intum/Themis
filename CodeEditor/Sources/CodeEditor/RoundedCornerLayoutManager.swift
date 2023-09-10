@@ -200,7 +200,9 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     
     private func drawProgrammingFeedbackSuggestions(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {
         let ctx = UIGraphicsGetCurrentContext()
-        guard let ctx else { return }
+        guard let ctx else {
+            return
+        }
         UIGraphicsPushContext(ctx)
         ctx.setFillColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
         ctx.setStrokeColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
