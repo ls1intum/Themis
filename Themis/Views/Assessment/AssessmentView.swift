@@ -162,8 +162,12 @@ struct AssessmentView: View {
         case .modeling:
             ModelingAssessmentView(assessmentVM: assessmentVM,
                                    assessmentResult: assessmentResult)
+        case .fileUpload:
+            FileUploadAssessmentView(assessmentVM: assessmentVM,
+                                     assessmentResult: assessmentResult)
         default:
             Text("Exercise not supported")
         }
     }
 }
+// swiftlint:enable closure_body_length

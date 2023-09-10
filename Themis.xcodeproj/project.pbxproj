@@ -85,6 +85,9 @@
 		65B49F4C2A08192100C9A45F /* LeftGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4B2A08192100C9A45F /* LeftGripView.swift */; };
 		65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4D2A08220D00C9A45F /* RightGripView.swift */; };
 		65B981AF2A7BDEF800FFC2F4 /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */; };
+		65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */; };
+		65B9BD062AAE17310086F9EC /* PDFRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD052AAE17310086F9EC /* PDFRenderer.swift */; };
+		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
@@ -255,6 +258,10 @@
 		65B49F4B2A08192100C9A45F /* LeftGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftGripView.swift; sourceTree = "<group>"; };
 		65B49F4D2A08220D00C9A45F /* RightGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightGripView.swift; sourceTree = "<group>"; };
 		65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
+		65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentView.swift; sourceTree = "<group>"; };
+		65B9BD052AAE17310086F9EC /* PDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFRenderer.swift; sourceTree = "<group>"; };
+		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
+		65B9BD0A2AAE1FE60086F9EC /* proposal.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = proposal.pdf; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
@@ -453,6 +460,7 @@
 		4065F859292E8A90005DAEE8 /* Assessment */ = {
 			isa = PBXGroup;
 			children = (
+				65B9BD072AAE18470086F9EC /* File Upload */,
 				65DD80BC2A758BA800234BFE /* Modeling */,
 				65DD80BB2A758BA300234BFE /* Text */,
 				65DD80BA2A758B9E00234BFE /* Programming */,
@@ -658,6 +666,23 @@
 			path = Pane;
 			sourceTree = "<group>";
 		};
+		65B9BD022AAE14FC0086F9EC /* File Upload Exercise */ = {
+			isa = PBXGroup;
+			children = (
+				65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */,
+				65B9BD052AAE17310086F9EC /* PDFRenderer.swift */,
+			);
+			path = "File Upload Exercise";
+			sourceTree = "<group>";
+		};
+		65B9BD072AAE18470086F9EC /* File Upload */ = {
+			isa = PBXGroup;
+			children = (
+				65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */,
+			);
+			path = "File Upload";
+			sourceTree = "<group>";
+		};
 		65DD80BA2A758B9E00234BFE /* Programming */ = {
 			isa = PBXGroup;
 			children = (
@@ -750,6 +775,7 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
+				65B9BD0A2AAE1FE60086F9EC /* proposal.pdf */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
@@ -955,6 +981,7 @@
 		E21AF042292B9D4C0096ACFC /* Assessment */ = {
 			isa = PBXGroup;
 			children = (
+				65B9BD022AAE14FC0086F9EC /* File Upload Exercise */,
 				654BC9922A6FF7630081CF22 /* Modeling Exercise */,
 				65A49CEA2A55B36200F8B716 /* Programming Exercise */,
 				6500B9362A2603CD003C8445 /* Text Exercise */,
@@ -1149,6 +1176,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65B9BD0B2AAE1FE60086F9EC /* proposal.pdf in Resources */,
 				83396D3529155935003EF727 /* Preview Assets.xcassets in Resources */,
 				83396D3229155935003EF727 /* Assets.xcassets in Resources */,
 			);
@@ -1287,6 +1315,7 @@
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
 				65E85CC32A57EEAE007E3A06 /* UMLModel.swift in Sources */,
 				650538B92A1E1EF200C45E18 /* ExerciseMockExtension.swift in Sources */,
+				65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */,
 				65DD80C02A758C0A00234BFE /* TextAssessmentViewModel.swift in Sources */,
 				65E6A0FD2A13D1540058E5D6 /* AssessmentService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
@@ -1298,6 +1327,7 @@
 				65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */,
 				E1DC9BA5293D28E900674F5B /* SubmissionSearchViewModel.swift in Sources */,
 				658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */,
+				65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */,
 				654BC9992A6FF7630081CF22 /* UMLClassDiagramRenderer.swift in Sources */,
 				E171F00E2933B5DD00236BC4 /* CodeEditorViewModel.swift in Sources */,
 				A9752D792992AA8B004441D1 /* ExamSection.swift in Sources */,
@@ -1309,6 +1339,7 @@
 				65B49F382A07D5C000C9A45F /* ToolbarPointsLabel.swift in Sources */,
 				650D87FE2A7A5B65004E7533 /* UMLUseCaseDiagramRenderer.swift in Sources */,
 				83396D2E29155935003EF727 /* ThemisApp.swift in Sources */,
+				65B9BD062AAE17310086F9EC /* PDFRenderer.swift in Sources */,
 				6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */,
 				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
