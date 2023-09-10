@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SharedModels
 
 public struct TextFeedbackSuggestion: FeedbackSuggestion {
     public let blockRef: TextBlockRef

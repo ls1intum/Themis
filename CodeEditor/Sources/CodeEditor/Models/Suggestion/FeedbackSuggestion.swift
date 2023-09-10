@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SharedModels
 
 public protocol FeedbackSuggestion: Equatable {
     var id: UUID { get }

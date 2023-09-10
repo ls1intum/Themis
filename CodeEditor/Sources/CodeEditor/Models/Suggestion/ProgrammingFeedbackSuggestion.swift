@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SharedModels
 
 public struct ProgrammingFeedbackSuggestion: FeedbackSuggestion, Decodable {
     public let id = UUID()
