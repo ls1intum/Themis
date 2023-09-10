@@ -25,7 +25,7 @@ extension Exercise {
     /// Indicates whether this exercise is assessable in the current version of Themis
     var isDisabled: Bool {
         switch self {
-        case .programming, .text, .modeling:
+        case .programming, .text, .modeling, .fileUpload:
             return false
         default:
             return true
