@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 
 class FileUploadAssessmentViewModel: AssessmentViewModel {
     
@@ -31,5 +32,25 @@ class FileUploadAssessmentViewModel: AssessmentViewModel {
         }
                 
         ThemisUndoManager.shared.removeAllActions()
+    }
+    
+    @MainActor
+    override func saveAssessment() async {
+        guard let submissionId else {
+            return
+        }
+        
+        loading = true
+        defer { loading = false }
+        
+        let assessmentService = AssessmentServiceFactory.service(for: exercise)
+        
+        do {
+            try await assessmentService.saveAssessment(submissionId: submissionId,
+                                                       newAssessment: assessmentResult)
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
     }
 }
