@@ -79,9 +79,11 @@ struct AssessmentView: View {
                         ToolbarRedoButton()
                     }
                     
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
-                            .disabled(!assessmentVM.allowsInlineFeedbackOperations)
+                    if exercise.supportsReferencedFeedbacks {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                                .disabled(!assessmentVM.allowsInlineFeedbackOperations)
+                        }
                     }
                 }
                 

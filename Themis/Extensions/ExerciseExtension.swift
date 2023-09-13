@@ -42,6 +42,15 @@ extension Exercise {
         }
     }
     
+    var supportsReferencedFeedbacks: Bool {
+        switch self {
+        case .programming, .text, .modeling:
+            return true
+        default:
+            return false
+        }
+    }
+    
     var isCurrentlyInAssessment: Bool {
         supportsAssessment && isDueDatePastButAssessmentDueDateNot
     }
