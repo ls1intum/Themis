@@ -8,9 +8,13 @@
 import SwiftUI
 import PDFKit
 
-struct PDFRenderer: UIViewRepresentable {
+protocol FileRenderer {
+    var url: URL { get }
+}
+
+struct PDFRenderer: UIViewRepresentable, FileRenderer {
     
-    let url = Bundle.main.url(forResource: "proposal", withExtension: "pdf")!
+    let url: URL
     
     func makeUIView(context: UIViewRepresentableContext<Self>) -> PDFView {
         let pdfView = PDFView()
@@ -23,7 +27,8 @@ struct PDFRenderer: UIViewRepresentable {
 
 struct PDFRenderer_Previews: PreviewProvider {
     static var previews: some View {
-        PDFRenderer()
+        // swiftlint:disable:next force_unwrapping
+        PDFRenderer(url: Bundle.main.url(forResource: "proposal", withExtension: "pdf")!)
             .onAppear {
                 print(FileManager.default.urls(for: .downloadsDirectory, in: .allDomainsMask))
             }

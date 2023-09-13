@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import Common
 
 class FileUploadAssessmentViewModel: AssessmentViewModel {
+    
     @MainActor
     override func initSubmission() async {
         guard submission == nil else {
@@ -24,12 +24,12 @@ class FileUploadAssessmentViewModel: AssessmentViewModel {
 //            }
         } else {
             if let submissionId {
-//                await getSubmission(submissionId: submissionId)
+                await getSubmission(submissionId: submissionId)
             } else {
                 await initRandomSubmission()
             }
         }
-        
+                
         ThemisUndoManager.shared.removeAllActions()
     }
 }

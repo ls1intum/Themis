@@ -67,7 +67,21 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
     }
     
     // MARK: - Get File Upload Submission For Assessment
+    private struct GetFileUploadSubmissionRequest: APIRequest {
+        typealias Response = FileUploadSubmission
+        
+        var submissionId: Int
+        
+        var method: HTTPMethod {
+            .get
+        }
+        
+        var resourceName: String {
+            "api/file-upload-submissions/\(submissionId)"
+        }
+    }
+    
     func getSubmissionForAssessment(submissionId: Int) async throws -> SubmissionType {
-        throw UserFacingError.operationNotSupportedForExercise
+        try await client.sendRequest(GetFileUploadSubmissionRequest(submissionId: submissionId)).get().0
     }
 }

@@ -11,6 +11,7 @@ import SharedModels
 struct FileUploadAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
+    @StateObject private var fileRendererVM = FileRendererViewModel()
     @StateObject private var paneVM = PaneViewModel(mode: .rightOnly)
     
     // TODO: handle this case
@@ -18,7 +19,14 @@ struct FileUploadAssessmentView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            PDFRenderer()
+            if !fileRendererVM.isSetupComplete || fileRendererVM.isLoading {
+                VStack { // TODO: replace with a skeleton once the skeleton PR is merged
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                fileRenderer
+            }
             
             Group {
                 RightGripView(paneVM: paneVM)
@@ -30,6 +38,7 @@ struct FileUploadAssessmentView: View {
         }
         .task {
             await assessmentVM.initSubmission()
+            await fileRendererVM.setup(basedOn: assessmentVM.submission)
         }
 //        .errorAlert(error: $umlRendererVM.error, onDismiss: { presentationMode.wrappedValue.dismiss() })
     }
@@ -40,6 +49,15 @@ struct FileUploadAssessmentView: View {
                 assessmentResult: $assessmentVM.assessmentResult,
                 assessmentVM: assessmentVM
             )
+        }
+    }
+    
+    @ViewBuilder
+    private var fileRenderer: some View {
+        if let localFileUrl = fileRendererVM.localFileURL, fileRendererVM.canDirectlyRenderFile {
+            FileRendererFactory.renderer(for: localFileUrl)
+        } else {
+            UnsupportedFileView(fileExtension: fileRendererVM.localFileURL?.pathExtension)
         }
     }
 }
