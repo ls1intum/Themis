@@ -17,12 +17,7 @@ class FileUploadAssessmentViewModel: AssessmentViewModel {
         }
         
         if readOnly {
-//            if let participationId {
-//                await getReadOnlySubmission(participationId: participationId)
-//            } else {
-//                self.error = UserFacingError.participationNotFound
-//                log.error("Could not find participation for modeling exercise: \(exercise.baseExercise.title ?? "")")
-//            }
+            self.error = UserFacingError.operationNotSupportedForExercise
         } else {
             if let submissionId {
                 await getSubmission(submissionId: submissionId)
@@ -30,7 +25,7 @@ class FileUploadAssessmentViewModel: AssessmentViewModel {
                 await initRandomSubmission()
             }
         }
-                
+        
         ThemisUndoManager.shared.removeAllActions()
     }
     

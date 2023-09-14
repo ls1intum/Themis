@@ -16,8 +16,23 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
     let client = APIClient()
     
     // MARK: - Get All Submissions
+    private struct GetAllSubmissionsRequest: APIRequest {
+        typealias Response = [Submission]
+        
+        var exerciseId: Int
+        
+        var method: HTTPMethod {
+            .get
+        }
+        
+        var resourceName: String {
+            "api/exercises/\(exerciseId)/file-upload-submissions"
+        }
+    }
+    
     func getAllSubmissions(exerciseId: Int) async throws -> [SharedModels.Submission] {
-        throw UserFacingError.operationNotSupportedForExercise
+        let submissions = try await client.sendRequest(GetAllSubmissionsRequest(exerciseId: exerciseId)).get().0
+        return submissions.filter({ $0.baseSubmission.results == nil }) // only get non-assessed submissions
     }
     
     // MARK: - Get Tutor Submissions
@@ -83,5 +98,10 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
     
     func getSubmissionForAssessment(submissionId: Int) async throws -> SubmissionType {
         try await client.sendRequest(GetFileUploadSubmissionRequest(submissionId: submissionId)).get().0
+    }
+    
+    func getSubmission(participationId: Int) async throws -> Submission {
+        // not supported because there's no `api/participations/\(participationId)/latest-file-upload-submission` endpoint
+        throw UserFacingError.operationNotSupportedForExercise
     }
 }

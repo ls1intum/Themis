@@ -94,7 +94,6 @@
 		65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */; };
 		65B9BD062AAE17310086F9EC /* PDFRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD052AAE17310086F9EC /* PDFRenderer.swift */; };
 		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
-		65B9BD0E2AAE36E50086F9EC /* proposal.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 65B9BD0D2AAE36DC0086F9EC /* proposal.pdf */; };
 		65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
@@ -275,7 +274,6 @@
 		65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentView.swift; sourceTree = "<group>"; };
 		65B9BD052AAE17310086F9EC /* PDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFRenderer.swift; sourceTree = "<group>"; };
 		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
-		65B9BD0D2AAE36DC0086F9EC /* proposal.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = proposal.pdf; sourceTree = "<group>"; };
 		65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65B9BD112AAE49F30086F9EC /* artemis-ios-core-modules */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "artemis-ios-core-modules"; path = "../artemis-ios-core-modules"; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
@@ -799,7 +797,6 @@
 			isa = PBXGroup;
 			children = (
 				65B9BD112AAE49F30086F9EC /* artemis-ios-core-modules */,
-				65B9BD0D2AAE36DC0086F9EC /* proposal.pdf */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
@@ -1200,7 +1197,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65B9BD0E2AAE36E50086F9EC /* proposal.pdf in Resources */,
 				83396D3529155935003EF727 /* Preview Assets.xcassets in Resources */,
 				83396D3229155935003EF727 /* Assets.xcassets in Resources */,
 			);

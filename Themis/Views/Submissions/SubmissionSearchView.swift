@@ -86,6 +86,7 @@ private struct SingleSubmissionCellView: View {
         .navigationDestination(isPresented: $showAssessmentView) {
             AssessmentView(
                 exercise: exercise,
+                submissionId: submission.baseSubmission.id,
                 participationId: submission.getParticipation()?.id,
                 readOnly: true
             )
