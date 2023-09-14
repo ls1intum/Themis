@@ -43,11 +43,29 @@ class FileUploadAssessmentViewModel: AssessmentViewModel {
         loading = true
         defer { loading = false }
         
-        let assessmentService = AssessmentServiceFactory.service(for: exercise)
-        
         do {
+            let assessmentService = AssessmentServiceFactory.service(for: exercise)
             try await assessmentService.saveAssessment(submissionId: submissionId,
                                                        newAssessment: assessmentResult)
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    override func submitAssessment() async {
+        guard let submissionId else {
+            return
+        }
+        
+        loading = true
+        defer { loading = false }
+                
+        do {
+            let assessmentService = AssessmentServiceFactory.service(for: exercise)
+            try await assessmentService.submitAssessment(submissionId: submissionId,
+                                                         newAssessment: assessmentResult)
         } catch {
             self.error = error
             log.error(String(describing: error))

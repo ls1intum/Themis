@@ -59,11 +59,33 @@ struct FileUploadAssessmentServiceImpl: AssessmentService {
         .get()
     }
     
-    func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
-        throw UserFacingError.operationNotSupportedForExercise
+    // MARK: - Save Assessment
+    private struct SubmitAssessmentRequest: APIRequest {
+        typealias Response = RawResponse
+        
+        let submissionId: Int
+        let assessmentDTO: AssessmentResult
+        
+        var method: HTTPMethod {
+            .put
+        }
+        
+        var body: Encodable? {
+            assessmentDTO
+        }
+        
+        var params: [URLQueryItem] {
+            [URLQueryItem(name: "submit", value: "true")]
+        }
+        
+        var resourceName: String {
+            "api/file-upload-submissions/\(submissionId)/feedback"
+        }
     }
     
-    func fetchParticipationForSubmission(submissionId: Int) async throws -> SharedModels.Participation {
-        throw UserFacingError.operationNotSupportedForExercise
+    func submitAssessment(submissionId: Int, newAssessment: AssessmentResult) async throws {
+        _ = try await client.sendRequest(SubmitAssessmentRequest(submissionId: submissionId,
+                                                                 assessmentDTO: newAssessment))
+        .get()
     }
 }

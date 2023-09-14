@@ -75,9 +75,4 @@ struct ProgrammingAssessmentServiceImpl: AssessmentService {
                                                submit: true))
             .get()
     }
-    
-    // MARK: - Fetch Participation For Submission
-    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
-        throw UserFacingError.operationNotSupportedForExercise
-    }
 }
