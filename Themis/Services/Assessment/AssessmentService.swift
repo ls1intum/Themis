@@ -29,7 +29,7 @@ protocol AssessmentService {
     func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation
 }
 
-extension AssessmentService { // Default implementation for some optional functions
+extension AssessmentService { // Default implementations for some optional functions
     func saveAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
         throw UserFacingError.operationNotSupportedForExercise
     }
