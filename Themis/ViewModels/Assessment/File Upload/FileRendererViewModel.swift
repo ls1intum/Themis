@@ -26,8 +26,11 @@ class FileRendererViewModel: ExerciseRendererViewModel {
               let baseUrl = UserSession.shared.institution?.baseURL?.absoluteString,
               let filePath = fileUploadSubmission.filePath?.dropFirst(),
               let remoteFileUrl = URL(string: "\(baseUrl)\(filePath)") else {
+            log.error("Setup failed")
             return
         }
+        
+        reset()
         
         isLoading = true
         defer {
@@ -41,5 +44,11 @@ class FileRendererViewModel: ExerciseRendererViewModel {
         }
         
         localFileURL = await fileDownloadService.download(from: remoteFileUrl)
+    }
+    
+    private func reset() {
+        localFileURL = nil
+        isSetupComplete = false
+        canDirectlyRenderFile = false
     }
 }

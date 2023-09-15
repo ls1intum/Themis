@@ -7,14 +7,15 @@
 
 import SwiftUI
 import SharedModels
+import Common
 
 struct FileUploadAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
     @ObservedObject var assessmentResult: AssessmentResult
+    @Environment(\.presentationMode) private var presentationMode
     @StateObject private var fileRendererVM = FileRendererViewModel()
     @StateObject private var paneVM = PaneViewModel(mode: .rightOnly)
     
-    // TODO: handle this case
     private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
     
     var body: some View {
@@ -40,7 +41,15 @@ struct FileUploadAssessmentView: View {
             await assessmentVM.initSubmission()
             await fileRendererVM.setup(basedOn: assessmentVM.submission)
         }
-//        .errorAlert(error: $umlRendererVM.error, onDismiss: { presentationMode.wrappedValue.dismiss() })
+        .onReceive(didStartNextAssessment, perform: { _ in
+            guard assessmentVM.submission != nil else {
+                log.warning("Received notification about a new assessment, but couldn't find a submission in the AssessmentViewModel")
+                return
+            }
+            Task {
+                await fileRendererVM.setup(basedOn: assessmentVM.submission)
+            }
+        })
     }
     
     private var correctionWithPlaceholder: some View {
