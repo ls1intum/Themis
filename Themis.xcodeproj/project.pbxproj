@@ -120,6 +120,7 @@
 		65F019012A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */; };
 		65F019052A1CDCE400BB1C98 /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019042A1CDCE400BB1C98 /* AssessmentView.swift */; };
 		65F019072A1CDE1200BB1C98 /* TextAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F019062A1CDE1200BB1C98 /* TextAssessmentView.swift */; };
+		65F4B9F62AB4F08A0079D383 /* ImageFileRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F4B9F52AB4F08A0079D383 /* ImageFileRenderer.swift */; };
 		83396D2E29155935003EF727 /* ThemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2D29155935003EF727 /* ThemisApp.swift */; };
 		83396D3029155935003EF727 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83396D2F29155935003EF727 /* ContentView.swift */; };
 		83396D3229155935003EF727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83396D3129155935003EF727 /* Assets.xcassets */; };
@@ -301,6 +302,7 @@
 		65F019002A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65F019042A1CDCE400BB1C98 /* AssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentView.swift; sourceTree = "<group>"; };
 		65F019062A1CDE1200BB1C98 /* TextAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAssessmentView.swift; sourceTree = "<group>"; };
+		65F4B9F52AB4F08A0079D383 /* ImageFileRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileRenderer.swift; sourceTree = "<group>"; };
 		83396D2A29155935003EF727 /* Themis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Themis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83396D2D29155935003EF727 /* ThemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisApp.swift; sourceTree = "<group>"; };
 		83396D2F29155935003EF727 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = Themis/Views/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -685,9 +687,8 @@
 		65B9BD022AAE14FC0086F9EC /* File Upload Exercise */ = {
 			isa = PBXGroup;
 			children = (
+				65F4B9F42AB4F0770079D383 /* File Renderers */,
 				65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */,
-				65B9BD052AAE17310086F9EC /* PDFRenderer.swift */,
-				6540AEE52AB0FC0C00643A91 /* UnsupportedFileView.swift */,
 				6536D7042AB1912400A26E59 /* FileRendererFactory.swift */,
 			);
 			path = "File Upload Exercise";
@@ -791,6 +792,16 @@
 				65E797272A1A4B9400E17401 /* SectionTitleModifier.swift */,
 			);
 			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		65F4B9F42AB4F0770079D383 /* File Renderers */ = {
+			isa = PBXGroup;
+			children = (
+				6540AEE52AB0FC0C00643A91 /* UnsupportedFileView.swift */,
+				65B9BD052AAE17310086F9EC /* PDFRenderer.swift */,
+				65F4B9F52AB4F08A0079D383 /* ImageFileRenderer.swift */,
+			);
+			path = "File Renderers";
 			sourceTree = "<group>";
 		};
 		83396D2129155934003EF727 = {
@@ -1289,6 +1300,7 @@
 				654F61222A1DEADE0044C747 /* ThemisUndoManager.swift in Sources */,
 				E21AF05A292B9D4C0096ACFC /* ProgrammingAssessmentView.swift in Sources */,
 				65B49F3A2A07D5F200C9A45F /* ToolbarToggleButton.swift in Sources */,
+				65F4B9F62AB4F08A0079D383 /* ImageFileRenderer.swift in Sources */,
 				E2192ED9291E57A40092CE58 /* Request.swift in Sources */,
 				E119ED9B2922DE4700626DEA /* AssessmentResult.swift in Sources */,
 				65F019052A1CDCE400BB1C98 /* AssessmentView.swift in Sources */,

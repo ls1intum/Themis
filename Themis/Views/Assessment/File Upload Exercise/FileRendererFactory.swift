@@ -9,7 +9,18 @@ import SwiftUI
 
 enum FileRendererFactory {
     @ViewBuilder
-    static func renderer(for localFileUrl: URL) -> some View {
-        PDFRenderer(url: localFileUrl)
+    static func renderer(for fileExtension: FileUploadExerciseFileExtension, at url: URL) -> some View {
+        switch fileExtension {
+        case .pdf:
+            PDFRenderer(url: url)
+        case .png, .jpeg:
+            ImageFileRenderer(url: url)
+        default:
+            UnsupportedFileView(url: url, fileExtension: fileExtension)
+        }
     }
+}
+
+enum FileUploadExerciseFileExtension: String {
+    case pdf, jpeg, png, other
 }

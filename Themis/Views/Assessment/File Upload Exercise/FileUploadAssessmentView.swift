@@ -63,10 +63,12 @@ struct FileUploadAssessmentView: View {
     
     @ViewBuilder
     private var fileRenderer: some View {
-        if let localFileUrl = fileRendererVM.localFileURL, fileRendererVM.canDirectlyRenderFile {
-            FileRendererFactory.renderer(for: localFileUrl)
-        } else {
-            UnsupportedFileView(fileExtension: fileRendererVM.localFileURL?.pathExtension)
+        if let fileExtension = fileRendererVM.fileExtension {
+            if let localFileUrl = fileRendererVM.localFileURL {
+                FileRendererFactory.renderer(for: fileExtension, at: localFileUrl)
+            } else if let remoteFileUrl = fileRendererVM.remoteFileURL {
+                UnsupportedFileView(url: remoteFileUrl)
+            }
         }
     }
 }

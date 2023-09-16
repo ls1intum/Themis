@@ -11,13 +11,15 @@ import UserStore
 import Common
 
 class FileRendererViewModel: ExerciseRendererViewModel {
+    @Published var remoteFileURL: URL?
     @Published var localFileURL: URL?
+    @Published var fileExtension: FileUploadExerciseFileExtension?
     @Published var isSetupComplete = false
     @Published var canDirectlyRenderFile = false
     
     var fileDownloadService = FileDownloadService()
     
-    private let supportedFileExtensions = ["pdf"]
+    private let supportedFileExtensions = [FileUploadExerciseFileExtension.pdf, .png, .jpeg]
     
     /// Sets this VM up based on the given submission
     @MainActor
@@ -38,7 +40,11 @@ class FileRendererViewModel: ExerciseRendererViewModel {
             isSetupComplete = true
         }
         
-        canDirectlyRenderFile = supportedFileExtensions.contains(remoteFileUrl.pathExtension)
+        self.remoteFileURL = remoteFileUrl
+        let parsedFileExtension = FileUploadExerciseFileExtension(rawValue: remoteFileUrl.pathExtension) ?? .other
+        fileExtension = parsedFileExtension
+        
+        canDirectlyRenderFile = supportedFileExtensions.contains(parsedFileExtension)
         guard canDirectlyRenderFile else {
             return
         }
@@ -47,7 +53,9 @@ class FileRendererViewModel: ExerciseRendererViewModel {
     }
     
     private func reset() {
+        remoteFileURL = nil
         localFileURL = nil
+        fileExtension = nil
         isSetupComplete = false
         canDirectlyRenderFile = false
     }

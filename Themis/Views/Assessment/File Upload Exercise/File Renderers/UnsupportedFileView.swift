@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-struct UnsupportedFileView: View {
-    var fileExtension: String?
+struct UnsupportedFileView: View, FileRenderer {
+    var url: URL
+    var fileExtension: FileUploadExerciseFileExtension?
     private let backgroundColor = Color(UIColor.systemGray5)
     
     private var errorMsg: String {
         if let fileExtension {
-            return ".\(fileExtension) files can't be viewed in Themis"
+            return ".\(fileExtension.rawValue) files can't be viewed in Themis"
         } else {
             return "This file can't be viewed in Themis"
         }
@@ -47,6 +48,7 @@ struct UnsupportedFileView: View {
 
 struct UnsupportedFileView_Previews: PreviewProvider {
     static var previews: some View {
-        UnsupportedFileView(fileExtension: ".docx")
+        // swiftlint:disable:next force_unwrapping
+        UnsupportedFileView(url: URL(string: "https://google.com")!, fileExtension: .png)
     }
 }
