@@ -19,8 +19,6 @@ class FileRendererViewModel: ExerciseRendererViewModel {
     
     var fileDownloadService = FileDownloadService()
     
-    private let supportedFileExtensions = [FileUploadExerciseFileExtension.pdf, .png, .jpeg]
-    
     /// Sets this VM up based on the given submission
     @MainActor
     func setup(basedOn submission: BaseSubmission? = nil) async {
@@ -44,7 +42,7 @@ class FileRendererViewModel: ExerciseRendererViewModel {
         let parsedFileExtension = FileUploadExerciseFileExtension(rawValue: remoteFileUrl.pathExtension) ?? .other
         fileExtension = parsedFileExtension
         
-        canDirectlyRenderFile = supportedFileExtensions.contains(parsedFileExtension)
+        canDirectlyRenderFile = (parsedFileExtension != .other)
         guard canDirectlyRenderFile else {
             return
         }

@@ -8,10 +8,6 @@
 import SwiftUI
 import PDFKit
 
-protocol FileRenderer {
-    var url: URL { get }
-}
-
 struct PDFRenderer: UIViewRepresentable, FileRenderer {
     
     let url: URL
