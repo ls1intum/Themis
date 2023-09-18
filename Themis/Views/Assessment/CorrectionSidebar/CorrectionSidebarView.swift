@@ -23,6 +23,7 @@ struct CorrectionSidebarView: View {
     weak var feedbackDelegate: (any FeedbackDelegate)?
     
     private var exercise: (any BaseExercise)? {
+        // We can't use `assessmentVM.exercise` here because some exercise details would be missing
         assessmentVM.participation?.getExercise()
     }
     
@@ -36,27 +37,20 @@ struct CorrectionSidebarView: View {
             
             if !assessmentVM.loading {
                 ZStack {
-                    VStack {
-                        List {
-                            problemStatementSection
-                            exampleSolutionSection
-                        }
-                        .listStyle(.sidebar)
-                        .scrollContentBackground(.hidden)
+                    ScrollView {
+                        problemStatement
+                        exampleSolution
                     }
+                    .padding(.horizontal, problemStatementNeedsPadding ? 15 : 0)
                     .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001)
                     // 0.0 causes this view to be redrawn and webview to send a new request
                     
-                    switch correctionSidebarStatus {
-                    case .problemStatement:
-                        EmptyView() // handled above
-                    case .correctionGuidelines:
-                        correctionGuidelines
-                    case .generalFeedback:
-                        generalFeedbackList
+                    if !assessmentVM.loading {
+                        viewForSidebarStatus
                     }
                 }
             }
+            
             Spacer()
         }
         .frame(maxHeight: .infinity, alignment: .center)
@@ -77,26 +71,51 @@ struct CorrectionSidebarView: View {
     }
     
     @ViewBuilder
-    private var problemStatementSection: some View {
-        Section {
-            ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: exercise?.id)
-                .frame(maxHeight: .infinity)
-        } header: {
-            Text("Problem Statement")
-        }
-        .headerProminence(.increased)
+    private var problemStatement: some View {
+        ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: assessmentVM.exercise.id)
+            .frame(maxHeight: .infinity)
     }
     
     @ViewBuilder
-    private var exampleSolutionSection: some View {
+    private var viewForSidebarStatus: some View {
+        switch correctionSidebarStatus {
+        case .problemStatement:
+            EmptyView() // handled above
+        case .correctionGuidelines:
+            ScrollView {
+                CorrectionGuidelinesCellView(
+                    gradingCriteria: exercise?.gradingCriteria ?? [],
+                    gradingInstructions: exercise?.gradingInstructions
+                )
+            }
+        case .generalFeedback:
+            FeedbackListView(
+                assessmentVM: assessmentVM,
+                assessmentResult: assessmentResult,
+                feedbackDelegate: feedbackDelegate,
+                participationId: assessmentVM.participation?.id,
+                templateParticipationId: templateParticipationId,
+                gradingCriteria: exercise?.gradingCriteria ?? []
+            )
+        }
+    }
+    
+    private var problemStatementNeedsPadding: Bool {
+        guard let exercise else {
+            return false
+        }
+        return type(of: exercise) != ProgrammingExercise.self
+    }
+    
+    @ViewBuilder
+    private var exampleSolution: some View {
         if let exercise = assessmentVM.participation?.exercise,
            exercise.canShowExampleSolution {
-            Section {
-                ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
-            } header: {
+            VStack(alignment: .leading) {
                 Text("Example Solution")
+                    .font(.title2)
+                ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
             }
-            .headerProminence(.increased)
         }
     }
     
