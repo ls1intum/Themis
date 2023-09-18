@@ -85,6 +85,7 @@
 		65B49F4C2A08192100C9A45F /* LeftGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4B2A08192100C9A45F /* LeftGripView.swift */; };
 		65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4D2A08220D00C9A45F /* RightGripView.swift */; };
 		65B981AF2A7BDEF800FFC2F4 /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */; };
+		65B981B12A7C37E000FFC2F4 /* UMLGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
@@ -255,6 +256,7 @@
 		65B49F4B2A08192100C9A45F /* LeftGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftGripView.swift; sourceTree = "<group>"; };
 		65B49F4D2A08220D00C9A45F /* RightGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightGripView.swift; sourceTree = "<group>"; };
 		65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
+		65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLGraphicsContext.swift; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 			children = (
 				654BC9932A6FF7630081CF22 /* UMLRenderer.swift */,
 				654BC9942A6FF7630081CF22 /* ModelingAssessmentView.swift */,
+				65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */,
 				654BC9952A6FF7630081CF22 /* Diagram Renderers */,
 			);
 			path = "Modeling Exercise";
@@ -1276,6 +1279,7 @@
 				650538BE2A1E6E3D00C45E18 /* SubmissionMockExtension.swift in Sources */,
 				659CDC8129FAD79100E5FA50 /* ViewHideExtension.swift in Sources */,
 				651A44B82A1672DE00DBCD92 /* ExerciseGroups.swift in Sources */,
+				65B981B12A7C37E000FFC2F4 /* UMLGraphicsContext.swift in Sources */,
 				65593DF92A72B8A300B2DEBE /* UMLClassDiagramRelationshipRenderer.swift in Sources */,
 				65DD80C22A758C1600234BFE /* ModelingAssessmentViewModel.swift in Sources */,
 				65B49F402A07F29400C9A45F /* PaneViewModel.swift in Sources */,

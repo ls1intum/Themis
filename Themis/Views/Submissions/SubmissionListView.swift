@@ -42,14 +42,14 @@ struct SubmissionListView: View {
                 }.padding(.trailing)
             }
         }
-        .alert("Are you sure?", isPresented: $presentCancelAlert, presenting: submissionBeingCancelled, actions: { submission in
+        .alert("Are you sure?", isPresented: $presentCancelAlert, presenting: submissionBeingCancelled) { submission in
             Button("No", role: .cancel, action: {})
-            Button("Yes, cancel", role: .destructive, action: {
+            Button("Yes, cancel", role: .destructive) {
                 submissionListVM.cancel(submission, belongingTo: exercise)
-            })
-        }, message: { _ in
+            }
+        } message: { _ in
             Text("This will discard the assessment and release the lock on the submission.")
-        })
+        }
     }
     
     @ViewBuilder
