@@ -34,7 +34,7 @@ struct CodeView: View {
             editorBindings: EditorBindings(
                 source: $file.code ?? "loading...",
                 fontSize: $fontSize,
-                language: language,
+                language: file.fileExtension.codeEditorLang,
                 themeName: theme,
                 flags: editorFlags,
                 highlightedRanges: highlightedRanges,
@@ -80,17 +80,6 @@ struct CodeView: View {
             return .ocean
         } else {
             return CodeEditor.ThemeName(rawValue: "atelier-seaside-light")
-        }
-    }
-    
-    var language: CodeEditor.Language {
-        switch file.fileExtension {
-        case .java:
-            return .java
-        case .swift:
-            return .swift
-        case .other:
-            return .basic
         }
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Common
+import CodeEditor
 
 enum RepositoryType: String, CaseIterable {
     case student = "Student"
@@ -22,9 +23,40 @@ enum FileType: String, Codable {
 /// support for additional languages can be added in the future
 /// just by adding them here
 enum FileExtension: String, Codable {
+    // swiftlint:disable identifier_name
     case java = "JAVA"
+    case python = "PY"
+    case c = "C"
+    case haskell = "HS"
+    case kotlin = "KT"
+    case vhdl = "VHD"
     case swift = "SWIFT"
+    case ocaml = "ML"
     case other = "OTHER"
+    
+    var codeEditorLang: CodeEditor.Language {
+        switch self {
+        case .java:
+            return .java
+        case .python:
+            return .python
+        case .c:
+            return .cLang
+        case .haskell:
+            return .haskell
+        case .kotlin:
+            return .kotlin
+        case .vhdl:
+            return .vhdl
+        case .swift:
+            return .swift
+        case .ocaml:
+            return .ocaml
+        case .other:
+            return .basic
+        }
+    }
+    // swiftlint:enable identifier_name
 }
 
 
