@@ -21,7 +21,12 @@ struct ModelingAssessmentView: View {
     var body: some View {
         ZStack {
             UMLRenderer(umlRendererVM: umlRendererVM)
-                            
+            
+            if assessmentVM.loading {
+                ModelingSkeleton()
+                    .showsSkeleton(if: true)
+            }
+            
             HStack(spacing: 0) {
                 Spacer()
                 
