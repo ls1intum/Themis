@@ -9,10 +9,9 @@ import SwiftUI
 import Common
 
 struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
-    var context: GraphicsContext
+    var context: UMLGraphicsContext
     let canvasBounds: CGRect
-    
-    private let fontSize: CGFloat = 14
+    var fontSize: CGFloat
     
     func render(umlModel: UMLModel) {
         guard let relationships = umlModel.relationships else {
@@ -103,8 +102,9 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             rotationDegrees += 180
         }
         
-        context.drawLayer { layerContext in
+        context.baseGraphicsContext.drawLayer { layerContext in
             // Perform rotation
+            layerContext.translateBy(x: context.xOffset, y: context.yOffset)
             layerContext.translateBy(x: textSize.width / 2, y: textSize.height * 0.4)
             layerContext.rotate(by: Angle(degrees: rotationDegrees))
             let rotatedTextOrigin = textRect.origin.rotated(around: .zero,
@@ -150,7 +150,8 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
             rotationDegrees += 180
         }
         
-        context.drawLayer { layerContext in
+        context.baseGraphicsContext.drawLayer { layerContext in
+            layerContext.translateBy(x: context.xOffset, y: context.yOffset)
             layerContext.translateBy(x: textSize.width / 2, y: textSize.height)
             layerContext.rotate(by: Angle(degrees: rotationDegrees))
             let rotatedTextOrigin = textRect.origin.rotated(around: .init(x: 0, y: textSize.height / 2),
@@ -194,7 +195,7 @@ struct UMLUseCaseDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawArrowhead(at point: CGPoint, rotatedBy angle: Angle, type: ArrowHeadType) {
         var path = Path()
-        let size: CGFloat = (fontSize * 0.7).rounded()
+        let size: CGFloat = 10
                 
         switch type {
         case .triangle:

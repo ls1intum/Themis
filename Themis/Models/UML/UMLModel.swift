@@ -18,4 +18,8 @@ struct UMLModel: Decodable {
 struct Size: Decodable {
     let width: Double
     let height: Double
+    
+    var asCGSize: CGSize {
+        CGSize(width: width, height: height)
+    }
 }

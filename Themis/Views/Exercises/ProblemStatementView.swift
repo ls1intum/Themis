@@ -37,10 +37,10 @@ struct ProblemStatementView: View {
                 .disabled(true)
                 .frame(height: isLoading ? 0 : height)
                 
-                ProgressView()
+                TextSkeleton()
                     .isHidden(!isLoading, remove: true)
+                    .showsSkeleton(if: isLoading)
             }
-            .frame(height: height)
         } else {
             errorMessage
         }

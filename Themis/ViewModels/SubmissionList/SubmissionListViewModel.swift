@@ -12,6 +12,7 @@ import SharedModels
 class SubmissionListViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
     @Published var error: Error?
+    @Published var isLoading = false
     
     var submittedSubmissions: [Submission] {
         submissions.filter { $0.baseSubmission.results?.last?.completionDate != nil }
@@ -21,8 +22,16 @@ class SubmissionListViewModel: ObservableObject {
         submissions.filter { $0.baseSubmission.results?.last?.completionDate == nil }
     }
     
+    private var isLoadedOnce = false
+    
     @MainActor
     func fetchTutorSubmissions(for exercise: Exercise) async {
+        isLoading = isLoadedOnce ? isLoading : true
+        defer {
+            isLoading = false
+            isLoadedOnce = true
+        }
+        
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submissions = try await submissionService.getTutorSubmissions(exerciseId: exercise.id)
