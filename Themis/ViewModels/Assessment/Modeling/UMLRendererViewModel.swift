@@ -40,6 +40,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
+    var diagramSize: CGSize {
+        umlModel?.size?.asCGSize ?? CGSize()
+    }
+    
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
     private var orphanElements = [UMLElement]()
     
@@ -81,16 +85,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
               !diagramTypeUnsupported else {
             return
         }
-        
+        let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         var renderer: any UMLDiagramRenderer
         
         switch model.type {
         case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLClassDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
         case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLUseCaseDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
         default:
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
@@ -126,6 +130,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     private func getSelectableItem(at point: CGPoint) -> SelectableUMLItem? {
+        let point = CGPoint(x: point.x - UMLGraphicsContext.defaultOffset,
+                            y: point.y - UMLGraphicsContext.defaultOffset)
         // Look for relationships
         if let foundRelationship = umlModel?.relationships?.first(where: { $0.boundsContains(point: point) }) {
             return foundRelationship
@@ -227,6 +233,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     @MainActor
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
+        var context = UMLGraphicsContext(context)
+        
         // Highlight selected element if there is one
         if !pencilModeDisabled,
            let selectedElement,
@@ -278,7 +286,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     @MainActor
-    func renderTemporaryHighlightIfNeeded(_ context: inout GraphicsContext, size: CGSize) {
+    private func renderTemporaryHighlightIfNeeded(_ context: inout UMLGraphicsContext, size: CGSize) {
         guard let temporaryHighlight else {
             return
         }
