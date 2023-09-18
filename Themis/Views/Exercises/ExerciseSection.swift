@@ -28,31 +28,28 @@ struct ExerciseSection: View {
     
     var body: some View {
         Group {
-            if shownExercises.isEmpty {
-                EmptyView()
-            } else {
-                Text("Exercises")
-                    .customSectionTitle()
-                
-                VStack {
-                    ForEach(shownExercises, id: \.self) { exercise in
-                        NavigationLink {
-                            ExerciseView(exercise: exercise)
-                                .environmentObject(courseVM)
-                        } label: {
-                            ExerciseListItem(exercise: exercise, dateProperties: [releaseDate, dueDate, assessmentDueDate])
-                                .padding(.horizontal)
-                                .padding(.vertical, 12)
-                        }
-                        .disabled(exercise.isDisabled)
-                        
-                        Divider()
-                            .padding(.leading, .xl)
-                            .isHidden(exercise == shownExercises.last, fake: true)
+            Text("Exercises")
+                .customSectionTitle()
+            
+            VStack {
+                ForEach(shownExercises.mock(if: courseVM.loading), id: \.self) { exercise in
+                    NavigationLink {
+                        ExerciseView(exercise: exercise)
+                            .environmentObject(courseVM)
+                    } label: {
+                        ExerciseListItem(exercise: exercise, dateProperties: [releaseDate, dueDate, assessmentDueDate])
+                            .padding(.horizontal)
+                            .padding(.vertical, 12)
+                            .showsSkeleton(if: courseVM.loading)
                     }
+                    .disabled(exercise.isDisabled || courseVM.loading)
+                    
+                    Divider()
+                        .padding(.leading, .xl)
+                        .isHidden(exercise == shownExercises.last, fake: true)
                 }
-                .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))
             }
+            .background(Color(UIColor.secondarySystemGroupedBackground).cornerRadius(10))
         }
     }
 }
@@ -62,5 +59,6 @@ struct ExercisesSectionsView_Previews: PreviewProvider {
     static var previews: some View {
         ExerciseSection(exercises: [])
             .previewInterfaceOrientation(.landscapeLeft)
+            .environmentObject(CourseViewModel())
     }
 }
