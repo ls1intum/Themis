@@ -18,8 +18,9 @@ class CourseViewModel: ObservableObject {
     @Published var viewOnlyExams: [Exam] = []
     @Published var assessableExams: [Exam] = []
     @Published var error: Error?
-    @Published var showEmptyMessage = true
-    
+    @Published var showCoursesIsEmptyMessage = false
+    @Published var showExercisesIsEmptyMessage = false
+
     private static var shownCourseIDKey = "shownCourseID"
     
     @Published var shownCourseID: Int? {
@@ -73,7 +74,7 @@ class CourseViewModel: ObservableObject {
             }
             
             courses = coursesForDashboard.value?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
-            showEmptyMessage = courses.isEmpty
+            showCoursesIsEmptyMessage = courses.isEmpty
             
             if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
                 // can't use .first here due to double wrapped optional
@@ -90,13 +91,13 @@ class CourseViewModel: ObservableObject {
             return
         }
         
-        Task {
-            if firstLoad {
-                loading = true
-                firstLoad = false
-            }
+        Task { [weak self] in
+            self?.loading = true
+            self?.showExercisesIsEmptyMessage = false
+            
             defer {
-                loading = false
+                self?.loading = false
+                self?.showExercisesIsEmptyMessageIfNeeded()
             }
             
             let courseForAssessment = await CourseServiceFactory.shared.getCourseForAssessment(courseId: shownCourseID)
@@ -104,8 +105,8 @@ class CourseViewModel: ObservableObject {
             if case .failure(let error) = courseForAssessment {
                 log.error(String(describing: error))
             } else if let courseValueForAssessment = courseForAssessment.value {
-                setExercises(for: courseValueForAssessment)
-                setExamsForShownCourse()
+                self?.setExercises(for: courseValueForAssessment)
+                self?.setExamsForShownCourse()
             }
         }
     }
@@ -124,5 +125,11 @@ class CourseViewModel: ObservableObject {
     private func setExamsForShownCourse() {
         assessableExams = shownCourse?.exams?.filter({ $0.isOver && !$0.isAssessmentDue }) ?? []
         viewOnlyExams = shownCourse?.exams?.filter({ !$0.isOver || $0.isAssessmentDue }) ?? []
+    }
+    
+    private func showExercisesIsEmptyMessageIfNeeded() {
+        let allExercises = assessableExercises + viewOnlyExercises
+        let allExams = assessableExams + viewOnlyExams
+        showExercisesIsEmptyMessage = allExercises.isEmpty && allExams.isEmpty
     }
 }

@@ -16,22 +16,20 @@ struct FiletreeSidebarView: View {
             
             showWarningIfNeeded()
             
-            if !assessmentVM.loading {
-                List {
-                    OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
-                        if tree.type == .folder {
-                            nodeFolderView(folder: tree)
-                        } else {
-                            nodeFileView(file: tree)
-                        }
+            List {
+                OutlineGroup(cvm.fileTree, id: \.path, children: \.children) { tree in
+                    if tree.type == .folder {
+                        nodeFolderView(folder: tree)
+                    } else {
+                        nodeFileView(file: tree)
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color("sidebarBackground"))
                 }
-                .listStyle(.inset)
-                .background(Color("sidebarBackground"))
-                .scrollContentBackground(.hidden)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color("sidebarBackground"))
             }
+            .listStyle(.inset)
+            .background(Color("sidebarBackground"))
+            .scrollContentBackground(.hidden)
             
             Spacer()
             
@@ -42,6 +40,7 @@ struct FiletreeSidebarView: View {
         .padding(.top, 35)
         .background(Color("sidebarBackground"))
         .animation(.easeInOut(duration: 0.2), value: repositorySelection)
+        .shows(FiletreeSkeleton(), if: assessmentVM.loading || cvm.isLoading)
     }
     
     @ViewBuilder
@@ -126,7 +125,7 @@ struct FiletreeSidebarView: View {
     private func handleRepositoryChange(_ newRepositoryType: RepositoryType) {
         if let participationId = assessmentVM.participation?.getId(for: newRepositoryType) {
             Task {
-                await cvm.initFileTree(participationId: participationId, repositoryType: newRepositoryType)
+                await cvm.initFileTree(participationId: participationId, repositoryType: newRepositoryType, shouldSetLoading: false)
                 if newRepositoryType == .student {
                     await cvm.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult,
                                                           participationId: participationId)
