@@ -10,10 +10,9 @@ import Common
 
 // swiftlint:disable:next type_body_length
 struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
-    var context: GraphicsContext
+    var context: UMLGraphicsContext
     let canvasBounds: CGRect
-    
-    private let fontSize: CGFloat = 14
+    var fontSize: CGFloat
     
     func render(umlModel: UMLModel) {
         guard let relationships = umlModel.relationships else {
@@ -27,16 +26,11 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     }
     
     private func draw(relationship: UMLRelationship) {
-        guard let xCoordinate = relationship.bounds?.x,
-              let yCoordinate = relationship.bounds?.y,
-              let width = relationship.bounds?.width,
-              let height = relationship.bounds?.height else {
+        guard let relationshipRect = relationship.boundsAsCGRect else {
             log.warning("Failed to draw a UML relationship: \(relationship)")
             return
         }
         
-        let relationshipRect = CGRect(x: xCoordinate, y: yCoordinate, width: width, height: height)
-
         switch relationship.type {
         case .classDependency:
             drawDependency(relationship, in: relationshipRect)
@@ -136,7 +130,7 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
     
     private func drawArrowhead(at point: CGPoint, lookingAt direction: Direction, type: ArrowHeadType) {
         var path = Path()
-        let size: CGFloat = (fontSize * 0.7).rounded()
+        let size: CGFloat = 10
         
         switch type {
         case .triangle:
@@ -201,15 +195,14 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         var targetOffset: CGPoint
-        let relativeSize = (fontSize * 0.7).rounded()
         
         switch relationship.type {
         case .classDependency, .classUnidirectional:
             targetOffset = .init(x: 10, y: 10)
         case .classInheritance, .classRealization:
-            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+            targetOffset = .init(x: 0, y: fontSize * 1.05)
         case .classComposition, .classAggregation:
-            targetOffset = .init(x: 0, y: relativeSize * 2)
+            targetOffset = .init(x: 0, y: fontSize * 1.4)
         default:
             targetOffset = .zero
         }
@@ -280,15 +273,14 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         }
         
         var targetOffset: CGPoint
-        let relativeSize = (fontSize * 0.7).rounded()
         
         switch relationship.type {
         case .classDependency, .classUnidirectional:
-            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+            targetOffset = .init(x: 0, y: fontSize * 1.05)
         case .classInheritance, .classRealization:
-            targetOffset = .init(x: 0, y: relativeSize * 1.5)
+            targetOffset = .init(x: 0, y: fontSize * 1.05)
         case .classComposition, .classAggregation:
-            targetOffset = .init(x: 0, y: relativeSize * 2)
+            targetOffset = .init(x: 0, y: fontSize * 1.4)
         default:
             targetOffset = .zero
         }
@@ -349,7 +341,6 @@ struct UMLClassDiagramRelationshipRenderer: UMLDiagramRenderer {
         context.draw(resolvedText, in: textRect)
     }
 }
-// swiftlint:enable type_body_length
 
 enum ArrowHeadType {
     case triangle, triangleWithoutBase, rhombus, rhombusFilled
