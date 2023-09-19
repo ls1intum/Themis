@@ -19,9 +19,14 @@ struct SubmissionListView: View {
     @State private var presentCancelAlert = false
     @State private var submissionBeingCancelled: Submission?
     
+    private var relevantSubmissions: [Submission] {
+        submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions
+    }
+    
     var body: some View {
         List {
-            ForEach(submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions,
+            ForEach(relevantSubmissions.mock(if: submissionListVM.isLoading,
+                                             mockElementCountRange: 1...1),
                     id: \.baseSubmission.id) { submission in
                 NavigationLink {
                     AssessmentView(
@@ -42,6 +47,7 @@ struct SubmissionListView: View {
                 }.padding(.trailing)
             }
         }
+        .showsSkeleton(if: submissionListVM.isLoading)
         .alert("Are you sure?", isPresented: $presentCancelAlert, presenting: submissionBeingCancelled) { submission in
             Button("No", role: .cancel, action: {})
             Button("Yes, cancel", role: .destructive) {

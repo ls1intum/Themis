@@ -12,11 +12,15 @@ import SharedModels
 class SubmissionSearchViewModel: ObservableObject {
     @Published var submissions: [Submission] = []
     @Published var error: Error?
+    @Published var isLoading = false
     
     private let maxPercentDiffFromBestResultToStillShow = 0.15 // based on experimentation
 
     @MainActor
     func fetchSubmissions(exercise: Exercise) async {
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submissions = try await submissionService.getAllSubmissions(exerciseId: exercise.id)

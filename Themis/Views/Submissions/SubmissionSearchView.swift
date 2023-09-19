@@ -18,7 +18,9 @@ struct SubmissionSearchView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(submissionSearchVM.filterSubmissions(search: search), id: \.baseSubmission.id) { submission in
+                ForEach(submissionSearchVM.filterSubmissions(search: search).mock(if: submissionSearchVM.isLoading,
+                                                                                  mockElementCountRange: 3...5),
+                        id: \.baseSubmission.id) { submission in
                     SingleSubmissionCellView(exercise: exercise, submission: submission)
                 }
             }
@@ -26,9 +28,10 @@ struct SubmissionSearchView: View {
         .padding()
         .toolbar {
             ToolbarItem(placement: .principal) {
-                searchBar
+                searchBar.isHidden(submissionSearchVM.isLoading)
             }
         }
+        .showsSkeleton(if: submissionSearchVM.isLoading)
         .task {
             await submissionSearchVM.fetchSubmissions(exercise: exercise)
         }
@@ -86,6 +89,7 @@ private struct SingleSubmissionCellView: View {
         .navigationDestination(isPresented: $showAssessmentView) {
             AssessmentView(
                 exercise: exercise,
+                submissionId: submission.baseSubmission.id,
                 participationId: submission.getParticipation()?.id,
                 readOnly: true
             )

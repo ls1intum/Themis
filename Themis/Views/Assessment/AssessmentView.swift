@@ -62,7 +62,7 @@ struct AssessmentView: View {
                     AssessmentModeSymbol(exerciseTitle: exercise.baseExercise.title, readOnly: assessmentVM.readOnly)
                 }
                 
-                if assessmentVM.loading {
+                if assessmentVM.loading || assessmentVM.isSaving {
                     ToolbarItem(placement: .navigationBarLeading) {
                         ProgressView()
                             .frame(width: 20)
@@ -101,13 +101,13 @@ struct AssessmentView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     ToolbarSaveButton(assessmentVM: assessmentVM)
-                        .disabled(assessmentVM.readOnly || assessmentVM.loading)
+                        .disabled(assessmentVM.readOnly || assessmentVM.loading || assessmentVM.isSaving)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     ToolbarToggleButton(toggleVariable: $showSubmitConfirmation, text: "Submit")
                         .buttonStyle(ThemisButtonStyle(color: Color.themisGreen))
-                        .disabled(assessmentVM.readOnly || assessmentVM.loading)
+                        .disabled(assessmentVM.readOnly || assessmentVM.loading || assessmentVM.isSaving)
                 }
             }
             .alert("No more submissions to assess.", isPresented: $showNoSubmissionsAlert) {
@@ -167,3 +167,4 @@ struct AssessmentView: View {
         }
     }
 }
+// swiftlint:enable closure_body_length
