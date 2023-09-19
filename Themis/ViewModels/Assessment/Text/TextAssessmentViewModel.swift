@@ -24,7 +24,12 @@ class TextAssessmentViewModel: AssessmentViewModel {
         }
         
         if readOnly {
-            self.error = UserFacingError.operationNotSupportedForExercise
+            if let submissionId {
+                await getReadOnlySubmission(submissionId: submissionId)
+            } else {
+                self.error = UserFacingError.participationNotFound
+                log.error("Could not find participation for text exercise: \(exercise.baseExercise.title ?? "")")
+            }
         } else {
             if let participationId, let submissionId {
                 await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
@@ -40,6 +45,32 @@ class TextAssessmentViewModel: AssessmentViewModel {
         ThemisUndoManager.shared.removeAllActions()
     }
     
+    @MainActor
+    func getReadOnlySubmission(submissionId: Int) async {
+        guard readOnly else {
+            self.error = UserFacingError.unknown
+            log.error("This function should only be called for read-only mode")
+            return
+        }
+        
+        loading = true
+        defer {
+            loading = false
+        }
+        
+        do {
+            let submissionService = SubmissionServiceFactory.service(for: exercise)
+            // We are not actually getting the submission for assessment, but this is the only endpoint that can be used to
+            // get the submission based on the submissionId without locking it
+            let response = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
+            self.submission = response
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+        } catch {
+            self.error = error
+            log.error(String(describing: error))
+        }
+    }
+
     @MainActor
     private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
         guard let submissionId else {

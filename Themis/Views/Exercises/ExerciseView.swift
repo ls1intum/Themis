@@ -23,26 +23,16 @@ struct ExerciseView: View {
     
     var body: some View {
         VStack {
-            DataStateView(data: $exerciseVM.exerciseStats,
-                          retryHandler: { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }) { _ in
-                DataStateView(data: $exerciseVM.exerciseStatsForAssessment,
-                              retryHandler: { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }) { _ in
-                    Form {
-                        if !submissionListVM.openSubmissions.isEmpty {
-                            openSubmissionsSection
-                        }
-                        
-                        if !submissionListVM.submittedSubmissions.isEmpty {
-                            finishedSubmissionsSection
-                        }
-                        
-                        statisticsSection
-                        
-                        problemStatementSection
-                    }
-                    .refreshable { await fetchExerciseData() }
-                }
+            Form {
+                openSubmissionsSection
+                
+                finishedSubmissionsSection
+                
+                statisticsSection
+                
+                problemStatementSection
             }
+            .refreshable { await fetchExerciseData() }
         }
         .navigationDestination(isPresented: $showAssessmentView) {
             AssessmentView(exercise: exercise)
@@ -63,24 +53,30 @@ struct ExerciseView: View {
         .errorAlert(error: $exerciseVM.error, onDismiss: { self.presentationMode.wrappedValue.dismiss() })
     }
     
+    @ViewBuilder
     private var openSubmissionsSection: some View {
-        Section("Open submissions") {
-            SubmissionListView(
-                submissionListVM: submissionListVM,
-                exercise: exercise,
-                submissionStatus: .open
-            )
-        }.disabled(!exerciseVM.isAssessmentPossible)
+        if submissionListVM.isLoading || !submissionListVM.openSubmissions.isEmpty {
+            Section("Open submissions") {
+                SubmissionListView(
+                    submissionListVM: submissionListVM,
+                    exercise: exercise,
+                    submissionStatus: .open
+                )
+            }.disabled(!exerciseVM.isAssessmentPossible)
+        }
     }
     
+    @ViewBuilder
     private var finishedSubmissionsSection: some View {
-        Section("Finished submissions") {
-            SubmissionListView(
-                submissionListVM: submissionListVM,
-                exercise: exercise,
-                submissionStatus: .submitted
-            )
-        }.disabled(!exerciseVM.isAssessmentPossible)
+        if submissionListVM.isLoading || !submissionListVM.submittedSubmissions.isEmpty {
+            Section("Finished submissions") {
+                SubmissionListView(
+                    submissionListVM: submissionListVM,
+                    exercise: exercise,
+                    submissionStatus: .submitted
+                )
+            }.disabled(!exerciseVM.isAssessmentPossible)
+        }
     }
     
     private var statisticsSection: some View {
@@ -103,6 +99,7 @@ struct ExerciseView: View {
                                      currentValue: exerciseVM.averageScoreOfExercise)
                 Spacer()
             }
+            .showsSkeleton(if: exerciseVM.isLoading)
         }
     }
     
@@ -140,10 +137,15 @@ struct ExerciseView: View {
         exerciseVM.exam = exam
         
         await withTaskGroup(of: Void.self) { group in
-            group.addTask { await exerciseVM.fetchExercise(exerciseId: exercise.id) }
-            group.addTask { await exerciseVM.fetchExerciseStats(exerciseId: exercise.id) }
-            group.addTask { await exerciseVM.fetchExerciseStatsForDashboard(exerciseId: exercise.id) }
+            group.addTask { await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id) }
             group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
         }
+    }
+}
+
+struct ExerciseView_Previews: PreviewProvider {
+    static var previews: some View {
+        ExerciseView(exercise: Exercise.mockText)
+            .environmentObject(CourseViewModel())
     }
 }

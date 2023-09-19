@@ -89,8 +89,16 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         file.path == selectedFile?.path
     }
     
+    /// Initializes the file tree for the given participation ID and repository type.
+    /// - Parameters:
+    ///   - participationId: the ID of the participation to fetch the file anmes
+    ///   - repositoryType: the type of the repository that should be fetched
+    ///   - shouldSetLoading: if true, sets the loading state of this viewmodel, possibly causing loading indicators (skeleton) to show on the screen
     @MainActor
-    func initFileTree(participationId: Int, repositoryType: RepositoryType) async {
+    func initFileTree(participationId: Int, repositoryType: RepositoryType, shouldSetLoading: Bool = true) async {
+        isLoading = shouldSetLoading ? true : isLoading
+        defer { isLoading = shouldSetLoading ? false : isLoading }
+        
         do {
             let files = try await RepositoryServiceFactory.shared.getFileNamesOfRepository(participationId: participationId)
             let node = Node.initFileTreeStructure(files: files)

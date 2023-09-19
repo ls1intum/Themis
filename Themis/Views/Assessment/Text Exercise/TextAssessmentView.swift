@@ -25,6 +25,7 @@ struct TextAssessmentView: View {
     var body: some View {
         HStack(spacing: 0) {
             TextExerciseRenderer(textExerciseRendererVM: textExerciseRendererVM)
+                .shows(TextSkeleton(), if: assessmentVM.loading)
             
             Group {
                 RightGripView(paneVM: paneVM)
