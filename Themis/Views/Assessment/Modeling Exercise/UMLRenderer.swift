@@ -27,12 +27,11 @@ struct UMLRenderer: View {
         ZStack(alignment: .topLeading) {
             Group {
                 if let model = umlRendererVM.umlModel, let type = model.type {
-                    ApollonView(umlModel: model, 
+                    ApollonView(umlModel: model,
                                 diagramType: type,
-                                fontSize: 14.0,
-                                diagramOffset: CGPoint(x: 0, y: 0))
+                                fontSize: umlRendererVM.fontSize,
+                                diagramOffset: umlRendererVM.offset)
                 }
-                
                 Canvas(rendersAsynchronously: true) { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
                 } symbols: {
