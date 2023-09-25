@@ -1,10 +1,3 @@
-//
-//  UMLBadgeSymbol.swift
-//  Themis
-//
-//  Created by Tarlan Ismayilsoy on 25.07.23.
-//
-
 import SwiftUI
 
 /// Represents a badge symbol for UML elements having an associated referenced feedback
