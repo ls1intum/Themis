@@ -115,6 +115,7 @@ struct CorrectionSidebarView: View {
                 Text("Example Solution")
                     .font(.title2)
                 ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
