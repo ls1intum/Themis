@@ -18,7 +18,13 @@ struct FeedbackCellView: View {
     @State var feedback: AssessmentFeedback
     private var editingDisabled: Bool { assessmentVM.readOnly || !assessmentVM.allowsInlineFeedbackOperations }
     private var tapGestureDisabled: Bool { feedback.scope != .inline || !assessmentVM.allowsInlineFeedbackOperations }
-    private var feedbackText: String {feedback.baseFeedback.text ?? feedback.baseFeedback.testCase?.testName ?? "Feedback"}
+    private var feedbackText: String {
+        if let feedbackType = feedback.baseFeedback.type,
+           feedbackType.isAutomatic {
+            return feedback.baseFeedback.testCase?.testName ?? "Test Case"
+        }
+        return feedback.baseFeedback.text ?? "Feedback"
+    }
     private var feedbackDetailText: String {feedback.baseFeedback.detailText ?? ""}
 
     @State var showEditFeedback = false
