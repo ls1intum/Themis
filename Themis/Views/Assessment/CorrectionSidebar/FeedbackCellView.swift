@@ -21,7 +21,7 @@ struct FeedbackCellView: View {
     private var feedbackText: String {
         if let feedbackType = feedback.baseFeedback.type,
            feedbackType.isAutomatic {
-            return feedback.baseFeedback.testCase?.testName ?? "Test Case"
+            return feedback.baseFeedback.text ?? feedback.baseFeedback.testCase?.testName ?? "Test Case"
         }
         return feedback.baseFeedback.text ?? "Feedback"
     }
