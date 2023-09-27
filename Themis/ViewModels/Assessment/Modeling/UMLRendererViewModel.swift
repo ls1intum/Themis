@@ -214,7 +214,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     @MainActor
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
-        var context = UMLGraphicsContext(context, offset: CGPoint(x: 15, y: 15))
+        var context = UMLGraphicsContext(context, offset: offset)
         
         // Highlight selected element if there is one
         if !pencilModeDisabled,
