@@ -90,10 +90,11 @@ extension Exercise {
     
     /// A mock text exercise
     static var mockText: Exercise {
+        let randomId = Int.random(in: 1...9999)
         let exerciseData = Data("""
         {
             "type": "text",
-            "id": 6314,
+            "id": \(randomId),
             "title": "Essay About Your Dream Spaceship",
             "maxPoints": 100.0,
             "bonusPoints": 0.0,
