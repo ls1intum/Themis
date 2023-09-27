@@ -28,7 +28,7 @@ struct CircularProgressView: View {
         
         let formatResult = (progress * 100.0)
             .formatted(.number.precision(
-                .integerAndFractionLength(integerLimits: 0...3, fractionLimits: 0...1)
+                .fractionLength(0...1)
             ))
         
         return "\(formatResult)%"
@@ -42,10 +42,10 @@ struct CircularProgressView: View {
         }
         
         let currentFormatted = currentValue.formatted(.number.precision(
-            .integerAndFractionLength(integerLimits: 0...3, fractionLimits: 0...1)
+            .fractionLength(0...1)
         ))
         let maxFormatted = maxValue.formatted(.number.precision(
-            .integerAndFractionLength(integerLimits: 0...3, fractionLimits: 0...1)
+            .fractionLength(0...1)
         ))
         
         return "\(currentFormatted) / \(maxFormatted)"
@@ -203,10 +203,10 @@ struct CircularProgressViewPreview: PreviewProvider {
                                  maxValue: 100,
                                  currentValue: 43.6931)
             
-            CircularProgressView(progress: 0.436,
+            CircularProgressView(progress: 0.004,
                                  description: .averageScore,
                                  maxValue: 100,
-                                 currentValue: 43.6931)
+                                 currentValue: 0.4)
         }
     }
 }
