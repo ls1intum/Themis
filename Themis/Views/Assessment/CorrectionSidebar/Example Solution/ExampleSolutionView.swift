@@ -10,9 +10,14 @@ import SharedModels
 
 struct ExampleSolutionView: View {
     var exercise: Exercise?
+    var isLoading = false
     
     var body: some View {
-        viewForExerciseType
+        if isLoading {
+            skeletonViewForExerciseType
+        } else {
+            viewForExerciseType
+        }
     }
     
     @ViewBuilder
@@ -28,6 +33,19 @@ struct ExampleSolutionView: View {
             }
         default:
             Text("This exercise does not support example solutions")
+        }
+    }
+    
+    @ViewBuilder
+    private var skeletonViewForExerciseType: some View {
+        switch exercise {
+        case .text:
+            TextSkeleton()
+        case .modeling:
+            ModelingSkeleton()
+                .frame(width: 280, height: 280)
+        default:
+            TextSkeleton()
         }
     }
 }
