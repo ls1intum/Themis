@@ -144,7 +144,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         if let point {
             currentDragLocation = point
         } else {
-            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Athena
+            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Apollon
                                         y: diagramSize.width - 50)
         }
     }
