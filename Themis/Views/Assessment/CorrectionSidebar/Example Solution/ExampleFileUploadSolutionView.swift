@@ -7,12 +7,13 @@
 
 import SwiftUI
 import SharedModels
+import ArtemisMarkdown
 
 struct ExampleFileUploadSolutionView: View {
     var exercise: FileUploadExercise
     
     var body: some View {
-        Text("\(exercise.exampleSolution ?? "No example solution")")
+        ArtemisMarkdownView(string: exercise.exampleSolution ?? "No example solution")
     }
 }
 
