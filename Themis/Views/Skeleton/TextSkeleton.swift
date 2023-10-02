@@ -19,6 +19,7 @@ struct TextSkeleton: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
+        .showsSkeleton(if: true)
     }
     
     @ViewBuilder
