@@ -17,12 +17,14 @@ protocol SelectableUMLItem {
     var highlightPath: Path? { get }
     /// The path that should be highlighted when the corresponding feedback cell is tapped
     var temporaryHighlightPath: Path? { get }
+    /// The path that should be highlighted if the item has a suggested feedback
+    var suggestedHighlightPath: Path? { get }
     /// The point where this UML item prefers to have it's badge. Badges are used to indicate a feedback referencing this item
     var badgeLocation: CGPoint? { get }
     var boundsAsCGRect: CGRect? { get }
     var typeAsString: String? { get }
     
-    /// Return true if the given point lies within the boundary of this element
+    /// Returns true if the given point lies within the boundary of this element
     func boundsContains(point: CGPoint) -> Bool
 }
 
@@ -38,6 +40,10 @@ extension SelectableUMLItem { // default implementations for all conforming type
     }
     
     var temporaryHighlightPath: Path? {
+        highlightPath
+    }
+    
+    var suggestedHighlightPath: Path? {
         highlightPath
     }
 }
