@@ -24,14 +24,6 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
     var typeAsString: String? {
         type?.rawValue
     }
-        
-    private var hasTurningPoints: Bool {
-        guard let path else {
-            return false
-        }
-        
-        return path.count > 2
-    }
     
     /// Contains rectangles drawn between PathPoints
     private var pathRects: [CGRect] {
@@ -64,7 +56,7 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
     var highlightPath: Path? {
         var result = Path()
         
-        if !hasTurningPoints, let pathWithCGPoints {
+        if let pathWithCGPoints {
             result = pathWithCGPoints.strokedPath(.init(lineWidth: 20))
         } else {
             result.addRects(pathRects)
@@ -119,7 +111,7 @@ struct UMLRelationship: Decodable, SelectableUMLItem {
     }
     
     func boundsContains(point: CGPoint) -> Bool {
-        if !hasTurningPoints, let pathWithCGPoints {
+        if let pathWithCGPoints {
             return pathWithCGPoints.strokedPath(.init(lineWidth: 20)).contains(point)
         }
         return pathRects.contains(where: { $0.contains(point) })
