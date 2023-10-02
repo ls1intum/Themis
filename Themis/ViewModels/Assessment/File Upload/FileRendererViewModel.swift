@@ -16,6 +16,7 @@ class FileRendererViewModel: ExerciseRendererViewModel {
     @Published var fileExtension: FileUploadExerciseFileExtension?
     @Published var isSetupComplete = false
     @Published var canDirectlyRenderFile = false
+    @Published var error: UserFacingError?
     
     var fileDownloadService = FileDownloadService()
     
@@ -27,6 +28,8 @@ class FileRendererViewModel: ExerciseRendererViewModel {
               let filePath = fileUploadSubmission.filePath?.dropFirst(),
               let remoteFileUrl = URL(string: "\(baseUrl)\(filePath)") else {
             log.error("Setup failed")
+            error = UserFacingError.couldNotFetchFileDetails
+            isSetupComplete = true
             return
         }
         
@@ -56,5 +59,6 @@ class FileRendererViewModel: ExerciseRendererViewModel {
         fileExtension = nil
         isSetupComplete = false
         canDirectlyRenderFile = false
+        error = nil
     }
 }

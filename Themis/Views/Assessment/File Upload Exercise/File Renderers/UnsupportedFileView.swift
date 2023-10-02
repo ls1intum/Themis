@@ -28,7 +28,7 @@ struct UnsupportedFileView: View, FileRenderer {
         VStack {
             Spacer()
             
-            errorIcon
+            FileErrorIcon()
             
             Text(errorMsg)
                 .textCase(.uppercase)
@@ -46,20 +46,6 @@ struct UnsupportedFileView: View, FileRenderer {
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
         .animation(.default, value: unsupportedFileVM.localFileUrl)
-    }
-    
-    @ViewBuilder
-    private var errorIcon: some View {
-        Image(systemName: "doc.fill")
-            .font(.system(size: 80))
-            .padding(.bottom)
-            .overlay {
-                Image(systemName: "xmark")
-                    .font(.system(size: 30, weight: .bold))
-                    .padding(.top)
-                    .foregroundColor(backgroundColor)
-            }
-            .foregroundColor(.secondary)
     }
     
     @ViewBuilder
