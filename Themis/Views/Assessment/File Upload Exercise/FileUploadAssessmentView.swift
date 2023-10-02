@@ -21,10 +21,8 @@ struct FileUploadAssessmentView: View {
     var body: some View {
         HStack(spacing: 0) {
             if !fileRendererVM.isSetupComplete || fileRendererVM.isLoading {
-                VStack { // TODO: replace with a skeleton once the skeleton PR is merged
-                    ProgressView()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                TextSkeleton()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = fileRendererVM.error {
                 errorView(error)
             } else {
