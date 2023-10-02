@@ -8,6 +8,7 @@
 import SwiftUI
 import SharedModels
 import Common
+import ApollonView
 
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
@@ -24,12 +25,12 @@ struct UMLRenderer: View {
     
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Image("umlRendererBackground")
-                .resizable(resizingMode: .tile)
-            
             Group {
-                Canvas(rendersAsynchronously: true) { context, size in
-                    umlRendererVM.render(&context, size: size)
+                if let model = umlRendererVM.umlModel, let type = model.type {
+                    ApollonView(umlModel: model,
+                                diagramType: type,
+                                fontSize: umlRendererVM.fontSize,
+                                diagramOffset: umlRendererVM.offset)
                 }
                 
                 Canvas(rendersAsynchronously: true) { context, size in

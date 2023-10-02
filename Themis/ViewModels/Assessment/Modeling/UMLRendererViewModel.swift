@@ -9,12 +9,15 @@ import Foundation
 import SharedModels
 import Common
 import SwiftUI
+import ApollonModels
+import ApollonView
 
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
     @Published var error: Error?
     @Published var currentDragLocation = CGPoint.zero
+    @Published var offset: CGPoint = CGPoint(x: 15, y: 15)
     
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
@@ -103,30 +106,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         undoManager.removeAllActions()
     }
     
-    @MainActor
-    func render(_ context: inout GraphicsContext, size: CGSize) {
-        guard let model = umlModel,
-              let modelType = model.type,
-              !diagramTypeUnsupported else {
-            return
-        }
-        let umlContext = UMLGraphicsContext(context)
-        let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        
-        var renderer = UMLDiagramRendererFactory.renderer(for: modelType,
-                                                          context: umlContext,
-                                                          canvasBounds: canvasBounds,
-                                                          fontSize: fontSize)
-        
-        if let renderer {
-            renderer.render(umlModel: model)
-        } else {
-            log.error("Attempted to draw an unknown diagram type")
-            diagramTypeUnsupported = true
-            setError(.diagramNotSupported)
-        }
-    }
-    
     private func setError(_ error: UserFacingError) {
         if self.error == nil {
             Task { @MainActor [weak self] in
@@ -164,8 +143,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     private func getSelectableItem(at point: CGPoint) -> SelectableUMLItem? {
-        let point = CGPoint(x: point.x - UMLGraphicsContext.defaultOffset,
-                            y: point.y - UMLGraphicsContext.defaultOffset)
+        let point = CGPoint(x: point.x - offset.x,
+                            y: point.y - offset.y)
         // Look for relationships
         if let foundRelationship = umlModel?.relationships?.first(where: { $0.boundsContains(point: point) }) {
             return foundRelationship
@@ -273,7 +252,7 @@ extension UMLRendererViewModel {
     
     @MainActor
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
-        var context = UMLGraphicsContext(context)
+        var context = UMLGraphicsContext(context, offset: offset)
         
         // Highlight selected element if there is one
         if !pencilModeDisabled,
