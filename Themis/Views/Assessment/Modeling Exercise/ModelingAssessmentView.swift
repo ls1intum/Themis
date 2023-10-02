@@ -24,7 +24,6 @@ struct ModelingAssessmentView: View {
             
             if assessmentVM.loading {
                 ModelingSkeleton()
-                    .showsSkeleton(if: true)
             }
             
             HStack(spacing: 0) {
