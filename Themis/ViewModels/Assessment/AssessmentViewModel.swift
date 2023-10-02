@@ -12,6 +12,7 @@ class AssessmentViewModel: ObservableObject {
     @Published var assessmentResult: AssessmentResult
     @Published var readOnly: Bool
     @Published var loading = false
+    @Published var isSaving = false
     @Published var error: Error?
     @Published var pencilModeDisabled = true
     @Published var allowsInlineFeedbackOperations = true
@@ -158,8 +159,8 @@ class AssessmentViewModel: ObservableObject {
             return
         }
         
-        loading = true
-        defer { loading = false }
+        isSaving = true
+        defer { isSaving = false }
         
         let assessmentService = AssessmentServiceFactory.service(for: exercise)
         

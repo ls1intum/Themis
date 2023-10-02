@@ -14,6 +14,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
     @Published var error: Error?
+    @Published var currentDragLocation = CGPoint.zero
     
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
@@ -38,6 +39,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                 target.highlights = oldValue
             }
         }
+    }
+    
+    var diagramSize: CGSize {
+        umlModel?.size?.asCGSize ?? CGSize()
     }
     
     /// Contains UML elements that do not have a parent. Such elements are a good starting point when we need to determine which element the user tapped on.
@@ -75,22 +80,45 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         setupHighlights(basedOn: feedbacks)
     }
     
+    /// Sets this VM up based on the given UML Model string
+    @MainActor
+    func setup(basedOn umlModelString: String) {
+        guard let modelData = umlModelString.data(using: .utf8) else {
+            log.error("Invalid UML model string")
+            return
+        }
+        self.umlModel = nil
+        self.selectedElement = nil
+        self.highlights = []
+        self.orphanElements = []
+        
+        do {
+            umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            determineChildren()
+            orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
+        } catch {
+            log.error("Could not parse UML string: \(error)")
+        }
+        
+        undoManager.removeAllActions()
+    }
+    
     @MainActor
     func render(_ context: inout GraphicsContext, size: CGSize) {
         guard let model = umlModel,
               !diagramTypeUnsupported else {
             return
         }
-        
+        let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         var renderer: any UMLDiagramRenderer
         
         switch model.type {
         case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLClassDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
         case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: context, canvasBounds: canvasBounds)
+            renderer = UMLUseCaseDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
         default:
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
@@ -106,6 +134,18 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             Task { @MainActor [weak self] in
                 self?.error = error
             }
+        }
+    }
+    
+    @MainActor
+    /// Sets the drag location to the specified point
+    /// - Parameter point: when nil, the drag location is set in such a way that centers the diagram
+    func setDragLocation(at point: CGPoint? = nil) {
+        if let point {
+            currentDragLocation = point
+        } else {
+            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Apollon
+                                        y: diagramSize.width - 50)
         }
     }
     
@@ -126,6 +166,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     private func getSelectableItem(at point: CGPoint) -> SelectableUMLItem? {
+        let point = CGPoint(x: point.x - UMLGraphicsContext.defaultOffset,
+                            y: point.y - UMLGraphicsContext.defaultOffset)
         // Look for relationships
         if let foundRelationship = umlModel?.relationships?.first(where: { $0.boundsContains(point: point) }) {
             return foundRelationship
@@ -176,8 +218,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func generateFeedbackDetail() -> ModelingFeedbackDetail {
         ModelingFeedbackDetail(umlItem: selectedElement)
     }
-    
-    // MARK: - Highlight-Related Functions
+}
+
+// MARK: - Highlight-Related Functions
+extension UMLRendererViewModel {
     @MainActor
     private func setupHighlights(basedOn feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         guard umlModel?.elements != nil else {
@@ -227,6 +271,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     
     @MainActor
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
+        var context = UMLGraphicsContext(context)
+        
         // Highlight selected element if there is one
         if !pencilModeDisabled,
            let selectedElement,
@@ -278,7 +324,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     @MainActor
-    func renderTemporaryHighlightIfNeeded(_ context: inout GraphicsContext, size: CGSize) {
+    private func renderTemporaryHighlightIfNeeded(_ context: inout UMLGraphicsContext, size: CGSize) {
         guard let temporaryHighlight else {
             return
         }

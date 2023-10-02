@@ -23,16 +23,16 @@ struct CourseView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if courseVM.loading {
-                    ProgressView()
-                } else if courseVM.showEmptyMessage {
-                    emptyInfo
+                if courseVM.showCoursesIsEmptyMessage {
+                    coursesEmptyInfo
+                } else if courseVM.showExercisesIsEmptyMessage {
+                    exercisesEmptyInfo
                 } else {
-                    ScrollView {
-                        Group {
+                    ScrollView(.vertical) {
+                        VStack(spacing: 25) {
                             ExerciseGroups(courseVM: courseVM, type: .inAssessment)
-                                .padding(.bottom)
                             ExerciseGroups(courseVM: courseVM, type: .viewOnly)
+                            Spacer()
                         }
                         .padding(20)
                     }
@@ -44,7 +44,7 @@ struct CourseView: View {
                 }
             }
             .navigationTitle(navTitle)
-            .toolbar(content: buildToolbar)
+            .toolbar(content: generateToolbarContent)
         }
         .task {
             courseVM.fetchAllCourses()
@@ -53,27 +53,6 @@ struct CourseView: View {
         .errorAlert(error: $courseVM.error)
     }
     
-    @ToolbarContentBuilder
-    private func buildToolbar() -> some ToolbarContent {
-        ToolbarItemGroup(placement: .cancellationAction) {
-            logoutButton
-            userFirstName
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Picker("", selection: $courseVM.shownCourseID) {
-                ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
-                    if let courseID {
-                        Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
-                            .padding(.leading, 40)
-                    }
-                }
-            }
-            .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
-            .isHidden(courseVM.showEmptyMessage)
-            .padding(-10) // compensates for Picker's default padding
-        }
-    }
-
     private var logoutButton: some View {
         Button {
             APIClient().perfomLogout()
@@ -88,7 +67,7 @@ struct CourseView: View {
             .font(.callout)
     }
     
-    private var emptyInfo: some View {
+    private var coursesEmptyInfo: some View {
         VStack {
             Image(systemName: "person.fill.xmark")
                 .font(.system(size: 80))
@@ -100,6 +79,47 @@ struct CourseView: View {
         }
         .foregroundColor(.secondary)
     }
+    
+    private var exercisesEmptyInfo: some View {
+        VStack {
+            ZStack(alignment: .topTrailing) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 30, weight: .medium))
+                    .frame(alignment: .trailing)
+                
+                Image(systemName: "list.bullet.rectangle.fill")
+                    .font(.system(size: 60))
+                    .padding([.top, .trailing], 25)
+            }
+            .padding(.bottom)
+            
+            Text("There are no exercises in this course")
+                .textCase(.uppercase)
+                .font(.system(size: 17, weight: .medium))
+        }
+        .foregroundColor(.secondary)
+    }
+    
+    @ToolbarContentBuilder
+    private func generateToolbarContent() -> some ToolbarContent {
+        ToolbarItemGroup(placement: .cancellationAction) {
+            logoutButton
+            userFirstName
+        }
+        ToolbarItem(placement: .primaryAction) {
+            Picker("", selection: $courseVM.shownCourseID) {
+                ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
+                    if let courseID {
+                        Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
+                            .padding(.leading, 40)
+                    }
+                }
+            }
+            .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
+            .isHidden(courseVM.showCoursesIsEmptyMessage)
+            .padding(-10) // compensates for Picker's default padding
+        }
+    }
 }
 
 struct CourseView_Previews: PreviewProvider {
@@ -107,8 +127,5 @@ struct CourseView_Previews: PreviewProvider {
     
     static var previews: some View {
         CourseView(courseVM: courseVM)
-            .onAppear {
-                courseVM.showEmptyMessage = true
-            }
     }
 }

@@ -19,16 +19,25 @@ struct ModelingAssessmentView: View {
     private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
     
     var body: some View {
-        HStack(spacing: 0) {
+        ZStack {
             UMLRenderer(umlRendererVM: umlRendererVM)
             
-            Group {
+            if assessmentVM.loading {
+                ModelingSkeleton()
+            }
+            
+            HStack(spacing: 0) {
+                Spacer()
+                
                 RightGripView(paneVM: paneVM)
                 
                 correctionWithPlaceholder
                     .frame(width: paneVM.dragWidthRight)
             }
             .animation(.default, value: paneVM.showRightPane)
+        }
+        .onAppear {
+            assessmentVM.fontSize = 14.0
         }
         .task {
             await assessmentVM.initSubmission()
