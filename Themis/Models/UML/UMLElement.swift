@@ -18,7 +18,7 @@ class UMLElement: Decodable, SelectableUMLItem {
     
     var children: [UMLElement]? = [] // not decoded
     
-    /// Childresn of this element sorted by their vertical position (top to bottom)
+    /// Children of this element sorted by their vertical position (top to bottom)
     var verticallySortedChildren: [UMLElement]? {
         children?.sorted(by: { ($0.bounds?.y ?? 0.0) < ($1.bounds?.y ?? 0.0) })
     }
@@ -42,6 +42,21 @@ class UMLElement: Decodable, SelectableUMLItem {
         
         return CGPoint(x: boundsAsCGRect.maxX, y: boundsAsCGRect.minY)
     }()
+    
+    /// Returns a rectangular path from the top of the element until the top of the vertically highest child
+    var suggestedHighlightPath: Path? {
+        guard let boundsAsCGRect,
+              let highestChildMinY = verticallySortedChildren?.first?.boundsAsCGRect?.minY else {
+            return highlightPath
+        }
+        
+        var path = Path()
+        path.move(to: boundsAsCGRect.origin)
+        path.addLine(to: .init(x: boundsAsCGRect.maxX, y: boundsAsCGRect.minY))
+        path.addLine(to: .init(x: boundsAsCGRect.maxX, y: highestChildMinY))
+        path.addLine(to: .init(x: boundsAsCGRect.minX, y: highestChildMinY))
+        return path
+    }
     
     /// Recursively looks for the child UML element located at the given point
     func getChild(at point: CGPoint) -> UMLElement? {

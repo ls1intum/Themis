@@ -32,6 +32,16 @@ extension Exercise {
         }
     }
     
+    /// Indicates whether example solutions can be viewed for this exercise
+    var canShowExampleSolution: Bool {
+        switch self {
+        case .text, .modeling:
+            return true
+        default:
+            return false
+        }
+    }
+    
     /// Indicates whether this exercise is assessable in general
     var supportsAssessment: Bool {
         switch self {
