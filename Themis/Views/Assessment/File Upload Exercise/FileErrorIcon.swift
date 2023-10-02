@@ -25,6 +25,8 @@ struct FileErrorIcon: View {
     }
 }
 
-#Preview {
-    FileErrorIcon()
+struct FileErrorIcon_Previews: PreviewProvider {
+     static var previews: some View {
+         FileErrorIcon()
+     }
 }
