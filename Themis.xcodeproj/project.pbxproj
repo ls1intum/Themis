@@ -103,19 +103,19 @@
 		65B49F4C2A08192100C9A45F /* LeftGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4B2A08192100C9A45F /* LeftGripView.swift */; };
 		65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B49F4D2A08220D00C9A45F /* RightGripView.swift */; };
 		65B981AF2A7BDEF800FFC2F4 /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */; };
+		65B981B12A7C37E000FFC2F4 /* UMLGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */; };
 		65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */; };
 		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
 		65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */; };
-		65B981B12A7C37E000FFC2F4 /* UMLGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
 		65D2C6892A011815001D5CD1 /* ExerciseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */; };
 		65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */; };
+		65D2E1FF2A8CA4A8003DB837 /* CodeEditorSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */; };
 		65D9AEFC2AB58C3900500088 /* QuickLookFileRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D9AEFB2AB58C3900500088 /* QuickLookFileRenderer.swift */; };
 		65D9AEFE2AB596F900500088 /* PDFRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D9AEFD2AB596F900500088 /* PDFRenderer.swift */; };
 		65D9AF002AB5E10A00500088 /* UnsupportedFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D9AEFF2AB5E10A00500088 /* UnsupportedFileViewModel.swift */; };
-		65D2E1FF2A8CA4A8003DB837 /* CodeEditorSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */; };
 		65DD80BE2A758BE200234BFE /* ProgrammingAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD80BD2A758BE200234BFE /* ProgrammingAssessmentViewModel.swift */; };
 		65DD80C02A758C0A00234BFE /* TextAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD80BF2A758C0A00234BFE /* TextAssessmentViewModel.swift */; };
 		65DD80C22A758C1600234BFE /* ModelingAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD80C12A758C1600234BFE /* ModelingAssessmentViewModel.swift */; };
@@ -300,19 +300,19 @@
 		65B49F4B2A08192100C9A45F /* LeftGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftGripView.swift; sourceTree = "<group>"; };
 		65B49F4D2A08220D00C9A45F /* RightGripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightGripView.swift; sourceTree = "<group>"; };
 		65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
+		65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLGraphicsContext.swift; sourceTree = "<group>"; };
 		65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentView.swift; sourceTree = "<group>"; };
 		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
 		65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadSubmissionServiceImpl.swift; sourceTree = "<group>"; };
-		65B981B02A7C37E000FFC2F4 /* UMLGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLGraphicsContext.swift; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
 		65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseExtension.swift; sourceTree = "<group>"; };
 		65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionExtension.swift; sourceTree = "<group>"; };
+		65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorSkeleton.swift; sourceTree = "<group>"; };
 		65D9AEFB2AB58C3900500088 /* QuickLookFileRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookFileRenderer.swift; sourceTree = "<group>"; };
 		65D9AEFD2AB596F900500088 /* PDFRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFRenderer.swift; sourceTree = "<group>"; };
 		65D9AEFF2AB5E10A00500088 /* UnsupportedFileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsupportedFileViewModel.swift; sourceTree = "<group>"; };
-		65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorSkeleton.swift; sourceTree = "<group>"; };
 		65DD80BD2A758BE200234BFE /* ProgrammingAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingAssessmentViewModel.swift; sourceTree = "<group>"; };
 		65DD80BF2A758C0A00234BFE /* TextAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAssessmentViewModel.swift; sourceTree = "<group>"; };
 		65DD80C12A758C1600234BFE /* ModelingAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelingAssessmentViewModel.swift; sourceTree = "<group>"; };
@@ -1845,7 +1845,7 @@
 			repositoryURL = "https://github.com/ls1intum/artemis-ios-core-modules";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
+				minimumVersion = 3.4.0;
 			};
 		};
 		65F007962A86C837000FD641 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
