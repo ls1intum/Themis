@@ -10,55 +10,74 @@ import SwiftUI
 
 struct ModelingSkeleton: View {
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            Rectangle()
-                .foregroundColor(Color(UIColor.systemGray3))
-                .frame(width: 230, height: 5)
-                .offset(.init(width: 270, height: 100))
-            
-            Rectangle()
-                .foregroundColor(Color(UIColor.systemGray3))
-                .frame(width: 5, height: 200)
-                .offset(.init(width: 50, height: 180))
-            
-            Rectangle()
-                .foregroundColor(Color(UIColor.systemGray3))
-                .frame(width: 5, height: 200)
-                .offset(.init(width: 240, height: 180))
-            
-            Rectangle()
-                .foregroundColor(Color(UIColor.systemGray3))
-                .frame(width: 5, height: 200)
-                .offset(.init(width: 480, height: 180))
-            
-            VStack(alignment: .leading, spacing: 50) {
-                HStack(alignment: .top, spacing: 190) {
-                    Rectangle()
-                        .foregroundColor(Color(UIColor.systemGray3))
-                        .frame(width: 280, height: 180)
-                    
-                    Rectangle()
-                        .foregroundColor(Color(UIColor.systemGray3))
-                        .frame(width: 150, height: 250)
-                }
+        GeometryReader { geoReader in
+            ZStack(alignment: .topLeading) {
+                // Relationships
+                Rectangle() // top vertical
+                    .foregroundColor(Color(UIColor.systemGray3))
+                    .frame(width: geoReader.minSide * 0.15,
+                           height: geoReader.minSide * 0.003)
+                    .offset(.init(width: geoReader.minSide * 0.25,
+                                  height: geoReader.minSide * 0.07))
                 
-                HStack(alignment: .top, spacing: 100) {
-                    Rectangle()
-                        .foregroundColor(Color(UIColor.systemGray3))
-                        .frame(width: 100, height: 100)
+                Rectangle() // bottom first
+                    .foregroundColor(Color(UIColor.systemGray3))
+                    .frame(width: geoReader.minSide * 0.003,
+                           height: geoReader.minSide * 0.08)
+                    .offset(.init(width: geoReader.minSide * 0.05,
+                                  height: geoReader.minSide * 0.25))
+                
+                Rectangle() // bottom second
+                    .foregroundColor(Color(UIColor.systemGray3))
+                    .frame(width: geoReader.minSide * 0.003,
+                           height: geoReader.minSide * 0.08)
+                    .offset(.init(width: geoReader.minSide * 0.23,
+                                  height: geoReader.minSide * 0.25))
+                
+                Rectangle() // bottom third
+                    .foregroundColor(Color(UIColor.systemGray3))
+                    .frame(width: geoReader.minSide * 0.003,
+                           height: geoReader.minSide * 0.08)
+                    .offset(.init(width: geoReader.minSide * 0.42,
+                                  height: geoReader.minSide * 0.25))
 
-                    Rectangle()
-                        .foregroundColor(Color(UIColor.systemGray3))
-                        .frame(width: 100, height: 100)
+                // Classes
+                VStack(alignment: .leading, spacing: geoReader.minSide * 0.07) {
+                    HStack(alignment: .top, spacing: geoReader.minSide * 0.15) {
+                        Rectangle()
+                            .foregroundColor(Color(UIColor.systemGray3))
+                            .frame(width: geoReader.minSide * 0.25,
+                                   height: geoReader.minSide * 0.25)
+                        
+                        Rectangle()
+                            .foregroundColor(Color(UIColor.systemGray3))
+                            .frame(width: geoReader.minSide * 0.15,
+                                   height: geoReader.minSide * 0.25)
+                    }
                     
-                    Rectangle()
-                        .foregroundColor(Color(UIColor.systemGray3))
-                        .frame(width: 100, height: 100)
+                    HStack(alignment: .top, spacing: geoReader.minSide * 0.08) {
+                        Rectangle()
+                            .foregroundColor(Color(UIColor.systemGray3))
+                            .frame(width: geoReader.minSide * 0.1,
+                                   height: geoReader.minSide * 0.1)
+
+                        Rectangle()
+                            .foregroundColor(Color(UIColor.systemGray3))
+                            .frame(width: geoReader.minSide * 0.1,
+                                   height: geoReader.minSide * 0.1)
+
+                        Rectangle()
+                            .foregroundColor(Color(UIColor.systemGray3))
+                            .frame(width: geoReader.minSide * 0.1,
+                                   height: geoReader.minSide * 0.1)
+                    }
                 }
             }
+            .padding(.horizontal, geoReader.size.width * 0.1)
+            .padding(.vertical, geoReader.size.height * 0.1)
+            .showsSkeleton(if: true)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(60)
     }
 }
 

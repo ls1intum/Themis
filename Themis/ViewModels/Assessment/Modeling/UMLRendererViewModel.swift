@@ -106,27 +106,25 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     @MainActor
     func render(_ context: inout GraphicsContext, size: CGSize) {
         guard let model = umlModel,
+              let modelType = model.type,
               !diagramTypeUnsupported else {
             return
         }
         let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
-        var renderer: any UMLDiagramRenderer
+        var renderer = UMLDiagramRendererFactory.renderer(for: modelType,
+                                                          context: umlContext,
+                                                          canvasBounds: canvasBounds,
+                                                          fontSize: fontSize)
         
-        switch model.type {
-        case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
-        case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
-        default:
+        if let renderer {
+            renderer.render(umlModel: model)
+        } else {
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
             setError(.diagramNotSupported)
-            return
         }
-        
-        renderer.render(umlModel: model)
     }
     
     private func setError(_ error: UserFacingError) {
@@ -144,7 +142,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         if let point {
             currentDragLocation = point
         } else {
-            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Athena
+            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Apollon
                                         y: diagramSize.width - 50)
         }
     }
@@ -156,7 +154,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         if let selectedElement {
             log.verbose("Selected UML element: \(selectedElement.name ?? "no name")")
             
-            if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) { // Edit Feedback
+            if let matchingHighlight = highlights.first(where: { $0.elementBounds == selectedElement.boundsAsCGRect }) { // Edit Feedback
                 self.selectedFeedbackForEditingId = matchingHighlight.assessmentFeedbackId
                 self.showEditFeedback = true
             } else if !pencilModeDisabled { // Add Fedback
@@ -239,12 +237,16 @@ extension UMLRendererViewModel {
                 continue
             }
             
+            let isSuggested = assessmentFeedback.baseFeedback.type?.isAutomatic ?? false
+            let highlightPath = isSuggested ? referencedItem.suggestedHighlightPath ?? .init() : Path(elementRect)
+            
             let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
-                                            rect: elementRect,
+                                            elementBounds: elementRect,
+                                            path: highlightPath,
                                             badgeLocation: badgeLocation,
                                             temporaryHighlightPath: temporaryHighlightPath,
-                                            isSuggested: assessmentFeedback.baseFeedback.type?.isAutomatic ?? false)
+                                            isSuggested: isSuggested)
             highlights.append(newHighlight)
         }
         
@@ -316,7 +318,7 @@ extension UMLRendererViewModel {
             context.draw(resolvedBadgeSymbol, in: badgeRect.insetBy(dx: 6, dy: 6))
             
             if highlight.isSuggested {
-                context.fill(Path(highlight.rect), with: .color(Color.modelingSuggestedFeedback))
+                context.fill(highlight.path, with: .color(Color.modelingSuggestedFeedback))
             }
         }
         
@@ -396,7 +398,8 @@ extension UMLRendererViewModel: FeedbackDelegate {
 struct UMLHighlight {
     var assessmentFeedbackId: UUID
     var symbol: UMLBadgeSymbol
-    var rect: CGRect
+    var elementBounds: CGRect
+    var path: Path
     var badgeLocation: CGPoint
     var temporaryHighlightPath: Path
     var isSuggested: Bool

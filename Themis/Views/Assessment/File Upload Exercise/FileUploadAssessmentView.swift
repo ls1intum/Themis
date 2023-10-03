@@ -21,10 +21,10 @@ struct FileUploadAssessmentView: View {
     var body: some View {
         HStack(spacing: 0) {
             if !fileRendererVM.isSetupComplete || fileRendererVM.isLoading {
-                VStack { // TODO: replace with a skeleton once the skeleton PR is merged
-                    ProgressView()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                TextSkeleton()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let error = fileRendererVM.error {
+                errorView(error)
             } else {
                 fileRenderer
             }
@@ -63,13 +63,31 @@ struct FileUploadAssessmentView: View {
     
     @ViewBuilder
     private var fileRenderer: some View {
-        if let fileExtension = fileRendererVM.fileExtension {
-            if let localFileUrl = fileRendererVM.localFileURL {
-                FileRendererFactory.renderer(for: fileExtension, at: localFileUrl)
-            } else if let remoteFileUrl = fileRendererVM.remoteFileURL {
-                UnsupportedFileView(url: remoteFileUrl)
-            }
+        if let fileExtension = fileRendererVM.fileExtension,
+           let localFileUrl = fileRendererVM.localFileURL {
+            FileRendererFactory.renderer(for: fileExtension, at: localFileUrl)
+        } else if let remoteFileUrl = fileRendererVM.remoteFileURL {
+            UnsupportedFileView(url: remoteFileUrl)
         }
+    }
+    
+    @ViewBuilder
+    private func errorView(_ error: UserFacingError) -> some View {
+        VStack {
+            Spacer()
+            
+            FileErrorIcon()
+            
+            Text(error.title)
+                .textCase(.uppercase)
+                .font(.system(size: 17, weight: .medium))
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color(UIColor.systemGray5))
     }
 }
 

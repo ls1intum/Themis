@@ -23,10 +23,13 @@ struct PDFRenderer: UIViewRepresentable, FileRenderer {
 
 struct PDFRenderer_Previews: PreviewProvider {
     static var previews: some View {
-        // swiftlint:disable:next force_unwrapping
-        PDFRenderer(url: Bundle.main.url(forResource: "proposal", withExtension: "pdf")!)
-            .onAppear {
-                print(FileManager.default.urls(for: .downloadsDirectory, in: .allDomainsMask))
-            }
+        if let mockFileUrl = Bundle.main.url(forResource: "proposal", withExtension: "pdf") {
+            PDFRenderer(url: mockFileUrl)
+                .onAppear {
+                    print(FileManager.default.urls(for: .downloadsDirectory, in: .allDomainsMask))
+                }
+        } else {
+            EmptyView()
+        }
     }
 }

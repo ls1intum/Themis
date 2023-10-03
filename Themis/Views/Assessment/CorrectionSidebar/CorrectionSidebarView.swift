@@ -35,19 +35,17 @@ struct CorrectionSidebarView: View {
         VStack {
             sideBarElementPicker
             
-            if !assessmentVM.loading {
-                ZStack {
-                    ScrollView {
-                        problemStatement
-                        exampleSolution
-                    }
-                    .padding(.horizontal, problemStatementNeedsPadding ? 15 : 0)
-                    .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001)
-                    // 0.0 causes this view to be redrawn and webview to send a new request
-                    
-                    if !assessmentVM.loading {
-                        viewForSidebarStatus
-                    }
+            ZStack {
+                ScrollView {
+                    problemStatement
+                    exampleSolution
+                }
+                .padding(.horizontal, problemStatementNeedsPadding ? 15 : 0)
+                .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001)
+                // 0.0 causes this view to be redrawn and webview to send a new request
+                
+                if !assessmentVM.loading {
+                    viewForSidebarStatus
                 }
             }
             
@@ -109,13 +107,16 @@ struct CorrectionSidebarView: View {
     
     @ViewBuilder
     private var exampleSolution: some View {
-        if let exercise = assessmentVM.participation?.exercise,
-           exercise.canShowExampleSolution {
+        // Keep in mind that `assessmentVM.exercise` is an incomplete exercise model.
+        // We try to use `assessmentVM.participation?.exercise` instead as soon the participation it is fetched
+        if assessmentVM.exercise.canShowExampleSolution {
             VStack(alignment: .leading) {
                 Text("Example Solution")
                     .font(.title2)
-                ExampleSolutionView(exercise: assessmentVM.participation?.exercise)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .isHidden(assessmentVM.loading, remove: true)
+                ExampleSolutionView(exercise: assessmentVM.participation?.exercise ?? assessmentVM.exercise,
+                                    isLoading: assessmentVM.loading)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
