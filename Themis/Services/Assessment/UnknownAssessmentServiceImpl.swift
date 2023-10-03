@@ -22,8 +22,4 @@ class UnknownAssessmentServiceImpl: AssessmentService {
     func submitAssessment(participationId: Int, newAssessment: AssessmentResult) async throws {
         throw UserFacingError.operationNotSupportedForExercise
     }
-    
-    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
-        throw UserFacingError.operationNotSupportedForExercise
-    }
 }

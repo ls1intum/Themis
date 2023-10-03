@@ -10,6 +10,84 @@ import Foundation
 import SharedModels
 
 extension Exercise {
+    static var mockFileUpload: Exercise {
+        let exerciseData = Data("""
+        {
+            "type": "file-upload",
+            "id": 6736,
+            "title": "Upload a PDF",
+            "maxPoints": 70.0,
+            "bonusPoints": 0.0,
+            "releaseDate": "2023-07-20T14:03:00+02:00",
+            "startDate": "2023-07-20T14:03:00+02:00",
+            "dueDate": "2023-07-20T14:07:00+02:00",
+            "assessmentDueDate": "2023-10-31T13:07:00+01:00",
+            "mode": "INDIVIDUAL",
+            "allowComplaintsForAutomaticAssessments": false,
+            "allowManualFeedbackRequests": false,
+            "includedInOverallScore": "INCLUDED_COMPLETELY",
+            "problemStatement": "Upload any pdf file.",
+            "presentationScoreEnabled": false,
+            "secondCorrectionEnabled": false,
+            "course": {
+                "id": 3342,
+                "title": "NASA Space Course",
+                "shortName": "ios2223cit",
+                "studentGroupName": "artemis-ios2223cit-students",
+                "teachingAssistantGroupName": "artemis-ios2223cit-tutors",
+                "editorGroupName": "artemis-ios2223cit-editors",
+                "instructorGroupName": "artemis-ios2223cit-instructors",
+                "startDate": "2022-10-01T00:00:00+02:00",
+                "endDate": "2024-09-13T18:22:00+02:00",
+                "testCourse": true,
+                "onlineCourse": false,
+                "courseInformationSharingConfiguration": "COMMUNICATION_AND_MESSAGING",
+                "maxComplaints": 3,
+                "maxTeamComplaints": 3,
+                "maxComplaintTimeDays": 7,
+                "maxRequestMoreFeedbackTimeDays": 7,
+                "maxComplaintTextLimit": 2000,
+                "maxComplaintResponseTextLimit": 2000,
+                "enrollmentEnabled": true,
+                "enrollmentConfirmationMessage": "Hi",
+                "unenrollmentEnabled": false,
+                "accuracyOfScores": 1,
+                "learningPathsEnabled": false,
+                "requestMoreFeedbackEnabled": true,
+                "complaintsEnabled": true
+            },
+            "gradingCriteria": [
+                {
+                    "id": 25,
+                    "structuredGradingInstructions": [
+                        {
+                            "id": 49,
+                            "credits": -10.0,
+                            "gradingScale": "Quality",
+                            "instructionDescription": "The file quality is low and hard to read",
+                            "feedback": "Please upload pdf with better quality",
+                            "usageCount": 1
+                        }
+                    ]
+                }
+            ],
+            "exampleSolution": "This is an example solution.",
+            "filePattern": "pdf",
+            "type": "file-upload",
+            "exerciseType": "FILE_UPLOAD",
+            "studentAssignedTeamIdComputed": false,
+            "gradingInstructionFeedbackUsed": false,
+            "teamMode": false,
+            "visibleToStudents": true
+        }
+        """.utf8)
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .customISO8601
+        
+        return try! decoder.decode(Exercise.self, from: exerciseData)
+    }
+    
     /// A mock text exercise
     static var mockText: Exercise {
         let randomId = Int.random(in: 1...9999)
