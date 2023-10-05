@@ -237,6 +237,12 @@ enum AssessmentViewModelFactory {
                                                participationId: participationId,
                                                resultId: resultId,
                                                readOnly: readOnly)
+        case .fileUpload:
+            return FileUploadAssessmentViewModel(exercise: exercise,
+                                                 submissionId: submissionId,
+                                                 participationId: participationId,
+                                                 resultId: resultId,
+                                                 readOnly: readOnly)
         default:
             log.warning("Could not find the corresponding AssessmentViewModel subtype for exercise \(exercise)")
             return AssessmentViewModel(exercise: exercise,
