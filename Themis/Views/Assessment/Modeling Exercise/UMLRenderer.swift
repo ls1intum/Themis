@@ -25,12 +25,14 @@ struct UMLRenderer: View {
     
     var body: some View {
         ZStack(alignment: .topLeading) {
+            ApollonViewViewModel.getGridBackground()
             Group {
                 if let model = umlRendererVM.umlModel, let type = model.type {
                     ApollonView(umlModel: model,
                                 diagramType: type,
                                 fontSize: umlRendererVM.fontSize,
-                                diagramOffset: umlRendererVM.offset)
+                                diagramOffset: umlRendererVM.offset,
+                                isGridBackground: false)
                 }
                 
                 Canvas(rendersAsynchronously: true) { context, size in
