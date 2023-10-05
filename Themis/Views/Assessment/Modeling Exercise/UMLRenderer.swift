@@ -25,8 +25,10 @@ struct UMLRenderer: View {
     
     var body: some View {
         ZStack(alignment: .topLeading) {
+            /// Render the Grid Background from the Apollon Package
             ApollonViewViewModel.getGridBackground()
             Group {
+                /// If the UML Model is set, create an ApollonView View
                 if let model = umlRendererVM.umlModel, let type = model.type {
                     ApollonView(umlModel: model,
                                 diagramType: type,
@@ -34,7 +36,6 @@ struct UMLRenderer: View {
                                 diagramOffset: umlRendererVM.offset,
                                 isGridBackground: false)
                 }
-                
                 Canvas(rendersAsynchronously: true) { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
                 } symbols: {
