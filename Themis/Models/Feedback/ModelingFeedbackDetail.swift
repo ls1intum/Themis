@@ -7,7 +7,7 @@
 
 import Foundation
 import SharedModels
-import ApollonModels
+import ApollonShared
 
 struct ModelingFeedbackDetail: FeedbackDetail {
     var umlItem: SelectableUMLItem?

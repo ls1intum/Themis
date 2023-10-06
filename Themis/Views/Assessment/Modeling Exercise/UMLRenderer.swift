@@ -9,6 +9,7 @@ import SwiftUI
 import SharedModels
 import Common
 import ApollonView
+import ApollonShared
 
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
@@ -26,7 +27,7 @@ struct UMLRenderer: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             /// Render the Grid Background from the Apollon Package
-            ApollonViewViewModel.getGridBackground()
+            GridBackgroundView()
             Group {
                 /// If the UML Model is set, create an ApollonView View
                 if let model = umlRendererVM.umlModel, let type = model.type {

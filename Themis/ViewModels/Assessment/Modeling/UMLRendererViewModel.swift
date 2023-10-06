@@ -9,15 +9,14 @@ import Foundation
 import SharedModels
 import Common
 import SwiftUI
-import ApollonModels
-import ApollonView
+import ApollonShared
 
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
     @Published var error: Error?
     @Published var currentDragLocation = CGPoint.zero
-    @Published var offset: CGPoint = CGPoint(x: 15, y: 15)
+    @Published var offset = CGPoint(x: 15, y: 15)
     
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
@@ -54,8 +53,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     /// A Task that sets the value of `temporaryHighlight` to nil after some time
     private var temporaryHighlightRemovalTask: Task<(), Error>?
     
-    private var diagramTypeUnsupported = false
-    
     private var symbolSize = 30.0
     
     /// Sets this VM up based on the given submission
@@ -72,6 +69,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
+                log.error("This diagram type is not yet supported")
+                return
+            }
             determineChildren()
             orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
         } catch {
@@ -97,6 +98,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
+                log.error("This diagram type is not yet supported")
+                return
+            }
             determineChildren()
             orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
         } catch {

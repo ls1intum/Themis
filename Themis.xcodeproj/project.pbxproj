@@ -93,7 +93,6 @@
 		65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */; };
 		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
 		65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */; };
-		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
 		65D2C6892A011815001D5CD1 /* ExerciseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */; };
@@ -180,8 +179,8 @@
 		E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536EAD2298C00380078E077 /* DateTimelineView.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
 		F72D68F52ACB31EE001A0871 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D68F42ACB31EE001A0871 /* UMLBadgeSymbol.swift */; };
-		F72D68F82ACB3249001A0871 /* ApollonModels in Frameworks */ = {isa = PBXBuildFile; productRef = F72D68F72ACB3249001A0871 /* ApollonModels */; };
 		F72D68FA2ACB3249001A0871 /* ApollonView in Frameworks */ = {isa = PBXBuildFile; productRef = F72D68F92ACB3249001A0871 /* ApollonView */; };
+		F767A0472AD0574900318707 /* ApollonShared in Frameworks */ = {isa = PBXBuildFile; productRef = F767A0462AD0574900318707 /* ApollonShared */; };
 		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
 		F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = F958C4DD29887DE800E70669 /* ShakeEffect.swift */; };
@@ -278,7 +277,6 @@
 		65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentView.swift; sourceTree = "<group>"; };
 		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
 		65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadSubmissionServiceImpl.swift; sourceTree = "<group>"; };
-		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
 		65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseExtension.swift; sourceTree = "<group>"; };
@@ -392,9 +390,9 @@
 				657534B22A0F7A52004B0C3F /* DesignLibrary in Frameworks */,
 				657534AC2A0F7A52004B0C3F /* Account in Frameworks */,
 				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
+				F767A0472AD0574900318707 /* ApollonShared in Frameworks */,
 				6564DC0E2A00EFFC00CF2F89 /* SharedModels in Frameworks */,
 				06A99D3F2A94D99000E48066 /* Starscream in Frameworks */,
-				F72D68F82ACB3249001A0871 /* ApollonModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1118,8 +1116,8 @@
 				657534BB2A0F7A52004B0C3F /* UserStore */,
 				65F007972A86C837000FD641 /* Shimmer */,
 				06A99D3E2A94D99000E48066 /* Starscream */,
-				F72D68F72ACB3249001A0871 /* ApollonModels */,
 				F72D68F92ACB3249001A0871 /* ApollonView */,
+				F767A0462AD0574900318707 /* ApollonShared */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -1909,15 +1907,15 @@
 			package = E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */;
 			productName = SwiftUIReorderableForEach;
 		};
-		F72D68F72ACB3249001A0871 /* ApollonModels */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
-			productName = ApollonModels;
-		};
 		F72D68F92ACB3249001A0871 /* ApollonView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
 			productName = ApollonView;
+		};
+		F767A0462AD0574900318707 /* ApollonShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
+			productName = ApollonShared;
 		};
 		F9032CA4294A159700B2DED5 /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
