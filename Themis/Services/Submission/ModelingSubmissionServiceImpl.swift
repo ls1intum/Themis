@@ -41,13 +41,17 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         typealias Response = [Submission]
         
         var exerciseId: Int
+        var correctionround: Int
         
         var method: HTTPMethod {
             .get
         }
         
         var params: [URLQueryItem] {
-            [URLQueryItem(name: "assessedByTutor", value: "true")]
+            [
+                URLQueryItem(name: "assessedByTutor", value: "true"),
+                URLQueryItem(name: "correction-round", value: "\(correctionround)")
+            ]
         }
         
         var resourceName: String {
@@ -55,8 +59,10 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getTutorSubmissions(exerciseId: Int) async throws -> [Submission] {
-        try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId)).get().0
+    func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
+        try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
+                                                                correctionround: correctionRound))
+            .get().0
     }
 
     // MARK: - Get Random Modeling Submission For Assessment

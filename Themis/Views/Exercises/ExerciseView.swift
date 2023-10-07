@@ -28,6 +28,10 @@ struct ExerciseView: View {
                 
                 finishedSubmissionsSection
                 
+                openSecondRoundSubmissionsSection
+                
+                finishedSecondRoundSubmissionsSection
+                
                 statisticsSection
                 
                 problemStatementSection
@@ -67,6 +71,20 @@ struct ExerciseView: View {
     }
     
     @ViewBuilder
+    private var openSecondRoundSubmissionsSection: some View {
+        if exerciseVM.isSecondCorrectionRoundEnabled
+            && (submissionListVM.isLoading || !submissionListVM.openSecondRoundSubmissions.isEmpty) {
+            Section("Open submissions (Correction Round 2)") {
+                SubmissionListView(
+                    submissionListVM: submissionListVM,
+                    exercise: exercise,
+                    submissionStatus: .openForSecondCorrectionRound
+                )
+            }.disabled(!exerciseVM.isAssessmentPossible)
+        }
+    }
+    
+    @ViewBuilder
     private var finishedSubmissionsSection: some View {
         if submissionListVM.isLoading || !submissionListVM.submittedSubmissions.isEmpty {
             Section("Finished submissions") {
@@ -74,6 +92,20 @@ struct ExerciseView: View {
                     submissionListVM: submissionListVM,
                     exercise: exercise,
                     submissionStatus: .submitted
+                )
+            }.disabled(!exerciseVM.isAssessmentPossible)
+        }
+    }
+    
+    @ViewBuilder
+    private var finishedSecondRoundSubmissionsSection: some View {
+        if exerciseVM.isSecondCorrectionRoundEnabled
+            && submissionListVM.isLoading || !submissionListVM.submittedSecondRoundSubmissions.isEmpty {
+            Section("Finished submissions (Correction Round 2)") {
+                SubmissionListView(
+                    submissionListVM: submissionListVM,
+                    exercise: exercise,
+                    submissionStatus: .submittedForSecondCorrectionRound
                 )
             }.disabled(!exerciseVM.isAssessmentPossible)
         }
@@ -139,6 +171,9 @@ struct ExerciseView: View {
         await withTaskGroup(of: Void.self) { group in
             group.addTask { await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id) }
             group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
+            if exerciseVM.isSecondCorrectionRoundEnabled {
+                group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise, correctionRound: .second) }
+            }
         }
     }
 }

@@ -20,7 +20,16 @@ struct SubmissionListView: View {
     @State private var submissionBeingCancelled: Submission?
     
     private var relevantSubmissions: [Submission] {
-        submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions
+        switch submissionStatus {
+        case .open:
+            submissionListVM.openSubmissions
+        case .openForSecondCorrectionRound:
+            submissionListVM.openSecondRoundSubmissions
+        case .submitted:
+            submissionListVM.submittedSubmissions
+        case .submittedForSecondCorrectionRound:
+            submissionListVM.submittedSecondRoundSubmissions
+        }
     }
     
     var body: some View {
@@ -33,7 +42,7 @@ struct SubmissionListView: View {
                         exercise: exercise,
                         submissionId: submission.baseSubmission.id,
                         participationId: submission.baseSubmission.participation?.id,
-                        resultId: submission.baseSubmission.results?.last?.id
+                        resultId: submission.baseSubmission.results?.last??.id
                     )
                     .environmentObject(courseVM)
                 } label: {
@@ -60,7 +69,7 @@ struct SubmissionListView: View {
     
     @ViewBuilder
     private func cancelButton(for submission: Submission) -> some View {
-        if submissionStatus == .open {
+        if submissionStatus == .open || submissionStatus == .openForSecondCorrectionRound {
             Button("Cancel") {
                 submissionBeingCancelled = submission
                 presentCancelAlert = true
@@ -75,7 +84,7 @@ struct SubmissionListView: View {
         if let submissionDate = (submission.baseSubmission.submissionDate) {
             dates.append(("Submission Date", submissionDate))
         }
-        if let completionDate = (submission.baseSubmission.results?.last?.completionDate), submissionStatus == .submitted {
+        if let completionDate = (submission.baseSubmission.results?.last??.completionDate), submissionStatus == .submitted {
             dates.append(("Last Assessed", completionDate))
         }
         

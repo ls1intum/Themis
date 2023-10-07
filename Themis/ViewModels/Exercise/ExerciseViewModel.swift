@@ -85,6 +85,10 @@ class ExerciseViewModel: ObservableObject {
         || ((exam?.isOver ?? false) && !(exam?.isAssessmentDue ?? true))
     }
     
+    var isSecondCorrectionRoundEnabled: Bool {
+        exam?.numberOfCorrectionRoundsInExam == 2
+    }
+    
     private var isLoadedOnce = false
     
     @MainActor
