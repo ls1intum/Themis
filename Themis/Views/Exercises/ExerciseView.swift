@@ -159,7 +159,7 @@ struct ExerciseView: View {
         Button {
             showAssessmentView = true
         } label: {
-            Text("Start Assessment")
+            Text(exerciseVM.startAssessmentButtonText)
                 .foregroundColor(.white)
         }
         .buttonStyle(ThemisButtonStyle(color: .themisGreen, iconImageName: "startAssessmentIcon"))

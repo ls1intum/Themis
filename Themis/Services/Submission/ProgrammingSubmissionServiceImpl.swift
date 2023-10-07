@@ -40,7 +40,7 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         typealias Response = [Submission]
         
         var exerciseId: Int
-        var correctionround: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
@@ -49,7 +49,7 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         var params: [URLQueryItem] {
             [
                 URLQueryItem(name: "assessedByTutor", value: "true"),
-                URLQueryItem(name: "correction-round", value: "\(correctionround)")
+                URLQueryItem(name: "correction-round", value: "\(correctionRound)")
             ]
         }
         
@@ -60,7 +60,7 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
     
     func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
-                                                                correctionround: correctionRound))
+                                                                correctionRound: correctionRound))
             .get().0
     }
     
@@ -69,13 +69,17 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         typealias Response = ProgrammingSubmission
         
         var exerciseId: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
         }
         
         var params: [URLQueryItem] {
-            [URLQueryItem(name: "lock", value: "true")]
+            [
+                URLQueryItem(name: "lock", value: "true"),
+                URLQueryItem(name: "correction-round", value: "\(correctionRound)")
+            ]
         }
         
         var resourceName: String {
@@ -83,8 +87,10 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> ProgrammingSubmission {
-        try await client.sendRequest(GetRandomProgrammingSubmissionRequest(exerciseId: exerciseId)).get().0
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> ProgrammingSubmission {
+        try await client.sendRequest(GetRandomProgrammingSubmissionRequest(exerciseId: exerciseId,
+                                                                           correctionRound: correctionRound))
+            .get().0
     }
     
     // MARK: - Get Programming Submission For Assessment

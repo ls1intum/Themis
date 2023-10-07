@@ -19,7 +19,7 @@ protocol SubmissionService {
     func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission]
     
     /// Fetches a random submission and locks it. This should be used to assess a random submission
-    func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> SubmissionType
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> SubmissionType
     
     /// Fetches a submission associated with submissionId and locks it, so no one else can assess it. This should be used to assess a specific Submission.
     func getSubmissionForAssessment(submissionId: Int) async throws -> SubmissionType

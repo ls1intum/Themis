@@ -26,6 +26,10 @@ class ExerciseViewModel: ObservableObject {
         return "\(totalNumberOfAssessments) / \(totalNumberOfStudents) (\(percentageString))"
     }
     
+    var startAssessmentButtonText: String {
+        isSecondCorrectionRoundEnabled ? "Start Assessment (Round 2)" : "Start Assessment"
+    }
+    
     var numberOfParticipations: Int? {
         exerciseStats.value?.numberOfParticipations
     }
@@ -86,7 +90,7 @@ class ExerciseViewModel: ObservableObject {
     }
     
     var isSecondCorrectionRoundEnabled: Bool {
-        exam?.numberOfCorrectionRoundsInExam == 2
+        exam?.numberOfCorrectionRoundsInExam == 2 && assessed == 1.0
     }
     
     private var isLoadedOnce = false

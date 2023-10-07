@@ -40,7 +40,7 @@ class TextSubmissionServiceImpl: SubmissionService {
         typealias Response = [Submission]
         
         var exerciseId: Int
-        var correctionround: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
@@ -49,7 +49,7 @@ class TextSubmissionServiceImpl: SubmissionService {
         var params: [URLQueryItem] {
             [
                 URLQueryItem(name: "assessedByTutor", value: "true"),
-                URLQueryItem(name: "correction-round", value: "\(correctionround)")
+                URLQueryItem(name: "correction-round", value: "\(correctionRound)")
             ]
         }
         
@@ -60,7 +60,7 @@ class TextSubmissionServiceImpl: SubmissionService {
     
     func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
-                                                                correctionround: correctionRound))
+                                                                correctionRound: correctionRound))
             .get().0
     }
     
@@ -69,13 +69,17 @@ class TextSubmissionServiceImpl: SubmissionService {
         typealias Response = TextSubmission
         
         var exerciseId: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
         }
         
         var params: [URLQueryItem] {
-            [URLQueryItem(name: "lock", value: "true")]
+            [
+                URLQueryItem(name: "lock", value: "true"),
+                URLQueryItem(name: "correction-round", value: "\(correctionRound)")
+            ]
         }
         
         var resourceName: String {
@@ -83,8 +87,10 @@ class TextSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> TextSubmission {
-        try await client.sendRequest(GetRandomTextSubmissionRequest(exerciseId: exerciseId)).get().0
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> TextSubmission {
+        try await client.sendRequest(GetRandomTextSubmissionRequest(exerciseId: exerciseId,
+                                                                    correctionRound: correctionRound))
+            .get().0
     }
     
     // MARK: - Get Text Submission For Assessment

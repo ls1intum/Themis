@@ -27,7 +27,7 @@ class UnknownSubmissionServiceImpl: SubmissionService {
         throw defaultError
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> UnknownSubmission {
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> UnknownSubmission {
         throw defaultError
     }
     

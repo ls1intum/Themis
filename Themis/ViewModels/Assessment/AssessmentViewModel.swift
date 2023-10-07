@@ -24,6 +24,9 @@ class AssessmentViewModel: ObservableObject {
     var exercise: Exercise
     
     private var cancellables: [AnyCancellable] = []
+    private var correctionRound: CorrectionRound {
+        (exercise.baseExercise.secondCorrectionEnabled == true) ? .second : .first
+    }
     
     init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
         self.exercise = exercise
@@ -77,7 +80,8 @@ class AssessmentViewModel: ObservableObject {
         }
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
-            self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
+            self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id,
+                                                                                           correctionRound: correctionRound.rawValue)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
             assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
