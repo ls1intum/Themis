@@ -60,6 +60,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func setup(basedOn submission: BaseSubmission? = nil, _ assessmentResult: AssessmentResult) {
         guard let modelingSubmission = submission as? ModelingSubmission,
               let modelData = modelingSubmission.model?.data(using: .utf8) else {
+            log.error("Could not get model data from submission")
+            setError(.couldNotParseDiagram)
             return
         }
         self.umlModel = nil
@@ -71,12 +73,14 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
             guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
                 log.error("This diagram type is not yet supported")
+                setError(.diagramNotSupported)
                 return
             }
             determineChildren()
             orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
         } catch {
             log.error("Could not parse UML string: \(error)")
+            setError(.couldNotParseDiagram)
         }
         
         let feedbacks = assessmentResult.inlineFeedback + assessmentResult.automaticFeedback
@@ -89,6 +93,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func setup(basedOn umlModelString: String) {
         guard let modelData = umlModelString.data(using: .utf8) else {
             log.error("Invalid UML model string")
+            setError(.couldNotParseDiagram)
             return
         }
         self.umlModel = nil
@@ -100,12 +105,14 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
             guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
                 log.error("This diagram type is not yet supported")
+                setError(.diagramNotSupported)
                 return
             }
             determineChildren()
             orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
         } catch {
             log.error("Could not parse UML string: \(error)")
+            setError(.couldNotParseDiagram)
         }
         
         undoManager.removeAllActions()

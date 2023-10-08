@@ -15,6 +15,7 @@ extension UserFacingError {
     
     // MARK: - Modeling
     static let diagramNotSupported = UserFacingError(title: "This UML diagram type is not supported")
+    static let couldNotParseDiagram = UserFacingError(title: "Could not find UML diagram")
     
     // MARK: - File Upload
     static let couldNotFetchFileDetails = UserFacingError(title: """
