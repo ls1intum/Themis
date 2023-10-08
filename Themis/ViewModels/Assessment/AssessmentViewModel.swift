@@ -22,18 +22,22 @@ class AssessmentViewModel: ObservableObject {
     var participationId: Int?
     var resultId: Int?
     var exercise: Exercise
+    var correctionRound: CorrectionRound
     
     private var cancellables: [AnyCancellable] = []
-    private var correctionRound: CorrectionRound {
-        (exercise.baseExercise.secondCorrectionEnabled == true) ? .second : .first
-    }
     
-    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
+    init(exercise: Exercise,
+         submissionId: Int? = nil,
+         participationId: Int? = nil,
+         resultId: Int? = nil,
+         correctionRound: CorrectionRound = .first,
+         readOnly: Bool) {
         self.exercise = exercise
         self.submissionId = submissionId
         self.participationId = participationId
         self.resultId = resultId
         self.assessmentResult = AssessmentResultFactory.assessmentResult(for: exercise, resultIdFromServer: resultId)
+        self.correctionRound = correctionRound
         self.readOnly = readOnly
         
         $submission
@@ -221,6 +225,7 @@ enum AssessmentViewModelFactory {
                                     submissionId: Int? = nil,
                                     participationId: Int? = nil,
                                     resultId: Int? = nil,
+                                    correctionRound: CorrectionRound = .first,
                                     readOnly: Bool) -> AssessmentViewModel {
         switch exercise {
         case .programming:
@@ -228,24 +233,28 @@ enum AssessmentViewModelFactory {
                                                   submissionId: submissionId,
                                                   participationId: participationId,
                                                   resultId: resultId,
+                                                  correctionRound: correctionRound,
                                                   readOnly: readOnly)
         case .text:
             return TextAssessmentViewModel(exercise: exercise,
                                            submissionId: submissionId,
                                            participationId: participationId,
                                            resultId: resultId,
+                                           correctionRound: correctionRound,
                                            readOnly: readOnly)
         case .modeling:
             return ModelingAssessmentViewModel(exercise: exercise,
                                                submissionId: submissionId,
                                                participationId: participationId,
                                                resultId: resultId,
+                                               correctionRound: correctionRound,
                                                readOnly: readOnly)
         case .fileUpload:
             return FileUploadAssessmentViewModel(exercise: exercise,
                                                  submissionId: submissionId,
                                                  participationId: participationId,
                                                  resultId: resultId,
+                                                 correctionRound: correctionRound,
                                                  readOnly: readOnly)
         default:
             log.warning("Could not find the corresponding AssessmentViewModel subtype for exercise \(exercise)")
@@ -253,6 +262,7 @@ enum AssessmentViewModelFactory {
                                        submissionId: submissionId,
                                        participationId: participationId,
                                        resultId: resultId,
+                                       correctionRound: correctionRound,
                                        readOnly: readOnly)
         }
     }

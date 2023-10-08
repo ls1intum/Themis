@@ -27,7 +27,7 @@ class ExerciseViewModel: ObservableObject {
     }
     
     var startAssessmentButtonText: String {
-        isSecondCorrectionRoundEnabled ? "Start Assessment (Round 2)" : "Start Assessment"
+        currentCorrectionRound == .first ? "Start Assessment" : "Start Assessment (Round 2)"
     }
     
     var numberOfParticipations: Int? {
@@ -90,7 +90,11 @@ class ExerciseViewModel: ObservableObject {
     }
     
     var isSecondCorrectionRoundEnabled: Bool {
-        exam?.numberOfCorrectionRoundsInExam == 2 && assessed == 1.0
+        exam?.numberOfCorrectionRoundsInExam == 2
+    }
+    
+    var currentCorrectionRound: CorrectionRound {
+        (isSecondCorrectionRoundEnabled && assessed == 1.0) ? .second : .first
     }
     
     private var isLoadedOnce = false

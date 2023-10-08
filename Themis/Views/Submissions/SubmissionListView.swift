@@ -32,6 +32,15 @@ struct SubmissionListView: View {
         }
     }
     
+    private var correctionRound: CorrectionRound {
+        switch submissionStatus {
+        case .open, .submitted:
+            return .first
+        case .openForSecondCorrectionRound, .submittedForSecondCorrectionRound:
+            return .second
+        }
+    }
+    
     var body: some View {
         List {
             ForEach(relevantSubmissions.mock(if: submissionListVM.isLoading,
@@ -42,7 +51,8 @@ struct SubmissionListView: View {
                         exercise: exercise,
                         submissionId: submission.baseSubmission.id,
                         participationId: submission.baseSubmission.participation?.id,
-                        resultId: submission.baseSubmission.results?.last??.id
+                        resultId: submission.baseSubmission.results?.last??.id,
+                        correctionRound: correctionRound
                     )
                     .environmentObject(courseVM)
                 } label: {

@@ -39,7 +39,7 @@ struct ExerciseView: View {
             .refreshable { await fetchExerciseData() }
         }
         .navigationDestination(isPresented: $showAssessmentView) {
-            AssessmentView(exercise: exercise)
+            AssessmentView(exercise: exercise, correctionRound: exerciseVM.currentCorrectionRound)
                 .environmentObject(courseVM)
         }
         .navigationTitle(exercise.baseExercise.title ?? "")
