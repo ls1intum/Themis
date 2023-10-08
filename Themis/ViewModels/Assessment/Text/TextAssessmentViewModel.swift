@@ -24,8 +24,8 @@ class TextAssessmentViewModel: AssessmentViewModel {
                 log.error("Could not find participation for text exercise: \(exercise.baseExercise.title ?? "")")
             }
         } else {
-            if let participationId, let submissionId {
-                await getParticipationForSubmission(participationId: participationId, submissionId: submissionId)
+            if let submissionId, participationId != nil {
+                await getParticipationForSubmission(submissionId: submissionId)
             } else {
                 await initRandomSubmission()
             }
@@ -59,9 +59,9 @@ class TextAssessmentViewModel: AssessmentViewModel {
             log.error(String(describing: error))
         }
     }
-
+    
     @MainActor
-    private func getParticipationForSubmission(participationId: Int?, submissionId: Int?) async {
+    private func getParticipationForSubmission(submissionId: Int?) async {
         guard let submissionId else {
             return
         }
@@ -72,7 +72,9 @@ class TextAssessmentViewModel: AssessmentViewModel {
         }
         do {
             let assessmentService = AssessmentServiceFactory.service(for: exercise)
-            let fetchedParticipation = try await assessmentService.fetchParticipationForSubmission(submissionId: submissionId).baseParticipation
+            let fetchedParticipation = try await assessmentService
+                .fetchParticipationForSubmission(submissionId: submissionId,
+                                                 correctionRound: correctionRound.rawValue).baseParticipation
             self.submission = fetchedParticipation.submissions?.last?.baseSubmission
             self.participation = fetchedParticipation
             assessmentResult.setComputedFeedbacks(basedOn: participation?.results?.last?.feedbacks ?? [])
