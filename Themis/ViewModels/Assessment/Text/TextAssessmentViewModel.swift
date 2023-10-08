@@ -51,7 +51,7 @@ class TextAssessmentViewModel: AssessmentViewModel {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             // We are not actually getting the submission for assessment, but this is the only endpoint that can be used to
             // get the submission based on the submissionId without locking it
-            let response = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
+            let response = try await submissionService.getSubmissionForAssessment(submissionId: submissionId, correctionRound: 0)
             self.submission = response
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         } catch {

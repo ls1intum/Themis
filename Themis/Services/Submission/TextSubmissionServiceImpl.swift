@@ -108,7 +108,9 @@ class TextSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int) async throws -> TextSubmission {
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> TextSubmission {
+        // Note: we are not using the correctionRound parameter here because unlike other exercise types, text exercises
+        // use a different endpoint to continue the assessment of open submissions
         try await client.sendRequest(GetTextSubmissionRequest(submissionId: submissionId)).get().0
     }
     

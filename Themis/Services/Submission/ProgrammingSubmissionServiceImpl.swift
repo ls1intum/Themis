@@ -98,18 +98,25 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         typealias Response = ProgrammingSubmission
         
         var submissionId: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
         }
-        // TODO: add correctionRound
+        
+        var params: [URLQueryItem] {
+            [URLQueryItem(name: "correction-round", value: "\(correctionRound)")]
+        }
+        
         var resourceName: String {
             "api/programming-submissions/\(submissionId)/lock"
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int) async throws -> ProgrammingSubmission {
-        try await client.sendRequest(GetProgrammingSubmissionRequest(submissionId: submissionId)).get().0
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> ProgrammingSubmission {
+        try await client.sendRequest(GetProgrammingSubmissionRequest(submissionId: submissionId,
+                                                                     correctionRound: correctionRound))
+            .get().0
     }
     
     // MARK: - Get Result

@@ -99,9 +99,14 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         typealias Response = ModelingSubmission
         
         var submissionId: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
+        }
+        
+        var params: [URLQueryItem] {
+            [URLQueryItem(name: "correction-round", value: "\(correctionRound)")]
         }
         
         var resourceName: String {
@@ -109,8 +114,10 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int) async throws -> ModelingSubmission {
-        try await client.sendRequest(GetModelingSubmissionRequest(submissionId: submissionId)).get().0
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> ModelingSubmission {
+        try await client.sendRequest(GetModelingSubmissionRequest(submissionId: submissionId,
+                                                                  correctionRound: correctionRound))
+            .get().0
     }
     
     // MARK: - Get Modeling Submission

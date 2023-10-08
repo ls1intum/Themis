@@ -98,9 +98,14 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
         typealias Response = FileUploadSubmission
         
         var submissionId: Int
+        var correctionRound: Int
         
         var method: HTTPMethod {
             .get
+        }
+        
+        var params: [URLQueryItem] {
+            [URLQueryItem(name: "correction-round", value: "\(correctionRound)")]
         }
         
         var resourceName: String {
@@ -108,8 +113,10 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int) async throws -> SubmissionType {
-        try await client.sendRequest(GetFileUploadSubmissionRequest(submissionId: submissionId)).get().0
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> SubmissionType {
+        try await client.sendRequest(GetFileUploadSubmissionRequest(submissionId: submissionId,
+                                                                    correctionRound: correctionRound))
+            .get().0
     }
     
     // MARK: - Get File Upload Submission
