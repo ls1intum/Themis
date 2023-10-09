@@ -46,9 +46,11 @@ class SubmissionListViewModel: ObservableObject {
             
             switch round {
             case .first:
-                self.submissions = try await submissionService.getTutorSubmissions(exerciseId: exercise.id, correctionRound: round.rawValue)
+                self.submissions = try await submissionService.getTutorSubmissions(exerciseId: exercise.id,
+                                                                                   correctionRound: round.rawValue)
             case .second:
-                self.secondCorrectionRoundSubmissions = try await submissionService.getTutorSubmissions(exerciseId: exercise.id, correctionRound: round.rawValue)
+                self.secondCorrectionRoundSubmissions = try await submissionService.getTutorSubmissions(exerciseId: exercise.id, 
+                                                                                                        correctionRound: round.rawValue)
             }
         } catch let error {
             self.error = error
