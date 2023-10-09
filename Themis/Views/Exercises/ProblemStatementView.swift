@@ -39,7 +39,6 @@ struct ProblemStatementView: View {
                 
                 TextSkeleton()
                     .isHidden(!isLoading, remove: true)
-                    .showsSkeleton(if: isLoading)
             }
         } else {
             errorMessage

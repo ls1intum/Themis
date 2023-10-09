@@ -37,11 +37,12 @@ struct CorrectionSidebarView: View {
             
             ZStack {
                 ScrollView {
-                    ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: assessmentVM.exercise.id)
-                        .frame(maxHeight: .infinity)
+                    problemStatement
+                    exampleSolution
                 }
                 .padding(.horizontal, problemStatementNeedsPadding ? 15 : 0)
-                .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001) // 0.0 causes this view to be redrawn
+                .opacity(correctionSidebarStatus == .problemStatement ? 1.0 : 0.0001)
+                // 0.0 causes this view to be redrawn and webview to send a new request
                 
                 if !assessmentVM.loading {
                     viewForSidebarStatus
@@ -65,6 +66,12 @@ struct CorrectionSidebarView: View {
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding()
+    }
+    
+    @ViewBuilder
+    private var problemStatement: some View {
+        ProblemStatementView(courseId: courseVM.shownCourseID, exerciseId: assessmentVM.exercise.id)
+            .frame(maxHeight: .infinity)
     }
     
     @ViewBuilder
@@ -97,6 +104,43 @@ struct CorrectionSidebarView: View {
         }
         return type(of: exercise) != ProgrammingExercise.self
     }
+    
+    @ViewBuilder
+    private var exampleSolution: some View {
+        // Keep in mind that `assessmentVM.exercise` is an incomplete exercise model.
+        // We try to use `assessmentVM.participation?.exercise` instead as soon the participation it is fetched
+        if assessmentVM.exercise.canShowExampleSolution {
+            VStack(alignment: .leading) {
+                Text("Example Solution")
+                    .font(.title2)
+                    .isHidden(assessmentVM.loading, remove: true)
+                ExampleSolutionView(exercise: assessmentVM.participation?.exercise ?? assessmentVM.exercise,
+                                    isLoading: assessmentVM.loading)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var correctionGuidelines: some View {
+        ScrollView {
+            CorrectionGuidelinesCellView(
+                gradingCriteria: exercise?.gradingCriteria ?? [],
+                gradingInstructions: exercise?.gradingInstructions
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var generalFeedbackList: some View {
+        FeedbackListView(
+            assessmentVM: assessmentVM,
+            assessmentResult: assessmentResult,
+            feedbackDelegate: feedbackDelegate,
+            participationId: assessmentVM.participation?.id,
+            templateParticipationId: templateParticipationId,
+            gradingCriteria: exercise?.gradingCriteria ?? []
+        )
+    }
 }
 
 struct CorrectionSidebarView_Previews: PreviewProvider {
@@ -110,6 +154,6 @@ struct CorrectionSidebarView_Previews: PreviewProvider {
             assessmentVM: assessmentVM,
             feedbackDelegate: cvm
         )
-        .previewInterfaceOrientation(.landscapeLeft)
+        .environmentObject(cvm)
     }
 }
