@@ -50,6 +50,8 @@ enum SubmissionServiceFactory {
             return TextSubmissionServiceImpl()
         case .modeling:
             return ModelingSubmissionServiceImpl()
+        case .fileUpload:
+            return FileUploadSubmissionServiceImpl()
         default:
             return UnknownSubmissionServiceImpl()
         }
