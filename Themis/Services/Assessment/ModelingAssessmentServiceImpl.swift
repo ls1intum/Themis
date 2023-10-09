@@ -108,9 +108,4 @@ struct ModelingAssessmentServiceImpl: AssessmentService {
     func cancelAssessment(participationId: Int?, submissionId: Int) async throws {
         _ = try await client.sendRequest(CancelAssessmentRequest(submissionId: submissionId)).get()
     }
-    
-    // MARK: - Fetch Participation For Submission
-    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
-        throw UserFacingError.operationNotSupportedForExercise
-    }
 }

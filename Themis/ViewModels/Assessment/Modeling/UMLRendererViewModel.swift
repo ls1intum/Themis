@@ -14,6 +14,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
     @Published var error: Error?
+    @Published var currentDragLocation = CGPoint.zero
     
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
@@ -79,30 +80,51 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         setupHighlights(basedOn: feedbacks)
     }
     
+    /// Sets this VM up based on the given UML Model string
+    @MainActor
+    func setup(basedOn umlModelString: String) {
+        guard let modelData = umlModelString.data(using: .utf8) else {
+            log.error("Invalid UML model string")
+            return
+        }
+        self.umlModel = nil
+        self.selectedElement = nil
+        self.highlights = []
+        self.orphanElements = []
+        
+        do {
+            umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            determineChildren()
+            orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
+        } catch {
+            log.error("Could not parse UML string: \(error)")
+        }
+        
+        undoManager.removeAllActions()
+    }
+    
     @MainActor
     func render(_ context: inout GraphicsContext, size: CGSize) {
         guard let model = umlModel,
+              let modelType = model.type,
               !diagramTypeUnsupported else {
             return
         }
         let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
-        var renderer: any UMLDiagramRenderer
+        var renderer = UMLDiagramRendererFactory.renderer(for: modelType,
+                                                          context: umlContext,
+                                                          canvasBounds: canvasBounds,
+                                                          fontSize: fontSize)
         
-        switch model.type {
-        case .classDiagram:
-            renderer = UMLClassDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
-        case .useCaseDiagram:
-            renderer = UMLUseCaseDiagramRenderer(context: umlContext, canvasBounds: canvasBounds, fontSize: fontSize)
-        default:
+        if let renderer {
+            renderer.render(umlModel: model)
+        } else {
             log.error("Attempted to draw an unknown diagram type")
             diagramTypeUnsupported = true
             setError(.diagramNotSupported)
-            return
         }
-        
-        renderer.render(umlModel: model)
     }
     
     private func setError(_ error: UserFacingError) {
@@ -114,13 +136,25 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     @MainActor
+    /// Sets the drag location to the specified point
+    /// - Parameter point: when nil, the drag location is set in such a way that centers the diagram
+    func setDragLocation(at point: CGPoint? = nil) {
+        if let point {
+            currentDragLocation = point
+        } else {
+            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Apollon
+                                        y: diagramSize.width - 50)
+        }
+    }
+    
+    @MainActor
     func selectItem(at point: CGPoint) {
         selectedElement = getSelectableItem(at: point)
         
         if let selectedElement {
             log.verbose("Selected UML element: \(selectedElement.name ?? "no name")")
             
-            if let matchingHighlight = highlights.first(where: { $0.rect == selectedElement.boundsAsCGRect }) { // Edit Feedback
+            if let matchingHighlight = highlights.first(where: { $0.elementBounds == selectedElement.boundsAsCGRect }) { // Edit Feedback
                 self.selectedFeedbackForEditingId = matchingHighlight.assessmentFeedbackId
                 self.showEditFeedback = true
             } else if !pencilModeDisabled { // Add Fedback
@@ -182,8 +216,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func generateFeedbackDetail() -> ModelingFeedbackDetail {
         ModelingFeedbackDetail(umlItem: selectedElement)
     }
-    
-    // MARK: - Highlight-Related Functions
+}
+
+// MARK: - Highlight-Related Functions
+extension UMLRendererViewModel {
     @MainActor
     private func setupHighlights(basedOn feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
         guard umlModel?.elements != nil else {
@@ -201,12 +237,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
                 continue
             }
             
+            let isSuggested = assessmentFeedback.baseFeedback.type?.isAutomatic ?? false
+            let highlightPath = isSuggested ? referencedItem.suggestedHighlightPath ?? .init() : Path(elementRect)
+            
             let newHighlight = UMLHighlight(assessmentFeedbackId: assessmentFeedback.id,
                                             symbol: UMLBadgeSymbol.symbol(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0),
-                                            rect: elementRect,
+                                            elementBounds: elementRect,
+                                            path: highlightPath,
                                             badgeLocation: badgeLocation,
                                             temporaryHighlightPath: temporaryHighlightPath,
-                                            isSuggested: assessmentFeedback.baseFeedback.type?.isAutomatic ?? false)
+                                            isSuggested: isSuggested)
             highlights.append(newHighlight)
         }
         
@@ -278,7 +318,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             context.draw(resolvedBadgeSymbol, in: badgeRect.insetBy(dx: 6, dy: 6))
             
             if highlight.isSuggested {
-                context.fill(Path(highlight.rect), with: .color(Color.modelingSuggestedFeedback))
+                context.fill(highlight.path, with: .color(Color.modelingSuggestedFeedback))
             }
         }
         
@@ -358,7 +398,8 @@ extension UMLRendererViewModel: FeedbackDelegate {
 struct UMLHighlight {
     var assessmentFeedbackId: UUID
     var symbol: UMLBadgeSymbol
-    var rect: CGRect
+    var elementBounds: CGRect
+    var path: Path
     var badgeLocation: CGPoint
     var temporaryHighlightPath: Path
     var isSuggested: Bool

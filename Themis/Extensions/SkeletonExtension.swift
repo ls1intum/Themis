@@ -22,9 +22,7 @@ extension View {
     func shows(_ skeletonView: some View, if condition: @autoclosure () -> Bool) -> some View {
         if condition() {
             skeletonView
-                .redacted(reason: condition() ? .placeholder : [])
-                .shimmering(active: condition(), duration: 1.2)
-                .disabled(condition())
+                .showsSkeleton(if: condition())
         } else {
             self
         }

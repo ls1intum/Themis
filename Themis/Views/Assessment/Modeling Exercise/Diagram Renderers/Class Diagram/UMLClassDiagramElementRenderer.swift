@@ -104,6 +104,10 @@ struct UMLClassDiagramElementRenderer: UMLDiagramRenderer {
         var text = Text(element.name ?? "")
         text = text.font(.system(size: fontSize, weight: .bold))
         
+        if element.type == .abstractClass {
+            text = text.italic()
+        }
+        
         let elementTitle = context.resolve(text)
         let titleSize = elementTitle.measure(in: elementRect.size)
         let titleRect = CGRect(x: elementRect.midX - titleSize.width / 2,
