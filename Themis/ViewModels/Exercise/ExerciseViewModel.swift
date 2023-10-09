@@ -90,7 +90,7 @@ class ExerciseViewModel: ObservableObject {
     }
     
     var isSecondCorrectionRoundEnabled: Bool {
-        exam?.numberOfCorrectionRoundsInExam == 2
+        exam?.numberOfCorrectionRoundsInExam == 2 && exercise.value?.baseExercise.secondCorrectionEnabled == true
     }
     
     var currentCorrectionRound: CorrectionRound {
