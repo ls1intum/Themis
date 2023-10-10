@@ -96,12 +96,16 @@ class AssessmentResult: Encodable, ObservableObject {
     }
 
     @discardableResult
-    func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
+    func updateFeedback(id: UUID,
+                        detailText: String,
+                        credits: Double,
+                        instruction: GradingInstruction?) -> AssessmentFeedback? {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return nil
         }
         computedFeedbacks[index].baseFeedback.detailText = detailText
         computedFeedbacks[index].baseFeedback.credits = credits
+        computedFeedbacks[index].baseFeedback.gradingInstruction = instruction
         return computedFeedbacks[index]
     }
     

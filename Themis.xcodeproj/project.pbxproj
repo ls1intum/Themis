@@ -247,6 +247,7 @@
 		6530B0F62A6BE17E00CBCA71 /* ModelingAssessmentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelingAssessmentResult.swift; sourceTree = "<group>"; };
 		6530B0F82A6BF86700CBCA71 /* ModelingFeedbackDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelingFeedbackDetail.swift; sourceTree = "<group>"; };
 		653452B52A068E4D008D9598 /* ParticipationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipationExtension.swift; sourceTree = "<group>"; };
+		65363A8A2AD56D320010ABBA /* artemis-ios-core-modules */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "artemis-ios-core-modules"; path = "../artemis-ios-core-modules"; sourceTree = "<group>"; };
 		6536D7042AB1912400A26E59 /* FileRendererFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRendererFactory.swift; sourceTree = "<group>"; };
 		6536D7062AB1918100A26E59 /* FileDownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadService.swift; sourceTree = "<group>"; };
 		6536D7082AB19BE700A26E59 /* FileUploadAssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentServiceImpl.swift; sourceTree = "<group>"; };
@@ -875,6 +876,7 @@
 		83396D2129155934003EF727 = {
 			isa = PBXGroup;
 			children = (
+				65363A8A2AD56D320010ABBA /* artemis-ios-core-modules */,
 				E2E3852B2943800100F5854D /* CodeEditor */,
 				83396D2C29155935003EF727 /* Themis */,
 				83396D3D29155936003EF727 /* ThemisTests */,
