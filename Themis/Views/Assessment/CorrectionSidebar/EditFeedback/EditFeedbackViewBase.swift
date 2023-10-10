@@ -51,7 +51,6 @@ struct EditFeedbackViewBase: View {
                     .frame(maxWidth: 130)
                     .disabled(linkedGradingInstruction != nil)
             }
-            .animation(.easeIn, value: score)
             
             Spacer()
             
@@ -122,9 +121,9 @@ struct EditFeedbackViewBase: View {
     @ViewBuilder
     private var linkedCriterionInfo: some View {
         if let instructionFeedback = linkedGradingInstruction?.feedback {
-            HStack(spacing: 2) {
+            HStack(alignment: .top, spacing: 5) {
                 Image(systemName: "link")
-                Text(" \(instructionFeedback)")
+                Text("\(instructionFeedback)")
                 
                 Spacer()
                 
@@ -134,12 +133,14 @@ struct EditFeedbackViewBase: View {
                         .font(.title2)
                 })
             }
-            .padding(10)
+            .padding()
             .background {
                 RoundedRectangle(cornerRadius: 5)
                     .foregroundStyle(Color.getBackgroundColor(forCredits: score))
             }
+            .padding(.bottom)
             .foregroundColor(Color.getTextColor(forCredits: score))
+            .transition(.move(edge: .bottom).combined(with: .opacity))
         }
     }
     
