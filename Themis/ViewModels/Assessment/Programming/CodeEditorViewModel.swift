@@ -275,7 +275,12 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
                         }
                     } else { // without additional column reference (the whole line)
                         let startIndex = fileLines[lines[0] - 1].location
-                        let endIndex = fileLines[lines[0] - 1].location + fileLines[lines[0] - 1].length
+                        var endIndex = fileLines[lines[0] - 1].location + fileLines[lines[0] - 1].length
+                        
+                        if lines[0] == fileLines.count { // if we don't do this, the highlight for the last line becomes invisible
+                            endIndex -= 1
+                        }
+                        
                         range = NSRange(location: startIndex, length: endIndex - startIndex)
                     }
                 }
@@ -285,7 +290,12 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
                 let endLine = lines[1]
                 if fileLines.count >= endLine {
                     let startIndex = fileLines[startLine - 1].location
-                    let endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length - 1
+                    var endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length - 1
+                    
+                    if endLine == fileLines.count { // if we don't do this, the highlight for the last line becomes invisible
+                        endIndex -= 1
+                    }
+                    
                     range = NSRange(location: startIndex, length: endIndex - startIndex)
                 }
             default:
