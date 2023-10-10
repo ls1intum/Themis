@@ -25,10 +25,20 @@ extension Exercise {
     /// Indicates whether this exercise is assessable in the current version of Themis
     var isDisabled: Bool {
         switch self {
-        case .programming, .text, .modeling:
+        case .programming, .text, .modeling, .fileUpload:
             return false
         default:
             return true
+        }
+    }
+    
+    /// Indicates whether example solutions can be viewed for this exercise
+    var canShowExampleSolution: Bool {
+        switch self {
+        case .text, .modeling:
+            return true
+        default:
+            return false
         }
     }
     
@@ -39,6 +49,15 @@ extension Exercise {
             return false
         default:
             return true
+        }
+    }
+    
+    var supportsReferencedFeedbacks: Bool {
+        switch self {
+        case .programming, .text, .modeling:
+            return true
+        default:
+            return false
         }
     }
     

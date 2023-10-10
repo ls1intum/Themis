@@ -79,9 +79,11 @@ struct AssessmentView: View {
                         ToolbarRedoButton()
                     }
                     
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
-                            .disabled(!assessmentVM.allowsInlineFeedbackOperations)
+                    if exercise.supportsReferencedFeedbacks {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                                .disabled(!assessmentVM.allowsInlineFeedbackOperations)
+                        }
                     }
                 }
                 
@@ -162,6 +164,9 @@ struct AssessmentView: View {
         case .modeling:
             ModelingAssessmentView(assessmentVM: assessmentVM,
                                    assessmentResult: assessmentResult)
+        case .fileUpload:
+            FileUploadAssessmentView(assessmentVM: assessmentVM,
+                                     assessmentResult: assessmentResult)
         default:
             Text("Exercise not supported")
         }

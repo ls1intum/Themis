@@ -138,6 +138,8 @@ enum AssessmentResultFactory {
             return TextAssessmentResult(resultId: resultIdFromServer)
         case .modeling:
             return ModelingAssessmentResult()
+        case .fileUpload:
+            return FileUploadAssessmentResult()
         default:
             return UnknownAssessmentResult()
         }
