@@ -14,8 +14,25 @@ class AssessmentResult: Encodable, ObservableObject {
     var maxPoints = 100.0
     
     var points: Double {
-        let score = feedbacks.reduce(0) { $0 + ($1.baseFeedback.credits ?? 0.0) }
-        return score < 0 ? 0 : score
+        var instructionDict = [GradingInstruction: Int]()
+        
+        let score = feedbacks.reduce(0) { result, nextFeedback in
+            if let instruction = nextFeedback.baseFeedback.gradingInstruction { // there's a grading instruction
+                instructionDict[instruction] = (instructionDict[instruction] ?? 0) + 1
+                
+                if let limit = instruction.usageCount,
+                   let currentCount = instructionDict[instruction],
+                   limit == 0 || currentCount <= limit { // the limit is 0 (unlimited) or the limit is not exceeded
+                    return result + (instruction.credits ?? 0.0)
+                }
+                
+                return result // the limit is exceeded
+            } else { // no grading instruction, just add the feedback credits
+                return result + (nextFeedback.baseFeedback.credits ?? 0.0)
+            }
+        }
+        
+        return score < 0 ? 0 : score // TODO: also consider bonus
     }
     
     var score: Double {
