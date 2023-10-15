@@ -227,29 +227,7 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
                              title: "Title",
                              isEditing: false,
                              scope: .inline,
-                             gradingCriteria: [
-                                .init(id: 1,
-                                      title: "Grading Criterion Title",
-                                      structuredGradingInstructions: [
-                                        .init(id: 1,
-                                              credits: 10,
-                                              gradingScale: "Title",
-                                              instructionDescription: "Some instruction here",
-                                              feedback: "feedback",
-                                              usageCount: 2),
-                                        .init(id: 2,
-                                              credits: 0,
-                                              gradingScale: "Title",
-                                              instructionDescription: "Some instruction here",
-                                              feedback: "feedback",
-                                              usageCount: 1),
-                                        .init(id: 3,
-                                              credits: -10,
-                                              gradingScale: "Title",
-                                              instructionDescription: "Some instruction here",
-                                              feedback: "feedback")
-                                      ])
-                             ],
+                             gradingCriteria: [.mock],
                              showSheet: .constant(true)
         )
     }

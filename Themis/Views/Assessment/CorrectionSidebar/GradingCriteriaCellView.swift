@@ -86,27 +86,7 @@ struct GradingCriteriaCellView: View {
 struct GradingCriteriaCellView_Previews: PreviewProvider {
     @State private static var selectedInstruction: GradingInstruction?
     
-    static let gradingInstruction = GradingCriterion(id: 1,
-                                                     title: "Grading Criterion Title",
-                                                     structuredGradingInstructions: [
-                                                        .init(id: 1,
-                                                              credits: 10,
-                                                              gradingScale: "Title",
-                                                              instructionDescription: "Some instruction here",
-                                                              feedback: "feedback",
-                                                              usageCount: 2),
-                                                        .init(id: 2,
-                                                              credits: 0,
-                                                              gradingScale: "Title",
-                                                              instructionDescription: "Some instruction here",
-                                                              feedback: "feedback",
-                                                              usageCount: 0),
-                                                        .init(id: 3,
-                                                              credits: -10,
-                                                              gradingScale: "Title",
-                                                              instructionDescription: "Some instruction here",
-                                                              feedback: "feedback")
-                                                     ])
+    static let gradingInstruction = GradingCriterion.mock
     
     static var previews: some View {
         GradingCriteriaCellView(gradingCriterion: gradingInstruction,

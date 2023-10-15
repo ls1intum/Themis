@@ -110,6 +110,7 @@
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
+		65CC29902ADC23760095ABDA /* GradingCriterionMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CC298F2ADC23750095ABDA /* GradingCriterionMockExtension.swift */; };
 		65D2C6892A011815001D5CD1 /* ExerciseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */; };
 		65D2C69C2A011CDC001D5CD1 /* SubmissionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */; };
 		65D2E1FF2A8CA4A8003DB837 /* CodeEditorSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */; };
@@ -308,6 +309,7 @@
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
+		65CC298F2ADC23750095ABDA /* GradingCriterionMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingCriterionMockExtension.swift; sourceTree = "<group>"; };
 		65D2C6882A011815001D5CD1 /* ExerciseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseExtension.swift; sourceTree = "<group>"; };
 		65D2C69B2A011CDC001D5CD1 /* SubmissionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionExtension.swift; sourceTree = "<group>"; };
 		65D2E1FE2A8CA4A8003DB837 /* CodeEditorSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorSkeleton.swift; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 				650538BD2A1E6E3D00C45E18 /* SubmissionMockExtension.swift */,
 				657EBAF82A8907D4005525AA /* ExamMockExtension.swift */,
 				657EBAFC2A892F2D005525AA /* ArrayMockExtension.swift */,
+				65CC298F2ADC23750095ABDA /* GradingCriterionMockExtension.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -1463,6 +1466,7 @@
 				E21AF058292B9D4C0096ACFC /* HighlightName.swift in Sources */,
 				65D2E1FF2A8CA4A8003DB837 /* CodeEditorSkeleton.swift in Sources */,
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
+				65CC29902ADC23760095ABDA /* GradingCriterionMockExtension.swift in Sources */,
 				650D88002A7A5B78004E7533 /* UMLDiagramRenderer.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
