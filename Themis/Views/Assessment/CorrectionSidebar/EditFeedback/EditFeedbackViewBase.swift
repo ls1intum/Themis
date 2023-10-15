@@ -205,7 +205,13 @@ struct EditFeedbackViewBase: View {
     private func setStates() {
         if idForUpdate != nil {
             if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
-                self.detailText = feedback.baseFeedback.detailText ?? feedback.baseFeedback.text ?? ""
+                var detailText = feedback.baseFeedback.detailText ?? feedback.baseFeedback.text ?? ""
+                // If an instruction is applied, the use can not edit the `text` field
+                if let instruction = feedback.baseFeedback.gradingInstruction {
+                    detailText = feedback.baseFeedback.detailText ?? ""
+                }
+                self.detailText = detailText
+                
                 self.score = feedback.baseFeedback.credits ?? 0.0
                 self.linkedGradingInstruction = feedback.baseFeedback.gradingInstruction
             }
