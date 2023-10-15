@@ -12,6 +12,7 @@ class AssessmentResult: Encodable, ObservableObject {
     let undoManager = ThemisUndoManager.shared
     
     var maxPoints = 100.0
+    var allowedBonus = 0.0
     
     var points: Double {
         var instructionDict = [GradingInstruction: Int]()
@@ -32,7 +33,7 @@ class AssessmentResult: Encodable, ObservableObject {
             }
         }
         
-        return score < 0 ? 0 : score // TODO: also consider bonus
+        return score.clamped(to: 0...maxPoints + allowedBonus)
     }
     
     var score: Double {

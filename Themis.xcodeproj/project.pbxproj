@@ -81,7 +81,7 @@
 		6589205729EE7C18005EE6FA /* LoginButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */; };
 		6589205D29EF0840005EE6FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589205C29EF0840005EE6FA /* ColorExtension.swift */; };
 		658AFD9B2A55BEDC009FB94E /* UMLRendererViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658AFD9A2A55BEDC009FB94E /* UMLRendererViewModel.swift */; };
-		658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */; };
+		658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E4A312A61C7D600B43798 /* ComparableExtension.swift */; };
 		6594C9302A37027C00B9CF9F /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6594C92F2A37027C00B9CF9F /* NotificationExtension.swift */; };
 		6595D2292A2744410033C1B5 /* TextAssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6595D2282A2744410033C1B5 /* TextAssessmentServiceImpl.swift */; };
 		6595D22B2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6595D22A2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift */; };
@@ -280,7 +280,7 @@
 		6589205629EE7C18005EE6FA /* LoginButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonStyle.swift; sourceTree = "<group>"; };
 		6589205C29EF0840005EE6FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		658AFD9A2A55BEDC009FB94E /* UMLRendererViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLRendererViewModel.swift; sourceTree = "<group>"; };
-		658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPointExtension.swift; sourceTree = "<group>"; };
+		658E4A312A61C7D600B43798 /* ComparableExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableExtension.swift; sourceTree = "<group>"; };
 		6594C92F2A37027C00B9CF9F /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		6595D2282A2744410033C1B5 /* TextAssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAssessmentServiceImpl.swift; sourceTree = "<group>"; };
 		6595D22A2A275A740033C1B5 /* UnknownAssessmentServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownAssessmentServiceImpl.swift; sourceTree = "<group>"; };
@@ -720,7 +720,7 @@
 				653452B52A068E4D008D9598 /* ParticipationExtension.swift */,
 				6594C92F2A37027C00B9CF9F /* NotificationExtension.swift */,
 				651A44BA2A167FDF00DBCD92 /* CourseMockExtension.swift */,
-				658E4A312A61C7D600B43798 /* FloatingPointExtension.swift */,
+				658E4A312A61C7D600B43798 /* ComparableExtension.swift */,
 				657EBAFA2A8927E8005525AA /* SkeletonExtension.swift */,
 				65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */,
 				652EDCBC2AC5CAB1009D9A3C /* GeometryProxyExtension.swift */,
@@ -1348,7 +1348,7 @@
 				65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
 				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
-				658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */,
+				658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */,
 				650D88022A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */,
