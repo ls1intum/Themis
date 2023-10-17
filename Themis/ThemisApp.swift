@@ -15,7 +15,7 @@ struct ThemisApp: App {
         WindowGroup {
             ContentView()
                 .task {
-//                    Tips.showAllTipsForTesting() // uncomment when debugging tips
+//                    try? Tips.resetDatastore() // uncomment when debugging tips
                     
                     try? Tips.configure([
                         .displayFrequency(.immediate),

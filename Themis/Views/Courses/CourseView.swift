@@ -107,18 +107,22 @@ struct CourseView: View {
             userFirstName
         }
         ToolbarItem(placement: .primaryAction) {
-            Picker("", selection: $courseVM.shownCourseID) {
-                ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
-                    if let courseID {
-                        Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
-                            .padding(.leading, 40)
+            Menu {
+                Picker("", selection: $courseVM.shownCourseID) {
+                    ForEach(courseVM.pickerCourseIDs, id: \.self) { courseID in
+                        if let courseID {
+                            Text(courseVM.courseForID(id: courseID)?.title ?? "Invalid")
+                                .padding(.leading, 40)
+                        }
                     }
                 }
+                .padding(-10) // compensates for Picker's default padding
+            } label: {
+                Text("Change Course")
             }
             .popoverTip(CoursePickerTip())
             .onChange(of: courseVM.shownCourseID) { courseVM.fetchShownCourseAndSetExercises() }
             .isHidden(courseVM.showCoursesIsEmptyMessage)
-            .padding(-10) // compensates for Picker's default padding
         }
     }
 }
@@ -127,6 +131,8 @@ struct CourseView_Previews: PreviewProvider {
     static var courseVM = CourseViewModel()
     
     static var previews: some View {
-        CourseView(courseVM: courseVM)
+        AuthenticatedPreview(authenticationVM: PreviewAuthenticationViewModel()) {
+            CourseView(courseVM: courseVM)
+        }
     }
 }
