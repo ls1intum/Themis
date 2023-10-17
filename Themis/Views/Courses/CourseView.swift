@@ -115,7 +115,8 @@ struct CourseView: View {
                     }
                 }
             }
-            .onChange(of: courseVM.shownCourseID, perform: { _ in courseVM.fetchShownCourseAndSetExercises() })
+            .popoverTip(CoursePickerTip())
+            .onChange(of: courseVM.shownCourseID) { courseVM.fetchShownCourseAndSetExercises() }
             .isHidden(courseVM.showCoursesIsEmptyMessage)
             .padding(-10) // compensates for Picker's default padding
         }

@@ -82,6 +82,7 @@ struct AssessmentView: View {
                     if exercise.supportsReferencedFeedbacks {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                                .popoverTip(FeedbackModeTip())
                                 .disabled(!assessmentVM.allowsInlineFeedbackOperations)
                         }
                     }
