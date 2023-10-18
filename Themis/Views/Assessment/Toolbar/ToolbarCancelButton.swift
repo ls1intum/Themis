@@ -61,18 +61,18 @@ struct ToolbarCancelButton: View {
             .foregroundColor(.white)
         }
         .confirmationDialog("Cancel Assessment", isPresented: $showCancelDialog) {
-            Button(saveButtonLabel, role: saveButtonRole) {
-                Task {
-                    await assessmentVM.saveAssessment()
-                    presentationMode.dismiss()
-                }
-            }
-            
             Button(deleteButtonLabel, role: deleteButtonRole) {
                 Task {
                     if !submissionIsAssessed {
                         await assessmentVM.cancelAssessment()
                     }
+                    presentationMode.dismiss()
+                }
+            }
+            
+            Button(saveButtonLabel, role: saveButtonRole) {
+                Task {
+                    await assessmentVM.saveAssessment()
                     presentationMode.dismiss()
                 }
             }
