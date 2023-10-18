@@ -277,8 +277,9 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
                         let startIndex = fileLines[lines[0] - 1].location
                         var endIndex = fileLines[lines[0] - 1].location + fileLines[lines[0] - 1].length
                         
-                        if lines[0] == fileLines.count { // if we don't do this, the highlight for the last line becomes invisible
-                            endIndex -= 1
+                        let highlightCoversLastLine = (line == fileLines.count)
+                        if highlightCoversLastLine {
+                            endIndex -= 1 // if we don't do this, the highlight for the last line becomes invisible
                         }
                         
                         range = NSRange(location: startIndex, length: endIndex - startIndex)
@@ -290,10 +291,11 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
                 let endLine = lines[1]
                 if fileLines.count >= endLine {
                     let startIndex = fileLines[startLine - 1].location
-                    var endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length - 1
+                    var endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length
                     
-                    if endLine == fileLines.count { // if we don't do this, the highlight for the last line becomes invisible
-                        endIndex -= 1
+                    let highlightEndsAtLastLine = (endLine == fileLines.count)
+                    if highlightEndsAtLastLine {
+                        endIndex -= 1 // if we don't do this, the highlight for the last line becomes invisible
                     }
                     
                     range = NSRange(location: startIndex, length: endIndex - startIndex)
@@ -310,9 +312,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
 extension CodeEditorViewModel {
     private func extractFilePath(textComponents: [String]) -> String {
         var filePathComponent = textComponents[1]
-        if let firstChar = filePathComponent.first, firstChar != "/" {
-            filePathComponent = "/" + filePathComponent
-        }
+        filePathComponent = filePathComponent.appendingLeadingSlashIfMissing()
         
         return filePathComponent
     }

@@ -107,6 +107,7 @@
 		65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */; };
 		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
 		65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */; };
+		65BA61D72AE02B5C009FE11C /* PathStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BA61D62AE02B5C009FE11C /* PathStringExtension.swift */; };
 		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
@@ -304,6 +305,7 @@
 		65B9BD032AAE15110086F9EC /* FileUploadAssessmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentView.swift; sourceTree = "<group>"; };
 		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
 		65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadSubmissionServiceImpl.swift; sourceTree = "<group>"; };
+		65BA61D62AE02B5C009FE11C /* PathStringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathStringExtension.swift; sourceTree = "<group>"; };
 		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
@@ -720,6 +722,7 @@
 				657EBAFA2A8927E8005525AA /* SkeletonExtension.swift */,
 				65B981AE2A7BDEF800FFC2F4 /* CGPointExtension.swift */,
 				652EDCBC2AC5CAB1009D9A3C /* GeometryProxyExtension.swift */,
+				65BA61D62AE02B5C009FE11C /* PathStringExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1463,6 +1466,7 @@
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
 				650D88002A7A5B78004E7533 /* UMLDiagramRenderer.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
+				65BA61D72AE02B5C009FE11C /* PathStringExtension.swift in Sources */,
 				E2E460DD29292ECF00ECC0A5 /* Stack.swift in Sources */,
 				A9752D7B2992AAEB004441D1 /* ExamSectionDetailView.swift in Sources */,
 				DA3F0F03294A308E00A7B807 /* EditFeedbackView.swift in Sources */,
