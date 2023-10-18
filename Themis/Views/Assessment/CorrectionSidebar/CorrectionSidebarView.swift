@@ -116,6 +116,7 @@ struct CorrectionSidebarView: View {
                     .isHidden(assessmentVM.loading, remove: true)
                 ExampleSolutionView(exercise: assessmentVM.participation?.exercise ?? assessmentVM.exercise,
                                     isLoading: assessmentVM.loading)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
