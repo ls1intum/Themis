@@ -67,6 +67,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
+    private var previousDragSelection: Range<Int>?
     
     var pencilOnly = false {
         didSet {
@@ -538,6 +539,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
+            self.previousDragSelection = nil
             self.firstPoint = touch.location(in: self)
             setNeedsDisplay()
         }
@@ -548,7 +550,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
-            self.dragSelection = getSelectionFromTouch()
+            let calculatedSelection = getSelectionFromTouch()
+            self.dragSelection = calculatedSelection ?? previousDragSelection
+            previousDragSelection = calculatedSelection ?? previousDragSelection
             setNeedsDisplay()
         }
     }
