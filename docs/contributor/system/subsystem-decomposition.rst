@@ -3,7 +3,7 @@ Subsystem Decomposition
 
 This section aims to describe the top-level view of the system in terms of components, subsystems and the dependencies among components, respectively subsystems.
 
-.. image:: ../images/component_diagram.png
+.. image:: images/component_diagram.png
 
 The system can be divided into four major subsystems. 
 

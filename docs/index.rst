@@ -26,17 +26,13 @@ as needed, improving the accuracy and efficiency of the assessment process.
     :includehidden:
     :maxdepth: 3
 
-    contributor/analysis/ui
-    contributor/analysis/use-case-model
     contributor/analysis/analysis-object-model
-    contributor/analysis/dynamic-model
 
 .. toctree::
     :caption: Contributor Guide
     :includehidden:
     :maxdepth: 3
 
-    contributor/analysis/ui
     contributor/analysis/use-case-model
     contributor/analysis/analysis-object-model
     contributor/analysis/dynamic-model

@@ -3,7 +3,7 @@ Analysis Object Model
 
 The Analysis Object Model describe the static structure of the system by means of classes, attributes and associations.
 
-.. image:: ../images/class_diagram.png
+.. image:: images/class_diagram.png
 
 
 The **Course** class refers to different university courses that use the Artemis web application. Each course has a title and a description and has multiple exercises with each exercise class containing attributes for the problem statement, the grading instructions, the score, etc. A course can be taken or worked for by multiple users.

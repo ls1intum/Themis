@@ -12,7 +12,7 @@ Themis iPad App
 Answering Student Questions
 ---------------------------
 
-.. image:: ../images/activity_diagram_1.png
+.. image:: images/activity_diagram_1.png
 
 This activity diagram shows how the flow of answering a student question on a certain exercise e.g. during the lecture looks like. Assume that the tutor already opened the app and navigated to the corresponding lecture course.
 
@@ -26,7 +26,7 @@ This activity diagram shows how the flow of answering a student question on a ce
 Assessing Student Submissions
 -----------------------------
 
-.. image:: ../images/activity_diagram_2.png
+.. image:: images/activity_diagram_2.png
 
 This activity diagram shows the workflow of assessing student submissions in the app. Assume that the tutor already opened the app and navigated to the corresponding lecture course.
 
@@ -48,7 +48,7 @@ ThemisML Server
 Generating Feedback Suggestions
 -------------------------------
 
-.. image:: ../images/activity_diagram_ml.png
+.. image:: images/activity_diagram_ml.png
 
 This activity diagram shows the process of generating feedback suggestions.
 
