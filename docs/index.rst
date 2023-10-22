@@ -29,7 +29,7 @@ as needed, improving the accuracy and efficiency of the assessment process.
     contributor/dev-process/development-process
 
 .. toctree::
-    :caption: Administration Guide
+    :caption: Administrator Guide
     :includehidden:
     :maxdepth: 2
 
