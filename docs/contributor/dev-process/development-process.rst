@@ -32,6 +32,12 @@ Creating and Merging a Pull Request
 
 Precondition
 ---------------------------------
+
+* Check if the functionality already exists in the `ArtemisCore <https://github.com/ls1intum/artemis-ios-core-modules>`_ dependency
+
+    If it does not, consider whether the change would also be useful for other iOS clients. If yes, create the PR in
+    the ArtemisCore repository instead.
+
 * Limit yourself to one functionality per pull request.
 * Split up your task in multiple branches & pull requests if necessary.
 * `Commit Early, Commit Often, Perfect Later, Publish Once. <https://speakerdeck.com/lemiorhan/10-git-anti-patterns-you-should-be-aware-of>`_
