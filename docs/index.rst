@@ -27,6 +27,8 @@ as needed, improving the accuracy and efficiency of the assessment process.
     :maxdepth: 2
 
     contributor/dev-process/development-process
+    contributor/guidelines/guidelines
+    contributor/system-design/overview
 
 .. toctree::
     :caption: Administrator Guide
