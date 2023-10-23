@@ -10,7 +10,7 @@ Infrastructure Setup
 Themis needs to connect to an Artemis server instance to operate. The deployment diagram below can be useful to
 understand the infrastructure:
 
-.. image:: /contributor/system/images/deployment_diagram.png
+.. image:: /contributor/system-design/images/deployment_diagram.png
 
 The app can be installed on iPads via `TestFlight`_. Therefore, it requires TestFlight to be installed on the iPad and the user
 to be part of at least one group, either via Apple-ID or via public TestFlight link. The only formal requirement is iPadOS 17.
