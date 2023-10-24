@@ -33,7 +33,7 @@ as needed, improving the accuracy and efficiency of the assessment process.
     :includehidden:
     :maxdepth: 2
 
-    user/login
+    user/login/login
     user/assessment-overview/assessment-overview
 
 .. toctree::
