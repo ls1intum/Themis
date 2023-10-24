@@ -29,6 +29,14 @@ suggestions fitting to current submissions are proposed. The suggestions are dis
 as needed, improving the accuracy and efficiency of the assessment process.
 
 .. toctree::
+    :caption: User Guide
+    :includehidden:
+    :maxdepth: 2
+
+    user/login
+    user/assessment-overview/assessment-overview
+
+.. toctree::
     :caption: Contributor Guide
     :includehidden:
     :maxdepth: 2
