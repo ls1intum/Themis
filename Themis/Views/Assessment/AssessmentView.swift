@@ -47,6 +47,7 @@ struct AssessmentView: View {
             .toolbarBackground(Color.themisPrimary, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .onAppear {
+                assessmentVM.pencilModeDisabled = assessmentVM.readOnly
                 assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
             }
             .onDisappear {

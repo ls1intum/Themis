@@ -15,11 +15,11 @@ class SubmissionListViewModel: ObservableObject {
     @Published var isLoading = false
     
     var submittedSubmissions: [Submission] {
-        submissions.filter { $0.baseSubmission.results?.last?.completionDate != nil }
+        submissions.filter { $0.baseSubmission.isAssessed }
     }
     
     var openSubmissions: [Submission] {
-        submissions.filter { $0.baseSubmission.results?.last?.completionDate == nil }
+        submissions.filter { !$0.baseSubmission.isAssessed }
     }
     
     private var isLoadedOnce = false
