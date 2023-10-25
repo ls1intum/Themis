@@ -105,6 +105,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
             self.fileTree = node.children ?? []
             self.openFiles = []
             self.selectedFile = nil
+            self.inlineHighlights = [:]
             self.allowsInlineFeedbackOperations = (repositoryType == .student)
         } catch {
             self.error = error
