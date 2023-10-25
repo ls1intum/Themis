@@ -40,11 +40,7 @@ class CourseViewModel: ObservableObject {
     }
     
     var pickerCourseIDs: [Int?] {
-        if shownCourseID == nil {
-            return courses.map(\.id) + [nil]
-        } else {
-            return courses.map(\.id)
-        }
+        courses.map(\.id)
     }
     
     private var courses: [Course] = []

@@ -18,7 +18,15 @@ struct FeedbackCellView: View {
     @State var feedback: AssessmentFeedback
     private var editingDisabled: Bool { assessmentVM.readOnly || !assessmentVM.allowsInlineFeedbackOperations }
     private var tapGestureDisabled: Bool { feedback.scope != .inline || !assessmentVM.allowsInlineFeedbackOperations }
-    
+    private var feedbackText: String {
+        if let feedbackType = feedback.baseFeedback.type,
+           feedbackType.isAutomatic {
+            return feedback.baseFeedback.text ?? feedback.baseFeedback.testCase?.testName ?? "Test Case"
+        }
+        return feedback.baseFeedback.text ?? "Feedback"
+    }
+    private var feedbackDetailText: String {feedback.baseFeedback.detailText ?? ""}
+
     @State var showEditFeedback = false
     
     var participationId: Int?
@@ -31,7 +39,7 @@ struct FeedbackCellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text(feedback.baseFeedback.text ?? "Feedback")
+                Text(feedbackText)
                     .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
                 
                 Spacer()
@@ -43,7 +51,7 @@ struct FeedbackCellView: View {
                 .frame(maxWidth: .infinity)
             
             HStack {
-                Text(feedback.baseFeedback.detailText ?? "")
+                Text(feedbackDetailText)
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
