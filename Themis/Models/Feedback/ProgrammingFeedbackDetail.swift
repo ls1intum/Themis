@@ -20,20 +20,23 @@ public struct ProgrammingFeedbackDetail: FeedbackDetail {
         if lines.location == 0 {
             return
         }
-        baseFeedback.reference = "file:" + file.path + "_line:\(lines.location)"
+        
+        let filePath = file.path.removeLeadingSlashIfExists()
+        
+        baseFeedback.reference = "file:" + filePath + "_line:\(lines.location)"
         
         guard let columns else {
             if lines.length == 0 {
-                baseFeedback.text = "File " + file.path + " at line \(lines.location)"
+                baseFeedback.text = "File " + filePath + " at line \(lines.location)"
             } else {
-                baseFeedback.text = "File " + file.path + " at lines \(lines.location)-\(lines.location + lines.length)"
+                baseFeedback.text = "File " + filePath + " at lines \(lines.location)-\(lines.location + lines.length)"
             }
             return
         }
         if columns.length == 0 {
-            baseFeedback.text = "File " + file.path + " at line \(lines.location) column \(columns.location)"
+            baseFeedback.text = "File " + filePath + " at line \(lines.location) column \(columns.location)"
         } else {
-            baseFeedback.text = "File " + file.path + " at line \(lines.location) column \(columns.location)-\(columns.location + columns.length)"
+            baseFeedback.text = "File " + filePath + " at line \(lines.location) column \(columns.location)-\(columns.location + columns.length)"
         }
     }
 }

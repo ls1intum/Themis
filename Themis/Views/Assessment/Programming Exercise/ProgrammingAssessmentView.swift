@@ -75,6 +75,7 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
+            assessmentVM.pencilModeDisabled = true
             await assessmentVM.initSubmission()
             await codeEditorVM.setup(basedOn: assessmentVM.participation?.id, exercise.baseExercise.id, assessmentVM.assessmentResult)
         }

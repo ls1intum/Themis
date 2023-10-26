@@ -140,6 +140,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
             self.fileTree = node.children ?? []
             self.openFiles = []
             self.selectedFile = nil
+            self.inlineHighlights = [:]
             self.allowsInlineFeedbackOperations = (repositoryType == .student)
         } catch {
             self.error = error
@@ -306,20 +307,32 @@ extension CodeEditorViewModel {
         if let fileLines = file.lines {
             var range = NSRange(location: 0, length: 0)
             switch lines.count {
-            // single line feedback with additional column reference
+            // single line feedback
             case 1:
                 let line = lines[0]
-                if fileLines.count >= line, let columns = columns {
-                    let leftCol = columns[0]
-                    if columns.count == 1 {
-                        // single column
-                        let startIndex = fileLines[line - 1].location + leftCol - 1
-                        range = NSRange(location: startIndex, length: 1)
-                    } else {
-                        // two columns
-                        let rightCol = columns[1]
-                        let startIndex = fileLines[line - 1].location + leftCol - 1
-                        let endIndex = fileLines[line - 1].location + rightCol - 1
+                if fileLines.count >= line {
+                    if let columns { // with additional column reference
+                        let leftCol = columns[0]
+                        if columns.count == 1 {
+                            // single column
+                            let startIndex = fileLines[line - 1].location + leftCol - 1
+                            range = NSRange(location: startIndex, length: 1)
+                        } else {
+                            // two columns
+                            let rightCol = columns[1]
+                            let startIndex = fileLines[line - 1].location + leftCol - 1
+                            let endIndex = fileLines[line - 1].location + rightCol - 1
+                            range = NSRange(location: startIndex, length: endIndex - startIndex)
+                        }
+                    } else { // without additional column reference (the whole line)
+                        let startIndex = fileLines[lines[0] - 1].location
+                        var endIndex = fileLines[lines[0] - 1].location + fileLines[lines[0] - 1].length
+                        
+                        let highlightCoversLastLine = (line == fileLines.count)
+                        if highlightCoversLastLine {
+                            endIndex -= 1 // if we don't do this, the highlight for the last line becomes invisible
+                        }
+                        
                         range = NSRange(location: startIndex, length: endIndex - startIndex)
                     }
                 }
@@ -329,7 +342,13 @@ extension CodeEditorViewModel {
                 let endLine = lines[1]
                 if fileLines.count >= endLine {
                     let startIndex = fileLines[startLine - 1].location
-                    let endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length
+                    var endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length
+                    
+                    let highlightEndsAtLastLine = (endLine == fileLines.count)
+                    if highlightEndsAtLastLine {
+                        endIndex -= 1 // if we don't do this, the highlight for the last line becomes invisible
+                    }
+                    
                     range = NSRange(location: startIndex, length: endIndex - startIndex)
                 }
             default:
@@ -340,6 +359,25 @@ extension CodeEditorViewModel {
     }
 }
 
+// MARK: - Functions for extracting line and column information
+extension CodeEditorViewModel {
+    private func extractFilePath(textComponents: [String]) -> String {
+        var filePathComponent = textComponents[1]
+        filePathComponent = filePathComponent.appendingLeadingSlashIfMissing()
+        
+        return filePathComponent
+    }
+    
+    private func extractLines(textComponents: [String]) -> [Int] {
+        textComponents[4].components(separatedBy: "-").map { Int($0) ?? 0 }
+    }
+    
+    private func extractColumns(textComponents: [String]) -> [Int] {
+        textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
+    }
+}
+
+// MARK: - Feedback Delegate
 extension CodeEditorViewModel: FeedbackDelegate {
     @MainActor
     func onFeedbackCreation(_ feedback: AssessmentFeedback) {
