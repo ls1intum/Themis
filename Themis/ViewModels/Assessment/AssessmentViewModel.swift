@@ -218,7 +218,11 @@ class AssessmentViewModel: ObservableObject {
     
     func getManualFeedback(byId id: UUID) -> AssessmentFeedback? {
         let manualFeedbacks = assessmentResult.inlineFeedback + assessmentResult.generalFeedback
-        return manualFeedbacks.first(where: { $0.id == id })
+        return manualFeedbacks.first(where: { !$0.isSuggested && $0.id == id })
+    }
+    
+    func getSuggestedFeedback(byAssessmentFeedbackId id: UUID) -> AssessmentFeedback? {
+        assessmentResult.suggestedFeedback.first(where: { $0.id == id })
     }
 }
 

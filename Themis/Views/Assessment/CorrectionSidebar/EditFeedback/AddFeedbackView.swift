@@ -27,8 +27,6 @@ struct AddFeedbackView: View {
             feedbackDelegate: feedbackDelegate,
             incompleteFeedback: incompleteFeedback,
             feedbackSuggestion: feedbackSuggestion,
-            title: feedbackSuggestion != nil ? "Review Suggested Feedback" : "Add Feedback",
-            isEditing: false,
             scope: scope,
             gradingCriteria: gradingCriteria,
             showSheet: $showSheet

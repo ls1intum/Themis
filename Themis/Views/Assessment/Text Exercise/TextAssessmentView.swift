@@ -75,23 +75,19 @@ struct TextAssessmentView: View {
                     gradingCriteria: assessmentVM.gradingCriteria,
                     showSheet: $textExerciseRendererVM.showEditFeedback
                 )
-            } else if let textAssessmentVM = assessmentVM as? TextAssessmentViewModel,
-                      let suggestion = textAssessmentVM.getSuggestion(byAssessmentFeedbackId: textExerciseRendererVM.selectedFeedbackForEditingId) {
-                // The user tapped on a feedback suggestion. This is not actually an edit action, but is triggered as one
-                AddFeedbackView(
+            } else {
+                EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     feedbackDelegate: textExerciseRendererVM,
-                    incompleteFeedback: AssessmentFeedback(scope: .inline,
-                                                           detail: TextFeedbackDetail(block: suggestion.blockRef.block)),
-                    feedbackSuggestion: suggestion,
                     scope: .inline,
+                    idForUpdate: textExerciseRendererVM.selectedFeedbackForEditingId,
                     gradingCriteria: assessmentVM.gradingCriteria,
                     showSheet: $textExerciseRendererVM.showEditFeedback
                 )
             }
         }
-        .onChange(of: assessmentVM.fontSize, perform: { textExerciseRendererVM.fontSize = $0 })
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: { textExerciseRendererVM.pencilModeDisabled = $0 })
+        .onChange(of: assessmentVM.fontSize) { textExerciseRendererVM.fontSize = $1 }
+        .onChange(of: assessmentVM.pencilModeDisabled) { textExerciseRendererVM.pencilModeDisabled = $1 }
     }
     
     private var correctionWithPlaceholder: some View {

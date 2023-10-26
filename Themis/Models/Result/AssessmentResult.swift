@@ -55,6 +55,10 @@ class AssessmentResult: Encodable, ObservableObject {
         feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false }
     }
     
+    var suggestedFeedback: [AssessmentFeedback] {
+        feedbacks.filter { $0.isSuggested }
+    }
+    
     func reset() {
         self.computedFeedbacks.removeAll()
     }

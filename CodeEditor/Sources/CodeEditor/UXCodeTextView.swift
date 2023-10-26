@@ -409,7 +409,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
             let offset = self.calculateWrapOffsetOf(lineNumber)
             if let feedback = self.feedbackSuggestions.first(where: { $0.fromLine == lineNumber - offset }) {
-                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: feedback.id.uuidString) {
+                // TODO: get rid of the string interpolation once programming exercise suggestions are integrated into Athena
+                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: "\(feedback.id)") {
                     self.lightBulbs.append(lightbulb)
                     self.addSubview(lightbulb)
                 }

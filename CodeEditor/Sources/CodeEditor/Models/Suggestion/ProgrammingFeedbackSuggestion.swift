@@ -6,16 +6,31 @@
 //
 
 import Foundation
+import SharedModels
 
 public struct ProgrammingFeedbackSuggestion: FeedbackSuggestion, Decodable {
-    public let id = UUID()
-    public let exerciseId: Int
+    
+    public var id: Int
+    
+    public var exerciseId: Int
+    
+    public var submissionId: Int
+    
+    public var title: String
+    
+    public var description: String
+    
+    public var credits: Double
+    
+    public var gradingInstruction: GradingInstruction?
+    
+    public var associatedAssessmentFeedbackId: UUID?
+    
+    // TODO: rename/remove the fields below once programming suggestions are integrated into Athena
     public let participationId: Int
     public let srcFile: String
     public let fromLine: Int
     public let toLine: Int
-    public let text: String
-    public let credits: Double
     
     enum DecodingKeys: String, CodingKey {
         case exercise_id
@@ -27,14 +42,18 @@ public struct ProgrammingFeedbackSuggestion: FeedbackSuggestion, Decodable {
         case credits
     }
 
+    // TODO: correct the decoding logic below once programming suggestions are integrated into Athena
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: DecodingKeys.self)
+        id = Int.random(in: 1...999999)
         exerciseId = try values.decode(Int.self, forKey: .exercise_id)
+        submissionId = -1
+        title = "Suggestion"
         participationId = try values.decode(Int.self, forKey: .participation_id)
         srcFile = try values.decode(String.self, forKey: .src_file)
         fromLine = try values.decode(Int.self, forKey: .from_line)
         toLine = try values.decode(Int.self, forKey: .to_line)
-        text = try values.decode(String.self, forKey: .text)
+        description = try values.decode(String.self, forKey: .text)
         credits = try values.decode(Double.self, forKey: .credits)
     }
     

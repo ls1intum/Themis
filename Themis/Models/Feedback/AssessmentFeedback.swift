@@ -21,7 +21,11 @@ public struct AssessmentFeedback: Identifiable {
     var baseFeedback: Feedback
     var scope: ThemisFeedbackScope
     var detail: (any FeedbackDetail)?
-
+    
+    var isSuggested: Bool {
+        baseFeedback.isSuggested
+    }
+    
     init(
         baseFeedback: Feedback = Feedback(),
         scope: ThemisFeedbackScope,

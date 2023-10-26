@@ -18,7 +18,7 @@ struct AthenaService {
     
     // MARK: - Get Feedback Suggestions
     private struct GetFeedbackSuggestionsRequest: APIRequest {
-        typealias Response = [TextBlockRef]
+        typealias Response = [TextFeedbackSuggestion]
         
         let exerciseId: Int
         let submissionId: Int
@@ -28,11 +28,11 @@ struct AthenaService {
         }
         
         var resourceName: String {
-            "api/athena/exercises/\(exerciseId)/submissions/\(submissionId)/feedback-suggestions"
+            "api/athena/text-exercises/\(exerciseId)/submissions/\(submissionId)/feedback-suggestions"
         }
     }
     
-    func getFeedbackSuggestions(exerciseId: Int, submissionId: Int) async throws -> [TextBlockRef] {
+    func getFeedbackSuggestions(exerciseId: Int, submissionId: Int) async throws -> [TextFeedbackSuggestion] {
         try await client.sendRequest(GetFeedbackSuggestionsRequest(exerciseId: exerciseId, submissionId: submissionId)).get().0
     }
 }

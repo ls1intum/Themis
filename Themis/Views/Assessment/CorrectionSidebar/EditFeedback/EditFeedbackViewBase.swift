@@ -17,8 +17,6 @@ struct EditFeedbackViewBase: View {
     var incompleteFeedback: AssessmentFeedback?
     var feedbackSuggestion: (any FeedbackSuggestion)?
     
-    let title: String?
-    let isEditing: Bool
     let scope: ThemisFeedbackScope
     let gradingCriteria: [GradingCriterion]
     
@@ -26,14 +24,26 @@ struct EditFeedbackViewBase: View {
     @State private var detailText = ""
     @State private var score = 0.0
     
+    private var isReviewingSuggestion: Bool {
+        feedbackSuggestion != nil || assessmentResult.feedbacks.first(where: { idForUpdate == $0.id })?.isSuggested == true
+    }
+    
+    private var isEditing: Bool {
+        idForUpdate != nil
+    }
+    
+    private var title: String {
+        isReviewingSuggestion ? "Review Suggested Feedback" : (isEditing ? "Edit Feedback" : "Add Feedback")
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                if feedbackSuggestion != nil {
+                if isReviewingSuggestion {
                     robotSymbol
                 }
                 
-                Text(title ?? "Edit Feedback")
+                Text(title)
                     .font(.largeTitle)
                 
                 Spacer()
@@ -46,15 +56,7 @@ struct EditFeedbackViewBase: View {
             }
             
             HStack(spacing: 15) {
-                TextField("Enter your feedback here", text: $detailText, axis: .vertical)
-                    .foregroundColor(Color.getTextColor(forCredits: score))
-                    .submitLabel(.return)
-                    .lineLimit(10...40)
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 5)
-                        .stroke(lineWidth: 2)
-                        .foregroundColor(.getTextColor(forCredits: score)))
-                    .background(Color.getBackgroundColor(forCredits: score))
+                textField
                 
                 ScorePicker(score: $score, maxScore: assessmentResult.maxPoints)
                     .frame(maxWidth: 130)
@@ -71,6 +73,19 @@ struct EditFeedbackViewBase: View {
         }
     }
     
+    @ViewBuilder
+    private var textField: some View {
+        TextField("Enter your feedback here", text: $detailText, axis: .vertical)
+            .foregroundColor(Color.getTextColor(forCredits: score))
+            .submitLabel(.return)
+            .lineLimit(10...40)
+            .padding()
+            .overlay(RoundedRectangle(cornerRadius: 5)
+                .stroke(lineWidth: 2)
+                .foregroundColor(.getTextColor(forCredits: score)))
+            .background(Color.getBackgroundColor(forCredits: score))
+    }
+    
     private var gradingCriteriaList: some View {
         ScrollView(.vertical) {
             VStack {
@@ -82,12 +97,12 @@ struct EditFeedbackViewBase: View {
     }
     
     private var robotSymbol: some View {
-        Image("Robot")
+        Image("SuggestedFeedbackSymbol")
             .renderingMode(.template)
             .resizable()
             .scaledToFit()
-            .frame(width: 35, height: 35)
-            .foregroundColor(.themisSecondary)
+            .frame(width: 30, height: 30)
+            .foregroundColor(.feedbackSuggestionColor)
     }
     
     private var editOrSaveButton: some View {
@@ -128,9 +143,7 @@ struct EditFeedbackViewBase: View {
     }
 
     private func createFeedback() {
-        if let feedbackSuggestion {
-            addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
-        } else if scope == .inline {
+        if scope == .inline {
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText, credits: score, type: .MANUAL),
                                               scope: scope,
                                               detail: incompleteFeedback?.detail)
@@ -146,26 +159,12 @@ struct EditFeedbackViewBase: View {
     
     private func deleteFeedback() {
         if let feedbackSuggestion {
-            assessmentResult.deleteFeedback(id: feedbackSuggestion.id)
+            assessmentResult.deleteFeedback(id: feedbackSuggestion.associatedAssessmentFeedbackId ?? UUID())
             feedbackDelegate?.onFeedbackSuggestionDiscard(feedbackSuggestion)
         } else if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
             assessmentResult.deleteFeedback(id: feedback.id)
             feedbackDelegate?.onFeedbackDeletion(feedback)
         }
-    }
-    
-    private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: any FeedbackSuggestion) {
-        let feedback = AssessmentFeedback(basedOn: feedbackSuggestion, incompleteFeedback?.detail, detailText, score)
-        
-        // Try to replace the existing automatic feedback
-        let newFeedback = assessmentResult.replace(feedbackWithId: feedbackSuggestion.id, with: feedback)
-        
-        // No automatic feedback found -> simply add a new feedback for the given suggestion
-        if newFeedback == nil {
-            assessmentResult.addFeedback(feedback: feedback)
-        }
-        
-        feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
     }
 
     private func setStates() {
@@ -174,10 +173,6 @@ struct EditFeedbackViewBase: View {
                 self.detailText = feedback.baseFeedback.detailText ?? feedback.baseFeedback.text ?? ""
                 self.score = feedback.baseFeedback.credits ?? 0.0
             }
-        }
-        if let feedbackSuggestion = feedbackSuggestion {
-            self.detailText = feedbackSuggestion.text
-            self.score = feedbackSuggestion.credits
         }
     }
 }
@@ -189,8 +184,6 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
     static var previews: some View {
         EditFeedbackViewBase(assessmentResult: result,
                              feedbackDelegate: cvm,
-                             title: "Title",
-                             isEditing: false,
                              scope: .inline,
                              gradingCriteria: [
                                 .init(id: 1, structuredGradingInstructions: [

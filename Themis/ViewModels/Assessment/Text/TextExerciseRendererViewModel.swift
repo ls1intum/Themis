@@ -91,7 +91,7 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
             
             let range = NSRange(startIndex..<endIndex)
             let color = UIColor(.getHighlightColor(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0))
-            let isSuggested = assessmentFeedback.baseFeedback.type?.isAutomatic ?? false
+            let isSuggested = assessmentFeedback.isSuggested
             
             inlineHighlights.append(HighlightedRange(id: assessmentFeedback.id, range: range, color: color, isSuggested: isSuggested))
         }
@@ -119,7 +119,10 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
         let oldHighlight = inlineHighlights[oldHighlightIndex]
         let newColor = UIColor(Color.getHighlightColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
         
-        inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id, range: oldHighlight.range, color: newColor)
+        inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id,
+                                                               range: oldHighlight.range,
+                                                               color: newColor,
+                                                               isSuggested: oldHighlight.isSuggested)
     }
     
     private func createHighlight(for feedback: AssessmentFeedback) {
@@ -139,12 +142,12 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
     }
     
     private func deleteHighlight(for suggestion: TextFeedbackSuggestion) {
-        inlineHighlights.removeAll(where: { $0.id == suggestion.id })
+        inlineHighlights.removeAll(where: { $0.id == suggestion.associatedAssessmentFeedbackId })
         undoManager.endUndoGrouping()
     }
     
     private func replaceHighlight(for suggestion: TextFeedbackSuggestion, withHighlightFor feedback: AssessmentFeedback) {
-        inlineHighlights.removeAll(where: { $0.id == suggestion.id })
+        inlineHighlights.removeAll(where: { $0.id == suggestion.associatedAssessmentFeedbackId })
         createHighlight(for: feedback)
     }
 }
@@ -160,13 +163,6 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
     
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
         deleteHighlight(for: feedback)
-    }
-    
-    func onFeedbackSuggestionSelection(_ suggestion: any FeedbackSuggestion, _ feedback: AssessmentFeedback) {
-        guard let suggestion = suggestion as? TextFeedbackSuggestion else {
-            return
-        }
-        replaceHighlight(for: suggestion, withHighlightFor: feedback)
     }
     
     func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion) {

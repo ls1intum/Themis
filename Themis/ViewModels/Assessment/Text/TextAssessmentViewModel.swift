@@ -11,10 +11,10 @@ import SharedModels
 import CodeEditor
 
 class TextAssessmentViewModel: AssessmentViewModel {
-    private var suggestedBlockRefs = [TextBlockRef]()
+    private var suggestions = [TextFeedbackSuggestion]()
     
     private var shouldFetchSuggestions: Bool {
-        !readOnly && submission?.isAssessed == false && assessmentResult.automaticFeedback.isEmpty
+        !readOnly && submission?.isAssessed == false && assessmentResult.suggestedFeedback.isEmpty
     }
     
     @MainActor
@@ -96,6 +96,7 @@ class TextAssessmentViewModel: AssessmentViewModel {
         }
     }
     
+    @MainActor
     private func fetchSuggestions() async {
         guard let exerciseId = participation?.exercise?.id,
               let submissionId = submission?.id else {
@@ -104,71 +105,79 @@ class TextAssessmentViewModel: AssessmentViewModel {
         }
         
         do {
-            var blockRefs = try await AthenaService().getFeedbackSuggestions(exerciseId: exerciseId, submissionId: submissionId)
-            log.verbose("Fetched \(blockRefs.count) suggestions")
+            var fetchedSuggestions = try await AthenaService().getFeedbackSuggestions(exerciseId: exerciseId, submissionId: submissionId)
+            log.verbose("Fetched \(fetchedSuggestions.count) suggestions")
             
-            blockRefs = removeOverlappingRefs(blockRefs)
+            fetchedSuggestions = setTextBlockContent(of: fetchedSuggestions)
+            fetchedSuggestions = removeOverlappingSuggestions(fetchedSuggestions)
             
-            suggestedBlockRefs = blockRefs
-            await saveBlockRefsAsAssessmentFeedbacks()
+            self.suggestions = fetchedSuggestions
+            saveSuggestionsAsAssessmentFeedbacks()
         } catch {
             log.error(String(describing: error))
         }
     }
     
     @MainActor
-    private func saveBlockRefsAsAssessmentFeedbacks() {
-        var suggestedFeedbacks = [AssessmentFeedback]()
-        
-        for index in 0 ..< suggestedBlockRefs.count {
-            let blockRef = suggestedBlockRefs[index]
-            let assessmentFeedback = AssessmentFeedback(baseFeedback: blockRef.feedback,
-                                                        scope: .inline,
-                                                        detail: TextFeedbackDetail(block: blockRef.block))
-            suggestedFeedbacks.append(assessmentFeedback)
-            suggestedBlockRefs[index].associatedAssessmentFeedbackId = assessmentFeedback.id
+    private func setTextBlockContent(of suggestions: [TextFeedbackSuggestion]) -> [TextFeedbackSuggestion] {
+        guard let textSubmission = self.submission as? TextSubmission else {
+            log.error("Expected a TextSubmission but got \(type(of: self.submission)) instead")
+            return suggestions
         }
         
-        assessmentResult.computedFeedbacks += suggestedFeedbacks
-    }
-    
-    private func removeOverlappingRefs(_ blockRefs: [TextBlockRef]) -> [TextBlockRef] {
-        var rangeToBlockRef = [Range<Int>: TextBlockRef]()
-        
-        for blockRef in blockRefs {
-            guard let startIndex = blockRef.block.startIndex,
-                  let endIndex = blockRef.block.endIndex else {
-                continue
-            }
-            let blockRefRange = startIndex..<endIndex
-            rangeToBlockRef[blockRefRange] = blockRef
+        var result = suggestions
+        for index in 0 ..< suggestions.count {
+            result[index].setTextBlockContent(from: textSubmission)
         }
-        
-        let result = Array(rangeToBlockRef.values)
-        log.verbose("\(result.count) suggestions are remaining after removing overlaps")
         return result
     }
     
-    func getSuggestion(byAssessmentFeedbackId id: UUID) -> TextFeedbackSuggestion? {
-        var suggestionBlockRef: TextBlockRef?
+    @MainActor
+    private func saveSuggestionsAsAssessmentFeedbacks() {
+        var suggestedAssessmentFeedbacks = [AssessmentFeedback]()
         
-        if let blockRef = suggestedBlockRefs.first(where: { $0.associatedAssessmentFeedbackId == id }) {
-            suggestionBlockRef = blockRef
-        }
-        // this happens when `fetchSuggestions()` is not called and automatic feedbacks embedded into the submission are used
-        else if let assessmentFeedback = assessmentResult.automaticFeedback.first(where: { $0.id == id }),
-                let textSubmission = submission as? TextSubmission,
-                let blocks = textSubmission.blocks,
-                let block = blocks.first(where: { $0.id == assessmentFeedback.baseFeedback.reference }) {
-            var blockRef = TextBlockRef(block: block, feedback: assessmentFeedback.baseFeedback)
-            blockRef.associatedAssessmentFeedbackId = id
-            suggestionBlockRef = blockRef
+        for index in 0 ..< suggestions.count {
+            let suggestion = suggestions[index]
+            
+            var feedbackDetail: TextFeedbackDetail?
+            if let suggestionTextBlock = suggestion.textBlock {
+                feedbackDetail = TextFeedbackDetail(block: suggestionTextBlock)
+            }
+            
+            let assessmentFeedback = AssessmentFeedback(baseFeedback: suggestion.feedback,
+                                                        scope: suggestion.isReferenced ? .inline : .general,
+                                                        detail: feedbackDetail)
+            suggestedAssessmentFeedbacks.append(assessmentFeedback)
+            suggestions[index].associatedAssessmentFeedbackId = assessmentFeedback.id
         }
         
-        if let suggestionBlockRef {
-            return TextFeedbackSuggestion(blockRef: suggestionBlockRef)
-        } else {
-            return nil
+        assessmentResult.computedFeedbacks += suggestedAssessmentFeedbacks
+    }
+    
+    private func removeOverlappingSuggestions(_ suggestions: [TextFeedbackSuggestion]) -> [TextFeedbackSuggestion] {
+        var rangeToSuggestion = [Range<Int>: TextFeedbackSuggestion]()
+        var result = [TextFeedbackSuggestion]()
+        
+        for suggestion in suggestions {
+            guard let startIndex = suggestion.indexStart,
+                  let endIndex = suggestion.indexEnd else {
+                result.append(suggestion) // preserve unreferenced suggestion
+                continue
+            }
+            let range = startIndex..<endIndex
+            
+            let oldRanges = rangeToSuggestion.keys
+            for oldRange in oldRanges {
+                if oldRange.contains(range.lowerBound) || oldRange.contains(range.upperBound) {
+                    continue // overlap detected
+                }
+            }
+            
+            rangeToSuggestion[range] = suggestion
         }
+        
+        result += Array(rangeToSuggestion.values)
+        log.verbose("\(result.count) suggestions are remaining after removing overlaps")
+        return result
     }
 }

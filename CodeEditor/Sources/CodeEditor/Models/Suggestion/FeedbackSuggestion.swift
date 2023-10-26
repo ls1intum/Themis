@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import SharedModels
 
-public protocol FeedbackSuggestion: Equatable {
-    var id: UUID { get }
-    var text: String { get }
+public protocol FeedbackSuggestion: Equatable, Decodable {
+    var id: Int { get }
+    var exerciseId: Int { get }
+    var submissionId: Int { get }
+    var title: String { get }
+    var description: String { get }
     var credits: Double { get }
-}
-
-public extension FeedbackSuggestion {
-    var text: String { "" }
-    var credits: Double { 0.0 }
+    var gradingInstruction: GradingInstruction? { get }
+    
+    var associatedAssessmentFeedbackId: UUID?  { get set } // not decoded
 }
