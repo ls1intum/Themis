@@ -37,10 +37,9 @@ struct FeedbackCellView: View {
     let gradingCriteria: [GradingCriterion]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text(feedbackText)
-                    .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
+                feedbackTextLabel
                 
                 Spacer()
                 
@@ -90,6 +89,17 @@ struct FeedbackCellView: View {
         .scaleEffect(isTapped ? 1.05 : 1.0)
     }
     
+    @ViewBuilder
+    private var feedbackTextLabel: some View {
+        if feedback.isSuggested {
+            suggestionBadge
+        } else {
+            Text(feedbackText)
+                .foregroundColor(.getTextColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
+        }
+    }
+    
+    @ViewBuilder
     private var pointLabel: some View {
         Text(String(format: "%.1f", feedback.baseFeedback.credits ?? 0.0) + "P")
             .font(.headline)
@@ -99,6 +109,7 @@ struct FeedbackCellView: View {
             .cornerRadius(5)
     }
     
+    @ViewBuilder
     private var editButton: some View {
         Button {
             showEditFeedback = true
@@ -111,5 +122,38 @@ struct FeedbackCellView: View {
         .font(.caption)
         .disabled(editingDisabled)
         .isHidden(feedback.baseFeedback.type?.isAutomatic ?? false)
+    }
+    
+    @ViewBuilder
+    private var suggestionBadge: some View {
+        HStack(spacing: 4) {
+            Image("SuggestedFeedbackSymbol")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 15, height: 15)
+            
+            Text("SUGGESTED")
+                .font(.footnote)
+                .fontWeight(.bold)
+        }
+        .frame(height: 18)
+        .padding(8)
+        .foregroundStyle(.white)
+        .background(Color.feedbackSuggestionColor)
+        .cornerRadius(5)
+    }
+}
+
+struct FeedbackCellView_Previews: PreviewProvider {
+    static var assessmentVM = AssessmentViewModel(exercise: .mockText, readOnly: false)
+    static var assessmentResult = TextAssessmentResult()
+    
+    static var previews: some View {
+        FeedbackCellView(assessmentVM: assessmentVM,
+                         assessmentResult: assessmentResult,
+                         feedback: AssessmentFeedback(scope: .inline),
+                         gradingCriteria: [])
+        .padding(.horizontal, 200)
     }
 }
