@@ -201,8 +201,9 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         defer {
             isCurrentlyUpdatingView.value = false
         }
-        if editorBindings.themeName.rawValue != textView.themeName.rawValue {
-            textView.applyNewTheme(editorBindings.themeName)
+        if editorBindings.themeName.rawValue != textView.themeName.rawValue,
+           let fontSize = editorBindings.fontSize?.wrappedValue {
+            textView.applyNewTheme(editorBindings.themeName, andFontSize: fontSize)
         }
         
         textView.language = editorBindings.language

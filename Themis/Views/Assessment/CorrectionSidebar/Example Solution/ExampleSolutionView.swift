@@ -31,6 +31,10 @@ struct ExampleSolutionView: View {
             if let modelingExercise = exercise?.baseExercise as? ModelingExercise {
                 ExampleModelingSolutionView(exercise: modelingExercise)
             }
+        case .fileUpload:
+            if let fileUploadExercise = exercise?.baseExercise as? FileUploadExercise {
+                ExampleFileUploadSolutionView(exercise: fileUploadExercise)
+            }
         default:
             Text("This exercise does not support example solutions")
         }

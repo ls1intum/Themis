@@ -47,6 +47,7 @@ struct AssessmentView: View {
             .toolbarBackground(Color.themisPrimary, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .onAppear {
+                assessmentVM.pencilModeDisabled = assessmentVM.readOnly
                 assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
             }
             .onDisappear {
@@ -82,6 +83,7 @@ struct AssessmentView: View {
                     if exercise.supportsReferencedFeedbacks {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             ToolbarToggleButton(toggleVariable: $assessmentVM.pencilModeDisabled, iconImageSystemName: "hand.draw", inverted: true)
+                                .popoverTip(FeedbackModeTip())
                                 .disabled(!assessmentVM.allowsInlineFeedbackOperations)
                         }
                     }
