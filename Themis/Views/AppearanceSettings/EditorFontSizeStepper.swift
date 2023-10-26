@@ -5,7 +5,6 @@ import CodeEditor
 
 // Custom stepper to adjust font size with input field
 struct EditorFontSizeStepperView: View {
-    @Environment(\.colorScheme) var colorScheme
     @Binding var fontSize: CGFloat
 
     func ensureLargeEnoughFontSize() {
@@ -34,7 +33,6 @@ struct EditorFontSizeStepperView: View {
                 .onSubmit {
                     ensureLargeEnoughFontSize()
                 }
-                .foregroundColor(colorScheme == .light ? .black : .white)
                 .keyboardType(.numberPad)
                 .fixedSize()
                 .frame(width: 30)
