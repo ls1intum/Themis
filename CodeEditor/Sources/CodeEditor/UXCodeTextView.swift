@@ -67,6 +67,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
+    private var previousDragSelection: Range<Int>?
     
     var pencilOnly = false {
         didSet {
@@ -547,6 +548,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
+            self.previousDragSelection = nil
             self.firstPoint = touch.location(in: self)
             setNeedsDisplay()
         }
@@ -557,7 +559,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
-            self.dragSelection = getSelectionFromTouch()
+            let calculatedSelection = getSelectionFromTouch()
+            self.dragSelection = calculatedSelection ?? previousDragSelection
+            previousDragSelection = calculatedSelection ?? previousDragSelection
             setNeedsDisplay()
         }
     }
@@ -585,15 +589,15 @@ protocol UXCodeTextViewDelegate: UXTextViewDelegate {
 // MARK: - Range functions
 
 extension UXTextView {
-    /// Tries to find a range enclosing either the given position, it's left neighbor, or it's right neighbor
+    /// Tries to find a range enclosing either the given position, it's left neighbors, or it's right neighbors
     func rangeEnclosingApproximatePosition(_ position: UITextPosition, with granularity: UITextGranularity, inDirection direction: UITextDirection) -> UITextRange? {
-        let leftPosition = self.position(from: position, offset: -1)
-        let rightPosition = self.position(from: position, offset: 1)
-        let positionsToCheck = [position, leftPosition, rightPosition].compactMap({ $0 })
         
-        for position in positionsToCheck {
-            if let range = tokenizer.rangeEnclosingPosition(position, with: granularity, inDirection: direction) {
-                return range
+        // We check the position itself, followed by the left and right neighbors
+        for offset in [0, -1, -2, -3, 1, 2, 3] {
+            if let newPosition = self.position(from: position, offset: offset) {
+                if let range = tokenizer.rangeEnclosingPosition(newPosition, with: granularity, inDirection: direction) {
+                    return range
+                }
             }
         }
         
