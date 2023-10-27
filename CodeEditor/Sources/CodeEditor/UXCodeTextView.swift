@@ -67,6 +67,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     private var firstPoint: CGPoint?
     private var secondPoint: CGPoint?
+    private var previousDragSelection: Range<Int>?
     
     var pencilOnly = false {
         didSet {
@@ -79,7 +80,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     var selectionGranularity = UITextGranularity.character
-    var canSelectionIncludeHighlightedRanges = true
     
     var feedbackMode = true
     
@@ -451,7 +451,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
             }
         }
     }
-
+    
     func didHighlight(_ range: NSRange, success: Bool) {
         if !text.isEmpty {
             for hRange in highlightedRanges {
@@ -524,22 +524,31 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     /// Validates the `dragSelection` value
     private func isSelectionValid() -> Bool {
-        guard !canSelectionIncludeHighlightedRanges else { return true }
+        guard let dragSelection else { return false }
         
+        // Check for empty selection
+        // Warning: This also prevents selecting an empty line, which is possible in the web client
+        if let selectedRangeAsNSRange = Range(dragSelection.toNSRange(), in: self.text),
+           string[selectedRangeAsNSRange].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return false
+        }
+        
+        // Check for overlap
         let highlightedIntRanges = highlightedRanges.compactMap({ Range($0.range) })
         for range in highlightedIntRanges {
-            if self.dragSelection?.overlaps(range) == true {
+            if dragSelection.overlaps(range) == true {
                 return false
             }
         }
         
         return true
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard feedbackMode else { return }
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
+            self.previousDragSelection = nil
             self.firstPoint = touch.location(in: self)
             setNeedsDisplay()
         }
@@ -550,7 +559,9 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let touch = touches.first else { return }
         if pencilOnly && touch.type == .pencil || !pencilOnly {
             self.secondPoint = touch.location(in: self)
-            self.dragSelection = getSelectionFromTouch()
+            let calculatedSelection = getSelectionFromTouch()
+            self.dragSelection = calculatedSelection ?? previousDragSelection
+            previousDragSelection = calculatedSelection ?? previousDragSelection
             setNeedsDisplay()
         }
     }
@@ -566,6 +577,31 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         
         coordinator?.setDragSelection(dragSelection)
     }
+    
+    // This override disables the context menu, but still enables links (tappable highlights)
+    // https://stackoverflow.com/a/49428307/7074664
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            if gestureRecognizer is UIPanGestureRecognizer {
+                // required for compatibility with isScrollEnabled
+                return super.gestureRecognizerShouldBegin(gestureRecognizer)
+            }
+            if let tapGestureRecognizer = gestureRecognizer as? UITapGestureRecognizer,
+                tapGestureRecognizer.numberOfTapsRequired == 1 {
+                // required for compatibility with links
+                return super.gestureRecognizerShouldBegin(gestureRecognizer)
+            }
+            // allowing smallDelayRecognizer for links
+            // https://stackoverflow.com/questions/46143868/xcode-9-uitextview-links-no-longer-clickable
+            if let longPressGestureRecognizer = gestureRecognizer as? UILongPressGestureRecognizer,
+                // comparison value is used to distinguish between 0.12 (smallDelayRecognizer) and 0.5 (textSelectionForce and textLoupe)
+                longPressGestureRecognizer.minimumPressDuration < 0.325 {
+                return super.gestureRecognizerShouldBegin(gestureRecognizer)
+            }
+            // preventing selection from loupe/magnifier (_UITextSelectionForceGesture), multi tap, tap and a half, etc.
+            gestureRecognizer.isEnabled = false
+            return false
+        }
+
 }
 
 protocol UXCodeTextViewDelegate: UXTextViewDelegate {
@@ -578,15 +614,15 @@ protocol UXCodeTextViewDelegate: UXTextViewDelegate {
 // MARK: - Range functions
 
 extension UXTextView {
-    /// Tries to find a range enclosing either the given position, it's left neighbor, or it's right neighbor
+    /// Tries to find a range enclosing either the given position, it's left neighbors, or it's right neighbors
     func rangeEnclosingApproximatePosition(_ position: UITextPosition, with granularity: UITextGranularity, inDirection direction: UITextDirection) -> UITextRange? {
-        let leftPosition = self.position(from: position, offset: -1)
-        let rightPosition = self.position(from: position, offset: 1)
-        let positionsToCheck = [position, leftPosition, rightPosition].compactMap({ $0 })
         
-        for position in positionsToCheck {
-            if let range = tokenizer.rangeEnclosingPosition(position, with: granularity, inDirection: direction) {
-                return range
+        // We check the position itself, followed by the left and right neighbors
+        for offset in [0, -1, -2, -3, 1, 2, 3] {
+            if let newPosition = self.position(from: position, offset: offset) {
+                if let range = tokenizer.rangeEnclosingPosition(newPosition, with: granularity, inDirection: direction) {
+                    return range
+                }
             }
         }
         
