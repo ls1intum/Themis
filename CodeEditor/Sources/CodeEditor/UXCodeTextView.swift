@@ -524,6 +524,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         guard let dragSelection else { return false }
         
         // Check for empty selection
+        // Warning: This also prevents selecting an empty line, which is possible in the web client
         if let selectedRangeAsNSRange = Range(dragSelection.toNSRange(), in: self.text),
            string[selectedRangeAsNSRange].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return false
