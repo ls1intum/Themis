@@ -194,8 +194,9 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         defer {
             isCurrentlyUpdatingView.value = false
         }
-        if editorBindings.themeName.rawValue != textView.themeName.rawValue {
-            textView.applyNewTheme(editorBindings.themeName)
+        if editorBindings.themeName.rawValue != textView.themeName.rawValue,
+           let fontSize = editorBindings.fontSize?.wrappedValue {
+            textView.applyNewTheme(editorBindings.themeName, andFontSize: fontSize)
         }
         
         textView.language = editorBindings.language
@@ -226,7 +227,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
         textView.selectionGranularity = editorBindings.selectionGranularity
-        textView.canSelectionIncludeHighlightedRanges = editorBindings.canSelectionIncludeHighlightedRanges
         textView.font = editorBindings.font ?? textView.font
         
         if let binding = editorBindings.fontSize {

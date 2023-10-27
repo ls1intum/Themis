@@ -73,6 +73,7 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
+            assessmentVM.pencilModeDisabled = true
             await assessmentVM.initSubmission()
             
             if let pId = assessmentVM.participation?.id {
