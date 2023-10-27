@@ -79,7 +79,6 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     }
     
     var selectionGranularity = UITextGranularity.character
-    var canSelectionIncludeHighlightedRanges = true
     
     var feedbackMode = true
     
@@ -524,11 +523,19 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     /// Validates the `dragSelection` value
     private func isSelectionValid() -> Bool {
-        guard !canSelectionIncludeHighlightedRanges else { return true }
+        guard let dragSelection else { return false }
         
+        // Check for empty selection
+        // Warning: This also prevents selecting an empty line, which is possible in the web client
+        if let selectedRangeAsNSRange = Range(dragSelection.toNSRange(), in: self.text),
+           string[selectedRangeAsNSRange].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return false
+        }
+        
+        // Check for overlap
         let highlightedIntRanges = highlightedRanges.compactMap({ Range($0.range) })
         for range in highlightedIntRanges {
-            if self.dragSelection?.overlaps(range) == true {
+            if dragSelection.overlaps(range) == true {
                 return false
             }
         }
