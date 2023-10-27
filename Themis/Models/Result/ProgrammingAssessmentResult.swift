@@ -19,6 +19,7 @@ struct ProgrammingAssessmentResultDTO: Encodable {
     let feedbacks: [Feedback]
     let testCaseCount: Int
     let passedTestCaseCount: Int
+    let rated = true
     
     init(basedOn programmingAssessmentResult: ProgrammingAssessmentResult) {
         self.score = programmingAssessmentResult.score
