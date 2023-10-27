@@ -1,3 +1,0 @@
-Themis
-includehidden
-maxdepth

@@ -1,9 +1,0 @@
-{
-	"esbonio.sphinx.confDir": "${workspaceFolder}",
-	"cSpell.words": [
-		"includehidden",
-		"maxdepth",
-		"themisml",
-		"toctree"
-	]
-}
