@@ -202,18 +202,6 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         feedback.detail = detail
         assessmentResult.updateFeedback(feedback: feedback)
     }
-    
-    private func extractFilePath(textComponents: [String]) -> String {
-        textComponents[1]
-    }
-    
-    private func extractLines(textComponents: [String]) -> [Int] {
-        textComponents[4].components(separatedBy: "-").map { Int($0) ?? 0 }
-    }
-    
-    private func extractColumns(textComponents: [String]) -> [Int] {
-        textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
-    }
 }
 
 // MARK: - Highlight-Related Functions
