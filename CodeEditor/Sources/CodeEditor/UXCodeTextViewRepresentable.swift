@@ -139,17 +139,6 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
 #error("Unsupported OS")
 #endif
         
-        public func textView(_ textView: UITextView, editMenuForTextIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
-            var additionalActions: [UIMenuElement] = []
-            if range.length > 0 && self.parent.editorBindings.flags.contains(.feedbackMode) {
-                let feedbackAction = UIAction(title: "Feedback") { _ in
-                    self.parent.editorBindings.showAddFeedback.wrappedValue.toggle()
-                }
-                additionalActions.append(feedbackAction)
-            }
-            return UIMenu(children: additionalActions + suggestedActions)
-        }
-        
         public func textView(_ textView: UITextView, shouldInteractWith URL: URL,
                              in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
             if interaction == .invokeDefaultAction,
@@ -170,6 +159,10 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             guard !parent.isCurrentlyUpdatingView.value else {
                 return
             }
+            
+            // to prevent interference with inline highlight selection
+            textView.selectedTextRange = nil
+            
             // avoid empty references for inline highlights
             if textView.selectedRange.length > 0 {
                 parent.editorBindings.selectedSection.wrappedValue = textView.selectedRange
@@ -217,6 +210,7 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             // reset contentoffset when switching files as it is not stored and content heights of files vary
             deletedHighlights.removeAll()
             textView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+            
             if let textStorage = textView.codeTextStorage {
                 textStorage.replaceCharacters(
                     in: NSRange(location: 0, length: textStorage.length),
@@ -225,10 +219,9 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
                 assertionFailure("no text storage?")
                 textView.string = editorBindings.source.wrappedValue
             }
-            if editorBindings.flags.contains(.feedbackMode) {
-                textView.feedbackSuggestions = editorBindings.feedbackSuggestions
-                textView.updateLightBulbs()
-            }
+            
+            textView.feedbackSuggestions = editorBindings.feedbackSuggestions
+            textView.updateLightBulbs()
         }
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
