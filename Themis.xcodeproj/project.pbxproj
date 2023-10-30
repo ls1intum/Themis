@@ -1360,7 +1360,7 @@
 				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
 				658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */,
 				65AB56D52ADEF60D004B5F3F /* CoursePickerTip.swift in Sources */,
-				658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */,
+				658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */,
 				650D88022A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */,

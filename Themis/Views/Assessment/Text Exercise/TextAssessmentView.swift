@@ -93,7 +93,7 @@ struct TextAssessmentView: View {
     /// - Parameter force: if true, updates the resultId regardless of whether the current value is nil
     private func ensureResultId(force: Bool = false) {
         if force || (assessmentResult as? TextAssessmentResult)?.resultId == nil {
-           (assessmentResult as? TextAssessmentResult)?.resultId = assessmentVM.submission?.results?.last?.id
+           (assessmentResult as? TextAssessmentResult)?.resultId = assessmentVM.submission?.results?.last??.id
         }
     }
 }

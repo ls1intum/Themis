@@ -20,7 +20,7 @@ class ModelingAssessmentResult: AssessmentResult {
     }
     
     override func setReferenceData(basedOn submission: BaseSubmission?) {
-        self.resultId = submission?.results?.last?.id
+        self.resultId = submission?.results?.last??.id
         self.submissionId = submission?.id
     }
     

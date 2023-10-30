@@ -20,7 +20,7 @@ extension BaseSubmission {
     }
     
     var isAssessed: Bool {
-        results?.last?.completionDate != nil
+        results?.last??.completionDate != nil
     }
 }
 
