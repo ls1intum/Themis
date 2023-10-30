@@ -6,7 +6,11 @@ View Exercises
 After login, you will be redirected to the course view, where you can select a course and 
 view exercises. You can find more information about this view in the following video:
 
-.. TODO: insert course view video
+.. raw:: html
+
+	<iframe src="https://live.rbg.tum.de/w/artemisintro/40508?video_only=1&t=0" allowfullscreen="1" frameborder="0" width="600" height="500">
+		Video tutorial of the Login on TUM-Live.
+	</iframe>
 
 By tapping on an exercise in the course view you can navigate to a new screen where exercise
 details are shown. From here, you can start a new assessment, or manage ongoing assessments.
@@ -21,9 +25,6 @@ Themis supports the assessment of the following exercise types:
 	/user/text-assessment/text-assessment
 	/user/modeling-assessment/modeling-assessment
 	/user/file-upload-assessment/file-upload-assessment
-
-.. TODO: insert a video explaining some UI elements common to all assessment 
-.. views (toolbar, correction sidebar, etc)
 
 Assess Exam Exercises
 ---------------------
