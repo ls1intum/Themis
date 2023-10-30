@@ -9,3 +9,5 @@ will be saved for subsequent app launches.
     :align: center
     :alt: Login View
     :width: 95%
+
+    Login View

@@ -34,6 +34,26 @@ Assess Exam Exercises
 ---------------------
 
 Themis supports the assessment of exam exercises as well. To assess an exam exercise, 
-navigate to the relevant exam and select the exercise that you want to assess.
+navigate to the relevant exam and select the exercise that you want to assess. 
 
-.. TODO: insert exam mode (+ 2nd correction round) video
+If the second correction round is enabled and all submissions for the first round are assessed, 
+the **Start Assessment** button changes into **Start Assessment (Round 2)**. In addition, 
+the **Open Submissions (Correction Round 2)** and **Finished Submissions (Correction Round 2)** 
+sections appear.
+
+.. figure:: ./images/2nd-round-exercise-view.png
+    :align: center
+    :alt: Exercise View in Second Correction Round
+    :width: 95%
+
+    Exercise View in Second Correction Round
+
+When performing an assessment in the second round, the assessment view toolbar contains a **Round 2** 
+label.
+
+.. figure:: ./images/2nd-round-assessment-view.png
+    :align: center
+    :alt: Assessment View in Second Correction Round
+    :width: 95%
+
+    Assessment View in Second Correction Round
