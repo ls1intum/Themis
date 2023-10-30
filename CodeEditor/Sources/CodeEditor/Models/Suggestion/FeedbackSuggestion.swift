@@ -17,5 +17,5 @@ public protocol FeedbackSuggestion: Equatable, Decodable {
     var credits: Double { get }
     var gradingInstruction: GradingInstruction? { get }
     
-    var associatedAssessmentFeedbackId: UUID?  { get set } // not decoded
+    var associatedAssessmentFeedbackId: UUID? { get set } // not decoded
 }

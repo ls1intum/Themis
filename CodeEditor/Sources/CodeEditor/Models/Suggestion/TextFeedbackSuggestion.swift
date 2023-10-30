@@ -30,7 +30,7 @@ public struct TextFeedbackSuggestion: FeedbackSuggestion {
     public let indexEnd: Int?
     
     public static func == (lhs: TextFeedbackSuggestion, rhs: TextFeedbackSuggestion) -> Bool {
-        lhs.id == rhs.id 
+        lhs.id == rhs.id
         && lhs.exerciseId == rhs.exerciseId
         && lhs.submissionId == rhs.submissionId
         && lhs.title == rhs.title
