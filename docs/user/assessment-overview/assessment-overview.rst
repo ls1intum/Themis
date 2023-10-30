@@ -60,7 +60,7 @@ sections appear.
 When performing an assessment in the second round, the assessment view toolbar contains a **Round 2** 
 label.
 
-.. figure:: ./images/2nd-round-assessment-view-2.png
+.. figure:: ./images/2nd-round-assessment-view.png
     :align: center
     :alt: Assessment View in Second Correction Round
     :width: 85%
