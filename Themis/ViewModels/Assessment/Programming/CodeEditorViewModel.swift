@@ -64,6 +64,41 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         return files
     }
     
+    /// Sets this VM up based on the given participation
+    @MainActor
+    func setup(basedOn participationId: Int?, _ exerciseId: Int?, _ assessmentResult: AssessmentResult) async {
+        guard let participationId, let exerciseId else {
+            log.error("Setup failed due to missing participation ID or exercise ID")
+            return
+        }
+        reset()
+        
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { [weak self] in
+                await self?.initFileTree(participationId: participationId, repositoryType: .student)
+                await self?.loadInlineHighlightsIfEmpty(assessmentResult: assessmentResult, participationId: participationId)
+            }
+            group.addTask { [weak self] in
+                await self?.getFeedbackSuggestions(participationId: participationId, exerciseId: exerciseId)
+            }
+        }
+        
+        ThemisUndoManager.shared.removeAllActions()
+    }
+    
+    private func reset() {
+        fileTree = []
+        openFiles = []
+        selectedFile = nil
+        editorFontSize = CodeEditor.defaultFontSize
+        selectedSection = nil
+        inlineHighlights = [:]
+        allowsInlineFeedbackOperations = true
+        error = nil
+        feedbackSuggestions = []
+        scrollUtils = ScrollUtils(range: nil, offsets: [:])
+    }
+    
     @MainActor
     func openFile(file: Node, participationId: Int, templateParticipationId: Int?) {
         if !openFiles.contains(where: { $0.path == file.path }) {
@@ -123,18 +158,6 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         }
     }
     
-    @MainActor
-    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
-        if let file = selectedFile, let code = file.code {
-            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
-                return
-            }
-            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
-        }
-        
-        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
-    }
-    
     private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
         var count = 1
         var fromIndex: String.Index?
@@ -162,6 +185,37 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         let toIndex = text.index(fromIndex, offsetBy: toDistance)
         
         return NSRange(text.lineRange(for: fromIndex...toIndex), in: text)
+    }
+    
+    private func assign(file: Node, tofeedbackWithId feedbackId: UUID, on assessmentResult: AssessmentResult) {
+        guard var feedback = assessmentResult.getFeedback(byId: feedbackId) else {
+            return
+        }
+        
+        var detail = ProgrammingFeedbackDetail()
+        
+        if let existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
+            detail = existingDetail // use existing detail to prevent overwriting
+        }
+        
+        detail.file = file
+        feedback.detail = detail
+        assessmentResult.updateFeedback(feedback: feedback)
+    }
+}
+
+// MARK: - Highlight-Related Functions
+extension CodeEditorViewModel {
+    @MainActor
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+        if let file = selectedFile, let code = file.code {
+            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+                return
+            }
+            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
+        }
+        
+        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     @MainActor
@@ -203,23 +257,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         }
         undoManager.removeAllActions()
     }
-    
-    private func assign(file: Node, tofeedbackWithId feedbackId: UUID, on assessmentResult: AssessmentResult) {
-        guard var feedback = assessmentResult.getFeedback(byId: feedbackId) else {
-            return
-        }
-        
-        var detail = ProgrammingFeedbackDetail()
-        
-        if let existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
-            detail = existingDetail // use existing detail to prevent overwriting
-        }
-        
-        detail.file = file
-        feedback.detail = detail
-        assessmentResult.updateFeedback(feedback: feedback)
-    }
-    
+
     @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = (feedback.detail as? ProgrammingFeedbackDetail)?.file?.path {
