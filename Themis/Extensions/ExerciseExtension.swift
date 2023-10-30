@@ -35,7 +35,7 @@ extension Exercise {
     /// Indicates whether example solutions can be viewed for this exercise
     var canShowExampleSolution: Bool {
         switch self {
-        case .text, .modeling:
+        case .text, .modeling, .fileUpload:
             return true
         default:
             return false

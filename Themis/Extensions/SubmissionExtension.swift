@@ -18,6 +18,10 @@ extension BaseSubmission {
     func getExercise<T>(as: T.Type = (any BaseExercise).self) -> T? {
         self.getParticipation()?.getExercise(as: T.self)
     }
+    
+    var isAssessed: Bool {
+        results?.last?.completionDate != nil
+    }
 }
 
 extension Submission {
