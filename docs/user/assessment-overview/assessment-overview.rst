@@ -9,13 +9,17 @@ view exercises. You can find more information about this view in the following v
 .. raw:: html
 
 	<iframe src="https://live.rbg.tum.de/w/artemisintro/40508?video_only=1&t=0" allowfullscreen="1" frameborder="0" width="600" height="500">
-		Video tutorial of the Login on TUM-Live.
+		Course view tutorial
 	</iframe>
 
 By tapping on an exercise in the course view you can navigate to a new screen where exercise
 details are shown. From here, you can start a new assessment, or manage ongoing assessments.
 
-.. TODO: insert exercise view video
+.. raw:: html
+
+	<iframe src="https://live.rbg.tum.de/w/artemisintro/40568?video_only=1&t=0" allowfullscreen="1" frameborder="0" width="600" height="500">
+		Exercise view tutorial
+	</iframe>
 
 Themis supports the assessment of the following exercise types:
 
