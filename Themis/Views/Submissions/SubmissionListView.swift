@@ -33,7 +33,7 @@ struct SubmissionListView: View {
                         exercise: exercise,
                         submissionId: submission.baseSubmission.id,
                         participationId: submission.baseSubmission.participation?.id,
-                        resultId: submission.baseSubmission.results?.last?.id
+                        resultId: submission.baseSubmission.results?.last??.id
                     )
                     .environmentObject(courseVM)
                 } label: {
@@ -75,7 +75,7 @@ struct SubmissionListView: View {
         if let submissionDate = (submission.baseSubmission.submissionDate) {
             dates.append(("Submission Date", submissionDate))
         }
-        if let completionDate = (submission.baseSubmission.results?.last?.completionDate), submissionStatus == .submitted {
+        if let completionDate = (submission.baseSubmission.results?.last??.completionDate), submissionStatus == .submitted {
             dates.append(("Last Assessed", completionDate))
         }
         

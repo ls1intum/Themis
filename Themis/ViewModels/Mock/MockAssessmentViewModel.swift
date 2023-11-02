@@ -35,13 +35,13 @@ class MockAssessmentViewModel: AssessmentViewModel {
     
     override func initRandomSubmission() async {
         self.submission = Submission.mockText.baseSubmission
-        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         ThemisUndoManager.shared.removeAllActions()
     }
     
     override func getSubmission(submissionId: Int) async {
         self.submission = Submission.mockText.baseSubmission
-        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         ThemisUndoManager.shared.removeAllActions()
     }
     
