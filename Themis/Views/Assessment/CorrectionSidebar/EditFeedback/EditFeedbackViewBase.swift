@@ -92,19 +92,6 @@ struct EditFeedbackViewBase: View {
             .background(Color.getBackgroundColor(forCredits: score))
     }
     
-    @ViewBuilder
-    private var textField: some View {
-        TextField("Enter your feedback here", text: $detailText, axis: .vertical)
-            .foregroundColor(Color.getTextColor(forCredits: score))
-            .submitLabel(.return)
-            .lineLimit(10...40)
-            .padding()
-            .overlay(RoundedRectangle(cornerRadius: 5)
-                .stroke(lineWidth: 2)
-                .foregroundColor(.getTextColor(forCredits: score)))
-            .background(Color.getBackgroundColor(forCredits: score))
-    }
-    
     private var gradingCriteriaList: some View {
         ScrollView(.vertical) {
             VStack {

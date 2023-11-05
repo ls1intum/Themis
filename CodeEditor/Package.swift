@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -7,7 +7,7 @@ let package = Package(
   name: "CodeEditor",
 
   platforms: [
-    .iOS(.v16)
+    .iOS(.v17)
   ],
 
   products: [
@@ -16,7 +16,7 @@ let package = Package(
 
   dependencies: [
     .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
-    .package(url: "https://github.com/ls1intum/artemis-ios-core-modules", from: "3.3.2"),
+    .package(url: "https://github.com/ls1intum/artemis-ios-core-modules", from: "6.1.0"),
   ],
 
   targets: [
