@@ -89,8 +89,15 @@ class ExerciseViewModel: ObservableObject {
         || ((exam?.isOver ?? false) && !(exam?.isAssessmentDue ?? true))
     }
     
+    /// Is true if this VM contains an exam supporting second correction round
+    var hasExamSupportingSecondCorrectionRound: Bool {
+        exam?.numberOfCorrectionRoundsInExam == 2
+    }
+    
+    /// Is true if this VM contains an exam and an exercise supporting second correction round.
+    /// This is needed because not all exam exercises support the second round
     var isSecondCorrectionRoundEnabled: Bool {
-        exam?.numberOfCorrectionRoundsInExam == 2 && exercise.value?.baseExercise.secondCorrectionEnabled == true
+        hasExamSupportingSecondCorrectionRound && exercise.value?.baseExercise.secondCorrectionEnabled == true
     }
     
     var currentCorrectionRound: CorrectionRound {

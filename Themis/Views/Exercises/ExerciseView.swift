@@ -167,12 +167,18 @@ struct ExerciseView: View {
     
     private func fetchExerciseData() async {
         exerciseVM.exam = exam
-        
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask { await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id) }
-            group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
-            if exerciseVM.isSecondCorrectionRoundEnabled {
+        if exerciseVM.hasExamSupportingSecondCorrectionRound {
+            // We can't fetch exercise data in the task group below because fetchTutorSubmissions(for: correctionRound:) needs exercise data
+            await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id)
+            
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
                 group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise, correctionRound: .second) }
+            }
+        } else {
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask { await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id) }
+                group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
             }
         }
     }
