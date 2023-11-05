@@ -49,6 +49,7 @@ struct AssessmentView: View {
             .onAppear {
                 assessmentVM.pencilModeDisabled = assessmentVM.readOnly
                 assessmentResult.maxPoints = exercise.baseExercise.maxPoints ?? 100
+                assessmentResult.allowedBonus = exercise.baseExercise.bonusPoints ?? 0.0
             }
             .onDisappear {
                 ThemisUndoManager.shared.removeAllActions()

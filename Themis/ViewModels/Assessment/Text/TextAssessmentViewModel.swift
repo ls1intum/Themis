@@ -64,7 +64,7 @@ class TextAssessmentViewModel: AssessmentViewModel {
             // get the submission based on the submissionId without locking it
             let response = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
             self.submission = response
-            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         } catch {
             self.error = error
             log.error(String(describing: error))

@@ -12,6 +12,8 @@ struct ScorePicker: View {
     
     var maxScore: Double
     
+    @Environment(\.isEnabled) private var isEnabled
+    
     private var pickerRange: [Double] {
         Array(stride(from: -1 * maxScore, to: maxScore + 0.5, by: 0.5))
             .sorted { $0 > $1 }
@@ -19,11 +21,18 @@ struct ScorePicker: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("SCORE")
-                .font(.subheadline)
-                .bold()
-                .foregroundColor(.secondary)
-                .padding(.top)
+            HStack(spacing: 3) {
+                Text("SCORE")
+                    .font(.subheadline)
+                
+                if !isEnabled {
+                    Image(systemName: "lock.fill")
+                        .font(.footnote)
+                }
+            }
+            .bold()
+            .foregroundColor(.secondary)
+            .padding(.top)
             
             Picker("Score", selection: $score) {
                 ForEach(pickerRange, id: \.self) { number in

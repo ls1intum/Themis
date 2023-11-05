@@ -12,10 +12,28 @@ class AssessmentResult: Encodable, ObservableObject {
     let undoManager = ThemisUndoManager.shared
     
     var maxPoints = 100.0
+    var allowedBonus = 0.0
     
     var points: Double {
-        let score = feedbacks.reduce(0) { $0 + ($1.baseFeedback.credits ?? 0.0) }
-        return score < 0 ? 0 : score
+        var instructionDict = [GradingInstruction: Int]()
+        
+        let score = feedbacks.reduce(0) { result, nextFeedback in
+            if let instruction = nextFeedback.baseFeedback.gradingInstruction { // there's a grading instruction
+                instructionDict[instruction] = (instructionDict[instruction] ?? 0) + 1
+                
+                if let limit = instruction.usageCount,
+                   let currentCount = instructionDict[instruction],
+                   limit == 0 || currentCount <= limit { // the limit is 0 (unlimited) or the limit is not exceeded
+                    return result + (instruction.credits ?? 0.0)
+                }
+                
+                return result // the limit is exceeded
+            } else { // no grading instruction, just add the feedback credits
+                return result + (nextFeedback.baseFeedback.credits ?? 0.0)
+            }
+        }
+        
+        return score.clamped(to: 0...maxPoints + allowedBonus)
     }
     
     var score: Double {
@@ -100,12 +118,16 @@ class AssessmentResult: Encodable, ObservableObject {
     }
 
     @discardableResult
-    func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
+    func updateFeedback(id: UUID,
+                        detailText: String,
+                        credits: Double,
+                        instruction: GradingInstruction?) -> AssessmentFeedback? {
         guard let index = (feedbacks.firstIndex { $0.id == id }) else {
             return nil
         }
         computedFeedbacks[index].baseFeedback.detailText = detailText
         computedFeedbacks[index].baseFeedback.credits = credits
+        computedFeedbacks[index].baseFeedback.gradingInstruction = instruction
         return computedFeedbacks[index]
     }
     
