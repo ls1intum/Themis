@@ -11,8 +11,7 @@ In order to make requests to the Artemis server the user has to be authenticated
 ThemisML Server
 ***************
 .. TODO: Remove once Athena is fully integrated
-*This section will be removed once feedback suggestions are completely integrated into
-Artemis.*
+.. note:: *This section will be removed once feedback suggestions are completely integrated into Artemis.*
 
 When notifying or requesting feedback suggestions from ThemisML, the request has to contain the jwt token for Artemis of the requesting user. ThemisML only uses the token to make requests to the Artemis server and does not store the token.
 
