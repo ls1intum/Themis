@@ -24,11 +24,11 @@ class SubmissionListViewModel: ObservableObject {
     }
     
     var openSubmissions: [Submission] {
-        submissions.filter { $0.baseSubmission.results?.last??.completionDate == nil }
+        submissions.filter { !$0.baseSubmission.isAssessed }
     }
     
     var openSecondRoundSubmissions: [Submission] {
-        secondCorrectionRoundSubmissions.filter { $0.baseSubmission.results?.last??.completionDate == nil }
+        secondCorrectionRoundSubmissions.filter { !$0.baseSubmission.isAssessed }
     }
     
     private var isLoadedOnce = false

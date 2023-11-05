@@ -95,6 +95,11 @@ class AssessmentViewModel: ObservableObject {
             if case .decodingError(_, let statusCode) = (error as? APIClientError),
                statusCode == 200 { // Status is OK, but the body is not decodable (empty)
                 self.error = UserFacingError.noMoreAssessments
+            } else if let error = error as? APIClientError,
+                      case .jhipsterError = error {
+                var userFacingError = UserFacingError(error: error)
+                userFacingError.message = nil // message from the server is not user-friendly, so we remove it
+                self.error = userFacingError
             } else {
                 self.error = UserFacingError.unknown
             }

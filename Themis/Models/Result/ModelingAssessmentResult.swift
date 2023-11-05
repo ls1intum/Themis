@@ -36,8 +36,14 @@ class ModelingAssessmentResult: AssessmentResult {
         super.addFeedback(feedback: newFeedback)
     }
     
-    override func updateFeedback(id: UUID, detailText: String, credits: Double) -> AssessmentFeedback? {
-        guard var updatedFeedback = super.updateFeedback(id: id, detailText: detailText, credits: credits) else {
+    override func updateFeedback(id: UUID,
+                                 detailText: String,
+                                 credits: Double,
+                                 instruction: GradingInstruction?) -> AssessmentFeedback? {
+        guard var updatedFeedback = super.updateFeedback(id: id,
+                                                         detailText: detailText,
+                                                         credits: credits,
+                                                         instruction: instruction) else {
             return nil
         }
         
