@@ -64,6 +64,41 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         return files
     }
     
+    /// Sets this VM up based on the given participation
+    @MainActor
+    func setup(basedOn participationId: Int?, _ exerciseId: Int?, _ assessmentResult: AssessmentResult) async {
+        guard let participationId, let exerciseId else {
+            log.error("Setup failed due to missing participation ID or exercise ID")
+            return
+        }
+        reset()
+        
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { [weak self] in
+                await self?.initFileTree(participationId: participationId, repositoryType: .student)
+                await self?.loadInlineHighlightsIfEmpty(assessmentResult: assessmentResult, participationId: participationId)
+            }
+            group.addTask { [weak self] in
+                await self?.getFeedbackSuggestions(participationId: participationId, exerciseId: exerciseId)
+            }
+        }
+        
+        ThemisUndoManager.shared.removeAllActions()
+    }
+    
+    private func reset() {
+        fileTree = []
+        openFiles = []
+        selectedFile = nil
+        editorFontSize = CodeEditor.defaultFontSize
+        selectedSection = nil
+        inlineHighlights = [:]
+        allowsInlineFeedbackOperations = true
+        error = nil
+        feedbackSuggestions = []
+        scrollUtils = ScrollUtils(range: nil, offsets: [:])
+    }
+    
     @MainActor
     func openFile(file: Node, participationId: Int, templateParticipationId: Int?) {
         if !openFiles.contains(where: { $0.path == file.path }) {
@@ -105,6 +140,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
             self.fileTree = node.children ?? []
             self.openFiles = []
             self.selectedFile = nil
+            self.inlineHighlights = [:]
             self.allowsInlineFeedbackOperations = (repositoryType == .student)
         } catch {
             self.error = error
@@ -120,18 +156,6 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         } catch {
             log.error(String(describing: error))
         }
-    }
-    
-    @MainActor
-    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
-        if let file = selectedFile, let code = file.code {
-            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
-                return
-            }
-            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
-        }
-        
-        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     private func getLineRange(text: String, fromLine: Int, toLine: Int) -> NSRange? {
@@ -161,6 +185,37 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         let toIndex = text.index(fromIndex, offsetBy: toDistance)
         
         return NSRange(text.lineRange(for: fromIndex...toIndex), in: text)
+    }
+    
+    private func assign(file: Node, tofeedbackWithId feedbackId: UUID, on assessmentResult: AssessmentResult) {
+        guard var feedback = assessmentResult.getFeedback(byId: feedbackId) else {
+            return
+        }
+        
+        var detail = ProgrammingFeedbackDetail()
+        
+        if let existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
+            detail = existingDetail // use existing detail to prevent overwriting
+        }
+        
+        detail.file = file
+        feedback.detail = detail
+        assessmentResult.updateFeedback(feedback: feedback)
+    }
+}
+
+// MARK: - Highlight-Related Functions
+extension CodeEditorViewModel {
+    @MainActor
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+        if let file = selectedFile, let code = file.code {
+            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+                return
+            }
+            appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
+        }
+        
+        undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
     }
     
     @MainActor
@@ -202,23 +257,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         }
         undoManager.removeAllActions()
     }
-    
-    private func assign(file: Node, tofeedbackWithId feedbackId: UUID, on assessmentResult: AssessmentResult) {
-        guard var feedback = assessmentResult.getFeedback(byId: feedbackId) else {
-            return
-        }
-        
-        var detail = ProgrammingFeedbackDetail()
-        
-        if let existingDetail = feedback.detail as? ProgrammingFeedbackDetail {
-            detail = existingDetail // use existing detail to prevent overwriting
-        }
-        
-        detail.file = file
-        feedback.detail = detail
-        assessmentResult.updateFeedback(feedback: feedback)
-    }
-    
+
     @MainActor
     func deleteInlineHighlight(feedback: AssessmentFeedback) {
         if let filePath = (feedback.detail as? ProgrammingFeedbackDetail)?.file?.path {
@@ -251,37 +290,37 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         }
     }
     
-    private func extractFilePath(textComponents: [String]) -> String {
-        textComponents[1]
-    }
-    
-    private func extractLines(textComponents: [String]) -> [Int] {
-        textComponents[4].components(separatedBy: "-").map { Int($0) ?? 0 }
-    }
-    
-    private func extractColumns(textComponents: [String]) -> [Int] {
-        textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
-    }
-    
     @MainActor
     private func constructHighlight(file: Node, lines: [Int], id: UUID, columns: [Int]? = nil) {
         if let fileLines = file.lines {
             var range = NSRange(location: 0, length: 0)
             switch lines.count {
-            // single line feedback with additional column reference
+            // single line feedback
             case 1:
                 let line = lines[0]
-                if fileLines.count >= line, let columns = columns {
-                    let leftCol = columns[0]
-                    if columns.count == 1 {
-                        // single column
-                        let startIndex = fileLines[line - 1].location + leftCol - 1
-                        range = NSRange(location: startIndex, length: 1)
-                    } else {
-                        // two columns
-                        let rightCol = columns[1]
-                        let startIndex = fileLines[line - 1].location + leftCol - 1
-                        let endIndex = fileLines[line - 1].location + rightCol - 1
+                if fileLines.count >= line {
+                    if let columns { // with additional column reference
+                        let leftCol = columns[0]
+                        if columns.count == 1 {
+                            // single column
+                            let startIndex = fileLines[line - 1].location + leftCol - 1
+                            range = NSRange(location: startIndex, length: 1)
+                        } else {
+                            // two columns
+                            let rightCol = columns[1]
+                            let startIndex = fileLines[line - 1].location + leftCol - 1
+                            let endIndex = fileLines[line - 1].location + rightCol - 1
+                            range = NSRange(location: startIndex, length: endIndex - startIndex)
+                        }
+                    } else { // without additional column reference (the whole line)
+                        let startIndex = fileLines[lines[0] - 1].location
+                        var endIndex = fileLines[lines[0] - 1].location + fileLines[lines[0] - 1].length
+                        
+                        let highlightCoversLastLine = (line == fileLines.count)
+                        if highlightCoversLastLine {
+                            endIndex -= 1 // if we don't do this, the highlight for the last line becomes invisible
+                        }
+                        
                         range = NSRange(location: startIndex, length: endIndex - startIndex)
                     }
                 }
@@ -291,7 +330,13 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
                 let endLine = lines[1]
                 if fileLines.count >= endLine {
                     let startIndex = fileLines[startLine - 1].location
-                    let endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length
+                    var endIndex = fileLines[endLine - 1].location + fileLines[endLine - 1].length
+                    
+                    let highlightEndsAtLastLine = (endLine == fileLines.count)
+                    if highlightEndsAtLastLine {
+                        endIndex -= 1 // if we don't do this, the highlight for the last line becomes invisible
+                    }
+                    
                     range = NSRange(location: startIndex, length: endIndex - startIndex)
                 }
             default:
@@ -302,6 +347,25 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
     }
 }
 
+// MARK: - Functions for extracting line and column information
+extension CodeEditorViewModel {
+    private func extractFilePath(textComponents: [String]) -> String {
+        var filePathComponent = textComponents[1]
+        filePathComponent = filePathComponent.appendingLeadingSlashIfMissing()
+        
+        return filePathComponent
+    }
+    
+    private func extractLines(textComponents: [String]) -> [Int] {
+        textComponents[4].components(separatedBy: "-").map { Int($0) ?? 0 }
+    }
+    
+    private func extractColumns(textComponents: [String]) -> [Int] {
+        textComponents[6].components(separatedBy: "-").map { Int($0) ?? 0 }
+    }
+}
+
+// MARK: - Feedback Delegate
 extension CodeEditorViewModel: FeedbackDelegate {
     @MainActor
     func onFeedbackCreation(_ feedback: AssessmentFeedback) {

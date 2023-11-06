@@ -51,7 +51,7 @@ class ModelingAssessmentViewModel: AssessmentViewModel {
         do {
             let response = try await submissionService.getSubmission(participationId: participationId)
             self.submission = response.baseSubmission
-            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         } catch {
             self.error = error
             log.error(String(describing: error))

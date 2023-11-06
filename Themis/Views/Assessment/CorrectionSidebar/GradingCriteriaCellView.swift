@@ -13,11 +13,9 @@ import SharedModels
 struct GradingCriteriaCellView: View {
     let gradingCriterion: GradingCriterion
     
-    var detailText: Binding<String>?
-    var score: Binding<Double>?
-
+    var selectedGradingInstruction: Binding<GradingInstruction?>?
+    
     var body: some View {
-
         VStack(alignment: .leading) {
             if let gradingCriterionTitle = gradingCriterion.title {
                 Text(gradingCriterionTitle).font(.title3)
@@ -25,31 +23,73 @@ struct GradingCriteriaCellView: View {
             
             ForEach(gradingCriterion.structuredGradingInstructions) { instruction in
                 Button {
-                    self.detailText?.wrappedValue = instruction.feedback ?? ""
-                    self.score?.wrappedValue = instruction.credits ?? 0.0
+                    self.selectedGradingInstruction?.wrappedValue = instruction
                 } label: {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(instruction.gradingScale ?? "")
-                                .font(.title3)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                            Text(String(format: "%.1f", instruction.credits ?? 0.0) + "P")
-                                .font(.title3)
-                        }
-
-                        Divider()
-
-                        Text(instruction.instructionDescription ?? "")
-                            .multilineTextAlignment(.leading)
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color.getBackgroundColor(forCredits: instruction.credits ?? 0.0)))
+                    cellView(for: instruction)
                 }
-                .disabled(detailText == nil || score == nil)
+                .disabled(selectedGradingInstruction == nil)
                 .foregroundColor(Color.primary)
             }
-        }.padding()
+        }
+        .padding()
+    }
+    
+    @ViewBuilder
+    private func cellView(for instruction: GradingInstruction) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text(instruction.gradingScale ?? "")
+                    .font(.title3)
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+                
+                Text(String(format: "%.1f", instruction.credits ?? 0.0) + "P")
+                    .font(.title3)
+            }
+            
+            Divider()
+            
+            HStack {
+                Text(instruction.instructionDescription ?? "")
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+                
+                if let limit = instruction.usageCount {
+                    Text("Limit: \(limit == 0 ? "∞" : "\(limit)")")
+                }
+            }
+        }
+        .padding()
+        .background { backgroundView(for: instruction) }
+    }
+    
+    @ViewBuilder
+    private func backgroundView(for instruction: GradingInstruction) -> some View {
+        ZStack(alignment: .topTrailing) {
+            RoundedRectangle(cornerRadius: 5)
+                .foregroundColor(Color.getBackgroundColor(forCredits: instruction.credits ?? 0.0))
+            
+            if instruction == selectedGradingInstruction?.wrappedValue {
+                Image(systemName: "checkmark.circle.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .font(.system(size: 25))
+                    .offset(x: 10, y: -10)
+                    .foregroundStyle(.secondary)
+                    .transition(.scale)
+            }
+        }
+    }
+}
+
+struct GradingCriteriaCellView_Previews: PreviewProvider {
+    @State private static var selectedInstruction: GradingInstruction?
+    
+    static let gradingInstruction = GradingCriterion.mock
+    
+    static var previews: some View {
+        GradingCriteriaCellView(gradingCriterion: gradingInstruction,
+                                selectedGradingInstruction: $selectedInstruction)
     }
 }
