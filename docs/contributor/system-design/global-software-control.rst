@@ -1,5 +1,7 @@
-Global Software control
-===========================================
+Global Software Control
+------------------------
+.. TODO: Remove once Athena is fully integrated
+.. note:: *This section will be removed once feedback suggestions are completely integrated into Artemis.*
 
 .. Global software control describes how the global software control is implemented. In particular, this section should describe how requests are initiated and how subsystems synchronize. This section should list and address synchronization and concurrency issues. This section is optional. It should be included if your system is event based, uses the observer pattern or includes a subsystem using push/pull notifications. For details refer to section 7.4.4 in Prof. Bruegge's book. 
 
