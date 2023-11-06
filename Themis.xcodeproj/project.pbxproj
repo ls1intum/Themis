@@ -199,7 +199,6 @@
 		E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */ = {isa = PBXBuildFile; productRef = E536EAD0297458240078E077 /* SwiftUIReorderableForEach */; };
 		E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536EAD2298C00380078E077 /* DateTimelineView.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
-		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
 		F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = F958C4DD29887DE800E70669 /* ShakeEffect.swift */; };
 /* End PBXBuildFile section */
@@ -426,7 +425,6 @@
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
 				657534B22A0F7A52004B0C3F /* DesignLibrary in Frameworks */,
 				657534AC2A0F7A52004B0C3F /* Account in Frameworks */,
-				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
 				6564DC0E2A00EFFC00CF2F89 /* SharedModels in Frameworks */,
 				06A99D3F2A94D99000E48066 /* Starscream in Frameworks */,
 			);
@@ -1181,7 +1179,6 @@
 			name = Themis;
 			packageProductDependencies = (
 				E2192EE0291E6F780092CE58 /* KeychainAccess */,
-				F9032CA4294A159700B2DED5 /* CachedAsyncImage */,
 				E2E3852929437F9100F5854D /* CodeEditor */,
 				E536EAD0297458240078E077 /* SwiftUIReorderableForEach */,
 				657534A92A0F7A52004B0C3F /* APIClient */,
@@ -1271,7 +1268,6 @@
 			mainGroup = 83396D2129155934003EF727;
 			packageReferences = (
 				E2192EDF291E6F780092CE58 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				E2E3852829437F9100F5854D /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */,
 				657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
@@ -1903,14 +1899,6 @@
 				kind = branch;
 			};
 		};
-		F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1998,11 +1986,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */;
 			productName = SwiftUIReorderableForEach;
-		};
-		F9032CA4294A159700B2DED5 /* CachedAsyncImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
