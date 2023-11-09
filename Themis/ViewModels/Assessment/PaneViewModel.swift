@@ -21,7 +21,7 @@ class PaneViewModel: ObservableObject {
     let minLeftSnapWidth: CGFloat = 150
     
     init(mode: PaneMode = .threePanes) {
-        maxRightWidth = (0.4 * UIScreen.main.bounds.size.width).rounded()
+        maxRightWidth = (0.5 * UIScreen.main.bounds.size.width).rounded()
         
         switch mode {
         case .threePanes:

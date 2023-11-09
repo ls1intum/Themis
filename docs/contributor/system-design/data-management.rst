@@ -17,8 +17,7 @@ The Artemis server URL is also stored in the UserDefaults at **"serverURL"**.
 ThemisML Server
 ***************
 .. TODO: Remove once Athena is fully integrated
-*This section will be removed once feedback suggestions are completely integrated into
-Artemis.*
+.. note:: *This section will be removed once feedback suggestions are completely integrated into Artemis.*
 
 ThemisML has a Postgres database separate from the Artemis database to store existing feedbacks for given submissions. The choice of the database follows a related project to ThemisML, `Athene`_.
 In principle, ThemisML could use the Artemis database directly, but the development team decided to use a separate database for a faster development cycle and more flexibility. The database might be merged in the future.
