@@ -1,8 +1,7 @@
 Known Issues and Workarounds 
 ===========================================
 .. TODO: Remove once Athena is fully integrated
-*The information below will be removed once feedback suggestions are completely integrated into
-Artemis.*
+.. note:: *This section will be removed once feedback suggestions are completely integrated into Artemis.*
 
 The feedback suggestion server ThemisML currently only works with Java projects.
 This should be easy to fix by creating an ANTLR grammar for every additional language to support and configuring the codeBERT similarity comparison accordingly.
