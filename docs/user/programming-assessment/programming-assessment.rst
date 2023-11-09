@@ -30,5 +30,5 @@ indicate the changed and added lines as shown below:
 When the referenced feedback mode (|feedback-mode-btn|) is enabled, you can drag 
 your finger over the code to highlight the specific part you are referring to.
 
-.. |feedback-mode-btn| image:: ./images/feedback-mode-btn.png
+.. |feedback-mode-btn| image:: ../assessment-overview/images/feedback-mode-btn.png
    :width: 25px
