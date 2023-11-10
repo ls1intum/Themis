@@ -26,7 +26,7 @@ protocol AssessmentService {
     func submitAssessment(submissionId: Int, newAssessment: AssessmentResult) async throws
     
     /// Fetches the participation with all data needed for assessment
-    func fetchParticipationForSubmission(submissionId: Int, correctionRound: Int) async throws -> Participation
+    func fetchParticipationForSubmission(submissionId: Int, correctionRound: CorrectionRound) async throws -> Participation
 }
 
 extension AssessmentService { // Default implementations for some optional functions
@@ -46,7 +46,7 @@ extension AssessmentService { // Default implementations for some optional funct
         throw UserFacingError.operationNotSupportedForExercise
     }
     
-    func fetchParticipationForSubmission(submissionId: Int, correctionRound: Int) async throws -> Participation {
+    func fetchParticipationForSubmission(submissionId: Int, correctionRound: CorrectionRound) async throws -> Participation {
         throw UserFacingError.operationNotSupportedForExercise
     }
 }

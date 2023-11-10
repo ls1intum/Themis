@@ -59,9 +59,9 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
+    func getTutorSubmissions(exerciseId: Int, correctionRound: CorrectionRound) async throws -> [Submission] {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
-                                                                correctionRound: correctionRound))
+                                                                correctionRound: correctionRound.rawValue))
             .get().0
     }
 
@@ -88,9 +88,9 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> ModelingSubmission {
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: CorrectionRound) async throws -> ModelingSubmission {
         try await client.sendRequest(GetRandomModelingSubmissionRequest(exerciseId: exerciseId,
-                                                                        correctionRound: correctionRound))
+                                                                        correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -114,9 +114,9 @@ class ModelingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> ModelingSubmission {
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: CorrectionRound) async throws -> ModelingSubmission {
         try await client.sendRequest(GetModelingSubmissionRequest(submissionId: submissionId,
-                                                                  correctionRound: correctionRound))
+                                                                  correctionRound: correctionRound.rawValue))
             .get().0
     }
     

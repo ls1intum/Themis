@@ -58,9 +58,9 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
+    func getTutorSubmissions(exerciseId: Int, correctionRound: CorrectionRound) async throws -> [Submission] {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
-                                                                correctionRound: correctionRound))
+                                                                correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -87,9 +87,9 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> SubmissionType {
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: CorrectionRound) async throws -> SubmissionType {
         try await client.sendRequest(GetRandomFileUploadSubmissionRequest(exerciseId: exerciseId,
-                                                                          correctionRound: correctionRound))
+                                                                          correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -113,9 +113,9 @@ class FileUploadSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> SubmissionType {
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: CorrectionRound) async throws -> SubmissionType {
         try await client.sendRequest(GetFileUploadSubmissionRequest(submissionId: submissionId,
-                                                                    correctionRound: correctionRound))
+                                                                    correctionRound: correctionRound.rawValue))
             .get().0
     }
     

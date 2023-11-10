@@ -58,9 +58,9 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
+    func getTutorSubmissions(exerciseId: Int, correctionRound: CorrectionRound) async throws -> [Submission] {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
-                                                                correctionRound: correctionRound))
+                                                                correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -87,9 +87,9 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> ProgrammingSubmission {
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: CorrectionRound) async throws -> ProgrammingSubmission {
         try await client.sendRequest(GetRandomProgrammingSubmissionRequest(exerciseId: exerciseId,
-                                                                           correctionRound: correctionRound))
+                                                                           correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -113,9 +113,9 @@ class ProgrammingSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> ProgrammingSubmission {
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: CorrectionRound) async throws -> ProgrammingSubmission {
         try await client.sendRequest(GetProgrammingSubmissionRequest(submissionId: submissionId,
-                                                                     correctionRound: correctionRound))
+                                                                     correctionRound: correctionRound.rawValue))
             .get().0
     }
     

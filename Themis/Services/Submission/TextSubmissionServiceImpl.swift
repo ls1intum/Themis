@@ -58,9 +58,9 @@ class TextSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getTutorSubmissions(exerciseId: Int, correctionRound: Int) async throws -> [Submission] {
+    func getTutorSubmissions(exerciseId: Int, correctionRound: CorrectionRound) async throws -> [Submission] {
         try await client.sendRequest(GetTutorSubmissionsRequest(exerciseId: exerciseId,
-                                                                correctionRound: correctionRound))
+                                                                correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -87,9 +87,9 @@ class TextSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: Int) async throws -> TextSubmission {
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: CorrectionRound) async throws -> TextSubmission {
         try await client.sendRequest(GetRandomTextSubmissionRequest(exerciseId: exerciseId,
-                                                                    correctionRound: correctionRound))
+                                                                    correctionRound: correctionRound.rawValue))
             .get().0
     }
     
@@ -108,7 +108,7 @@ class TextSubmissionServiceImpl: SubmissionService {
         }
     }
     
-    func getSubmissionForAssessment(submissionId: Int, correctionRound: Int) async throws -> TextSubmission {
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: CorrectionRound) async throws -> TextSubmission {
         // Note: we are not using the correctionRound parameter here because unlike other exercise types, text exercises
         // use a different endpoint to continue the assessment of open submissions
         try await client.sendRequest(GetTextSubmissionRequest(submissionId: submissionId)).get().0

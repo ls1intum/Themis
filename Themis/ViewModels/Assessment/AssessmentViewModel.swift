@@ -85,7 +85,7 @@ class AssessmentViewModel: ObservableObject {
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
             self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id,
-                                                                                           correctionRound: correctionRound.rawValue)
+                                                                                           correctionRound: correctionRound)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
             assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
@@ -125,7 +125,7 @@ class AssessmentViewModel: ObservableObject {
         
         do {
             self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId,
-                                                                                     correctionRound: correctionRound.rawValue)
+                                                                                     correctionRound: correctionRound)
             assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
             assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()

@@ -132,9 +132,9 @@ struct TextAssessmentServiceImpl: AssessmentService {
         }
     }
     
-    func fetchParticipationForSubmission(submissionId: Int, correctionRound: Int) async throws -> Participation {
+    func fetchParticipationForSubmission(submissionId: Int, correctionRound: CorrectionRound) async throws -> Participation {
         try await client.sendRequest(GetParticipationRequest(submissionId: submissionId,
-                                                             correctionRound: correctionRound))
+                                                             correctionRound: correctionRound.rawValue))
             .get().0
     }
 }
