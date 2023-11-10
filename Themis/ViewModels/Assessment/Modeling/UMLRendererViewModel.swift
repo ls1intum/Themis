@@ -113,7 +113,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         let umlContext = UMLGraphicsContext(context)
         let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
-        var renderer = UMLDiagramRendererFactory.renderer(for: modelType,
+        let renderer = UMLDiagramRendererFactory.renderer(for: modelType,
                                                           context: umlContext,
                                                           canvasBounds: canvasBounds,
                                                           fontSize: fontSize)

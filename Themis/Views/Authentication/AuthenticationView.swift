@@ -41,7 +41,7 @@ struct AuthenticationView: View {
         .onSubmit {
             handleSubmit()
         }
-        .onChange(of: loginVM.instituiton) { newIdentifier in
+        .onChange(of: loginVM.instituiton) { _, newIdentifier in
             updateRESTController(for: newIdentifier)
         }
         .task {
