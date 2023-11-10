@@ -51,12 +51,12 @@ struct CodeView: View {
                 selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )
-        .onChange(of: dragSelection) { newValue in
+        .onChange(of: dragSelection) { _, newValue in
             if let newValue {
                 onOpenFeedback(newValue)
             }
         }
-        .onChange(of: cvm.showAddFeedback) { newValue in
+        .onChange(of: cvm.showAddFeedback) { _, newValue in
             if !newValue {
                 dragSelection = nil
             }
