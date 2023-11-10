@@ -75,21 +75,23 @@ struct ModelingAssessmentView: View {
             }
             umlRendererVM.setup(basedOn: assessmentVM.submission, assessmentResult)
         })
-        .onChange(of: umlRendererVM.showAddFeedback) { newValue in
+        .onChange(of: umlRendererVM.showAddFeedback) { _, newValue in
             if !newValue {
                 umlRendererVM.selectedElement = nil
             }
         }
-        .onChange(of: umlRendererVM.showEditFeedback) { newValue in
+        .onChange(of: umlRendererVM.showEditFeedback) { _, newValue in
             if !newValue {
                 umlRendererVM.selectedElement = nil
             }
         }
-        .onChange(of: assessmentVM.fontSize, perform: { umlRendererVM.fontSize = $0 })
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: {
-            umlRendererVM.pencilModeDisabled = $0
+        .onChange(of: assessmentVM.fontSize) { _, newValue in
+            umlRendererVM.fontSize = newValue
+        }
+        .onChange(of: assessmentVM.pencilModeDisabled) { _, newValue in
+            umlRendererVM.pencilModeDisabled = newValue
             umlRendererVM.selectedElement = nil
-        })
+        }
     }
     
     private var correctionWithPlaceholder: some View {

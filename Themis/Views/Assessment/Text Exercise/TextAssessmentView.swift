@@ -75,8 +75,12 @@ struct TextAssessmentView: View {
                 )
             }
         }
-        .onChange(of: assessmentVM.fontSize, perform: { textExerciseRendererVM.fontSize = $0 })
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: { textExerciseRendererVM.pencilModeDisabled = $0 })
+        .onChange(of: assessmentVM.fontSize) { _, newValue in
+            textExerciseRendererVM.fontSize = newValue
+        }
+        .onChange(of: assessmentVM.pencilModeDisabled) { _, newValue in
+            textExerciseRendererVM.pencilModeDisabled = newValue
+        }
     }
     
     private var correctionWithPlaceholder: some View {
