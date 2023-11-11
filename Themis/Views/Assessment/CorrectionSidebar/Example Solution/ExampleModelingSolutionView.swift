@@ -9,7 +9,6 @@ import SwiftUI
 import SharedModels
 
 struct ExampleModelingSolutionView: View {
-    // swiftlint:disable all
     var exercise: ModelingExercise
     
     @StateObject private var umlRendererVM = UMLRendererViewModel()
@@ -19,9 +18,9 @@ struct ExampleModelingSolutionView: View {
     var body: some View {
         VStack {
             UMLRenderer(umlRendererVM: umlRendererVM, showResetButton: false, scale: scale)
-                .onChange(of: umlRendererVM.diagramSize, perform: { _ in
+                .onChange(of: umlRendererVM.diagramSize) {
                     setDragLocationWithScale()
-                })
+                }
                 .onAppear {
                     umlRendererVM.setup(basedOn: exercise.exampleSolutionModel ?? "")
                 }
