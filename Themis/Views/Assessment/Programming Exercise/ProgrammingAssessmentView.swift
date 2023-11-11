@@ -84,9 +84,15 @@ struct ProgrammingAssessmentView: View {
                 await codeEditorVM.setup(basedOn: assessmentVM.participation?.id, exercise.baseExercise.id, assessmentVM.assessmentResult)
             }
         })
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: { codeEditorVM.pencilModeDisabled = $0 })
-        .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })
-        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations, perform: { assessmentVM.allowsInlineFeedbackOperations = $0 })
+        .onChange(of: assessmentVM.pencilModeDisabled) { _, newValue in
+            codeEditorVM.pencilModeDisabled = newValue
+        }
+        .onChange(of: assessmentVM.fontSize) { _, newValue in
+            codeEditorVM.editorFontSize = newValue
+        }
+        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations) { _, newValue in
+            assessmentVM.allowsInlineFeedbackOperations = newValue
+        }
         .errorAlert(error: $codeEditorVM.error)
     }
     

@@ -74,7 +74,7 @@ struct EditFeedbackViewBase: View {
         .onAppear {
             setStates()
         }
-        .onChange(of: linkedGradingInstruction) { newValue in
+        .onChange(of: linkedGradingInstruction) { _, newValue in
             self.score = newValue?.credits ?? 0.0
         }
         .animation(.easeIn(duration: 0.2), value: linkedGradingInstruction)
