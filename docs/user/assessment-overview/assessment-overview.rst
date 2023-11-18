@@ -24,6 +24,7 @@ details are shown. From here, you can start a new assessment, or manage ongoing 
 Themis supports the assessment of the following exercise types:
 
 .. toctree::
+	:maxdepth: 1
 	
 	/user/programming-assessment/programming-assessment
 	/user/text-assessment/text-assessment
