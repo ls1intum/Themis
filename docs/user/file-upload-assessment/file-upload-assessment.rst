@@ -6,7 +6,8 @@ File Upload Exercise
 		File upload exercise assessment tutorial
 	</iframe>
 
-File upload exercises do **not** support referenced feedback.
+.. note::
+	File upload exercises do **not** support referenced feedback.
 
 The following **file extensions** are supported by Themis and can be viewed without leaving 
 the app:
