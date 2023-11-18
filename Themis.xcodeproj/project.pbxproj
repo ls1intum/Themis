@@ -1851,6 +1851,14 @@
 				version = 4.0.4;
 			};
 		};
+		6564DC022A00EFFC00CF2F89 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ls1intum/artemis-ios-core-modules";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ls1intum/artemis-ios-core-modules";
@@ -1901,12 +1909,12 @@
 		};
 		6564DC0D2A00EFFC00CF2F89 /* SharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			package = 6564DC022A00EFFC00CF2F89 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
 			productName = SharedModels;
 		};
 		6564DC0F2A00EFFC00CF2F89 /* UserStore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
+			package = 6564DC022A00EFFC00CF2F89 /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */;
 			productName = UserStore;
 		};
 		657534A92A0F7A52004B0C3F /* APIClient */ = {
