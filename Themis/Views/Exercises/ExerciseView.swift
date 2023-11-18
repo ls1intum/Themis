@@ -120,10 +120,22 @@ struct ExerciseView: View {
                                      maxValue: Double(exerciseVM.numberOfStudentsOrTeamsInCourse ?? 0),
                                      currentValue: Double(exerciseVM.numberOfParticipations ?? 0))
 
-                CircularProgressView(progress: exerciseVM.assessed,
-                                     description: .assessed,
-                                     maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
-                                     currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+                if exerciseVM.hasExamSupportingSecondCorrectionRound { // show assessment stats for 2 rounds
+                    CircularProgressView(progress: exerciseVM.assessed,
+                                         description: .assessedFirstRound,
+                                         maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                         currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+                    
+                    CircularProgressView(progress: exerciseVM.assessedSecondRound,
+                                         description: .assessedSecondRound,
+                                         maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                         currentValue: Double(exerciseVM.numberOfSecondRoundAssessmentsInTime ?? 0))
+                } else { // show general assessment stats
+                    CircularProgressView(progress: exerciseVM.assessed,
+                                         description: .assessed,
+                                         maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                         currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+                }
 
                 CircularProgressView(progress: exerciseVM.averageScore,
                                      description: .averageScore,

@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 enum StatisticDescription {
-    case participationRate, assessed, averageScore
+    case participationRate, assessed, assessedFirstRound, assessedSecondRound, averageScore
 }
 
 struct CircularProgressView: View {
@@ -65,6 +65,8 @@ struct CircularProgressView: View {
         switch description {
         case .participationRate: return "Participation Rate"
         case .assessed: return "Assessed"
+        case .assessedFirstRound: return "Assessed (Round 1)"
+        case .assessedSecondRound: return "Assessed (Round 2)"
         case .averageScore: return "Average Score"
         }
     }

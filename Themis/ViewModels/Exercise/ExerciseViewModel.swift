@@ -70,6 +70,10 @@ class ExerciseViewModel: ObservableObject {
         exerciseStatsForAssessment.value?.totalNumberOfAssessments?.inTime
     }
     
+    var numberOfSecondRoundAssessmentsInTime: Int? {
+        exerciseStatsForAssessment.value?.numberOfAssessmentsOfCorrectionRounds?[safe: 1]?.inTime
+    }
+    
     var numberOfSubmissionsInTime: Int? {
         exerciseStatsForAssessment.value?.numberOfSubmissions?.inTime
     }
@@ -82,6 +86,16 @@ class ExerciseViewModel: ObservableObject {
             return 0.0
         }
         return Double(numberOfAssessmentsInTime) / Double(numberOfSubmissionsInTime)
+    }
+    
+    var assessedSecondRound: Double {
+        guard let numberOfSecondRoundAssessmentsInTime,
+              let numberOfSubmissionsInTime,
+              numberOfSecondRoundAssessmentsInTime * numberOfSubmissionsInTime != 0
+        else {
+            return 0.0
+        }
+        return Double(numberOfSecondRoundAssessmentsInTime) / Double(numberOfSubmissionsInTime)
     }
     
     var isAssessmentPossible: Bool {
