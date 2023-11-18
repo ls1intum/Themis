@@ -7,7 +7,7 @@ Text Exercise
 	</iframe>
 	
 Similar to programming exercise assessments, when the referenced feedback mode (|feedback-mode-btn|) 
-is enabled, you can drag your finger over the text to highlight the specific part you are referring to.
+is enabled, you can drag your finger or the Apple Pencil over the text to highlight the specific part you are referring to.
 
 .. |feedback-mode-btn| image:: ../assessment-overview/images/feedback-mode-btn.png
    :width: 25px
