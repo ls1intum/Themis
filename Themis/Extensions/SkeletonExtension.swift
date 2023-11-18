@@ -13,7 +13,7 @@ extension View {
     @ViewBuilder
     func showsSkeleton(if condition: @autoclosure () -> Bool) -> some View {
         redacted(reason: condition() ? .placeholder : [])
-            .shimmering(active: condition(), duration: 1.2)
+            .shimmering(active: condition(), animation: .easeIn(duration: 1.2))
             .disabled(condition())
     }
     
