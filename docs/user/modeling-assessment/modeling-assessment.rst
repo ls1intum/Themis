@@ -23,5 +23,7 @@ as light blue highlights on model elements.
 	
 	Modeling Submission With Suggestions (blue)
 
-You can tap on the highlighted elements to edit or reject suggestions. By default, all suggestions are 
-automatically applied.
+You can tap on the highlighted elements to edit or reject suggestions. 
+
+.. note::
+	By default, all suggestions are automatically applied.

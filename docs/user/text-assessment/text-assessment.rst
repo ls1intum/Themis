@@ -23,8 +23,10 @@ as colored underlines.
 	
 	Feedback Suggestions on Text
 
-You can tap on the underlines to edit or reject suggestions. By default, all 
-suggestions are automatically applied.
+You can tap on the underlines to edit or reject suggestions. 
+
+.. note::
+	By default, all suggestions are automatically applied.
 
 .. figure:: ./images/suggestion-review.png
 	:width: 50%
