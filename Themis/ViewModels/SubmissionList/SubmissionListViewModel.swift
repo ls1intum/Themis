@@ -32,12 +32,15 @@ class SubmissionListViewModel: ObservableObject {
     }
     
     private var isLoadedOnce = false
+    private var ongoingFetchRequests = 0
     
     @MainActor
     func fetchTutorSubmissions(for exercise: Exercise, correctionRound round: CorrectionRound = .first) async {
+        ongoingFetchRequests += 1
         isLoading = isLoadedOnce ? isLoading : true
         defer {
-            isLoading = false
+            ongoingFetchRequests -= 1
+            isLoading = (ongoingFetchRequests == 0) ? false : isLoading
             isLoadedOnce = true
         }
         
