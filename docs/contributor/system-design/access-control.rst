@@ -1,7 +1,7 @@
 .. _Access Control and Security:
 
 Access Control and Security
---------------------------
+---------------------------
 
 .. Access control and security describes the user model of the system in terms of an access matrix. This section also describes security issues, such as the selection of an authentication mechanism, the use of encryption, and the management of keys. This section is optional. It should be included if the non-functional requirements include security concerns. For details refer to section 7.4.3 in Prof. Bruegge's book.
 
