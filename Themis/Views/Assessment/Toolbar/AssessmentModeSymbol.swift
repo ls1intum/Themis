@@ -10,6 +10,7 @@ import SwiftUI
 struct AssessmentModeSymbol: View {
     var exerciseTitle: String?
     var readOnly: Bool
+    var correctionRound: CorrectionRound
     
     var body: some View {
         HStack(alignment: .center) {
@@ -22,6 +23,10 @@ struct AssessmentModeSymbol: View {
                 
             Image(systemName: readOnly ? "eyeglasses" : "pencil.and.outline")
                 .font(.title3)
+            
+            Text((!readOnly && correctionRound == .second) ? "(Round 2)" : "")
+                .bold()
+                .font(.title3)
         }
         .foregroundColor(.white)
     }
@@ -29,7 +34,7 @@ struct AssessmentModeSymbol: View {
 
 struct AssessmentModeSymbol_Previews: PreviewProvider {
     static var previews: some View {
-        AssessmentModeSymbol(exerciseTitle: "Essay About Your Dream Spaceship", readOnly: false)
+        AssessmentModeSymbol(exerciseTitle: "Essay About Your Dream Spaceship", readOnly: false, correctionRound: .second)
             .padding()
             .background(.black)
     }

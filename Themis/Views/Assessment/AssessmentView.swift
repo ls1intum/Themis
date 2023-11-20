@@ -19,22 +19,30 @@ struct AssessmentView: View {
     var submissionId: Int?
     var participationId: Int?
     var resultId: Int?
+    var correctionRound: CorrectionRound
     
     @State private var showStepper = false
     @State private var showSubmitConfirmation = false
     @State private var showNoSubmissionsAlert = false
     @State private var showNavigationOptions = false
     
-    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool = false) {
+    init(exercise: Exercise,
+         submissionId: Int? = nil,
+         participationId: Int? = nil,
+         resultId: Int? = nil,
+         correctionRound: CorrectionRound = .first,
+         readOnly: Bool = false) {
         self.exercise = exercise
         self.submissionId = submissionId
         self.participationId = participationId
+        self.correctionRound = correctionRound
         self.resultId = resultId
         
         let newAssessmentVM = AssessmentViewModelFactory.assessmentViewModel(for: exercise,
                                                                              submissionId: submissionId,
                                                                              participationId: participationId,
                                                                              resultId: resultId,
+                                                                             correctionRound: correctionRound,
                                                                              readOnly: readOnly)
         self._assessmentVM = StateObject(wrappedValue: newAssessmentVM)
         self._assessmentResult = StateObject(wrappedValue: newAssessmentVM.assessmentResult)
@@ -61,7 +69,12 @@ struct AssessmentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    AssessmentModeSymbol(exerciseTitle: exercise.baseExercise.title, readOnly: assessmentVM.readOnly)
+                    AssessmentModeSymbol(exerciseTitle: exercise.baseExercise.title,
+                                         readOnly: assessmentVM.readOnly,
+                                         correctionRound: correctionRound)
+                }
+                
+                ToolbarItem(placement: .navigationBarLeading) {
                 }
                 
                 if assessmentVM.loading || assessmentVM.isSaving {

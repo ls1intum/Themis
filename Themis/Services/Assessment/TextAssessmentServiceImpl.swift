@@ -117,9 +117,14 @@ struct TextAssessmentServiceImpl: AssessmentService {
         typealias Response = Participation
         
         let submissionId: Int
+        let correctionRound: Int
         
         var method: HTTPMethod {
             .get
+        }
+        
+        var params: [URLQueryItem] {
+            [URLQueryItem(name: "correction-round", value: "\(correctionRound)")]
         }
         
         var resourceName: String {
@@ -127,7 +132,9 @@ struct TextAssessmentServiceImpl: AssessmentService {
         }
     }
     
-    func fetchParticipationForSubmission(submissionId: Int) async throws -> Participation {
-        try await client.sendRequest(GetParticipationRequest(submissionId: submissionId)).get().0
+    func fetchParticipationForSubmission(submissionId: Int, correctionRound: CorrectionRound) async throws -> Participation {
+        try await client.sendRequest(GetParticipationRequest(submissionId: submissionId,
+                                                             correctionRound: correctionRound.rawValue))
+            .get().0
     }
 }
