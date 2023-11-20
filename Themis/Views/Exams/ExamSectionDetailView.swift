@@ -22,7 +22,6 @@ struct ExamSectionDetailView: View {
                         ForEach(examDetailVM.exercises.mock(if: examDetailVM.isLoading)) { exercise in
                             exerciseNavigationLink(for: exercise)
                         }
-                        .showsSkeleton(if: examDetailVM.isLoading)
                     }
                 }
             }
@@ -50,6 +49,7 @@ struct ExamSectionDetailView: View {
                     .font(.title2)
                     .fontWeight(.medium)
             }
+            .showsSkeleton(if: examDetailVM.isLoading)
         }
         .disabled(exercise.isDisabled)
     }

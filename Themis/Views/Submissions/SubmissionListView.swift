@@ -20,7 +20,25 @@ struct SubmissionListView: View {
     @State private var submissionBeingCancelled: Submission?
     
     private var relevantSubmissions: [Submission] {
-        submissionStatus == .open ? submissionListVM.openSubmissions : submissionListVM.submittedSubmissions
+        switch submissionStatus {
+        case .open:
+            submissionListVM.openSubmissions
+        case .openForSecondCorrectionRound:
+            submissionListVM.openSecondRoundSubmissions
+        case .submitted:
+            submissionListVM.submittedSubmissions
+        case .submittedForSecondCorrectionRound:
+            submissionListVM.submittedSecondRoundSubmissions
+        }
+    }
+    
+    private var correctionRound: CorrectionRound {
+        switch submissionStatus {
+        case .open, .submitted:
+            return .first
+        case .openForSecondCorrectionRound, .submittedForSecondCorrectionRound:
+            return .second
+        }
     }
     
     var body: some View {
@@ -33,7 +51,8 @@ struct SubmissionListView: View {
                         exercise: exercise,
                         submissionId: submission.baseSubmission.id,
                         participationId: submission.baseSubmission.participation?.id,
-                        resultId: submission.baseSubmission.results?.last??.id
+                        resultId: submission.baseSubmission.results?.last??.id,
+                        correctionRound: correctionRound
                     )
                     .environmentObject(courseVM)
                 } label: {
@@ -60,7 +79,7 @@ struct SubmissionListView: View {
     
     @ViewBuilder
     private func cancelButton(for submission: Submission) -> some View {
-        if submissionStatus == .open {
+        if submissionStatus == .open || submissionStatus == .openForSecondCorrectionRound {
             Button("Cancel") {
                 submissionBeingCancelled = submission
                 presentCancelAlert = true

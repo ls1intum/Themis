@@ -26,6 +26,10 @@ class ExerciseViewModel: ObservableObject {
         return "\(totalNumberOfAssessments) / \(totalNumberOfStudents) (\(percentageString))"
     }
     
+    var startAssessmentButtonText: String {
+        currentCorrectionRound == .first ? "Start Assessment" : "Start Assessment (Round 2)"
+    }
+    
     var numberOfParticipations: Int? {
         exerciseStats.value?.numberOfParticipations
     }
@@ -66,6 +70,10 @@ class ExerciseViewModel: ObservableObject {
         exerciseStatsForAssessment.value?.totalNumberOfAssessments?.inTime
     }
     
+    var numberOfSecondRoundAssessmentsInTime: Int? {
+        exerciseStatsForAssessment.value?.numberOfAssessmentsOfCorrectionRounds?[safe: 1]?.inTime
+    }
+    
     var numberOfSubmissionsInTime: Int? {
         exerciseStatsForAssessment.value?.numberOfSubmissions?.inTime
     }
@@ -80,9 +88,34 @@ class ExerciseViewModel: ObservableObject {
         return Double(numberOfAssessmentsInTime) / Double(numberOfSubmissionsInTime)
     }
     
+    var assessedSecondRound: Double {
+        guard let numberOfSecondRoundAssessmentsInTime,
+              let numberOfSubmissionsInTime,
+              numberOfSecondRoundAssessmentsInTime * numberOfSubmissionsInTime != 0
+        else {
+            return 0.0
+        }
+        return Double(numberOfSecondRoundAssessmentsInTime) / Double(numberOfSubmissionsInTime)
+    }
+    
     var isAssessmentPossible: Bool {
         (exercise.value?.isCurrentlyInAssessment ?? false)
         || ((exam?.isOver ?? false) && !(exam?.isAssessmentDue ?? true))
+    }
+    
+    /// Is true if this VM contains an exam supporting second correction round
+    var hasExamSupportingSecondCorrectionRound: Bool {
+        exam?.numberOfCorrectionRoundsInExam == 2
+    }
+    
+    /// Is true if this VM contains an exam and an exercise supporting second correction round.
+    /// This is needed because not all exam exercises support the second round
+    var isSecondCorrectionRoundEnabled: Bool {
+        hasExamSupportingSecondCorrectionRound && exercise.value?.baseExercise.secondCorrectionEnabled == true
+    }
+    
+    var currentCorrectionRound: CorrectionRound {
+        (isSecondCorrectionRoundEnabled && assessed == 1.0) ? .second : .first
     }
     
     private var isLoadedOnce = false

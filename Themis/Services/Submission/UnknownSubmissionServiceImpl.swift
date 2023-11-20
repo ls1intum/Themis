@@ -19,7 +19,7 @@ class UnknownSubmissionServiceImpl: SubmissionService {
         throw defaultError
     }
     
-    func getTutorSubmissions(exerciseId: Int) async throws -> [Submission] {
+    func getTutorSubmissions(exerciseId: Int, correctionRound: CorrectionRound) async throws -> [Submission] {
         throw defaultError
     }
     
@@ -27,11 +27,11 @@ class UnknownSubmissionServiceImpl: SubmissionService {
         throw defaultError
     }
     
-    func getRandomSubmissionForAssessment(exerciseId: Int) async throws -> UnknownSubmission {
+    func getRandomSubmissionForAssessment(exerciseId: Int, correctionRound: CorrectionRound) async throws -> UnknownSubmission {
         throw defaultError
     }
     
-    func getSubmissionForAssessment(submissionId: Int) async throws -> UnknownSubmission {
+    func getSubmissionForAssessment(submissionId: Int, correctionRound: CorrectionRound) async throws -> UnknownSubmission {
         throw defaultError
     }
 }

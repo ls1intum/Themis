@@ -24,7 +24,12 @@ class MockAssessmentViewModel: AssessmentViewModel {
         self.submission = submission.baseSubmission
     }
     
-    override init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
+    override init(exercise: Exercise,
+                  submissionId: Int? = nil,
+                  participationId: Int? = nil,
+                  resultId: Int? = nil,
+                  correctionRound: CorrectionRound = .first,
+                  readOnly: Bool) {
         super.init(exercise: exercise,
                    submissionId: submissionId,
                    participationId: participationId,
