@@ -21,22 +21,13 @@ public struct TextFeedbackSuggestion: FeedbackSuggestion {
     
     public let credits: Double
     
-    public let gradingInstruction: GradingInstruction?
+    public let structuredGradingInstructionId: Int?
     
     public var associatedAssessmentFeedbackId: UUID?
     
     public let indexStart: Int?
     
     public let indexEnd: Int?
-    
-    public static func == (lhs: TextFeedbackSuggestion, rhs: TextFeedbackSuggestion) -> Bool {
-        lhs.id == rhs.id
-        && lhs.exerciseId == rhs.exerciseId
-        && lhs.submissionId == rhs.submissionId
-        && lhs.title == rhs.title
-        && lhs.description == rhs.description
-        && lhs.credits == rhs.credits
-    }
     
     public var textBlockContent: String?
     

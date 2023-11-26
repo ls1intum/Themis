@@ -16,10 +16,10 @@ struct AthenaService {
     
     let client = APIClient()
     
-    // MARK: - Get Feedback Suggestions
-    private struct GetFeedbackSuggestionsRequest: APIRequest {
-        typealias Response = [TextFeedbackSuggestion]
+    private struct GetFeedbackSuggestionsRequest<ResponseType: Decodable>: APIRequest {
+        typealias Response = [ResponseType]
         
+        let exerciseType: String
         let exerciseId: Int
         let submissionId: Int
         
@@ -28,11 +28,25 @@ struct AthenaService {
         }
         
         var resourceName: String {
-            "api/athena/text-exercises/\(exerciseId)/submissions/\(submissionId)/feedback-suggestions"
+            "api/athena/\(exerciseType)-exercises/\(exerciseId)/submissions/\(submissionId)/feedback-suggestions"
         }
     }
     
-    func getFeedbackSuggestions(exerciseId: Int, submissionId: Int) async throws -> [TextFeedbackSuggestion] {
-        try await client.sendRequest(GetFeedbackSuggestionsRequest(exerciseId: exerciseId, submissionId: submissionId)).get().0
+    // MARK: - Get Text Feedback Suggestions
+    func getTextFeedbackSuggestions(exerciseId: Int, submissionId: Int) async throws -> [TextFeedbackSuggestion] {
+        try await client
+            .sendRequest(GetFeedbackSuggestionsRequest<TextFeedbackSuggestion>(exerciseType: TextExercise.type,
+                                                                               exerciseId: exerciseId,
+                                                                               submissionId: submissionId))
+            .get().0
+    }
+    
+    // MARK: - Get Programming Feedback Suggestions
+    func getProgrammingFeedbackSuggestions(exerciseId: Int, submissionId: Int) async throws -> [ProgrammingFeedbackSuggestion] {
+        try await client
+            .sendRequest(GetFeedbackSuggestionsRequest<ProgrammingFeedbackSuggestion>(exerciseType: ProgrammingExercise.type,
+                                                                                      exerciseId: exerciseId,
+                                                                                      submissionId: submissionId))
+            .get().0
     }
 }

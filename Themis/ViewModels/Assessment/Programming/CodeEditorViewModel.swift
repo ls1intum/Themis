@@ -208,8 +208,11 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
 extension CodeEditorViewModel {
     @MainActor
     func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: ProgrammingFeedbackSuggestion, feedbackId: UUID) {
-        if let file = selectedFile, let code = file.code {
-            guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
+        if let file = selectedFile,
+           let code = file.code,
+           let lineStart = feedbackSuggestion.lineStart,
+           let lineEnd = feedbackSuggestion.lineEnd {
+            guard let range = getLineRange(text: code, fromLine: lineStart, toLine: lineEnd) else {
                 return
             }
             appendHighlight(feedbackId: feedbackId, range: range, path: file.path)

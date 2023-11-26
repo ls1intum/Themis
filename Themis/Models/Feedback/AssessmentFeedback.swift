@@ -73,8 +73,10 @@ extension AssessmentFeedback {
         var newIncompleteFeedbackDetail = incompleteFeedbackDetail
         
         if var incompleteFeedbackDetail = incompleteFeedbackDetail as? ProgrammingFeedbackDetail,
-           let codeSuggestion = suggestion as? ProgrammingFeedbackSuggestion {
-            let lines = NSRange(location: codeSuggestion.fromLine, length: codeSuggestion.toLine - codeSuggestion.fromLine)
+           let codeSuggestion = suggestion as? ProgrammingFeedbackSuggestion,
+           let lineStart = codeSuggestion.lineStart,
+           let lineEnd = codeSuggestion.lineEnd {
+            let lines = NSRange(location: lineStart, length: lineEnd - lineStart)
             incompleteFeedbackDetail.lines = lines
             newIncompleteFeedbackDetail = incompleteFeedbackDetail
         }

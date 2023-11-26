@@ -47,7 +47,7 @@ struct CodeView: View {
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
                 isNewFile: file.isNewFile,
-                feedbackSuggestions: hideSuggestions ? [] : cvm.feedbackSuggestions.filter { $0.srcFile == file.path },
+                feedbackSuggestions: hideSuggestions ? [] : cvm.feedbackSuggestions.filter { $0.filePath == file.path },
                 selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )
