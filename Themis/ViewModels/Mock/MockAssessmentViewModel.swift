@@ -24,7 +24,12 @@ class MockAssessmentViewModel: AssessmentViewModel {
         self.submission = submission.baseSubmission
     }
     
-    override init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
+    override init(exercise: Exercise,
+                  submissionId: Int? = nil,
+                  participationId: Int? = nil,
+                  resultId: Int? = nil,
+                  correctionRound: CorrectionRound = .first,
+                  readOnly: Bool) {
         super.init(exercise: exercise,
                    submissionId: submissionId,
                    participationId: participationId,
@@ -35,13 +40,13 @@ class MockAssessmentViewModel: AssessmentViewModel {
     
     override func initRandomSubmission() async {
         self.submission = Submission.mockText.baseSubmission
-        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         ThemisUndoManager.shared.removeAllActions()
     }
     
     override func getSubmission(submissionId: Int) async {
         self.submission = Submission.mockText.baseSubmission
-        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+        assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
         ThemisUndoManager.shared.removeAllActions()
     }
     

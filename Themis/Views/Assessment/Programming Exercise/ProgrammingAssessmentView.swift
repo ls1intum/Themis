@@ -12,6 +12,8 @@ struct ProgrammingAssessmentView: View {
     
     var submissionId: Int?
     
+    private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
+    
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
             HStack(spacing: 0) {
@@ -73,18 +75,24 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
+            assessmentVM.pencilModeDisabled = true
             await assessmentVM.initSubmission()
-            
-            if let pId = assessmentVM.participation?.id {
-                await codeEditorVM.initFileTree(participationId: pId, repositoryType: .student)
-                await codeEditorVM.loadInlineHighlightsIfEmpty(assessmentResult: assessmentVM.assessmentResult, participationId: pId)
-                await codeEditorVM.getFeedbackSuggestions(participationId: pId, exerciseId: exercise.baseExercise.id)
-            }
-            ThemisUndoManager.shared.removeAllActions()
+            await codeEditorVM.setup(basedOn: assessmentVM.participation?.id, exercise.baseExercise.id, assessmentVM.assessmentResult)
         }
-        .onChange(of: assessmentVM.pencilModeDisabled, perform: { codeEditorVM.pencilModeDisabled = $0 })
-        .onChange(of: assessmentVM.fontSize, perform: { codeEditorVM.editorFontSize = $0 })
-        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations, perform: { assessmentVM.allowsInlineFeedbackOperations = $0 })
+        .onReceive(didStartNextAssessment, perform: { _ in
+            Task {
+                await codeEditorVM.setup(basedOn: assessmentVM.participation?.id, exercise.baseExercise.id, assessmentVM.assessmentResult)
+            }
+        })
+        .onChange(of: assessmentVM.pencilModeDisabled) { _, newValue in
+            codeEditorVM.pencilModeDisabled = newValue
+        }
+        .onChange(of: assessmentVM.fontSize) { _, newValue in
+            codeEditorVM.editorFontSize = newValue
+        }
+        .onChange(of: codeEditorVM.allowsInlineFeedbackOperations) { _, newValue in
+            assessmentVM.allowsInlineFeedbackOperations = newValue
+        }
         .errorAlert(error: $codeEditorVM.error)
     }
     

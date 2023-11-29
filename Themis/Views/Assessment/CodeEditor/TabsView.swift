@@ -35,9 +35,9 @@ struct TabsView: View {
                     }
                 }
                 .frame(height: 30)
-                .onChange(of: cvm.selectedFile, perform: { file in
+                .onChange(of: cvm.selectedFile) { _, file in
                     scrollReader.scrollTo(file, anchor: nil)
-                })
+                }
             }
         }
     }

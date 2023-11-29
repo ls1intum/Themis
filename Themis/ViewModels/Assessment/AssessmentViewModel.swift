@@ -22,15 +22,22 @@ class AssessmentViewModel: ObservableObject {
     var participationId: Int?
     var resultId: Int?
     var exercise: Exercise
+    var correctionRound: CorrectionRound
     
     private var cancellables: [AnyCancellable] = []
     
-    init(exercise: Exercise, submissionId: Int? = nil, participationId: Int? = nil, resultId: Int? = nil, readOnly: Bool) {
+    init(exercise: Exercise,
+         submissionId: Int? = nil,
+         participationId: Int? = nil,
+         resultId: Int? = nil,
+         correctionRound: CorrectionRound = .first,
+         readOnly: Bool) {
         self.exercise = exercise
         self.submissionId = submissionId
         self.participationId = participationId
         self.resultId = resultId
         self.assessmentResult = AssessmentResultFactory.assessmentResult(for: exercise, resultIdFromServer: resultId)
+        self.correctionRound = correctionRound
         self.readOnly = readOnly
         
         $submission
@@ -77,8 +84,9 @@ class AssessmentViewModel: ObservableObject {
         }
         do {
             let submissionService = SubmissionServiceFactory.service(for: exercise)
-            self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id)
-            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            self.submission = try await submissionService.getRandomSubmissionForAssessment(exerciseId: exercise.id,
+                                                                                           correctionRound: correctionRound)
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
             assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
         } catch {
@@ -87,6 +95,11 @@ class AssessmentViewModel: ObservableObject {
             if case .decodingError(_, let statusCode) = (error as? APIClientError),
                statusCode == 200 { // Status is OK, but the body is not decodable (empty)
                 self.error = UserFacingError.noMoreAssessments
+            } else if let error = error as? APIClientError,
+                      case .jhipsterError = error {
+                var userFacingError = UserFacingError(error: error)
+                userFacingError.message = nil // message from the server is not user-friendly, so we remove it
+                self.error = userFacingError
             } else {
                 self.error = UserFacingError.unknown
             }
@@ -111,8 +124,9 @@ class AssessmentViewModel: ObservableObject {
         let submissionService = SubmissionServiceFactory.service(for: exercise)
         
         do {
-            self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId)
-            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last?.feedbacks ?? [])
+            self.submission = try await submissionService.getSubmissionForAssessment(submissionId: submissionId,
+                                                                                     correctionRound: correctionRound)
+            assessmentResult.setComputedFeedbacks(basedOn: submission?.results?.last??.feedbacks ?? [])
             assessmentResult.setReferenceData(basedOn: submission)
             ThemisUndoManager.shared.removeAllActions()
         } catch {
@@ -217,6 +231,7 @@ enum AssessmentViewModelFactory {
                                     submissionId: Int? = nil,
                                     participationId: Int? = nil,
                                     resultId: Int? = nil,
+                                    correctionRound: CorrectionRound = .first,
                                     readOnly: Bool) -> AssessmentViewModel {
         switch exercise {
         case .programming:
@@ -224,24 +239,28 @@ enum AssessmentViewModelFactory {
                                                   submissionId: submissionId,
                                                   participationId: participationId,
                                                   resultId: resultId,
+                                                  correctionRound: correctionRound,
                                                   readOnly: readOnly)
         case .text:
             return TextAssessmentViewModel(exercise: exercise,
                                            submissionId: submissionId,
                                            participationId: participationId,
                                            resultId: resultId,
+                                           correctionRound: correctionRound,
                                            readOnly: readOnly)
         case .modeling:
             return ModelingAssessmentViewModel(exercise: exercise,
                                                submissionId: submissionId,
                                                participationId: participationId,
                                                resultId: resultId,
+                                               correctionRound: correctionRound,
                                                readOnly: readOnly)
         case .fileUpload:
             return FileUploadAssessmentViewModel(exercise: exercise,
                                                  submissionId: submissionId,
                                                  participationId: participationId,
                                                  resultId: resultId,
+                                                 correctionRound: correctionRound,
                                                  readOnly: readOnly)
         default:
             log.warning("Could not find the corresponding AssessmentViewModel subtype for exercise \(exercise)")
@@ -249,6 +268,7 @@ enum AssessmentViewModelFactory {
                                        submissionId: submissionId,
                                        participationId: participationId,
                                        resultId: resultId,
+                                       correctionRound: correctionRound,
                                        readOnly: readOnly)
         }
     }

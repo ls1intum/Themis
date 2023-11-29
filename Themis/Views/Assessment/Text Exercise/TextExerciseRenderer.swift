@@ -51,7 +51,6 @@ struct TextExerciseRenderer: View {
                 flags: editorFlags,
                 highlightedRanges: textExerciseRendererVM.inlineHighlights,
                 selectionGranularity: .word,
-                canSelectionIncludeHighlightedRanges: false,
                 dragSelection: $dragSelection,
                 showAddFeedback: $textExerciseRendererVM.showAddFeedback,
                 showEditFeedback: $textExerciseRendererVM.showEditFeedback,
@@ -65,13 +64,13 @@ struct TextExerciseRenderer: View {
             )
         )
         .padding()
-        .onChange(of: dragSelection) { newValue in
+        .onChange(of: dragSelection) { _, newValue in
             if let newValue {
                 textExerciseRendererVM.selectedSection = newValue.toNSRange()
                 textExerciseRendererVM.showAddFeedback = true
             }
         }
-        .onChange(of: textExerciseRendererVM.showAddFeedback) { newValue in
+        .onChange(of: textExerciseRendererVM.showAddFeedback) { _, newValue in
             if !newValue {
                 dragSelection = nil
             }

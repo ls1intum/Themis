@@ -28,6 +28,10 @@ struct ExerciseView: View {
                 
                 finishedSubmissionsSection
                 
+                openSecondRoundSubmissionsSection
+                
+                finishedSecondRoundSubmissionsSection
+                
                 statisticsSection
                 
                 problemStatementSection
@@ -35,7 +39,7 @@ struct ExerciseView: View {
             .refreshable { await fetchExerciseData() }
         }
         .navigationDestination(isPresented: $showAssessmentView) {
-            AssessmentView(exercise: exercise)
+            AssessmentView(exercise: exercise, correctionRound: exerciseVM.currentCorrectionRound)
                 .environmentObject(courseVM)
         }
         .navigationTitle(exercise.baseExercise.title ?? "")
@@ -67,6 +71,20 @@ struct ExerciseView: View {
     }
     
     @ViewBuilder
+    private var openSecondRoundSubmissionsSection: some View {
+        if exerciseVM.isSecondCorrectionRoundEnabled
+            && (submissionListVM.isLoading || !submissionListVM.openSecondRoundSubmissions.isEmpty) {
+            Section("Open submissions (Correction Round 2)") {
+                SubmissionListView(
+                    submissionListVM: submissionListVM,
+                    exercise: exercise,
+                    submissionStatus: .openForSecondCorrectionRound
+                )
+            }.disabled(!exerciseVM.isAssessmentPossible)
+        }
+    }
+    
+    @ViewBuilder
     private var finishedSubmissionsSection: some View {
         if submissionListVM.isLoading || !submissionListVM.submittedSubmissions.isEmpty {
             Section("Finished submissions") {
@@ -74,6 +92,20 @@ struct ExerciseView: View {
                     submissionListVM: submissionListVM,
                     exercise: exercise,
                     submissionStatus: .submitted
+                )
+            }.disabled(!exerciseVM.isAssessmentPossible)
+        }
+    }
+    
+    @ViewBuilder
+    private var finishedSecondRoundSubmissionsSection: some View {
+        if exerciseVM.isSecondCorrectionRoundEnabled
+            && submissionListVM.isLoading || !submissionListVM.submittedSecondRoundSubmissions.isEmpty {
+            Section("Finished submissions (Correction Round 2)") {
+                SubmissionListView(
+                    submissionListVM: submissionListVM,
+                    exercise: exercise,
+                    submissionStatus: .submittedForSecondCorrectionRound
                 )
             }.disabled(!exerciseVM.isAssessmentPossible)
         }
@@ -88,10 +120,22 @@ struct ExerciseView: View {
                                      maxValue: Double(exerciseVM.numberOfStudentsOrTeamsInCourse ?? 0),
                                      currentValue: Double(exerciseVM.numberOfParticipations ?? 0))
 
-                CircularProgressView(progress: exerciseVM.assessed,
-                                     description: .assessed,
-                                     maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
-                                     currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+                if exerciseVM.hasExamSupportingSecondCorrectionRound { // show assessment stats for 2 rounds
+                    CircularProgressView(progress: exerciseVM.assessed,
+                                         description: .assessedFirstRound,
+                                         maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                         currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+                    
+                    CircularProgressView(progress: exerciseVM.assessedSecondRound,
+                                         description: .assessedSecondRound,
+                                         maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                         currentValue: Double(exerciseVM.numberOfSecondRoundAssessmentsInTime ?? 0))
+                } else { // show general assessment stats
+                    CircularProgressView(progress: exerciseVM.assessed,
+                                         description: .assessed,
+                                         maxValue: Double(exerciseVM.numberOfSubmissionsInTime ?? 0),
+                                         currentValue: Double(exerciseVM.numberOfAssessmentsInTime ?? 0))
+                }
 
                 CircularProgressView(progress: exerciseVM.averageScore,
                                      description: .averageScore,
@@ -127,7 +171,7 @@ struct ExerciseView: View {
         Button {
             showAssessmentView = true
         } label: {
-            Text("Start Assessment")
+            Text(exerciseVM.startAssessmentButtonText)
                 .foregroundColor(.white)
         }
         .buttonStyle(ThemisButtonStyle(color: .themisGreen, iconImageName: "startAssessmentIcon"))
@@ -135,10 +179,19 @@ struct ExerciseView: View {
     
     private func fetchExerciseData() async {
         exerciseVM.exam = exam
-        
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask { await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id) }
-            group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
+        if exerciseVM.hasExamSupportingSecondCorrectionRound {
+            // We can't fetch exercise data in the task group below because fetchTutorSubmissions(for: correctionRound:) needs exercise data
+            await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id)
+            
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
+                group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise, correctionRound: .second) }
+            }
+        } else {
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask { await exerciseVM.fetchAllExerciseData(exerciseId: exercise.id) }
+                group.addTask { await submissionListVM.fetchTutorSubmissions(for: exercise) }
+            }
         }
     }
 }

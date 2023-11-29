@@ -35,7 +35,7 @@ struct FiletreeSidebarView: View {
             
             repositoryPicker
         }
-        .onChange(of: repositorySelection, perform: handleRepositoryChange)
+        .onChange(of: repositorySelection) { handleRepositoryChange($1) }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 35)
         .background(Color("sidebarBackground"))
@@ -63,8 +63,8 @@ struct FiletreeSidebarView: View {
         .buttonStyle(PlainButtonStyle())
         .padding(.horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .bold(file === cvm.selectedFile)
-        .background(file === cvm.selectedFile ? Color("selectedFileBackground") : Color("sidebarBackground"))
+        .bold(file == cvm.selectedFile)
+        .background(file == cvm.selectedFile ? Color("selectedFileBackground") : Color("sidebarBackground"))
         .cornerRadius(10)
     }
     

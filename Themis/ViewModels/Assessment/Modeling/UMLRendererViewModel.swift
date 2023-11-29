@@ -118,6 +118,30 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         undoManager.removeAllActions()
     }
     
+    @MainActor
+    func render(_ context: inout GraphicsContext, size: CGSize) {
+        guard let model = umlModel,
+              let modelType = model.type,
+              !diagramTypeUnsupported else {
+            return
+        }
+        let umlContext = UMLGraphicsContext(context)
+        let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        let renderer = UMLDiagramRendererFactory.renderer(for: modelType,
+                                                          context: umlContext,
+                                                          canvasBounds: canvasBounds,
+                                                          fontSize: fontSize)
+        
+        if let renderer {
+            renderer.render(umlModel: model)
+        } else {
+            log.error("Attempted to draw an unknown diagram type")
+            diagramTypeUnsupported = true
+            setError(.diagramNotSupported)
+        }
+    }
+    
     private func setError(_ error: UserFacingError) {
         if self.error == nil {
             Task { @MainActor [weak self] in
