@@ -13,21 +13,21 @@ import ApollonShared
 
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
-    
+
     @State var showResetButton = true
     @State var scale: CGFloat = 1
     
     @State private var progressingScale: CGFloat = 1
     @State private var startDragLocation = CGPoint.zero
     @State private var dragStarted = true
-    
+
     /// The minimum scale value that the UML model can be scaled down to
     private let minScale = 0.1
     
     var body: some View {
         ZStack(alignment: .topLeading) {
             /// Render the Grid Background from the Apollon Package
-            GridBackgroundView()
+            GridBackgroundView(gridBackgroundViewModel: GridBackgroundViewModel())
             Group {
                 /// If the UML Model is set, create an ApollonView View
                 if let model = umlRendererVM.umlModel, let type = model.type {

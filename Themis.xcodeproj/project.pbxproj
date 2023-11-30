@@ -98,7 +98,6 @@
 		65B9BD092AAE18570086F9EC /* FileUploadAssessmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */; };
 		65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */; };
 		65BA61D72AE02B5C009FE11C /* PathStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BA61D62AE02B5C009FE11C /* PathStringExtension.swift */; };
-		65BC14532A6FD9F30002D089 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */; };
 		65C2F7532A03E3D4001EDADC /* FormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */; };
 		65C2F7552A03E428001EDADC /* JSONDecoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */; };
 		65CC29902ADC23760095ABDA /* GradingCriterionMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CC298F2ADC23750095ABDA /* GradingCriterionMockExtension.swift */; };
@@ -186,8 +185,8 @@
 		E536EAD3298C00380078E077 /* DateTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536EAD2298C00380078E077 /* DateTimelineView.swift */; };
 		E58C68062935037C008E6FEE /* EditFeedbackViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58C68052935037C008E6FEE /* EditFeedbackViewBase.swift */; };
 		F72D68F52ACB31EE001A0871 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D68F42ACB31EE001A0871 /* UMLBadgeSymbol.swift */; };
-		F72D68FA2ACB3249001A0871 /* ApollonView in Frameworks */ = {isa = PBXBuildFile; productRef = F72D68F92ACB3249001A0871 /* ApollonView */; };
-		F767A0472AD0574900318707 /* ApollonShared in Frameworks */ = {isa = PBXBuildFile; productRef = F767A0462AD0574900318707 /* ApollonShared */; };
+		F734D1AC2B18D83200435866 /* ApollonShared in Frameworks */ = {isa = PBXBuildFile; productRef = F734D1AB2B18D83200435866 /* ApollonShared */; };
+		F734D1AE2B18D83200435866 /* ApollonView in Frameworks */ = {isa = PBXBuildFile; productRef = F734D1AD2B18D83200435866 /* ApollonView */; };
 		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
 		F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = F958C4DD29887DE800E70669 /* ShakeEffect.swift */; };
@@ -289,7 +288,6 @@
 		65B9BD082AAE18570086F9EC /* FileUploadAssessmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadAssessmentViewModel.swift; sourceTree = "<group>"; };
 		65B9BD0F2AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadSubmissionServiceImpl.swift; sourceTree = "<group>"; };
 		65BA61D62AE02B5C009FE11C /* PathStringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathStringExtension.swift; sourceTree = "<group>"; };
-		65BC14522A6FD9F30002D089 /* UMLBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UMLBadgeSymbol.swift; sourceTree = "<group>"; };
 		65C2F7522A03E3D4001EDADC /* FormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtension.swift; sourceTree = "<group>"; };
 		65C2F7542A03E428001EDADC /* JSONDecoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderExtension.swift; sourceTree = "<group>"; };
 		65CC298F2ADC23750095ABDA /* GradingCriterionMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingCriterionMockExtension.swift; sourceTree = "<group>"; };
@@ -393,18 +391,18 @@
 				657534BC2A0F7A52004B0C3F /* UserStore in Frameworks */,
 				6564DC102A00EFFC00CF2F89 /* UserStore in Frameworks */,
 				657534AA2A0F7A52004B0C3F /* APIClient in Frameworks */,
+				F734D1AC2B18D83200435866 /* ApollonShared in Frameworks */,
 				657534B42A0F7A52004B0C3F /* Login in Frameworks */,
 				657534B62A0F7A52004B0C3F /* ProfileInfo in Frameworks */,
 				657534B02A0F7A52004B0C3F /* Common in Frameworks */,
 				657534BA2A0F7A52004B0C3F /* SharedModels in Frameworks */,
+				F734D1AE2B18D83200435866 /* ApollonView in Frameworks */,
 				E2192EE1291E6F780092CE58 /* KeychainAccess in Frameworks */,
-				F72D68FA2ACB3249001A0871 /* ApollonView in Frameworks */,
 				657534AE2A0F7A52004B0C3F /* ArtemisMarkdown in Frameworks */,
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
 				657534B22A0F7A52004B0C3F /* DesignLibrary in Frameworks */,
 				657534AC2A0F7A52004B0C3F /* Account in Frameworks */,
 				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
-				F767A0472AD0574900318707 /* ApollonShared in Frameworks */,
 				6564DC0E2A00EFFC00CF2F89 /* SharedModels in Frameworks */,
 				06A99D3F2A94D99000E48066 /* Starscream in Frameworks */,
 			);
@@ -1135,8 +1133,8 @@
 				657534BB2A0F7A52004B0C3F /* UserStore */,
 				65F007972A86C837000FD641 /* Shimmer */,
 				06A99D3E2A94D99000E48066 /* Starscream */,
-				F72D68F92ACB3249001A0871 /* ApollonView */,
-				F767A0462AD0574900318707 /* ApollonShared */,
+				F734D1AB2B18D83200435866 /* ApollonShared */,
+				F734D1AD2B18D83200435866 /* ApollonView */,
 			);
 			productName = feedback2go;
 			productReference = 83396D2A29155935003EF727 /* Themis.app */;
@@ -1217,8 +1215,8 @@
 				657534A82A0F7A52004B0C3F /* XCRemoteSwiftPackageReference "artemis-ios-core-modules" */,
 				65F007962A86C837000FD641 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 				06A99D3D2A94D99000E48066 /* XCRemoteSwiftPackageReference "Starscream" */,
-				F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */,
 				0697E6F02B0653DD00534F5B /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				F734D1AA2B18D83200435866 /* XCRemoteSwiftPackageReference "apollon-ios-module" */,
 			);
 			productRefGroup = 83396D2B29155935003EF727 /* Products */;
 			projectDirPath = "";
@@ -1299,11 +1297,10 @@
 				65B9BD102AAE413B0086F9EC /* FileUploadSubmissionServiceImpl.swift in Sources */,
 				E200F785297ECDB700DE269D /* FileView.swift in Sources */,
 				65E7972A2A1A4EF800E17401 /* ExamListItem.swift in Sources */,
-				658E4A322A61C7D600B43798 /* FloatingPointExtension.swift in Sources */,
+				658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */,
 				658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */,
 				65AB56D52ADEF60D004B5F3F /* CoursePickerTip.swift in Sources */,
 				658E4A322A61C7D600B43798 /* ComparableExtension.swift in Sources */,
-				650D88022A7A5C33004E7533 /* UMLUseCaseDiagramElementRenderer.swift in Sources */,
 				DAFFA3FB297F066200EA72B8 /* ArtemisDateHelpers.swift in Sources */,
 				65E4C1982A25345100CA173B /* FeedbackDelegate.swift in Sources */,
 				E2CAE63B2935219E00FAD327 /* ExerciseViewModel.swift in Sources */,
@@ -1392,7 +1389,6 @@
 				65B49F4E2A08220D00C9A45F /* RightGripView.swift in Sources */,
 				6530B0F52A6BE00000CBCA71 /* ModelingAssessmentServiceImpl.swift in Sources */,
 				E2192EE5291EBFFE0092CE58 /* AuthenticationView.swift in Sources */,
-				65B981AF2A7BDEF800FFC2F4 /* CGPointExtension.swift in Sources */,
 				65E6A1022A13E7260058E5D6 /* SubmissionService.swift in Sources */,
 				658057162A02C4DD00835AD0 /* CourseExtension.swift in Sources */,
 				65B9BD042AAE15110086F9EC /* FileUploadAssessmentView.swift in Sources */,
@@ -1413,7 +1409,6 @@
 				65D2E1FF2A8CA4A8003DB837 /* CodeEditorSkeleton.swift in Sources */,
 				DA249E9829302531008DE1D5 /* PreviewAuthenticationViewModel.swift in Sources */,
 				65CC29902ADC23760095ABDA /* GradingCriterionMockExtension.swift in Sources */,
-				650D88002A7A5B78004E7533 /* UMLDiagramRenderer.swift in Sources */,
 				65AB56D72ADEF6EB004B5F3F /* FeedbackModeTip.swift in Sources */,
 				E21AF054292B9D4C0096ACFC /* CodeView.swift in Sources */,
 				65BA61D72AE02B5C009FE11C /* PathStringExtension.swift in Sources */,
@@ -1844,7 +1839,7 @@
 				kind = branch;
 			};
 		};
-		F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */ = {
+		F734D1AA2B18D83200435866 /* XCRemoteSwiftPackageReference "apollon-ios-module" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ls1intum/apollon-ios-module";
 			requirement = {
@@ -1948,15 +1943,15 @@
 			package = E536EACF297458240078E077 /* XCRemoteSwiftPackageReference "swiftui-reorderable-foreach" */;
 			productName = SwiftUIReorderableForEach;
 		};
-		F72D68F92ACB3249001A0871 /* ApollonView */ = {
+		F734D1AB2B18D83200435866 /* ApollonShared */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
-			productName = ApollonView;
-		};
-		F767A0462AD0574900318707 /* ApollonShared */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F72D68F62ACB3249001A0871 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
+			package = F734D1AA2B18D83200435866 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
 			productName = ApollonShared;
+		};
+		F734D1AD2B18D83200435866 /* ApollonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F734D1AA2B18D83200435866 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
+			productName = ApollonView;
 		};
 		F9032CA4294A159700B2DED5 /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
