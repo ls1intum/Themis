@@ -187,7 +187,6 @@
 		F72D68F52ACB31EE001A0871 /* UMLBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D68F42ACB31EE001A0871 /* UMLBadgeSymbol.swift */; };
 		F734D1AC2B18D83200435866 /* ApollonShared in Frameworks */ = {isa = PBXBuildFile; productRef = F734D1AB2B18D83200435866 /* ApollonShared */; };
 		F734D1AE2B18D83200435866 /* ApollonView in Frameworks */ = {isa = PBXBuildFile; productRef = F734D1AD2B18D83200435866 /* ApollonView */; };
-		F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = F9032CA4294A159700B2DED5 /* CachedAsyncImage */; };
 		F922443A297BFD1A008E4374 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9224439297BFD1A008E4374 /* CircularProgressView.swift */; };
 		F958C4DE29887DE800E70669 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = F958C4DD29887DE800E70669 /* ShakeEffect.swift */; };
 /* End PBXBuildFile section */
@@ -402,7 +401,6 @@
 				E536EAD1297458240078E077 /* SwiftUIReorderableForEach in Frameworks */,
 				657534B22A0F7A52004B0C3F /* DesignLibrary in Frameworks */,
 				657534AC2A0F7A52004B0C3F /* Account in Frameworks */,
-				F9032CA5294A159700B2DED5 /* CachedAsyncImage in Frameworks */,
 				6564DC0E2A00EFFC00CF2F89 /* SharedModels in Frameworks */,
 				06A99D3F2A94D99000E48066 /* Starscream in Frameworks */,
 			);
@@ -1847,14 +1845,6 @@
 				kind = branch;
 			};
 		};
-		F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1952,11 +1942,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F734D1AA2B18D83200435866 /* XCRemoteSwiftPackageReference "apollon-ios-module" */;
 			productName = ApollonView;
-		};
-		F9032CA4294A159700B2DED5 /* CachedAsyncImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9032CA3294A159700B2DED5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
