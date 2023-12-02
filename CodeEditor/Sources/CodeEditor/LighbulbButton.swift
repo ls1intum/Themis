@@ -25,12 +25,23 @@ final class LightbulbButton: UIButton {
         fatalError("not implemented")
     }
     
-    
     private func setup() {
-        let image = UIImage(systemName: "lightbulb.fill")
-        setImage(image, for: .normal)
-        imageView?.contentMode = .scaleAspectFit
-        imageView?.tintColor = .yellow
+        self.backgroundColor = UIColor(netHex: 0xB54EFE)
+        self.layer.cornerRadius = 6
+        
+        let image = UIImage(named: "SuggestedFeedbackSymbol")?.withRenderingMode(.alwaysTemplate)
+        let customImgView = UIImageView()
+        customImgView.image = image
+        customImgView.tintColor = .white
+        customImgView.contentMode = .scaleAspectFit
+        self.addSubview(customImgView)
+        
+        customImgView.translatesAutoresizingMaskIntoConstraints = false
+        customImgView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        customImgView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        customImgView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5) .isActive = true
+        customImgView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.6) .isActive = true
+        
         addTarget(self, action: #selector(self.onLightBulbTap), for: .touchUpInside)
     }
     
@@ -38,4 +49,10 @@ final class LightbulbButton: UIButton {
         setSelectedFeedbackSuggestionId()
         toggleShowAddFeedback()
     }
+}
+
+#Preview {
+    LightbulbButton(frame: .init(x: 0, y: 0, width: 350, height: 350),
+                    setSelectedFeedbackSuggestionId: {},
+                    toggleShowAddFeedback: {})
 }
