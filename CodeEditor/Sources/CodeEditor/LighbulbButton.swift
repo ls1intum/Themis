@@ -26,7 +26,7 @@ final class LightbulbButton: UIButton {
     }
     
     private func setup() {
-        self.backgroundColor = UIColor(netHex: 0xB54EFE)
+        self.backgroundColor = .feedbackSuggestionColor
         self.layer.cornerRadius = 6
         
         let image = UIImage(named: "SuggestedFeedbackSymbol")?.withRenderingMode(.alwaysTemplate)

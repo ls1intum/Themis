@@ -203,8 +203,7 @@ class RoundedCornerLayoutManager: NSLayoutManager {
             return
         }
         UIGraphicsPushContext(ctx)
-        ctx.setFillColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
-        ctx.setStrokeColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
+        ctx.setFillColor(UIColor.feedbackSuggestionColor.cgColor)
         
         let programmingSuggestions = feedbackSuggestions.compactMap({ $0 as? ProgrammingFeedbackSuggestion })
         if programmingSuggestions.contains(where: { paraNumber + 1 >= $0.lineStart ?? 0 && paraNumber + 1 <= $0.lineEnd ?? 0 }) {
