@@ -1,3 +1,5 @@
+<img src="https://github.com/ls1intum/Themis/assets/22798314/251f1390-c3ba-4f08-906c-4a2e1f82e929" width=10%>
+
 # Themis: Artemis Tutor App for iPad
 
 Themis is an innovative iPad app providing a comprehensive and optimized way for tutors to assess submitted programming exercises on the go. As a complementary extension to the [Artemis](https://github.com/ls1intum/Artemis) platform, an open-source learning management system used at universities, Themis allows tutors to effortlessly inspect students’ submissions and provide feedback.
