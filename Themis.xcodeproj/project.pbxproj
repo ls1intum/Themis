@@ -159,7 +159,6 @@
 		8384C43129210474008CCB4D /* FeedbackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C43029210474008CCB4D /* FeedbackListView.swift */; };
 		8384C439292A8592008CCB4D /* FeedbackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C438292A8592008CCB4D /* FeedbackCellView.swift */; };
 		8384C441292AA1FB008CCB4D /* GradingCriteriaCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */; };
-		A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */; };
 		A9752D792992AA8B004441D1 /* ExamSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D782992AA8B004441D1 /* ExamSection.swift */; };
 		A9752D7B2992AAEB004441D1 /* ExamSectionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9752D7A2992AAEB004441D1 /* ExamSectionDetailView.swift */; };
 		DA0687C2292FB4870091B88A /* SubmissionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0687C1292FB4870091B88A /* SubmissionListView.swift */; };
@@ -374,7 +373,6 @@
 		8384C438292A8592008CCB4D /* FeedbackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedbackCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/FeedbackCellView.swift; sourceTree = SOURCE_ROOT; };
 		8384C440292AA1FB008CCB4D /* GradingCriteriaCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradingCriteriaCellView.swift; path = Themis/Views/Assessment/CorrectionSidebar/GradingCriteriaCellView.swift; sourceTree = SOURCE_ROOT; };
 		83E729E82915786600DB7B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemisAPI.swift; sourceTree = "<group>"; };
 		A9752D782992AA8B004441D1 /* ExamSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSection.swift; sourceTree = "<group>"; };
 		A9752D7A2992AAEB004441D1 /* ExamSectionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamSectionDetailView.swift; sourceTree = "<group>"; };
 		DA0687C1292FB4870091B88A /* SubmissionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionListView.swift; sourceTree = "<group>"; };
@@ -1102,7 +1100,6 @@
 			children = (
 				E2E460DC29292ECF00ECC0A5 /* Stack.swift */,
 				DAFFA3FA297F066200EA72B8 /* ArtemisDateHelpers.swift */,
-				A90D8C7E29818AB70066DBFD /* ThemisAPI.swift */,
 			);
 			name = API;
 			path = Themis/API;
@@ -1544,7 +1541,6 @@
 				65B49F472A080A9900C9A45F /* ToolbarRedoButton.swift in Sources */,
 				65F019012A1CCC0300BB1C98 /* UnknownSubmissionServiceImpl.swift in Sources */,
 				E2192ED3291E47820092CE58 /* RESTController.swift in Sources */,
-				A90D8C7F29818AB70066DBFD /* ThemisAPI.swift in Sources */,
 				E1DC9BA3293D241100674F5B /* SubmissionSearchView.swift in Sources */,
 				DA3F0F01294A2DF800A7B807 /* AddFeedbackView.swift in Sources */,
 				DA295CC6293A67EB000E04DC /* AuthenticationEnvironmentVariables.swift in Sources */,

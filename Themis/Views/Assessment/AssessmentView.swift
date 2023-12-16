@@ -137,7 +137,6 @@ struct AssessmentView: View {
                 Button("Yes") {
                     Task {
                         await assessmentVM.submitAssessment()
-                        await assessmentVM.notifyThemisML()
                         showNavigationOptions.toggle()
                     }
                 }
@@ -168,8 +167,7 @@ struct AssessmentView: View {
         case .programming:
             ProgrammingAssessmentView(assessmentVM: assessmentVM,
                                       assessmentResult: assessmentResult,
-                                      exercise: exercise,
-                                      submissionId: submissionId)
+                                      exercise: exercise)
         case .text:
             TextAssessmentView(assessmentVM: assessmentVM,
                                assessmentResult: assessmentResult,

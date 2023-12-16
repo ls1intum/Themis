@@ -47,7 +47,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         return nil
     }
     
-    var selectedFeedbackSuggestion: (any FeedbackSuggestion)? {
+    var selectedFeedbackSuggestion: ProgrammingFeedbackSuggestion? {
         feedbackSuggestions.first { "\($0.id)" == selectedFeedbackSuggestionId }
     }
     
@@ -64,22 +64,28 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         return files
     }
     
-    /// Sets this VM up based on the given participation
+    /// Sets this VM up based on the given parameters
     @MainActor
-    func setup(basedOn participationId: Int?, _ exerciseId: Int?, _ assessmentResult: AssessmentResult) async {
-        guard let participationId, let exerciseId else {
+    func setup(basedOn assessmentVM: AssessmentViewModel, _ exerciseId: Int?) async {
+        guard let participationId = assessmentVM.participation?.id,
+              let exerciseId else {
             log.error("Setup failed due to missing participation ID or exercise ID")
             return
         }
         reset()
+        
+        let assessmentResult = assessmentVM.assessmentResult
         
         await withTaskGroup(of: Void.self) { group in
             group.addTask { [weak self] in
                 await self?.initFileTree(participationId: participationId, repositoryType: .student)
                 await self?.loadInlineHighlightsIfEmpty(assessmentResult: assessmentResult, participationId: participationId)
             }
-            group.addTask { [weak self] in
-                await self?.getFeedbackSuggestions(participationId: participationId, exerciseId: exerciseId)
+            
+            if let submissionId = assessmentVM.submission?.id {
+                group.addTask { [weak self] in
+                    await self?.getFeedbackSuggestions(submissionId: submissionId, exerciseId: exerciseId)
+                }
             }
         }
         
@@ -148,11 +154,15 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         }
     }
     
+    // TODO: make sure this is not called for old assessments and in read-only mode
     @MainActor
-    func getFeedbackSuggestions(participationId: Int, exerciseId: Int) async {
+    private func getFeedbackSuggestions(submissionId: Int, exerciseId: Int) async {
         do {
-            self.feedbackSuggestions = try await ThemisAPI.getFeedbackSuggestions(exerciseId: exerciseId, participationId: participationId)
-            log.info("Got \(self.feedbackSuggestions.count) feedback suggestions")
+            var fetchedSuggestions = try await AthenaService().getProgrammingFeedbackSuggestions(exerciseId: exerciseId,
+                                                                                                 submissionId: submissionId)
+            log.verbose("Fetched \(fetchedSuggestions.count) suggestions")
+            
+            self.feedbackSuggestions = fetchedSuggestions
         } catch {
             log.error(String(describing: error))
         }
@@ -201,6 +211,22 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         detail.file = file
         feedback.detail = detail
         assessmentResult.updateFeedback(feedback: feedback)
+    }
+    
+    /// Generates a `ProgrammingFeedbackDetail` instance based on the available data. Some fields might be missing
+    func generateIncompleteFeedbackDetail() -> ProgrammingFeedbackDetail {
+        if let selectedFeedbackSuggestion,
+           let lineStart = selectedFeedbackSuggestion.lineStart,
+           let lineEnd = selectedFeedbackSuggestion.lineEnd { // Generate detail for the selected suggestion
+            let nsRange = (lineStart ..< lineEnd).toNSRange()
+            return ProgrammingFeedbackDetail(file: selectedFile,
+                                             lines: nsRange,
+                                             columns: nil)
+        } else { // Generate detail for a new feedback
+            return ProgrammingFeedbackDetail(file: selectedFile,
+                                             lines: selectedSectionParsed?.0,
+                                             columns: selectedSectionParsed?.1)
+        }
     }
 }
 

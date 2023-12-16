@@ -207,20 +207,6 @@ class AssessmentViewModel: ObservableObject {
         }
     }
     
-    func notifyThemisML() async { // TODO: Make this function more general once Athene is integrated
-        guard let participationId = participation?.id,
-              case .programming = exercise
-        else {
-            return
-        }
-        
-        do {
-            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exercise.id, participationId: participationId)
-        } catch {
-            log.error(String(describing: error))
-        }
-    }
-    
     func getFeedback(byId id: UUID) -> AssessmentFeedback? {
         assessmentResult.feedbacks.first(where: { $0.id == id })
     }

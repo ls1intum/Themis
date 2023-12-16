@@ -21,6 +21,10 @@ struct CodeView: View {
         readOnly || !cvm.allowsInlineFeedbackOperations
     }
     
+    private var suggestions: [ProgrammingFeedbackSuggestion] {
+        cvm.feedbackSuggestions.filter { $0.filePath?.appendingLeadingSlashIfMissing() == file.path }
+    }
+    
     private var highlightedRanges: [HighlightedRange] {
         guard cvm.allowsInlineFeedbackOperations,
               let highlights = cvm.inlineHighlights[file.path] else {
@@ -47,7 +51,7 @@ struct CodeView: View {
                 scrollUtils: cvm.scrollUtils,
                 diffLines: file.diffLines,
                 isNewFile: file.isNewFile,
-                feedbackSuggestions: hideSuggestions ? [] : cvm.feedbackSuggestions.filter { $0.filePath == file.path },
+                feedbackSuggestions: hideSuggestions ? [] : suggestions,
                 selectedFeedbackSuggestionId: $cvm.selectedFeedbackSuggestionId
             )
         )

@@ -59,6 +59,4 @@ class MockAssessmentViewModel: AssessmentViewModel {
     override func saveAssessment() async {}
     
     override func submitAssessment() async {}
-    
-    override func notifyThemisML() async {}
 }

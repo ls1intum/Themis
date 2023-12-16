@@ -219,6 +219,9 @@ struct EditFeedbackViewBase: View {
                 self.score = feedback.baseFeedback.credits ?? 0.0
                 self.linkedGradingInstruction = feedback.baseFeedback.gradingInstruction
             }
+        } else if let feedbackSuggestion {
+            self.detailText = feedbackSuggestion.description
+            self.score = feedbackSuggestion.credits
         }
     }
 }
