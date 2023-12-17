@@ -29,12 +29,17 @@ public struct AssessmentFeedback: Identifiable {
     init(
         baseFeedback: Feedback = Feedback(),
         scope: ThemisFeedbackScope,
-        detail: (any FeedbackDetail)? = nil
+        detail: (any FeedbackDetail)? = nil,
+        textPrefix: String? = nil
     ) {
         self.baseFeedback = baseFeedback
         self.scope = scope
         self.detail = detail
         self.detail?.buildArtemisFeedback(feedback: &self.baseFeedback)
+        
+        if let textPrefix {
+            self.baseFeedback.text = textPrefix + (self.baseFeedback.text ?? "")
+        }
     }
 
     mutating func setBaseFeedback(to feedback: Feedback) {

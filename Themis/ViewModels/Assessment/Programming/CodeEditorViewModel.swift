@@ -241,10 +241,16 @@ extension CodeEditorViewModel {
             guard let range = getLineRange(text: code, fromLine: lineStart, toLine: lineEnd) else {
                 return
             }
+            deleteHighlight(for: feedbackSuggestion)
             appendHighlight(feedbackId: feedbackId, range: range, path: file.path)
         }
         
         undoManager.endUndoGrouping() // undo group with addFeedback in AssessmentResult
+    }
+    
+    @MainActor
+    func deleteHighlight(for feedbackSuggestion: ProgrammingFeedbackSuggestion) {
+        feedbackSuggestions.removeAll(where: { $0.id == feedbackSuggestion.id })
     }
     
     @MainActor
@@ -412,6 +418,14 @@ extension CodeEditorViewModel: FeedbackDelegate {
             return
         }
         addFeedbackSuggestionInlineHighlight(feedbackSuggestion: suggestion, feedbackId: feedback.id)
+    }
+    
+    @MainActor
+    func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion) {
+        guard let suggestion = suggestion as? ProgrammingFeedbackSuggestion else {
+            return
+        }
+        deleteHighlight(for: suggestion)
     }
     
     @MainActor
