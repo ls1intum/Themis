@@ -222,7 +222,11 @@ public struct UXCodeTextViewRepresentable: UXViewRepresentable {
             
             textView.feedbackSuggestions = editorBindings.feedbackSuggestions
             textView.updateLightBulbs()
+        } else if editorBindings.feedbackSuggestions.count != textView.lightBulbs.count {
+            textView.feedbackSuggestions = editorBindings.feedbackSuggestions
+            textView.updateLightBulbs()
         }
+        
         textView.setNeedsDisplay()
         textView.pencilOnly = editorBindings.pencilOnly.wrappedValue
         textView.dragSelection = self.editorBindings.dragSelection?.wrappedValue
