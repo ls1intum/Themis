@@ -26,7 +26,13 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
     }
     @Published var allowsInlineFeedbackOperations = true
     @Published var error: Error?
-    @Published var feedbackSuggestions = [ProgrammingFeedbackSuggestion]()
+    @Published var feedbackSuggestions = [ProgrammingFeedbackSuggestion]() {
+        didSet {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.feedbackSuggestions = oldValue
+            }
+        }
+    }
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
