@@ -76,13 +76,17 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         
         let assessmentResult = assessmentVM.assessmentResult
         
+        // Do not fetch suggestions in the read only mode and when fetching a previously-saved assessment
+        let shouldFetchSubmissions = !assessmentVM.readOnly && assessmentVM.submissionId == nil
+        
         await withTaskGroup(of: Void.self) { group in
             group.addTask { [weak self] in
                 await self?.initFileTree(participationId: participationId, repositoryType: .student)
                 await self?.loadInlineHighlightsIfEmpty(assessmentResult: assessmentResult, participationId: participationId)
             }
             
-            if let submissionId = assessmentVM.submission?.id {
+            if shouldFetchSubmissions,
+               let submissionId = assessmentVM.submission?.id {
                 group.addTask { [weak self] in
                     await self?.getFeedbackSuggestions(submissionId: submissionId, exerciseId: exerciseId)
                 }
@@ -154,11 +158,10 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         }
     }
     
-    // TODO: make sure this is not called for old assessments and in read-only mode
     @MainActor
     private func getFeedbackSuggestions(submissionId: Int, exerciseId: Int) async {
         do {
-            var fetchedSuggestions = try await AthenaService().getProgrammingFeedbackSuggestions(exerciseId: exerciseId,
+            let fetchedSuggestions = try await AthenaService().getProgrammingFeedbackSuggestions(exerciseId: exerciseId,
                                                                                                  submissionId: submissionId)
             log.verbose("Fetched \(fetchedSuggestions.count) suggestions")
             
