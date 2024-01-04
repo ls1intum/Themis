@@ -69,7 +69,7 @@ class CourseViewModel: ObservableObject {
                 log.error(String(describing: error))
             }
             
-            courses = coursesForDashboard.value?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
+            courses = coursesForDashboard.value?.courses?.map({ $0.course }).filter({ $0.isAtLeastTutorInCourse }) ?? []
             showCoursesIsEmptyMessage = courses.isEmpty
             
             if !pickerCourseIDs.contains(where: { $0 == shownCourseID }) {
