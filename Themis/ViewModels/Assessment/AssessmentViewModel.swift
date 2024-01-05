@@ -24,6 +24,10 @@ class AssessmentViewModel: ObservableObject {
     var exercise: Exercise
     var correctionRound: CorrectionRound
     
+    /// A message shown to the user on the alert that appears when they press the submit button.
+    /// Intended to provide the user with additional information about the consequences of submitting the assessment.
+    var submissionAlertDetail: String? { nil }
+    
     private var cancellables: [AnyCancellable] = []
     
     init(exercise: Exercise,
@@ -203,20 +207,6 @@ class AssessmentViewModel: ObservableObject {
                                                          newAssessment: assessmentResult)
         } catch {
             self.error = error
-            log.error(String(describing: error))
-        }
-    }
-    
-    func notifyThemisML() async { // TODO: Make this function more general once Athene is integrated
-        guard let participationId = participation?.id,
-              case .programming = exercise
-        else {
-            return
-        }
-        
-        do {
-            try await ThemisAPI.notifyAboutNewFeedback(exerciseId: exercise.id, participationId: participationId)
-        } catch {
             log.error(String(describing: error))
         }
     }

@@ -133,16 +133,17 @@ struct AssessmentView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
-            .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
+            .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation, actions: {
                 Button("Yes") {
                     Task {
                         await assessmentVM.submitAssessment()
-                        await assessmentVM.notifyThemisML()
                         showNavigationOptions.toggle()
                     }
                 }
                 Button("Cancel", role: .cancel) {}
-            }
+            }, message: {
+                Text(assessmentVM.submissionAlertDetail ?? "")
+            })
             .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
                 Button("Next Submission") {
                     Task {
@@ -168,8 +169,7 @@ struct AssessmentView: View {
         case .programming:
             ProgrammingAssessmentView(assessmentVM: assessmentVM,
                                       assessmentResult: assessmentResult,
-                                      exercise: exercise,
-                                      submissionId: submissionId)
+                                      exercise: exercise)
         case .text:
             TextAssessmentView(assessmentVM: assessmentVM,
                                assessmentResult: assessmentResult,

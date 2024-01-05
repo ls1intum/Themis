@@ -10,8 +10,6 @@ struct ProgrammingAssessmentView: View {
     
     let exercise: Exercise
     
-    var submissionId: Int?
-    
     private let didStartNextAssessment = NotificationCenter.default.publisher(for: NSNotification.Name.nextAssessmentStarted)
     
     var body: some View {
@@ -53,9 +51,7 @@ struct ProgrammingAssessmentView: View {
                 assessmentResult: assessmentVM.assessmentResult,
                 feedbackDelegate: codeEditorVM,
                 incompleteFeedback: AssessmentFeedback(scope: .inline,
-                                                       detail: ProgrammingFeedbackDetail(file: codeEditorVM.selectedFile,
-                                                                                         lines: codeEditorVM.selectedSectionParsed?.0,
-                                                                                         columns: codeEditorVM.selectedSectionParsed?.1)),
+                                                       detail: codeEditorVM.generateIncompleteFeedbackDetail()),
                 feedbackSuggestion: codeEditorVM.selectedFeedbackSuggestion,
                 scope: .inline,
                 gradingCriteria: assessmentVM.gradingCriteria,
@@ -75,13 +71,14 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
+            (assessmentVM as? ProgrammingAssessmentViewModel)?.codeEditorVM = codeEditorVM
             assessmentVM.pencilModeDisabled = true
             await assessmentVM.initSubmission()
-            await codeEditorVM.setup(basedOn: assessmentVM.participation?.id, exercise.baseExercise.id, assessmentVM.assessmentResult)
+            await codeEditorVM.setup(basedOn: assessmentVM, exercise.baseExercise.id)
         }
         .onReceive(didStartNextAssessment, perform: { _ in
             Task {
-                await codeEditorVM.setup(basedOn: assessmentVM.participation?.id, exercise.baseExercise.id, assessmentVM.assessmentResult)
+                await codeEditorVM.setup(basedOn: assessmentVM, exercise.baseExercise.id)
             }
         })
         .onChange(of: assessmentVM.pencilModeDisabled) { _, newValue in

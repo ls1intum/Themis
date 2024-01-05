@@ -199,16 +199,14 @@ class RoundedCornerLayoutManager: NSLayoutManager {
     }
     
     private func drawProgrammingFeedbackSuggestions(_ paraNumber: Int, _ rect: CGRect, _ origin: CGPoint) {
-        let ctx = UIGraphicsGetCurrentContext()
-        guard let ctx else {
+        guard let ctx = UIGraphicsGetCurrentContext() else {
             return
         }
         UIGraphicsPushContext(ctx)
-        ctx.setFillColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
-        ctx.setStrokeColor(CGColor(red: 0, green: 0.2, blue: 0.8, alpha: 0.8))
+        ctx.setFillColor(UIColor.feedbackSuggestionColor.cgColor)
         
         let programmingSuggestions = feedbackSuggestions.compactMap({ $0 as? ProgrammingFeedbackSuggestion })
-        if programmingSuggestions.contains(where: { paraNumber + 1 >= $0.fromLine && paraNumber + 1 <= $0.toLine }) {
+        if programmingSuggestions.contains(where: { paraNumber + 1 >= $0.lineStart ?? 0 && paraNumber + 1 <= $0.lineEnd ?? 0 }) {
             let path = CGPath(
                 rect: CGRect(
                     x: rect.origin.x,

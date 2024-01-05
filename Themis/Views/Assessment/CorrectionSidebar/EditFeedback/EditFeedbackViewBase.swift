@@ -178,21 +178,45 @@ struct EditFeedbackViewBase: View {
     }
     
     private func createFeedback() {
+        // We need to add a prefix for programming feedback suggestions
+        var baseFeedbackTextPrefix: String? = nil
+        
+        if let feedbackSuggestion = feedbackSuggestion as? ProgrammingFeedbackSuggestion {
+            if detailText == feedbackSuggestion.description && score == feedbackSuggestion.credits {
+                baseFeedbackTextPrefix = Feedback.feedbackSuggestionAcceptedIdentifier
+            } else {
+                baseFeedbackTextPrefix = Feedback.feedbackSuggestionAdaptedIdentifier
+            }
+        }
+        
         if scope == .inline {
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
                                                                      credits: score,
                                                                      type: .MANUAL,
                                                                      gradingInstruction: linkedGradingInstruction),
                                               scope: scope,
-                                              detail: incompleteFeedback?.detail)
+                                              detail: incompleteFeedback?.detail,
+                                              textPrefix: baseFeedbackTextPrefix)
             
             assessmentResult.addFeedback(feedback: feedback)
-            feedbackDelegate?.onFeedbackCreation(feedback)
+            
+            if let feedbackSuggestion {
+                feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
+            } else {
+                feedbackDelegate?.onFeedbackCreation(feedback)
+            }
         } else {
-            assessmentResult.addFeedback(feedback: AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
-                                                                                             credits: score,
-                                                                                             type: .MANUAL_UNREFERENCED),
-                                                                      scope: scope))
+            let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
+                                                                     credits: score,
+                                                                     type: .MANUAL_UNREFERENCED),
+                                              scope: scope,
+                                              textPrefix: baseFeedbackTextPrefix)
+            
+            assessmentResult.addFeedback(feedback: feedback)
+            
+            if let feedbackSuggestion {
+                feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
+            }
         }
     }
     
@@ -219,6 +243,9 @@ struct EditFeedbackViewBase: View {
                 self.score = feedback.baseFeedback.credits ?? 0.0
                 self.linkedGradingInstruction = feedback.baseFeedback.gradingInstruction
             }
+        } else if let feedbackSuggestion {
+            self.detailText = feedbackSuggestion.description
+            self.score = feedbackSuggestion.credits
         }
     }
 }

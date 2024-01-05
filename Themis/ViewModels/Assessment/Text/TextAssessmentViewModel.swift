@@ -107,7 +107,8 @@ class TextAssessmentViewModel: AssessmentViewModel {
         }
         
         do {
-            var fetchedSuggestions = try await AthenaService().getFeedbackSuggestions(exerciseId: exerciseId, submissionId: submissionId)
+            var fetchedSuggestions = try await AthenaService().getTextFeedbackSuggestions(exerciseId: exerciseId,
+                                                                                          submissionId: submissionId)
             log.verbose("Fetched \(fetchedSuggestions.count) suggestions")
             
             fetchedSuggestions = setTextBlockContent(of: fetchedSuggestions)

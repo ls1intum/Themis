@@ -16,7 +16,7 @@ let package = Package(
 
   dependencies: [
     .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
-    .package(url: "https://github.com/ls1intum/artemis-ios-core-modules", from: "7.0.0"),
+    .package(url: "https://github.com/ls1intum/artemis-ios-core-modules", from: "8.0.0"),
   ],
 
   targets: [

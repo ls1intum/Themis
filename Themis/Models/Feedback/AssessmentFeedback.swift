@@ -29,12 +29,17 @@ public struct AssessmentFeedback: Identifiable {
     init(
         baseFeedback: Feedback = Feedback(),
         scope: ThemisFeedbackScope,
-        detail: (any FeedbackDetail)? = nil
+        detail: (any FeedbackDetail)? = nil,
+        textPrefix: String? = nil
     ) {
         self.baseFeedback = baseFeedback
         self.scope = scope
         self.detail = detail
         self.detail?.buildArtemisFeedback(feedback: &self.baseFeedback)
+        
+        if let textPrefix {
+            self.baseFeedback.text = textPrefix + (self.baseFeedback.text ?? "")
+        }
     }
 
     mutating func setBaseFeedback(to feedback: Feedback) {
@@ -73,8 +78,10 @@ extension AssessmentFeedback {
         var newIncompleteFeedbackDetail = incompleteFeedbackDetail
         
         if var incompleteFeedbackDetail = incompleteFeedbackDetail as? ProgrammingFeedbackDetail,
-           let codeSuggestion = suggestion as? ProgrammingFeedbackSuggestion {
-            let lines = NSRange(location: codeSuggestion.fromLine, length: codeSuggestion.toLine - codeSuggestion.fromLine)
+           let codeSuggestion = suggestion as? ProgrammingFeedbackSuggestion,
+           let lineStart = codeSuggestion.lineStart,
+           let lineEnd = codeSuggestion.lineEnd {
+            let lines = NSRange(location: lineStart, length: lineEnd - lineStart)
             incompleteFeedbackDetail.lines = lines
             newIncompleteFeedbackDetail = incompleteFeedbackDetail
         }
