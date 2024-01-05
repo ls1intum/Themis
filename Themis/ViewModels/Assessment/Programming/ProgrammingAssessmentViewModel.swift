@@ -10,6 +10,16 @@ import Common
 import SharedModels
 
 class ProgrammingAssessmentViewModel: AssessmentViewModel {
+    weak var codeEditorVM: CodeEditorViewModel?
+    
+    override var submissionAlertDetail: String? {
+        if codeEditorVM?.feedbackSuggestions.isEmpty == false {
+            "There are pending feedback suggestions that will be discarded."
+        } else {
+            nil
+        }
+    }
+    
     @MainActor
     override func initSubmission() async {
         guard submission == nil else {
@@ -65,7 +75,7 @@ class ProgrammingAssessmentViewModel: AssessmentViewModel {
             log.error(String(describing: error))
         }
     }
-
+    
     func participationId(for repoType: RepositoryType) -> Int? {
         switch repoType {
         case .student:

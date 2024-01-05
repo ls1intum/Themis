@@ -133,7 +133,7 @@ struct AssessmentView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
-            .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation) {
+            .alert("Are you sure you want to submit your assessment?", isPresented: $showSubmitConfirmation, actions: {
                 Button("Yes") {
                     Task {
                         await assessmentVM.submitAssessment()
@@ -141,7 +141,9 @@ struct AssessmentView: View {
                     }
                 }
                 Button("Cancel", role: .cancel) {}
-            }
+            }, message: {
+                Text(assessmentVM.submissionAlertDetail ?? "")
+            })
             .alert("What do you want to do next?", isPresented: $showNavigationOptions) {
                 Button("Next Submission") {
                     Task {

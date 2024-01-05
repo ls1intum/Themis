@@ -24,6 +24,10 @@ class AssessmentViewModel: ObservableObject {
     var exercise: Exercise
     var correctionRound: CorrectionRound
     
+    /// A message shown to the user on the alert that appears when they press the submit button.
+    /// Intended to provide the user with additional information about the consequences of submitting the assessment.
+    var submissionAlertDetail: String? { nil }
+    
     private var cancellables: [AnyCancellable] = []
     
     init(exercise: Exercise,

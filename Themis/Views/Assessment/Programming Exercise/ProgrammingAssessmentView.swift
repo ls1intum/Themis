@@ -71,6 +71,7 @@ struct ProgrammingAssessmentView: View {
             }
         }
         .task {
+            (assessmentVM as? ProgrammingAssessmentViewModel)?.codeEditorVM = codeEditorVM
             assessmentVM.pencilModeDisabled = true
             await assessmentVM.initSubmission()
             await codeEditorVM.setup(basedOn: assessmentVM, exercise.baseExercise.id)
