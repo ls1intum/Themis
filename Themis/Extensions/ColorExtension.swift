@@ -25,7 +25,7 @@ extension Color {
     static let positiveFeedbackBackground = Color("positiveFeedbackBackground")
     static let positiveFeedbackPointBackground = Color("positiveFeedbackPointBackground")
     static let positiveFeedbackText = Color("positiveFeedbackText")
-    static let positiveTextHighlight = UIColor(.init(netHex: 0xB0FFB4), darkModeColor: .init(netHex: 0x48A34B)).suColor
+    static let positiveTextHighlight = UIColor(.init(netHex: 0x4ED955), darkModeColor: .init(netHex: 0x48A34B)).suColor
 
     // Negative Feedback
     static let negativeFeedbackBackground = Color("negativeFeedbackBackground")
@@ -36,6 +36,9 @@ extension Color {
     // Modeling Assessment
     static let selectedUMLItemColor = themisSecondary.opacity(0.5)
     static let modelingSuggestedFeedback = UIColor(netHex: 0x17A2B8).suColor.opacity(0.3)
+    
+    // Suggestions
+    static let feedbackSuggestionColor = UIColor(netHex: 0xB54EFE).suColor
 }
 
 extension Color {

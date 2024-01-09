@@ -7,6 +7,7 @@
 
 import Foundation
 import SharedModels
+import CodeEditor
 
 enum ThemisFeedbackScope {
     case inline
@@ -20,7 +21,11 @@ public struct AssessmentFeedback: Identifiable {
     var baseFeedback: Feedback
     var scope: ThemisFeedbackScope
     var detail: (any FeedbackDetail)?
-
+    
+    var isSuggested: Bool {
+        baseFeedback.isSuggested
+    }
+    
     init(
         baseFeedback: Feedback = Feedback(),
         scope: ThemisFeedbackScope,
@@ -60,5 +65,24 @@ extension AssessmentFeedback: Equatable, Hashable {
         hasher.combine(created)
         hasher.combine(baseFeedback)
         hasher.combine(scope)
+    }
+}
+
+extension AssessmentFeedback {
+    init(basedOn suggestion: any FeedbackSuggestion, _ incompleteFeedbackDetail: FeedbackDetail?, _ detailText: String, _ credits: Double) {
+        var newIncompleteFeedbackDetail = incompleteFeedbackDetail
+        
+        if var incompleteFeedbackDetail = incompleteFeedbackDetail as? ProgrammingFeedbackDetail,
+           let codeSuggestion = suggestion as? ProgrammingFeedbackSuggestion {
+            let lines = NSRange(location: codeSuggestion.fromLine, length: codeSuggestion.toLine - codeSuggestion.fromLine)
+            incompleteFeedbackDetail.lines = lines
+            newIncompleteFeedbackDetail = incompleteFeedbackDetail
+        }
+        
+        self.init(baseFeedback: Feedback(detailText: detailText,
+                                         credits: credits,
+                                         type: .MANUAL_UNREFERENCED),
+                  scope: .inline,
+                  detail: newIncompleteFeedbackDetail)
     }
 }

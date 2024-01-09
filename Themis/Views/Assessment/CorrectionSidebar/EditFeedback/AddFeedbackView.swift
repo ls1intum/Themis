@@ -13,7 +13,7 @@ struct AddFeedbackView: View {
     var assessmentResult: AssessmentResult
     weak var feedbackDelegate: (any FeedbackDelegate)?
     var incompleteFeedback: AssessmentFeedback?
-    var feedbackSuggestion: FeedbackSuggestion?
+    var feedbackSuggestion: (any FeedbackSuggestion)?
     
     let scope: ThemisFeedbackScope
     let gradingCriteria: [GradingCriterion]
@@ -21,13 +21,12 @@ struct AddFeedbackView: View {
     @Binding var showSheet: Bool
     
     var body: some View {
+        // TODO: this structure used by AddFeedbackView and EditFeedbackView needs to be changed in the future. We can't just let EditFeedbackViewBase decide what's shown based on the parameters we pass
         EditFeedbackViewBase(
             assessmentResult: assessmentResult,
             feedbackDelegate: feedbackDelegate,
             incompleteFeedback: incompleteFeedback,
             feedbackSuggestion: feedbackSuggestion,
-            title: "Add Feedback",
-            isEditing: false,
             scope: scope,
             gradingCriteria: gradingCriteria,
             showSheet: $showSheet

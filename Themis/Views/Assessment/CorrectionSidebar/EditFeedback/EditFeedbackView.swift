@@ -23,8 +23,6 @@ struct EditFeedbackView: View {
             assessmentResult: assessmentResult,
             feedbackDelegate: feedbackDelegate,
             idForUpdate: idForUpdate,
-            title: "Edit Feedback",
-            isEditing: true,
             scope: scope,
             gradingCriteria: gradingCriteria,
             showSheet: $showSheet

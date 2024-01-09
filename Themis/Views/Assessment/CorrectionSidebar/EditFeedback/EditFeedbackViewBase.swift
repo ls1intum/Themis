@@ -15,10 +15,8 @@ struct EditFeedbackViewBase: View {
     weak var feedbackDelegate: (any FeedbackDelegate)?
     var idForUpdate: UUID?
     var incompleteFeedback: AssessmentFeedback?
-    var feedbackSuggestion: FeedbackSuggestion?
+    var feedbackSuggestion: (any FeedbackSuggestion)?
     
-    let title: String?
-    let isEditing: Bool
     let scope: ThemisFeedbackScope
     let gradingCriteria: [GradingCriterion]
     
@@ -27,15 +25,31 @@ struct EditFeedbackViewBase: View {
     @State private var score = 0.0
     @State private var linkedGradingInstruction: GradingInstruction?
     
+    private var isReviewingSuggestion: Bool {
+        feedbackSuggestion != nil || assessmentResult.feedbacks.first(where: { idForUpdate == $0.id })?.isSuggested == true
+    }
+    
+    private var isEditing: Bool {
+        idForUpdate != nil
+    }
+    
+    private var title: String {
+        isReviewingSuggestion ? "Review Suggested Feedback" : (isEditing ? "Edit Feedback" : "Add Feedback")
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(title ?? "Edit Feedback")
+                if isReviewingSuggestion {
+                    robotSymbol
+                }
+                
+                Text(title)
                     .font(.largeTitle)
                 
                 Spacer()
                 
-                if isEditing {
+                if isEditing || feedbackSuggestion != nil {
                     deleteButton
                 }
                 
@@ -87,6 +101,15 @@ struct EditFeedbackViewBase: View {
                 }
             }
         }
+    }
+    
+    private var robotSymbol: some View {
+        Image("SuggestedFeedbackSymbol")
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 30, height: 30)
+            .foregroundColor(.feedbackSuggestionColor)
     }
     
     private var editOrSaveButton: some View {
@@ -155,51 +178,32 @@ struct EditFeedbackViewBase: View {
     }
     
     private func createFeedback() {
-        if let feedbackSuggestion {
-            addFeedbackSuggestionToFeedbacks(feedbackSuggestion: feedbackSuggestion)
-        } else {
-            let feedbackType = (scope == .inline) ? FeedbackType.MANUAL : .MANUAL_UNREFERENCED
-            let feedbackDetail = (scope == .inline) ? incompleteFeedback?.detail : nil
+        if scope == .inline {
             let feedback = AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
                                                                      credits: score,
-                                                                     type: feedbackType,
+                                                                     type: .MANUAL,
                                                                      gradingInstruction: linkedGradingInstruction),
                                               scope: scope,
-                                              detail: feedbackDetail)
+                                              detail: incompleteFeedback?.detail)
             
             assessmentResult.addFeedback(feedback: feedback)
-            
-            if scope == .inline {
-                feedbackDelegate?.onFeedbackCreation(feedback)
-            }
+            feedbackDelegate?.onFeedbackCreation(feedback)
+        } else {
+            assessmentResult.addFeedback(feedback: AssessmentFeedback(baseFeedback: Feedback(detailText: detailText,
+                                                                                             credits: score,
+                                                                                             type: .MANUAL_UNREFERENCED),
+                                                                      scope: scope))
         }
     }
     
     private func deleteFeedback() {
-        guard let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) else {
-            return
+        if let feedbackSuggestion {
+            assessmentResult.deleteFeedback(id: feedbackSuggestion.associatedAssessmentFeedbackId ?? UUID())
+            feedbackDelegate?.onFeedbackSuggestionDiscard(feedbackSuggestion)
+        } else if let feedback = assessmentResult.feedbacks.first(where: { idForUpdate == $0.id }) {
+            assessmentResult.deleteFeedback(id: feedback.id)
+            feedbackDelegate?.onFeedbackDeletion(feedback)
         }
-        assessmentResult.deleteFeedback(id: feedback.id)
-        feedbackDelegate?.onFeedbackDeletion(feedback)
-    }
-    
-    private func addFeedbackSuggestionToFeedbacks(feedbackSuggestion: FeedbackSuggestion) {
-        guard var incompleteFeedbackDetail = incompleteFeedback?.detail as? ProgrammingFeedbackDetail else {
-            return
-        }
-        
-        let lines = NSRange(location: feedbackSuggestion.fromLine, length: feedbackSuggestion.toLine - feedbackSuggestion.fromLine)
-        incompleteFeedbackDetail.lines = lines
-        
-        let feedback = AssessmentFeedback(
-            baseFeedback: Feedback(detailText: feedbackSuggestion.text,
-                                   credits: feedbackSuggestion.credits,
-                                   type: .MANUAL_UNREFERENCED),
-            scope: .inline,
-            detail: incompleteFeedbackDetail)
-        
-        assessmentResult.addFeedback(feedback: feedback)
-        feedbackDelegate?.onFeedbackSuggestionSelection(feedbackSuggestion, feedback)
     }
     
     private func setStates() {
@@ -216,10 +220,6 @@ struct EditFeedbackViewBase: View {
                 self.linkedGradingInstruction = feedback.baseFeedback.gradingInstruction
             }
         }
-        if let feedbackSuggestion = feedbackSuggestion {
-            self.detailText = feedbackSuggestion.text
-            self.score = feedbackSuggestion.credits
-        }
     }
 }
 
@@ -230,8 +230,6 @@ struct EditFeedbackViewBase_Previews: PreviewProvider {
     static var previews: some View {
         EditFeedbackViewBase(assessmentResult: result,
                              feedbackDelegate: cvm,
-                             title: "Title",
-                             isEditing: false,
                              scope: .inline,
                              gradingCriteria: [.mock],
                              showSheet: .constant(true)

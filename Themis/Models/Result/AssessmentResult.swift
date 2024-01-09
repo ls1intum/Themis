@@ -73,6 +73,10 @@ class AssessmentResult: Encodable, ObservableObject {
         feedbacks.filter { $0.baseFeedback.type?.isAutomatic ?? false }
     }
     
+    var suggestedFeedback: [AssessmentFeedback] {
+        feedbacks.filter { $0.isSuggested }
+    }
+    
     func reset() {
         self.computedFeedbacks.removeAll()
     }
@@ -124,6 +128,18 @@ class AssessmentResult: Encodable, ObservableObject {
         computedFeedbacks[index].baseFeedback.detailText = detailText
         computedFeedbacks[index].baseFeedback.credits = credits
         computedFeedbacks[index].baseFeedback.gradingInstruction = instruction
+        return computedFeedbacks[index]
+    }
+    
+    @discardableResult
+    func replace(feedbackWithId id: UUID, with newFeedback: AssessmentFeedback) -> AssessmentFeedback? {
+        guard let index = (feedbacks.firstIndex { $0.id == id }) else {
+            return nil
+        }
+        
+        undoManager.beginUndoGrouping()
+        
+        computedFeedbacks[index] = newFeedback
         return computedFeedbacks[index]
     }
     

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedModels
+import CodeEditor
 
 struct TextAssessmentView: View {
     @ObservedObject var assessmentVM: AssessmentViewModel
@@ -64,7 +65,8 @@ struct TextAssessmentView: View {
             )
         })
         .sheet(isPresented: $textExerciseRendererVM.showEditFeedback) {
-            if let feedback = assessmentVM.getFeedback(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
+            if let feedback = assessmentVM.getManualFeedback(byId: textExerciseRendererVM.selectedFeedbackForEditingId) {
+                // The user tapped on a manual feedback to edit
                 EditFeedbackView(
                     assessmentResult: assessmentVM.assessmentResult,
                     feedbackDelegate: textExerciseRendererVM,
@@ -73,14 +75,19 @@ struct TextAssessmentView: View {
                     gradingCriteria: assessmentVM.gradingCriteria,
                     showSheet: $textExerciseRendererVM.showEditFeedback
                 )
+            } else {
+                EditFeedbackView(
+                    assessmentResult: assessmentVM.assessmentResult,
+                    feedbackDelegate: textExerciseRendererVM,
+                    scope: .inline,
+                    idForUpdate: textExerciseRendererVM.selectedFeedbackForEditingId,
+                    gradingCriteria: assessmentVM.gradingCriteria,
+                    showSheet: $textExerciseRendererVM.showEditFeedback
+                )
             }
         }
-        .onChange(of: assessmentVM.fontSize) { _, newValue in
-            textExerciseRendererVM.fontSize = newValue
-        }
-        .onChange(of: assessmentVM.pencilModeDisabled) { _, newValue in
-            textExerciseRendererVM.pencilModeDisabled = newValue
-        }
+        .onChange(of: assessmentVM.fontSize) { textExerciseRendererVM.fontSize = $1 }
+        .onChange(of: assessmentVM.pencilModeDisabled) { textExerciseRendererVM.pencilModeDisabled = $1 }
     }
     
     private var correctionWithPlaceholder: some View {

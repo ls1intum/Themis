@@ -26,7 +26,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
     }
     @Published var allowsInlineFeedbackOperations = true
     @Published var error: Error?
-    @Published var feedbackSuggestions = [FeedbackSuggestion]()
+    @Published var feedbackSuggestions = [ProgrammingFeedbackSuggestion]()
     
     var scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
@@ -47,7 +47,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
         return nil
     }
     
-    var selectedFeedbackSuggestion: FeedbackSuggestion? {
+    var selectedFeedbackSuggestion: (any FeedbackSuggestion)? {
         feedbackSuggestions.first { "\($0.id)" == selectedFeedbackSuggestionId }
     }
     
@@ -207,7 +207,7 @@ class CodeEditorViewModel: ExerciseRendererViewModel {
 // MARK: - Highlight-Related Functions
 extension CodeEditorViewModel {
     @MainActor
-    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: FeedbackSuggestion, feedbackId: UUID) {
+    func addFeedbackSuggestionInlineHighlight(feedbackSuggestion: ProgrammingFeedbackSuggestion, feedbackId: UUID) {
         if let file = selectedFile, let code = file.code {
             guard let range = getLineRange(text: code, fromLine: feedbackSuggestion.fromLine, toLine: feedbackSuggestion.toLine) else {
                 return
@@ -378,7 +378,10 @@ extension CodeEditorViewModel: FeedbackDelegate {
     }
     
     @MainActor
-    func onFeedbackSuggestionSelection(_ suggestion: FeedbackSuggestion, _ feedback: AssessmentFeedback) {
+    func onFeedbackSuggestionSelection(_ suggestion: any FeedbackSuggestion, _ feedback: AssessmentFeedback) {
+        guard let suggestion = suggestion as? ProgrammingFeedbackSuggestion else {
+            return
+        }
         addFeedbackSuggestionInlineHighlight(feedbackSuggestion: suggestion, feedbackId: feedback.id)
     }
     

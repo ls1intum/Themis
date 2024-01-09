@@ -13,7 +13,8 @@ protocol FeedbackDelegate: ObservableObject, AnyObject {
     func onFeedbackCreation(_ feedback: AssessmentFeedback)
     func onFeedbackUpdate(_ feedback: AssessmentFeedback)
     func onFeedbackDeletion(_ feedback: AssessmentFeedback)
-    func onFeedbackSuggestionSelection(_ suggestion: FeedbackSuggestion, _ feedback: AssessmentFeedback)
+    func onFeedbackSuggestionSelection(_ suggestion: any FeedbackSuggestion, _ feedback: AssessmentFeedback)
+    func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion)
     func onFeedbackCellTap(_ feedback: AssessmentFeedback, participationId: Int?, templateParticipationId: Int?)
 }
 
@@ -24,8 +25,10 @@ extension FeedbackDelegate {
     func onFeedbackUpdate(_ feedback: AssessmentFeedback) {}
     
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {}
-
-    func onFeedbackSuggestionSelection(_ suggestion: FeedbackSuggestion, _ feedback: AssessmentFeedback) {}
+    
+    func onFeedbackSuggestionSelection(_ suggestion: any FeedbackSuggestion, _ feedback: AssessmentFeedback) {}
+    
+    func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion) {}
     
     func onFeedbackCellTap(_ feedback: AssessmentFeedback, participationId: Int?, templateParticipationId: Int?) {}
 }

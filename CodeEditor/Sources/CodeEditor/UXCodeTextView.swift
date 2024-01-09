@@ -62,7 +62,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
     
     var highlightedRanges: [HighlightedRange] = []
     var dragSelection: Range<Int>?
-    var feedbackSuggestions: [FeedbackSuggestion] = []
+    var feedbackSuggestions: [ProgrammingFeedbackSuggestion] = []
     var showsLineNumbers: Bool
     
     private var firstPoint: CGPoint?
@@ -409,7 +409,8 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
         layoutManager.enumerateLineFragments(forGlyphRange: layoutManager.glyphRange(for: textContainer)) { rect, _, _, _, _ in
             let offset = self.calculateWrapOffsetOf(lineNumber)
             if let feedback = self.feedbackSuggestions.first(where: { $0.fromLine == lineNumber - offset }) {
-                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: feedback.id.uuidString) {
+                // TODO: get rid of the string interpolation once programming exercise suggestions are integrated into Athena
+                if let lightbulb = self.buildLightbulbButton(rect: rect, feedbackId: "\(feedback.id)") {
                     self.lightBulbs.append(lightbulb)
                     self.addSubview(lightbulb)
                 }
@@ -446,12 +447,7 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 guard text.hasRange(hRange.range) else {
                     continue
                 }
-                self.textStorage.addAttributes(
-                    [
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: hRange.color,
-                        .link: hRange.id.uuidString // equals feedback id
-                    ], range: hRange.range)
+                addUnderlineAttribute(for: hRange)
             }
         }
     }
@@ -462,14 +458,18 @@ final class UXCodeTextView: UXTextView, HighlightDelegate, UIScrollViewDelegate 
                 guard text.hasRange(hRange.range) else {
                     continue
                 }
-                self.textStorage.addAttributes(
-                    [
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                        .underlineColor: hRange.color,
-                        .link: hRange.id.uuidString // equals feedback id
-                    ], range: hRange.range)
+                addUnderlineAttribute(for: hRange)
             }
         }
+    }
+    
+    private func addUnderlineAttribute(for highlightedRange: HighlightedRange) {
+        self.textStorage.addAttributes(
+            [
+                .underlineStyle: highlightedRange.isSuggested ?  NSUnderlineStyle.thick.rawValue : NSUnderlineStyle.single.rawValue,
+                .underlineColor: highlightedRange.color,
+                .link: highlightedRange.id.uuidString // equals feedback id
+            ], range: highlightedRange.range)
     }
     
     

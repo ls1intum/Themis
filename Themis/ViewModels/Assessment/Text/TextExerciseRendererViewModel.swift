@@ -21,7 +21,7 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
             }
         }
     }
-    
+        
     var wordCount: Int {
         let wordRegex = /[\w\u00C0-\u00ff]+/
         return content?.matches(of: wordRegex).count ?? 0
@@ -43,7 +43,6 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
     /// Needed for creating new text blocks
     private var submissionId: Int?
     
-    
     /// Sets this VM up based on the given participation and optional submission
     /// - Parameters:
     ///   - participation:
@@ -61,7 +60,7 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
             return
         }
         
-        let feedbacks = assessmentResult.inlineFeedback
+        let feedbacks = assessmentResult.inlineFeedback + assessmentResult.automaticFeedback
         let blocks = textSubmission.blocks ?? []
         inlineHighlights.removeAll()
         
@@ -70,27 +69,48 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
         setupHighlights(basedOn: blocks, and: feedbacks)
     }
     
+    /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
+    func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
+        let block = TextBlock(submissionId: submissionId,
+                              text: textAtSelectedSection,
+                              startIndex: selectedSection?.lowerBound,
+                              endIndex: selectedSection?.upperBound)
+        return TextFeedbackDetail(block: block)
+    }
+    
+    // MARK: - Highlight-related code
     private func setupHighlights(basedOn blocks: [TextBlock], and feedbacks: [AssessmentFeedback], shouldWipeUndo: Bool = true) {
-        blocks.forEach { block in
-            guard let startIndex = block.startIndex,
+        feedbacks.forEach { assessmentFeedback in
+            guard let block = findBlock(for: assessmentFeedback, using: blocks),
+                  let startIndex = block.startIndex,
                   let endIndex = block.endIndex,
-                  let feedback = feedbacks.first(where: { $0.baseFeedback.reference == block.id }),
                   startIndex < endIndex
             else {
                 return
             }
             
             let range = NSRange(startIndex..<endIndex)
-            let color = UIColor(.getHighlightColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
+            let color = UIColor(.getHighlightColor(forCredits: assessmentFeedback.baseFeedback.credits ?? 0.0))
+            let isSuggested = assessmentFeedback.isSuggested
             
-            inlineHighlights.append(HighlightedRange(id: feedback.id, range: range, color: color))
+            inlineHighlights.append(HighlightedRange(id: assessmentFeedback.id, range: range, color: color, isSuggested: isSuggested))
         }
         
         if shouldWipeUndo {
             undoManager.removeAllActions()
         }
     }
-        
+    
+    /// Attempts to find the corresponding block for the given AssessmentFeedback among the given blocks.
+    /// If it fails, the `detail` property of AssessmentFeedback is used instead. The latter is useful for automatic feedbacks.
+    private func findBlock(for assessmentFeedback: AssessmentFeedback, using blocks: [TextBlock]) -> TextBlock? {
+        if let block = blocks.first(where: { $0.id == assessmentFeedback.baseFeedback.reference }) {
+            return block
+        } else {
+            return (assessmentFeedback.detail as? TextFeedbackDetail)?.block
+        }
+    }
+    
     private func updateHighlightColor(for feedback: AssessmentFeedback) {
         guard let oldHighlightIndex = inlineHighlights.firstIndex(where: { $0.id == feedback.id }) else {
             return
@@ -99,7 +119,10 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
         let oldHighlight = inlineHighlights[oldHighlightIndex]
         let newColor = UIColor(Color.getHighlightColor(forCredits: feedback.baseFeedback.credits ?? 0.0))
         
-        inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id, range: oldHighlight.range, color: newColor)
+        inlineHighlights[oldHighlightIndex] = HighlightedRange(id: oldHighlight.id,
+                                                               range: oldHighlight.range,
+                                                               color: newColor,
+                                                               isSuggested: oldHighlight.isSuggested)
     }
     
     private func createHighlight(for feedback: AssessmentFeedback) {
@@ -118,13 +141,14 @@ class TextExerciseRendererViewModel: ExerciseRendererViewModel {
         }
     }
     
-    /// Generates a `TextFeedbackDetail` instance based on the available data. Some fields might be missing
-    func generateIncompleteFeedbackDetail() -> TextFeedbackDetail {
-        let block = TextBlock(submissionId: submissionId,
-                              text: textAtSelectedSection,
-                              startIndex: selectedSection?.lowerBound,
-                              endIndex: selectedSection?.upperBound)
-        return TextFeedbackDetail(block: block)
+    private func deleteHighlight(for suggestion: TextFeedbackSuggestion) {
+        inlineHighlights.removeAll(where: { $0.id == suggestion.associatedAssessmentFeedbackId })
+        undoManager.endUndoGrouping()
+    }
+    
+    private func replaceHighlight(for suggestion: TextFeedbackSuggestion, withHighlightFor feedback: AssessmentFeedback) {
+        inlineHighlights.removeAll(where: { $0.id == suggestion.associatedAssessmentFeedbackId })
+        createHighlight(for: feedback)
     }
 }
 
@@ -139,5 +163,12 @@ extension TextExerciseRendererViewModel: FeedbackDelegate {
     
     func onFeedbackDeletion(_ feedback: AssessmentFeedback) {
         deleteHighlight(for: feedback)
+    }
+    
+    func onFeedbackSuggestionDiscard(_ suggestion: any FeedbackSuggestion) {
+        guard let suggestion = suggestion as? TextFeedbackSuggestion else {
+            return
+        }
+        deleteHighlight(for: suggestion)
     }
 }

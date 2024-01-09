@@ -17,9 +17,7 @@ struct TextExerciseRenderer: View {
     
     private let scrollUtils = ScrollUtils(range: nil, offsets: [:])
     
-    private var editorFlags: CodeEditor.Flags {
-        CodeEditor.Flags.selectable
-    }
+    private var editorFlags: CodeEditor.Flags { [.selectable] }
     
     private var theme: CodeEditor.ThemeName {
         colorScheme == .dark ? CodeEditor.ThemeName(rawValue: "a11y-dark") : CodeEditor.ThemeName(rawValue: "color-brewer")
