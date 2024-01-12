@@ -34,8 +34,9 @@ struct UMLRenderer: View {
                     ApollonView(umlModel: model,
                                 diagramType: type,
                                 fontSize: umlRendererVM.fontSize,
+                                themeColor: Color.Artemis.artemisBlue,
                                 diagramOffset: umlRendererVM.offset,
-                                isGridBackground: false)
+                                isGridBackground: false) {}
                 }
                 Canvas(rendersAsynchronously: true) { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
