@@ -61,7 +61,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         guard let modelingSubmission = submission as? ModelingSubmission,
               let modelData = modelingSubmission.model?.data(using: .utf8) else {
             log.error("Could not get model data from submission")
-            setError(.couldNotParseDiagram)
+            setError(.unsupportedDiagramVersion)
             return
         }
         self.umlModel = nil
@@ -72,7 +72,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
             guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
-                log.error("This diagram type is not yet supported")
+                log.error("This diagram type is not supported")
                 setError(.diagramNotSupported)
                 return
             }
