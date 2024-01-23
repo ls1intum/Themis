@@ -8,30 +8,36 @@
 import SwiftUI
 import SharedModels
 import Common
+import ApollonView
+import ApollonShared
 
 struct UMLRenderer: View {
     @ObservedObject var umlRendererVM: UMLRendererViewModel
-    
+
     @State var showResetButton = true
     @State var scale: CGFloat = 1
     
     @State private var progressingScale: CGFloat = 1
     @State private var startDragLocation = CGPoint.zero
     @State private var dragStarted = true
-    
+
     /// The minimum scale value that the UML model can be scaled down to
     private let minScale = 0.1
     
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Image("umlRendererBackground")
-                .resizable(resizingMode: .tile)
-            
+            /// Render the Grid Background from the Apollon Package
+            GridBackgroundView(gridBackgroundViewModel: GridBackgroundViewModel())
             Group {
-                Canvas(rendersAsynchronously: true) { context, size in
-                    umlRendererVM.render(&context, size: size)
+                /// If the UML Model is set, create an ApollonView View
+                if let model = umlRendererVM.umlModel, let type = model.type {
+                    ApollonView(umlModel: model,
+                                diagramType: type,
+                                fontSize: umlRendererVM.fontSize,
+                                themeColor: Color.Artemis.artemisBlue,
+                                diagramOffset: umlRendererVM.offset,
+                                isGridBackground: false) {}
                 }
-                
                 Canvas(rendersAsynchronously: true) { context, size in
                     umlRendererVM.renderHighlights(&context, size: size)
                 } symbols: {

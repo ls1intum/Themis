@@ -9,12 +9,14 @@ import Foundation
 import SharedModels
 import Common
 import SwiftUI
+import ApollonShared
 
 class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
     @Published var error: Error?
     @Published var currentDragLocation = CGPoint.zero
+    @Published var offset = CGPoint(x: 15, y: 15)
     
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
@@ -51,8 +53,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     /// A Task that sets the value of `temporaryHighlight` to nil after some time
     private var temporaryHighlightRemovalTask: Task<(), Error>?
     
-    private var diagramTypeUnsupported = false
-    
     private var symbolSize = 30.0
     
     /// Sets this VM up based on the given submission
@@ -60,6 +60,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func setup(basedOn submission: BaseSubmission? = nil, _ assessmentResult: AssessmentResult) {
         guard let modelingSubmission = submission as? ModelingSubmission,
               let modelData = modelingSubmission.model?.data(using: .utf8) else {
+            log.error("Could not get model data from submission")
+            setError(.unsupportedDiagramVersion)
             return
         }
         self.umlModel = nil
@@ -69,10 +71,16 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
+                log.error("This diagram type is not supported")
+                setError(.diagramNotSupported)
+                return
+            }
             determineChildren()
-            orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
+            orphanElements = umlModel?.elements?.values.filter { $0.owner == nil } ?? []
         } catch {
             log.error("Could not parse UML string: \(error)")
+            setError(.couldNotParseDiagram)
         }
         
         let feedbacks = assessmentResult.inlineFeedback + assessmentResult.automaticFeedback
@@ -85,6 +93,7 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     func setup(basedOn umlModelString: String) {
         guard let modelData = umlModelString.data(using: .utf8) else {
             log.error("Invalid UML model string")
+            setError(.couldNotParseDiagram)
             return
         }
         self.umlModel = nil
@@ -94,37 +103,20 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         
         do {
             umlModel = try JSONDecoder().decode(UMLModel.self, from: modelData)
+            guard let type = umlModel?.type, !UMLDiagramType.isDiagramTypeUnsupported(diagramType: type) else {
+                log.error("This diagram type is not yet supported")
+                setError(.diagramNotSupported)
+                return
+            }
             determineChildren()
-            orphanElements = umlModel?.elements?.filter({ $0.owner == nil }) ?? []
+            orphanElements = umlModel?.elements?.values.filter { $0.owner == nil } ?? []
+
         } catch {
             log.error("Could not parse UML string: \(error)")
+            setError(.couldNotParseDiagram)
         }
         
         undoManager.removeAllActions()
-    }
-    
-    @MainActor
-    func render(_ context: inout GraphicsContext, size: CGSize) {
-        guard let model = umlModel,
-              let modelType = model.type,
-              !diagramTypeUnsupported else {
-            return
-        }
-        let umlContext = UMLGraphicsContext(context)
-        let canvasBounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        
-        let renderer = UMLDiagramRendererFactory.renderer(for: modelType,
-                                                          context: umlContext,
-                                                          canvasBounds: canvasBounds,
-                                                          fontSize: fontSize)
-        
-        if let renderer {
-            renderer.render(umlModel: model)
-        } else {
-            log.error("Attempted to draw an unknown diagram type")
-            diagramTypeUnsupported = true
-            setError(.diagramNotSupported)
-        }
     }
     
     private func setError(_ error: UserFacingError) {
@@ -164,10 +156,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     }
     
     private func getSelectableItem(at point: CGPoint) -> SelectableUMLItem? {
-        let point = CGPoint(x: point.x - UMLGraphicsContext.defaultOffset,
-                            y: point.y - UMLGraphicsContext.defaultOffset)
+        let point = CGPoint(x: point.x - offset.x,
+                            y: point.y - offset.y)
         // Look for relationships
-        if let foundRelationship = umlModel?.relationships?.first(where: { $0.boundsContains(point: point) }) {
+        if let foundRelationship = umlModel?.relationships?.values.first(where: { $0.boundsContains(point: point) }) {
             return foundRelationship
         }
         
@@ -186,11 +178,11 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             log.warning("Could not find elements in the model")
             return
         }
-        var potentialChildren = elements.filter({ $0.owner != nil })
-        
-        for (elementIndex, element) in elements.enumerated().reversed() {
-            for (index, potentialChild) in potentialChildren.enumerated().reversed() where potentialChild.owner == element.id {
-                elements[elementIndex].addChild(potentialChild)
+        var potentialChildren = elements.values.filter({ $0.owner != nil })
+
+        for element in elements.reversed() {
+            for (index, potentialChild) in potentialChildren.enumerated().reversed() where potentialChild.owner == element.value.id {
+                elements[element.key]?.addChild(potentialChild)
                 potentialChildren.remove(at: index)
             }
         }
@@ -203,10 +195,10 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
         var selectableItem: SelectableUMLItem?
         
         if let elements = umlModel?.elements,
-           let foundElement = elements.first(where: { $0.id == id }) {
+           let foundElement = elements.values.first(where: { $0.id == id }) {
             selectableItem = foundElement
         } else if let relationships = umlModel?.relationships,
-                  let foundRelationship = relationships.first(where: { $0.id == id }) {
+                  let foundRelationship = relationships.values.first(where: { $0.id == id }) {
             selectableItem = foundRelationship
         }
         
@@ -273,7 +265,7 @@ extension UMLRendererViewModel {
     
     @MainActor
     func renderHighlights(_ context: inout GraphicsContext, size: CGSize) {
-        var context = UMLGraphicsContext(context)
+        var context = UMLGraphicsContext(context, offset: offset)
         
         // Highlight selected element if there is one
         if !pencilModeDisabled,
