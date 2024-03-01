@@ -13,43 +13,20 @@ struct ExampleModelingSolutionView: View {
     
     @StateObject private var umlRendererVM = UMLRendererViewModel()
     
-    private let scale = 0.5
-    
     var body: some View {
-        VStack {
-            UMLRenderer(umlRendererVM: umlRendererVM, showResetButton: false, scale: scale)
-                .onChange(of: umlRendererVM.diagramSize) {
-                    setDragLocationWithScale()
-                }
-                .onAppear {
-                    umlRendererVM.setup(basedOn: exercise.exampleSolutionModel ?? "")
-                }
-                .clipped()
-            
-            // The default reset button of UMLRenderer is replaced by the button below
-            // because the default one is not shown properly when put inside a List
-            centerButton
-        }
-    }
-    
-    @ViewBuilder
-    private var centerButton: some View {
-        Button {
-            setDragLocationWithScale()
-        } label: {
-            HStack {
-                Image(systemName: "scope")
-                Text("Center")
+        VStack(alignment: .leading) {
+            if let elements = umlRendererVM.umlModel?.elements, !elements.isEmpty {
+                UMLRenderer(umlRendererVM: umlRendererVM)
+                    .scaledToFit()
+                    .clipped()
+            } else {
+                Text("Not available for this exercise.")
+                    .font(.body)
             }
-            .foregroundColor(.white)
         }
-        .buttonStyle(ThemisButtonStyle())
-    }
-    
-    private func setDragLocationWithScale() {
-        umlRendererVM.setDragLocation() // center ignoring the scale first
-        umlRendererVM.setDragLocation(at: .init(x: umlRendererVM.currentDragLocation.x * 0.75,
-                                                y: umlRendererVM.currentDragLocation.y * scale * 0.75))
+        .onAppear {
+            umlRendererVM.setup(basedOn: exercise.exampleSolutionModel ?? "")
+        }
     }
 }
 

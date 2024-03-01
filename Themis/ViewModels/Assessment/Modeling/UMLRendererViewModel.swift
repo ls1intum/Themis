@@ -15,9 +15,8 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
     @Published var umlModel: UMLModel?
     @Published var selectedElement: SelectableUMLItem?
     @Published var error: Error?
-    @Published var currentDragLocation = CGPoint.zero
     @Published var offset = CGPoint(x: 15, y: 15)
-    
+
     /// Intended to get user's attention to a particular UML item temporarily
     @Published var temporaryHighlight: UMLHighlight? {
         willSet {
@@ -110,7 +109,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             }
             determineChildren()
             orphanElements = umlModel?.elements?.values.filter { $0.owner == nil } ?? []
-
         } catch {
             log.error("Could not parse UML string: \(error)")
             setError(.couldNotParseDiagram)
@@ -124,18 +122,6 @@ class UMLRendererViewModel: ExerciseRendererViewModel {
             Task { @MainActor [weak self] in
                 self?.error = error
             }
-        }
-    }
-    
-    @MainActor
-    /// Sets the drag location to the specified point
-    /// - Parameter point: when nil, the drag location is set in such a way that centers the diagram
-    func setDragLocation(at point: CGPoint? = nil) {
-        if let point {
-            currentDragLocation = point
-        } else {
-            currentDragLocation = .init(x: diagramSize.height - 50, // 50 – default padding added by Apollon
-                                        y: diagramSize.width - 50)
         }
     }
     
