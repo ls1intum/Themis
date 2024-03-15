@@ -57,6 +57,18 @@ platform :ios do
     )
 
     ##########################################
+    # Certificates
+    ##########################################
+    
+    # Download certificates
+    # from the apple developer portal
+    get_certificates(
+      api_key: api_key,
+      keychain_path: ENV['bamboo_KeyChain'],
+      keychain_password: ENV['bamboo_KeyChainPassword']
+    )
+
+    ##########################################
     # Provisioning Profile
     ##########################################
 
@@ -64,7 +76,6 @@ platform :ios do
     # from the apple developer portal
     get_provisioning_profile(
       api_key: api_key,
-      adhoc: true,
       force: true
     )
 
@@ -98,7 +109,7 @@ platform :ios do
     build_ios_app(
       clean: true, # Do a clean build each time
       output_name: "App.ipa", # The name of the output artifact
-      export_method: "ad-hoc", # Export for ad-hoc signing
+      export_method: "app-store", # Export for app-store signing
       configuration: "Release", # Build with release configuration
       cloned_source_packages_path: ".SwiftPackages", # Custom path for cloning source packages to
       derived_data_path: ".DerivedData", # Custom derived data path
@@ -128,9 +139,9 @@ platform :ios do
   lane :api_key do
     app_store_connect_api_key(
       duration: 300, # This Token is valid for 300s
-      key_id: ENV["bamboo_APP_STORE_CONNECT_API_KEY_KEY_ID"],
-      issuer_id: ENV["bamboo_APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-      key_content: ENV["bamboo_APP_STORE_CONNECT_API_KEY_PASSWORD"],
+      key_id: ENV["bamboo_ASE_APP_STORE_CONNECT_API_KEY_KEY_ID"],
+      issuer_id: ENV["bamboo_ASE_APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_content: ENV["bamboo_ASE_APP_STORE_CONNECT_API_KEY_PASSWORD"],
       is_key_content_base64: true
     )
   end
@@ -141,24 +152,6 @@ platform :ios do
       config_file: "swiftlint.yml",
       strict: false,
       raise_if_swiftlint_error: true
-    )
-  end
-
-  desc "[CI] Notify slack channel about new release"
-  lane :slack_notification do
-    slack(
-      message: "App successfully released!",
-      slack_url: ENV["bamboo_SLACK_WEBHOOK"],
-      success: true
-    )
-  end
-
-  desc "[CI] Notify slack channel about unsuccessful release"
-  error do |lane, exception|
-    slack(
-      message: "Something went wrong with the app release.",
-      slack_url: ENV["bamboo_SLACK_WEBHOOK"],
-      success: false
     )
   end
 
