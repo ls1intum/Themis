@@ -2,19 +2,7 @@
 #     https://docs.fastlane.tools/advanced/#appfile
 
 # The development bundle id
-app_identifier "de.tum.in.ase.university.ios2223.cit"
+app_identifier "de.tum.cit.ase.themis"
 
 # The team id for the university team
-team_id "7PLLZ436SG"
-
-# In the release build lane, we 1) change the app identifier to the
-# TestFlight one and 2) specify the team id of the TestFlight team
-for_lane :build do
-    app_identifier "de.tum.in.ase.ios2223.cit"
-    team_id "2J3C6P6X3N"
-end
-
-for_lane :release do
-    app_identifier "de.tum.in.ase.ios2223.cit"
-    team_id "2J3C6P6X3N"
-end
+team_id "T7PP2KY2B6"
